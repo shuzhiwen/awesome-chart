@@ -2,7 +2,7 @@ import chroma from 'chroma-js'
 import {cloneDeep, isArray, isEqual, isNil, merge, noop} from 'lodash'
 import {dataMapping, TableList} from '../data'
 import {AnimationQueue} from '../animation'
-import {drawerMapping} from '../draw'
+import {drawerMapping} from '../draws'
 import {
   COMMON_EVENTS,
   LIFE_CYCLE,

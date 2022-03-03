@@ -1,7 +1,7 @@
 import {Selection} from 'd3'
 import {Canvas, IEvent, Object} from 'fabric/fabric-impl'
 import {GraphStyleShape, TextStyleShape} from '.'
-import {drawerMapping} from '../draw'
+import {drawerMapping} from '../draws'
 
 export type D3Selection = Selection<any, unknown, any, unknown>
 

@@ -9,6 +9,17 @@ const writingModeMapping = {
   vertical: 'vertical-rl',
 }
 
+const getShadow = (shadow: TextStyleShape['shadow']) => {
+  if (isObject(shadow) && !isArray(shadow)) {
+    const {color = '#000', offset = [0, 0], blur = 0, hide = false} = shadow
+    if (!hide) {
+      return `${offset[0]}px ${-offset[1]}px ${blur}px ${color}`
+    }
+    return ''
+  }
+  return shadow
+}
+
 export function drawText({
   engine = 'svg',
   fontFamily = '',
@@ -100,15 +111,4 @@ export function drawText({
       container.add(text)
     })
   }
-}
-
-const getShadow = (shadow: TextStyleShape['shadow']) => {
-  if (isObject(shadow) && !isArray(shadow)) {
-    const {color = '#000', offset = [0, 0], blur = 0, hide = false} = shadow
-    if (!hide) {
-      return `${offset[0]}px ${-offset[1]}px ${blur}px ${color}`
-    }
-    return ''
-  }
-  return shadow
 }
