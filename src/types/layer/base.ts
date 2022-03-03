@@ -1,5 +1,5 @@
 import {TextStyleShape} from '.'
-import {layerMapping} from '../../layers'
+import {LayerBase, layerMapping} from '../../layers'
 import {
   Meta,
   Scale,
@@ -22,8 +22,8 @@ export type BackupValueShape<TData> = (Omit<
 export type BackupShape<TData> = Record<string, BackupValueShape<TData>>
 
 export interface LayerBaseProps {
-  options: LayerOptions
   context: ChartContext
+  options: LayerOptions
   tooltipTargets?: string[]
   sublayers?: string[]
 }
@@ -43,19 +43,21 @@ export interface CreateTextProps {
   offset?: number
 }
 
-export type LayerOptions = {
+export type LayerOptions = AnyObject & {
   id: string
   layout: LayoutArea
 }
 
-export type Layer = AnyObject & {
-  scales?: {
-    scaleX?: Scale
-    scaleY?: Scale
-    scaleXT?: Scale
-    scaleYR?: Scale
-    scaleAngle?: Scale
-    scaleRadius?: Scale
-    nice?: ScaleNiceShape
-  }
+export type LayerScalesShape = {
+  scaleX?: Scale
+  scaleY?: Scale
+  scaleXT?: Scale
+  scaleYR?: Scale
+  scaleAngle?: Scale
+  scaleRadius?: Scale
+  nice?: ScaleNiceShape
+}
+
+export type Layer = LayerBase & {
+  scales?: LayerScalesShape
 }

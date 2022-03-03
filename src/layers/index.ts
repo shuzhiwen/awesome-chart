@@ -1,18 +1,15 @@
-import {TextLayer} from '.'
+import {LayerText} from '.'
 
 export * from './normal'
 export * from './base'
 
 export const layerMapping = {
-  // base
-  axis: TextLayer,
-  legend: TextLayer,
-  // normal
-  text: TextLayer,
-  matrix: TextLayer,
-  indicator: TextLayer,
-  // relation
-  chord: TextLayer,
-  // ui
-  tabMenu: TextLayer,
+  axis: LayerText,
+  baseMap: LayerText,
+  chord: LayerText,
+  indicator: LayerText,
+  legend: LayerText,
+  matrix: LayerText,
+  tabMenu: LayerText,
+  text: LayerText,
 }

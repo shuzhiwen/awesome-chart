@@ -1,6 +1,7 @@
 import {isArray} from 'lodash'
 import {TableList, Table, Relation, Custom} from '../data'
-import {CreateChartSchema, CreateLayerSchema, LayerType, RandomOptions} from '../types'
+import {LayerType, CreateChartSchema, CreateLayerSchema} from '../types'
+import {Chart} from '.'
 import {
   createLog,
   isTable,
@@ -11,7 +12,6 @@ import {
   randomTableList,
   randomTable,
 } from '../utils'
-import {Chart} from '.'
 
 const isAxisLayer = (type: LayerType) => type === 'axis'
 const isLegendLayer = (type: LayerType) => type === 'legend'
@@ -24,8 +24,8 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
   let dataSet = data
 
   if (type === 'legend') {
-    dataSet = chart.layers.map(({instance}) => instance)
-  } else if (isTable(data) || (data as RandomOptions)?.type === 'table') {
+    dataSet = chart.layers
+  } else if (isTable(data) || data?.type === 'table') {
     dataSet = new Table(isTable(data) ? data : randomTable(data))
   } else if (isArray(data) && data.length === 2 && isRelation(data)) {
     if (type === 'chord') {
@@ -57,7 +57,7 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
 // create a chart by schema
 export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => {
   try {
-    const {brush, layers = [], afterCreate, ...initialConfig} = schema
+    const {layers = [], afterCreate, ...initialConfig} = schema
     const chart = existedChart ?? new Chart(initialConfig)
     // some special layers require data or scales from other layers
     const normalLayerConfigs = layers.filter(({type}) => isNormalLayer(type))
@@ -75,10 +75,8 @@ export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => 
     layers.forEach(({options}) => {
       chart.layers.find(({options: {id}}) => id === options.id)?.draw()
     })
-    // create brush after draw
-    brush && chart.createBrush({...brush, layout: chart.layout[brush.layout]})
     // TODO: throw and give control to users
-    setTimeout(() => chart.layers.map(({instance}) => instance?.playAnimation()))
+    setTimeout(() => chart.layers.map((instance) => instance?.playAnimation()))
     // callback after create
     afterCreate?.(chart)
 

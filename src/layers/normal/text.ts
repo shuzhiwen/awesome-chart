@@ -11,7 +11,7 @@ const defaultStyle: TextLayerStyleShape = {
   },
 }
 
-export class TextLayer extends LayerBase {
+export class LayerText extends LayerBase {
   readonly className = 'awesome-text'
 
   readonly event = createEvent('layer:normal:text')

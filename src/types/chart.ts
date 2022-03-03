@@ -1,4 +1,4 @@
-import {LayerOptions, LayerType, LayoutArea, LayoutCreator, RandomOptions, ScaleNiceShape} from '.'
+import {DataShape, LayerOptions, LayerType, LayoutCreator, RandomOptions, ScaleNiceShape} from '.'
 import {getEasyGradientCreator} from '../utils'
 import {Chart} from '../chart'
 
@@ -42,18 +42,15 @@ export interface ChartProps {
   layoutCreator?: LayoutCreator
 }
 
-export interface BrushProps {
-  mode: Direction
-  layout: LayoutArea
-  targets: string[]
-}
-
-export interface LayerShape {
-  options: LayerOptions
-  data?: AnyObject
-  scale?: AnyObject
+export interface LayerSchema {
+  options?: LayerOptions
+  data?: Maybe<DataShape>
   style?: AnyObject
   animation?: AnyObject
+}
+
+export type RandomDataSchema = RandomOptions & {
+  type: 'table' | 'tableList'
 }
 
 export interface CreateLayerSchema {
@@ -68,16 +65,13 @@ export interface CreateLayerSchema {
   scale?: {
     nice: ScaleNiceShape
   }
-  data: RandomOptions | MaybeGroup<any>
-  style?: LayerShape['style']
-  animation: LayerShape['style']
+  data: any
+  style?: LayerSchema['style']
+  animation: LayerSchema['style']
   event: Record<string, Function>
 }
 
 export interface CreateChartSchema extends ChartProps {
-  brush?: Pick<BrushProps, 'mode' | 'targets'> & {
-    layout: string
-  }
   layers?: CreateLayerSchema[]
   afterCreate?: (chart: Chart) => void
 }

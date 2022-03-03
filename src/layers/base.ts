@@ -29,7 +29,8 @@ import {
   FabricObject,
   GraphDrawerProps,
   LayerBaseProps,
-  LayerShape,
+  LayerScalesShape,
+  LayerSchema,
   Log,
 } from '../types'
 
@@ -40,7 +41,7 @@ export abstract class LayerBase {
 
   abstract data: Maybe<DataShape>
 
-  abstract setData(data?: AnyObject, scale?: AnyObject): void
+  abstract setData(data: Maybe<DataShape>, scale?: AnyObject): void
 
   abstract setStyle(style?: AnyObject): void
 
@@ -139,16 +140,10 @@ export abstract class LayerBase {
     this.sublayers.forEach((type) => this.backupAnimation[type]?.play())
   }
 
-  update({data, scale, style, animation}: LayerShape) {
-    if (!isNil(animation)) {
-      this.setAnimation(animation)
-    }
-    if (!isNil(data) || !isNil(scale)) {
-      this.setData(data, scale)
-    }
-    if (!isNil(data) || !isNil(scale) || !isNil(style)) {
-      this.setStyle(style)
-    }
+  update({data, style, animation}: LayerSchema) {
+    !isNil(data) && this.setData(data)
+    !isNil(style) && this.setStyle(style)
+    !isNil(animation) && this.setAnimation(animation)
     this.draw()
   }
 
@@ -198,7 +193,7 @@ export abstract class LayerBase {
         .scale(originColors)
         .mode('lch')
         .colors(rowNumber + 1)
-      // unfold: 1 dimension => 2 dimensions
+      // extends one dimension to two dimensions
       rowColors.reduce((prevColor, curColor, index) => {
         const count = index === rowNumber ? columnNumber : columnNumber + 1
         matrix.push(chroma.scale([prevColor, curColor]).mode('lch').colors(count))
@@ -213,23 +208,16 @@ export abstract class LayerBase {
   }
 
   // merge scale for the whole layer
-  createScale(defaultScale: AnyObject, currentScale: AnyObject, incomingScale: AnyObject) {
+  createScale<T extends LayerScalesShape>(defaultScale: T, currentScale: T, incomingScale: T) {
     const nice = merge(defaultScale?.nice, currentScale?.nice, incomingScale?.nice)
-    const scale: AnyObject = {nice}
+    const scales: LayerScalesShape = {nice}
 
-    // the naming of the scale is fixed
     SCALE_TYPE.forEach((type) => {
-      // Due to the axis layer control all the scale which from different layer.
-      // Scales which generate by layer itself has lowest priority.
-      scale[type] = incomingScale[type] || currentScale[type] || defaultScale[type]
-      // the brush changed the range of current scale that need to be remembered
-      if (currentScale[type]?.brushed) {
-        scale[type].range(currentScale[type].range())
-        scale[type].brushed = currentScale[type].brushed
-      }
+      // scales which generate by layer itself has lowest priority
+      scales[type] = incomingScale?.[type] || currentScale?.[type] || defaultScale?.[type]
     })
 
-    return scale
+    return scales
   }
 
   validateAndCreateData(
@@ -309,7 +297,7 @@ export abstract class LayerBase {
     }
   }
 
-  setVisible(visible: boolean, sublayer: string) {
+  setVisible(visible: boolean, sublayer?: string) {
     const {selector} = this
     const className = `${this.className}-${sublayer}`
     const target = sublayer ? selector.getFirstChildByClassName(this.root, className) : this.root

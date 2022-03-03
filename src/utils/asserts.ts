@@ -1,5 +1,6 @@
 import {isArray} from 'lodash'
-import {D3Selection, FabricCanvas, RawRelation, RawTable, RawTableList} from '../types'
+import {layerMapping} from '../layers'
+import {D3Selection, FabricCanvas, Layer, RawRelation, RawTable, RawTableList} from '../types'
 
 export function isSvgContainer(selector: any): selector is D3Selection {
   return selector?.constructor.name === 'Selection'
@@ -41,4 +42,12 @@ export function isRelation(relation: any): relation is RawRelation {
     return false
   }
   return true
+}
+
+export function isLayerAxis(instance: Layer) {
+  return instance.constructor.name === layerMapping.axis.constructor.name
+}
+
+export function isLayerBaseMap(instance: Layer) {
+  return instance.constructor.name === layerMapping.baseMap.constructor.name
 }

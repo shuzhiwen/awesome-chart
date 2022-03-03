@@ -1,10 +1,16 @@
 import * as d3 from 'd3'
 import {fabric} from 'fabric'
-import {createLog, createEvent} from '../utils'
-import {createDefs, getEasyGradientCreator} from '../utils/defines'
 import {getStandardLayoutCreator} from '../layout'
 import {layerMapping} from '../layers'
 import {Tooltip} from '.'
+import {
+  createLog,
+  createEvent,
+  isLayerAxis,
+  isLayerBaseMap,
+  createDefs,
+  getEasyGradientCreator,
+} from '../utils'
 import {
   Layer,
   LayoutShape,
@@ -13,15 +19,14 @@ import {
   LayoutCreator,
   ChartProps,
   LayerType,
-  LayerShape,
-  D3Selection,
-  BrushProps,
+  LayerSchema,
   ChartContext,
   GradientCreatorProps,
+  LayerOptions,
 } from '../types'
 
 export class Chart {
-  static defaultLayoutCreator = getStandardLayoutCreator({brush: false})
+  static standardLayoutCreator = getStandardLayoutCreator({brush: false})
 
   private log = createLog('chart:chart', 'Chart')
 
@@ -73,11 +78,10 @@ export class Chart {
     engine = 'svg',
     padding = [0, 0, 0, 0],
     theme = [...d3.schemeCategory10],
-    layoutCreator = Chart.defaultLayoutCreator,
+    layoutCreator = Chart.standardLayoutCreator,
     defineSchema = {},
     tooltipOptions,
   }: ChartProps) {
-    // initialize state
     this.theme = theme
     this.engine = engine
     this.padding = padding
@@ -113,7 +117,6 @@ export class Chart {
       this.defs = this.root.append('defs')
     }
 
-    // initialize other attr
     this._layout = layoutCreator({
       containerWidth: this.containerWidth,
       containerHeight: this.containerHeight,
@@ -124,7 +127,7 @@ export class Chart {
       container: tooltipOptions?.container ?? this.container,
     })
 
-    // custom svg dom
+    // custom svg defs
     createDefs({schema: defineSchema || {}, engine, container: this.defs})
 
     this._state = 'initialize'
@@ -133,7 +136,7 @@ export class Chart {
 
   setPadding({
     padding,
-    creator = Chart.defaultLayoutCreator,
+    creator = Chart.standardLayoutCreator,
   }: {
     padding: Maybe<Padding>
     creator: LayoutCreator
@@ -146,7 +149,7 @@ export class Chart {
     })
   }
 
-  createLayer(type: LayerType, options: LayerShape['options']) {
+  createLayer(type: LayerType, options: LayerOptions) {
     const context: ChartContext = {
       root: this.root,
       engine: this.engine,
@@ -168,117 +171,65 @@ export class Chart {
 
   getLayer(id: string) {
     const layer = this._layers.find(({options}) => options.id === id)
-    !layer && this.log.warn('invalid layerId', id)
+    !layer && this.log.warn('invalid id', id)
     return layer
   }
 
-  updateLayer(id: string, {data, scale, style, animation}: LayerShape) {
-    const layer = this.getLayer(id)
-    layer && layer.update({data, scale, style, animation})
+  updateLayer(id: string, {data, style, animation}: LayerSchema) {
+    this.getLayer(id)?.update({data, style, animation})
   }
 
   setVisible(id: string, visible: boolean) {
-    const layer = this.getLayer(id)
-    layer && layer.setVisible(visible)
+    this.getLayer(id)?.setVisible(visible)
   }
 
   bindCoordinate(redraw = false, triggerLayer?: Layer) {
-    // TODO: fix judgement
-    const isAxisLayer = (instance: Layer) => instance ?? false
-    const isBaseMapLayer = (instance: Layer) => instance ?? false
-    const axisLayer = this._layers.find(({instance}) => isAxisLayer(instance))?.instance
-    const type: Coordinate = axisLayer.options?.type
+    const axisLayer = this._layers.find((instance) => isLayerAxis(instance))
+    const type: Coordinate = axisLayer?.options?.type
     const layers = this._layers
-      .filter(({instance}) => instance.scale && !isAxisLayer(instance))
-      .map(({instance}) => instance)
+      .filter((instance) => instance.scales && !isLayerBaseMap(instance))
+      .map((instance) => instance)
 
     // merge scales
     layers.forEach((layer) => {
-      const {scale, options} = layer
+      const {scales, options} = layer
       const {axis} = options
-      const scales: Layer['scales'] = {}
+      const mergedScales: Layer['scales'] = {}
       if (type === 'cartesian') {
-        scales.scaleX = scale.scaleX
+        mergedScales.scaleX = scales?.scaleX
         if (axis === 'minor') {
-          scales.scaleYR = scale.scaleY
+          mergedScales.scaleYR = scales?.scaleY
         } else {
-          scales.scaleY = scale.scaleY
+          mergedScales.scaleY = scales?.scaleY
         }
       }
       if (type === 'polar') {
-        scales.scaleAngle = scale.scaleAngle
-        scales.scaleRadius = scale.scaleRadius
+        mergedScales.scaleAngle = scales?.scaleAngle
+        mergedScales.scaleRadius = scales?.scaleRadius
       }
-      if (type === 'geographic' && isBaseMapLayer(layer)) {
-        scales.scaleX = scale.scaleX
-        scales.scaleY = scale.scaleY
+      if (type === 'geographic' && isLayerBaseMap(layer)) {
+        mergedScales.scaleX = scales?.scaleX
+        mergedScales.scaleY = scales?.scaleY
       }
-      axisLayer.setData(null, scales)
-      axisLayer.setStyle()
+      axisLayer?.setData(null, mergedScales)
+      axisLayer?.setStyle()
     })
 
-    // axis will merge all scales and give them to every layer
+    // dispatch scales
     layers.forEach((layer) => {
-      const scales = {...layer.scale, ...axisLayer.scale}
+      const scales = {...layer.scales, ...axisLayer?.scales}
       // projection to normal scale
       if (type === 'geographic') {
-        const scaleX = (x: number) => scales.scaleX(x) - layer.options.layout.left
-        const scaleY = (y: number) => scales.scaleY(y) - layer.options.layout.top
-        layer.setData(null, {...scales, scaleX, scaleY})
+        const scaleX = (x: any) => (scales.scaleX?.(x) as number) - layer.options.layout.left
+        const scaleY = (y: any) => (scales.scaleY?.(y) as number) - layer.options.layout.top
+        layer.setData(undefined, {...scales, scaleX, scaleY})
       } else {
         const scaleY = layer.options.axis === 'minor' ? scales.scaleYR : scales.scaleY
-        layer.setData(null, {...scales, scaleY})
+        layer.setData(undefined, {...scales, scaleY})
       }
       layer.setStyle()
       redraw && layer !== triggerLayer && layer.draw()
     })
-  }
-
-  createBrush({mode, layout, targets}: BrushProps) {
-    if (this.engine !== 'svg') {
-      this.log.warn('the brush only supports svg')
-      return
-    }
-
-    const {width, height, left, top} = layout
-    const isHorizontal = mode === 'horizontal'
-    const layers = this._layers.filter(({id}) => targets.find((item) => item === id))
-    const prevRange = new Array(layers.length).fill(null)
-    // brush will change range of scale
-    const brushed = (event: any) => {
-      layers.forEach(({instance}, i) => {
-        const {selection} = event
-        const total = isHorizontal ? width : height
-        const scale = isHorizontal ? instance.scale.scaleX : instance.scale.scaleY
-        // initialize
-        if (prevRange[i] === null) {
-          prevRange[i] = scale.range()
-        }
-        const zoomFactor = total / (selection[1] - selection[0] || 1)
-        const nextRange = [
-          prevRange[i][0],
-          prevRange[i][0] + (prevRange[i][1] - prevRange[i][0]) * zoomFactor,
-        ]
-        const offset =
-          ((selection[0] - (isHorizontal ? left : top)) / total) * (nextRange[1] - nextRange[0])
-        scale.range(nextRange.map((value) => value - offset))
-        // mark scale with brush so that layer base can merge scales correctly
-        scale.brushed = true
-        instance.setData(null, {[isHorizontal ? 'scaleX' : 'scaleY']: scale})
-        instance.setStyle()
-        instance.draw()
-      })
-    }
-    // create brush instance
-    const [brushX1, brushX2, brushY1, brushY2] = [left, left + width, top, top + height]
-    const brush = isHorizontal ? d3.brushX() : d3.brushY()
-    brush.on('brush', brushed).extent([
-      [brushX1, brushY1],
-      [brushX2, brushY2],
-    ])
-    // initialize brush area
-    const brushDOM = (this.root as D3Selection).append('g').attr('class', 'chart-brush').call(brush)
-    brushDOM.call(brush.move, isHorizontal ? [brushX1, brushX2] : [brushY1, brushY2])
   }
 
   destroy() {
