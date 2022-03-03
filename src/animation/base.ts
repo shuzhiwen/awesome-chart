@@ -1,14 +1,6 @@
 import {merge} from 'lodash'
-import {isSvgContainer, noChange, uuid} from '../utils'
-import {
-  Log,
-  Event,
-  AnimationLifeCycle as Life,
-  AnimationBaseProps as Props,
-  BasicAnimationOptions as Options,
-} from '../types'
-
-const lifeCycles: Life[] = ['init', 'play', 'start', 'process', 'end', 'destroy']
+import {ANIMATION_LIFE_CYCLES, isSvgContainer, noChange, uuid} from '../utils'
+import {Log, Event, AnimationBaseProps as Props, BasicAnimationOptions as Options} from '../types'
 
 export abstract class AnimationBase<T extends Options> {
   abstract readonly log: Log
@@ -69,7 +61,7 @@ export abstract class AnimationBase<T extends Options> {
     this.createTargets('targets', context)
 
     // start catch error
-    lifeCycles.forEach((name) => {
+    ANIMATION_LIFE_CYCLES.forEach((name) => {
       const instance = this
       const fn = instance[name] || noChange
       instance[name] = (...parameter) => {

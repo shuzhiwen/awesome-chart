@@ -10,7 +10,7 @@ export const SCALE_TYPE = [
   'scaleRadius',
 ] as const
 
-export const LIFE_CYCLE = [
+export const LAYER_LIFE_CYCLES = [
   'setData',
   'setStyle',
   'draw',
@@ -18,6 +18,8 @@ export const LIFE_CYCLE = [
   'drawBasic',
   'playAnimation',
 ] as const
+
+export const ANIMATION_LIFE_CYCLES = ['init', 'play', 'start', 'process', 'end', 'destroy'] as const
 
 export const COMMON_EVENTS = [
   'click',

@@ -5,7 +5,7 @@ import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
 import {
   COMMON_EVENTS,
-  LIFE_CYCLE,
+  LAYER_LIFE_CYCLES,
   SCALE_TYPE,
   TOOLTIP_EVENTS,
   formatNumber,
@@ -116,7 +116,7 @@ export abstract class LayerBase {
   }
 
   private createLifeCycles() {
-    LIFE_CYCLE.forEach((name) => {
+    LAYER_LIFE_CYCLES.forEach((name) => {
       const instance = this
       const fn: Function = instance[name] || noop
       instance[name] = (...parameters: any[]) => {
