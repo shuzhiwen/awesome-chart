@@ -29,7 +29,6 @@ type Position =
   | 'right-top'
   | 'right-bottom'
   // aside
-  | 'side'
   | 'inner'
   | 'outer'
   | 'top-inner'

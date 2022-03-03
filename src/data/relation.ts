@@ -58,6 +58,7 @@ export class Relation extends DataBase<RawRelation, Options> {
     const completed: Record<string, boolean> = {}
     this.data.nodes.forEach(({id}) => (completed[id] = false))
     this.data.nodes.forEach(({id}) => (level[id] = -1))
+
     // find the root node of the current node
     const findRoot = (id: Meta) => {
       const current = this.data.nodes.find((node) => node.id === id)
@@ -72,6 +73,7 @@ export class Relation extends DataBase<RawRelation, Options> {
       }
       completed[id] = true
     }
+
     // calculate level of the current node
     const updateLevel = (id: Meta, parents: Meta[]) => {
       const nextIds = this.data.edges.filter(({from}) => from === id).map(({to}) => to)
@@ -94,6 +96,7 @@ export class Relation extends DataBase<RawRelation, Options> {
         })
       }
     }
+
     this.data.edges.forEach(({to}) => findRoot(to))
     this.data.roots.forEach((root) => updateLevel(root, []))
     this.data.nodes.map((node) => (node.level = level[node.id]))

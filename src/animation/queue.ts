@@ -46,11 +46,11 @@ export class AnimationQueue extends AnimationBase<Options> {
 
   // discrete animations to sequence animations
   connect(priorityConfig?: number[] | Function) {
-    // initialize life cycle
     this.queue.forEach((instance) => {
       instance.event.off('start')
       instance.event.off('end')
     })
+
     // default by index of array
     let finalPriority: number[]
     if (Array.isArray(priorityConfig)) {
@@ -60,11 +60,13 @@ export class AnimationQueue extends AnimationBase<Options> {
     } else {
       finalPriority = this.queue.map((_, index) => index)
     }
+
     // group animations by priority config
     const groupedQueue: Shape[][] = range(0, max(finalPriority)!).map(() => [])
     finalPriority.forEach((priority, animationIndex) => {
       groupedQueue[priority].push(this.queue[animationIndex])
     })
+
     // connect the grouped animations except head
     groupedQueue.reduce((previousAnimations, currentAnimations, priority) => {
       // queue capture item's events
@@ -81,6 +83,7 @@ export class AnimationQueue extends AnimationBase<Options> {
       this.bind(previousAnimations, () => currentAnimations.forEach((instance) => instance.play()))
       return currentAnimations
     })
+
     // connect done
     this.isReady = true
     return this
@@ -109,17 +112,19 @@ export class AnimationQueue extends AnimationBase<Options> {
       this.log.error('animation type error', type)
       return null
     }
+
     // id is required
     if (!this.queue[this.queue.length - 1].options.id) {
       this.queue[this.queue.length - 1].options.id = uuid()
     }
+
     // create a animation lead to reconnect
     this.isReady = false
   }
 
   remove(id: string) {
     const index = this.queue.findIndex(({options}) => options.id === id)
-    // remove a animation lead to reconnect
+
     if (index !== -1) {
       this.isReady = false
       return this.queue.splice(index, 1)

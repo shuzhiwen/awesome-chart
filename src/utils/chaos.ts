@@ -12,7 +12,6 @@ export function noChange(...args: any) {
   return args
 }
 
-// svg & dom text width
 export function getTextWidth(text: string, fontSize: number | string = 12) {
   ctx.font = `${typeof fontSize === 'string' ? fontSize : `${fontSize}px`} ${STYLE.FONT_FAMILY}`
   return ctx.measureText(text).width
