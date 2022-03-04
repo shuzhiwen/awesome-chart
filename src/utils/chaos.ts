@@ -1,19 +1,17 @@
 import * as d3 from 'd3'
 import chroma from 'chroma-js'
-import {isNil} from 'lodash'
+import {isArray, isNil} from 'lodash'
 import {D3Selection} from '../types'
 
 const ctx = document.createElement('canvas').getContext('2d')!
-const STYLE = {
-  FONT_FAMILY: "'PingFang SC', 'Helvetica Neue', Helvetica, Tahoma, Helvetica, sans-serif",
-}
+const fontFamily = "'PingFang SC', 'Helvetica Neue', Helvetica, Tahoma, Helvetica, sans-serif"
 
 export function noChange(...args: any) {
   return args
 }
 
 export function getTextWidth(text: string, fontSize: number | string = 12) {
-  ctx.font = `${typeof fontSize === 'string' ? fontSize : `${fontSize}px`} ${STYLE.FONT_FAMILY}`
+  ctx.font = `${typeof fontSize === 'string' ? fontSize : `${fontSize}px`} ${fontFamily}`
   return ctx.measureText(text).width
 }
 
@@ -45,26 +43,26 @@ export function mergeAlpha<T>(color: T, opacity: number) {
   }
 }
 
-// get real attr from target
-export function getAttr(target: MaybeGroup<any>, index: number = 0, defaultValue?: any) {
-  if (Array.isArray(target)) {
-    if (target.length > index && !isNil(target[index])) {
-      return target[index]
-    }
-    return defaultValue
-  }
-  return target ?? defaultValue
-}
-
 // add style for d3 selection
 export function addStyle(target: D3Selection, style: AnyObject, index: number = 0) {
-  Object.entries(style).forEach(([key, value]) => target.style(key, getAttr(value, index)))
+  Object.entries(style).forEach(([key, value]) => target.style(key, getAttr(value, index, '')))
 }
 
 // add event for d3 selection
 export function addEvent(target: D3Selection, event: AnyEventObject, data?: any) {
   Object.entries(event).forEach(([key, handler]) => target.on(key, handler.bind(null, data)))
   target.style('cursor', 'pointer')
+}
+
+// get real attr from target
+export function getAttr<T>(target: MaybeGroup<T>, index: number = 0, defaultValue: T): T {
+  if (isArray(target)) {
+    if (target.length > index && !isNil(target[index])) {
+      return target[index]
+    }
+    return defaultValue
+  }
+  return target ?? defaultValue
 }
 
 // format: fontSize => font-size

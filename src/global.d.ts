@@ -8,6 +8,8 @@ type MaybeGroup<T> = T | T[] | null | undefined
 
 type Padding = [number, number, number, number]
 
+type ArrayItem<T> = T extends Array<infer U> ? U : T
+
 type Engine = 'svg' | 'canvas'
 
 type Direction = 'horizontal' | 'vertical'

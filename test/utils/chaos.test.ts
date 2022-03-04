@@ -38,19 +38,19 @@ test('mergeAlpha', () => {
 test('getAttr', () => {
   const attributes = ['123', 456, '789']
   // single
-  expect(getAttr(123)).toBe(123)
-  expect(getAttr('123')).toBe('123')
-  expect(getAttr('123', 2)).toBe('123')
-  expect(getAttr('123', -1)).toBe('123')
-  expect(getAttr(false, -1, '456')).toBe(false)
+  expect(getAttr(123, 0, null)).toBe(123)
+  expect(getAttr('123', 0, null)).toBe('123')
+  expect(getAttr('123', 2, null)).toBe('123')
+  expect(getAttr('123', -1, null)).toBe('123')
+  expect(getAttr(false, -1, true)).toBe(false)
   expect(getAttr(undefined, -1, '456')).toBe('456')
   expect(getAttr(null, -1, '456')).toBe('456')
   // group
-  expect(getAttr(attributes, 0)).toBe('123')
-  expect(getAttr(attributes, 1)).toBe(456)
+  expect(getAttr(attributes, 0, null)).toBe('123')
+  expect(getAttr(attributes, 1, null)).toBe(456)
   // group require index
-  expect(getAttr(attributes)).toBe('123')
-  expect(getAttr(attributes, -1)).toBe(undefined)
+  expect(getAttr(attributes, 0, null)).toBe('123')
+  expect(getAttr(attributes, -1, undefined)).toBe(undefined)
   expect(getAttr(attributes, -1, 666)).toBe(666)
 })
 

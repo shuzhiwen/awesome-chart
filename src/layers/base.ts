@@ -17,21 +17,22 @@ import {
   getAttr,
 } from '../utils'
 import {
+  Log,
+  Event,
   BackupShape,
-  BasicElConfigShape,
+  ElConfigShape,
   CreateTextProps,
   DataShape,
   DataType,
   DrawBasicProps,
   DrawerTarget,
   ElEvent,
-  Event,
   FabricObject,
   GraphDrawerProps,
   LayerBaseProps,
   LayerScalesShape,
   LayerSchema,
-  Log,
+  CreateColorMatrixProps,
 } from '../types'
 
 export abstract class LayerBase {
@@ -81,7 +82,7 @@ export abstract class LayerBase {
     const {tooltip} = this.options
     const getMouseEvent = (event: ElEvent): MouseEvent =>
       event instanceof MouseEvent ? event : event.e
-    const getData = (event: ElEvent, data?: BasicElConfigShape): BasicElConfigShape =>
+    const getData = (event: ElEvent, data?: ElConfigShape): ElConfigShape =>
       event instanceof MouseEvent ? data : (event.target as any)
 
     this.backupEvent = {
@@ -91,7 +92,7 @@ export abstract class LayerBase {
         mousemove: (event: ElEvent) => {
           tooltip.move(getMouseEvent(event))
         },
-        mouseover: (event: ElEvent, data?: BasicElConfigShape) => {
+        mouseover: (event: ElEvent, data?: ElConfigShape) => {
           tooltip.update({
             backup: this.backupData,
             data: getData(event, data),
@@ -105,7 +106,7 @@ export abstract class LayerBase {
       this.backupEvent.common[type] = Object.fromEntries(
         this.sublayers.map((sublayer) => [
           sublayer,
-          (event: ElEvent, data: BasicElConfigShape) => {
+          (event: ElEvent, data: ElConfigShape) => {
             this.event.fire(`${type}-${sublayer}`, {
               data: getData(event, data),
               event: getMouseEvent(event),
@@ -148,7 +149,7 @@ export abstract class LayerBase {
   }
 
   // color enhance function
-  getColorMatrix(rowNumber: number, columnNumber: number, customColors: string[], nice = true) {
+  createColorMatrix({row, column, customColors, nice = true}: CreateColorMatrixProps) {
     let matrix: string[][] = []
     let originColors = this.options.theme
     const order = this.data?.options?.order
@@ -182,20 +183,20 @@ export abstract class LayerBase {
     }
 
     // new color matrix
-    if (columnNumber === 1) {
+    if (column === 1) {
       matrix = chroma
         .scale(originColors)
         .mode('lch')
-        .colors(rowNumber)
+        .colors(row)
         .map((color) => [color])
     } else {
       const rowColors = chroma
         .scale(originColors)
         .mode('lch')
-        .colors(rowNumber + 1)
+        .colors(row + 1)
       // extends one dimension to two dimensions
       rowColors.reduce((prevColor, curColor, index) => {
-        const count = index === rowNumber ? columnNumber : columnNumber + 1
+        const count = index === row ? column : column + 1
         matrix.push(chroma.scale([prevColor, curColor]).mode('lch').colors(count))
         return curColor
       })
@@ -243,8 +244,8 @@ export abstract class LayerBase {
   // handle texts in the chart
   createText({x, y, value, style = {}, position = 'right-top', offset = 0}: CreateTextProps) {
     let [positionX, positionY] = [x, y]
-    const {fontSize: _fontSize = 12, writingMode, format} = style
-    const fontSize = getAttr(_fontSize, 0)
+    const {fontSize: _fontSize, writingMode, format} = style
+    const fontSize = getAttr(_fontSize, 0, 12)
     const formattedText = String(formatNumber(value, format))
     const textWidth = getTextWidth(formattedText, fontSize)
 
@@ -278,7 +279,7 @@ export abstract class LayerBase {
     }
     // Relocate position according to the 'writingMode'.
     // But still has a problem: font height
-    if (writingMode === 'vertical') {
+    if (writingMode === 'vertical-rl') {
       positionX += textWidth / 2
       positionY += -fontSize
     }

@@ -1,40 +1,36 @@
 import {FormatNumberConfig} from '..'
 
 export type GraphStyleShape = Partial<{
-  // visual
   fill: MaybeGroup<string>
   stroke: MaybeGroup<string>
   strokeWidth: MaybeGroup<number>
   opacity: MaybeGroup<number>
   fillOpacity: MaybeGroup<number>
   strokeOpacity: MaybeGroup<number>
-  transformOrigin: MaybeGroup<string | number>
+  strokeDasharray: MaybeGroup<string>
+  transformOrigin: MaybeGroup<string>
   rotation: MaybeGroup<number>
-  // animation
   enableUpdateAnimation: boolean
   updateAnimationDuration: number
   updateAnimationDelay: number
-  // advance
   mapping: (config: AnyObject) => AnyObject
 }>
 
+export type Shadow = {
+  color: string
+  offset: [number, number]
+  blur: number
+}
+
 export type TextStyleShape = GraphStyleShape &
   Partial<{
+    writingMode: 'horizontal-tb' | 'vertical-rl'
     fontFamily: MaybeGroup<string>
     fontWeight: MaybeGroup<string | number>
     fontSize: MaybeGroup<number>
-    writingMode: 'horizontal' | 'vertical'
     format: FormatNumberConfig
     offset: [number, number]
-    shadow: MaybeGroup<
-      | string
-      | {
-          color: string
-          offset: [number, number]
-          blur: number
-          hide: boolean
-        }
-    >
+    shadow: string | Shadow
   }>
 
 export type TextLayerStyleShape = {

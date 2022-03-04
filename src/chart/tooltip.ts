@@ -1,7 +1,7 @@
 import {select} from 'd3'
 import {createLog} from '../utils'
 import {isEqual, isArray, merge} from 'lodash'
-import {BasicElConfigShape, D3Selection, BackupShape, TooltipOptions} from '../types'
+import {ElConfigShape, D3Selection, BackupShape, TooltipOptions} from '../types'
 
 const defaultOptions: Required<TooltipOptions> = {
   container: null,
@@ -58,46 +58,46 @@ export class Tooltip {
     this.isVisible = true
     this.instance?.style('display', 'block')
     event && this.move(event)
-    return this
   }
 
   hide() {
     this.isVisible = false
     this.instance?.style('display', 'none')
-    return this
   }
 
-  private getListData<T>(data: BasicElConfigShape, backup: BackupShape<T>) {
-    let list = null
+  private getListData<T>(data: ElConfigShape, backup: BackupShape<T>) {
+    let list: any[] = []
     const {mode} = this.options
+
     if (mode === 'single') {
       const {fill, stroke, source} = data
       const pointColor = fill || stroke
-      list = (isArray(source) ? source : [source]).map((item) => ({pointColor, ...item}))
-    }
-    if (mode === 'group') {
+      list.concat(isArray(source) ? source : [source]).map((item) => ({pointColor, ...item}))
+    } else if (mode === 'group') {
       try {
-        const {dimension} = data.source
+        const {dimension} = data.source || {}
         const elType = data.className.split('-')[2]
         const group = backup[elType].filter(({source}) =>
           isEqual(source?.[0].dimension, dimension)
         )?.[0]
         const {source, fill, stroke} = group
-        list = source?.map((item, i) => ({
-          ...item,
-          pointColor: isArray(fill) ? fill[i] : stroke?.[i],
-        }))
+        list.concat(
+          source?.map((item, i) => ({
+            pointColor: isArray(fill) ? fill[i] : stroke?.[i],
+            ...item,
+          }))
+        )
       } catch (error) {
         this.log.warn('the layer does not support group mode', error)
       }
     }
-    return list
   }
 
-  update<T>({data, backup}: {data: BasicElConfigShape; backup: BackupShape<T>}) {
+  update<T>({data, backup}: {data: ElConfigShape; backup: BackupShape<T>}) {
     const list = this.getListData(data, backup)
     const {titleSize, titleColor, pointSize, labelSize, labelColor, valueSize, valueColor} =
       this.options
+
     // render if and only if data change
     if (isArray(list) && !isEqual(this.backup, list)) {
       this.backup = list
@@ -163,12 +163,12 @@ export class Tooltip {
         .style('color', valueColor)
         .text((d) => d.value)
     }
-    return this
   }
 
   move({pageX, pageY}: MouseEvent) {
     const drift = 10
     const rect = this.instance.nodes()[0].getBoundingClientRect()
+
     // boundary judgement
     if (pageX + rect.width > document.body.clientWidth) {
       pageX -= rect.width + drift
@@ -180,8 +180,8 @@ export class Tooltip {
     } else {
       pageY += drift
     }
+
     this.instance.style('left', `${pageX}px`).style('top', `${pageY}px`)
-    return this
   }
 
   destroy() {

@@ -12,12 +12,10 @@ import {
 
 export type LayerType = keyof typeof layerMapping
 
-export type BackupValueShape<TData> = (Omit<
+export type BackupValueShape<TData> = Omit<
   GraphDrawerProps<TData>,
   'className' | 'container' | 'engine'
-> & {
-  hide?: boolean
-})[]
+>[]
 
 export type BackupShape<TData> = Record<string, BackupValueShape<TData>>
 
@@ -41,6 +39,13 @@ export interface CreateTextProps {
   style?: TextStyleShape
   position?: Position
   offset?: number
+}
+
+export interface CreateColorMatrixProps {
+  row: number
+  column: number
+  customColors: string[]
+  nice: boolean
 }
 
 export type LayerOptions = AnyObject & {
