@@ -1,5 +1,5 @@
 import {isArray} from 'lodash'
-import {TableList, Table, Relation, Custom} from '../data'
+import {DataTableList, DataTable, DataRelation, DataBase} from '../data'
 import {LayerType, CreateChartSchema, CreateLayerSchema} from '../types'
 import {Chart} from '.'
 import {
@@ -26,21 +26,21 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
   if (type === 'legend') {
     dataSet = chart.layers
   } else if (isTable(data) || data?.type === 'table') {
-    dataSet = new Table(isTable(data) ? data : randomTable(data))
+    dataSet = new DataTable(isTable(data) ? data : randomTable(data))
   } else if (isArray(data) && data.length === 2 && isRelation(data)) {
     if (type === 'chord') {
-      dataSet = new Table(relationToTable(data)!)
+      dataSet = new DataTable(relationToTable(data)!)
     } else {
-      dataSet = new Relation(data)
+      dataSet = new DataRelation(data)
     }
   } else if (type !== 'indicator' && (isTableList(data) || data?.type === 'tableList')) {
     if (type === 'matrix') {
-      dataSet = new Table(tableListToTable(data)!)
+      dataSet = new DataTable(tableListToTable(data)!)
     } else {
-      dataSet = new TableList(isTableList(data) ? data : randomTableList(data))
+      dataSet = new DataTableList(isTableList(data) ? data : randomTableList(data))
     }
   } else {
-    dataSet = new Custom(data)
+    dataSet = new DataBase(data, {})
   }
 
   layer.setData(dataSet)
@@ -54,7 +54,6 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
   return layer
 }
 
-// create a chart by schema
 export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => {
   try {
     const {layers = [], afterCreate, ...initialConfig} = schema

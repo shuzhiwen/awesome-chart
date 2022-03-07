@@ -8,7 +8,6 @@ const defaultNice = {
   paddingInner: 0,
 }
 
-// discrete to continuous
 export function ScaleBand({domain, range, nice = defaultNice}: ScaleBandProps) {
   const scale = d3.scaleBand().domain(domain).range(range)
 
@@ -39,7 +38,6 @@ export function ScaleBand({domain, range, nice = defaultNice}: ScaleBandProps) {
   return scale
 }
 
-// only for arc layer
 export function ScaleArc({domain, range, nice}: ScaleArcProps) {
   const scale = d3.scaleOrdinal()
 
@@ -63,7 +61,6 @@ export function ScaleArc({domain, range, nice}: ScaleArcProps) {
   return scale
 }
 
-// continuous to continuous
 export function ScaleLinear({domain, range, nice}: ScaleLinearProps) {
   const scale = d3.scaleLinear().domain(domain).range(range)
 
@@ -73,7 +70,6 @@ export function ScaleLinear({domain, range, nice}: ScaleLinearProps) {
   return scale
 }
 
-// extend domain so that contains zero
 export function extendZeroForScale(scale: d3.ScaleLinear<number, number>) {
   let [start, end] = scale.domain()
 
@@ -94,10 +90,10 @@ export function extendZeroForScale(scale: d3.ScaleLinear<number, number>) {
   scale.domain([start, end])
 }
 
-// d3 default nice function is not suitable for us
 export function niceScale(scale: d3.ScaleLinear<number, number>, tick: number) {
-  let [start, end] = scale.domain()
-  // start must different from end
+  let [start, end] = scale.domain(),
+    reverse = false
+
   if (start === end) {
     if (start === 0) {
       end += tick
@@ -106,37 +102,38 @@ export function niceScale(scale: d3.ScaleLinear<number, number>, tick: number) {
       end += tick
     }
   }
-  // order
-  let reverse = false
+
   if (start >= end) {
     ;[start, end] = [end, start]
     reverse = true
   }
-  // change domain
+
   if (tick > 0) {
-    const distance = end - start
-    const level = 10 ** Math.floor(Math.log10(Math.abs(distance / tick)))
-    // the blank ratio at the top of the chart
-    const spaceThreshold = 0
+    const distance = end - start,
+      level = 10 ** Math.floor(Math.log10(Math.abs(distance / tick))),
+      // the blank ratio at the top of the chart
+      spaceThreshold = 0
+
     // step to ensure that the chart will not overflow
-    let step = Math.ceil(distance / tick / level) * level
-    let newStart = Math.floor(start / step) * step
-    let newEnd = newStart + tick * step
-    // too much blank
+    let step = Math.ceil(distance / tick / level) * level,
+      newStart = Math.floor(start / step) * step,
+      newEnd = newStart + tick * step
+
     if (newEnd > end) {
-      const isOverflow = () => end + (level / 2) * tick >= newEnd
-      const isExceedThreshold = () => (newEnd - end) / (newEnd - newStart) > spaceThreshold
+      const isOverflow = () => end + (level / 2) * tick >= newEnd,
+        isExceedThreshold = () => (newEnd - end) / (newEnd - newStart) > spaceThreshold
+
       while (!isOverflow() && isExceedThreshold()) {
         step -= level / 2
         newEnd = newStart + tick * step
       }
     }
-    // overflow
+
     while (newEnd < end) {
       step += level / 2
       newEnd = newStart + tick * step
     }
-    // nice domain
+
     scale.domain(reverse ? [newEnd, newStart] : [newStart, newEnd])
   }
 }

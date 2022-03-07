@@ -1,7 +1,7 @@
 import {LayerBase} from '../base'
 import {createEvent, createLog, getAttr, getTextWidth} from '../../utils'
 import {BackupValueShape, ChartContext, LayerOptions, TextLayerStyleShape} from '../../types'
-import {Custom} from '../../data'
+import {DataBase} from '../../data'
 
 const defaultStyle: TextLayerStyleShape = {
   align: 'start',
@@ -18,7 +18,7 @@ export class LayerText extends LayerBase {
 
   readonly log = createLog('layer:normal:text', 'TextLayer')
 
-  private _data: Maybe<Custom> = null
+  private _data: Maybe<DataBase<string>> = null
 
   private _style = defaultStyle
 
@@ -40,8 +40,7 @@ export class LayerText extends LayerBase {
     super({options, context, sublayers: ['text']})
   }
 
-  // data is string
-  setData(data: Custom) {
+  setData(data: LayerText['data']) {
     this._data = this.validateAndCreateData('base', this.data, data)
   }
 
@@ -53,7 +52,7 @@ export class LayerText extends LayerBase {
     this._style = this.createStyle(defaultStyle, this._style, style)
     const {align, verticalAlign, text} = this._style
     const {left, top, width, height} = this.options.layout
-    const fontSize = getAttr(text?.fontSize, 0)
+    const fontSize = getAttr(text?.fontSize, 0, 12)
     let [x, y] = [0, 0]
 
     // horizontal position

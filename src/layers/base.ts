@@ -1,6 +1,6 @@
 import chroma from 'chroma-js'
 import {cloneDeep, isArray, isEqual, isNil, merge, noop} from 'lodash'
-import {dataMapping, TableList} from '../data'
+import {dataMapping, DataTableList} from '../data'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
 import {
@@ -159,7 +159,7 @@ export abstract class LayerBase {
     }
 
     // the order from legend layer
-    if (order && order.colorMatrix && this.data instanceof TableList) {
+    if (order && order.colorMatrix && this.data instanceof DataTableList) {
       const data = this.data?.data
       const {type, mapping} = order
       matrix = cloneDeep(order.colorMatrix.matrix)

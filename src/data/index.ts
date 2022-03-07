@@ -1,7 +1,6 @@
-import {DataBase, Relation, Table, TableList} from '.'
+import {DataBase, DataRelation, DataTable, DataTableList} from '.'
 
 export * from './base'
-export * from './custom'
 export * from './relation'
 export * from './scale'
 export * from './table-list'
@@ -9,7 +8,7 @@ export * from './table'
 
 export const dataMapping = {
   base: DataBase,
-  table: Table,
-  tableList: TableList,
-  relation: Relation,
+  table: DataTable,
+  tableList: DataTableList,
+  relation: DataRelation,
 }

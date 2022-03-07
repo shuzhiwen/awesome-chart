@@ -1,40 +1,29 @@
-import {cloneDeep, min, max} from 'lodash'
-import {createEvent, createLog, isTable, isTableList, tableListToTable} from '../utils'
+import {Meta, RawTable, TableDataShape as Shape, TableOptions as Options} from '../types'
+import {cloneDeep, min, max, isArray} from 'lodash'
+import {createLog, isTable} from '../utils'
 import {DataBase} from './base'
-import {
-  Meta,
-  RawTable as Input,
-  TableDataShape as Shape,
-  TableOptions as Options,
-  RawTableList,
-  RawTable,
-} from '../types'
 
-export class Table extends DataBase<RawTable, Options> {
-  readonly log = createLog('data:table')
+const log = createLog('data:table')
 
-  readonly event = createEvent('data:table')
-
+export class DataTable extends DataBase<RawTable, Options> {
   private _data: Shape = [[], [], []]
 
   get data() {
     return this._data
   }
 
-  constructor(table: Input, options: Options = {}) {
-    super({source: table, options})
-    this.update(table)
+  constructor(data: RawTable, options: Options = {}) {
+    super(data, options)
+    this.update(data)
   }
 
-  // get subset of the table without changing previous data
   select(rows: Meta[], columns: Meta[], options: Options) {
-    const _rows = Array.isArray(rows) ? rows : [rows]
-    const rowsIndex = _rows.map((row) => this.data[0].findIndex((value) => value === row))
-    const _columns = Array.isArray(columns) ? columns : [columns]
-    const columnsIndex = _columns.map((column) =>
-      this.data[1].findIndex((value) => value === column)
-    )
-    const data: RawTable = [_rows, _columns, []]
+    const _rows = isArray(rows) ? rows : [rows],
+      _columns = isArray(columns) ? columns : [columns],
+      data: RawTable = [_rows, _columns, []],
+      rowsIndex = _rows.map((row) => this.data[0].findIndex((value) => value === row)),
+      columnsIndex = _columns.map((column) => this.data[1].findIndex((value) => value === column))
+
     for (let i = 0; i < rowsIndex.length; i++) {
       let row: Meta[] = []
       for (let j = 0; j < columnsIndex.length; j++) {
@@ -42,30 +31,28 @@ export class Table extends DataBase<RawTable, Options> {
       }
       data[2].push(row)
     }
-    // HACK: create a new table
-    const result = new Table([[], [], []], options)
+
+    const result = new DataTable([[], [], []], options)
     result._data = cloneDeep(data)
     return result
   }
 
-  update(table: Input) {
+  update(table: RawTable) {
     if (!isTable(table)) {
-      this.log.error('illegal data', table)
-      if (isTableList(table)) {
-        table = tableListToTable(table as RawTableList)!
-      }
+      log.error('illegal data', table)
+      return
     }
+
     this._data = table
   }
 
-  // append items to the list
   push(target: Options['target'] = 'row', ...data: Meta[][]) {
     data.forEach((item) => {
       if (
         (target === 'row' && item.length !== this.data[0].length) ||
         (target === 'column' && item.length !== this.data[1].length)
       ) {
-        this.log.error('illegal data')
+        log.error('illegal data')
       } else {
         data.forEach(([dimension, ...values]) => {
           if (target === 'row') {
@@ -80,7 +67,6 @@ export class Table extends DataBase<RawTable, Options> {
     })
   }
 
-  // remove items from the list
   remove(target: Options['target'] = 'row', ...data: Meta[]) {
     const removedList: Meta[][] = []
     data.forEach((dimension) => {
@@ -92,14 +78,14 @@ export class Table extends DataBase<RawTable, Options> {
         index !== -1 && removedList.concat(this.data[2].map((item) => item.splice(index, 1)[0]))
       }
     })
-    return removedList
   }
 
   sort() {
-    const result = cloneDeep(this.data[2])
-    const column = this.data[1].length
-    const data = this.data[2].reduce((prev, cur) => [...prev, ...cur], [])
-    const order = new Array(data.length).fill(null).map((v, i) => i)
+    const result = cloneDeep(this.data[2]),
+      column = this.data[1].length,
+      data = this.data[2].reduce((prev, cur) => [...prev, ...cur], []),
+      order = new Array(data.length).fill(null).map((v, i) => i)
+
     for (let i = 0; i < data.length; i++) {
       for (let j = i + 1; j < data.length; j++) {
         if (data[i] > data[j]) {
@@ -108,7 +94,7 @@ export class Table extends DataBase<RawTable, Options> {
         }
       }
     }
-    // order data
+
     order.forEach((value, i) => (result[Math.floor(value / column)][value % column] = i))
     return result
   }

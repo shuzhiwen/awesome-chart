@@ -1,42 +1,39 @@
-import {Custom, dataMapping, Relation, Table, TableList} from '../data'
+import {DataBase, dataMapping, DataRelation, DataTable, DataTableList} from '../data'
 import {ScaleBand, ScaleLinear, ScaleArc} from '../data'
 
 export type Meta = string | number
 
 export type DataType = keyof typeof dataMapping
 
-export type DataShape = Custom | TableList | Table | Relation
+export type DataShape = DataBase<unknown> | DataTableList | DataTable | DataRelation
 
-// tableList
+export type RawTableList = Meta[][]
+
 export type TableListOptions = {
   mode?: 'sum' | 'percentage'
   target?: 'row' | 'column'
 }
 
-export type RawTableList = Meta[][]
-
-export type TableListDataShapeItem = {
+export type TableListDataItemShape = {
   header: string
   list: Meta[]
   min?: Meta
   max?: Meta
 }
 
-export type TableListDataShape = TableListDataShapeItem[]
+export type TableListDataShape = TableListDataItemShape[]
 
-// table
+export type RawTable = [Meta[], Meta[], RawTableList]
+
 export type TableOptions = {
   target?: 'row' | 'column'
 }
 
-export type RawTable = [Meta[], Meta[], RawTableList]
-
 export type TableDataShape = RawTable
 
-// relation
-export type RelationOptions = {}
-
 export type RawRelation = [RawTableList, RawTableList]
+
+export type RelationOptions = {}
 
 export type Edge = {
   id: Meta
@@ -60,11 +57,9 @@ export type RelationDataShape = {
   edges: Edge[]
 }
 
-// scale
 export type ScaleNiceShape = {
-  count?: number // tick count
-  zero?: boolean // domain extend
-  // for band type
+  count?: number
+  zero?: boolean
   paddingInner?: number
   fixedPaddingInner?: number
   fixedBandwidth?: number
@@ -87,7 +82,7 @@ export interface ScaleLinearProps {
 
 export interface ScaleArcProps {
   type: 'linear'
-  domain: TableList
+  domain: DataTableList
   range: [number, number]
   nice: Pick<ScaleNiceShape, 'paddingInner'>
 }
@@ -97,7 +92,6 @@ export type Scale =
   | ReturnType<typeof ScaleLinear>
   | ReturnType<typeof ScaleArc>
 
-// random
 export interface BaseRandomOptions {
   row: number
   column: number

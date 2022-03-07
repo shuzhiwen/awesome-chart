@@ -1,4 +1,4 @@
-import {merge} from 'lodash'
+import {debounce, merge} from 'lodash'
 import {ANIMATION_LIFE_CYCLES, isSvgContainer, noChange, uuid} from '../utils'
 import {Log, Event, AnimationBaseProps as Props, BasicAnimationOptions as Options} from '../types'
 
@@ -31,23 +31,23 @@ export abstract class AnimationBase<T extends Options> {
     return this._isAnimationAvailable
   }
 
-  init = (...args: any) => {
+  protected start(...args: any) {
+    return args
+  }
+
+  protected process(...args: any) {
+    return args
+  }
+
+  protected end(...args: any) {
+    return args
+  }
+
+  init(...args: any) {
     return args
   }
 
   play(...args: any) {
-    return args
-  }
-
-  start(...args: any) {
-    return args
-  }
-
-  process(...args: any) {
-    return args
-  }
-
-  end(...args: any) {
     return args
   }
 
@@ -60,10 +60,10 @@ export abstract class AnimationBase<T extends Options> {
     this.options = merge({}, defaultOptions, options, {context})
     this.createTargets('targets', context)
 
-    // start catch error
     ANIMATION_LIFE_CYCLES.forEach((name) => {
       const instance = this
       const fn = instance[name] || noChange
+
       instance[name] = (...parameter) => {
         try {
           if (name === 'init' && instance._isInitialized) {
@@ -97,12 +97,16 @@ export abstract class AnimationBase<T extends Options> {
           instance.log.error('animation life cycle call exception', error)
         }
       }
+
+      instance.init = debounce(instance.init, 100)
+      instance.play = debounce(instance.play, 100)
+      instance.destroy = debounce(instance.destroy, 100)
     })
   }
 
-  // transform targets
   protected createTargets(key: string, context: Props<T>['context']) {
     const targets = this.options[key as 'targets']
+
     if (isSvgContainer(context)) {
       if (typeof targets === 'string') {
         merge(this.options, {className: targets, [key]: context.selectAll(targets).nodes()})
