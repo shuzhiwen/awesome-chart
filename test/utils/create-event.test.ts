@@ -1,4 +1,4 @@
-import {createEvent} from '../../src/main'
+import {createEvent} from '../../src'
 
 test('createEvent', () => {
   const event = createEvent('abc')

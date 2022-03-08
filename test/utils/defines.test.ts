@@ -1,6 +1,6 @@
 import {select} from 'd3'
 import {fabric} from 'fabric'
-import {getEasyGradientCreator} from '../../src/main'
+import {getEasyGradientCreator} from '../../src'
 
 test('defines', () => {
   const svgContainer = select(document.createElement('svg')).append('defs')

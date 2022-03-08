@@ -1,4 +1,4 @@
-import {ColorMatrix} from '../../src/main'
+import {ColorMatrix} from '../../src'
 
 // disable log message
 jest.mock('../../src/utils/create-log', () => ({

@@ -13,9 +13,11 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
-    "composite": true
+    "composite": true,
+    "rootDir": "src",
+    "outDir": "dist"
   },
-  "include": ["src", "test", "vite.config.ts"]
+  "include": ["src"],
+  "exclude": ["src/demo", "**/*.tsx"]
 }

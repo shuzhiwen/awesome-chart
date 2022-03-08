@@ -1,4 +1,4 @@
-import {tableListToObjects, tableListToTable, relationToTable} from '../../src/main'
+import {tableListToObjects, tableListToTable, relationToTable} from '../../src'
 
 test('tableListToObjects', () => {
   expect(

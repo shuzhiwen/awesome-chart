@@ -1,4 +1,4 @@
-import {isTable, isTableList, isRelation} from '../../src/main'
+import {isTable, isTableList, isRelation} from '../../src'
 
 test('isTableList', () => {
   expect(

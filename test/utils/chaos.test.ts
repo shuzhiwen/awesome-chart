@@ -7,7 +7,7 @@ import {
   mergeAlpha,
   transformAttr,
   getTextWidth,
-} from '../../src/main'
+} from '../../src'
 
 test('range', () => {
   // integer

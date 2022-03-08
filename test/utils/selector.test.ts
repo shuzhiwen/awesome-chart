@@ -1,6 +1,6 @@
 import {select} from 'd3'
 import {fabric} from 'fabric'
-import {Selector} from '../../src/main'
+import {Selector} from '../../src'
 
 // disable log message
 jest.mock('../../src/utils/create-log', () => ({

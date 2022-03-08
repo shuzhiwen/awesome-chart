@@ -1,4 +1,4 @@
-import {formatNumber, overflowControl} from '../../src/main'
+import {formatNumber, overflowControl} from '../../src'
 
 jest.mock('../../src/utils/chaos', () => ({
   __esModule: true,

@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # Temporary
-src/demo
+tsconfig.tsbuildinfo
