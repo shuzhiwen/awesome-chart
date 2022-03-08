@@ -7,6 +7,7 @@ export type AnimationType = keyof typeof animationMapping | 'queue' | 'function'
 
 export type BasicAnimationOptions = {
   id?: string
+  engine?: Engine
   targets?: string | D3Selection
   duration?: number
   delay?: number
@@ -19,7 +20,7 @@ export interface AnimationBaseProps<T extends BasicAnimationOptions> {
   defaultOptions: T
 }
 
-export interface AnimationProps<T> {
+export interface AnimationProps<T extends BasicAnimationOptions> {
   context?: Maybe<DrawerTarget>
   options?: T
 }

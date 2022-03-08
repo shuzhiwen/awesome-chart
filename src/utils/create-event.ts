@@ -6,14 +6,14 @@ type Callback = Function & {
   isOnceDone?: boolean
 }
 
-const isCallback = (fn: any): fn is Callback => isFunction(fn)
+const isCallback = (fn: unknown): fn is Callback => isFunction(fn)
 
 export const createEvent = (privateName = '') => {
   const id = `__event-${privateName}-${uuid()}`
   const rename = (name: string) => `${id}-${name}`
   const cache: Record<string, Callback[]> = {}
 
-  const event = {
+  return {
     onWithOff(name: string, fn: Callback, category: string = name) {
       this.off(name, fn, category)
       this.on(name, fn, category)
@@ -60,7 +60,7 @@ export const createEvent = (privateName = '') => {
       }
     },
 
-    fire(name: string, args?: any, context?: any) {
+    fire(name: string, args?: unknown, context?: unknown) {
       const fns = cache[rename(name)]
       if (fns) {
         let fn
@@ -80,6 +80,4 @@ export const createEvent = (privateName = '') => {
       return !!cache[rename(name)]
     },
   }
-
-  return event
 }

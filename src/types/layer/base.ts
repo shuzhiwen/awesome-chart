@@ -1,13 +1,13 @@
-import {TextStyleShape} from '.'
 import {LayerBase, layerMapping} from '../../layers'
 import {
-  Meta,
   Scale,
   DrawerType,
   ChartContext,
   GraphDrawerProps,
   ScaleNiceShape,
   LayoutArea,
+  AnimationType,
+  DrawerTarget,
 } from '..'
 
 export type LayerType = keyof typeof layerMapping
@@ -26,26 +26,32 @@ export interface LayerBaseProps {
   sublayers?: string[]
 }
 
+export type CreateAnimationConfigItemShape = {
+  type: AnimationType
+  duration?: number
+  delay?: number
+  loop?: boolean
+}
+
+export type CreateAnimationProps = {
+  event: Event
+  engine: Engine
+  sublayer: string
+  context: DrawerTarget
+  config: Record<
+    string,
+    {
+      enter: CreateAnimationConfigItemShape
+      loop: CreateAnimationConfigItemShape
+      update: CreateAnimationConfigItemShape
+    }
+  >
+}
+
 export interface DrawBasicProps {
   type: DrawerType
   data: BackupValueShape<any>
   sublayer?: string
-}
-
-export interface CreateTextProps {
-  x: number
-  y: number
-  value: Meta
-  style?: TextStyleShape
-  position?: Position
-  offset?: number
-}
-
-export interface CreateColorMatrixProps {
-  row: number
-  column: number
-  customColors: string[]
-  nice: boolean
 }
 
 export type LayerOptions = AnyObject & {

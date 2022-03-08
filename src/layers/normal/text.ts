@@ -1,6 +1,7 @@
 import {LayerBase} from '../base'
 import {createEvent, createLog, getAttr, getTextWidth} from '../../utils'
 import {BackupValueShape, ChartContext, LayerOptions, TextLayerStyleShape} from '../../types'
+import {createStyle, createText, validateAndCreateData} from '../helpers'
 import {DataBase} from '../../data'
 
 const defaultStyle: TextLayerStyleShape = {
@@ -41,7 +42,7 @@ export class LayerText extends LayerBase {
   }
 
   setData(data: LayerText['data']) {
-    this._data = this.validateAndCreateData('base', this.data, data)
+    this._data = validateAndCreateData('base', this.data, data)
   }
 
   setStyle(style: TextLayerStyleShape) {
@@ -49,7 +50,7 @@ export class LayerText extends LayerBase {
       return
     }
 
-    this._style = this.createStyle(defaultStyle, this._style, style)
+    this._style = createStyle(defaultStyle, this._style, style)
     const {align, verticalAlign, text} = this._style
     const {left, top, width, height} = this.options.layout
     const fontSize = getAttr(text?.fontSize, 0, 12)
@@ -72,7 +73,7 @@ export class LayerText extends LayerBase {
       y = top + height
     }
 
-    const textData = this.createText({x, y, value: this.data.source, style: text})
+    const textData = createText({x, y, value: this.data.source, style: text})
     this.textData = [{data: [textData]}]
   }
 

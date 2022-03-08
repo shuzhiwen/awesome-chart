@@ -5,7 +5,6 @@ export type Log = ReturnType<typeof createLog>
 
 export type Event = ReturnType<typeof createEvent>
 
-// format
 export interface FormatNumberConfig {
   percentage?: boolean // 0.1234 or 12.34%
   thousandth?: boolean // 1234 or 1,234
@@ -19,7 +18,6 @@ export interface OverflowControlConfig {
   fontSize?: number
 }
 
-// defines
 export type Stop = {
   color?: string
   offset?: number

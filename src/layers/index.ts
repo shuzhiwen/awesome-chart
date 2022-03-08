@@ -1,7 +1,8 @@
 import {LayerText} from '.'
 
-export * from './normal'
 export * from './base'
+export * from './helpers'
+export * from './normal'
 
 export const layerMapping = {
   axis: LayerText,

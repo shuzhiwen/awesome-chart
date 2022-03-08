@@ -1,8 +1,7 @@
 import {select} from 'd3'
-import {DrawerTarget} from '../types'
-import {createLog, isCanvasContainer, isSvgContainer} from '.'
+import {DrawerTarget} from '../../types'
+import {createLog, isCanvasContainer, isSvgContainer} from '../../utils'
 
-// Node handler for svg(d3) and canvas(fabric)
 export class Selector {
   private log = createLog('utils:selector', 'Selector')
 
