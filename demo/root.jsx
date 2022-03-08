@@ -1,11 +1,13 @@
 import React, {useState} from 'react'
-import {SideBar, Editor, Chart} from '.'
-import styles from './root.module.css'
+import styles from './Root.module.css'
 import schema from './schema'
+import {SideBar} from './SideBar'
+import {Editor} from './Editor'
+import {Chart} from './Chart'
 
 let backup = schema.children[0].children[0].code
 
-export function Demo() {
+export function Root() {
   const [oldSchema, setOldSchema] = useState(backup)
   const [newSchema, setNewSchema] = useState(backup)
 

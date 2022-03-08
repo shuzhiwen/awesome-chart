@@ -18,6 +18,5 @@
     "rootDir": "src",
     "outDir": "dist"
   },
-  "include": ["src"],
-  "exclude": ["src/demo", "**/*.tsx"]
+  "include": ["src"]
 }

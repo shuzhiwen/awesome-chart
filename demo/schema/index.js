@@ -40,7 +40,8 @@ export default {
               data: '折线图',
               style: {
                 text: {
-                  fontSize: 16,
+                  fontSize: 30,
+                  fill: 'white',
                 },
               },
             },

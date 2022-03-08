@@ -2,8 +2,8 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution'
 import 'monaco-editor/esm/vs/editor/contrib/find/browser/findController'
 import {useEffect, useRef, useState} from 'react'
-import styles from './editor.module.css'
-import {download} from '..'
+import styles from './Editor.module.css'
+import {download} from '../src'
 
 export function Editor({schema, onChange}) {
   const editorRef = useRef(null)

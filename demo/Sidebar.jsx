@@ -1,7 +1,7 @@
 import {useEffect, useRef} from 'react'
 import schema from './schema'
-import {createChart} from '..'
-import styles from './side-bar.module.css'
+import {createChart} from '../src'
+import styles from './Sidebar.module.css'
 
 export function SideBar({onSelect}) {
   const ref = useRef(null)
@@ -44,7 +44,7 @@ export function SideBar({onSelect}) {
         ],
       })
     }
-    refresh()
+    // refresh()
   }, [])
 
   return (

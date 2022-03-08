@@ -1,15 +1,13 @@
 import {useEffect, useRef, useState} from 'react'
 import {select} from 'd3-selection'
-import styles from './chart.module.css'
-import {createChart, getStandardLayoutCreator, download} from '..'
+import styles from './Chart.module.css'
+import {createChart, getStandardLayoutCreator, download} from '../src'
 
 export const Chart = ({title, schema}) => {
   const chartRef = useRef(null)
   const [chart, setChart] = useState(null)
   const downloadSvg = () => {
-    if (chartRef.current) {
-      download(select(chartRef.current).selectAll('svg').nodes()[0].outerHTML, 'chart.svg')
-    }
+    download(select(chartRef.current).selectAll('svg').nodes()[0].outerHTML, 'chart.svg')
   }
 
   useEffect(() => {
@@ -28,7 +26,7 @@ export const Chart = ({title, schema}) => {
         schema && setChart(createChart(chartSchema))
       }
     } catch (e) {
-      console.log(e)
+      console.error(e)
     }
   }, [schema])
 

@@ -245,7 +245,7 @@ export abstract class LayerBase {
           groupContainer = selector.getFirstChildByClassName(sublayerContainer, groupClassName),
           options: GraphDrawerProps<any> = {
             engine: this.selector.engine,
-            className: `chart-basic-${sublayer}`,
+            className: `awesome-basic-${sublayer}`,
             container: groupContainer!,
             data: [],
           }
