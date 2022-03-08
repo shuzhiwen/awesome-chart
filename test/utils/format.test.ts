@@ -2,7 +2,6 @@ import {formatNumber, overflowControl} from '../../src'
 
 jest.mock('../../src/utils/chaos', () => ({
   __esModule: true,
-  ...jest.requireActual('../../src/utils/chaos'),
   getTextWidth: jest.fn((text) => (text?.length > 5 ? 100 : 20)),
 }))
 

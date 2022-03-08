@@ -6,8 +6,8 @@ import {D3Selection} from '../types'
 const ctx = document.createElement('canvas').getContext('2d')!
 const fontFamily = "'PingFang SC', 'Helvetica Neue', Helvetica, Tahoma, Helvetica, sans-serif"
 
-export function noChange(...args: any) {
-  return args
+export function noChange(input: any) {
+  return input
 }
 
 export function getTextWidth(text: string, fontSize: number | string = 12) {

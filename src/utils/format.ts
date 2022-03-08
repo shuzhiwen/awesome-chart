@@ -1,4 +1,4 @@
-import * as d3 from 'd3'
+import * as d3 from 'd3-format'
 import {FormatNumberConfig, OverflowControlConfig} from '../types'
 import {getTextWidth} from './chaos'
 

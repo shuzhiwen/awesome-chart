@@ -1,6 +1,6 @@
 import {isEqual, isNil, merge, noop} from 'lodash'
 import {AnimationQueue} from '../animation'
-import {drawerMapping} from '../draws'
+import {drawerMapping} from '../drawer'
 import {Selector} from './helpers'
 import {
   COMMON_EVENTS,

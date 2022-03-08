@@ -1,0 +1,12 @@
+.sideContainer {
+  display: flex;
+  flex-direction: column;
+  border-right: solid lightgray 1px;
+  width: 120px;
+}
+
+.menu {
+  width: 300px;
+  height: 100%;
+  z-index: 1;
+}
