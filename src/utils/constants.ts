@@ -1,6 +1,5 @@
 export const characters = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789'
 
-// common set
 export const SCALE_TYPE = [
   'scaleX',
   'scaleY',

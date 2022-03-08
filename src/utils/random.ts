@@ -39,7 +39,6 @@ export const randomTable = (options: RandomOptions): RawTable => {
   return [rows, columns, numbers]
 }
 
-// create a random string
 export function uuid(n = 16) {
   let string = ''
   for (let i = 0; i < n; i++) {

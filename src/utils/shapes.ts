@@ -1,4 +1,3 @@
-// create a parallelogram with auto degree which not exceed the area
 export const createParallelogram = (
   left: number,
   top: number,
@@ -12,7 +11,6 @@ export const createParallelogram = (
   [left + Math.sin(angle) * height, top + height],
 ]
 
-// create a hexagon which not exceed the area
 export const createHexagon = (left: number, top: number, width: number, height: number) => [
   [left + width * 0.5, top],
   [left + width, top + height * 0.25],
@@ -22,7 +20,6 @@ export const createHexagon = (left: number, top: number, width: number, height: 
   [left, top + height * 0.25],
 ]
 
-// create a regular five-pointed star which not exceed the area
 export const createStar = (left: number, top: number, width: number, height: number) => [
   [
     left + width * 0.5 * (1 - Math.sin(Math.PI * 0.4)),
@@ -43,7 +40,6 @@ export const createStar = (left: number, top: number, width: number, height: num
   ],
 ]
 
-// create an arrow which not exceed the area
 export const createArrow = (
   left: number,
   top: number,
@@ -69,7 +65,6 @@ export const createArrow = (
   }
 }
 
-// create a knuckle which not exceed the area
 export const createKnuckle = (
   left: number,
   top: number,
