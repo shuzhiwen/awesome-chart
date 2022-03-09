@@ -19,7 +19,6 @@ export function Editor({schema, onChange}) {
 
   useEffect(() => {
     const instance = monaco.editor.create(editorRef.current, {
-      fontSize: 16,
       value: schema || '"hello world !"',
       language: 'javascript',
     })

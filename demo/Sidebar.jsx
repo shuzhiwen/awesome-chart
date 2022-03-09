@@ -44,7 +44,7 @@ export function SideBar({onSelect}) {
         ],
       })
     }
-    // refresh()
+    refresh()
   }, [])
 
   return (

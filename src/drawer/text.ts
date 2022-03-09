@@ -69,7 +69,7 @@ export function drawText({
       .attr('font-weight', (d) => d.fontWeight)
       .attr('writing-mode', (d) => d.writingMode)
       .style('text-shadow', (d) => d.shadow)
-      .style('transform', (d) => d.rotation && `rotate(${d.rotation}deg)`)
+      .style('transform', (d) => `rotate(${d.rotation}deg)`)
       .style('transform-origin', (d) => d.transformOrigin)
       .style('pointer-events', 'fill')
   }

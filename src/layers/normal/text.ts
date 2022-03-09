@@ -74,7 +74,7 @@ export class LayerText extends LayerBase {
     }
 
     const textData = createText({x, y, value: this.data.source, style: text})
-    this.textData = [{data: [textData]}]
+    this.textData = [{data: [textData], ...textData, ...text}]
   }
 
   draw() {
