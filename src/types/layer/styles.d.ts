@@ -16,21 +16,15 @@ export type GraphStyleShape = Partial<{
   mapping: (config: AnyObject) => AnyObject
 }>
 
-export type Shadow = {
-  color: string
-  offset: [number, number]
-  blur: number
-}
-
 export type TextStyleShape = GraphStyleShape &
   Partial<{
     writingMode: 'horizontal-tb' | 'vertical-rl'
     fontFamily: MaybeGroup<string>
     fontWeight: MaybeGroup<string | number>
     fontSize: MaybeGroup<number>
+    shadow: MaybeGroup<string>
     format: FormatNumberConfig
     offset: [number, number]
-    shadow: string | Shadow
   }>
 
 export type TextLayerStyleShape = {

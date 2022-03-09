@@ -1,7 +1,6 @@
 import {fabric} from 'fabric'
-import {isObject} from 'lodash'
 import {TextOptions} from 'fabric/fabric-impl'
-import {TextDrawerProps, TextStyleShape} from '../types'
+import {TextDrawerProps} from '../types'
 import {mergeAlpha, getAttr, isSvgContainer, isCanvasContainer, noChange} from '../utils'
 
 export function drawText({
@@ -42,7 +41,7 @@ export function drawText({
     strokeOpacity: getAttr(strokeOpacity, i, 1),
     strokeWidth: getAttr(strokeWidth, i, 0),
     rotation: getAttr(rotation, i, 0),
-    shadow: getShadow(getAttr(shadow, i, '')),
+    shadow: getAttr(shadow, i, ''),
     transformOrigin: getAttr(transformOrigin, i, ''),
     writingMode: getAttr(writingMode, i, 'horizontal-tb'),
   }))
@@ -99,12 +98,4 @@ export function drawText({
   }
 
   return configuredData
-}
-
-const getShadow = (shadow: TextStyleShape['shadow']) => {
-  if (isObject(shadow)) {
-    const {color = '#000', offset = [0, 0], blur = 0} = shadow
-    return `${offset[0]}px ${-offset[1]}px ${blur}px ${color}`
-  }
-  return shadow ?? ''
 }
