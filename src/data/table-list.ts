@@ -8,9 +8,9 @@ import {
   Meta,
 } from '../types'
 
-const log = createLog('data:table-list')
-
 export class DataTableList extends DataBase<RawTableList, Options> {
+  private readonly log = createLog('data:tableList')
+
   private _data: Shape = []
 
   get data() {
@@ -70,7 +70,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
 
   update(tableList: RawTableList, options: AnyObject = {}) {
     if (!isTableList(tableList)) {
-      log.error('illegal data', tableList)
+      this.log.error('illegal data', tableList)
       return
     }
 
@@ -93,7 +93,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
   push(...rows: Meta[][]) {
     rows.forEach((row) => {
       if (row.length !== this.data.length) {
-        log.error('illegal data', row)
+        this.log.error('illegal data', row)
       } else {
         row.forEach((value, i) => this.data[i].list.push(value))
       }

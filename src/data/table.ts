@@ -3,9 +3,9 @@ import {cloneDeep, min, max, isArray} from 'lodash'
 import {createLog, isTable} from '../utils'
 import {DataBase} from './base'
 
-const log = createLog('data:table')
-
 export class DataTable extends DataBase<RawTable, Options> {
+  private readonly log = createLog('data:table')
+
   private _data: Shape = [[], [], []]
 
   get data() {
@@ -39,7 +39,7 @@ export class DataTable extends DataBase<RawTable, Options> {
 
   update(table: RawTable) {
     if (!isTable(table)) {
-      log.error('illegal data', table)
+      this.log.error('illegal data', table)
       return
     }
 
@@ -52,7 +52,7 @@ export class DataTable extends DataBase<RawTable, Options> {
         (target === 'row' && item.length !== this.data[0].length) ||
         (target === 'column' && item.length !== this.data[1].length)
       ) {
-        log.error('illegal data')
+        this.log.error('illegal data')
       } else {
         data.forEach(([dimension, ...values]) => {
           if (target === 'row') {

@@ -10,9 +10,9 @@ import {
   Meta,
 } from '../types'
 
-const log = createLog('data:relation')
-
 export class DataRelation extends DataBase<RawRelation, Options> {
+  private readonly log = createLog('data:relation')
+
   private _data: Shape = {nodes: [], edges: [], roots: []}
 
   get data() {
@@ -26,7 +26,7 @@ export class DataRelation extends DataBase<RawRelation, Options> {
 
   update(relation: RawRelation) {
     if (!isRelation(relation)) {
-      log.error('wrong incoming data', relation)
+      this.log.error('wrong incoming data', relation)
       return
     }
 
