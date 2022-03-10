@@ -9,13 +9,12 @@
     "url": "https://github.com/shuzhiwen"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite  --port 6666",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "yarn jest"
   },
   "dependencies": {
-    "animejs": "^3.2.1",
     "chroma-js": "^2.1.1",
     "d3": "^6.6.1",
     "fabric": "^4.6.0",

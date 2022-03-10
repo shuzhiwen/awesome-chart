@@ -1,44 +1,27 @@
-import anime from 'animejs'
 import {AnimationBase} from '.'
 import {createEvent, createLog} from '../utils'
-import {AnimationEmptyOptions as Options, AnimationProps as Props} from '../types'
-
-const defaultOptions = {
-  delay: 0,
-  duration: 0,
-  loop: false,
-}
+import {BasicAnimationOptions as Options, AnimationProps as Props} from '../types'
 
 export class AnimationEmpty extends AnimationBase<Options> {
   readonly log = createLog('animation:empty')
 
   readonly event = createEvent('animation:empty')
 
-  constructor({options, context}: Props<Options>) {
-    super({defaultOptions, options, context})
+  constructor(props: Props<Options>) {
+    super(props)
   }
 
   play() {
-    const {duration, loop, mode} = this.options
+    const {duration = 0, delay = 0} = this.options
 
-    if (mode === 'function') {
+    setTimeout(() => {
       this.start()
       this.process()
-      this.end()
-    } else if (mode === 'timer') {
-      this.instance = anime({
-        duration,
-        loop,
-        update: this.process,
-        loopBegin: this.start,
-        loopComplete: this.end,
-      })
-    }
+      setTimeout(this.end, duration)
+    }, delay)
   }
 
-  destroy() {
-    if (this.options.mode === 'timer') {
-      anime.remove(this.instance)
-    }
+  end() {
+    this.options.loop && this.play()
   }
 }

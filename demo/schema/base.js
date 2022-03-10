@@ -43,10 +43,8 @@ export default `/**
   height: 100,
   // 主绘图图层的内边距
   padding: [60, 60, 60, 60],
-  // 提示
-  tooltip: {
-    mode: 'single', // or 'group'
-  },
-  // 图层数据, 定义的顺序代表绘制顺序
-  layers: {REPLACED_LAYERS},
+  // 绘制引擎
+  engine: "ENGINE",
+  // 顺序图层
+  layers: REPLACED_LAYERS,
 })`

@@ -1,6 +1,6 @@
 import {debounce, merge} from 'lodash'
-import {ANIMATION_LIFE_CYCLES, isSvgContainer, noChange, uuid} from '../utils'
-import {Log, Event, AnimationBaseProps as Props, BasicAnimationOptions as Options} from '../types'
+import {ANIMATION_LIFE_CYCLES, isCanvasContainer, isSvgContainer, noChange, uuid} from '../utils'
+import {Log, Event, AnimationProps as Props, BasicAnimationOptions as Options} from '../types'
 
 export abstract class AnimationBase<T extends Options> {
   abstract readonly log: Log
@@ -55,9 +55,8 @@ export abstract class AnimationBase<T extends Options> {
     return args
   }
 
-  constructor({defaultOptions, options, context}: Props<T>) {
-    this.id = uuid()
-    this.options = merge({}, defaultOptions, options, {context})
+  constructor({options, context}: Props<T>) {
+    this.options = merge({}, options, {context})
     this.createTargets('targets', context)
 
     ANIMATION_LIFE_CYCLES.forEach((name) => {
@@ -107,12 +106,14 @@ export abstract class AnimationBase<T extends Options> {
   protected createTargets(key: string, context: Props<T>['context']) {
     const targets = this.options[key as 'targets']
 
-    if (isSvgContainer(context)) {
-      if (typeof targets === 'string') {
-        merge(this.options, {className: targets, [key]: context.selectAll(targets).nodes()})
-      } else {
-        merge(this.options, {[key]: targets?.nodes()})
+    if (typeof targets === 'string') {
+      if (isSvgContainer(context)) {
+        merge(this.options, {className: targets, [key]: context.selectAll(targets)})
+      } else if (isCanvasContainer(context)) {
+        merge(this.options, {className: targets, [key]: context.getObjects()})
       }
+    } else {
+      merge(this.options, {[key]: targets})
     }
   }
 }

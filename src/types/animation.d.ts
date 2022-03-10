@@ -1,23 +1,19 @@
+import {Object} from 'fabric/fabric-impl'
 import {D3Selection, DrawerTarget} from '.'
 import {animationMapping} from '../animation'
 
 export type AnimationLifeCycle = 'init' | 'play' | 'start' | 'process' | 'end' | 'destroy'
 
-export type AnimationType = keyof typeof animationMapping | 'queue' | 'function'
+export type AnimationType = keyof typeof animationMapping | 'queue'
 
 export type BasicAnimationOptions = {
   id?: string
+  type?: AnimationType
   engine?: Engine
-  targets?: string | D3Selection
+  targets?: D3Selection | Object[]
   duration?: number
   delay?: number
   loop?: boolean
-}
-
-export interface AnimationBaseProps<T extends BasicAnimationOptions> {
-  context?: Maybe<DrawerTarget>
-  options?: T
-  defaultOptions: T
 }
 
 export interface AnimationProps<T extends BasicAnimationOptions> {
@@ -25,6 +21,9 @@ export interface AnimationProps<T extends BasicAnimationOptions> {
   options?: T
 }
 
-export type AnimationEmptyOptions = BasicAnimationOptions & {
-  mode?: 'function' | 'timer'
+export type AnimationFadeOptions = BasicAnimationOptions & {
+  type: 'fade'
+  initialOpacity?: number
+  startOpacity?: number
+  endOpacity?: number
 }

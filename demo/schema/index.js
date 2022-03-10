@@ -19,7 +19,9 @@ import treemap from './relation/treemap'
 import pack from './relation/pack'
 
 const createCode = (schema) => {
-  return base.replace('{REPLACED_LAYERS}', JSON.stringify(schema, null, 2))
+  return base
+    .replace('ENGINE', 'canvas')
+    .replace('REPLACED_LAYERS', JSON.stringify(schema, null, 2))
 }
 
 export default {
@@ -40,7 +42,15 @@ export default {
               data: '折线图',
               style: {
                 text: {
-                  fill: 'green',
+                  fill: 'white',
+                  fontSize: 20,
+                },
+              },
+              animation: {
+                text: {
+                  enter: {
+                    type: 'fade',
+                  },
                 },
               },
             },

@@ -22,10 +22,10 @@ export function Editor({schema, onChange}) {
       value: schema || '"hello world !"',
       language: 'javascript',
     })
-    instance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
+    instance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
       onChange(instance.getValue())
     })
-    instance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_D, () => {
+    instance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyD, () => {
       download(instance.getValue(), 'schema.txt')
     })
     setEditor(instance)

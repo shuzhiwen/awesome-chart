@@ -175,10 +175,10 @@ export abstract class LayerBase {
 
   private createAnimation = (sublayer: string) => {
     const {engine} = this.options,
-      {options} = this.backupAnimation
+      {options} = this.backupAnimation,
+      prefix = `${sublayer}-animation-`
     let isFirstPlay = true
 
-    // destroy previous animation to free resource
     if (this.backupAnimation[sublayer]) {
       this.backupAnimation[sublayer].destroy()
       isFirstPlay = false
@@ -193,29 +193,25 @@ export abstract class LayerBase {
       enterQueue = new AnimationQueue({options: {loop: false}}),
       loopQueue = new AnimationQueue({options: {loop: false}}),
       {enter, loop, update} = options[sublayer],
-      targets = `.chart-basic-${sublayer}`
+      targets = `.awesome-basic-${sublayer}`
+    this.backupAnimation[sublayer] = animationQueue
 
     isFirstPlay && animationQueue.push('queue', enterQueue, this.root)
     isFirstPlay && enter && enterQueue.push(enter.type, {...enter, targets, engine}, this.root)
     loop && loopQueue.push(loop.type, {...loop, targets, engine}, this.root)
-    this.backupAnimation[sublayer] = animationQueue.push('queue', loopQueue, this.root)
+    animationQueue.push('queue', loopQueue, this.root)
 
-    // register the animation events
-    this.backupAnimation[sublayer].event.on('start', (d: any) =>
-      this.event.fire(`${sublayer}-animation-start`, d)
-    )
-    this.backupAnimation[sublayer].event.on('process', (d: any) =>
-      this.event.fire(`${sublayer}-animation-process`, d)
-    )
-    this.backupAnimation[sublayer].event.on('end', (d: any) =>
-      this.event.fire(`${sublayer}-animation-end`, d)
-    )
+    animationQueue.event.on('start', (d: any) => this.event.fire(`${prefix}start`, d))
+    animationQueue.event.on('process', (d: any) => this.event.fire(`${prefix}process`, d))
+    animationQueue.event.on('end', (d: any) => this.event.fire(`${prefix}end`, d))
 
     if (!isFirstPlay) {
       clearTimeout(this.backupAnimation[sublayer].timer)
       const {duration = 2000, delay = 0} = update || {}
-      const timer = setTimeout(() => this.backupAnimation[sublayer].play(), duration + delay)
-      this.backupAnimation[sublayer].timer = timer
+      this.backupAnimation[sublayer].timer = setTimeout(
+        () => this.backupAnimation[sublayer].play(),
+        duration + delay
+      )
     }
   }
 
@@ -267,7 +263,7 @@ export abstract class LayerBase {
 
     this.setEvent(sublayer)
     this.setTooltip(sublayer)
-    this.selector.engine === 'svg' && this.createAnimation(sublayer)
+    this.createAnimation(sublayer)
   }
 
   destroy() {

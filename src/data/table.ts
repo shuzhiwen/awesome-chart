@@ -4,7 +4,7 @@ import {createLog, isTable} from '../utils'
 import {DataBase} from './base'
 
 export class DataTable extends DataBase<RawTable, Options> {
-  private readonly log = createLog('data:table')
+  readonly log = createLog('data:table')
 
   private _data: Shape = [[], [], []]
 

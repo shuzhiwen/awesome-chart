@@ -9,7 +9,7 @@ import {
 } from '../types'
 
 export class DataTableList extends DataBase<RawTableList, Options> {
-  private readonly log = createLog('data:tableList')
+  readonly log = createLog('data:tableList')
 
   private _data: Shape = []
 

@@ -20,16 +20,14 @@ export class AnimationQueue extends AnimationBase<Options> {
   private queue: Shape[]
 
   constructor({options, context}: Props<Options>) {
-    super({defaultOptions: {loop: false}, options, context})
-    // initialize animation queue
+    super({options, context})
     const animationHead = new AnimationEmpty({})
-    // queue must has a head animation
+
     animationHead.event.on('start', () => this.start())
     animationHead.event.on('end', () => this.end())
     this.queue = [animationHead]
   }
 
-  // run the callback after all animations done
   private bind(animations: Shape[], callback: Function) {
     let completeCount = 0
     animations.forEach((instance) => {
@@ -44,14 +42,12 @@ export class AnimationQueue extends AnimationBase<Options> {
     return animations
   }
 
-  // discrete animations to sequence animations
   connect(priorityConfig?: number[] | Function) {
     this.queue.forEach((instance) => {
       instance.event.off('start')
       instance.event.off('end')
     })
 
-    // default by index of array
     let finalPriority: number[]
     if (Array.isArray(priorityConfig)) {
       finalPriority = [0, ...priorityConfig]
@@ -67,58 +63,43 @@ export class AnimationQueue extends AnimationBase<Options> {
       groupedQueue[priority].push(this.queue[animationIndex])
     })
 
-    // connect the grouped animations except head
     groupedQueue.reduce((previousAnimations, currentAnimations, priority) => {
-      // queue capture item's events
       currentAnimations.forEach((animation) => {
         const mapToState = (state: string) => ({id: animation.options.id, priority, state})
         const [startState, processState, endState] = ['start', 'process', 'end'].map(mapToState)
+
         animation.event.on('start', () => this.process(startState))
         animation.event.on('process', (data: any) => this.process({...processState, data}))
         animation.event.on('end', () => this.process(endState))
       })
-      // last animations bind queue's 'end' event
+
       if (priority === Math.max(...finalPriority)) this.bind(currentAnimations, () => this.end())
-      // previous animation group fire next animation group
       this.bind(previousAnimations, () => currentAnimations.forEach((instance) => instance.play()))
+
       return currentAnimations
     })
 
-    // connect done
     this.isReady = true
-    return this
   }
 
-  push(
-    type: AnimationType,
-    options: Options | Function | AnimationQueue,
-    context: Maybe<DrawerTarget>
-  ) {
-    // create new queue item by type
-    if (type === 'function') {
-      const animation = new AnimationEmpty({})
-      animation.event.on('process', options as Function)
-      this.queue.push(animation)
-    } else if (type === 'queue') {
+  push(type: AnimationType, options: Options | AnimationQueue, context: Maybe<DrawerTarget>) {
+    if (type === 'queue') {
       this.queue.push(options as AnimationQueue)
-    } else if (animationMapping[type]) {
+    } else if (!animationMapping[type]) {
+      this.log.error('animation type error', type)
+    } else {
       this.queue.push(
         new animationMapping[type]({
-          options: {...options, loop: false},
+          options: {...(options as any), loop: false},
           context,
         })
       )
-    } else {
-      this.log.error('animation type error', type)
-      return null
     }
 
-    // id is required
     if (!this.queue[this.queue.length - 1].options.id) {
       this.queue[this.queue.length - 1].options.id = uuid()
     }
 
-    // create a animation lead to reconnect
     this.isReady = false
   }
 
@@ -134,7 +115,9 @@ export class AnimationQueue extends AnimationBase<Options> {
   }
 
   play() {
-    !this.isReady && this.queue.length > 1 && this.connect()
+    if (!this.isReady && this.queue.length > 1) {
+      this.connect()
+    }
     this.queue[0].play()
   }
 
