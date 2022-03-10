@@ -6,7 +6,7 @@ export interface CreateTextProps {
   y: number
   value: Meta
   style?: TextStyleShape
-  position?: Position
+  position?: Position9
   offset?: number
 }
 

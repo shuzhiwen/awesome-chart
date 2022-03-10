@@ -86,3 +86,22 @@ export interface CreateDefsSchema {
   radialGradient?: RadialGradientSchema[] | false
   mask?: MaskSchema[] | false
 }
+
+export interface BaseRandomOptions {
+  row: number
+  column: number
+  decimalPlace?: number
+}
+
+export interface NormalRandomOptions extends BaseRandomOptions {
+  mode: 'normal'
+  sigma?: number
+  mu?: number
+}
+
+export interface PoissonRandomOptions extends BaseRandomOptions {
+  mode: 'poisson'
+  lambda?: number
+}
+
+export type RandomOptions = NormalRandomOptions | PoissonRandomOptions

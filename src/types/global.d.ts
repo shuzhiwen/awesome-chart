@@ -18,26 +18,8 @@ type Align = 'start' | 'middle' | 'end'
 
 type Coordinate = 'geographic' | 'cartesian' | 'polar'
 
-type Position =
-  // normal
-  | 'center'
-  | 'top'
-  | 'right'
-  | 'bottom'
-  | 'left'
-  // corner
-  | 'left-top'
-  | 'left-bottom'
-  | 'right-top'
-  | 'right-bottom'
-  // aside
-  | 'inner'
-  | 'outer'
-  | 'top-inner'
-  | 'top-outer'
-  | 'right-inner'
-  | 'right-outer'
-  | 'bottom-inner'
-  | 'bottom-outer'
-  | 'left-inner'
-  | 'left-outer'
+type Position2 = 'inner' | 'outer'
+
+type Position5 = 'center' | 'top' | 'right' | 'bottom' | 'left'
+
+type Position9 = Position5 | 'left-top' | 'left-bottom' | 'right-top' | 'right-bottom'
