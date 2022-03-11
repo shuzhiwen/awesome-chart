@@ -29,9 +29,7 @@ import {
 export class Chart {
   static standardLayoutCreator = getStandardLayoutCreator({brush: false})
 
-  private log = createLog('chart:chart', 'Chart')
-
-  private event = createEvent('chart:chart')
+  private isCanvasRender = false
 
   private _state: ChartState = 'initialize'
 
@@ -47,7 +45,9 @@ export class Chart {
 
   private tooltip: Tooltip
 
-  private isCanvasRender = false
+  private event = createEvent('chart:chart')
+
+  readonly log = createLog('chart:chart', Chart.name)
 
   readonly engine: Engine
 

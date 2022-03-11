@@ -17,7 +17,7 @@ const defaultOptions: Required<TooltipOptions> = {
 }
 
 export class Tooltip {
-  private log = createLog('chart:tooltip', 'Tooltip')
+  readonly log = createLog('chart:tooltip', Tooltip.name)
 
   private instance: D3Selection
 
@@ -31,7 +31,6 @@ export class Tooltip {
 
   constructor(options: TooltipOptions) {
     this.options = merge({}, defaultOptions, options)
-    // root container
     const {container, backgroundColor} = this.options
     this.instance = select(container)
       .append('div')
@@ -98,10 +97,8 @@ export class Tooltip {
     const {titleSize, titleColor, pointSize, labelSize, labelColor, valueSize, valueColor} =
       this.options
 
-    // render if and only if data change
     if (isArray(list) && !isEqual(this.backup, list)) {
       this.backup = list
-      // dimension data
       this.instance
         .selectAll('.chart-tooltip-title')
         .data([list[0].dimension])
@@ -112,7 +109,6 @@ export class Tooltip {
         .style('color', titleColor)
         .style('position', 'relative')
         .text((d) => d)
-      // content
       const container = this.instance
         .selectAll('.chart-tooltip-content')
         .data([null])
@@ -124,7 +120,6 @@ export class Tooltip {
         .style('align-items', 'center')
         .style('padding', '5px')
         .style('position', 'relative')
-      // every row
       container.selectAll('div').remove()
       const rows = container
         .selectAll('div')
@@ -135,7 +130,6 @@ export class Tooltip {
         .style('justify-content', 'space-between')
         .style('align-items', 'center')
         .style('width', '100%')
-      // point and text in row
       const pointWidthLabel = rows
         .append('div')
         .style('display', 'flex')
@@ -155,7 +149,6 @@ export class Tooltip {
         .style('font-size', `${labelSize}px`)
         .style('color', labelColor)
         .text((d) => d.category)
-      // value in row
       rows
         .append('div')
         .style('font-weight', 'bold')

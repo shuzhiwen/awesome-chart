@@ -1,4 +1,4 @@
-export function createLog(file: string, scope?: string) {
+export function createLog(file: string, scope: string) {
   const filePath = file.replace(/\./g, '\\.')
   const emptyData: any = 'Empty Data'
 

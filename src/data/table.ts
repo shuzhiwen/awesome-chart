@@ -4,7 +4,7 @@ import {createLog, isTable} from '../utils'
 import {DataBase} from './base'
 
 export class DataTable extends DataBase<RawTable, Options> {
-  readonly log = createLog('data:table')
+  static readonly log = createLog('data:table', DataTable.name)
 
   private _data: Shape = [[], [], []]
 
@@ -39,7 +39,7 @@ export class DataTable extends DataBase<RawTable, Options> {
 
   update(table: RawTable) {
     if (!isTable(table)) {
-      this.log.error('illegal data', table)
+      DataTable.log.error('illegal data', table)
       return
     }
 
@@ -52,7 +52,7 @@ export class DataTable extends DataBase<RawTable, Options> {
         (target === 'row' && item.length !== this.data[0].length) ||
         (target === 'column' && item.length !== this.data[1].length)
       ) {
-        this.log.error('illegal data')
+        DataTable.log.error('illegal data')
       } else {
         data.forEach(([dimension, ...values]) => {
           if (target === 'row') {

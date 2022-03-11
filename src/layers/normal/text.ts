@@ -17,7 +17,7 @@ export class LayerText extends LayerBase {
 
   readonly event = createEvent('layer:normal:text')
 
-  readonly log = createLog('layer:normal:text', 'TextLayer')
+  readonly log = createLog('layer:normal:text', LayerText.name)
 
   private _data: Maybe<DataBase<string>> = null
 
@@ -56,7 +56,6 @@ export class LayerText extends LayerBase {
     const fontSize = getAttr(text?.fontSize, 0, 12)
     let [x, y] = [0, 0]
 
-    // horizontal position
     if (align === 'start') {
       x = left
     } else if (align === 'middle') {
@@ -64,7 +63,7 @@ export class LayerText extends LayerBase {
     } else if (align === 'end') {
       x = left + width - getTextWidth(this.data.source, fontSize)
     }
-    // vertical position
+
     if (verticalAlign === 'start') {
       y = top + fontSize
     } else if (verticalAlign === 'middle') {

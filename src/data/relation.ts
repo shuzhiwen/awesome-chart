@@ -11,7 +11,7 @@ import {
 } from '../types'
 
 export class DataRelation extends DataBase<RawRelation, Options> {
-  readonly log = createLog('data:relation')
+  static readonly log = createLog('data:relation', DataRelation.name)
 
   private _data: Shape = {nodes: [], edges: [], roots: []}
 
@@ -26,7 +26,7 @@ export class DataRelation extends DataBase<RawRelation, Options> {
 
   update(relation: RawRelation) {
     if (!isRelation(relation)) {
-      this.log.error('wrong incoming data', relation)
+      DataRelation.log.error('wrong incoming data', relation)
       return
     }
 

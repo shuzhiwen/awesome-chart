@@ -3,7 +3,7 @@ import {createEvent, createLog, isSvgContainer} from '../utils'
 import {AnimationFadeOptions as Options, AnimationProps as Props} from '../types'
 
 export class AnimationFade extends AnimationBase<Options> {
-  readonly log = createLog('animation:fade')
+  readonly log = createLog('animation:fade', AnimationFade.name)
 
   readonly event = createEvent('animation:fade')
 
