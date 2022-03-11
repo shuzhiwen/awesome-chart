@@ -9,7 +9,7 @@
     "url": "https://github.com/shuzhiwen"
   },
   "scripts": {
-    "dev": "vite  --port 6666",
+    "dev": "vite  --port 9527",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "yarn jest"

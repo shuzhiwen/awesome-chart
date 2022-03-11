@@ -12,7 +12,7 @@ import {
 import {
   Log,
   Event,
-  BackupShape,
+  BackupDataShape,
   ElConfigShape,
   DataShape,
   DrawBasicProps,
@@ -22,6 +22,8 @@ import {
   GraphDrawerProps,
   LayerBaseProps,
   LayerSchema,
+  BackupAnimationShape,
+  BackupAnimationOptions,
 } from '../types'
 
 export abstract class LayerBase {
@@ -41,11 +43,11 @@ export abstract class LayerBase {
 
   readonly className: string = 'awesome-base'
 
-  private backupData: BackupShape<any> = {}
+  private backupData: BackupDataShape<any> = {}
 
   private backupEvent: AnyObject = {}
 
-  private backupAnimation: AnyObject = {options: {}}
+  private backupAnimation: BackupAnimationShape = {timer: {}}
 
   protected readonly root: DrawerTarget
 
@@ -61,7 +63,7 @@ export abstract class LayerBase {
     this.tooltipTargets = tooltipTargets || []
     this.sublayers.forEach((name) => (this.backupData[name] = []))
     this.selector = new Selector(this.options.engine)
-    this.root = this.selector.createSubContainer(this.options.root, this.className)!
+    this.root = this.selector.createSubcontainer(this.options.root, this.className)!
     this.createEvent()
     this.createLifeCycles()
   }
@@ -89,7 +91,7 @@ export abstract class LayerBase {
         },
       },
     }
-    // basic mouse event
+
     COMMON_EVENTS.forEach((type) => {
       this.backupEvent.common[type] = Object.fromEntries(
         this.sublayers.map((sublayer) => [
@@ -121,8 +123,9 @@ export abstract class LayerBase {
     })
   }
 
-  setAnimation(options: AnyObject) {
+  setAnimation(options: BackupAnimationOptions) {
     merge(this.backupAnimation, {options})
+    this.sublayers.forEach((sublayer) => this.createAnimation(sublayer))
   }
 
   playAnimation() {
@@ -139,7 +142,7 @@ export abstract class LayerBase {
   setVisible(visible: boolean, sublayer?: string) {
     const {selector} = this,
       className = `${this.className}-${sublayer}`,
-      target = sublayer ? selector.getFirstChildByClassName(this.root, className) : this.root
+      target = sublayer ? selector.getSubcontainer(this.root, className) : this.root
     selector.setVisible(target, visible)
   }
 
@@ -174,13 +177,14 @@ export abstract class LayerBase {
   }
 
   private createAnimation = (sublayer: string) => {
-    const {engine} = this.options,
+    const {debounceRender} = this.options,
       {options} = this.backupAnimation,
+      targets = this.selector.getChildren(this.root, `awesome-basic-${sublayer}`),
       prefix = `${sublayer}-animation-`
     let isFirstPlay = true
 
     if (this.backupAnimation[sublayer]) {
-      this.backupAnimation[sublayer].destroy()
+      this.backupAnimation[sublayer]?.destroy()
       isFirstPlay = false
     }
 
@@ -189,27 +193,32 @@ export abstract class LayerBase {
       return
     }
 
-    const animationQueue = new AnimationQueue({options: {loop: false}}),
-      enterQueue = new AnimationQueue({options: {loop: false}}),
-      loopQueue = new AnimationQueue({options: {loop: false}}),
+    const animationQueue = new AnimationQueue({options: {loop: false, debounceRender}}),
+      enterQueue = new AnimationQueue({options: {loop: false, debounceRender}}),
+      loopQueue = new AnimationQueue({options: {loop: true, debounceRender}}),
       {enter, loop, update} = options[sublayer],
-      targets = `.awesome-basic-${sublayer}`
+      event = animationQueue.event
+
+    if (isFirstPlay && enter?.type) {
+      enterQueue.pushAnimation(enter.type, {...enter, targets, debounceRender}, this.root)
+      animationQueue.pushQueue(enterQueue)
+    }
+
+    if (loop?.type) {
+      loopQueue.pushAnimation(loop.type, {...loop, targets, debounceRender}, this.root)
+      animationQueue.pushQueue(loopQueue)
+    }
+
+    event.on('start', (d: any) => this.event.fire(`${prefix}start`, d))
+    event.on('process', (d: any) => this.event.fire(`${prefix}process`, d))
+    event.on('end', (d: any) => this.event.fire(`${prefix}end`, d))
     this.backupAnimation[sublayer] = animationQueue
 
-    isFirstPlay && animationQueue.push('queue', enterQueue, this.root)
-    isFirstPlay && enter && enterQueue.push(enter.type, {...enter, targets, engine}, this.root)
-    loop && loopQueue.push(loop.type, {...loop, targets, engine}, this.root)
-    animationQueue.push('queue', loopQueue, this.root)
-
-    animationQueue.event.on('start', (d: any) => this.event.fire(`${prefix}start`, d))
-    animationQueue.event.on('process', (d: any) => this.event.fire(`${prefix}process`, d))
-    animationQueue.event.on('end', (d: any) => this.event.fire(`${prefix}end`, d))
-
     if (!isFirstPlay) {
-      clearTimeout(this.backupAnimation[sublayer].timer)
+      clearTimeout(this.backupAnimation.timer[sublayer])
       const {duration = 2000, delay = 0} = update || {}
-      this.backupAnimation[sublayer].timer = setTimeout(
-        () => this.backupAnimation[sublayer].play(),
+      this.backupAnimation.timer[sublayer] = setTimeout(
+        () => this.backupAnimation[sublayer]?.play(),
         duration + delay
       )
     }
@@ -217,18 +226,18 @@ export abstract class LayerBase {
 
   protected drawBasic = ({type, data, sublayer = type}: DrawBasicProps) => {
     const {selector} = this,
-      sublayerClassName = `${this.className}-${sublayer}`
-    let sublayerContainer =
-      selector.getFirstChildByClassName(this.root, sublayerClassName) ||
-      selector.createSubContainer(this.root, sublayerClassName)
+      sublayerClassName = `${this.className}-${sublayer}`,
+      sublayerContainer =
+        selector.getSubcontainer(this.root, sublayerClassName) ||
+        selector.createSubcontainer(this.root, sublayerClassName)
 
-    // group container preparation: delete the redundant group in the last rendering
+    // delete the redundant group in the last rendering
     for (let i = 0; i < Math.max(this.backupData[sublayer].length, data.length); i++) {
       const groupClassName = `${sublayerClassName}-${i}`
-      let groupContainer = selector.getFirstChildByClassName(sublayerContainer, groupClassName)
+      let groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
 
       if (i < data.length && !groupContainer) {
-        groupContainer = selector.createSubContainer(sublayerContainer, groupClassName)
+        groupContainer = selector.createSubcontainer(sublayerContainer, groupClassName)
       } else if (i >= data.length) {
         selector.remove(groupContainer)
       }
@@ -238,7 +247,7 @@ export abstract class LayerBase {
       this.backupData[sublayer].length = data.length
       if (!isEqual(this.backupData[sublayer][i], data[i])) {
         const groupClassName = `${sublayerClassName}-${i}`,
-          groupContainer = selector.getFirstChildByClassName(sublayerContainer, groupClassName),
+          groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),
           options: GraphDrawerProps<any> = {
             engine: this.selector.engine,
             className: `awesome-basic-${sublayer}`,
@@ -246,10 +255,10 @@ export abstract class LayerBase {
             data: [],
           }
 
-        !data[i].hide && merge(options, data[i])
         options.enableUpdateAnimation = false
+        !data[i].hide && merge(options, data[i])
 
-        if (this.backupData[sublayer][i] && this.backupAnimation.options[sublayer]) {
+        if (this.backupData[sublayer][i] && this.backupAnimation.options?.[sublayer]) {
           const {duration, delay} = this.backupAnimation.options[sublayer].update || {}
           options.enableUpdateAnimation = true
           options.updateAnimationDuration = duration

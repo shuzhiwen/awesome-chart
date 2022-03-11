@@ -13,6 +13,7 @@ export type ChartContext = {
   containerWidth: Chart['containerWidth']
   containerHeight: Chart['containerHeight']
   bindCoordinate: Chart['bindCoordinate']
+  debounceRender: Chart['debounceRender']
   createGradient: ReturnType<typeof getEasyGradientCreator>
 }
 

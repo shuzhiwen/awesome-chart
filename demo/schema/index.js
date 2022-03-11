@@ -51,6 +51,9 @@ export default {
                   enter: {
                     type: 'fade',
                   },
+                  loop: {
+                    type: 'fade',
+                  },
                 },
               },
             },

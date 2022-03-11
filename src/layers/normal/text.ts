@@ -1,6 +1,6 @@
 import {LayerBase} from '../base'
 import {createEvent, createLog, getAttr, getTextWidth} from '../../utils'
-import {BackupValueShape, ChartContext, LayerOptions, TextLayerStyleShape} from '../../types'
+import {BackupDataItemShape, ChartContext, LayerOptions, TextLayerStyleShape} from '../../types'
 import {createStyle, createText, validateAndCreateData} from '../helpers'
 import {DataBase} from '../../data'
 
@@ -23,7 +23,7 @@ export class LayerText extends LayerBase {
 
   private _style = defaultStyle
 
-  private textData: BackupValueShape<{
+  private textData: BackupDataItemShape<{
     value: string
     x: number
     y: number

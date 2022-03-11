@@ -4,6 +4,7 @@ import {
   DrawerType,
   ChartContext,
   GraphDrawerProps,
+  BasicAnimationOptions,
   ScaleNiceShape,
   LayoutArea,
   AnimationType,
@@ -12,12 +13,22 @@ import {
 
 export type LayerType = keyof typeof layerMapping
 
-export type BackupValueShape<TData> = Omit<
-  GraphDrawerProps<TData>,
+export type BackupDataItemShape<T> = Omit<
+  GraphDrawerProps<T>,
   'className' | 'container' | 'engine'
 >[]
 
-export type BackupShape<TData> = Record<string, BackupValueShape<TData>>
+export type BackupDataShape<T> = Record<string, BackupDataItemShape<T>>
+
+export type BackupAnimationOptions = Record<
+  string,
+  Record<'enter' | 'loop' | 'update', Omit<BasicAnimationOptions, 'debounceRender'>>
+>
+
+export type BackupAnimationShape = Record<string, Maybe<AnyObject>> & {
+  timer: Record<string, NodeJS.Timeout>
+  options?: BackupAnimationOptions
+}
 
 export interface LayerBaseProps {
   context: ChartContext
@@ -50,7 +61,7 @@ export type CreateAnimationProps = {
 
 export interface DrawBasicProps {
   type: DrawerType
-  data: BackupValueShape<any>
+  data: BackupDataItemShape<any>
   sublayer?: string
 }
 

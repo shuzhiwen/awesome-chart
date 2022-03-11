@@ -1,6 +1,6 @@
 import {AnimationBase} from '.'
 import {createEvent, createLog} from '../utils'
-import {BasicAnimationOptions as Options, AnimationProps as Props} from '../types'
+import {AnimationEmptyOptions as Options, AnimationProps as Props} from '../types'
 
 export class AnimationEmpty extends AnimationBase<Options> {
   readonly log = createLog('animation:empty')

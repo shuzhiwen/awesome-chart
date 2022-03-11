@@ -1,19 +1,21 @@
 import {Object} from 'fabric/fabric-impl'
 import {D3Selection, DrawerTarget} from '.'
 import {animationMapping} from '../animation'
+import {Chart} from '../chart'
 
 export type AnimationLifeCycle = 'init' | 'play' | 'start' | 'process' | 'end' | 'destroy'
 
-export type AnimationType = keyof typeof animationMapping | 'queue'
+export type AnimationType = keyof typeof animationMapping
 
 export type BasicAnimationOptions = {
   id?: string
   type?: AnimationType
-  engine?: Engine
   targets?: D3Selection | Object[]
   duration?: number
   delay?: number
   loop?: boolean
+  // only for canvas
+  debounceRender: Chart['debounceRender']
 }
 
 export interface AnimationProps<T extends BasicAnimationOptions> {
@@ -21,8 +23,9 @@ export interface AnimationProps<T extends BasicAnimationOptions> {
   options?: T
 }
 
+export type AnimationEmptyOptions = BasicAnimationOptions
+
 export type AnimationFadeOptions = BasicAnimationOptions & {
-  type: 'fade'
   initialOpacity?: number
   startOpacity?: number
   endOpacity?: number

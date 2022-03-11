@@ -15,7 +15,7 @@ export abstract class AnimationBase<T extends Options> {
 
   protected _isInitialized = false
 
-  protected _isAnimationStart = false
+  protected _isAnimationStarted = false
 
   protected _isAnimationAvailable = true
 
@@ -23,8 +23,8 @@ export abstract class AnimationBase<T extends Options> {
     return this._isInitialized
   }
 
-  get isAnimationStart() {
-    return this._isAnimationStart
+  get isAnimationStarted() {
+    return this._isAnimationStarted
   }
 
   get isAnimationAvailable() {
@@ -73,7 +73,7 @@ export abstract class AnimationBase<T extends Options> {
               instance.log.warn('the animation is not available!')
               return
             }
-            if (instance._isAnimationStart) {
+            if (instance._isAnimationStarted) {
               instance.log.warn('the animation is already started!')
               return
             }
@@ -86,11 +86,12 @@ export abstract class AnimationBase<T extends Options> {
             this._isInitialized = true
             this._isAnimationAvailable = true
           } else if (name === 'start') {
-            instance._isAnimationStart = true
+            instance._isAnimationStarted = true
           } else if (name === 'end') {
-            instance._isAnimationStart = false
+            instance._isAnimationStarted = false
           } else if (name === 'destroy') {
             this._isAnimationAvailable = false
+            this._isInitialized = false
           }
         } catch (error) {
           instance.log.error('animation life cycle call exception', error)

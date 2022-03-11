@@ -1,7 +1,7 @@
 import {select} from 'd3'
 import {createLog} from '../utils'
 import {isEqual, isArray, merge} from 'lodash'
-import {ElConfigShape, D3Selection, BackupShape, TooltipOptions} from '../types'
+import {ElConfigShape, D3Selection, BackupDataShape, TooltipOptions} from '../types'
 
 const defaultOptions: Required<TooltipOptions> = {
   container: null,
@@ -65,7 +65,7 @@ export class Tooltip {
     this.instance?.style('display', 'none')
   }
 
-  private getListData<T>(data: ElConfigShape, backup: BackupShape<T>) {
+  private getListData<T>(data: ElConfigShape, backup: BackupDataShape<T>) {
     let list: any[] = []
     const {mode} = this.options
 
@@ -93,7 +93,7 @@ export class Tooltip {
     }
   }
 
-  update<T>({data, backup}: {data: ElConfigShape; backup: BackupShape<T>}) {
+  update<T>({data, backup}: {data: ElConfigShape; backup: BackupDataShape<T>}) {
     const list = this.getListData(data, backup)
     const {titleSize, titleColor, pointSize, labelSize, labelColor, valueSize, valueColor} =
       this.options

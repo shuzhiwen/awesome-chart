@@ -10,6 +10,7 @@ import {
   isLayerBaseMap,
   createDefs,
   getEasyGradientCreator,
+  isCanvasContainer,
 } from '../utils'
 import {
   Layer,
@@ -45,6 +46,8 @@ export class Chart {
   private defs: GradientCreatorProps<unknown>['container']
 
   private tooltip: Tooltip
+
+  private isCanvasRender = false
 
   readonly engine: Engine
 
@@ -117,6 +120,7 @@ export class Chart {
       this.defs = this.root.append('defs')
     }
 
+    createDefs({schema: defineSchema || {}, engine, container: this.defs})
     this._layout = layoutCreator({
       containerWidth: this.containerWidth,
       containerHeight: this.containerHeight,
@@ -126,10 +130,6 @@ export class Chart {
       ...tooltipOptions,
       container: tooltipOptions?.container ?? this.container,
     })
-
-    // custom svg defs
-    createDefs({schema: defineSchema || {}, engine, container: this.defs})
-
     this._state = 'initialize'
     this.event.fire(this.state)
   }
@@ -149,19 +149,30 @@ export class Chart {
     })
   }
 
+  debounceRender() {
+    if (this.engine === 'canvas' && !this.isCanvasRender) {
+      this.isCanvasRender = true
+      requestAnimationFrame(() => {
+        isCanvasContainer(this.root) && this.root.renderAll()
+        this.isCanvasRender = false
+      })
+    }
+  }
+
   createLayer(type: LayerType, options: LayerOptions) {
     const context: ChartContext = {
       root: this.root,
+      theme: this.theme,
       engine: this.engine,
       tooltip: this.tooltip,
       container: this.container,
       containerWidth: this.containerWidth,
       containerHeight: this.containerHeight,
-      createGradient: getEasyGradientCreator({container: this.defs, engine: this.engine}),
       bindCoordinate: this.bindCoordinate.bind(this),
-      theme: this.theme,
-    }
-    // generate a layer by layer type
+      debounceRender: this.debounceRender.bind(this),
+      createGradient: getEasyGradientCreator({container: this.defs, engine: this.engine}),
+    } as const
+
     const layer = new layerMapping[type](options, context)
     this._layers.push(layer)
     this._state = 'ready'
@@ -190,7 +201,6 @@ export class Chart {
       .filter((instance) => instance.scales && !isLayerBaseMap(instance))
       .map((instance) => instance)
 
-    // merge scales
     layers.forEach((layer) => {
       const {scales, options} = layer
       const {axis} = options
@@ -215,7 +225,6 @@ export class Chart {
       axisLayer?.setStyle()
     })
 
-    // dispatch scales
     layers.forEach((layer) => {
       const scales = {...layer.scales, ...axisLayer?.scales}
       // projection to normal scale

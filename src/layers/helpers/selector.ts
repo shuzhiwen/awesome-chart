@@ -1,5 +1,5 @@
 import {select} from 'd3'
-import {DrawerTarget} from '../../types'
+import {DrawerTarget, FabricObject} from '../../types'
 import {createLog, isCanvasContainer, isSvgContainer} from '../../utils'
 
 export class Selector {
@@ -24,7 +24,15 @@ export class Selector {
     }
   }
 
-  getFirstChildByClassName(target: Maybe<DrawerTarget>, className: string) {
+  getChildren(target: Maybe<DrawerTarget>, className: string) {
+    if (this.engine === 'svg' && isSvgContainer(target)) {
+      return target.selectAll(`.${className}`)
+    } else if (this.engine === 'canvas' && isCanvasContainer(target)) {
+      return target.getObjects().filter((item) => (item as FabricObject).className === className)
+    }
+  }
+
+  getSubcontainer(target: Maybe<DrawerTarget>, className: string) {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       const result = target.selectAll(`.${className}`)
       return result.size() !== 0 ? select(result.nodes()[0]) : null
@@ -33,7 +41,7 @@ export class Selector {
     }
   }
 
-  createSubContainer(target: Maybe<DrawerTarget>, className: string) {
+  createSubcontainer(target: Maybe<DrawerTarget>, className: string) {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       return target.append('g').attr('class', className)
     }

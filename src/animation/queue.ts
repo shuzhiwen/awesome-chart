@@ -10,12 +10,26 @@ import {
 
 type Shape = AnimationBase<Options>
 
+const bind = (animations: Shape[], callback: Function) => {
+  Promise.all(
+    animations.map(
+      (instance) =>
+        new Promise((resolve) => {
+          instance.event.onWithOff('end', resolve)
+        })
+    )
+  ).then(() => {
+    bind(animations, callback)
+    callback()
+  })
+}
+
 export class AnimationQueue extends AnimationBase<Options> {
   readonly log = createLog('animation:queue')
 
   readonly event = createEvent('animation:queue')
 
-  private isReady = false
+  private isConnected = false
 
   private queue: Shape[]
 
@@ -23,23 +37,9 @@ export class AnimationQueue extends AnimationBase<Options> {
     super({options, context})
     const animationHead = new AnimationEmpty({})
 
-    animationHead.event.on('start', () => this.start())
-    animationHead.event.on('end', () => this.end())
+    animationHead.event.on('start', this.start)
+    animationHead.event.on('end', this.end)
     this.queue = [animationHead]
-  }
-
-  private bind(animations: Shape[], callback: Function) {
-    let completeCount = 0
-    animations.forEach((instance) => {
-      instance.event.on('end', () => {
-        if (++completeCount === animations.length) {
-          // reset count and run the callback
-          completeCount = 0
-          callback()
-        }
-      })
-    })
-    return animations
   }
 
   connect(priorityConfig?: number[] | Function) {
@@ -73,41 +73,40 @@ export class AnimationQueue extends AnimationBase<Options> {
         animation.event.on('end', () => this.process(endState))
       })
 
-      if (priority === Math.max(...finalPriority)) this.bind(currentAnimations, () => this.end())
-      this.bind(previousAnimations, () => currentAnimations.forEach((instance) => instance.play()))
+      if (priority === Math.max(...finalPriority)) bind(currentAnimations, () => this.end())
+      bind(previousAnimations, () => currentAnimations.forEach((instance) => instance.play()))
 
       return currentAnimations
     })
 
-    this.isReady = true
+    this.isConnected = true
   }
 
-  push(type: AnimationType, options: Options | AnimationQueue, context: Maybe<DrawerTarget>) {
-    if (type === 'queue') {
-      this.queue.push(options as AnimationQueue)
-    } else if (!animationMapping[type]) {
+  pushQueue(options: AnimationQueue) {
+    this.queue.push(options)
+    this.isConnected = false
+  }
+
+  pushAnimation(type: AnimationType, options: Options, context: DrawerTarget) {
+    if (!animationMapping[type]) {
       this.log.error('animation type error', type)
-    } else {
-      this.queue.push(
-        new animationMapping[type]({
-          options: {...(options as any), loop: false},
-          context,
-        })
-      )
+      return
     }
 
-    if (!this.queue[this.queue.length - 1].options.id) {
-      this.queue[this.queue.length - 1].options.id = uuid()
-    }
-
-    this.isReady = false
+    this.isConnected = false
+    this.queue.push(
+      new animationMapping[type]({
+        options: {id: uuid(), ...options},
+        context,
+      })
+    )
   }
 
   remove(id: string) {
     const index = this.queue.findIndex(({options}) => options.id === id)
 
     if (index !== -1) {
-      this.isReady = false
+      this.isConnected = false
       return this.queue.splice(index, 1)
     } else {
       this.log.error('the animation does not exist', id)
@@ -115,7 +114,7 @@ export class AnimationQueue extends AnimationBase<Options> {
   }
 
   play() {
-    if (!this.isReady && this.queue.length > 1) {
+    if (!this.isConnected && this.queue.length > 1) {
       this.connect()
     }
     this.queue[0].play()

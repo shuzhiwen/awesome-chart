@@ -12,7 +12,14 @@ export class AnimationFade extends AnimationBase<Options> {
   }
 
   play() {
-    const {targets, duration = 0, delay = 0, startOpacity = 0, endOpacity = 1} = this.options
+    const {
+      targets,
+      debounceRender,
+      delay = 0,
+      duration = 1000,
+      startOpacity = 0,
+      endOpacity = 1,
+    } = this.options
 
     if (isSvgContainer(targets)) {
       targets
@@ -28,10 +35,14 @@ export class AnimationFade extends AnimationBase<Options> {
         this.start()
         targets.forEach((target) => {
           target.opacity = startOpacity
-          target.animate('opacity', endOpacity, {duration})
+          target.animate('opacity', endOpacity, {duration, onChange: debounceRender})
         })
         setTimeout(this.end, duration)
       }, delay)
     }
+  }
+
+  end() {
+    this.options.loop && this.play()
   }
 }
