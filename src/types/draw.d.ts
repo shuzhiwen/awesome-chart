@@ -13,7 +13,7 @@ import {
   drawPolygon,
   drawRect,
   drawText,
-} from '../drawer'
+} from '../draws'
 
 export type D3Selection = Selection<any, unknown, any, unknown>
 
