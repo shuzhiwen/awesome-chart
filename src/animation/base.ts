@@ -77,6 +77,9 @@ export abstract class AnimationBase<T extends Options> {
               instance.log.warn('the animation is already started!')
               return
             }
+            if (!instance.isInitialized) {
+              instance.init()
+            }
           }
 
           fn.call(instance, ...parameter)

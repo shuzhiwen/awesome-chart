@@ -11,6 +11,17 @@ export class AnimationFade extends AnimationBase<Options> {
     super(props)
   }
 
+  init() {
+    const {targets, debounceRender, initialOpacity = 0} = this.options
+
+    if (isSvgContainer(targets)) {
+      targets.attr('opacity', initialOpacity)
+    } else if (targets) {
+      targets.forEach((target) => (target.opacity = initialOpacity))
+      debounceRender()
+    }
+  }
+
   play() {
     const {
       targets,

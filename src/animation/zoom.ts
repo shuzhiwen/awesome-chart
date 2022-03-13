@@ -11,6 +11,20 @@ export class AnimationZoom extends AnimationBase<Options> {
     super(props)
   }
 
+  init() {
+    const {targets, debounceRender, initialScale: initial = 0} = this.options
+
+    if (isSvgContainer(targets)) {
+      targets.attr('transform', safeTransform(targets.attr('transform'), 'scale', initial))
+    } else if (targets) {
+      targets.forEach((target) => {
+        target.scaleX = initial
+        target.scaleY = initial
+      })
+      debounceRender()
+    }
+  }
+
   play() {
     const {
         targets,
