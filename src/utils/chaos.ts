@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import chroma from 'chroma-js'
 import {isArray, isNil} from 'lodash'
-import {D3Selection} from '../types'
+import {D3Selection, Meta} from '../types'
 
 const ctx = document.createElement('canvas').getContext('2d')!
 const fontFamily = "'PingFang SC', 'Helvetica Neue', Helvetica, Tahoma, Helvetica, sans-serif"
@@ -60,14 +60,21 @@ export function getAttr<T>(target: MaybeGroup<T>, index: number = 0, defaultValu
 }
 
 export function transformAttr(object: AnyObject) {
-  const result: AnyObject = {}
-  Object.entries(object).forEach(([key, value]) => {
-    const index = key.search(/[A-Z]/)
-    if (index !== -1) {
-      key = key.toLowerCase()
-      key = `${key.slice(0, index)}-${key.slice(index)}`
-    }
-    result[key] = value
-  })
-  return result
+  return Object.fromEntries(
+    Object.entries(object).map(([key, value]) => {
+      const index = key.search(/[A-Z]/)
+      if (index !== -1) {
+        key = key.toLowerCase()
+        key = `${key.slice(0, index)}-${key.slice(index)}`
+      }
+      return [key, value]
+    })
+  )
+}
+
+export function safeTransform(transform: string, key: string, value: Meta) {
+  if (!transform || transform.search(key) === -1) {
+    return `${transform ?? ''}${key}(${value})`
+  }
+  return transform.replace(new RegExp(`${key}\([\\w\\W]*\)`), `${key}(${value})`)
 }

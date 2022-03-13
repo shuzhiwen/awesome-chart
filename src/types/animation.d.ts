@@ -14,6 +14,7 @@ export type BasicAnimationOptions = {
   duration?: number
   delay?: number
   loop?: boolean
+  easing?: string
   // only for canvas
   debounceRender: Chart['debounceRender']
 }
@@ -29,4 +30,10 @@ export type AnimationFadeOptions = BasicAnimationOptions & {
   initialOpacity?: number
   startOpacity?: number
   endOpacity?: number
+}
+
+export type AnimationZoomOptions = BasicAnimationOptions & {
+  initialScale?: number
+  startScale?: number
+  endScale?: number
 }
