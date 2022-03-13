@@ -19,9 +19,7 @@ import treemap from './relation/treemap'
 import pack from './relation/pack'
 
 const createCode = (schema) => {
-  return base
-    .replace('ENGINE', 'canvas')
-    .replace('REPLACED_LAYERS', JSON.stringify(schema, null, 2))
+  return base.replace('REPLACED_LAYERS', JSON.stringify(schema, null, 2))
 }
 
 export default {
@@ -52,7 +50,7 @@ export default {
                     type: 'fade',
                   },
                   loop: {
-                    type: 'fade',
+                    type: 'zoom',
                   },
                 },
               },

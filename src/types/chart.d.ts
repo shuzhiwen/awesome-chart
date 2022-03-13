@@ -68,8 +68,8 @@ export interface CreateLayerSchema {
   }
   data: any
   style?: LayerSchema['style']
-  animation: LayerSchema['style']
-  event: Record<string, Function>
+  animation?: LayerSchema['style']
+  event?: Record<string, Function>
 }
 
 export interface CreateChartSchema extends ChartProps {
