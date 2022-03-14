@@ -12,41 +12,36 @@ export class AnimationFade extends AnimationBase<Options> {
   }
 
   init() {
-    const {targets, debounceRender, initialOpacity = 0} = this.options
+    const {targets, initialOpacity = 0} = this.options
 
     if (isSvgContainer(targets)) {
       targets.attr('opacity', initialOpacity)
     } else if (targets) {
       targets.forEach((target) => (target.opacity = initialOpacity))
-      debounceRender()
+      this.renderCanvas()
     }
   }
 
   play() {
-    const {
-      targets,
-      debounceRender,
-      delay = 0,
-      duration = 1000,
-      startOpacity = 0,
-      endOpacity = 1,
-    } = this.options
+    const {targets, delay = 0, duration = 1000, startOpacity = 0, endOpacity = 1} = this.options
 
     if (isSvgContainer(targets)) {
       targets
-        .attr('opacity', startOpacity)
         .transition()
         .delay(delay)
-        .on('start', this.start)
+        .duration(0)
+        .attr('opacity', startOpacity)
+        .transition()
         .duration(duration)
-        .attr('opacity', endOpacity)
+        .on('start', this.start)
         .on('end', this.end)
+        .attr('opacity', endOpacity)
     } else if (targets) {
       setTimeout(() => {
         this.start()
         targets.forEach((target) => {
           target.opacity = startOpacity
-          target.animate('opacity', endOpacity, {duration, onChange: debounceRender})
+          target.animate('opacity', endOpacity, {duration, onChange: this.renderCanvas})
         })
         setTimeout(this.end, duration)
       }, delay)

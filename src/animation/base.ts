@@ -1,4 +1,4 @@
-import {debounce, merge} from 'lodash'
+import {throttle, merge, noop} from 'lodash'
 import {ANIMATION_LIFE_CYCLES, isCanvasContainer, isSvgContainer, noChange, uuid} from '../utils'
 import {Log, Event, AnimationProps as Props, BasicAnimationOptions as Options} from '../types'
 
@@ -11,7 +11,7 @@ export abstract class AnimationBase<T extends Options> {
 
   protected id = uuid()
 
-  protected instance: any
+  protected renderCanvas = noop
 
   protected _isInitialized = false
 
@@ -59,6 +59,10 @@ export abstract class AnimationBase<T extends Options> {
     this.options = merge({}, options, {context})
     this.createTargets('targets', context)
 
+    if (isCanvasContainer(context)) {
+      this.renderCanvas = context.requestRenderAll.bind(context)
+    }
+
     ANIMATION_LIFE_CYCLES.forEach((name) => {
       const instance = this
       const fn = instance[name] || noChange
@@ -101,9 +105,9 @@ export abstract class AnimationBase<T extends Options> {
         }
       }
 
-      instance.init = debounce(instance.init, 100)
-      instance.play = debounce(instance.play, 100)
-      instance.destroy = debounce(instance.destroy, 100)
+      instance.init = throttle(instance.init, 100)
+      instance.play = throttle(instance.play, 100)
+      instance.destroy = throttle(instance.destroy, 100)
     })
   }
 

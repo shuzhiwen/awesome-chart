@@ -12,7 +12,7 @@ export class AnimationZoom extends AnimationBase<Options> {
   }
 
   init() {
-    const {targets, debounceRender, initialScale: initial = 0} = this.options
+    const {targets, initialScale: initial = 0} = this.options
 
     if (isSvgContainer(targets)) {
       targets.attr('transform', safeTransform(targets.attr('transform'), 'scale', initial))
@@ -21,39 +21,34 @@ export class AnimationZoom extends AnimationBase<Options> {
         target.scaleX = initial
         target.scaleY = initial
       })
-      debounceRender()
+      this.renderCanvas()
     }
   }
 
   play() {
-    const {
-        targets,
-        debounceRender,
-        delay = 0,
-        duration = 1000,
-        startScale = 0,
-        endScale = 1,
-      } = this.options,
+    const {targets, delay = 0, duration = 1000, startScale = 0, endScale = 1} = this.options,
       start = Math.max(startScale, Number.MIN_VALUE),
       end = Math.max(endScale, Number.MIN_VALUE)
 
     if (isSvgContainer(targets)) {
       targets
-        .attr('transform', safeTransform(targets.attr('transform'), 'scale', start))
         .transition()
         .delay(delay)
-        .on('start', this.start)
+        .duration(0)
+        .attr('transform', safeTransform(targets.attr('transform'), 'scale', start))
+        .transition()
         .duration(duration)
-        .attr('transform', safeTransform(targets.attr('transform'), 'scale', end))
+        .on('start', this.start)
         .on('end', this.end)
+        .attr('transform', safeTransform(targets.attr('transform'), 'scale', end))
     } else if (targets) {
       setTimeout(() => {
         this.start()
         targets.forEach((target) => {
           target.scaleX = 0
           target.scaleY = 0
-          target.animate('scaleX', end, {duration, onChange: debounceRender})
-          target.animate('scaleY', end, {duration, onChange: debounceRender})
+          target.animate('scaleX', end, {duration, onChange: this.renderCanvas})
+          target.animate('scaleY', end, {duration, onChange: this.renderCanvas})
         })
         setTimeout(this.end, duration)
       }, delay)

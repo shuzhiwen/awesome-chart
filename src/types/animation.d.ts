@@ -15,8 +15,6 @@ export type BasicAnimationOptions = {
   delay?: number
   loop?: boolean
   easing?: string
-  // only for canvas
-  debounceRender: Chart['debounceRender']
 }
 
 export interface AnimationProps<T extends BasicAnimationOptions> {
@@ -36,4 +34,14 @@ export type AnimationZoomOptions = BasicAnimationOptions & {
   initialScale?: number
   startScale?: number
   endScale?: number
+}
+
+export type AnimationMoveOptions = BasicAnimationOptions & {
+  initialOffset?: [number, number]
+  startOffset?: [number, number]
+  endOffset?: [number, number]
+}
+
+export type AnimationEraseOptions = BasicAnimationOptions & {
+  direction?: Position4
 }

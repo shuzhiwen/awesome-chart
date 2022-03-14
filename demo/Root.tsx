@@ -31,7 +31,7 @@ export function Root() {
           />
         </div>
         <div className={styles.chartSection}>
-          <Chart title="PREVIOUS" schema={oldSchema} />
+          {/* <Chart title="PREVIOUS" schema={oldSchema} /> */}
           <Chart title="CURRENT" schema={newSchema} />
         </div>
       </div>

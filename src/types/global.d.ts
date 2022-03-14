@@ -20,6 +20,8 @@ type Coordinate = 'geographic' | 'cartesian' | 'polar'
 
 type Position2 = 'inner' | 'outer'
 
-type Position5 = 'center' | 'top' | 'right' | 'bottom' | 'left'
+type Position4 = 'top' | 'right' | 'bottom' | 'left'
+
+type Position5 = Position4 | 'center'
 
 type Position9 = Position5 | 'left-top' | 'left-bottom' | 'right-top' | 'right-bottom'

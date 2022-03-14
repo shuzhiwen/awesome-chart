@@ -7,7 +7,7 @@ export const Chart = ({title, schema}) => {
   const chartRef = useRef(null)
   const [chart, setChart] = useState(null)
   const [engine, setEngine] = useState('SVG')
-  const toggleEngine = useCallback(() => setEngine(engine === 'SVG' ? 'CANVAS' : 'SVG'), [])
+  const toggleEngine = useCallback(() => setEngine(engine === 'SVG' ? 'CANVAS' : 'SVG'), [engine])
   const downloadSvg = useCallback(() => {
     download((select(chartRef.current).selectAll('svg').nodes()[0] as any).outerHTML, 'chart.svg')
   }, [])

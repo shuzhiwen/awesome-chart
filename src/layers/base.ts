@@ -177,8 +177,7 @@ export abstract class LayerBase {
   }
 
   private createAnimation = (sublayer: string) => {
-    const {debounceRender} = this.options,
-      {options} = this.backupAnimation,
+    const {options} = this.backupAnimation,
       targets = this.selector.getChildren(this.root, `awesome-basic-${sublayer}`),
       prefix = `${sublayer}-animation-`
     let isFirstPlay = true
@@ -193,19 +192,19 @@ export abstract class LayerBase {
       return
     }
 
-    const animationQueue = new AnimationQueue({options: {loop: false, debounceRender}}),
-      enterQueue = new AnimationQueue({options: {loop: false, debounceRender}}),
-      loopQueue = new AnimationQueue({options: {loop: true, debounceRender}}),
+    const animationQueue = new AnimationQueue({options: {loop: false}}),
+      enterQueue = new AnimationQueue({options: {loop: false}}),
+      loopQueue = new AnimationQueue({options: {loop: true}}),
       {enter, loop, update} = options[sublayer],
       event = animationQueue.event
 
     if (isFirstPlay && enter?.type) {
-      enterQueue.pushAnimation(enter.type, {...enter, targets, debounceRender}, this.root)
+      enterQueue.pushAnimation(enter.type, {...enter, targets}, this.root)
       animationQueue.pushQueue(enterQueue)
     }
 
     if (loop?.type) {
-      loopQueue.pushAnimation(loop.type, {...loop, targets, debounceRender}, this.root)
+      loopQueue.pushAnimation(loop.type, {...loop, targets}, this.root)
       animationQueue.pushQueue(loopQueue)
     }
 

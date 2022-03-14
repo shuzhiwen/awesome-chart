@@ -37,20 +37,20 @@ export default {
                 id: 'title',
                 layout: 'title',
               },
-              data: '折线图',
+              data: '测试文本',
               style: {
                 text: {
                   fill: 'white',
-                  fontSize: 20,
+                  fontSize: 50,
                 },
               },
               animation: {
                 text: {
                   enter: {
-                    type: 'fade',
-                  },
-                  loop: {
-                    type: 'zoom',
+                    type: 'erase',
+                    delay: 1000,
+                    duration: 3000,
+                    direction: 'left',
                   },
                 },
               },

@@ -10,7 +10,6 @@ import {
   isLayerBaseMap,
   createDefs,
   getEasyGradientCreator,
-  isCanvasContainer,
 } from '../utils'
 import {
   Layer,
@@ -28,8 +27,6 @@ import {
 
 export class Chart {
   static standardLayoutCreator = getStandardLayoutCreator({brush: false})
-
-  private isCanvasRender = false
 
   private _state: ChartState = 'initialize'
 
@@ -149,16 +146,6 @@ export class Chart {
     })
   }
 
-  debounceRender() {
-    if (this.engine === 'canvas' && !this.isCanvasRender) {
-      this.isCanvasRender = true
-      requestAnimationFrame(() => {
-        isCanvasContainer(this.root) && this.root.renderAll()
-        this.isCanvasRender = false
-      })
-    }
-  }
-
   createLayer(type: LayerType, options: LayerOptions) {
     const context: ChartContext = {
       root: this.root,
@@ -169,9 +156,8 @@ export class Chart {
       containerWidth: this.containerWidth,
       containerHeight: this.containerHeight,
       bindCoordinate: this.bindCoordinate.bind(this),
-      debounceRender: this.debounceRender.bind(this),
       createGradient: getEasyGradientCreator({container: this.defs, engine: this.engine}),
-    } as const
+    }
 
     const layer = new layerMapping[type](options, context)
     this._layers.push(layer)

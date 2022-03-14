@@ -1,4 +1,4 @@
-import {Selection} from 'd3'
+import {Selection, Transition} from 'd3'
 import {Canvas, IEvent, Object} from 'fabric/fabric-impl'
 import {GraphStyleShape, TextStyleShape} from '.'
 import {
@@ -16,6 +16,8 @@ import {
 } from '../draws'
 
 export type D3Selection = Selection<any, unknown, any, unknown>
+
+export type D3Transition = Transition<any, unknown, any, unknown>
 
 export type FabricCanvas = Canvas
 
