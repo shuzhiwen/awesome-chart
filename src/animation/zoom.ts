@@ -43,14 +43,15 @@ export class AnimationZoom extends AnimationBase<Options> {
         .attr('transform', safeTransform(targets.attr('transform'), 'scale', end))
     } else if (targets) {
       setTimeout(() => {
+        setTimeout(this.end, duration)
         this.start()
+
         targets.forEach((target) => {
           target.scaleX = 0
           target.scaleY = 0
           target.animate('scaleX', end, {duration, onChange: this.renderCanvas})
           target.animate('scaleY', end, {duration, onChange: this.renderCanvas})
         })
-        setTimeout(this.end, duration)
       }, delay)
     }
   }

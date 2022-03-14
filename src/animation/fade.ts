@@ -38,12 +38,13 @@ export class AnimationFade extends AnimationBase<Options> {
         .attr('opacity', endOpacity)
     } else if (targets) {
       setTimeout(() => {
+        setTimeout(this.end, duration)
         this.start()
+
         targets.forEach((target) => {
           target.opacity = startOpacity
           target.animate('opacity', endOpacity, {duration, onChange: this.renderCanvas})
         })
-        setTimeout(this.end, duration)
       }, delay)
     }
   }

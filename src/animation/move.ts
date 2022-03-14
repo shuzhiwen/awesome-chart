@@ -64,7 +64,9 @@ export class AnimationMove extends AnimationBase<Options> {
         .call(addTransformForSvgContainer, targets, endOffset)
     } else if (targets) {
       setTimeout(() => {
+        setTimeout(this.end, duration)
         this.start()
+
         targets.forEach((target) => {
           target.animate('left', endOffset[0], {
             duration,
@@ -77,7 +79,6 @@ export class AnimationMove extends AnimationBase<Options> {
             from: (target.top ?? 0) - initialOffset[1] + startOffset[1],
           })
         })
-        setTimeout(this.end, duration)
       }, delay)
     }
   }

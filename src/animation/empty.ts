@@ -15,9 +15,9 @@ export class AnimationEmpty extends AnimationBase<Options> {
     const {duration = 0, delay = 0} = this.options
 
     setTimeout(() => {
+      setTimeout(this.end, duration)
       this.start()
       this.process()
-      setTimeout(this.end, duration)
     }, delay)
   }
 

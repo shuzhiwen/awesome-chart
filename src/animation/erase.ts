@@ -69,9 +69,11 @@ export class AnimationErase extends AnimationBase<Options> {
         .attr('width', direction === 'left' || direction === 'right' ? '0%' : '100%')
         .attr('height', direction === 'top' || direction === 'bottom' ? '0%' : '100%')
     } else if (isCanvasContainer(context) && !isSvgContainer(targets) && targets) {
-      // TODO: bugfix here
       setTimeout(() => {
+        setTimeout(this.end, duration)
         this.start()
+
+        // TODO: bug with render clipPath
         targets.forEach((target) => {
           const {left = 0, top = 0, width = 0, height = 0} = target.clipPath!
 
@@ -104,7 +106,6 @@ export class AnimationErase extends AnimationBase<Options> {
             }
           )
         })
-        setTimeout(this.end, duration)
       }, delay)
     }
   }
