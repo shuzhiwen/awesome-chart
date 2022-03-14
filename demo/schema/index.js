@@ -48,7 +48,7 @@ export default {
                 text: {
                   enter: {
                     type: 'erase',
-                    delay: 1000,
+                    delay: 0,
                     duration: 3000,
                     direction: 'left',
                   },

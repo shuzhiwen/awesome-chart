@@ -73,36 +73,22 @@ export class AnimationErase extends AnimationBase<Options> {
         setTimeout(this.end, duration)
         this.start()
 
-        // TODO: bug with render clipPath
         targets.forEach((target) => {
           const {left = 0, top = 0, width = 0, height = 0} = target.clipPath!
 
-          target.clipPath?.animate('left', direction !== 'right' ? left : left + width, {
-            duration,
-            onChange: this.renderCanvas,
-            from: left,
-          })
-          target.clipPath?.animate('top', direction !== 'bottom' ? top : top + height, {
-            duration,
-            onChange: this.renderCanvas,
-            from: top,
-          })
           target.clipPath?.animate(
-            'width',
-            direction === 'left' || direction === 'right' ? 0 : width,
+            {
+              left: direction !== 'right' ? left : left + width,
+              top: direction !== 'bottom' ? top : top + height,
+              width: direction === 'left' || direction === 'right' ? 0 : width,
+              height: direction === 'top' || direction === 'bottom' ? 0 : height,
+            },
             {
               duration,
-              onChange: this.renderCanvas,
-              from: width,
-            }
-          )
-          target.clipPath?.animate(
-            'height',
-            direction === 'top' || direction === 'bottom' ? 0 : height,
-            {
-              duration,
-              onChange: this.renderCanvas,
-              from: height,
+              onChange: () => {
+                target.drawClipPathOnCache(context.toCanvasElement().getContext('2d')!)
+                this.renderCanvas()
+              },
             }
           )
         })
