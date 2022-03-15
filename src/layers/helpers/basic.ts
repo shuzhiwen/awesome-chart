@@ -15,7 +15,7 @@ export function createScale<T extends LayerScalesShape>(
     scales[type] = incomingScale?.[type] || currentScale?.[type] || defaultScale?.[type]
   })
 
-  return scales
+  return scales as T
 }
 
 export function validateAndCreateData<T>(

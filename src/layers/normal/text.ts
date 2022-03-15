@@ -1,10 +1,10 @@
 import {LayerBase} from '../base'
 import {getAttr, getTextWidth} from '../../utils'
-import {BackupDataItemShape, ChartContext, LayerOptions, TextLayerStyleShape} from '../../types'
+import {BackupDataItemShape, ChartContext, LayerOptions, LayerTextStyleShape} from '../../types'
 import {createStyle, createText, validateAndCreateData} from '../helpers'
 import {DataBase} from '../../data'
 
-const defaultStyle: TextLayerStyleShape = {
+const defaultStyle: LayerTextStyleShape = {
   align: 'start',
   verticalAlign: 'start',
   text: {
@@ -39,7 +39,7 @@ export class LayerText extends LayerBase {
     this._data = validateAndCreateData('base', this.data, data)
   }
 
-  setStyle(style: TextLayerStyleShape) {
+  setStyle(style: LayerTextStyleShape) {
     if (!this.data?.source) {
       return
     }

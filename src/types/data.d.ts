@@ -1,5 +1,4 @@
 import {DataBase, dataMapping, DataRelation, DataTable, DataTableList} from '../data'
-import {ScaleBand, ScaleLinear, ScaleArc} from '../data'
 
 export type Meta = string | number
 
@@ -86,8 +85,3 @@ export interface ScaleArcProps {
   range: [number, number]
   nice: Pick<ScaleNiceShape, 'paddingInner'>
 }
-
-export type Scale =
-  | ReturnType<typeof ScaleBand>
-  | ReturnType<typeof ScaleLinear>
-  | ReturnType<typeof ScaleArc>

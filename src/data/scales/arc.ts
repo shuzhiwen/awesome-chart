@@ -1,7 +1,7 @@
 import {scaleOrdinal} from 'd3'
 import {ScaleArcProps} from '../../types'
 
-export function ScaleArc({domain, range, nice}: ScaleArcProps) {
+export function scaleArc({domain, range, nice}: ScaleArcProps) {
   const {paddingInner = 0} = nice,
     distance = range[1] - range[0],
     padding = (distance * paddingInner) / domain.data[0].list.length,

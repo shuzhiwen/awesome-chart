@@ -27,7 +27,7 @@ export type TextStyleShape = GraphStyleShape &
     offset: [number, number]
   }>
 
-export type TextLayerStyleShape = {
+export type LayerTextStyleShape = {
   align?: Align
   verticalAlign?: Align
   text?: TextStyleShape
