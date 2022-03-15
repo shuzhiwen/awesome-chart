@@ -1,3 +1,5 @@
+import './global'
+import './module'
 export * from './animation'
 export * from './chart'
 export * from './data'
