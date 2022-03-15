@@ -1,6 +1,6 @@
 import {DataBase} from './base'
 import {merge, max, sum} from 'lodash'
-import {createLog, isRelation, formatNumber, tableListToObjects} from '../utils'
+import {isRelation, formatNumber, tableListToObjects} from '../utils'
 import {
   RelationDataShape as Shape,
   RelationOptions as Options,
@@ -11,8 +11,6 @@ import {
 } from '../types'
 
 export class DataRelation extends DataBase<RawRelation, Options> {
-  static readonly log = createLog(DataRelation.name)
-
   private _data: Shape = {nodes: [], edges: [], roots: []}
 
   get data() {
@@ -26,7 +24,7 @@ export class DataRelation extends DataBase<RawRelation, Options> {
 
   update(relation: RawRelation) {
     if (!isRelation(relation)) {
-      DataRelation.log.error('wrong incoming data', relation)
+      this.log.error('wrong incoming data', relation)
       return
     }
 

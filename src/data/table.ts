@@ -1,11 +1,9 @@
 import {Meta, RawTable, TableDataShape as Shape, TableOptions as Options} from '../types'
 import {cloneDeep, min, max, isArray} from 'lodash'
-import {createLog, isTable} from '../utils'
+import {isTable} from '../utils'
 import {DataBase} from './base'
 
 export class DataTable extends DataBase<RawTable, Options> {
-  static readonly log = createLog(DataTable.name)
-
   private _data: Shape = [[], [], []]
 
   get data() {
@@ -39,7 +37,7 @@ export class DataTable extends DataBase<RawTable, Options> {
 
   update(table: RawTable) {
     if (!isTable(table)) {
-      DataTable.log.error('illegal data', table)
+      this.log.error('illegal data', table)
       return
     }
 
@@ -52,7 +50,7 @@ export class DataTable extends DataBase<RawTable, Options> {
         (target === 'row' && item.length !== this.data[0].length) ||
         (target === 'column' && item.length !== this.data[1].length)
       ) {
-        DataTable.log.error('illegal data')
+        this.log.error('illegal data')
       } else {
         data.forEach(([dimension, ...values]) => {
           if (target === 'row') {

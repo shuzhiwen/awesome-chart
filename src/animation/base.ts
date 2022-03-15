@@ -1,11 +1,19 @@
 import {throttle, merge, noop} from 'lodash'
-import {ANIMATION_LIFE_CYCLES, isCanvasContainer, isSvgContainer, noChange, uuid} from '../utils'
 import {Log, Event, AnimationProps as Props, BasicAnimationOptions as Options} from '../types'
+import {
+  ANIMATION_LIFE_CYCLES,
+  createEvent,
+  createLog,
+  isCanvasContainer,
+  isSvgContainer,
+  noChange,
+  uuid,
+} from '../utils'
 
 export abstract class AnimationBase<T extends Options> {
-  abstract readonly log: Log
+  readonly log: Log
 
-  abstract readonly event: Event
+  readonly event: Event
 
   readonly options
 
@@ -56,6 +64,8 @@ export abstract class AnimationBase<T extends Options> {
   }
 
   constructor({options, context}: Props<T>) {
+    this.log = createLog(this.constructor.name)
+    this.event = createEvent(this.constructor.name)
     this.options = merge({}, options, {context})
     this.createTargets('targets', context)
 

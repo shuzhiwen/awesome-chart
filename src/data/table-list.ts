@@ -1,5 +1,5 @@
 import {cloneDeep, sum, min, max} from 'lodash'
-import {createLog, isTableList, transpose} from '../utils'
+import {isTableList, transpose} from '../utils'
 import {DataBase} from './base'
 import {
   RawTableList,
@@ -9,8 +9,6 @@ import {
 } from '../types'
 
 export class DataTableList extends DataBase<RawTableList, Options> {
-  static readonly log = createLog(DataTableList.name)
-
   private _data: Shape = []
 
   get data() {
@@ -70,7 +68,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
 
   update(tableList: RawTableList, options: AnyObject = {}) {
     if (!isTableList(tableList)) {
-      DataTableList.log.error('illegal data', tableList)
+      this.log.error('illegal data', tableList)
       return
     }
 
@@ -93,7 +91,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
   push(...rows: Meta[][]) {
     rows.forEach((row) => {
       if (row.length !== this.data.length) {
-        DataTableList.log.error('illegal data', row)
+        this.log.error('illegal data', row)
       } else {
         row.forEach((value, i) => this.data[i].list.push(value))
       }

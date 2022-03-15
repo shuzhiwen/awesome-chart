@@ -1,13 +1,9 @@
 import {AnimationBase} from '.'
-import {createEvent, createLog, isSvgContainer, safeTransform} from '../utils'
+import {isSvgContainer, safeTransform} from '../utils'
 import {AnimationZoomOptions as Options, AnimationProps as Props} from '../types'
 import {canvasEasing, svgEasing} from './easing'
 
 export class AnimationZoom extends AnimationBase<Options> {
-  readonly log = createLog(AnimationZoom.name)
-
-  readonly event = createEvent(AnimationZoom.name)
-
   constructor(props: Props<Options>) {
     super(props)
   }

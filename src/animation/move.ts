@@ -1,5 +1,5 @@
 import {AnimationBase} from '.'
-import {createEvent, createLog, isSvgContainer, safeTransform} from '../utils'
+import {isSvgContainer, safeTransform} from '../utils'
 import {canvasEasing, svgEasing} from './easing'
 import {
   AnimationMoveOptions as Options,
@@ -20,10 +20,6 @@ const addTransformForSvgContainer = (
 }
 
 export class AnimationMove extends AnimationBase<Options> {
-  readonly log = createLog(AnimationMove.name)
-
-  readonly event = createEvent(AnimationMove.name)
-
   constructor(props: Props<Options>) {
     super(props)
   }

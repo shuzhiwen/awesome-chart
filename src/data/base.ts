@@ -1,4 +1,9 @@
+import {Log} from '../types'
+import {createLog} from '../utils'
+
 export class DataBase<T, P extends AnyObject = AnyObject> {
+  readonly log: Log
+
   private readonly _storage: Record<string, unknown>
 
   private readonly _source: T
@@ -24,6 +29,7 @@ export class DataBase<T, P extends AnyObject = AnyObject> {
   }
 
   constructor(source: T, options: P) {
+    this.log = createLog(this.constructor.name)
     this._options = {...options}
     this._source = source
     this._storage = {}

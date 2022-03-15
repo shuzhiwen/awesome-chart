@@ -8,6 +8,8 @@ import {
   TOOLTIP_EVENTS,
   isSvgContainer,
   isCanvasContainer,
+  createLog,
+  createEvent,
 } from '../utils'
 import {
   Log,
@@ -29,10 +31,6 @@ import {
 } from '../types'
 
 export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
-  abstract readonly log: Log
-
-  abstract readonly event: Event
-
   abstract data: Maybe<DataShape>
 
   abstract setData(data: Maybe<DataShape>, scale?: AnyObject): void
@@ -40,6 +38,10 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
   abstract setStyle(style?: AnyObject): void
 
   abstract draw(): void
+
+  readonly log: Log
+
+  readonly event: Event
 
   readonly className: string
 
@@ -61,6 +63,8 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
 
   constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<T>) {
     this.className = this.constructor.name
+    this.log = createLog(this.className)
+    this.event = createEvent(this.className)
     this.options = merge(options, context)
     this.sublayers = sublayers || []
     this.tooltipTargets = tooltipTargets || []

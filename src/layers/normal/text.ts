@@ -1,5 +1,5 @@
 import {LayerBase} from '../base'
-import {createEvent, createLog, getAttr, getTextWidth} from '../../utils'
+import {getAttr, getTextWidth} from '../../utils'
 import {BackupDataItemShape, ChartContext, LayerOptions, TextLayerStyleShape} from '../../types'
 import {createStyle, createText, validateAndCreateData} from '../helpers'
 import {DataBase} from '../../data'
@@ -13,10 +13,6 @@ const defaultStyle: TextLayerStyleShape = {
 }
 
 export class LayerText extends LayerBase {
-  readonly event = createEvent(LayerText.name)
-
-  readonly log = createLog(LayerText.name)
-
   private _data: Maybe<DataBase<string>> = null
 
   private _style = defaultStyle

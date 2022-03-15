@@ -1,13 +1,9 @@
 import {AnimationBase} from '.'
-import {createEvent, createLog, isSvgContainer} from '../utils'
+import {isSvgContainer} from '../utils'
 import {AnimationFadeOptions as Options, AnimationProps as Props} from '../types'
 import {canvasEasing, svgEasing} from './easing'
 
 export class AnimationFade extends AnimationBase<Options> {
-  readonly log = createLog(AnimationFade.name)
-
-  readonly event = createEvent(AnimationFade.name)
-
   constructor(props: Props<Options>) {
     super(props)
   }

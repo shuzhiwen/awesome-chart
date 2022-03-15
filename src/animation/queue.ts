@@ -1,4 +1,4 @@
-import {createEvent, createLog, range, uuid} from '../utils'
+import {range, uuid} from '../utils'
 import {AnimationBase, AnimationEmpty, animationMapping} from '.'
 import {max} from 'lodash'
 import {
@@ -25,10 +25,6 @@ const bind = (animations: Shape[], callback: Function) => {
 }
 
 export class AnimationQueue extends AnimationBase<Options> {
-  readonly log = createLog(AnimationQueue.name)
-
-  readonly event = createEvent(AnimationQueue.name)
-
   private isConnected = false
 
   private queue: Shape[]

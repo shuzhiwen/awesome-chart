@@ -1,15 +1,11 @@
 import {AnimationBase} from '.'
-import {createEvent, createLog, isCanvasContainer, isSvgContainer} from '../utils'
+import {isCanvasContainer, isSvgContainer} from '../utils'
 import {AnimationEraseOptions as Options, AnimationProps as Props, D3Selection} from '../types'
 import {canvasEasing, svgEasing} from './easing'
 import {transition} from 'd3-transition'
 import {fabric} from 'fabric'
 
 export class AnimationErase extends AnimationBase<Options> {
-  readonly log = createLog(AnimationErase.name)
-
-  readonly event = createEvent(AnimationErase.name)
-
   private defs: Maybe<D3Selection>
 
   constructor(props: Props<Options>) {
