@@ -41,9 +41,9 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
 
   abstract draw(): void
 
-  readonly options: T & ChartContext
+  readonly className: string
 
-  readonly className: string = 'awesome-base'
+  readonly options: T & ChartContext
 
   private backupData: BackupDataShape<any> = {}
 
@@ -60,6 +60,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
   protected selector
 
   constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<T>) {
+    this.className = this.constructor.name
     this.options = merge(options, context)
     this.sublayers = sublayers || []
     this.tooltipTargets = tooltipTargets || []
@@ -180,7 +181,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
 
   private createAnimation = (sublayer: string) => {
     const {options} = this.backupAnimation,
-      targets = this.selector.getChildren(this.root, `awesome-basic-${sublayer}`),
+      targets = this.selector.getChildren(this.root, `chart-basic-${sublayer}`),
       prefix = `${sublayer}-animation-`
     let isFirstPlay = true
 
@@ -251,7 +252,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
           groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),
           options: GraphDrawerProps<any> = {
             engine: this.selector.engine,
-            className: `awesome-basic-${sublayer}`,
+            className: `chart-basic-${sublayer}`,
             container: groupContainer!,
             data: [],
           }

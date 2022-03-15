@@ -13,8 +13,6 @@ const defaultStyle: TextLayerStyleShape = {
 }
 
 export class LayerText extends LayerBase {
-  readonly className = 'awesome-text'
-
   readonly event = createEvent(LayerText.name)
 
   readonly log = createLog(LayerText.name)
