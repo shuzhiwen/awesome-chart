@@ -3,7 +3,7 @@ import {DrawerTarget, FabricObject} from '../../types'
 import {createLog, isCanvasContainer, isSvgContainer} from '../../utils'
 
 export class Selector {
-  readonly log = createLog('utils:selector', Selector.name)
+  readonly log = createLog(Selector.name)
 
   readonly engine: Engine
 

@@ -17,7 +17,7 @@ const defaultOptions: Required<TooltipOptions> = {
 }
 
 export class Tooltip {
-  readonly log = createLog('chart:tooltip', Tooltip.name)
+  readonly log = createLog(Tooltip.name)
 
   private instance: D3Selection
 

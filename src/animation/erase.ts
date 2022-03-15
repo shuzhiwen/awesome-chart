@@ -6,9 +6,9 @@ import {transition} from 'd3-transition'
 import {fabric} from 'fabric'
 
 export class AnimationErase extends AnimationBase<Options> {
-  readonly log = createLog('animation:erase', AnimationErase.name)
+  readonly log = createLog(AnimationErase.name)
 
-  readonly event = createEvent('animation:erase')
+  readonly event = createEvent(AnimationErase.name)
 
   private defs: Maybe<D3Selection>
 

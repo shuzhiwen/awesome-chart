@@ -16,7 +16,7 @@ import {
 const isAxisLayer = (type: LayerType) => type === 'axis'
 const isLegendLayer = (type: LayerType) => type === 'legend'
 const isNormalLayer = (type: LayerType) => !isAxisLayer(type) && !isLegendLayer(type)
-const log = createLog('chart:create', 'CreateChart')
+const log = createLog('CreateChart')
 
 export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
   const {type, options, data, style, animation, event} = schema

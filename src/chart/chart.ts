@@ -42,9 +42,9 @@ export class Chart {
 
   private tooltip: Tooltip
 
-  private event = createEvent('chart:chart')
+  private event = createEvent(Chart.name)
 
-  readonly log = createLog('chart:chart', Chart.name)
+  readonly log = createLog(Chart.name)
 
   readonly engine: Engine
 

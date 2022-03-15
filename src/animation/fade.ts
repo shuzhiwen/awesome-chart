@@ -4,9 +4,9 @@ import {AnimationFadeOptions as Options, AnimationProps as Props} from '../types
 import {canvasEasing, svgEasing} from './easing'
 
 export class AnimationFade extends AnimationBase<Options> {
-  readonly log = createLog('animation:fade', AnimationFade.name)
+  readonly log = createLog(AnimationFade.name)
 
-  readonly event = createEvent('animation:fade')
+  readonly event = createEvent(AnimationFade.name)
 
   constructor(props: Props<Options>) {
     super(props)

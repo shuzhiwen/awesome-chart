@@ -20,9 +20,9 @@ const addTransformForSvgContainer = (
 }
 
 export class AnimationMove extends AnimationBase<Options> {
-  readonly log = createLog('animation:move', AnimationMove.name)
+  readonly log = createLog(AnimationMove.name)
 
-  readonly event = createEvent('animation:move')
+  readonly event = createEvent(AnimationMove.name)
 
   constructor(props: Props<Options>) {
     super(props)

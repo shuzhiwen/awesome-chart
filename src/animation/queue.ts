@@ -25,9 +25,9 @@ const bind = (animations: Shape[], callback: Function) => {
 }
 
 export class AnimationQueue extends AnimationBase<Options> {
-  readonly log = createLog('animation:queue', AnimationQueue.name)
+  readonly log = createLog(AnimationQueue.name)
 
-  readonly event = createEvent('animation:queue')
+  readonly event = createEvent(AnimationQueue.name)
 
   private isConnected = false
 

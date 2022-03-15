@@ -4,9 +4,9 @@ import {AnimationZoomOptions as Options, AnimationProps as Props} from '../types
 import {canvasEasing, svgEasing} from './easing'
 
 export class AnimationZoom extends AnimationBase<Options> {
-  readonly log = createLog('animation:zoom', AnimationZoom.name)
+  readonly log = createLog(AnimationZoom.name)
 
-  readonly event = createEvent('animation:zoom')
+  readonly event = createEvent(AnimationZoom.name)
 
   constructor(props: Props<Options>) {
     super(props)

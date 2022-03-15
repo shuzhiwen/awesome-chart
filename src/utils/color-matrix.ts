@@ -4,7 +4,7 @@ import {mean} from 'd3'
 import {Log} from '../types'
 
 export class ColorMatrix {
-  readonly log: Log = createLog('util:color-matrix', ColorMatrix.name)
+  readonly log: Log = createLog(ColorMatrix.name)
 
   private _matrix: string[][]
 

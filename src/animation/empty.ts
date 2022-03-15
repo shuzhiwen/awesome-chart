@@ -3,9 +3,9 @@ import {createEvent, createLog} from '../utils'
 import {AnimationEmptyOptions as Options, AnimationProps as Props} from '../types'
 
 export class AnimationEmpty extends AnimationBase<Options> {
-  readonly log = createLog('animation:empty', AnimationEmpty.name)
+  readonly log = createLog(AnimationEmpty.name)
 
-  readonly event = createEvent('animation:empty')
+  readonly event = createEvent(AnimationEmpty.name)
 
   constructor(props: Props<Options>) {
     super(props)

@@ -1,16 +1,15 @@
-export function createLog(file: string, scope: string) {
-  const filePath = file.replace(/\./g, '\\.')
+export function createLog(key: string) {
   const emptyData: any = 'Empty Data'
 
   return {
     info(message: string, data = emptyData) {
-      console.info(`${scope}: ${message}`, `=> Path: '${filePath}'\n`, data)
+      console.info(`${key}: ${message}\n`, data)
     },
     warn(message: string, data = emptyData) {
-      console.warn(`${scope}: ${message}`, `=> Path: '${filePath}'\n`, data)
+      console.warn(`${key}: ${message}\n`, data)
     },
     error(message: string, data = emptyData) {
-      console.error(`${scope}: ${message}`, `=> Path: '${filePath}'\n`, data)
+      console.error(`${key}: ${message}\n`, data)
     },
   }
 }

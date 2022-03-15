@@ -11,7 +11,7 @@ import {
 } from '../types'
 
 export class DataRelation extends DataBase<RawRelation, Options> {
-  static readonly log = createLog('data:relation', DataRelation.name)
+  static readonly log = createLog(DataRelation.name)
 
   private _data: Shape = {nodes: [], edges: [], roots: []}
 

@@ -8,8 +8,8 @@ type Callback = Function & {
 
 const isCallback = (fn: unknown): fn is Callback => isFunction(fn)
 
-export const createEvent = (privateName = '') => {
-  const id = `__event-${privateName}-${uuid()}`
+export const createEvent = (key: string) => {
+  const id = `__event-${key}-${uuid()}`
   const rename = (name: string) => `${id}-${name}`
   const cache: Record<string, Callback[]> = {}
 
