@@ -58,9 +58,9 @@ export interface CreateLayerSchema {
   options: {
     id: string
     layout: string
-    axis?: string
+    coordinate?: Coordinate
+    axis?: 'main' | 'minor'
     mode?: string
-    type?: string
   }
   scale?: {
     nice: ScaleNiceShape

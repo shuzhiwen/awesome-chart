@@ -24,9 +24,11 @@ import {
   LayerSchema,
   BackupAnimationShape,
   BackupAnimationOptions,
+  LayerOptions,
+  ChartContext,
 } from '../types'
 
-export abstract class LayerBase {
+export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
   abstract readonly log: Log
 
   abstract readonly event: Event
@@ -39,7 +41,7 @@ export abstract class LayerBase {
 
   abstract draw(): void
 
-  readonly options
+  readonly options: T & ChartContext
 
   readonly className: string = 'awesome-base'
 
@@ -57,7 +59,7 @@ export abstract class LayerBase {
 
   protected selector
 
-  constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps) {
+  constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<T>) {
     this.options = merge(options, context)
     this.sublayers = sublayers || []
     this.tooltipTargets = tooltipTargets || []

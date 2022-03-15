@@ -1,4 +1,4 @@
-import * as d3 from 'd3'
+import {select, schemeCategory10} from 'd3'
 import {fabric} from 'fabric'
 import {getStandardLayoutCreator} from '../layout'
 import {layerMapping} from '../layers'
@@ -77,7 +77,7 @@ export class Chart {
     adjust = true,
     engine = 'svg',
     padding = [0, 0, 0, 0],
-    theme = [...d3.schemeCategory10],
+    theme = [...schemeCategory10],
     layoutCreator = Chart.standardLayoutCreator,
     defineSchema = {},
     tooltipOptions,
@@ -86,7 +86,7 @@ export class Chart {
     this.engine = engine
     this.padding = padding
     this.container = container
-    const d3Container = d3.select(this.container)
+    const d3Container = select(this.container)
     d3Container.html('')
 
     if (adjust) {
@@ -182,7 +182,7 @@ export class Chart {
 
   bindCoordinate(redraw = false, triggerLayer?: Layer) {
     const axisLayer = this._layers.find((instance) => isLayerAxis(instance))
-    const type: Coordinate = axisLayer?.options?.type
+    const coordinate = axisLayer?.options.coordinate
     const layers = this._layers
       .filter((instance) => instance.scales && !isLayerBaseMap(instance))
       .map((instance) => instance)
@@ -191,7 +191,7 @@ export class Chart {
       const {scales, options} = layer
       const {axis} = options
       const mergedScales: Layer['scales'] = {}
-      if (type === 'cartesian') {
+      if (coordinate === 'cartesian') {
         mergedScales.scaleX = scales?.scaleX
         if (axis === 'minor') {
           mergedScales.scaleYR = scales?.scaleY
@@ -199,11 +199,11 @@ export class Chart {
           mergedScales.scaleY = scales?.scaleY
         }
       }
-      if (type === 'polar') {
+      if (coordinate === 'polar') {
         mergedScales.scaleAngle = scales?.scaleAngle
         mergedScales.scaleRadius = scales?.scaleRadius
       }
-      if (type === 'geographic' && isLayerBaseMap(layer)) {
+      if (coordinate === 'geographic' && isLayerBaseMap(layer)) {
         mergedScales.scaleX = scales?.scaleX
         mergedScales.scaleY = scales?.scaleY
       }
@@ -214,7 +214,7 @@ export class Chart {
     layers.forEach((layer) => {
       const scales = {...layer.scales, ...axisLayer?.scales}
       // projection to normal scale
-      if (type === 'geographic') {
+      if (coordinate === 'geographic') {
         const scaleX = (x: any) => (scales.scaleX?.(x) as number) - layer.options.layout.left
         const scaleY = (y: any) => (scales.scaleY?.(y) as number) - layer.options.layout.top
         layer.setData(undefined, {...scales, scaleX, scaleY})

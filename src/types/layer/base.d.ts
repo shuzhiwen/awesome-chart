@@ -30,9 +30,9 @@ export type BackupAnimationShape = Record<string, Maybe<AnyObject>> & {
   options?: BackupAnimationOptions
 }
 
-export interface LayerBaseProps {
+export interface LayerBaseProps<T> {
   context: ChartContext
-  options: LayerOptions
+  options: T & LayerOptions
   tooltipTargets?: string[]
   sublayers?: string[]
 }
@@ -68,6 +68,8 @@ export interface DrawBasicProps {
 export type LayerOptions = AnyObject & {
   id: string
   layout: LayoutArea
+  coordinate?: Coordinate
+  axis?: 'main' | 'minor'
 }
 
 export type LayerScalesShape = {
@@ -80,6 +82,6 @@ export type LayerScalesShape = {
   nice?: ScaleNiceShape
 }
 
-export type Layer = LayerBase & {
+export type Layer = LayerBase<LayerOptions> & {
   scales?: LayerScalesShape
 }
