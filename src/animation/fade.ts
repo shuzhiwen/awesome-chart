@@ -1,6 +1,7 @@
 import {AnimationBase} from '.'
 import {createEvent, createLog, isSvgContainer} from '../utils'
 import {AnimationFadeOptions as Options, AnimationProps as Props} from '../types'
+import {canvasEasing, svgEasing} from './easing'
 
 export class AnimationFade extends AnimationBase<Options> {
   readonly log = createLog('animation:fade', AnimationFade.name)
@@ -23,7 +24,14 @@ export class AnimationFade extends AnimationBase<Options> {
   }
 
   play() {
-    const {targets, delay = 0, duration = 1000, startOpacity = 0, endOpacity = 1} = this.options
+    const {
+      targets,
+      delay = 0,
+      duration = 1000,
+      easing = 'easeInOutSine',
+      startOpacity = 0,
+      endOpacity = 1,
+    } = this.options
 
     if (isSvgContainer(targets)) {
       targets
@@ -33,6 +41,7 @@ export class AnimationFade extends AnimationBase<Options> {
         .attr('opacity', startOpacity)
         .transition()
         .duration(duration)
+        .ease(svgEasing.get(easing)!)
         .on('start', this.start)
         .on('end', this.end)
         .attr('opacity', endOpacity)
@@ -43,7 +52,11 @@ export class AnimationFade extends AnimationBase<Options> {
 
         targets.forEach((target) => {
           target.opacity = startOpacity
-          target.animate('opacity', endOpacity, {duration, onChange: this.renderCanvas})
+          target.animate('opacity', endOpacity, {
+            duration,
+            easing: canvasEasing.get(easing),
+            onChange: this.renderCanvas,
+          })
         })
       }, delay)
     }

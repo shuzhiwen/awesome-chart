@@ -1,9 +1,35 @@
 import {Object} from 'fabric/fabric-impl'
 import {D3Selection, DrawerTarget} from '.'
 import {animationMapping} from '../animation'
-import {Chart} from '../chart'
 
 export type AnimationLifeCycle = 'init' | 'play' | 'start' | 'process' | 'end' | 'destroy'
+
+// see https://easings.net/
+export type AnimationEasing =
+  | 'easeInBack'
+  | 'easeInBounce'
+  | 'easeInCirc'
+  | 'easeInCubic'
+  | 'easeInElastic'
+  | 'easeInExpo'
+  | 'easeInOutBack'
+  | 'easeInOutBounce'
+  | 'easeInOutCirc'
+  | 'easeInOutCubic'
+  | 'easeInOutElastic'
+  | 'easeInOutExpo'
+  | 'easeInOutQuad'
+  | 'easeInOutSine'
+  | 'easeInQuad'
+  | 'easeInSine'
+  | 'easeOutBack'
+  | 'easeOutBounce'
+  | 'easeOutCirc'
+  | 'easeOutCubic'
+  | 'easeOutElastic'
+  | 'easeOutExpo'
+  | 'easeOutQuad'
+  | 'easeOutSine'
 
 export type AnimationType = keyof typeof animationMapping
 
@@ -14,7 +40,7 @@ export type BasicAnimationOptions = {
   duration?: number
   delay?: number
   loop?: boolean
-  easing?: string
+  easing?: AnimationEasing
 }
 
 export interface AnimationProps<T extends BasicAnimationOptions> {

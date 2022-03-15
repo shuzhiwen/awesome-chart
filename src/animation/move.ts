@@ -1,5 +1,6 @@
 import {AnimationBase} from '.'
 import {createEvent, createLog, isSvgContainer, safeTransform} from '../utils'
+import {canvasEasing, svgEasing} from './easing'
 import {
   AnimationMoveOptions as Options,
   AnimationProps as Props,
@@ -46,6 +47,7 @@ export class AnimationMove extends AnimationBase<Options> {
       targets,
       delay = 0,
       duration = 1000,
+      easing = 'easeInOutSine',
       initialOffset = [0, 0],
       startOffset = [0, 0],
       endOffset = [0, 0],
@@ -59,6 +61,7 @@ export class AnimationMove extends AnimationBase<Options> {
         .call(addTransformForSvgContainer, targets, startOffset)
         .transition()
         .duration(duration)
+        .ease(svgEasing.get(easing)!)
         .on('start', this.start)
         .on('end', this.end)
         .call(addTransformForSvgContainer, targets, endOffset)
@@ -75,6 +78,7 @@ export class AnimationMove extends AnimationBase<Options> {
           })
           target.animate('top', endOffset[0], {
             duration,
+            easing: canvasEasing.get(easing),
             onChange: this.renderCanvas,
             from: (target.top ?? 0) - initialOffset[1] + startOffset[1],
           })
