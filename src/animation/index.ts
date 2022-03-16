@@ -1,5 +1,4 @@
-import {AnimationErase, AnimationEmpty, AnimationFade, AnimationMove, AnimationZoom} from '.'
-
+import * as animation from '.'
 export * from './base'
 export * from './erase'
 export * from './empty'
@@ -9,9 +8,9 @@ export * from './queue'
 export * from './zoom'
 
 export const animationMapping = {
-  erase: AnimationErase,
-  empty: AnimationEmpty,
-  fade: AnimationFade,
-  move: AnimationMove,
-  zoom: AnimationZoom,
+  erase: animation.AnimationErase,
+  empty: animation.AnimationEmpty,
+  fade: animation.AnimationFade,
+  move: animation.AnimationMove,
+  zoom: animation.AnimationZoom,
 }

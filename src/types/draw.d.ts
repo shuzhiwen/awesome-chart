@@ -4,6 +4,7 @@ import {GraphStyleShape, TextStyleShape, Meta} from '.'
 import {
   drawArc,
   drawArea,
+  drawCircle,
   drawCurve,
   drawEllipse,
   drawerMapping,
@@ -41,6 +42,7 @@ export type ElConfigShape = ArrayItem<
   ReturnType<
     | typeof drawArc
     | typeof drawArea
+    | typeof drawCircle
     | typeof drawCurve
     | typeof drawEllipse
     | typeof drawImage
@@ -97,10 +99,9 @@ export interface AreaDrawerProps
     curve: CurveType
   }> {}
 
-export interface EllipseDrawerProps
+export interface CircleDrawerProps
   extends GraphDrawerProps<{
-    rx: number
-    ry: number
+    r: number
     cx: number
     cy: number
   }> {}
@@ -109,6 +110,14 @@ export interface CurveDrawerProps
   extends GraphDrawerProps<{
     points: {x: number; y: number}[]
     curve: CurveType
+  }> {}
+
+export interface EllipseDrawerProps
+  extends GraphDrawerProps<{
+    rx: number
+    ry: number
+    cx: number
+    cy: number
   }> {}
 
 export interface ImageDrawerProps
