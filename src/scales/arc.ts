@@ -1,5 +1,5 @@
 import {scaleOrdinal} from 'd3'
-import {ScaleArcProps} from '../../types'
+import {ScaleArcProps} from '../types'
 
 export function scaleArc({domain, range, nice}: ScaleArcProps) {
   const {paddingInner = 0} = nice,

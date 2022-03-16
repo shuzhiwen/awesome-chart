@@ -1,5 +1,5 @@
 import {isNumber} from 'lodash'
-import {ScaleBandProps} from '../../types'
+import {ScaleBandProps} from '../types'
 import * as d3 from 'd3-scale'
 
 export function scaleBand({domain, range, nice}: ScaleBandProps) {
