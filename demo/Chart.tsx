@@ -16,7 +16,7 @@ export const Chart = ({title, schema}) => {
     try {
       const container = chartRef.current,
         layout = getStandardLayoutCreator({brush: false}),
-        chartSchema = eval(schema.replace(/engine[\d\D]*\,$/, `engine: "${engine.toLowerCase()}"`))
+        chartSchema = eval(schema.replace(/engine(.*?)\,/, `engine: "${engine.toLowerCase()}",`))
 
       chartSchema.container = chartSchema.container ?? container
       chartSchema.layout = chartSchema.layout ?? layout
