@@ -4,7 +4,7 @@ import {getTextWidth} from './chaos'
 
 export const formatNumber = (data: string | number, config?: FormatNumberConfig) => {
   const number = Number(data)
-  const {percentage = false, thousandth = false, decimalPlace = 8} = config || {}
+  const {percentage = false, thousandth = false, decimals = 8} = config || {}
 
   if (!config) {
     // anonymous formatting
@@ -13,7 +13,7 @@ export const formatNumber = (data: string | number, config?: FormatNumberConfig)
     }
     return data
   } else {
-    return d3.format(`${thousandth ? ',' : ''}.${decimalPlace}~${percentage ? '%' : 'f'}`)(number)
+    return d3.format(`${thousandth ? ',' : ''}.${decimals}~${percentage ? '%' : 'f'}`)(number)
   }
 }
 

@@ -13,14 +13,14 @@ const mapping = {
   poisson: ({lambda = 1}: Pick<PoissonRandomOptions, 'lambda'>) => d3.randomPoisson(lambda),
 }
 
-const toFixed = (number: number, decimal: number) => {
-  return Math.round(number / 10 ** -decimal) / 10 ** decimal
+const toFixed = (number: number, decimals: number) => {
+  return Math.round(number / 10 ** -decimals) / 10 ** decimals
 }
 
 export const randomTableList = (options: RandomOptions): RawTableList => {
-  const {mode, row, column, decimalPlace = 0} = options
+  const {mode, row, column, decimals = 0} = options
   const getNumber = mapping[mode](options)
-  const numbers = new Array(row * column).fill(null).map(() => toFixed(getNumber(), decimalPlace))
+  const numbers = new Array(row * column).fill(null).map(() => toFixed(getNumber(), decimals))
   const headers = ['dimension'].concat(new Array(column).fill(null).map((_, i) => `Class ${i + 1}`))
   const lists = new Array(row)
     .fill(null)
@@ -29,11 +29,11 @@ export const randomTableList = (options: RandomOptions): RawTableList => {
 }
 
 export const randomTable = (options: RandomOptions): RawTable => {
-  const {mode, row, column, decimalPlace = 8} = options
+  const {mode, row, column, decimals = 8} = options
   const getNumber = mapping[mode](options)
   const numbers = new Array(row)
     .fill(null)
-    .map(() => new Array(column).fill(null).map(() => toFixed(getNumber(), decimalPlace)))
+    .map(() => new Array(column).fill(null).map(() => toFixed(getNumber(), decimals)))
   const rows = new Array(row).fill(null).map((_, i) => `Row ${i + 1}`)
   const columns = new Array(column).fill(null).map((_, i) => `Column ${i + 1}`)
   return [rows, columns, numbers]

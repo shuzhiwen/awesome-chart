@@ -8,7 +8,7 @@ export type Event = ReturnType<typeof createEvent>
 export interface FormatNumberConfig {
   percentage?: boolean // 0.1234 or 12.34%
   thousandth?: boolean // 1234 or 1,234
-  decimalPlace?: number // 12.3 or 12.34
+  decimals?: number // 12.3 or 12.34
 }
 
 export interface OverflowControlConfig {
@@ -90,7 +90,7 @@ export interface CreateDefsSchema {
 export interface BaseRandomOptions {
   row: number
   column: number
-  decimalPlace?: number
+  decimals?: number
 }
 
 export interface NormalRandomOptions extends BaseRandomOptions {
