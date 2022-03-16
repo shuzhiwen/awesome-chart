@@ -35,7 +35,7 @@ export class Selector {
   getSubcontainer(target: Maybe<DrawerTarget>, className: string) {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       const result = target.selectAll(`.${className}`)
-      return result.size() !== 0 ? select(result.nodes()[0]) : null
+      return result.size() !== 0 ? select(result.node()) : null
     } else {
       return target
     }

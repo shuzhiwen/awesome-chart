@@ -1,5 +1,5 @@
 import {select} from 'd3'
-import {createLog} from '../utils'
+import {createLog, getAttr, group, ungroup} from '../utils'
 import {isEqual, isArray, merge} from 'lodash'
 import {ElConfigShape, D3Selection, BackupDataShape, TooltipOptions} from '../types'
 
@@ -65,30 +65,40 @@ export class Tooltip {
   }
 
   private getListData<T>(data: ElConfigShape, backup: BackupDataShape<T>) {
-    let list: any[] = []
-    const {mode} = this.options
+    try {
+      if (this.options.mode === 'single') {
+        const {fill, stroke, source} = data,
+          pointColor = ungroup(fill) || ungroup(stroke) || '#000'
 
-    if (mode === 'single') {
-      const {fill, stroke, source} = data
-      const pointColor = fill || stroke
-      list.concat(isArray(source) ? source : [source]).map((item) => ({pointColor, ...item}))
-    } else if (mode === 'group') {
-      try {
-        const {dimension} = data.source || {}
-        const elType = data.className.split('-')[2]
-        const group = backup[elType].filter(({source}) =>
-          isEqual(source?.[0].dimension, dimension)
-        )?.[0]
-        const {source, fill, stroke} = group
-        list.concat(
-          source?.map((item, i) => ({
-            pointColor: isArray(fill) ? fill[i] : stroke?.[i],
-            ...item,
-          }))
-        )
-      } catch (error) {
-        this.log.warn('the layer does not support group mode', error)
+        return group(source).map((item) => ({pointColor, ...item}))
       }
+
+      if (this.options.mode === 'dimension') {
+        const {dimension} = getAttr(data.source, 0, {}),
+          elType = data.className.split('-').at(-1)!,
+          groups = backup[elType].filter(({source}) => source?.[0].dimension === dimension),
+          {source, fill, stroke} = groups[0]
+
+        return source?.map((item, i) => ({
+          pointColor: getAttr(fill, i, null) || getAttr(stroke, i, null) || '#000',
+          ...item,
+        }))
+      }
+
+      if (this.options.mode === 'category') {
+        const {category} = getAttr(data.source, 0, {}),
+          elType = data.className.split('-').at(-1)!,
+          groups = backup[elType]
+            .map(({source}) => source?.filter((item) => item.category === category))
+            .reduce((prev, cur) => [...prev!, ...cur!], [])
+
+        return groups?.map((item, i) => ({
+          pointColor: getAttr(data.fill, i, null) || getAttr(data.stroke, i, null) || '#000',
+          ...item,
+        }))
+      }
+    } catch (error) {
+      this.log.warn(`the layer does not support ${this.options.mode} mode`, error)
     }
   }
 
@@ -101,14 +111,14 @@ export class Tooltip {
       this.backup = list
       this.instance
         .selectAll('.chart-tooltip-title')
-        .data([list[0].dimension])
+        .data([list[0]?.dimension])
         .join('div')
         .attr('class', 'chart-tooltip-title')
-        .style('padding', '5px 5px 0')
+        .style('padding', '8px')
         .style('font-size', `${titleSize}px`)
         .style('color', titleColor)
         .style('position', 'relative')
-        .text((d) => d)
+        .text((d) => d!)
       const container = this.instance
         .selectAll('.chart-tooltip-content')
         .data([null])
@@ -118,7 +128,8 @@ export class Tooltip {
         .style('flex-direction', 'column')
         .style('justify-content', 'space-between')
         .style('align-items', 'center')
-        .style('padding', '5px')
+        .style('padding', `${list.length ? 8 : 0}px`)
+        .style('padding-top', '0px')
         .style('position', 'relative')
       container.selectAll('div').remove()
       const rows = container
@@ -148,19 +159,19 @@ export class Tooltip {
         .append('div')
         .style('font-size', `${labelSize}px`)
         .style('color', labelColor)
-        .text((d) => d.category)
+        .text((d) => d.category!)
       rows
         .append('div')
         .style('font-weight', 'bold')
         .style('font-size', `${valueSize}px`)
         .style('color', valueColor)
-        .text((d) => d.value)
+        .text((d) => d.value!)
     }
   }
 
   move({pageX, pageY}: MouseEvent) {
     const drift = 10
-    const rect = this.instance.nodes()[0].getBoundingClientRect()
+    const rect = this.instance.node().getBoundingClientRect()
 
     // boundary judgement
     if (pageX + rect.width > document.body.clientWidth) {

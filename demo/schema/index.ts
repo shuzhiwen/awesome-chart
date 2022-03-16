@@ -46,12 +46,12 @@ export default {
               },
               animation: {
                 text: {
-                  enter: {
-                    type: 'erase',
-                    delay: 0,
-                    duration: 3000,
-                    direction: 'left',
-                  },
+                  // enter: {
+                  //   type: 'erase',
+                  //   delay: 0,
+                  //   duration: 3000,
+                  //   direction: 'left',
+                  // },
                 },
               },
             },

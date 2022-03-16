@@ -18,7 +18,7 @@ export type ChartContext = {
 
 export type TooltipOptions = {
   container: HTMLElement | null
-  mode?: 'single' | 'group'
+  mode?: 'single' | 'dimension' | 'category'
   pointSize?: number
   titleSize?: number
   titleColor?: string

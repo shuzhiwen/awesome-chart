@@ -1,6 +1,6 @@
 import {Selection, Transition} from 'd3'
 import {Canvas, IEvent, Object} from 'fabric/fabric-impl'
-import {GraphStyleShape, TextStyleShape} from '.'
+import {GraphStyleShape, TextStyleShape, Meta} from '.'
 import {
   drawArc,
   drawArea,
@@ -52,6 +52,12 @@ export type ElConfigShape = ArrayItem<
   >
 >
 
+export type ElSourceShape = {
+  dimension?: Meta
+  category?: Meta
+  value?: Meta
+}
+
 export type CurveType =
   | 'curveLinear'
   | 'curveNatural'
@@ -66,7 +72,7 @@ export type CurveType =
 export interface BasicDrawerProps<T> {
   engine: Engine
   data: DrawerDataParameter<T>
-  source?: DrawerDataParameter<AnyObject>
+  source?: DrawerDataParameter<ElSourceShape>
   className: string
   container: DrawerTarget
 }

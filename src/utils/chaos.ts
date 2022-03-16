@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 import chroma from 'chroma-js'
-import {isArray, isNil} from 'lodash'
+import {isArray, isNil, isNumber} from 'lodash'
 import {D3Selection, Meta} from '../types'
 
 const ctx = document.createElement('canvas').getContext('2d')!
@@ -10,8 +10,16 @@ export function noChange(input: any) {
   return input
 }
 
+export function group<T>(input: MaybeGroup<T>) {
+  return isNil(input) ? [] : isArray(input) ? input : [input]
+}
+
+export function ungroup<T>(input: MaybeGroup<T>): Maybe<T> {
+  return !isArray(input) ? input : input.length ? ungroup(input[0]) : null
+}
+
 export function getTextWidth(text: string, fontSize: number | string = 12) {
-  ctx.font = `${typeof fontSize === 'string' ? fontSize : `${fontSize}px`} ${fontFamily}`
+  ctx.font = `${isNumber(fontSize) ? `${fontSize}px` : fontSize} ${fontFamily}`
   return ctx.measureText(text).width
 }
 

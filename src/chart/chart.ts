@@ -104,7 +104,7 @@ export class Chart {
         .attr('height', this.containerHeight)
         .style('position', 'absolute')
       this.defs = []
-      this.root = new fabric.Canvas(canvas.nodes()[0], {selection: false, hoverCursor: 'pointer'})
+      this.root = new fabric.Canvas(canvas.node(), {selection: false, hoverCursor: 'pointer'})
       this.root.defs = this.defs
       fabric.Object.prototype.objectCaching = false
     } else {
