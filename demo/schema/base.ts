@@ -20,31 +20,26 @@ export default `/**
  * 玲珑伞 ['#46D4FF', '#569EFF', '#686EFF', '#9D6DFF', '#FF61D2', '#FF849E', '#FF6A59', '#FF9456', '#FFBD68']
  */
 
-() => ({
-  // 颜色主题
-  theme: [
-    '#34C8FE',
-    '#009BFF',
-    '#006BFD',
-    '#1B45F6',
-    '#421FED',
-    '#6103E6',
-    '#7700E3',
-    '#9D01DF',
-    '#BC00DB',
-    '#D900D8',
-    '#EE34A1',
-  ],
-  // 图表适应容器的方式
-  adjust: 'auto',
-  // 容器宽, 自适应为 auto 时无效
-  width: 100,
-  // 容器高, 自适应为 auto 时无效
-  height: 100,
-  // 主绘图图层的内边距
-  padding: [60, 60, 60, 60],
-  // 绘制引擎
-  engine: "ENGINE",
-  // 顺序图层
-  layers: REPLACED_LAYERS,
-})`
+(function () {
+  return {
+    theme: [
+      '#34C8FE',
+      '#009BFF',
+      '#006BFD',
+      '#1B45F6',
+      '#421FED',
+      '#6103E6',
+      '#7700E3',
+      '#9D01DF',
+      '#BC00DB',
+      '#D900D8',
+      '#EE34A1',
+    ],
+    adjust: true,
+    width: 100,
+    height: 100,
+    padding: [60, 60, 60, 60],
+    engine: 'svg',
+    layers: {REPLACED_LAYERS},
+  }
+})()`
