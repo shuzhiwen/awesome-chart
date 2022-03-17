@@ -30,7 +30,7 @@ import {
 export class Chart {
   private _state: ChartState = 'initialize'
 
-  private _layout: LayoutShape
+  private _layout: LayoutShape = {}
 
   private _layers: Layer[] = []
 
@@ -119,11 +119,7 @@ export class Chart {
 
     createDefs({schema: defineSchema, engine, container: this.defs})
 
-    this._layout = layoutCreator({
-      containerWidth: this.containerWidth,
-      containerHeight: this.containerHeight,
-      padding: this.padding,
-    })
+    this.setPadding(padding, layoutCreator)
     this.tooltip = new Tooltip({
       ...tooltipOptions,
       container: tooltipOptions?.container ?? this.container,
@@ -132,7 +128,7 @@ export class Chart {
     this.event.fire(this.state)
   }
 
-  setPadding(padding: Maybe<Padding>, creator: LayoutCreator = defaultLayoutCreator) {
+  setPadding(padding?: Padding, creator: LayoutCreator = defaultLayoutCreator) {
     this.padding = padding || this.padding
     this._layout = creator({
       containerWidth: this.containerWidth,
