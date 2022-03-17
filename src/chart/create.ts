@@ -81,6 +81,6 @@ export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => 
 
     return chart
   } catch (error) {
-    log.error('chart initialization failed', error)
+    log.error('Chart initialization failed', error)
   }
 }

@@ -63,7 +63,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
 
   update(tableList: RawTableList, options: AnyObject = {}) {
     if (!isTableList(tableList)) {
-      this.log.error('illegal data', tableList)
+      this.log.error('Illegal data', tableList)
       return
     }
 
@@ -86,7 +86,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
   push(...rows: Meta[][]) {
     rows.forEach((row) => {
       if (row.length !== this.data.length) {
-        this.log.error('illegal data', row)
+        this.log.error('Illegal data', row)
       } else {
         row.forEach((value, i) => this.data[i].list.push(value))
       }

@@ -23,7 +23,7 @@ export class DataRelation extends DataBase<RawRelation, Options> {
 
   update(relation: RawRelation) {
     if (!isRelation(relation)) {
-      this.log.error('wrong incoming data', relation)
+      this.log.error('Wrong incoming data', relation)
       return
     }
 

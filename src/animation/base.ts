@@ -80,15 +80,15 @@ export abstract class AnimationBase<T extends Options> {
       instance[name] = (...parameter) => {
         try {
           if (name === 'init' && instance._isInitialized) {
-            instance.log.warn('the animation is already initialized!')
+            instance.log.warn('The animation is already initialized!')
             return
           } else if (name === 'play') {
             if (!instance._isAnimationAvailable) {
-              instance.log.warn('the animation is not available!')
+              instance.log.warn('The animation is not available!')
               return
             }
             if (instance._isAnimationStarted) {
-              instance.log.warn('the animation is already started!')
+              instance.log.warn('The animation is already started!')
               return
             }
             if (!instance.isInitialized) {
@@ -111,7 +111,7 @@ export abstract class AnimationBase<T extends Options> {
             instance._isInitialized = false
           }
         } catch (error) {
-          instance.log.error('animation life cycle call exception', error)
+          instance.log.error('Animation life cycle call exception', error)
         }
       }
 

@@ -139,11 +139,11 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
 
           if (name === 'setData' || name === 'setScale' || name === 'setStyle') {
             instance.needRecalculated = true
-          } else if (name === 'draw') {
+          } else if (name === 'update') {
             instance.needRecalculated = false
           }
         } catch (error) {
-          instance.log.error('layer life cycle call exception', error)
+          instance.log.error('Layer life cycle call exception', error)
         }
       }
     })

@@ -170,7 +170,7 @@ export class Chart {
 
   getLayer(id: string) {
     const layer = this._layers.find(({options}) => options.id === id)
-    !layer && this.log.warn('invalid id', id)
+    !layer && this.log.warn('Invalid ID', id)
     return layer
   }
 

@@ -37,7 +37,7 @@ export class DataTable extends DataBase<RawTable, Options> {
 
   update(table: RawTable) {
     if (!isTable(table)) {
-      this.log.error('illegal data', table)
+      this.log.error('Illegal data', table)
       return
     }
 
@@ -50,7 +50,7 @@ export class DataTable extends DataBase<RawTable, Options> {
         (target === 'row' && item.length !== this.data[0].length) ||
         (target === 'column' && item.length !== this.data[1].length)
       ) {
-        this.log.error('illegal data')
+        this.log.error('Illegal data')
       } else {
         data.forEach(([dimension, ...values]) => {
           if (target === 'row') {

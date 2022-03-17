@@ -87,7 +87,7 @@ export class AnimationQueue extends AnimationBase<Options> {
 
   pushAnimation(type: AnimationType, options: Options, context: DrawerTarget) {
     if (!animationMapping[type]) {
-      this.log.error('animation type error', type)
+      this.log.error('Animation type error', type)
       return
     }
 
@@ -107,7 +107,7 @@ export class AnimationQueue extends AnimationBase<Options> {
       this.isConnected = false
       return this.queue.splice(index, 1)
     } else {
-      this.log.error('the animation does not exist', id)
+      this.log.error('The animation does not exist', id)
     }
   }
 

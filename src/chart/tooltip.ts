@@ -99,7 +99,7 @@ export class Tooltip {
         }))
       }
     } catch (error) {
-      this.log.warn(`the layer does not support ${this.options.mode} mode`, error)
+      this.log.warn(`The layer does not support ${this.options.mode} mode`, error)
     }
   }
 

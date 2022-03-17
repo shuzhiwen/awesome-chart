@@ -18,7 +18,7 @@ export class ColorMatrix {
 
   get(row: number, column: number) {
     if (row < 0 || column < 0 || row >= this.matrix.length || column >= this.matrix[row]?.length) {
-      this.log.warn('get color out of bounds', {row, column})
+      this.log.warn('Get color out of bounds', {row, column})
     }
 
     while (row < 0) row += this.matrix.length || 1

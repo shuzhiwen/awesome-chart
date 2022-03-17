@@ -10,7 +10,7 @@ export class Selector {
   constructor(engine: Engine) {
     this.engine = engine
     if (engine !== 'svg' && engine !== 'canvas') {
-      this.log.error('wrong engine type')
+      this.log.error('Wrong engine type')
     }
   }
 
@@ -18,9 +18,9 @@ export class Selector {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       target.attr('display', visible ? 'block' : 'none')
     } else if (this.engine === 'canvas' && isCanvasContainer(target)) {
-      this.log.warn('setVisible is not available to canvas selector')
+      this.log.warn('Method "setVisible" is not available to canvas selector')
     } else {
-      this.log.error('illegal parameter', {target, visible})
+      this.log.error('Illegal parameter', {target, visible})
     }
   }
 
