@@ -13,6 +13,6 @@ export type CreateColorMatrixProps = {
   layer: Layer
   row: number
   column: number
-  theme: string[]
-  nice: boolean
+  theme: MaybeGroup<string>
+  nice?: boolean
 }

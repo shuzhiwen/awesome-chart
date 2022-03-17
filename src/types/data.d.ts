@@ -4,12 +4,12 @@ export type Meta = string | number
 
 export type DataType = keyof typeof dataMapping
 
-export type DataShape = DataBase<unknown> | DataTableList | DataTable | DataRelation
+export type DataShape = DataBase<any> | DataTableList | DataTable | DataRelation
 
 export type RawTableList = Meta[][]
 
 export type TableListOptions = {
-  mode?: 'sum' | 'percentage'
+  mode?: 'sum' | 'percentage' | 'copy'
   target?: 'row' | 'column'
 }
 

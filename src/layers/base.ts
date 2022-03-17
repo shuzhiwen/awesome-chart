@@ -1,4 +1,4 @@
-import {isEqual, isNil, merge, noop} from 'lodash'
+import {isEqual, merge, noop} from 'lodash'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
 import {Selector} from './helpers'
@@ -23,19 +23,23 @@ import {
   FabricObject,
   GraphDrawerProps,
   LayerBaseProps,
-  LayerSchema,
   BackupAnimationShape,
   BackupAnimationOptions,
   LayerOptions,
   ChartContext,
+  LayerScalesShape,
 } from '../types'
 
 export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
   abstract data: Maybe<DataShape>
 
-  abstract setData(data: Maybe<DataShape>, scale?: AnyObject): void
+  abstract setData(data?: Maybe<DataShape>): void
 
-  abstract setStyle(style?: AnyObject): void
+  abstract setScale(scale?: Maybe<LayerScalesShape>): void
+
+  abstract setStyle(style?: Maybe<AnyObject>): void
+
+  abstract update(): void
 
   abstract draw(): void
 
@@ -47,19 +51,21 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
 
   readonly options: T & ChartContext
 
+  protected readonly root: DrawerTarget
+
+  protected readonly sublayers
+
+  protected readonly tooltipTargets
+
+  protected readonly selector
+
   private backupData: BackupDataShape<any> = {}
 
   private backupEvent: AnyObject = {}
 
   private backupAnimation: BackupAnimationShape = {timer: {}}
 
-  protected readonly root: DrawerTarget
-
-  protected sublayers
-
-  protected tooltipTargets
-
-  protected selector
+  private needRecalculated = false
 
   constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<T>) {
     this.className = this.constructor.name
@@ -116,15 +122,28 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
 
   private createLifeCycles() {
     LAYER_LIFE_CYCLES.forEach((name) => {
-      const fn: Function = this[name] || noop
+      const instance = this
+      const fn: Function = instance[name] || noop
 
-      this[name] = (...parameters: any[]) => {
+      instance[name] = (...parameters: any) => {
         try {
-          this.event.fire(`before:${name}`, {...parameters})
-          fn.call(this, ...parameters)
-          this.event.fire(name, {...parameters})
+          if (name === 'draw') {
+            instance.update()
+          } else if (name === 'update' && !instance.needRecalculated) {
+            return
+          }
+
+          instance.event.fire(`before:${name}`, {...parameters})
+          fn.call(instance, ...parameters)
+          instance.event.fire(name, {...parameters})
+
+          if (name === 'setData' || name === 'setScale' || name === 'setStyle') {
+            instance.needRecalculated = true
+          } else if (name === 'draw') {
+            instance.needRecalculated = false
+          }
         } catch (error) {
-          this.log.error('layer life cycle call exception', error)
+          instance.log.error('layer life cycle call exception', error)
         }
       }
     })
@@ -137,13 +156,6 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
 
   playAnimation() {
     this.sublayers.forEach((type) => this.backupAnimation[type]?.play())
-  }
-
-  update({data, style, animation}: LayerSchema) {
-    !isNil(data) && this.setData(data)
-    !isNil(style) && this.setStyle(style)
-    !isNil(animation) && this.setAnimation(animation)
-    this.draw()
   }
 
   setVisible(visible: boolean, sublayer?: string) {

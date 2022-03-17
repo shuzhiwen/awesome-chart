@@ -6,10 +6,12 @@ import {
   GraphDrawerProps,
   BasicAnimationOptions,
   ScaleNiceShape,
-  LayoutArea,
   AnimationType,
   DrawerTarget,
 } from '..'
+import {LayerOptions} from './options'
+import {ColorMatrix} from '../../utils'
+import {Meta} from '../data'
 
 export type LayerType = keyof typeof layerMapping
 
@@ -44,7 +46,7 @@ export type CreateAnimationConfigItemShape = {
   loop?: boolean
 }
 
-export type CreateAnimationProps = {
+export interface CreateAnimationProps {
   event: Event
   engine: Engine
   sublayer: string
@@ -65,13 +67,6 @@ export interface DrawBasicProps {
   sublayer?: string
 }
 
-export type LayerOptions = AnyObject & {
-  id: string
-  layout: LayoutArea
-  coordinate?: Coordinate
-  axis?: 'main' | 'minor'
-}
-
 export type LayerScalesShape = {
   scaleX?: Scale
   scaleY?: Scale
@@ -84,4 +79,14 @@ export type LayerScalesShape = {
 
 export type Layer = LayerBase<LayerOptions> & {
   scales?: LayerScalesShape
+}
+
+export type LegendDataShape = {
+  colorMatrix?: ColorMatrix
+  filter?: 'column' | 'row'
+  legends?: {
+    label: Meta
+    color: string
+    shape: 'rect' | 'circle' | 'broken-line' | 'dotted-line' | 'star'
+  }[]
 }

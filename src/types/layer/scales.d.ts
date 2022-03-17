@@ -1,6 +1,6 @@
 import {ScaleBand, ScaleLinear} from '..'
 
-export type LayerNormalScaleShape = {
-  scaleX?: ScaleBand
-  scaleY?: ScaleLinear
-}
+export type LayerNormalScaleShape = Maybe<{
+  scaleX: ScaleBand
+  scaleY: ScaleLinear
+}>

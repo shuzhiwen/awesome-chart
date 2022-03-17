@@ -15,7 +15,7 @@ export class DataTable extends DataBase<RawTable, Options> {
     this.update(data)
   }
 
-  select(rows: Meta[], columns: Meta[], options: Options) {
+  select(rows: Meta[], columns: Meta[], options: Options = {}) {
     const _rows = isArray(rows) ? rows : [rows],
       _columns = isArray(columns) ? columns : [columns],
       data: RawTable = [_rows, _columns, []],

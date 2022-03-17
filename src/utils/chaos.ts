@@ -60,7 +60,7 @@ export function addEvent(target: D3Selection, event: AnyEventObject, data?: any)
 export function getAttr<T>(target: MaybeGroup<T>, index: number = 0, defaultValue: T): T {
   if (isArray(target)) {
     if (target.length > index && !isNil(target[index])) {
-      return target[index]
+      return target[index] ?? defaultValue
     }
     return defaultValue
   }

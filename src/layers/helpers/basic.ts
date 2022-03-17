@@ -4,9 +4,9 @@ import {SCALE_TYPE} from '../../utils'
 import {DataType, LayerScalesShape} from '../../types'
 
 export function createScale<T extends LayerScalesShape>(
-  defaultScale: T,
-  currentScale: T,
-  incomingScale: T
+  defaultScale?: T,
+  currentScale?: T,
+  incomingScale?: T
 ) {
   const nice = merge({}, defaultScale?.nice, currentScale?.nice, incomingScale?.nice),
     scales: LayerScalesShape = {nice}
@@ -15,13 +15,13 @@ export function createScale<T extends LayerScalesShape>(
     scales[type] = incomingScale?.[type] || currentScale?.[type] || defaultScale?.[type]
   })
 
-  return scales as T
+  return scales as Required<T>
 }
 
 export function validateAndCreateData<T>(
   dataType: DataType,
-  currentData: T,
-  incomingData: T,
+  currentData?: T,
+  incomingData?: T,
   filter?: (data: T) => T
 ) {
   if (!incomingData) {

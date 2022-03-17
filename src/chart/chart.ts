@@ -1,8 +1,9 @@
-import {select, schemeCategory10} from 'd3'
 import {fabric} from 'fabric'
+import {select, schemeCategory10} from 'd3'
 import {getStandardLayoutCreator} from '../layout'
 import {layerMapping} from '../layers'
-import {Tooltip} from '.'
+import {Tooltip} from './tooltip'
+import {isNil} from 'lodash'
 import {
   createLog,
   createEvent,
@@ -23,6 +24,7 @@ import {
   ChartContext,
   GradientCreatorProps,
   LayerOptions,
+  LayerScalesShape,
 } from '../types'
 
 export class Chart {
@@ -172,8 +174,16 @@ export class Chart {
     return layer
   }
 
-  updateLayer(id: string, {data, style, animation}: LayerSchema) {
-    this.getLayer(id)?.update({data, style, animation})
+  updateLayer(id: string, {data, scale, style, animation}: LayerSchema) {
+    const layer = this.getLayer(id)
+
+    if (layer) {
+      !isNil(data) && layer.setData(data)
+      !isNil(scale) && layer.setScale(scale)
+      !isNil(style) && layer.setStyle(style)
+      !isNil(animation) && layer.setAnimation(animation)
+      layer.draw()
+    }
   }
 
   setVisible(id: string, visible: boolean) {
@@ -207,7 +217,7 @@ export class Chart {
         mergedScales.scaleX = scales?.scaleX
         mergedScales.scaleY = scales?.scaleY
       }
-      axisLayer?.setData(null, mergedScales)
+      axisLayer?.setScale(mergedScales)
       axisLayer?.setStyle()
     })
 
@@ -217,10 +227,10 @@ export class Chart {
       if (coordinate === 'geographic') {
         const scaleX = (x: any) => (scales.scaleX?.(x) as number) - layer.options.layout.left
         const scaleY = (y: any) => (scales.scaleY?.(y) as number) - layer.options.layout.top
-        layer.setData(undefined, {...scales, scaleX, scaleY})
+        layer.setScale({...scales, scaleX, scaleY} as LayerScalesShape)
       } else {
         const scaleY = layer.options.axis === 'minor' ? scales.scaleYR : scales.scaleY
-        layer.setData(undefined, {...scales, scaleY})
+        layer.setScale({...scales, scaleY})
       }
       layer.setStyle()
       redraw && layer !== triggerLayer && layer.draw()

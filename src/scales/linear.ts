@@ -1,7 +1,7 @@
 import * as d3 from 'd3-scale'
 import {ScaleLinearProps} from '../types'
 
-export function scaleLinear({domain, range, nice}: ScaleLinearProps) {
+export function scaleLinear({domain, range, nice = {}}: ScaleLinearProps) {
   const scale = d3.scaleLinear().domain(domain).range(range)
 
   nice.zero && extendZeroForScale(scale)

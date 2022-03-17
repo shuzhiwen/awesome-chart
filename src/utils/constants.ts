@@ -11,14 +11,14 @@ export const SCALE_TYPE = [
 
 export const LAYER_LIFE_CYCLES = [
   'setData',
+  'setScale',
   'setStyle',
+  'update',
   'draw',
   'destroy',
   'drawBasic',
   'playAnimation',
 ] as const
-
-export const ANIMATION_LIFE_CYCLES = ['init', 'play', 'start', 'process', 'end', 'destroy'] as const
 
 export const COMMON_EVENTS = [
   'click',
@@ -28,5 +28,7 @@ export const COMMON_EVENTS = [
   'mouseup',
   'mousedown',
 ] as const
+
+export const ANIMATION_LIFE_CYCLES = ['init', 'play', 'start', 'process', 'end', 'destroy'] as const
 
 export const TOOLTIP_EVENTS = ['mouseover', 'mouseout', 'mousemove'] as const

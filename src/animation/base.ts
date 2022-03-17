@@ -100,15 +100,15 @@ export abstract class AnimationBase<T extends Options> {
           instance.event.fire(name, {...parameter})
 
           if (name === 'init') {
-            this._isInitialized = true
-            this._isAnimationAvailable = true
+            instance._isInitialized = true
+            instance._isAnimationAvailable = true
           } else if (name === 'start') {
             instance._isAnimationStarted = true
           } else if (name === 'end') {
             instance._isAnimationStarted = false
           } else if (name === 'destroy') {
-            this._isAnimationAvailable = false
-            this._isInitialized = false
+            instance._isAnimationAvailable = false
+            instance._isInitialized = false
           }
         } catch (error) {
           instance.log.error('animation life cycle call exception', error)

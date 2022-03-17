@@ -1,4 +1,5 @@
 import {FormatNumberConfig} from '..'
+import {CurveType} from '../draw'
 
 export type GraphStyleShape = Partial<{
   fill: MaybeGroup<string>
@@ -31,4 +32,15 @@ export type LayerTextStyleShape = {
   align?: Align
   verticalAlign?: Align
   text?: TextStyleShape
+}
+
+export type LayerLineStyleShape = {
+  fallback: 'zero' | 'continue' | 'break'
+  pointSize: number
+  labelPosition: Position5
+  curveType: CurveType
+  text?: TextStyleShape
+  curve?: GraphStyleShape
+  point?: GraphStyleShape
+  area?: GraphStyleShape
 }

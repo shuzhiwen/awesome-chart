@@ -20,7 +20,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
     this.update(data, options)
   }
 
-  select(headers: MaybeGroup<string>, options: Options): DataTableList {
+  select(headers: MaybeGroup<string>, options: Options = {}): DataTableList {
     const {mode = 'sum', target = 'column'} = options,
       headerArray = Array.isArray(headers) ? headers : [headers]
     let data = cloneDeep(this.data.filter(({header}) => headerArray.includes(header)))
@@ -123,10 +123,10 @@ export class DataTableList extends DataBase<RawTableList, Options> {
     })
   }
 
-  range() {
+  range(): [number, number] {
     return [
-      min(this.data.map(({list, min: value}) => min([value, min(list)]))),
-      max(this.data.map(({list, max: value}) => max([value, max(list)]))),
+      Number(min(this.data.map(({list, min: value}) => min([value, min(list)])))),
+      Number(max(this.data.map(({list, max: value}) => max([value, max(list)])))),
     ]
   }
 }

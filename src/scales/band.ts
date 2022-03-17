@@ -2,7 +2,7 @@ import {isNumber} from 'lodash'
 import {ScaleBandProps} from '../types'
 import * as d3 from 'd3-scale'
 
-export function scaleBand({domain, range, nice}: ScaleBandProps) {
+export function scaleBand(this: any, {domain, range, nice = {}}: ScaleBandProps) {
   const {fixedBandwidth, fixedPaddingInner, fixedBoundary, paddingInner} = nice,
     scale = d3.scaleBand().domain(domain).range(range),
     distance = Math.abs(range[1] - range[0])

@@ -19,22 +19,19 @@ export type ScaleNiceShape = {
 }
 
 export interface ScaleBandProps {
-  type: 'band'
   domain: string[]
   range: [number, number]
-  nice: ScaleNiceShape
+  nice?: ScaleNiceShape
 }
 
 export interface ScaleLinearProps {
-  type: 'linear'
   domain: [number, number]
   range: [number, number]
-  nice: Pick<ScaleNiceShape, 'count' | 'zero'>
+  nice?: Pick<ScaleNiceShape, 'count' | 'zero'>
 }
 
 export interface ScaleArcProps {
-  type: 'linear'
   domain: DataTableList
   range: [number, number]
-  nice: Pick<ScaleNiceShape, 'paddingInner'>
+  nice?: Pick<ScaleNiceShape, 'paddingInner'>
 }

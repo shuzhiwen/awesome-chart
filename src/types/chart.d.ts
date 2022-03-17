@@ -2,7 +2,7 @@ import {DataShape, LayerOptions, LayerType, LayoutCreator, RandomOptions, ScaleN
 import {getEasyGradientCreator} from '../utils'
 import {Chart} from '../chart'
 import {ElConfigShape} from './draw'
-import {BackupDataShape} from './layer'
+import {BackupDataShape, LayerScalesShape} from './layer'
 
 export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
 
@@ -50,6 +50,7 @@ export interface ChartProps {
 export interface LayerSchema {
   options?: LayerOptions
   data?: Maybe<DataShape>
+  scale?: LayerScalesShape
   style?: AnyObject
   animation?: AnyObject
 }

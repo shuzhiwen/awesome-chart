@@ -1,4 +1,5 @@
 export * from './base'
 export * from './helpers'
 export * from './scales'
+export * from './options'
 export * from './styles'

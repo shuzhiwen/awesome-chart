@@ -1,8 +1,15 @@
 import {LayerBase} from '../base'
 import {getAttr, getTextWidth} from '../../utils'
-import {BackupDataItemShape, ChartContext, LayerOptions, LayerTextStyleShape} from '../../types'
 import {createStyle, createText, validateAndCreateData} from '../helpers'
 import {DataBase} from '../../data'
+import {
+  BackupDataItemShape,
+  ChartContext,
+  DrawerDataShape,
+  LayerOptions,
+  LayerTextStyleShape,
+  TextDrawerProps,
+} from '../../types'
 
 const defaultStyle: LayerTextStyleShape = {
   align: 'start',
@@ -17,11 +24,7 @@ export class LayerText extends LayerBase {
 
   private _style = defaultStyle
 
-  private textData: BackupDataItemShape<{
-    value: string
-    x: number
-    y: number
-  }> = []
+  private textData: BackupDataItemShape<DrawerDataShape<TextDrawerProps>> = []
 
   get data() {
     return this._data
@@ -39,12 +42,17 @@ export class LayerText extends LayerBase {
     this._data = validateAndCreateData('base', this.data, data)
   }
 
-  setStyle(style: LayerTextStyleShape) {
-    if (!this.data?.source) {
-      return
-    }
+  setScale() {
+    this.log.error('Method not implemented')
+  }
 
+  setStyle(style: LayerTextStyleShape) {
     this._style = createStyle(defaultStyle, this._style, style)
+  }
+
+  update() {
+    if (!this.data) return
+
     const {align, verticalAlign, text} = this._style
     const {left, top, width, height} = this.options.layout
     const fontSize = getAttr(text?.fontSize, 0, 12)
