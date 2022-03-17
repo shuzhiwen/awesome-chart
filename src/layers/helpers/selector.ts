@@ -51,6 +51,8 @@ export class Selector {
   remove(target: Maybe<DrawerTarget>) {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       return target?.remove()
+    } else if (this.engine === 'canvas' && isCanvasContainer(target)) {
+      target.remove(...target.getObjects())
     }
     return target
   }

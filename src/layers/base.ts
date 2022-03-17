@@ -267,8 +267,9 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
       }
     }
 
+    this.backupData[sublayer].length = data.length
+
     data.forEach((groupData, i) => {
-      this.backupData[sublayer].length = data.length
       if (!isEqual(this.backupData[sublayer][i], groupData)) {
         const groupClassName = `${sublayerClassName}-${i}`,
           groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),
