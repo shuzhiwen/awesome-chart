@@ -14,28 +14,28 @@ test('formatNumber', () => {
     formatNumber(1.23999999999, {
       percentage: false,
       thousandth: false,
-      decimalPlace: 2,
+      decimals: 2,
     })
   ).toEqual('1.24')
   expect(
     formatNumber(1.23999999999, {
       percentage: true,
       thousandth: false,
-      decimalPlace: 2,
+      decimals: 2,
     })
   ).toEqual('124%')
   expect(
     formatNumber(1111.23999999, {
       percentage: true,
       thousandth: true,
-      decimalPlace: 2,
+      decimals: 2,
     })
   ).toEqual('111,124%')
   expect(
     formatNumber(1111.1123999, {
       percentage: true,
       thousandth: true,
-      decimalPlace: 2,
+      decimals: 2,
     })
   ).toEqual('111,111.24%')
 })
