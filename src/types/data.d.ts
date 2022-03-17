@@ -1,7 +1,5 @@
 import {DataBase, dataMapping, DataRelation, DataTable, DataTableList} from '../data'
 
-export type Meta = string | number
-
 export type DataType = keyof typeof dataMapping
 
 export type DataShape = DataBase<any> | DataTableList | DataTable | DataRelation

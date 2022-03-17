@@ -1,5 +1,5 @@
-import {isTableList} from '.'
 import {RawRelation, RawTable, RawTableList} from '../types'
+import {isTableList} from './asserts'
 
 export function tableListToObjects(tableList: RawTableList): AnyObject {
   if (!isTableList(tableList)) {

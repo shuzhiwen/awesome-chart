@@ -1,6 +1,6 @@
 import {Object} from 'fabric/fabric-impl'
-import {D3Selection, DrawerTarget} from '.'
 import {animationMapping} from '../animation'
+import {D3Selection, DrawerTarget} from './draw'
 
 export type AnimationLifeCycle = 'init' | 'play' | 'start' | 'process' | 'end' | 'destroy'
 

@@ -1,7 +1,9 @@
 import * as d3 from 'd3'
 import {fabric} from 'fabric'
 import {isArray} from 'lodash'
-import {mergeAlpha, uuid, isSvgContainer} from '.'
+import {isSvgContainer} from './asserts'
+import {mergeAlpha} from './chaos'
+import {uuid} from './random'
 import {
   GradientCreatorProps,
   GradientWithId,

@@ -1,8 +1,11 @@
-import {DataShape, LayerOptions, LayerType, LayoutCreator, RandomOptions, ScaleNiceShape} from '.'
-import {getEasyGradientCreator} from '../utils'
 import {Chart} from '../chart'
 import {ElConfigShape} from './draw'
-import {BackupDataShape, LayerScalesShape} from './layer'
+import {BackupDataShape, LayerOptions, LayerScalesShape, LayerType} from './layer'
+import {LayoutCreator} from './layout'
+import {DataShape} from './data'
+import {RandomOptions} from './utils'
+import {ScaleNiceShape} from './scale'
+import {getEasyGradientCreator} from '../utils'
 
 export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
 

@@ -1,5 +1,5 @@
-import {D3Selection, Meta} from '.'
 import {createEvent, createLog} from '../utils'
+import {D3Selection} from './draw'
 
 export type Log = ReturnType<typeof createLog>
 

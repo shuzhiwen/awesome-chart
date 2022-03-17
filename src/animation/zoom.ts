@@ -1,4 +1,4 @@
-import {AnimationBase} from '.'
+import {AnimationBase} from './base'
 import {isSvgContainer, safeTransform} from '../utils'
 import {AnimationZoomOptions as Options, AnimationProps as Props} from '../types'
 import {canvasEasing, svgEasing} from './easing'

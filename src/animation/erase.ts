@@ -1,4 +1,4 @@
-import {AnimationBase} from '.'
+import {AnimationBase} from './base'
 import {isCanvasContainer, isSvgContainer} from '../utils'
 import {AnimationEraseOptions as Options, AnimationProps as Props, D3Selection} from '../types'
 import {canvasEasing, svgEasing} from './easing'

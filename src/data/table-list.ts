@@ -1,12 +1,7 @@
 import {cloneDeep, sum, min, max} from 'lodash'
 import {isTableList, transpose} from '../utils'
 import {DataBase} from './base'
-import {
-  RawTableList,
-  TableListDataShape as Shape,
-  TableListOptions as Options,
-  Meta,
-} from '../types'
+import {RawTableList, TableListDataShape as Shape, TableListOptions as Options} from '../types'
 
 export class DataTableList extends DataBase<RawTableList, Options> {
   private _data: Shape = []

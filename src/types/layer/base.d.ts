@@ -1,17 +1,10 @@
 import {LayerBase, layerMapping} from '../../layers'
-import {
-  Scale,
-  DrawerType,
-  ChartContext,
-  GraphDrawerProps,
-  BasicAnimationOptions,
-  ScaleNiceShape,
-  AnimationType,
-  DrawerTarget,
-} from '..'
 import {LayerOptions} from './options'
 import {ColorMatrix} from '../../utils'
-import {Meta} from '../data'
+import {DrawerTarget, DrawerType, GraphDrawerProps} from '../draw'
+import {AnimationType, BasicAnimationOptions} from '../animation'
+import {Scale, ScaleNiceShape} from '../scale'
+import {ChartContext} from '../chart'
 
 export type LayerType = keyof typeof layerMapping
 

@@ -1,6 +1,8 @@
-import {range, uuid} from '../utils'
-import {AnimationBase, AnimationEmpty, animationMapping} from '.'
 import {max} from 'lodash'
+import {range, uuid} from '../utils'
+import {AnimationBase} from './base'
+import {AnimationEmpty} from './empty'
+import {animationMapping} from '.'
 import {
   AnimationType,
   AnimationProps as Props,

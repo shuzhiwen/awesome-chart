@@ -1,7 +1,7 @@
 import {isArray} from 'lodash'
 import {DataTableList, DataTable, DataRelation, DataBase} from '../data'
 import {LayerType, CreateChartSchema, CreateLayerSchema} from '../types'
-import {Chart} from '.'
+import {Chart} from './chart'
 import {
   createLog,
   isTable,

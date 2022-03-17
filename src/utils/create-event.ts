@@ -1,5 +1,5 @@
 import {isNil, isFunction, isString} from 'lodash'
-import {uuid} from '.'
+import {uuid} from './random'
 
 type Callback = Function & {
   category?: string

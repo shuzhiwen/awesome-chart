@@ -1,6 +1,6 @@
 import {Selection, Transition} from 'd3'
 import {Canvas, IEvent, Object} from 'fabric/fabric-impl'
-import {GraphStyleShape, TextStyleShape, Meta} from '.'
+import {GraphStyleShape, TextStyleShape} from './layer'
 import {
   drawArc,
   drawArea,

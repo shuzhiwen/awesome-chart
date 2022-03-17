@@ -1,16 +1,15 @@
-import {LayerText} from '.'
-
+import * as layer from '.'
 export * from './base'
 export * from './helpers'
 export * from './normal'
 
 export const layerMapping = {
-  axis: LayerText,
-  baseMap: LayerText,
-  chord: LayerText,
-  indicator: LayerText,
-  legend: LayerText,
-  matrix: LayerText,
-  tabMenu: LayerText,
-  text: LayerText,
+  axis: layer.LayerText,
+  baseMap: layer.LayerText,
+  chord: layer.LayerText,
+  indicator: layer.LayerText,
+  legend: layer.LayerText,
+  matrix: layer.LayerText,
+  tabMenu: layer.LayerText,
+  text: layer.LayerText,
 }

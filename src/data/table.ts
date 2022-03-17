@@ -1,4 +1,4 @@
-import {Meta, RawTable, TableDataShape as Shape, TableOptions as Options} from '../types'
+import {RawTable, TableDataShape as Shape, TableOptions as Options} from '../types'
 import {cloneDeep, min, max, isArray} from 'lodash'
 import {isTable} from '../utils'
 import {DataBase} from './base'

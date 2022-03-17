@@ -1,5 +1,5 @@
-import {FormatNumberConfig} from '..'
 import {CurveType} from '../draw'
+import {FormatNumberConfig} from '../utils'
 
 export type GraphStyleShape = Partial<{
   fill: MaybeGroup<string>

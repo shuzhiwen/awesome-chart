@@ -1,3 +1,5 @@
+type Meta = number | string
+
 type AnyObject = Record<string, any>
 
 type AnyEventObject = Record<string, Function>

@@ -7,7 +7,6 @@ import {
   RawRelation,
   Node,
   Edge,
-  Meta,
 } from '../types'
 
 export class DataRelation extends DataBase<RawRelation, Options> {

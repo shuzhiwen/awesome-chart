@@ -1,4 +1,5 @@
-import {Meta, Layer, TextStyleShape} from '..'
+import {Layer} from './base'
+import {TextStyleShape} from './styles'
 
 export interface CreateTextProps {
   x: number

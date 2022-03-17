@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import chroma from 'chroma-js'
 import {isArray, isNil, isNumber} from 'lodash'
-import {D3Selection, Meta} from '../types'
+import {D3Selection} from '../types'
 
 const ctx = document.createElement('canvas').getContext('2d')!
 const fontFamily = "'PingFang SC', 'Helvetica Neue', Helvetica, Tahoma, Helvetica, sans-serif"
