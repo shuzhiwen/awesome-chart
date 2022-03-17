@@ -59,7 +59,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
 
   protected readonly selector
 
-  private backupData: BackupDataShape<any> = {}
+  private backupData: BackupDataShape<AnyObject> = {}
 
   private backupEvent: AnyObject = {}
 
@@ -77,8 +77,9 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
     this.sublayers.forEach((name) => (this.backupData[name] = []))
     this.selector = new Selector(this.options.engine)
     this.root = this.selector.createSubcontainer(this.options.root, this.className)!
-    this.createEvent()
+    this.backupData = Object.fromEntries(this.sublayers.map((name) => [name, []]))
     this.createLifeCycles()
+    this.createEvent()
   }
 
   private createEvent() {
@@ -242,7 +243,12 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
     }
   }
 
-  protected drawBasic = ({type, data, sublayer = type}: DrawBasicProps) => {
+  protected drawBasic<T>({type, data, sublayer = type}: DrawBasicProps<T>) {
+    if (!this.sublayers.includes(sublayer)) {
+      this.log.error('Invalid sublayer type')
+      return
+    }
+
     const {selector} = this,
       sublayerClassName = `${this.className}-${sublayer}`,
       sublayerContainer =
@@ -261,9 +267,9 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
       }
     }
 
-    for (let i = 0; i < data.length; i++) {
+    data.forEach((groupData, i) => {
       this.backupData[sublayer].length = data.length
-      if (!isEqual(this.backupData[sublayer][i], data[i])) {
+      if (!isEqual(this.backupData[sublayer][i], groupData)) {
         const groupClassName = `${sublayerClassName}-${i}`,
           groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),
           options: GraphDrawerProps<any> = {
@@ -274,7 +280,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
           }
 
         options.enableUpdateAnimation = false
-        !data[i].hide && merge(options, data[i])
+        !groupData.hide && merge(options, groupData)
 
         if (this.backupData[sublayer][i] && this.backupAnimation.options?.[sublayer]) {
           const {duration, delay} = this.backupAnimation.options[sublayer].update || {}
@@ -284,9 +290,9 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
         }
 
         drawerMapping[type](options)
-        this.backupData[sublayer][i] = data[i]
+        this.backupData[sublayer][i] = groupData
       }
-    }
+    })
 
     this.setEvent(sublayer)
     this.setTooltip(sublayer)

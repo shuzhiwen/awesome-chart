@@ -3,7 +3,7 @@ import {dataMapping} from '../../data'
 import {SCALE_TYPE} from '../../utils'
 import {DataType, LayerScalesShape} from '../../types'
 
-export function createScale<T extends LayerScalesShape>(
+export function createScale<T extends Maybe<LayerScalesShape>>(
   defaultScale?: T,
   currentScale?: T,
   incomingScale?: T

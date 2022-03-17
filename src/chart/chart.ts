@@ -1,6 +1,6 @@
 import {fabric} from 'fabric'
 import {select, schemeCategory10} from 'd3'
-import {getStandardLayoutCreator} from '../layout'
+import {defaultLayoutCreator} from '../layout'
 import {layerMapping} from '../layers'
 import {Tooltip} from './tooltip'
 import {isNil} from 'lodash'
@@ -28,8 +28,6 @@ import {
 } from '../types'
 
 export class Chart {
-  static standardLayoutCreator = getStandardLayoutCreator({brush: false})
-
   private _state: ChartState = 'initialize'
 
   private _layout: LayoutShape
@@ -80,7 +78,7 @@ export class Chart {
     engine = 'svg',
     padding = [0, 0, 0, 0],
     theme = [...schemeCategory10],
-    layoutCreator = Chart.standardLayoutCreator,
+    layoutCreator = defaultLayoutCreator,
     defineSchema = {},
     tooltipOptions,
   }: ChartProps) {
@@ -119,7 +117,8 @@ export class Chart {
       this.defs = this.root.append('defs')
     }
 
-    createDefs({schema: defineSchema || {}, engine, container: this.defs})
+    createDefs({schema: defineSchema, engine, container: this.defs})
+
     this._layout = layoutCreator({
       containerWidth: this.containerWidth,
       containerHeight: this.containerHeight,
@@ -133,13 +132,7 @@ export class Chart {
     this.event.fire(this.state)
   }
 
-  setPadding({
-    padding,
-    creator = Chart.standardLayoutCreator,
-  }: {
-    padding: Maybe<Padding>
-    creator: LayoutCreator
-  }) {
+  setPadding(padding: Maybe<Padding>, creator: LayoutCreator = defaultLayoutCreator) {
     this.padding = padding || this.padding
     this._layout = creator({
       containerWidth: this.containerWidth,
@@ -241,6 +234,7 @@ export class Chart {
     while (this._layers.length) {
       this._layers.shift()?.destroy()
     }
+    this.tooltip.destroy()
     this._state = 'destroy'
     this.event.fire(this.state)
   }

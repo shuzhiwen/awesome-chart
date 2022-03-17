@@ -102,8 +102,8 @@ export interface AreaDrawerProps
 export interface CircleDrawerProps
   extends GraphDrawerProps<{
     r: number
-    cx: number
-    cy: number
+    x: number
+    y: number
   }> {}
 
 export interface CurveDrawerProps

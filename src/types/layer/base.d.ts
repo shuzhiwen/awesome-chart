@@ -54,9 +54,9 @@ export interface CreateAnimationProps {
   >
 }
 
-export interface DrawBasicProps {
+export interface DrawBasicProps<T> {
   type: DrawerType
-  data: BackupDataItemShape<any>
+  data: BackupDataItemShape<T>
   sublayer?: string
 }
 

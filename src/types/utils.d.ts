@@ -60,31 +60,9 @@ export interface RadialGradientSchema {
   stops: Stop[]
 }
 
-export interface MaskSchema {
-  type: 'rect' | 'circle' | 'arc'
-  id: string
-  fill: string
-
-  x?: Meta
-  y?: Meta
-  width?: Meta
-  height?: Meta
-
-  cx?: Meta
-  cy?: Meta
-  rx?: Meta
-  ry?: Meta
-
-  innerRadius?: number
-  outerRadius?: number
-  startAngle?: number
-  endAngle?: number
-}
-
 export interface CreateDefsSchema {
-  linearGradient?: LinearGradientSchema[] | false
-  radialGradient?: RadialGradientSchema[] | false
-  mask?: MaskSchema[] | false
+  linearGradient?: MaybeGroup<LinearGradientSchema>
+  radialGradient?: MaybeGroup<RadialGradientSchema>
 }
 
 export interface BaseRandomOptions {

@@ -14,5 +14,6 @@ export function drawCurve({data = [], ...rest}: CurveDrawerProps) {
         .curve(d3[curve])(points.map(({x, y}) => [x, y]))!,
     })),
     ...rest,
+    fillOpacity: 0,
   })
 }

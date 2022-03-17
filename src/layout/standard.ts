@@ -49,3 +49,5 @@ export const getStandardLayoutCreator =
       },
     }
   }
+
+export const defaultLayoutCreator = getStandardLayoutCreator({brush: false})

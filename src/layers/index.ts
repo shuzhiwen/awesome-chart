@@ -9,6 +9,7 @@ export const layerMapping = {
   chord: layer.LayerText,
   indicator: layer.LayerText,
   legend: layer.LayerText,
+  line: layer.LayerLine,
   matrix: layer.LayerText,
   tabMenu: layer.LayerText,
   text: layer.LayerText,
