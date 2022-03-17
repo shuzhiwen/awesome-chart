@@ -1,6 +1,6 @@
 import {select} from 'd3'
 import {createLog, getAttr, group, ungroup} from '../utils'
-import {isEqual, isArray, merge} from 'lodash'
+import {isEqual, isArray, merge, isFunction} from 'lodash'
 import {ElConfigShape, D3Selection, BackupDataShape, TooltipOptions} from '../types'
 
 const defaultOptions: Required<TooltipOptions> = {
@@ -14,6 +14,7 @@ const defaultOptions: Required<TooltipOptions> = {
   valueSize: 12,
   valueColor: '#383d41',
   backgroundColor: '#c3c4c5',
+  render: null,
 }
 
 export class Tooltip {
@@ -103,6 +104,11 @@ export class Tooltip {
   }
 
   update<T>({data, backup}: {data: ElConfigShape; backup: BackupDataShape<T>}) {
+    if (isFunction(this.options.render)) {
+      this.options.render(this.instance.node(), data, backup)
+      return
+    }
+
     const list = this.getListData(data, backup)
     const {titleSize, titleColor, pointSize, labelSize, labelColor, valueSize, valueColor} =
       this.options

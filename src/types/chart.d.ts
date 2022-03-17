@@ -1,6 +1,8 @@
 import {DataShape, LayerOptions, LayerType, LayoutCreator, RandomOptions, ScaleNiceShape} from '.'
 import {getEasyGradientCreator} from '../utils'
 import {Chart} from '../chart'
+import {ElConfigShape} from './draw'
+import {BackupDataShape} from './layer'
 
 export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
 
@@ -27,6 +29,9 @@ export type TooltipOptions = {
   valueSize?: number
   valueColor?: string
   backgroundColor?: string
+  render?: Maybe<
+    (container: HTMLElement, data: ElConfigShape, backup: BackupDataShape<AnyObject>) => void
+  >
 }
 
 export interface ChartProps {
@@ -62,10 +67,8 @@ export interface CreateLayerSchema {
     axis?: 'main' | 'minor'
     mode?: string
   }
-  scale?: {
-    nice: ScaleNiceShape
-  }
   data: any
+  scale?: ScaleNiceShape
   style?: LayerSchema['style']
   animation?: LayerSchema['style']
   event?: Record<string, Function>
