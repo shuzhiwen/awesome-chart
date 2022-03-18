@@ -1,6 +1,5 @@
-import {isNumber} from 'lodash'
 import {LayerBase} from '../base'
-import {mergeAlpha, transpose} from '../../utils'
+import {isRealNumber, mergeAlpha, transpose} from '../../utils'
 import {scaleBand, scaleLinear} from '../../scales'
 import {DataTableList} from '../../data'
 import {
@@ -17,7 +16,6 @@ import {
   TextDrawerProps,
   LayerLineOptions,
   LegendDataShape,
-  GraphStyleShape,
   LayerNormalScaleShape,
 } from '../../types'
 
@@ -41,7 +39,7 @@ const defaultStyle: LayerLineStyleShape = {
   },
 }
 
-export class LayerLine extends LayerBase {
+export class LayerLine extends LayerBase<LayerLineOptions> {
   public legendData: LegendDataShape = {}
 
   private _data: Maybe<DataTableList>
@@ -66,7 +64,7 @@ export class LayerLine extends LayerBase {
     x: number
     y1: number
     y2: number
-    fill: GraphStyleShape['fill']
+    fill: string
   }[][] = []
 
   get scale() {
@@ -122,7 +120,7 @@ export class LayerLine extends LayerBase {
       values.map((value, i) => ({
         value,
         x: left + (scaleX(dimension as string) || 0) + scaleX.bandwidth() / 2,
-        y: isNumber(value) ? top + scaleY(value) : top + height,
+        y: isRealNumber(value) ? top + scaleY(value) : NaN,
         r: defaultStyle.pointSize / 2,
         source: {dimension, category: headers[i + 1], value},
         color: colorMatrix.get(0, i),
@@ -194,7 +192,7 @@ export class LayerLine extends LayerBase {
   private fallbackFilter(position: {y?: number; y1?: number; y2?: number}[]) {
     const {layout} = this.options,
       {fallback} = this.style,
-      scaleY = this.scale.scaleY as ReturnType<typeof scaleLinear>
+      {scaleY} = this.scale
 
     if (fallback === 'break') {
       return position.reduce<{y?: number; y1?: number; y2?: number}[][]>(
@@ -213,7 +211,7 @@ export class LayerLine extends LayerBase {
         })),
       ]
     } else if (fallback === 'continue') {
-      return [position.filter((item) => isNumber(item.y) || isNumber(item.y1))]
+      return [position.filter((item) => isRealNumber(item.y) || isRealNumber(item.y1))]
     }
 
     return []
@@ -237,11 +235,11 @@ export class LayerLine extends LayerBase {
       stroke: color,
     }))
     const textData = this.textData.map((group) => ({
-      data: group,
+      data: group.filter(({y}) => isRealNumber(y)),
       ...this.style.text,
     }))
     const pointData = this.pointData.map((group) => ({
-      data: group,
+      data: group.filter(({y}) => isRealNumber(y)),
       source: group.map(({source}) => source),
       ...this.style.point,
       stroke: group.map(({color}) => color),
