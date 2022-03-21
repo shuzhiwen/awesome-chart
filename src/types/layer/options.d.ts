@@ -7,10 +7,15 @@ export type LayerOptions<T extends AnyObject = AnyObject> = T & {
   axis?: 'main' | 'minor'
 }
 
+export type LayerAxisOptions = LayerOptions<{
+  coordinate?: Coordinate
+}>
+
 export type LayerLineOptions = LayerOptions<{
   mode?: 'cover' | 'stack'
 }>
 
-export type LayerAxisOptions = LayerOptions<{
-  coordinate?: Coordinate
+export type LayerRectOptions = LayerOptions<{
+  variant?: 'column' | 'bar'
+  mode?: 'cover' | 'group' | 'stack' | 'interval' | 'waterfall' | 'percentage'
 }>

@@ -16,8 +16,12 @@ import {
   TextDrawerProps,
   LayerLineOptions,
   LegendDataShape,
-  LayerNormalScaleShape,
+  LayerLineScaleShape,
 } from '../../types'
+
+const defaultOptions: Partial<LayerLineOptions> = {
+  mode: 'cover',
+}
 
 const defaultStyle: LayerLineStyleShape = {
   fallback: 'break',
@@ -44,7 +48,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
 
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerNormalScaleShape
+  private _scale: LayerLineScaleShape
 
   private _style = defaultStyle
 
@@ -81,8 +85,8 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
 
   constructor(options: LayerLineOptions, context: ChartContext) {
     super({
-      options,
       context,
+      options: {...defaultOptions, ...options},
       sublayers: ['text', 'curve', 'point', 'area'],
       tooltipTargets: ['point'],
     })
@@ -92,7 +96,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
     this._data = validateAndCreateData('base', this.data, data)
   }
 
-  setScale(scale: LayerNormalScaleShape) {
+  setScale(scale: LayerLineScaleShape) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
