@@ -1,5 +1,8 @@
 import {LayerBase} from './base'
+import {DataBase} from '../data'
 import {createArcText, createScale, createStyle, createText, validateAndCreateData} from './helpers'
+import {isScaleBand, isScaleLinear, range, SCALE_TYPES, ungroup} from '../utils'
+import {scaleLinear} from '../scales'
 import {
   Scale,
   ChartContext,
@@ -7,9 +10,6 @@ import {
   LayerAxisScaleShape,
   LayerAxisOptions,
 } from '../types'
-import {DataBase} from '../data'
-import {isScaleBand, isScaleLinear, range, SCALE_TYPES, ungroup} from '../utils'
-import {scaleLinear} from '../scales'
 
 const defaultAxisLine = {
   stroke: 'white',

@@ -210,21 +210,24 @@ export class Chart {
     })
 
     layers.forEach((layer) => {
-      const scales = {...layer.scale, ...axisLayer?.scale}
+      const scales = {...layer.scale, ...axisLayer?.scale},
+        {axis, layout} = layer.options
 
       if (coordinate === 'geographic') {
         layer.setScale({
           ...scales,
-          scaleX: (x: any) => (scales.scaleX?.(x) as number) - layer.options.layout.left,
-          scaleY: (y: any) => (scales.scaleY?.(y) as number) - layer.options.layout.top,
+          scaleX: (x: any) => (scales.scaleX?.(x) as number) - layout.left,
+          scaleY: (y: any) => (scales.scaleY?.(y) as number) - layout.top,
         } as LayerScalesShape)
       } else {
         layer.setScale({
           ...scales,
-          scaleY: layer.options.axis === 'minor' ? scales.scaleYR : scales.scaleY,
+          scaleY: axis === 'minor' ? scales.scaleYR : scales.scaleY,
         })
       }
-      redraw && layer !== triggerLayer && layer.draw()
+      if (redraw && layer !== triggerLayer) {
+        layer.draw()
+      }
     })
   }
 
