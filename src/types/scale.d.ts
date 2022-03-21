@@ -7,9 +7,15 @@ export type ScaleBand = ReturnType<typeof scaleBand>
 
 export type ScaleLinear = ReturnType<typeof scaleLinear>
 
-export type Scale = ScaleArc | ScaleBand | ScaleLinear
+export interface Scale<Domain = any> {
+  (x: Domain): number | undefined
+  domain(): Domain[]
+  domain(domain: Iterable<Domain>): this
+  range(): number[]
+  range(range: Iterable<number>): this
+}
 
-export type ScaleNiceShape = {
+export interface ScaleNiceShape {
   count?: number
   zero?: boolean
   paddingInner?: number

@@ -1,13 +1,10 @@
 export const characters = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789'
 
-export const SCALE_TYPE = [
-  'scaleX',
-  'scaleY',
-  'scaleXT',
-  'scaleYR',
-  'scaleAngle',
-  'scaleRadius',
-] as const
+export const SCALE_TYPES = ['scaleX', 'scaleY', 'scaleAngle', 'scaleRadius'] as const
+
+export const TOOLTIP_EVENTS = ['mouseover', 'mouseout', 'mousemove'] as const
+
+export const ANIMATION_LIFE_CYCLES = ['init', 'play', 'start', 'process', 'end', 'destroy'] as const
 
 export const LAYER_LIFE_CYCLES = [
   'setData',
@@ -28,7 +25,3 @@ export const COMMON_EVENTS = [
   'mouseup',
   'mousedown',
 ] as const
-
-export const ANIMATION_LIFE_CYCLES = ['init', 'play', 'start', 'process', 'end', 'destroy'] as const
-
-export const TOOLTIP_EVENTS = ['mouseover', 'mouseout', 'mousemove'] as const

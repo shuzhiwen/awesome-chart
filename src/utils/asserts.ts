@@ -1,6 +1,16 @@
 import {isArray, isNumber} from 'lodash'
 import {layerMapping} from '../layers'
-import {D3Selection, FabricCanvas, Layer, RawRelation, RawTable, RawTableList} from '../types'
+import {
+  D3Selection,
+  FabricCanvas,
+  Layer,
+  RawRelation,
+  RawTable,
+  RawTableList,
+  Scale,
+  ScaleBand,
+  ScaleLinear,
+} from '../types'
 
 export function isRealNumber(value: any): value is number {
   return isNumber(value) && !isNaN(value)
@@ -12,6 +22,22 @@ export function isSvgContainer(selector: any): selector is D3Selection {
 
 export function isCanvasContainer(selector: any): selector is FabricCanvas {
   return selector?.constructor.name === 'klass'
+}
+
+export function isLayerAxis(instance: Maybe<Layer>) {
+  return instance?.constructor.name === layerMapping.axis.constructor.name
+}
+
+export function isLayerBaseMap(instance: Maybe<Layer>) {
+  return instance?.constructor.name === layerMapping.baseMap.constructor.name
+}
+
+export function isScaleBand(scale: Maybe<Scale>): scale is ScaleBand {
+  return scale?.constructor.name === 'ScaleBand'
+}
+
+export function isScaleLinear(scale: Maybe<Scale>): scale is ScaleLinear {
+  return scale?.constructor.name === 'ScaleLinear'
 }
 
 export function isTableList(tableList: any): tableList is RawTableList {
@@ -41,12 +67,4 @@ export function isRelation(relation: any): relation is RawRelation {
     isTableList(relation[0]) &&
     isTableList(relation[1])
   )
-}
-
-export function isLayerAxis(instance: Layer) {
-  return instance.constructor.name === layerMapping.axis.constructor.name
-}
-
-export function isLayerBaseMap(instance: Layer) {
-  return instance.constructor.name === layerMapping.baseMap.constructor.name
 }

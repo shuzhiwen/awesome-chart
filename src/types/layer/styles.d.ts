@@ -44,3 +44,18 @@ export type LayerLineStyleShape = {
   point?: GraphStyleShape
   area?: GraphStyleShape
 }
+
+export type LayerAxisStyleShape = {
+  lineAxisX: GraphStyleShape
+  lineAxisY: GraphStyleShape
+  lineAngle: GraphStyleShape
+  lineRadius: GraphStyleShape
+  textX: TextStyleShape
+  textY: TextStyleShape
+  textYR: TextStyleShape
+  textAngle: TextStyleShape
+  textRadius: TextStyleShape
+  titleX: TextStyleShape
+  titleY: TextStyleShape
+  titleYR: TextStyleShape
+}

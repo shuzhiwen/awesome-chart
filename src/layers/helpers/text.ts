@@ -57,3 +57,21 @@ export function createText(props: CreateTextProps) {
     textWidth,
   }
 }
+
+export function createArcText(props: Omit<CreateTextProps, 'position'> & {angle: number}) {
+  const {angle} = props
+
+  return createText({
+    ...props,
+    position:
+      angle === 0
+        ? 'top'
+        : angle === 180
+        ? 'bottom'
+        : angle > 180
+        ? 'left'
+        : angle < 180
+        ? 'right'
+        : 'center',
+  })
+}

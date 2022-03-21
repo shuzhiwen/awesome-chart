@@ -10,3 +10,7 @@ export type LayerOptions<T extends AnyObject = AnyObject> = T & {
 export type LayerLineOptions = LayerOptions<{
   mode?: 'cover' | 'stack'
 }>
+
+export type LayerAxisOptions = LayerOptions<{
+  coordinate?: Coordinate
+}>
