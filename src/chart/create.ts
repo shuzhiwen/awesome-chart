@@ -64,7 +64,7 @@ export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => 
     const legendLayerConfig = layers.find(({type}) => isLegendLayer(type))
 
     // layer instance
-    normalLayerConfigs.forEach((layer) => createLayer(chart, layer))
+    normalLayerConfigs.forEach((layer) => createLayer(chart, layer).update())
     axisLayerConfig && createLayer(chart, axisLayerConfig)
     // axis layer control all scales
     axisLayerConfig && chart.bindCoordinate()

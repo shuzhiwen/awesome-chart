@@ -180,48 +180,50 @@ export class Chart {
   }
 
   bindCoordinate(redraw = false, triggerLayer?: Layer) {
-    const axisLayer = this._layers.find((instance) => isLayerAxis(instance))
-    const coordinate = axisLayer?.options.coordinate
-    const layers = this._layers
-      .filter((instance) => instance.scales && !isLayerBaseMap(instance))
-      .map((instance) => instance)
+    const axisLayer = this._layers.find((instance) => isLayerAxis(instance)),
+      coordinate = axisLayer?.options.coordinate,
+      layers = this._layers.filter(
+        (instance) => instance.scale && !isLayerAxis(instance) && !isLayerBaseMap(instance)
+      )
 
     layers.forEach((layer) => {
-      const {scales, options} = layer
-      const {axis} = options
-      const mergedScales: Layer['scales'] = {}
+      const {scale, options} = layer,
+        {axis} = options,
+        mergedScales: Layer['scale'] = {}
+
       if (coordinate === 'cartesian') {
-        mergedScales.scaleX = scales?.scaleX
+        mergedScales.scaleX = scale?.scaleX
         if (axis === 'minor') {
-          mergedScales.scaleYR = scales?.scaleY
+          mergedScales.scaleYR = scale?.scaleY
         } else {
-          mergedScales.scaleY = scales?.scaleY
+          mergedScales.scaleY = scale?.scaleY
         }
+      } else if (coordinate === 'polar') {
+        mergedScales.scaleAngle = scale?.scaleAngle
+        mergedScales.scaleRadius = scale?.scaleRadius
+      } else if (coordinate === 'geographic' && isLayerBaseMap(layer)) {
+        mergedScales.scaleX = scale?.scaleX
+        mergedScales.scaleY = scale?.scaleY
       }
-      if (coordinate === 'polar') {
-        mergedScales.scaleAngle = scales?.scaleAngle
-        mergedScales.scaleRadius = scales?.scaleRadius
-      }
-      if (coordinate === 'geographic' && isLayerBaseMap(layer)) {
-        mergedScales.scaleX = scales?.scaleX
-        mergedScales.scaleY = scales?.scaleY
-      }
+
       axisLayer?.setScale(mergedScales)
-      axisLayer?.setStyle()
     })
 
     layers.forEach((layer) => {
-      const scales = {...layer.scales, ...axisLayer?.scales}
-      // projection to normal scale
+      const scales = {...layer.scale, ...axisLayer?.scale}
+
       if (coordinate === 'geographic') {
-        const scaleX = (x: any) => (scales.scaleX?.(x) as number) - layer.options.layout.left
-        const scaleY = (y: any) => (scales.scaleY?.(y) as number) - layer.options.layout.top
-        layer.setScale({...scales, scaleX, scaleY} as LayerScalesShape)
+        layer.setScale({
+          ...scales,
+          scaleX: (x: any) => (scales.scaleX?.(x) as number) - layer.options.layout.left,
+          scaleY: (y: any) => (scales.scaleY?.(y) as number) - layer.options.layout.top,
+        } as LayerScalesShape)
       } else {
-        const scaleY = layer.options.axis === 'minor' ? scales.scaleYR : scales.scaleY
-        layer.setScale({...scales, scaleY})
+        layer.setScale({
+          ...scales,
+          scaleY: layer.options.axis === 'minor' ? scales.scaleYR : scales.scaleY,
+        })
       }
-      layer.setStyle()
       redraw && layer !== triggerLayer && layer.draw()
     })
   }

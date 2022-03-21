@@ -4,19 +4,12 @@ import {
   Scale,
   ChartContext,
   LayerAxisStyleShape,
-  LayerLineOptions,
   LayerAxisScaleShape,
+  LayerAxisOptions,
 } from '../types'
 import {DataBase} from '../data'
 import {isScaleBand, isScaleLinear, range, SCALE_TYPES, ungroup} from '../utils'
 import {scaleLinear} from '../scales'
-
-const defaultTickLine = {
-  stroke: 'white',
-  strokeWidth: 1,
-  strokeOpacity: 0.2,
-  fillOpacity: 0,
-}
 
 const defaultAxisLine = {
   stroke: 'white',
@@ -34,11 +27,15 @@ const defaultTitle = {
   fillOpacity: 0.8,
 }
 
+const defaultOptions: Partial<LayerAxisOptions> = {
+  coordinate: 'cartesian',
+}
+
 const defaultStyle: LayerAxisStyleShape = {
   lineAxisX: defaultAxisLine,
   lineAxisY: defaultAxisLine,
-  lineAngle: defaultTickLine,
-  lineRadius: defaultTickLine,
+  lineAngle: defaultAxisLine,
+  lineRadius: defaultAxisLine,
   textX: defaultText,
   textY: defaultText,
   textYR: defaultText,
@@ -53,7 +50,7 @@ const lineKey = ['lineAxisX', 'lineAxisY', 'lineAngle', 'lineRadius'] as const
 const labelKey = ['textX', 'textY', 'textYR', 'textAngle', 'textRadius'] as const
 const titleKey = ['titleX', 'titleY', 'titleYR'] as const
 
-export class LayerAxis extends LayerBase<LayerLineOptions> {
+export class LayerAxis extends LayerBase<LayerAxisOptions> {
   private _data: Maybe<
     DataBase<{
       titleX: string
@@ -113,10 +110,10 @@ export class LayerAxis extends LayerBase<LayerLineOptions> {
     return this._style!
   }
 
-  constructor(options: LayerLineOptions, context: ChartContext) {
+  constructor(options: LayerAxisOptions, context: ChartContext) {
     super({
-      options,
       context,
+      options: {...defaultOptions, ...options},
       tooltipTargets: ['interactive'],
       sublayers: ['interactive', ...lineKey, ...labelKey, ...titleKey],
     })
@@ -211,7 +208,7 @@ export class LayerAxis extends LayerBase<LayerLineOptions> {
     this.textData.titleX = [
       createText({
         x: left + width / 2,
-        y: bottom - (textX.offset?.[1] ?? 0) + (ungroup(textX.fontSize) ?? 0),
+        y: bottom - (textX?.offset?.[1] ?? 0) + (ungroup(textX?.fontSize) ?? 0),
         value: this.data.source.titleX,
         style: titleX,
         position: 'bottom',
@@ -220,7 +217,7 @@ export class LayerAxis extends LayerBase<LayerLineOptions> {
 
     this.textData.titleY = [
       createText({
-        x: (ungroup(titleY.fontSize) ?? 0) / 2,
+        x: (ungroup(titleY?.fontSize) ?? 0) / 2,
         y: top + height / 2,
         value: this.data.source.titleY,
         style: titleY,
@@ -230,7 +227,7 @@ export class LayerAxis extends LayerBase<LayerLineOptions> {
 
     this.textData.titleYR = [
       createText({
-        x: containerWidth - (ungroup(titleY.fontSize) ?? 0) / 2,
+        x: containerWidth - (ungroup(titleY?.fontSize) ?? 0) / 2,
         y: top + height / 2,
         value: this.data.source.titleYR,
         style: titleYR,
@@ -281,22 +278,20 @@ export class LayerAxis extends LayerBase<LayerLineOptions> {
       {scaleX, scaleY} = this.scale,
       getLineData = (key: Keys<LayerAxis['lineData']>) => [
         {
-          data: this.lineData[key].map(({x1, y1, x2, y2}) => [x1, y1, x2, y2]),
+          data: this.lineData[key],
           ...this.style[key],
         },
       ],
       getRadiusData = (key: Keys<LayerAxis['lineData']>) => [
         {
-          data: this.lineData[key].map(({r}) => [r, r]),
-          position: this.lineData[key].map(({cx, cy}) => [cx, cy]),
+          data: this.lineData[key],
           ...this.style[key],
         },
       ],
       getTextData = (key: Keys<LayerAxis['textData']>, rotation?: number) => [
         {
-          data: this.textData[key].map(({value}) => value),
-          position: this.textData[key].map(({x, y}) => [x, y]),
-          transformOrigin: this.textData[key].map(({transformOrigin}) => transformOrigin),
+          data: this.textData[key],
+          transformOrigin: this.textData[key].map((group) => group.transformOrigin),
           rotation,
           ...this.style[key],
         },

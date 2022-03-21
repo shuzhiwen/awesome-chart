@@ -28,7 +28,7 @@ export type TextStyleShape = GraphStyleShape &
     offset: [number, number]
   }>
 
-export type LayerAxisStyleShape = {
+export type LayerAxisStyleShape = Partial<{
   lineAxisX: GraphStyleShape
   lineAxisY: GraphStyleShape
   lineAngle: GraphStyleShape
@@ -41,31 +41,31 @@ export type LayerAxisStyleShape = {
   titleX: TextStyleShape
   titleY: TextStyleShape
   titleYR: TextStyleShape
-}
+}>
 
-export type LayerTextStyleShape = {
-  align?: Align
-  verticalAlign?: Align
-  text?: TextStyleShape
-}
+export type LayerTextStyleShape = Partial<{
+  align: Align
+  verticalAlign: Align
+  text: TextStyleShape
+}>
 
-export type LayerLineStyleShape = {
+export type LayerLineStyleShape = Partial<{
   fallback: 'zero' | 'continue' | 'break'
   pointSize: number
   labelPosition: Position5
   curveType: CurveType
-  text?: TextStyleShape
-  curve?: GraphStyleShape
-  point?: GraphStyleShape
-  area?: GraphStyleShape
-}
+  text: TextStyleShape
+  curve: GraphStyleShape
+  point: GraphStyleShape
+  area: GraphStyleShape
+}>
 
-export type LayerRectStyleShape = {
+export type LayerRectStyleShape = Partial<{
   fixedWidth: Maybe<number>
   fixedHeight: Maybe<number>
   labelPosition: Position5 | [Position5, Position5]
   labelPositionOrient: Position2
-  rect?: GraphStyleShape
+  rect: GraphStyleShape
   background: GraphStyleShape
-  text?: TextStyleShape
-}
+  text: TextStyleShape
+}>

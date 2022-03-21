@@ -71,7 +71,7 @@ export type LayerScalesShape = {
 }
 
 export type Layer = LayerBase<LayerOptions> & {
-  scales?: LayerScalesShape
+  scale?: LayerScalesShape
 }
 
 export type LegendDataShape = {

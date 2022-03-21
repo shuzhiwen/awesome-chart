@@ -1,5 +1,5 @@
 import {isArray, isNumber} from 'lodash'
-import {layerMapping} from '../layers'
+import {LayerAxis} from '../layers'
 import {
   D3Selection,
   FabricCanvas,
@@ -7,7 +7,6 @@ import {
   RawRelation,
   RawTable,
   RawTableList,
-  Scale,
   ScaleBand,
   ScaleLinear,
 } from '../types'
@@ -25,19 +24,19 @@ export function isCanvasContainer(selector: any): selector is FabricCanvas {
 }
 
 export function isLayerAxis(instance: Maybe<Layer>) {
-  return instance?.constructor.name === layerMapping.axis.constructor.name
+  return instance?.constructor.name === LayerAxis.name
 }
 
 export function isLayerBaseMap(instance: Maybe<Layer>) {
-  return instance?.constructor.name === layerMapping.baseMap.constructor.name
+  return instance?.constructor.name === 'BaseMap'
 }
 
-export function isScaleBand(scale: Maybe<Scale>): scale is ScaleBand {
-  return scale?.constructor.name === 'ScaleBand'
+export function isScaleBand(scale: any): scale is ScaleBand {
+  return typeof scale?.bandwidth === 'function'
 }
 
-export function isScaleLinear(scale: Maybe<Scale>): scale is ScaleLinear {
-  return scale?.constructor.name === 'ScaleLinear'
+export function isScaleLinear(scale: any): scale is ScaleLinear {
+  return typeof scale?.ticks === 'function'
 }
 
 export function isTableList(tableList: any): tableList is RawTableList {
