@@ -43,6 +43,17 @@ export type LayerAxisStyleShape = Partial<{
   titleYR: TextStyleShape
 }>
 
+export type LayerLegendStyleShape = Partial<{
+  align: Align
+  verticalAlign: Align
+  direction: Direction
+  offset: [number, number]
+  gap: [number, number]
+  shapeSize: number
+  shape: GraphStyleShape
+  text: TextStyleShape
+}>
+
 export type LayerTextStyleShape = Partial<{
   align: Align
   verticalAlign: Align

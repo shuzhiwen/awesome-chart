@@ -18,9 +18,9 @@ export function ungroup<T>(input: MaybeGroup<T>): Maybe<T> {
   return !isArray(input) ? input : input.length ? ungroup(input[0]) : null
 }
 
-export function getTextWidth(text: string, fontSize: number | string = 12) {
+export function getTextWidth(text: Meta, fontSize: number | string = 12) {
   ctx.font = `${isNumber(fontSize) ? `${fontSize}px` : fontSize} ${fontFamily}`
-  return ctx.measureText(text).width
+  return ctx.measureText(String(text)).width
 }
 
 export function download(data: string, fileName: string) {

@@ -11,6 +11,7 @@ import {
   tableListToTable,
   randomTableList,
   randomTable,
+  isLayerLegend,
 } from '../utils'
 
 const isAxisLayer = (type: LayerType) => type === 'axis'
@@ -23,8 +24,8 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
   const layer = chart.createLayer(type, {...options, layout: chart.layout[options.layout]})
   let dataSet = data
 
-  if (type === 'legend') {
-    dataSet = chart.layers
+  if (type === 'legend' && isLayerLegend(layer)) {
+    layer.bindLayers(chart.layers)
   } else if (isTable(data) || data?.type === 'table') {
     dataSet = new DataTable(isTable(data) ? data : randomTable(data))
   } else if (isArray(data) && data.length === 2 && isRelation(data)) {
@@ -43,25 +44,21 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
     dataSet = new DataBase(data, {})
   }
 
-  layer.setData(dataSet)
   layer.setStyle(style || {})
   layer.setAnimation(animation || {})
-
-  if (event) {
-    Object.keys(event).forEach((eventName) => layer.event.on(eventName, event[eventName]))
-  }
+  type !== 'legend' && layer.setData(dataSet)
+  event && Object.keys(event).forEach((name) => layer.event.on(name, event[name]))
 
   return layer
 }
 
 export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => {
   try {
-    const {layers = [], afterCreate, ...initialConfig} = schema
-    const chart = existedChart ?? new Chart(initialConfig)
-    // some special layers require data or scales from other layers
-    const normalLayerConfigs = layers.filter(({type}) => isNormalLayer(type))
-    const axisLayerConfig = layers.find(({type}) => isAxisLayer(type))
-    const legendLayerConfig = layers.find(({type}) => isLegendLayer(type))
+    const {layers = [], afterCreate, ...initialConfig} = schema,
+      chart = existedChart ?? new Chart(initialConfig),
+      normalLayerConfigs = layers.filter(({type}) => isNormalLayer(type)),
+      axisLayerConfig = layers.find(({type}) => isAxisLayer(type)),
+      legendLayerConfig = layers.find(({type}) => isLegendLayer(type))
 
     // layer instance
     normalLayerConfigs.forEach((layer) => createLayer(chart, layer).update())

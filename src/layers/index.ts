@@ -2,6 +2,7 @@ import * as layer from '.'
 export * from './axis'
 export * from './base'
 export * from './helpers'
+export * from './legend'
 export * from './normal'
 
 export const layerMapping = {
@@ -9,7 +10,7 @@ export const layerMapping = {
   baseMap: layer.LayerText,
   chord: layer.LayerText,
   indicator: layer.LayerText,
-  legend: layer.LayerText,
+  legend: layer.LayerLegend,
   line: layer.LayerLine,
   matrix: layer.LayerText,
   rect: layer.LayerRect,

@@ -44,7 +44,7 @@ const defaultStyle: LayerLineStyleShape = {
 }
 
 export class LayerLine extends LayerBase<LayerLineOptions> {
-  public legendData: LegendDataShape = {}
+  public legendData: Maybe<LegendDataShape>
 
   private _data: Maybe<DataTableList>
 
@@ -61,7 +61,6 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
     value: Meta
     source: AnyObject
     color: string
-    pointSize: number
   }[][] = []
 
   private areaData: {
@@ -110,7 +109,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
     const {layout, mode, createGradient} = this.options,
       {height, top, left} = layout,
       {scaleX, scaleY} = this.scale,
-      {labelPosition, pointSize, text, curve} = this.style,
+      {labelPosition, pointSize = 5, text, curve} = this.style,
       headers = this.data.data.map(({header}) => header),
       rawTableList = transpose(this.data.data.map(({list}) => list)),
       colorMatrix = createColorMatrix({
@@ -125,10 +124,9 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
         value,
         x: left + (scaleX(dimension as string) || 0) + scaleX.bandwidth() / 2,
         y: isRealNumber(value) ? top + scaleY(value) : NaN,
-        r: defaultStyle.pointSize / 2,
+        r: pointSize / 2,
         source: {dimension, category: headers[i + 1], value},
         color: colorMatrix.get(0, i),
-        pointSize: pointSize / 2,
       }))
     )
 

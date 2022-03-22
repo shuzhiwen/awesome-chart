@@ -1,4 +1,5 @@
 import {isNil, isFunction, isString} from 'lodash'
+import {group} from './chaos'
 import {uuid} from './random'
 
 type Callback = Function & {
@@ -67,9 +68,9 @@ export const createEvent = (key: string) => {
         for (let i = 0, l = fns.length; i < l; i++) {
           fn = fns[i]
           if (isNil(fn.isOnceDone)) {
-            fn.apply(context || null, args)
+            fn.apply(context || null, group(args))
           } else if (fn.isOnceDone === false) {
-            fn.apply(context || null, args)
+            fn.apply(context || null, group(args))
             fn.isOnceDone = true
           }
         }

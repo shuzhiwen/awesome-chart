@@ -43,7 +43,7 @@ const defaultStyle: LayerRectStyleShape = {
 }
 
 export class LayerRect extends LayerBase<LayerRectOptions> {
-  public legendData: LegendDataShape = {}
+  public legendData: Maybe<LegendDataShape>
 
   private _data: Maybe<DataTableList>
 

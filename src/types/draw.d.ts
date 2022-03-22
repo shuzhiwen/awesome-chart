@@ -54,7 +54,7 @@ export type ElConfigShape = ArrayItem<
   >
 >
 
-export type ElSourceShape = {
+export type ElSourceShape = AnyObject & {
   dimension?: Meta
   category?: Meta
   value?: Meta

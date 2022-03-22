@@ -72,14 +72,17 @@ export type LayerScalesShape = {
 
 export type Layer = LayerBase<LayerOptions> & {
   scale?: LayerScalesShape
+  legendData?: Maybe<LegendDataShape>
 }
 
+export type LegendShape = 'rect' | 'circle' | 'broken-line' | 'dotted-line' | 'star'
+
 export type LegendDataShape = {
-  colorMatrix?: ColorMatrix
-  filter?: 'column' | 'row'
-  legends?: {
+  filter: 'column' | 'row'
+  colorMatrix: ColorMatrix
+  legends: {
     label: Meta
     color: string
-    shape: 'rect' | 'circle' | 'broken-line' | 'dotted-line' | 'star'
+    shape: LegendShape
   }[]
 }
