@@ -67,6 +67,8 @@ export function Editor({schema, onChange}) {
 
     setEditor(editor)
     onChange(editor.getValue())
+
+    return () => (editorRef.current.innerHTML = '')
   }, [])
 
   return <div className={styles.editor} ref={editorRef} />
