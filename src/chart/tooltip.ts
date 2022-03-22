@@ -94,8 +94,10 @@ export class Tooltip {
             .reduce((prev, cur) => [...prev!, ...cur!], [])
 
         return groups?.map((item, i) => ({
-          pointColor: getAttr(data.fill, i, null) || getAttr(data.stroke, i, null) || '#000',
           ...item,
+          pointColor: getAttr(data.fill, i, null) || getAttr(data.stroke, i, null) || '#000',
+          category: item.dimension,
+          dimension: item.category,
         }))
       }
     } catch (error) {
