@@ -10,7 +10,7 @@ export interface CreateTextProps {
   offset?: number
 }
 
-export type CreateColorMatrixProps = {
+export interface CreateColorMatrixProps {
   layer: Layer
   row: number
   column: number

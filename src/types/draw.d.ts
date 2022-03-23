@@ -16,16 +16,6 @@ import {
   drawText,
 } from '../draws'
 
-export type D3Selection = Selection<any, unknown, any, unknown>
-
-export type D3Transition = Transition<any, unknown, any, unknown>
-
-export type FabricCanvas = Canvas
-
-export type FabricObject = Object & {
-  className: string
-}
-
 export type DrawerTarget = D3Selection | FabricCanvas
 
 export type DrawerDataParameter<T> = T[]
@@ -54,12 +44,6 @@ export type ElConfigShape = ArrayItem<
   >
 >
 
-export type ElSourceShape = AnyObject & {
-  dimension?: Meta
-  category?: Meta
-  value?: Meta
-}
-
 export type CurveType =
   | 'curveLinear'
   | 'curveNatural'
@@ -70,6 +54,22 @@ export type CurveType =
   | 'curveStep'
   | 'curveStepAfter'
   | 'curveStepBefore'
+
+export interface D3Selection extends Selection<any, unknown, any, unknown> {}
+
+export interface D3Transition extends Transition<any, unknown, any, unknown> {}
+
+export interface FabricCanvas extends Canvas {}
+
+export interface FabricObject extends Object {
+  className: string
+}
+
+export interface ElSourceShape extends AnyObject {
+  dimension?: Meta
+  category?: Meta
+  value?: Meta
+}
 
 export interface BasicDrawerProps<T> {
   engine: Engine

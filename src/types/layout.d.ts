@@ -1,4 +1,4 @@
-export type LayoutArea = {
+export interface LayoutArea {
   top: number
   right: number
   bottom: number
@@ -9,7 +9,9 @@ export type LayoutArea = {
 
 export type LayoutShape = Record<string, LayoutArea>
 
-export type LayoutCreator = (props: LayoutProps) => LayoutShape
+export interface LayoutCreator {
+  (props: LayoutProps): LayoutShape
+}
 
 export interface LayoutProps {
   containerWidth: number

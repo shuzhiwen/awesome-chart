@@ -4,6 +4,8 @@ import {D3Selection, DrawerTarget} from './draw'
 
 export type AnimationLifeCycle = 'init' | 'play' | 'start' | 'process' | 'end' | 'destroy'
 
+export type AnimationType = keyof typeof animationMapping
+
 // see https://easings.net/
 export type AnimationEasing =
   | 'easeInBack'
@@ -31,9 +33,7 @@ export type AnimationEasing =
   | 'easeOutQuad'
   | 'easeOutSine'
 
-export type AnimationType = keyof typeof animationMapping
-
-export type BasicAnimationOptions = {
+export interface BasicAnimationOptions {
   id?: string
   type?: AnimationType
   targets?: D3Selection | Object[]
@@ -48,26 +48,26 @@ export interface AnimationProps<T extends BasicAnimationOptions> {
   options?: T
 }
 
-export type AnimationEmptyOptions = BasicAnimationOptions
+export interface AnimationEmptyOptions extends BasicAnimationOptions {}
 
-export type AnimationFadeOptions = BasicAnimationOptions & {
+export interface AnimationFadeOptions extends BasicAnimationOptions {
   initialOpacity?: number
   startOpacity?: number
   endOpacity?: number
 }
 
-export type AnimationZoomOptions = BasicAnimationOptions & {
+export interface AnimationZoomOptions extends BasicAnimationOptions {
   initialScale?: number
   startScale?: number
   endScale?: number
 }
 
-export type AnimationMoveOptions = BasicAnimationOptions & {
+export interface AnimationMoveOptions extends BasicAnimationOptions {
   initialOffset?: [number, number]
   startOffset?: [number, number]
   endOffset?: [number, number]
 }
 
-export type AnimationEraseOptions = BasicAnimationOptions & {
+export interface AnimationEraseOptions extends BasicAnimationOptions {
   direction?: Position4
 }

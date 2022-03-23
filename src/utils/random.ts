@@ -1,16 +1,10 @@
 import * as d3 from 'd3-random'
 import {characters} from './constants'
-import {
-  RawTable,
-  RandomOptions,
-  RawTableList,
-  NormalRandomOptions,
-  PoissonRandomOptions,
-} from '../types'
+import {RawTable, RandomOptions, RawTableList} from '../types'
 
 const mapping = {
-  normal: ({mu, sigma}: Pick<NormalRandomOptions, 'mu' | 'sigma'>) => d3.randomNormal(mu, sigma),
-  poisson: ({lambda = 1}: Pick<PoissonRandomOptions, 'lambda'>) => d3.randomPoisson(lambda),
+  normal: ({mu, sigma}: RandomOptions) => d3.randomNormal(mu, sigma),
+  poisson: ({lambda = 1}: RandomOptions) => d3.randomPoisson(lambda),
 }
 
 const toFixed = (number: number, decimals: number) => {

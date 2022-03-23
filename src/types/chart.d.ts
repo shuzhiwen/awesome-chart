@@ -9,7 +9,7 @@ import {getEasyGradientCreator} from '../utils'
 
 export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
 
-export type ChartContext = {
+export interface ChartContext {
   root: Chart['root']
   theme: Chart['theme']
   engine: Chart['engine']
@@ -21,7 +21,7 @@ export type ChartContext = {
   createGradient: ReturnType<typeof getEasyGradientCreator>
 }
 
-export type TooltipOptions = {
+export interface TooltipOptions {
   container: HTMLElement | null
   mode?: 'single' | 'dimension' | 'category'
   pointSize?: number
@@ -58,7 +58,7 @@ export interface LayerSchema {
   animation?: AnyObject
 }
 
-export type RandomDataSchema = RandomOptions & {
+export interface RandomDataSchema extends RandomOptions {
   type: 'table' | 'tableList'
 }
 

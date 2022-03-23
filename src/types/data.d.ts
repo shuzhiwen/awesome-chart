@@ -6,40 +6,27 @@ export type DataShape = DataBase<any> | DataTableList | DataTable | DataRelation
 
 export type RawTableList = Meta[][]
 
-export type TableListOptions = {
-  mode?: 'sum' | 'percentage' | 'copy'
-  target?: 'row' | 'column'
-}
+export type RawTable = [Meta[], Meta[], RawTableList]
 
-export type TableListDataItemShape = {
+export type RawRelation = [RawTableList, RawTableList]
+
+export type TableDataShape = RawTable
+
+export type TableListDataShape = {
   header: string
   list: Meta[]
   min?: Meta
   max?: Meta
-}
+}[]
 
-export type TableListDataShape = TableListDataItemShape[]
-
-export type RawTable = [Meta[], Meta[], RawTableList]
-
-export type TableOptions = {
-  target?: 'row' | 'column'
-}
-
-export type TableDataShape = RawTable
-
-export type RawRelation = [RawTableList, RawTableList]
-
-export type RelationOptions = {}
-
-export type Edge = {
+export interface Edge {
   id: Meta
   from: Meta
   to: Meta
   value?: Meta
 }
 
-export type Node = {
+export interface Node {
   id: Meta
   name: Meta
   value?: Meta
@@ -48,8 +35,19 @@ export type Node = {
   children?: Meta[]
 }
 
-export type RelationDataShape = {
+export interface RelationDataShape {
   roots: Meta[]
   nodes: Node[]
   edges: Edge[]
 }
+
+export interface TableListOptions {
+  mode?: 'sum' | 'percentage' | 'copy'
+  target?: 'row' | 'column'
+}
+
+export interface TableOptions {
+  target?: 'row' | 'column'
+}
+
+export interface RelationOptions {}

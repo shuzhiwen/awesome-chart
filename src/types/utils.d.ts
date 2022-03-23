@@ -18,13 +18,13 @@ export interface OverflowControlConfig {
   fontSize?: number
 }
 
-export type Stop = {
+export interface Stop {
   color?: string
   offset?: number
   opacity?: number
 }
 
-export type GradientWithId = fabric.Gradient & {
+export interface GradientWithId extends fabric.Gradient {
   id?: string
 }
 
@@ -65,21 +65,12 @@ export interface CreateDefsSchema {
   radialGradient?: MaybeGroup<RadialGradientSchema>
 }
 
-export interface BaseRandomOptions {
+export interface RandomOptions {
+  mode: 'normal' | 'poisson'
   row: number
   column: number
   decimals?: number
-}
-
-export interface NormalRandomOptions extends BaseRandomOptions {
-  mode: 'normal'
+  lambda?: number
   sigma?: number
   mu?: number
 }
-
-export interface PoissonRandomOptions extends BaseRandomOptions {
-  mode: 'poisson'
-  lambda?: number
-}
-
-export type RandomOptions = NormalRandomOptions | PoissonRandomOptions

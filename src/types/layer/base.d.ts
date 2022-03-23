@@ -25,6 +25,8 @@ export type BackupAnimationShape = Record<string, Maybe<AnyObject>> & {
   options?: BackupAnimationOptions
 }
 
+export type LegendShape = 'rect' | 'circle' | 'broken-line' | 'dotted-line' | 'star'
+
 export interface LayerBaseProps<T> {
   context: ChartContext
   options: T & LayerOptions
@@ -32,7 +34,7 @@ export interface LayerBaseProps<T> {
   sublayers?: string[]
 }
 
-export type CreateAnimationConfigItemShape = {
+export interface CreateAnimationConfigItemShape {
   type: AnimationType
   duration?: number
   delay?: number
@@ -60,7 +62,7 @@ export interface DrawBasicProps<T> {
   sublayer?: string
 }
 
-export type LayerScalesShape = {
+export interface LayerScalesShape {
   scaleX?: Scale
   scaleY?: Scale
   scaleXT?: Scale
@@ -70,14 +72,12 @@ export type LayerScalesShape = {
   nice?: ScaleNiceShape
 }
 
-export type Layer = LayerBase<LayerOptions> & {
+export interface Layer extends LayerBase<LayerOptions> {
   scale?: LayerScalesShape
   legendData?: Maybe<LegendDataShape>
 }
 
-export type LegendShape = 'rect' | 'circle' | 'broken-line' | 'dotted-line' | 'star'
-
-export type LegendDataShape = {
+export interface LegendDataShape {
   filter: 'column' | 'row'
   colorMatrix: ColorMatrix
   legends: {
