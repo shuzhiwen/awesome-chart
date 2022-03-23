@@ -1,6 +1,6 @@
 import {isArray} from 'lodash'
 import {DataTableList, DataTable, DataRelation, DataBase} from '../data'
-import {LayerType, CreateChartSchema, CreateLayerSchema} from '../types'
+import {CreateChartSchema, CreateLayerSchema} from '../types'
 import {Chart} from './chart'
 import {
   createLog,
@@ -60,8 +60,8 @@ export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => 
       legendLayerConfig = layers.find(({type}) => type === 'legend')
 
     // layer instance
-    normalLayerConfigs.forEach((layer) => createLayer(chart, layer).update())
     axisLayerConfig && createLayer(chart, axisLayerConfig)
+    normalLayerConfigs.forEach((layer) => createLayer(chart, layer).update())
     // axis layer control all scales
     axisLayerConfig && chart.bindCoordinate()
     // legend layer is the last one
