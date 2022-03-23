@@ -153,13 +153,24 @@ export class LayerLegend extends LayerBase<LayerOptions> {
           layerIndex = counts.findIndex((_, i) => sum(counts.slice(0, i + 1)) > index),
           startIndex = counts.slice(0, layerIndex).reduce((prev, cur) => prev + cur, 0),
           layerData = originData[layerIndex],
-          layer = layers[layerIndex]
+          layer = layers[layerIndex],
+          order: {
+            type: ArrayItem<typeof filterTypes>
+            mapping: Record<Meta, number>
+            colorMatrix: ColorMatrix
+          } = {
+            type: filterTypes[layerIndex],
+            colorMatrix: colorMatrix[layerIndex],
+            mapping: {},
+          }
 
         if (!(layerData instanceof DataTableList)) {
           return
         }
 
+        let filteredData = layerData
         this.isFiltering = true
+
         if (!active[index]) {
           active[index] = true
           data.shapeColors[index] = colors[index]
@@ -171,17 +182,6 @@ export class LayerLegend extends LayerBase<LayerOptions> {
         }
 
         try {
-          let filteredData = layerData
-          const order: {
-            type: ArrayItem<typeof filterTypes>
-            mapping: Record<Meta, number>
-            colorMatrix: ColorMatrix
-          } = {
-            type: filterTypes[layerIndex],
-            colorMatrix: colorMatrix[layerIndex],
-            mapping: {},
-          }
-
           if (filterTypes[layerIndex] === 'row') {
             const mapping = range(startIndex, startIndex + counts[layerIndex]).map((i) => active[i])
 
