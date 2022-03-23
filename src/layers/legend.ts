@@ -31,7 +31,7 @@ const defaultStyle: LayerLegendStyleShape = {
   verticalAlign: 'start',
   direction: 'horizontal',
   offset: [0, 0],
-  gap: [0, 0],
+  gap: [5, 10],
   shapeSize: 12,
   shape: {},
   text: {

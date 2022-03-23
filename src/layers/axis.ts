@@ -23,7 +23,7 @@ const defaultText = {
 }
 
 const defaultTitle = {
-  fontSize: 12,
+  fontSize: 16,
   fillOpacity: 0.8,
 }
 
@@ -36,12 +36,12 @@ const defaultStyle: LayerAxisStyleShape = {
   lineAxisY: defaultAxisLine,
   lineAngle: defaultAxisLine,
   lineRadius: defaultAxisLine,
-  textX: defaultText,
-  textY: defaultText,
-  textYR: defaultText,
+  textX: {...defaultText, offset: [0, -10]},
+  textY: {...defaultText, offset: [-10, 0]},
+  textYR: {...defaultText, offset: [10, 0]},
   textAngle: defaultText,
   textRadius: defaultText,
-  titleX: defaultTitle,
+  titleX: {...defaultTitle, offset: [0, -10]},
   titleY: defaultTitle,
   titleYR: defaultTitle,
 }
@@ -145,7 +145,9 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
             isReverse ? Math.min(current[1], incoming[1]) : Math.max(current[1], incoming[1]),
           ])
         }
+      }
 
+      if (isScaleLinear(this.scale[type])) {
         this.scale[type] = scaleLinear({
           domain: this.scale[type]?.domain() as [number, number],
           range: this.scale[type]?.range() as [number, number],
@@ -217,7 +219,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
 
     this.textData.titleY = [
       createText({
-        x: (ungroup(titleY?.fontSize) ?? 0) / 2,
+        x: 0,
         y: top + height / 2,
         value: this.data.source.titleY,
         style: titleY,
@@ -227,7 +229,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
 
     this.textData.titleYR = [
       createText({
-        x: containerWidth - (ungroup(titleY?.fontSize) ?? 0) / 2,
+        x: containerWidth,
         y: top + height / 2,
         value: this.data.source.titleYR,
         style: titleYR,
