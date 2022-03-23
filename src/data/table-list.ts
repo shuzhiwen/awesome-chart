@@ -16,7 +16,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
   }
 
   select(headers: MaybeGroup<string>, options: Options = {}): DataTableList {
-    const {mode = 'copy', target = 'column'} = options,
+    const {mode = 'copy', target = 'row'} = options,
       headerArray = Array.isArray(headers) ? headers : [headers]
     let data = cloneDeep(this.data.filter(({header}) => headerArray.includes(header)))
 
