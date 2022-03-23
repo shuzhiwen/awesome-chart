@@ -179,7 +179,9 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
         column: 1,
         theme: rect?.fill,
       })
-      this.rectData.forEach((group, i) => (group[0].color = colorMatrix.get(i, 0)))
+      this.rectData.forEach((group, i) =>
+        group.forEach((item) => (item.color = colorMatrix.get(i, 0)))
+      )
     }
 
     if (mode === 'group') {

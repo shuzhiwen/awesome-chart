@@ -9,7 +9,7 @@ export function createColorMatrix(props: CreateColorMatrixProps) {
     order = layer.data?.options.order,
     colors = !theme ? layer.options.theme : isArray(theme) ? theme : [theme],
     chromaScale = chroma.scale(colors).mode('lch')
-  let matrix: string[][] = []
+  let matrix: string[][] = order?.colorMatrix?.matrix || []
 
   if (order?.colorMatrix && layer.data instanceof DataTableList) {
     const {type, mapping} = order,

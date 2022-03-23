@@ -12,15 +12,13 @@ import {
   randomTableList,
   randomTable,
   isLayerLegend,
+  isLayerAxis,
 } from '../utils'
 
-const isAxisLayer = (type: LayerType) => type === 'axis'
-const isLegendLayer = (type: LayerType) => type === 'legend'
-const isNormalLayer = (type: LayerType) => !isAxisLayer(type) && !isLegendLayer(type)
 const log = createLog('CreateChart')
 
 export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
-  const {type, options, data, style, animation, event} = schema
+  const {type, options, data, scale, style, animation, event} = schema
   const layer = chart.createLayer(type, {...options, layout: chart.layout[options.layout]})
   let dataSet = data
 
@@ -44,9 +42,10 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
     dataSet = new DataBase(data, {})
   }
 
-  layer.setStyle(style || {})
-  layer.setAnimation(animation || {})
-  type !== 'legend' && layer.setData(dataSet)
+  layer.setStyle({...style})
+  layer.setAnimation({...animation})
+  isLayerAxis(layer) && layer.setScale({nice: scale})
+  !isLayerLegend(layer) && layer.setData(dataSet)
   event && Object.keys(event).forEach((name) => layer.event.on(name, event[name]))
 
   return layer
@@ -56,9 +55,9 @@ export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => 
   try {
     const {layers = [], afterCreate, ...initialConfig} = schema,
       chart = existedChart ?? new Chart(initialConfig),
-      normalLayerConfigs = layers.filter(({type}) => isNormalLayer(type)),
-      axisLayerConfig = layers.find(({type}) => isAxisLayer(type)),
-      legendLayerConfig = layers.find(({type}) => isLegendLayer(type))
+      normalLayerConfigs = layers.filter(({type}) => type !== 'axis' && type !== 'legend'),
+      axisLayerConfig = layers.find(({type}) => type === 'axis'),
+      legendLayerConfig = layers.find(({type}) => type === 'legend')
 
     // layer instance
     normalLayerConfigs.forEach((layer) => createLayer(chart, layer).update())

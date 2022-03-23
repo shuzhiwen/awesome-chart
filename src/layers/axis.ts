@@ -146,7 +146,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
           ])
         }
 
-        scaleLinear({
+        this.scale[type] = scaleLinear({
           domain: this.scale[type]?.domain() as [number, number],
           range: this.scale[type]?.range() as [number, number],
           nice: this.scale.nice,
