@@ -23,21 +23,19 @@ export function drawRect({
   className,
   ...rest
 }: RectDrawerProps) {
-  const configuredData = data.map((item, i) => {
-    return {
-      ...rest,
-      ...item,
-      className,
-      fill: getAttr(fill, i, '#fff'),
-      stroke: getAttr(stroke, i, '#fff'),
-      opacity: getAttr(opacity, i, 1),
-      fillOpacity: getAttr(fillOpacity, i, 1),
-      strokeOpacity: getAttr(strokeOpacity, i, 1),
-      strokeWidth: getAttr(strokeWidth, i, 0),
-      source: getAttr(source, i, {}),
-      transformOrigin: getTransformOrigin(item, transformOrigin),
-    }
-  })
+  const configuredData = data.map((item, i) => ({
+    ...rest,
+    ...item,
+    className,
+    fill: getAttr(fill, i, '#fff'),
+    stroke: getAttr(stroke, i, '#fff'),
+    opacity: getAttr(opacity, i, 1),
+    fillOpacity: getAttr(fillOpacity, i, 1),
+    strokeOpacity: getAttr(strokeOpacity, i, 1),
+    strokeWidth: getAttr(strokeWidth, i, 0),
+    source: getAttr(source, i, {}),
+    transformOrigin: getTransformOrigin(item, transformOrigin),
+  }))
 
   if (engine === 'svg' && isSvgContainer(container)) {
     container
