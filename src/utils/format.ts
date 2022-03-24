@@ -1,28 +1,31 @@
 import * as d3 from 'd3-format'
+import {isNil} from 'lodash'
 import {FormatNumberConfig, OverflowControlConfig} from '../types'
 import {getTextWidth} from './chaos'
 
-export const formatNumber = (data: string | number, config?: FormatNumberConfig) => {
+export const formatNumber = (data: Meta, config?: FormatNumberConfig) => {
   const number = Number(data)
   const {percentage = false, thousandth = false, decimals = 8} = config || {}
 
+  // anonymous
   if (!config) {
-    // anonymous formatting
-    if (!Number.isNaN(number)) {
+    if (isNil(data) || data === '') {
+      return ''
+    } else if (!Number.isNaN(number)) {
       return d3.format(`.${8}~f`)(number)
     }
     return data
-  } else {
-    return d3.format(`${thousandth ? ',' : ''}.${decimals}~${percentage ? '%' : 'f'}`)(number)
   }
+
+  return d3.format(`${thousandth ? ',' : ''}.${decimals}~${percentage ? '%' : 'f'}`)(number)
 }
 
-export const overflowControl = (data: string | number, config: OverflowControlConfig) => {
+export const overflowControl = (data: Meta, config: OverflowControlConfig) => {
   const text = String(data)
   const {omit = true, width = Infinity, height = Infinity, fontSize = 12} = config
 
   if (fontSize > height) {
-    return null
+    return ''
   } else if (width < getTextWidth(text, fontSize)) {
     for (let i = text.length; i > 0; i--) {
       const substring = `${text.substring(0, i)}${omit ? '...' : ''}`

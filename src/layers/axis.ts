@@ -146,7 +146,11 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
           ])
         }
       }
+    })
+  }
 
+  niceScale() {
+    SCALE_TYPES.forEach((type) => {
       if (isScaleLinear(this.scale[type])) {
         this.scale[type] = scaleLinear({
           domain: this.scale[type]?.domain() as [number, number],
@@ -165,7 +169,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     const {containerWidth, layout} = this.options,
       {left, top, width, height, bottom} = layout,
       {titleX, titleY, titleYR, textX, textY, textYR, textAngle, textRadius} = this.style,
-      maxRadius = this.scale.scaleRadius?.range()[1] || Math.max(width / 2, height / 2)
+      maxRadius = this.scale.scaleRadius?.range()[1] || Math.max(width / 2, height / 2),
+      labelYR = this.getLabelAndPosition(this.scale.scaleYR!)
 
     this.lineData.lineAxisX = this.getLabelAndPosition(this.scale.scaleX!).map(
       ({label, position}) => ({
@@ -211,7 +216,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       createText({
         x: left + width / 2,
         y: bottom - (textX?.offset?.[1] ?? 0) + (ungroup(textX?.fontSize) ?? 0),
-        value: this.data.source.titleX,
+        value: this.data?.source.titleX ?? '',
         style: titleX,
         position: 'bottom',
       }),
@@ -221,7 +226,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       createText({
         x: 0,
         y: top + height / 2,
-        value: this.data.source.titleY,
+        value: this.data?.source.titleY ?? '',
         style: titleY,
         position: 'center',
       }),
@@ -231,7 +236,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       createText({
         x: containerWidth,
         y: top + height / 2,
-        value: this.data.source.titleYR,
+        value: this.data?.source.titleYR ?? '',
         style: titleYR,
         position: 'center',
       }),
@@ -245,8 +250,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       createText({x: x1!, y: y1!, value, style: textY, position: 'left'})
     )
 
-    this.textData.textYR = this.lineData.lineAxisY.map(({value, x2, y2}) =>
-      createText({x: x2!, y: y2!, value, style: textYR, position: 'right'})
+    this.textData.textYR = this.lineData.lineAxisY.map(({x2, y2}, i) =>
+      createText({x: x2!, y: y2!, value: labelYR[i]?.label, style: textYR, position: 'right'})
     )
 
     this.textData.textRadius = this.lineData.lineRadius.map(({value, cx, cy, r}) =>

@@ -180,11 +180,9 @@ export class Chart {
   }
 
   bindCoordinate(redraw = false, triggerLayer?: Layer) {
-    const axisLayer = this._layers.find((instance) => isLayerAxis(instance)),
-      coordinate = axisLayer?.options.coordinate,
-      layers = this._layers.filter(
-        (instance) => instance.scale && !isLayerAxis(instance) && !isLayerBaseMap(instance)
-      )
+    const axisLayer = this._layers.find((layer) => isLayerAxis(layer)),
+      layers = this._layers.filter((layer) => !isLayerAxis(layer) && !isLayerBaseMap(layer)),
+      coordinate = axisLayer?.options.coordinate
 
     layers.forEach((layer) => {
       const {scale, options} = layer,
@@ -208,6 +206,8 @@ export class Chart {
 
       axisLayer?.setScale(mergedScales)
     })
+
+    isLayerAxis(axisLayer) && axisLayer.niceScale()
 
     layers.forEach((layer) => {
       const scales = {...layer.scale, ...axisLayer?.scale},
@@ -235,8 +235,9 @@ export class Chart {
     while (this._layers.length) {
       this._layers.shift()?.destroy()
     }
-    this.tooltip.destroy()
+
     this._state = 'destroy'
+    this.tooltip.destroy()
     this.event.fire(this.state)
   }
 }

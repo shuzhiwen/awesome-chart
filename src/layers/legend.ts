@@ -92,7 +92,7 @@ export class LayerLegend extends LayerBase<LayerOptions> {
   }
 
   get style() {
-    return this._style!
+    return this._style
   }
 
   constructor(options: LayerOptions, context: ChartContext) {
