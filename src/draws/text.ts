@@ -54,7 +54,7 @@ export function drawText({
       .text((d) => d.value)
       .attr('class', (d) => d.className)
       .attr('x', (d) => d.x)
-      .attr('y', (d) => d.y)
+      .attr('y', (d) => d.y - d.fontSize / 2)
       .transition()
       .duration(enableUpdateAnimation ? updateAnimationDuration : 0)
       .delay(enableUpdateAnimation ? updateAnimationDelay : 0)
@@ -71,6 +71,7 @@ export function drawText({
       .style('text-shadow', (d) => d.shadow)
       .style('transform', (d) => `rotate(${d.rotation}deg)`)
       .style('transform-origin', (d) => d.transformOrigin)
+      .style('dominant-baseline', 'central')
       .style('pointer-events', 'fill')
   }
 
@@ -79,7 +80,7 @@ export function drawText({
       const text = new fabric.Text(config.value, {
         className: config.className,
         left: config.x,
-        top: config.y,
+        top: config.y - config.fontSize,
         fontSize: config.fontSize,
         fontFamily: config.fontFamily,
         fontWeight: config.fontWeight,
@@ -88,7 +89,6 @@ export function drawText({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         shadow: config.shadow,
-        originY: 'bottom',
         selectable: false,
         evented: false,
       } as TextOptions)
