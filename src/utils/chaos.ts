@@ -24,7 +24,7 @@ export function getTextWidth(text: Meta, fontSize: number | string = 12) {
 }
 
 export function download(data: string, fileName: string) {
-  const dataUrl = `data:,${data}`
+  const dataUrl = URL.createObjectURL(new Blob([data]))
   const a = document.createElement('a')
   a.download = fileName
   a.href = dataUrl
