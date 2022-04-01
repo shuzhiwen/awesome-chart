@@ -42,9 +42,7 @@ export class LayerText extends LayerBase {
     this._data = validateAndCreateData('base', this.data, data)
   }
 
-  setScale() {
-    this.log.error('Method not implemented')
-  }
+  setScale() {}
 
   setStyle(style: LayerTextStyleShape) {
     this._style = createStyle(defaultStyle, this._style, style)

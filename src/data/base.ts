@@ -1,7 +1,7 @@
 import {Log} from '../types'
 import {createLog} from '../utils'
 
-export class DataBase<T extends AnyObject, P extends AnyObject = AnyObject> {
+export class DataBase<T, P extends AnyObject = AnyObject> {
   readonly log: Log
 
   private readonly _storage: Record<string, unknown>
@@ -31,7 +31,7 @@ export class DataBase<T extends AnyObject, P extends AnyObject = AnyObject> {
   constructor(source: T, options: P) {
     this.log = createLog(this.constructor.name)
     this._options = {...options}
-    this._source = source || {}
+    this._source = source
     this._storage = {}
   }
 }

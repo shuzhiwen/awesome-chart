@@ -55,7 +55,8 @@ export function drawLine({
 
   if (engine === 'canvas' && isCanvasContainer(container)) {
     configuredData.forEach((config) => {
-      const line = new fabric.Line([config.x1, config.y1, config.x2, config.y2], {
+      const y = config.y1 - config.strokeWidth / 2
+      const line = new fabric.Line([config.x1, y, config.x2, y], {
         className: config.className,
         stroke: mergeAlpha(config.stroke, config.strokeOpacity),
         strokeDashArray: config.strokeDasharray.split(' ').map(Number),
