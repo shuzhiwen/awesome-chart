@@ -80,3 +80,24 @@ export type LayerRectStyleShape = Partial<{
   background: GraphStyleShape
   text: TextStyleShape
 }>
+
+export type LayerFlopperStyleShape = Partial<{
+  scale: number
+  integerPlace: number
+  decimalPlace: number
+  thousandth: boolean
+  url: string
+  characters: Record<
+    string,
+    {
+      left: number
+      top: number
+      width: number
+      height: number
+    }
+  >
+  cell: {
+    fontSize: string
+    backgroundColor: string
+  }
+}>

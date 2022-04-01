@@ -1,5 +1,6 @@
 import * as animation from '.'
 export * from './base'
+export * from './easing'
 export * from './erase'
 export * from './empty'
 export * from './fade'

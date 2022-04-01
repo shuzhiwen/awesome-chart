@@ -19,3 +19,7 @@ export type LayerRectOptions = LayerOptions<{
   variant?: 'column' | 'bar'
   mode?: 'cover' | 'group' | 'stack' | 'interval' | 'waterfall' | 'percentage'
 }>
+
+export type LayerFlopperOptions = LayerOptions<{
+  mode?: 'vertical' | 'flop'
+}>

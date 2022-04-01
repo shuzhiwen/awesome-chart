@@ -50,11 +50,13 @@ export function mergeAlpha<T>(color: T, opacity: number) {
 
 export function addStyle(target: D3Selection, style: AnyObject, index: number = 0) {
   Object.entries(style).forEach(([key, value]) => target.style(key, getAttr(value, index, '')))
+  return target
 }
 
 export function addEvent(target: D3Selection, event: AnyEventObject, data?: any) {
   Object.entries(event).forEach(([key, handler]) => target.on(key, handler.bind(null, data)))
   target.style('cursor', 'pointer')
+  return target
 }
 
 export function getAttr<T>(target: MaybeGroup<T>, index: number = 0, defaultValue: T): T {
@@ -80,9 +82,30 @@ export function transformAttr(object: AnyObject) {
   )
 }
 
-export function safeTransform(transform: string, key: string, value: Meta) {
-  if (!transform || transform.search(key) === -1) {
-    return `${transform ?? ''}${key}(${value})`
+function getTransformSuffix(key: string) {
+  if (key.match(/rotate/)) {
+    return 'deg'
+  } else if (key.match(/(translateX|translateY)/)) {
+    return 'px'
   }
-  return transform.replace(new RegExp(`${key}\([\\w\\W]*\)`), `${key}(${value})`)
+  return ''
+}
+
+export function safeTransform(
+  transform: string,
+  key: string,
+  value: number,
+  {unit = false, append = false} = {}
+) {
+  const target = transform === 'none' || !transform ? '' : transform,
+    suffix = unit ? getTransformSuffix(key) : '',
+    regExp = new RegExp(`${key}\\(.*?\\)`),
+    prevValue = target.match(regExp)?.[0].split(/\(|\)/).at(1)?.replaceAll(suffix, '') ?? '',
+    nextValue = value + Number(prevValue)
+
+  if (!target.match(key)) {
+    return `${target ?? ''}${key}(${value}${suffix})`
+  }
+
+  return target.replace(regExp, `${key}(${append ? nextValue : value}${suffix})`)
 }
