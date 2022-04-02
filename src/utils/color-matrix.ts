@@ -29,7 +29,6 @@ export class ColorMatrix {
     ]
   }
 
-  // nice color matrix
   nice(maxDistance = 85, colorSpace: keyof chroma.ColorSpaces = 'lab') {
     this._matrix = this.matrix.map((row) => {
       if (row.length > 1) {
@@ -40,7 +39,6 @@ export class ColorMatrix {
           colorQueue.pop()
           colorQueue.shift()
           const colors = chroma.scale(colorQueue).mode('lch').colors(row.length)
-          // calculate distance
           const distances: number[] = []
           colors.reduce((prev, cur) => {
             distances.push(chroma.distance(prev, cur, colorSpace))
