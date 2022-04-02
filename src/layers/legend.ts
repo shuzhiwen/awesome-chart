@@ -133,7 +133,7 @@ export class LayerLegend extends LayerBase<LayerOptions> {
     this.filter(layers)
     this.isFiltering = false
 
-    axisLayer?.event.onWithOff('draw', () => !this.isFiltering && this.update(), id)
+    axisLayer?.event.onWithOff('draw', id, () => !this.isFiltering && this.update())
   }
 
   private filter = (layers: Layer[]) => {
@@ -148,6 +148,7 @@ export class LayerLegend extends LayerBase<LayerOptions> {
 
     this.event.onWithOff(
       'click-interactive',
+      this.options.id,
       (object: {data: {source: {index: number}}}) => {
         const {index} = object.data.source,
           layerIndex = counts.findIndex((_, i) => sum(counts.slice(0, i + 1)) > index),
@@ -211,8 +212,7 @@ export class LayerLegend extends LayerBase<LayerOptions> {
         } catch (error) {
           this.log.warn('Legend Data filtering error', error)
         }
-      },
-      this.options.id
+      }
     )
   }
 

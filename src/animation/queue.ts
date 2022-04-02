@@ -17,7 +17,7 @@ const bind = (animations: Shape[], callback: Function) => {
     animations.map(
       (instance) =>
         new Promise((resolve) => {
-          instance.event.onWithOff('end', resolve)
+          instance.event.onWithOff('end', 'bindAnimation', resolve)
         })
     )
   ).then(() => {

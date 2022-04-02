@@ -13,10 +13,8 @@ const addTransformForSvgContainer = (
   selection: D3Selection,
   translate: [number, number]
 ) => {
-  targets.attr(
-    'transform',
-    safeTransform(selection.attr('transform'), 'translate', `${translate[0]},${translate[1]}`)
-  )
+  targets.attr('transform', safeTransform(selection.attr('transform'), 'translateX', translate[0]))
+  targets.attr('transform', safeTransform(selection.attr('transform'), 'translateY', translate[1]))
 }
 
 export class AnimationMove extends AnimationBase<Options> {

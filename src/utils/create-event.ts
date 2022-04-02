@@ -15,7 +15,7 @@ export const createEvent = (key: string) => {
   const cache: Record<string, Callback[]> = {}
 
   return {
-    onWithOff(name: string, fn: Callback, category: string = name) {
+    onWithOff(name: string, category: string, fn: Callback) {
       this.off(name, fn, category)
       this.on(name, fn, category)
     },
