@@ -34,7 +34,7 @@ export function drawRect({
     strokeOpacity: getAttr(strokeOpacity, i, 1),
     strokeWidth: getAttr(strokeWidth, i, 0),
     source: getAttr(source, i, {}),
-    transformOrigin: getTransformOrigin(item, transformOrigin),
+    transformOrigin: getTransformOrigin(item, getAttr(transformOrigin, i, '')),
   }))
 
   if (engine === 'svg' && isSvgContainer(container)) {
@@ -87,7 +87,7 @@ export function drawRect({
 
 const getTransformOrigin = (
   data: DrawerDataShape<RectDrawerProps>,
-  transformOrigin: RectDrawerProps['transformOrigin']
+  transformOrigin: ArrayItem<RectDrawerProps['transformOrigin']>
 ) => {
   let result: string
   const {x, y, width, height} = data
