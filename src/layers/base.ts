@@ -144,7 +144,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
             instance.needRecalculated = false
           }
         } catch (error) {
-          instance.log.error('Layer life cycle call exception', error)
+          instance.log.error(`Layer life cycle (${name}) call exception`, error)
         }
       }
     })

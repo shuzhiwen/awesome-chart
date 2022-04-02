@@ -22,4 +22,5 @@ export type LayerRectOptions = LayerOptions<{
 
 export type LayerFlopperOptions = LayerOptions<{
   mode?: 'vertical' | 'flop'
+  autoplay?: boolean
 }>

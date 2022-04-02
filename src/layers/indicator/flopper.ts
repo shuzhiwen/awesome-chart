@@ -1,16 +1,16 @@
+import anime from 'animejs'
 import {select} from 'd3'
 import {cloneDeep, merge} from 'lodash'
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {createStyle, validateAndCreateData} from '../helpers'
-import {svgEasing} from '../../animation'
 import {
   addStyle,
   isCanvasContainer,
   isSvgContainer,
+  mergeAlpha,
   range,
   safeTransform,
-  transformAttr,
 } from '../../utils'
 import {
   BasicAnimationOptions,
@@ -32,7 +32,7 @@ const defaultStyle: LayerFlopperStyleShape = {
   thousandth: true,
   cell: {
     fontSize: '48px',
-    backgroundColor: '#00000000',
+    backgroundColor: 'black',
   },
 }
 
@@ -68,7 +68,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
   constructor(options: LayerOptions, context: ChartContext) {
     super({options: {...defaultOptions, ...options}, context})
 
-    const {containerWidth, containerHeight, layout, root} = this.options,
+    const {containerWidth, containerHeight, layout, root, autoplay} = this.options,
       {left, top, width, height} = layout
 
     if (isSvgContainer(root)) {
@@ -87,17 +87,21 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
         .style('overflow', 'hidden')
     }
 
-    this.debug()
-  }
+    if (autoplay) {
+      const random = () => {
+        const {integerPlace = 8} = this.style,
+          {duration = 0} = this.animation
 
-  private debug() {
-    setTimeout(() => {
-      this.setData(new DataBase({value: Math.random() * 100000}, {}))
-      this.draw()
-      this.playAnimation()
-      this.log.warn('Current Number', this.data?.source.value)
-      this.debug()
-    }, 5000)
+        setTimeout(() => {
+          this.setData(new DataBase({value: Math.random() * 10 ** (integerPlace ?? 8)}, {}))
+          this.draw()
+          this.playAnimation()
+          this.log.info('Random Number', this.data?.source.value)
+          random()
+        }, duration + 2000)
+      }
+      random()
+    }
   }
 
   setData(data: LayerFlopper['data']) {
@@ -161,11 +165,14 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
 
     const {mode} = this.options,
       {url, characters, scale, cell} = this.style,
+      {backgroundColor} = cell || {},
       {width, height} = this.cellSize,
       characterData = mode === 'flop' ? cloneDeep(characterSet).reverse() : characterSet,
-      position = mode === 'flop' ? 'absolute' : 'relative'
+      position = mode === 'flop' ? 'absolute' : 'relative',
+      background = mergeAlpha(backgroundColor || 'black', 1)
 
     this.root
+      .style('background', background)
       .selectAll(`.${this.className}-group`)
       .data(this.cellData)
       .join('xhtml:div')
@@ -180,7 +187,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       .style('height', `${height}px`)
       .style('position', position)
       .each((d, i, els) => {
-        const container = addStyle(select(els[i]), transformAttr(cell || {}), i)
+        const container = addStyle(select(els[i]), cell)
 
         if (mode === 'vertical') {
           if (characters?.[d]) {
@@ -236,7 +243,6 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
             .style('justify-content', 'center')
             .style('backface-visibility', 'hidden')
             .style('overflow', 'hidden')
-
           if (characters?.[d]) {
             const {left, top, width, height} = characters[d],
               [offsetX, offsetY] = [-width / 2 - left, -height / 2 - top]
@@ -247,18 +253,15 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
               .data([null])
               .join('img')
               .attr('src', url!)
+              .style('left', '50%')
               .style('position', 'absolute')
+              .style('backface-visibility', 'hidden')
               .style('clip', `rect(${top}px,${left + width}px,${top + height}px,${left}px)`)
               .style('transform', `translate(${offsetX}px,${offsetY}px)`)
-              .style('backface-visibility', 'hidden')
-              .style('left', '50%')
+              .style('background', background)
             container.selectAll('.top img').style('top', '100%')
           } else {
-            container
-              .selectAll('.digital')
-              .text(d)
-              .style('display', 'grid')
-              .style('place-items', 'center')
+            container.selectAll('.digital').text(d).style('background', background)
           }
         }
       })
@@ -275,33 +278,23 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
     }
 
     const {mode} = this.options,
-      {duration = 2000, delay = 0, easing = 'easeOutCubic'} = this.animation,
-      ease = svgEasing.get(easing)!
+      {duration = 2000, delay = 0, easing = 'easeOutCubic'} = this.animation
 
     this.root.selectAll(`.${this.className}-group`).each((d, i, els) => {
       let prevIndex = characterSet.findIndex((value) => value === (d as any).prevText),
-        index = characterSet.findIndex((value) => value === (d as any).text),
-        offset = (prevIndex === -1 ? 0 : prevIndex) - (index === -1 ? 0 : index)
+        index = characterSet.findIndex((value) => value === (d as any).text)
+
+      prevIndex = prevIndex === -1 ? 0 : prevIndex
+      index = index === -1 ? 0 : index
 
       if (index !== prevIndex && mode === 'vertical') {
-        select(els[i])
-          .nodes()
-          .forEach((node) => {
-            select(node)
-              .transition()
-              .duration(duration)
-              .delay(delay)
-              .ease(ease)
-              .style(
-                'transform',
-                safeTransform(
-                  select(node).style('transform'),
-                  'translateY',
-                  this.cellSize.height * offset,
-                  {unit: true, append: true}
-                )
-              )
-          })
+        anime({
+          targets: select(els[i]).nodes(),
+          duration,
+          delay,
+          easing,
+          translateY: `+=${this.cellSize.height * (prevIndex - index)}`,
+        })
       } else if (index !== prevIndex) {
         const cells = select(els[i]).selectAll(`.${this.className}-cell`).nodes().reverse(),
           [backCell, frontCell] = [cells[index], cells[prevIndex]],
@@ -312,27 +305,12 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
           getTransform = (selector: D3Selection, rotateX: number) =>
             safeTransform(selector.style('transform'), 'rotateX', rotateX, {unit: true})
 
-        backBottom
-          .transition()
-          .duration(0)
-          .style('transform', getTransform(backBottom, 180))
-          .on('end', () => {
-            backBottom
-              .transition()
-              .duration(duration)
-              .ease(ease)
-              .style('transform', getTransform(backBottom, 0))
-            frontTop
-              .transition()
-              .duration(duration)
-              .ease(ease)
-              .style('transform', getTransform(frontTop, 180))
-              .on('end', () => {
-                frontTop.style('z-index', 'auto')
-                frontBottom.style('z-index', 'auto')
-                frontTop.transition().duration(0).style('transform', getTransform(frontTop, 0))
-              })
-          })
+        backBottom.style('transform', getTransform(backBottom, 180))
+        anime({targets: backBottom.nodes(), rotateX: 0, duration, easing})
+        anime({targets: frontTop.nodes(), rotateX: 180, duration, easing}).finished.then(() => {
+          frontTop.style('z-index', 'auto').style('transform', getTransform(frontTop, 0))
+          frontBottom.style('z-index', 'auto')
+        })
       }
     })
   }

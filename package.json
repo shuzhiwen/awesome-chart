@@ -16,6 +16,7 @@
     "test": "yarn jest"
   },
   "dependencies": {
+    "animejs": "^3.2.1",
     "chroma-js": "^2.1.1",
     "d3": "^6.6.1",
     "fabric": "^4.6.0",

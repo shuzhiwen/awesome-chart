@@ -48,12 +48,12 @@ export function mergeAlpha<T>(color: T, opacity: number) {
   }
 }
 
-export function addStyle(target: D3Selection, style: AnyObject, index: number = 0) {
+export function addStyle(target: D3Selection, style: AnyObject = {}, index: number = 0) {
   Object.entries(style).forEach(([key, value]) => target.style(key, getAttr(value, index, '')))
   return target
 }
 
-export function addEvent(target: D3Selection, event: AnyEventObject, data?: any) {
+export function addEvent(target: D3Selection, event: AnyEventObject = {}, data?: any) {
   Object.entries(event).forEach(([key, handler]) => target.on(key, handler.bind(null, data)))
   target.style('cursor', 'pointer')
   return target
