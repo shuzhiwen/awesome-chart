@@ -1,4 +1,4 @@
-import {isEqual, merge, noop} from 'lodash'
+import {cloneDeep, isEqual, merge, noop} from 'lodash'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
 import {Selector} from './helpers'
@@ -59,13 +59,13 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
 
   protected readonly selector
 
+  protected needRecalculated = false
+
   private backupData: BackupDataShape<AnyObject> = {}
 
   private backupEvent: AnyObject = {}
 
   private backupAnimation: BackupAnimationShape = {timer: {}}
-
-  private needRecalculated = false
 
   constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<T>) {
     this.className = this.constructor.name
@@ -291,7 +291,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
         }
 
         drawerMapping[type](options)
-        this.backupData[sublayer][i] = groupData
+        this.backupData[sublayer][i] = cloneDeep(groupData)
       }
     })
 

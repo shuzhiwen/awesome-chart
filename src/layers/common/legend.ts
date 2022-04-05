@@ -144,7 +144,7 @@ export class LayerLegend extends LayerBase<LayerOptions> {
       filterTypes = this.legendDataGroup.map(({filter}) => filter),
       colorMatrix = this.legendDataGroup.map(({colorMatrix}) => colorMatrix),
       active = new Array<Boolean>(colors.length).fill(true),
-      disableColor = 'E2E3E588'
+      disableColor = '#E2E3E588'
 
     this.event.onWithOff(
       'click-interactive',
@@ -209,6 +209,8 @@ export class LayerLegend extends LayerBase<LayerOptions> {
 
           layer.setData(filteredData)
           layer.draw()
+          this.needRecalculated = true
+          this.draw()
         } catch (error) {
           this.log.warn('Legend Data filtering error', error)
         }
