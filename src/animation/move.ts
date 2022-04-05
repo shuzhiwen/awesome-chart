@@ -80,8 +80,4 @@ export class AnimationMove extends AnimationBase<Options> {
       }, delay)
     }
   }
-
-  end() {
-    this.options.loop && this.play()
-  }
 }

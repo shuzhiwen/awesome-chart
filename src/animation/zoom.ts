@@ -69,8 +69,4 @@ export class AnimationZoom extends AnimationBase<Options> {
       }, delay)
     }
   }
-
-  end() {
-    this.options.loop && this.play()
-  }
 }

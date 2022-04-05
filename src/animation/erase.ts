@@ -97,8 +97,4 @@ export class AnimationErase extends AnimationBase<Options> {
         })
     }
   }
-
-  end() {
-    this.options.loop && this.play()
-  }
 }

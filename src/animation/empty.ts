@@ -15,8 +15,4 @@ export class AnimationEmpty extends AnimationBase<Options> {
       this.process()
     }, delay)
   }
-
-  end() {
-    this.options.loop && this.play()
-  }
 }

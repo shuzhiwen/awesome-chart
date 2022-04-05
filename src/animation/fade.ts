@@ -57,8 +57,4 @@ export class AnimationFade extends AnimationBase<Options> {
       }, delay)
     }
   }
-
-  end() {
-    this.options.loop && this.play()
-  }
 }
