@@ -1,6 +1,7 @@
-import {LayerBase} from './base'
-import {createStyle, createText} from './helpers'
-import {DataBase, DataTableList} from '../data'
+import {LayerBase} from '../base'
+import {createStyle, createText} from '../helpers'
+import {DataBase, DataTableList} from '../../data'
+import {cloneDeep, sum} from 'lodash'
 import {
   ColorMatrix,
   createStar,
@@ -9,8 +10,7 @@ import {
   isLayerAxis,
   range,
   ungroup,
-} from '../utils'
-import {cloneDeep, sum} from 'lodash'
+} from '../../utils'
 import {
   ChartContext,
   CircleDrawerProps,
@@ -24,7 +24,7 @@ import {
   PolyDrawerProps,
   RectDrawerProps,
   TextDrawerProps,
-} from '../types'
+} from '../../types'
 
 const defaultStyle: LayerLegendStyleShape = {
   align: 'end',

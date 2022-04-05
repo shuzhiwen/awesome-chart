@@ -1,9 +1,8 @@
 import * as layer from '.'
-export * from './axis'
+export * from './common'
 export * from './base'
 export * from './helpers'
 export * from './indicator'
-export * from './legend'
 export * from './normal'
 
 export const layerMapping = {
