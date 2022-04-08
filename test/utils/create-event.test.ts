@@ -32,13 +32,13 @@ test('createEvent', () => {
 
   value = 10
   expect(event.has('addOne')).toBe(false)
-  event.onWithOff('MinusOnce', () => value--)
+  event.onWithOff('MinusOnce', null, () => value--)
   event.fire('MinusOnce')
   expect(value).toBe(9)
-  event.onWithOff('MinusOnce', () => value--)
+  event.onWithOff('MinusOnce', null, () => value--)
   event.fire('MinusOnce')
   expect(value).toBe(8)
-  event.onWithOff('MinusOnce', () => value--)
+  event.onWithOff('MinusOnce', null, () => value--)
   event.fire('MinusOnce')
   expect(value).toBe(7)
   expect(event.has('MinusOnce')).toBe(true)

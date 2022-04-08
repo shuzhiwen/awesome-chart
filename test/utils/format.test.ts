@@ -46,7 +46,7 @@ test('overflowControl', () => {
 
   expect(overflowControl(short, {})).toBe(short)
   expect(overflowControl(long, {width: 50})).toBe('ab...')
-  expect(overflowControl(long, {height: 5})).toBe(null)
+  expect(overflowControl(long, {height: 5})).toBe('')
   expect(overflowControl(long, {height: 5, fontSize: 3})).toBe(long)
   expect(overflowControl(long, {width: 50, omit: false})).toBe('abcde')
 })
