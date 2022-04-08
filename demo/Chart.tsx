@@ -15,14 +15,14 @@ export const Chart = ({title, schema}) => {
   useEffect(() => {
     try {
       const container = chartRef.current,
-        layout = getStandardLayoutCreator({brush: false}),
-        chartSchema = eval(schema.replace(/engine(.*?)\,/, `engine: "${engine.toLowerCase()}",`))
+        layoutCreator = getStandardLayoutCreator({brush: false})
 
-      chartSchema.container = chartSchema.container ?? container
-      chartSchema.layout = chartSchema.layout ?? layout
+      schema.engine = engine.toLowerCase()
+      schema.container = schema.container ?? container
+      schema.layoutCreator = schema.layoutCreator ?? layoutCreator
 
       chart && chart.destroy()
-      schema && setChart(createChart(chartSchema))
+      schema && setChart(createChart(schema))
     } catch (e) {
       console.error(e)
     }

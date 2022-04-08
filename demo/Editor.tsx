@@ -1,59 +1,36 @@
-// @ts-nocheck
 import * as monaco from 'monaco-editor'
-import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
-import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
-import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
-import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
-import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useMemo, useRef, useState} from 'react'
 import styles from './Editor.module.css'
 import {download} from '../src'
 import {throttle} from 'lodash'
 import chroma from 'chroma-js'
 
-self.MonacoEnvironment = {
-  getWorker(_, label) {
-    if (label === 'json') {
-      return new jsonWorker()
-    }
-    if (label === 'css' || label === 'scss' || label === 'less') {
-      return new cssWorker()
-    }
-    if (label === 'html' || label === 'handlebars' || label === 'razor') {
-      return new htmlWorker()
-    }
-    if (label === 'typescript' || label === 'javascript') {
-      return new tsWorker()
-    }
-    return new editorWorker()
-  },
-}
-
 const throttleDownload = throttle(download, 500)
 
-export function Editor({schema, onChange}) {
+export function Editor({schema: _schema, onChange}) {
   const editorRef = useRef(null)
   const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor>(null)
+  const schema = useMemo(() => JSON.stringify(_schema, null, 2), [_schema])
 
   useEffect(() => {
     if (editor && schema) {
       const state = editor.saveViewState()
       editor.setValue(schema)
       editor.restoreViewState(state)
-      editor.trigger('source', 'editor.action.formatDocument')
+      editor.trigger('source', 'editor.action.formatDocument', null)
       localStorage.setItem('editorContent', schema)
     }
   }, [schema])
 
   useEffect(() => {
     const editor = monaco.editor.create(editorRef.current, {
-      value: localStorage.getItem('editorContent') || schema,
-      language: 'typescript',
+      value: schema,
+      language: 'json',
       fontSize: 14,
     })
 
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
-      onChange(editor.getValue())
+      onChange(JSON.parse(editor.getValue()))
     })
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyD, () => {
       const schemaForDownload = editor
@@ -66,9 +43,12 @@ export function Editor({schema, onChange}) {
     })
 
     setEditor(editor)
-    onChange(editor.getValue())
+    onChange(JSON.parse(editor.getValue()))
 
-    return () => (editorRef.current.innerHTML = '')
+    return () => {
+      editor.dispose()
+      editorRef.current.innerHTML = ''
+    }
   }, [])
 
   return <div className={styles.editor} ref={editorRef} />
