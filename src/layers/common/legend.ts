@@ -186,24 +186,20 @@ export class LayerLegend extends LayerBase<LayerOptions> {
           if (filterTypes[layerIndex] === 'row') {
             const mapping = range(startIndex, startIndex + counts[layerIndex]).map((i) => active[i])
 
-            filteredData = layerData.select(layerData.data.map(({header}) => header))
-            filteredData.data.forEach(
-              (item) => (item.list = item.list.filter((_, j) => mapping[j]))
-            )
-            layerData.data[0].list.forEach((dimension, i) => (order.mapping[dimension] = i))
+            filteredData = layerData.select(layerData.headers)
+            filteredData.lists.forEach((list) => {
+              list.concat(list.filter((_, j) => mapping[j]))
+              list.splice(0, list.length / 2)
+            })
+            layerData.headers.forEach((dimension, i) => (order.mapping[dimension] = i))
             filteredData.options.order = order
           }
 
           if (filterTypes[layerIndex] === 'column') {
             filteredData = layerData.select(
-              layerData.data
-                .filter((_, i) => !i || active[startIndex + i - 1])
-                .map(({header}) => header)
+              layerData.headers.filter((_, i) => !i || active[startIndex + i - 1])
             )
-            layerData.data
-              .slice(1)
-              .map(({header}) => header)
-              .forEach((header, i) => (order.mapping[header] = i))
+            layerData.headers.slice(1).forEach((header, i) => (order.mapping[header] = i))
             filteredData.options.order = order
           }
 

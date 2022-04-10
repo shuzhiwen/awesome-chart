@@ -6,8 +6,16 @@ import {RawTableList, TableListDataShape as Shape, TableListOptions as Options} 
 export class DataTableList extends DataBase<RawTableList, Options> {
   private _data: Shape = []
 
-  get data() {
-    return this._data
+  get headers() {
+    return this._data.map(({header}) => header)
+  }
+
+  get lists() {
+    return this._data.map(({list}) => list)
+  }
+
+  get rawTableList() {
+    return transpose(this.lists)
   }
 
   constructor(data: RawTableList, options: Options = {}) {
@@ -15,18 +23,16 @@ export class DataTableList extends DataBase<RawTableList, Options> {
     this.update(data, options)
   }
 
-  select(headers: MaybeGroup<string>, options: Options = {}): DataTableList {
+  select(headers: MaybeGroup<Meta>, options: Options = {}): DataTableList {
     const {mode = 'copy', target = 'row'} = options,
       headerArray = Array.isArray(headers) ? headers : [headers]
-    let data = cloneDeep(this.data.filter(({header}) => headerArray.includes(header)))
+    let data = cloneDeep(this._data.filter(({header}) => headerArray.includes(header)))
 
     if (mode === 'sum') {
       if (target === 'row') {
-        const lists = data
-          .map(({list}) => list)
-          .reduce<Meta[][]>((prev, cur, i) => {
-            return i === 0 ? [cur] : [...prev, prev[i - 1].map((value, j) => sum([value, cur[j]]))]
-          }, [])
+        const lists = this.lists.reduce<Meta[][]>((prev, cur, i) => {
+          return i === 0 ? [cur] : [...prev, prev[i - 1].map((value, j) => sum([value, cur[j]]))]
+        }, [])
         data = [
           {
             header: data.map(({header}) => header).join('-'),
@@ -74,21 +80,21 @@ export class DataTableList extends DataBase<RawTableList, Options> {
     }))
 
     updateData.forEach((item) => {
-      const index = this.data.findIndex(({header}) => item.header === header)
+      const index = this.headers.findIndex((header) => item.header === header)
       if (index !== -1) {
-        this.data[index] = item
+        this._data[index] = item
       } else {
-        this.data.push(item)
+        this._data.push(item)
       }
     })
   }
 
   push(...rows: Meta[][]) {
     rows.forEach((row) => {
-      if (row.length !== this.data.length) {
+      if (row.length !== this._data.length) {
         this.log.error('Illegal data', row)
       } else {
-        row.forEach((value, i) => this.data[i].list.push(value))
+        row.forEach((value, i) => this.lists[i].push(value))
       }
     })
   }
@@ -97,9 +103,9 @@ export class DataTableList extends DataBase<RawTableList, Options> {
     const removedList: Shape[] = [],
       headerArray = Array.isArray(headers) ? headers : [headers]
     headerArray.forEach((header) => {
-      const index = this.data.findIndex((item) => item.header === header)
+      const index = this.headers.findIndex((_header) => _header === header)
       if (index !== -1) {
-        removedList.concat(this.data.splice(index, 1))
+        removedList.concat(this._data.splice(index, 1))
       }
     })
   }
@@ -108,7 +114,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
     const newTableList = cloneDeep(this)
     tableLists.forEach((tableList) => {
       cloneDeep(tableList)._data.forEach((item) => {
-        const index = newTableList._data.findIndex(({header}) => item.header === header)
+        const index = newTableList.headers.findIndex((header) => item.header === header)
         if (index !== -1) {
           newTableList._data[index] = item
         } else {
@@ -120,8 +126,8 @@ export class DataTableList extends DataBase<RawTableList, Options> {
 
   range(): [number, number] {
     return [
-      Number(min(this.data.map(({list, min: value}) => min([value, min(list)])))),
-      Number(max(this.data.map(({list, max: value}) => max([value, max(list)])))),
+      Number(min(this._data.map(({list, min: value}) => min([value, min(list)])))),
+      Number(max(this._data.map(({list, max: value}) => max([value, max(list)])))),
     ]
   }
 }

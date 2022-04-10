@@ -1,7 +1,7 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {scaleBand, scaleLinear} from '../../scales'
-import {ColorMatrix, formatNumber, isRealNumber, transpose} from '../../utils'
+import {ColorMatrix, formatNumber, isRealNumber} from '../../utils'
 import {cloneDeep, isArray} from 'lodash'
 import {
   createColorMatrix,
@@ -92,7 +92,16 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   }
 
   setData(data: LayerRect['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    const {mode} = this.options
+
+    this._data = validateAndCreateData('tableList', this.data, data, (data) => {
+      if (mode === 'interval') {
+        return data.select(data.headers.slice(0, 3))
+      } else if (mode === 'waterfall') {
+        return data.select(data.headers.slice(0, 2))
+      }
+      return data
+    })
   }
 
   setScale(scale: LayerLineScaleShape) {
@@ -108,15 +117,14 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
     const {variant, mode, layout} = this.options,
       {rect} = this.style,
-      pureTableList = transpose(this.data.data.map(({list}) => list)),
-      headers = this.data.data.map(({header}) => header)
+      {rawTableList, headers} = this.data
     let colorMatrix: ColorMatrix
 
     if (variant === 'column') {
       const scaleX = this.scale.scaleX as ScaleBand,
         scaleY = this.scale.scaleY as ScaleLinear
 
-      this.rectData = pureTableList.map(([dimension, ...values]) =>
+      this.rectData = rawTableList.map(([dimension, ...values]) =>
         values.map((value, i) => ({
           value,
           x: layout.left + (scaleX(dimension as string) || 0),
@@ -127,7 +135,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
           color: '#000',
         }))
       )
-      this.backgroundData = pureTableList.map(([dimension]) => [
+      this.backgroundData = rawTableList.map(([dimension]) => [
         {
           x: layout.left + (scaleX(dimension as string) || 0),
           y: layout.top,
@@ -139,7 +147,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       const scaleX = this.scale.scaleX as ScaleLinear,
         scaleY = this.scale.scaleY as ScaleBand
 
-      this.rectData = pureTableList.map(([dimension, ...values]) =>
+      this.rectData = rawTableList.map(([dimension, ...values]) =>
         values.map((value, i) => ({
           value,
           y: layout.top + (scaleY(dimension as string) || 0),
@@ -150,7 +158,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
           color: '#000',
         }))
       )
-      this.backgroundData = pureTableList.map(([dimension]) => [
+      this.backgroundData = rawTableList.map(([dimension]) => [
         {
           x: layout.left,
           y: layout.top + (scaleY(dimension as string) || 0),
@@ -203,7 +211,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       this.legendData = {
         colorMatrix,
         filter: 'column',
-        legends: this.data.data.slice(1).map(({header}, i) => ({
+        legends: this.data.headers.slice(1).map((header, i) => ({
           shape: 'rect',
           label: header,
           color: colorMatrix.get(0, i),
@@ -359,9 +367,9 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   private createScale() {
     const {layout, variant = 'column', mode} = this.options,
       {width, height} = layout,
-      headers = this.data.data.map(({header}) => header),
+      {headers} = this.data,
       selectMode = mode === 'stack' ? 'sum' : 'copy',
-      bandDomain = this.data.select(headers[0]).data[0].list as string[],
+      bandDomain = this.data.select(headers[0]).lists[0] as string[],
       linearDomain =
         mode !== 'percentage'
           ? this.data.select(headers.slice(1), {mode: selectMode}).range()

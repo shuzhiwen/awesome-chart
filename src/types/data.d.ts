@@ -13,7 +13,7 @@ export type RawRelation = [RawTableList, RawTableList]
 export type TableDataShape = RawTable
 
 export type TableListDataShape = {
-  header: string
+  header: Meta
   list: Meta[]
   min?: Meta
   max?: Meta

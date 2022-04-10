@@ -1,5 +1,5 @@
 import {LayerBase} from '../base'
-import {isRealNumber, mergeAlpha, transpose} from '../../utils'
+import {isRealNumber, mergeAlpha} from '../../utils'
 import {scaleBand, scaleLinear} from '../../scales'
 import {DataTableList} from '../../data'
 import {
@@ -92,7 +92,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
   }
 
   setData(data: LayerLine['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    this._data = validateAndCreateData('tableList', this.data, data)
   }
 
   setScale(scale: LayerLineScaleShape) {
@@ -110,8 +110,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
       {height, top, left} = layout,
       {scaleX, scaleY} = this.scale,
       {labelPosition, pointSize = 5, text, curve} = this.style,
-      headers = this.data.data.map(({header}) => header),
-      rawTableList = transpose(this.data.data.map(({list}) => list)),
+      {headers, rawTableList} = this.data,
       colorMatrix = createColorMatrix({
         layer: this,
         row: 1,
@@ -161,7 +160,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
     this.legendData = {
       colorMatrix,
       filter: 'column',
-      legends: this.data.data.slice(1).map(({header}, i) => ({
+      legends: this.data.headers.slice(1).map((header, i) => ({
         label: header,
         shape: 'broken-line',
         color: colorMatrix.get(0, i),
@@ -172,12 +171,12 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
   private createScale() {
     const {layout, mode} = this.options,
       {width, height} = layout,
-      headers = this.data.data.map(({header}) => header)
+      {headers} = this.data
 
     this._scale = createScale(
       {
         scaleX: scaleBand({
-          domain: this.data.select(headers[0]).data[0].list as string[],
+          domain: this.data.select(headers[0]).lists[0] as string[],
           range: [0, width],
         }),
         scaleY: scaleLinear({

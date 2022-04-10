@@ -6,8 +6,16 @@ import {DataBase} from './base'
 export class DataTable extends DataBase<RawTable, Options> {
   private _data: Shape = [[], [], []]
 
-  get data() {
-    return this._data
+  get rows() {
+    return this._data[0]
+  }
+
+  get columns() {
+    return this._data[1]
+  }
+
+  get body() {
+    return this._data[2]
   }
 
   constructor(data: RawTable, options: Options = {}) {
@@ -19,13 +27,13 @@ export class DataTable extends DataBase<RawTable, Options> {
     const _rows = isArray(rows) ? rows : [rows],
       _columns = isArray(columns) ? columns : [columns],
       data: RawTable = [_rows, _columns, []],
-      rowsIndex = _rows.map((row) => this.data[0].findIndex((value) => value === row)),
-      columnsIndex = _columns.map((column) => this.data[1].findIndex((value) => value === column))
+      rowsIndex = _rows.map((row) => this.rows.findIndex((value) => value === row)),
+      columnsIndex = _columns.map((column) => this.columns.findIndex((value) => value === column))
 
     for (let i = 0; i < rowsIndex.length; i++) {
       let row: Meta[] = []
       for (let j = 0; j < columnsIndex.length; j++) {
-        row.push(this.data[2][columnsIndex[j]][rowsIndex[i]])
+        row.push(this.body[columnsIndex[j]][rowsIndex[i]])
       }
       data[2].push(row)
     }
@@ -47,18 +55,18 @@ export class DataTable extends DataBase<RawTable, Options> {
   push(target: Options['target'] = 'row', ...data: Meta[][]) {
     data.forEach((item) => {
       if (
-        (target === 'row' && item.length !== this.data[0].length) ||
-        (target === 'column' && item.length !== this.data[1].length)
+        (target === 'row' && item.length !== this.rows.length) ||
+        (target === 'column' && item.length !== this.columns.length)
       ) {
         this.log.error('Illegal data')
       } else {
         data.forEach(([dimension, ...values]) => {
           if (target === 'row') {
-            this.data[0].push(dimension)
-            this.data[2].push(values)
+            this.rows.push(dimension)
+            this.body.push(values)
           } else if (target === 'column') {
-            this.data[1].push(dimension)
-            this.data[2].forEach((rowArray) => rowArray.push(...values))
+            this.columns.push(dimension)
+            this.body.forEach((rowArray) => rowArray.push(...values))
           }
         })
       }
@@ -69,19 +77,19 @@ export class DataTable extends DataBase<RawTable, Options> {
     const removedList: Meta[][] = []
     data.forEach((dimension) => {
       if (target === 'row') {
-        const index = this.data[0].findIndex((value) => value === dimension)
-        index !== -1 && removedList.concat(this.data[2].splice(index, 1))
+        const index = this.rows.findIndex((value) => value === dimension)
+        index !== -1 && removedList.concat(this.body.splice(index, 1))
       } else if (target === 'column') {
-        const index = this.data[1].findIndex((value) => value === dimension)
-        index !== -1 && removedList.concat(this.data[2].map((item) => item.splice(index, 1)[0]))
+        const index = this.columns.findIndex((value) => value === dimension)
+        index !== -1 && removedList.concat(this.body.map((item) => item.splice(index, 1)[0]))
       }
     })
   }
 
   sort() {
-    const result = cloneDeep(this.data[2]),
-      column = this.data[1].length,
-      data = this.data[2].reduce((prev, cur) => [...prev, ...cur], []),
+    const result = cloneDeep(this.body),
+      column = this.columns.length,
+      data = this.body.reduce((prev, cur) => [...prev, ...cur], []),
       order = new Array(data.length).fill(null).map((v, i) => i)
 
     for (let i = 0; i < data.length; i++) {
@@ -98,6 +106,6 @@ export class DataTable extends DataBase<RawTable, Options> {
   }
 
   range() {
-    return [min(this.data[2].map((row) => min(row))), max(this.data[2].map((row) => max(row)))]
+    return [min(this.body.map((row) => min(row))), max(this.body.map((row) => max(row)))]
   }
 }

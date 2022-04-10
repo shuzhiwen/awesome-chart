@@ -4,9 +4,9 @@ import {ScaleArcProps} from '../types'
 export function scaleArc({domain, range, nice = {}}: ScaleArcProps) {
   const {paddingInner = 0} = nice,
     distance = range[1] - range[0],
-    padding = (distance * paddingInner) / domain.data[0].list.length,
+    padding = (distance * paddingInner) / domain.headers.length,
     available = distance * (1 - paddingInner),
-    arcRange = domain.data[1].list
+    arcRange = domain.lists[0]
       .reduce(
         (prev, cur, index) => {
           const startAngle = prev[index].endAngle + padding
@@ -18,6 +18,6 @@ export function scaleArc({domain, range, nice = {}}: ScaleArcProps) {
       .slice(1)
 
   return scaleOrdinal()
-    .domain(domain.data[0].list as string[])
+    .domain(domain.headers as string[])
     .range(arcRange)
 }

@@ -12,8 +12,16 @@ import {
 export class DataRelation extends DataBase<RawRelation, Options> {
   private _data: Shape = {nodes: [], edges: [], roots: []}
 
-  get data() {
-    return this._data
+  get nodes() {
+    return this._data.nodes
+  }
+
+  get edges() {
+    return this._data.edges
+  }
+
+  get roots() {
+    return this._data.roots
   }
 
   constructor(source: RawRelation, options: Options = {}) {
@@ -28,14 +36,14 @@ export class DataRelation extends DataBase<RawRelation, Options> {
     }
 
     const [nodeTableList, edgeTableList] = relation
-    this.data.nodes = tableListToObjects(nodeTableList) as Node[]
-    this.data.edges = tableListToObjects(edgeTableList) as Edge[]
-    this.data.nodes.forEach((item) => merge(item, {children: [], parents: []}))
+    this._data.nodes = tableListToObjects(nodeTableList) as Node[]
+    this._data.edges = tableListToObjects(edgeTableList) as Edge[]
+    this.nodes.forEach((node) => merge(node, {children: [], parents: []}))
 
     if (nodeTableList[0].indexOf('value') === -1 && edgeTableList[0].indexOf('value') !== -1) {
-      this.data.nodes.forEach((node) => {
-        const from = this.data.edges.filter(({from}) => from === node.id).map(({value}) => value),
-          to = this.data.edges.filter(({to}) => to === node.id).map(({value}) => value)
+      this.nodes.forEach((node) => {
+        const from = this.edges.filter(({from}) => from === node.id).map(({value}) => value),
+          to = this.edges.filter(({to}) => to === node.id).map(({value}) => value)
         node.value = formatNumber(max([sum(from), sum(to)])!)
       })
     }
@@ -43,7 +51,7 @@ export class DataRelation extends DataBase<RawRelation, Options> {
     if (nodeTableList[0].indexOf('level') === -1) {
       this.computeLevel()
     } else {
-      this.data.roots = this.data.nodes.filter(({level}) => level === 0).map(({id}) => id)
+      this._data.roots = this.nodes.filter(({level}) => level === 0).map(({id}) => id)
     }
   }
 
@@ -51,16 +59,16 @@ export class DataRelation extends DataBase<RawRelation, Options> {
     const level: Record<string, number> = {},
       completed: Record<string, boolean> = {}
 
-    this.data.nodes.forEach(({id}) => (completed[id] = false))
-    this.data.nodes.forEach(({id}) => (level[id] = -1))
+    this.nodes.forEach(({id}) => (completed[id] = false))
+    this.nodes.forEach(({id}) => (level[id] = -1))
 
     const findRoot = (id: Meta) => {
-      const current = this.data.nodes.find((node) => node.id === id),
-        prevIds = this.data.edges.filter(({to}) => to === id).map(({from}) => from)
+      const current = this.nodes.find((node) => node.id === id),
+        prevIds = this.edges.filter(({to}) => to === id).map(({from}) => from)
       if (prevIds.length === 0) {
-        !completed[id] && this.data.roots.push(id)
+        !completed[id] && this.roots.push(id)
       } else if (current) {
-        const parents = prevIds.map((prevId) => this.data.nodes.find((node) => node.id === prevId))
+        const parents = prevIds.map((prevId) => this.nodes.find((node) => node.id === prevId))
         current.parents?.push(...prevIds)
         parents.forEach((parent) => parent?.children?.push(id))
         prevIds.forEach((prevId) => !completed[prevId] && findRoot(prevId))
@@ -69,7 +77,7 @@ export class DataRelation extends DataBase<RawRelation, Options> {
     }
 
     const updateLevel = (id: Meta, parents: Meta[]) => {
-      const nextIds = this.data.edges.filter(({from}) => from === id).map(({to}) => to)
+      const nextIds = this.edges.filter(({from}) => from === id).map(({to}) => to)
       if (level[id] === -1) {
         parents.push(id)
         level[id] = 0
@@ -85,20 +93,20 @@ export class DataRelation extends DataBase<RawRelation, Options> {
       })
     }
 
-    this.data.edges.forEach(({to}) => findRoot(to))
-    this.data.roots.forEach((root) => updateLevel(root, []))
-    this.data.nodes.map((node) => (node.level = level[node.id]))
-    this.data.nodes.forEach(({parents, children}, i) => {
-      this.data.nodes[i].parents = Array.from(new Set(parents))
-      this.data.nodes[i].children = Array.from(new Set(children))
+    this.edges.forEach(({to}) => findRoot(to))
+    this.roots.forEach((root) => updateLevel(root, []))
+    this.nodes.map((node) => (node.level = level[node.id]))
+    this.nodes.forEach(({parents, children}, i) => {
+      this.nodes[i].parents = Array.from(new Set(parents))
+      this.nodes[i].children = Array.from(new Set(children))
     })
   }
 
   getNode(id: Meta) {
-    return this.data.nodes.find(({id: nodeId}) => nodeId === id)
+    return this.nodes.find(({id: nodeId}) => nodeId === id)
   }
 
   getEdge(id: Meta) {
-    return this.data.edges.find(({id: edgeId}) => edgeId === id)
+    return this.edges.find(({id: edgeId}) => edgeId === id)
   }
 }

@@ -12,22 +12,21 @@ export function createColorMatrix(props: CreateColorMatrixProps) {
   let matrix: string[][] = order?.colorMatrix?.matrix || []
 
   if (order?.colorMatrix && layer.data instanceof DataTableList) {
-    const {type, mapping} = order,
-      data = layer.data?.data
+    const {type, mapping} = order
 
     if (type === 'row') {
-      matrix = data[0].list
+      matrix = layer.data.headers
         .map((dimension) => mapping[dimension])
         .sort()
         .map((index) => matrix[index])
     } else if (type === 'column') {
-      const selected = data
+      const selected = layer.data.headers
         .slice(1)
-        .map(({header}) => mapping[header])
+        .map((header) => mapping[header])
         .sort()
       matrix = matrix.map((row) => selected.map((index) => row[index]))
       if (selected.length === 1) {
-        while (matrix.length < data[0].list.length) {
+        while (matrix.length < layer.data.headers.length) {
           matrix.push(matrix[0])
         }
       }
