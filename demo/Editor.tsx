@@ -24,7 +24,7 @@ export function Editor({schema: _schema, onChange = noop}) {
 
   useEffect(() => {
     const editor = monaco.editor.create(editorRef.current, {
-      value: schema,
+      value: localStorage.getItem('editorContent') || schema,
       language: 'json',
       fontSize: 14,
     })

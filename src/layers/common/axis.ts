@@ -1,7 +1,7 @@
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {isScaleBand, isScaleLinear, range, SCALE_TYPES, ungroup} from '../../utils'
-import {scaleLinear} from '../../scales'
+import {scaleBand, scaleLinear} from '../../scales'
 import {
   createArcText,
   createScale,
@@ -59,9 +59,9 @@ const titleKey = ['titleX', 'titleY', 'titleYR'] as const
 export class LayerAxis extends LayerBase<LayerAxisOptions> {
   private _data: Maybe<
     DataBase<{
-      titleX: string
-      titleY: string
-      titleYR: string
+      titleX?: string
+      titleY?: string
+      titleYR?: string
     }>
   >
 
@@ -163,6 +163,12 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
           range: this.scale[type]?.range() as [number, number],
           nice: this.scale.nice,
         })
+      } else if (isScaleBand(this.scale[type])) {
+        this.scale[type] = scaleBand({
+          domain: this.scale[type]?.domain() as string[],
+          range: this.scale[type]?.range() as [number, number],
+          nice: this.scale.nice,
+        })
       }
     })
   }
@@ -222,7 +228,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       createText({
         x: left + width / 2,
         y: bottom - (textX?.offset?.[1] ?? 0) + (ungroup(textX?.fontSize) ?? 0),
-        value: this.data?.source.titleX ?? '',
+        value: this.data.source.titleX ?? '',
         style: titleX,
         position: 'bottom',
       }),
@@ -232,7 +238,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       createText({
         x: 0,
         y: top + height / 2,
-        value: this.data?.source.titleY ?? '',
+        value: this.data.source.titleY ?? '',
         style: titleY,
         position: 'center',
       }),
@@ -242,7 +248,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       createText({
         x: containerWidth,
         y: top + height / 2,
-        value: this.data?.source.titleYR ?? '',
+        value: this.data.source.titleYR ?? '',
         style: titleYR,
         position: 'center',
       }),

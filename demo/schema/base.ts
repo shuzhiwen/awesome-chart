@@ -17,7 +17,7 @@ export default (layers: AnyObject[]) => ({
     'rgb(217,0,216)',
     'rgb(238,52,161)',
   ],
-  tooltip: {
+  tooltipOptions: {
     mode: 'dimension',
   },
   layers,

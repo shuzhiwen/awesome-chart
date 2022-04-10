@@ -26,7 +26,7 @@ import {
 
 const defaultOptions: Partial<LayerRectOptions> = {
   variant: 'column',
-  mode: 'cover',
+  mode: 'group',
 }
 
 const defaultStyle: LayerRectStyleShape = {
@@ -35,7 +35,7 @@ const defaultStyle: LayerRectStyleShape = {
   labelPosition: 'center',
   labelPositionOrient: 'outer',
   background: {
-    fillOpacity: 0.3,
+    fillOpacity: 0.1,
   },
   text: {
     offset: [0, 0],
