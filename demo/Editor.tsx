@@ -2,12 +2,12 @@ import * as monaco from 'monaco-editor'
 import {useEffect, useMemo, useRef, useState} from 'react'
 import styles from './Editor.module.css'
 import {download} from '../src'
-import {throttle} from 'lodash'
+import {noop, throttle} from 'lodash'
 import chroma from 'chroma-js'
 
 const throttleDownload = throttle(download, 500)
 
-export function Editor({schema: _schema, onChange}) {
+export function Editor({schema: _schema, onChange = noop}) {
   const editorRef = useRef(null)
   const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor>(null)
   const schema = useMemo(() => JSON.stringify(_schema, null, 2), [_schema])
