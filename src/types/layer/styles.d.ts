@@ -54,6 +54,14 @@ export type LayerLegendStyleShape = Partial<{
   text: TextStyleShape
 }>
 
+export type LayerAuxiliaryStyleShape = Partial<{
+  enableLegend: boolean
+  labelPosition: Position4
+  labelOffset: number
+  line: GraphStyleShape
+  text: TextStyleShape
+}>
+
 export type LayerTextStyleShape = Partial<{
   align: Align
   verticalAlign: Align

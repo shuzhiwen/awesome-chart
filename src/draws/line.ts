@@ -27,7 +27,7 @@ export function drawLine({
     stroke: getAttr(stroke, i, '#fff'),
     opacity: getAttr(opacity, i, 1),
     strokeOpacity: getAttr(strokeOpacity, i, 1),
-    strokeWidth: getAttr(strokeWidth, i, 0),
+    strokeWidth: getAttr(strokeWidth, i, 1),
     strokeDasharray: getAttr(strokeDasharray, i, ''),
     source: getAttr(source, i, {}),
   }))

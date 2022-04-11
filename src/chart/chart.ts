@@ -148,6 +148,7 @@ export class Chart {
       containerHeight: this.containerHeight,
       bindCoordinate: this.bindCoordinate.bind(this),
       createGradient: getEasyGradientCreator({container: this.defs, engine: this.engine}),
+      createSublayer: this.createLayer.bind(this),
     }
 
     const layer = new layerMapping[type](options, context)

@@ -11,6 +11,13 @@ export type LayerAxisScaleShape = Maybe<
   }>
 >
 
+export type LayerAuxiliaryScaleShape = Maybe<
+  Partial<{
+    scaleX: Scale
+    scaleY: Scale
+  }>
+>
+
 export type LayerLineScaleShape = Maybe<{
   scaleX: ScaleBand
   scaleY: ScaleLinear

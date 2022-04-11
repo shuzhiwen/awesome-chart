@@ -18,6 +18,7 @@ export interface ChartContext {
   containerWidth: Chart['containerWidth']
   containerHeight: Chart['containerHeight']
   bindCoordinate: Chart['bindCoordinate']
+  createSublayer: Chart['createLayer']
   createGradient: ReturnType<typeof getEasyGradientCreator>
 }
 
