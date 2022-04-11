@@ -1,18 +1,18 @@
 import {DataTableList} from '../data'
-import {scaleBand, scaleLinear, scaleArc} from '../scales'
+import {scaleBand, scaleLinear, scaleAngle} from '../scales'
 
-export type ScaleArc = ReturnType<typeof scaleArc>
+export type ScaleAngle = ReturnType<typeof scaleAngle>
 
 export type ScaleBand = ReturnType<typeof scaleBand>
 
 export type ScaleLinear = ReturnType<typeof scaleLinear>
 
 export interface Scale<Domain = any> {
-  (x: Domain): number | undefined
+  (x: Domain): any
   domain(): Domain[]
   domain(domain: Iterable<Domain>): this
-  range(): number[]
-  range(range: Iterable<number>): this
+  range(): any[]
+  range(range: Iterable<any>): this
 }
 
 export interface ScaleNiceShape {
@@ -40,4 +40,9 @@ export interface ScaleArcProps {
   domain: DataTableList
   range: [number, number]
   nice?: Pick<ScaleNiceShape, 'paddingInner'>
+}
+
+export interface ScaleArcRangeItem {
+  startAngle: number
+  endAngle: number
 }

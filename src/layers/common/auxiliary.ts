@@ -1,6 +1,6 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {isScaleLinear, transpose} from '../../utils'
+import {isScaleLinear} from '../../utils'
 import {
   createColorMatrix,
   createScale,
@@ -88,7 +88,7 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
       {left, top, width, height} = layout,
       {scaleX, scaleY} = this.scale,
       {labelPosition, labelOffset, line, text, enableLegend} = this.style,
-      rawTableList = transpose(this.data.data.map(({list}) => list)),
+      {rawTableList} = this.data,
       colorMatrix = createColorMatrix({
         layer: this,
         row: rawTableList.length,

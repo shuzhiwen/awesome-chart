@@ -89,6 +89,14 @@ export type LayerRectStyleShape = Partial<{
   text: TextStyleShape
 }>
 
+export type LayerArcStyleShape = Partial<{
+  innerRadius: number
+  labelOffset: number
+  labelPosition: Position2
+  arc: GraphStyleShape
+  text: TextStyleShape
+}>
+
 export type LayerFlopperStyleShape = Partial<{
   scale: number
   integerPlace: number

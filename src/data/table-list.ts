@@ -30,9 +30,11 @@ export class DataTableList extends DataBase<RawTableList, Options> {
 
     if (mode === 'sum') {
       if (target === 'row') {
-        const lists = this.lists.reduce<Meta[][]>((prev, cur, i) => {
-          return i === 0 ? [cur] : [...prev, prev[i - 1].map((value, j) => sum([value, cur[j]]))]
-        }, [])
+        const lists = data
+          .map(({list}) => list)
+          .reduce<Meta[][]>((prev, cur, i) => {
+            return i === 0 ? [cur] : [...prev, prev[i - 1].map((value, j) => sum([value, cur[j]]))]
+          }, [])
         data = [
           {
             header: data.map(({header}) => header).join('-'),
@@ -102,16 +104,20 @@ export class DataTableList extends DataBase<RawTableList, Options> {
   remove(headers: MaybeGroup<string>) {
     const removedList: Shape[] = [],
       headerArray = Array.isArray(headers) ? headers : [headers]
+
     headerArray.forEach((header) => {
       const index = this.headers.findIndex((_header) => _header === header)
       if (index !== -1) {
         removedList.concat(this._data.splice(index, 1))
       }
     })
+
+    return removedList
   }
 
   concat(...tableLists: DataTableList[]) {
     const newTableList = cloneDeep(this)
+
     tableLists.forEach((tableList) => {
       cloneDeep(tableList)._data.forEach((item) => {
         const index = newTableList.headers.findIndex((header) => item.header === header)
@@ -122,6 +128,8 @@ export class DataTableList extends DataBase<RawTableList, Options> {
         }
       })
     })
+
+    return newTableList
   }
 
   range(): [number, number] {

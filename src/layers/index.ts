@@ -6,6 +6,7 @@ export * from './indicator'
 export * from './normal'
 
 export const layerMapping = {
+  arc: layer.LayerArc,
   auxiliary: layer.LayerAuxiliary,
   axis: layer.LayerAxis,
   baseMap: layer.LayerText,

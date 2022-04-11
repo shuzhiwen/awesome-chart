@@ -1,4 +1,4 @@
-import {Scale, ScaleBand, ScaleLinear, ScaleNiceShape} from '../scale'
+import {Scale, ScaleAngle, ScaleBand, ScaleLinear, ScaleNiceShape} from '../scale'
 
 export type LayerAxisScaleShape = Maybe<
   Partial<{
@@ -26,4 +26,9 @@ export type LayerLineScaleShape = Maybe<{
 export type LayerRectScaleShape = Maybe<{
   scaleX: ScaleBand | ScaleLinear
   scaleY: ScaleBand | ScaleLinear
+}>
+
+export type LayerArcScaleShape = Maybe<{
+  scaleAngle: ScaleAngle
+  scaleRadius: ScaleLinear
 }>

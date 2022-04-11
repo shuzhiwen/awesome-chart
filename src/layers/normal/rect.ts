@@ -369,7 +369,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       {width, height} = layout,
       {headers} = this.data,
       selectMode = mode === 'stack' ? 'sum' : 'copy',
-      bandDomain = this.data.select(headers[0]).lists[0] as string[],
+      bandDomain = this.data.lists[0] as string[],
       linearDomain =
         mode !== 'percentage'
           ? this.data.select(headers.slice(1), {mode: selectMode}).range()

@@ -24,6 +24,10 @@ export type LayerRectOptions = LayerOptions<{
   mode: 'cover' | 'group' | 'stack' | 'interval' | 'waterfall' | 'percentage'
 }>
 
+export type LayerArcOptions = LayerOptions<{
+  variant: 'pie' | 'nightingaleRose'
+}>
+
 export type LayerFlopperOptions = LayerOptions<{
   mode: 'vertical' | 'flop'
   autoplay: boolean
