@@ -9,6 +9,8 @@ import {getEasyGradientCreator} from '../utils'
 
 export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
 
+export type FocusListener = (event: MouseEvent) => void
+
 export interface ChartContext {
   root: Chart['root']
   theme: Chart['theme']
@@ -20,6 +22,8 @@ export interface ChartContext {
   bindCoordinate: Chart['bindCoordinate']
   createSublayer: Chart['createLayer']
   createGradient: ReturnType<typeof getEasyGradientCreator>
+  registerFocusListener: (listener: FocusListener) => void
+  changeFocus: (event: MouseEvent) => void
 }
 
 export interface TooltipOptions {

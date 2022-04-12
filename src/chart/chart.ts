@@ -25,6 +25,7 @@ import {
   GradientCreatorProps,
   LayerOptions,
   LayerScalesShape,
+  FocusListener,
 } from '../types'
 
 export class Chart {
@@ -41,6 +42,8 @@ export class Chart {
   private defs: GradientCreatorProps<unknown>['container']
 
   private tooltip: Tooltip
+
+  private focusListeners: FocusListener[] = []
 
   private event = createEvent(Chart.name)
 
@@ -149,6 +152,8 @@ export class Chart {
       bindCoordinate: this.bindCoordinate.bind(this),
       createGradient: getEasyGradientCreator({container: this.defs, engine: this.engine}),
       createSublayer: this.createLayer.bind(this),
+      registerFocusListener: (listener) => this.focusListeners.push(listener),
+      changeFocus: (event) => this.focusListeners.forEach((fn) => fn(event)),
     }
 
     const layer = new layerMapping[type](options, context)
@@ -180,7 +185,7 @@ export class Chart {
     this.getLayer(id)?.setVisible(visible)
   }
 
-  bindCoordinate(redraw = false, triggerLayer?: Layer) {
+  bindCoordinate() {
     const axisLayer = this._layers.find((layer) => isLayerAxis(layer)),
       layers = this._layers.filter((layer) => !isLayerAxis(layer) && !isLayerBaseMap(layer)),
       coordinate = axisLayer?.options.coordinate
@@ -225,9 +230,6 @@ export class Chart {
           ...scales,
           scaleY: axis === 'minor' ? scales.scaleYR : scales.scaleY,
         })
-      }
-      if (redraw && layer !== triggerLayer) {
-        layer.draw()
       }
     })
   }
