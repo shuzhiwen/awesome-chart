@@ -11,6 +11,7 @@ import {
   isLayerBaseMap,
   createDefs,
   getEasyGradientCreator,
+  isLayerInteractive,
 } from '../utils'
 import {
   Layer,
@@ -187,6 +188,7 @@ export class Chart {
 
   bindCoordinate() {
     const axisLayer = this._layers.find((layer) => isLayerAxis(layer)),
+      interactiveLayer = this._layers.find((layer) => isLayerInteractive(layer)),
       layers = this._layers.filter((layer) => !isLayerAxis(layer) && !isLayerBaseMap(layer)),
       coordinate = axisLayer?.options.coordinate
 
@@ -214,6 +216,7 @@ export class Chart {
     })
 
     isLayerAxis(axisLayer) && axisLayer.niceScale()
+    interactiveLayer?.setScale(axisLayer?.scale)
 
     layers.forEach((layer) => {
       const scales = {...layer.scale, ...axisLayer?.scale},

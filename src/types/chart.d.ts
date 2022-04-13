@@ -85,5 +85,4 @@ export interface CreateLayerSchema {
 
 export interface CreateChartSchema extends ChartProps {
   layers?: CreateLayerSchema[]
-  afterCreate?: (chart: Chart) => void
 }

@@ -62,6 +62,11 @@ export type LayerAuxiliaryStyleShape = Partial<{
   text: TextStyleShape
 }>
 
+export type LayerInteractiveStyleShape = Partial<{
+  interactive: GraphStyleShape
+  line: GraphStyleShape
+}>
+
 export type LayerTextStyleShape = Partial<{
   align: Align
   verticalAlign: Align

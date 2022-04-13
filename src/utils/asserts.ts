@@ -1,5 +1,5 @@
 import {isArray, isNumber} from 'lodash'
-import {LayerAxis, LayerLegend} from '../layers'
+import {LayerAxis, LayerInteractive, LayerLegend} from '../layers'
 import {
   D3Selection,
   FabricCanvas,
@@ -29,6 +29,10 @@ export function isLayerAxis(instance: Maybe<Layer>): instance is LayerAxis {
 
 export function isLayerLegend(instance: Maybe<Layer>): instance is LayerLegend {
   return instance instanceof LayerLegend
+}
+
+export function isLayerInteractive(instance: Maybe<Layer>): instance is LayerInteractive {
+  return instance instanceof LayerInteractive
 }
 
 export function isLayerBaseMap(instance: Maybe<Layer>) {

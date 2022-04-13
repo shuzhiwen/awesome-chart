@@ -53,27 +53,30 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
 
 export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => {
   try {
-    const {layers = [], afterCreate, ...initialConfig} = schema,
+    const {layers = [], ...initialConfig} = schema,
       chart = existedChart ?? new Chart(initialConfig),
-      normalLayerConfigs = layers.filter(({type}) => type !== 'axis' && type !== 'legend'),
       axisLayerConfig = layers.find(({type}) => type === 'axis'),
-      legendLayerConfig = layers.find(({type}) => type === 'legend')
+      legendLayerConfig = layers.find(({type}) => type === 'legend'),
+      interactiveConfig = layers.find(({type}) => type === 'interactive'),
+      normalLayerConfigs = layers.filter(
+        ({type}) => type !== 'axis' && type !== 'legend' && type !== 'interactive'
+      )
 
     // layer instance
     axisLayerConfig && createLayer(chart, axisLayerConfig)
     normalLayerConfigs.forEach((layer) => createLayer(chart, layer).update())
+    // legend and interactive is the last one
+    legendLayerConfig && createLayer(chart, legendLayerConfig)
+    interactiveConfig && createLayer(chart, interactiveConfig)
     // axis layer control all scales
     axisLayerConfig && chart.bindCoordinate()
-    // legend layer is the last one
-    legendLayerConfig && createLayer(chart, legendLayerConfig)
     // draw in order with schema
     layers.forEach(({options}) => {
       chart.layers.find(({options: {id}}) => id === options.id)?.draw()
     })
+
     // TODO: throw and give control to users
     setTimeout(() => chart.layers.map((instance) => instance?.playAnimation()))
-    // callback after create
-    afterCreate?.(chart)
 
     return chart
   } catch (error) {

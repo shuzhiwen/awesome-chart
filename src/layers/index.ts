@@ -13,6 +13,7 @@ export const layerMapping = {
   chord: layer.LayerText,
   flopper: layer.LayerFlopper,
   indicator: layer.LayerText,
+  interactive: layer.LayerInteractive,
   legend: layer.LayerLegend,
   line: layer.LayerLine,
   matrix: layer.LayerText,
