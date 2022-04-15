@@ -26,8 +26,9 @@ import {
   GradientCreatorProps,
   LayerOptions,
   LayerScalesShape,
-  FocusListener,
 } from '../types'
+
+fabric.Object.prototype.objectCaching = false
 
 export class Chart {
   private _state: ChartState = 'initialize'
@@ -43,8 +44,6 @@ export class Chart {
   private defs: GradientCreatorProps<unknown>['container']
 
   private tooltip: Tooltip
-
-  private focusListeners: FocusListener[] = []
 
   private event = createEvent(Chart.name)
 
@@ -110,7 +109,7 @@ export class Chart {
       this.defs = []
       this.root = new fabric.Canvas(canvas.node(), {selection: false, hoverCursor: 'pointer'})
       this.root.defs = this.defs
-      fabric.Object.prototype.objectCaching = false
+      this.root.on('mouse:move', ({e: event}) => this.event.fire('MouseEvent', {event}))
     } else {
       this.root = d3Container
         .append('svg')
@@ -119,6 +118,7 @@ export class Chart {
         .attr('xmlns', 'http://www.w3.org/2000/svg')
         .style('position', 'absolute')
       this.defs = this.root.append('defs')
+      this.root.on('mousemove', (event) => this.event.fire('MouseEvent', {event}))
     }
 
     createDefs({schema: defineSchema, engine, container: this.defs})
@@ -153,8 +153,7 @@ export class Chart {
       bindCoordinate: this.bindCoordinate.bind(this),
       createGradient: getEasyGradientCreator({container: this.defs, engine: this.engine}),
       createSublayer: this.createLayer.bind(this),
-      registerFocusListener: (listener) => this.focusListeners.push(listener),
-      changeFocus: (event) => this.focusListeners.forEach((fn) => fn(event)),
+      event: this.event,
     }
 
     const layer = new layerMapping[type](options, context)

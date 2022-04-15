@@ -72,7 +72,7 @@ export function drawText({
       .style('transform', (d) => `rotate(${d.rotation}deg)`)
       .style('transform-origin', (d) => d.transformOrigin)
       .style('dominant-baseline', 'central')
-      .style('pointer-events', 'fill')
+      .style('pointer-events', 'none')
   }
 
   if (engine === 'canvas' && isCanvasContainer(container)) {

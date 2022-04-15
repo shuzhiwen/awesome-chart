@@ -83,7 +83,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
   }
 
   private createEvent() {
-    const {tooltip, changeFocus} = this.options,
+    const {tooltip} = this.options,
       getMouseEvent = (event: ElEvent): MouseEvent =>
         event instanceof MouseEvent ? event : event.e,
       getData = (event: ElEvent, data?: ElConfigShape): ElConfigShape =>
@@ -111,7 +111,6 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
         this.sublayers.map((sublayer) => [
           sublayer,
           (event: ElEvent, data: ElConfigShape) => {
-            changeFocus(getMouseEvent(event))
             this.event.fire(`${type}-${sublayer}`, {
               data: getData(event, data),
               event: getMouseEvent(event),

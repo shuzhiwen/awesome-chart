@@ -46,7 +46,7 @@ export class LayerInteractive extends LayerBase {
 
   constructor(options: LayerOptions, context: ChartContext) {
     super({context, options, sublayers: ['rect']})
-    const {layout, createSublayer, registerFocusListener} = this.options
+    const {layout, createSublayer, event} = this.options
 
     this.helperAuxiliary = [
       createSublayer('auxiliary', {
@@ -61,13 +61,22 @@ export class LayerInteractive extends LayerBase {
       }),
     ] as LayerInteractive['helperAuxiliary']
 
-    registerFocusListener(({offsetX, offsetY}) => {
-      const {scaleX, scaleY} = this.scale,
+    event.on('MouseEvent', ({event}: {event: MouseEvent}) => {
+      const {offsetX, offsetY} = event,
+        {scaleX, scaleY} = this.scale,
+        {left, right, top, bottom} = layout,
         [helperAuxiliaryX, helperAuxiliaryY] = this.helperAuxiliary
       let x: Maybe<number>, y: Maybe<number>
 
+      if (offsetX < left || offsetX > right || offsetY < top || offsetY > bottom) {
+        helperAuxiliaryX.setVisible(false)
+        helperAuxiliaryY.setVisible(false)
+        return
+      }
+
       if (isScaleLinear(scaleX)) {
-        x = scaleX.invert(offsetX) + layout.left
+        x = scaleX.invert(offsetX - left)
+        helperAuxiliaryX.setVisible(true)
         helperAuxiliaryX.setData(
           new DataTableList([
             ['label', 'value'],
@@ -78,7 +87,8 @@ export class LayerInteractive extends LayerBase {
       }
 
       if (isScaleLinear(scaleY)) {
-        y = scaleY.invert(offsetY) + layout.top
+        y = scaleY.invert(offsetY - top)
+        helperAuxiliaryY.setVisible(true)
         helperAuxiliaryY.setData(
           new DataTableList([
             ['label', 'value'],

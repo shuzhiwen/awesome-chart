@@ -3,13 +3,11 @@ import {ElConfigShape} from './draw'
 import {BackupDataShape, LayerOptions, LayerScalesShape, LayerType} from './layer'
 import {LayoutCreator} from './layout'
 import {DataShape} from './data'
-import {RandomOptions} from './utils'
+import {Event, RandomOptions} from './utils'
 import {ScaleNiceShape} from './scale'
 import {getEasyGradientCreator} from '../utils'
 
 export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
-
-export type FocusListener = (event: MouseEvent) => void
 
 export interface ChartContext {
   root: Chart['root']
@@ -22,8 +20,7 @@ export interface ChartContext {
   bindCoordinate: Chart['bindCoordinate']
   createSublayer: Chart['createLayer']
   createGradient: ReturnType<typeof getEasyGradientCreator>
-  registerFocusListener: (listener: FocusListener) => void
-  changeFocus: (event: MouseEvent) => void
+  event: Event
 }
 
 export interface TooltipOptions {
