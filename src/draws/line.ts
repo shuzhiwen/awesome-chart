@@ -55,9 +55,11 @@ export function drawLine({
   }
 
   if (engine === 'canvas' && isCanvasContainer(container)) {
+    container.remove(...container.getObjects())
     configuredData.forEach((config) => {
-      const y = config.y1 - config.strokeWidth / 2
-      const line = new fabric.Line([config.x1, y, config.x2, y], {
+      const y1 = config.y1 - config.strokeWidth / 2
+      const y2 = config.y2 - config.strokeWidth / 2
+      const line = new fabric.Line([config.x1, y1, config.x2, y2], {
         className: config.className,
         stroke: mergeAlpha(config.stroke, config.strokeOpacity),
         strokeDashArray: config.strokeDasharray.split(' ').map(Number),
@@ -67,8 +69,9 @@ export function drawLine({
         selectable: false,
         evented: false,
       } as ILineOptions)
-      container.add(line)
+      container.addWithUpdate(line)
     })
+    container.canvas?.requestRenderAll()
   }
 
   return configuredData

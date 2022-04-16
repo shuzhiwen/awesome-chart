@@ -57,6 +57,7 @@ export function drawEllipse({
   }
 
   if (engine === 'canvas' && isCanvasContainer(container)) {
+    container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       const ellipse = new fabric.Ellipse({
         className: config.className,
@@ -71,8 +72,9 @@ export function drawEllipse({
         source: config.source,
         selectable: false,
       } as IEllipseOptions)
-      container.add(ellipse)
+      container.addWithUpdate(ellipse)
     })
+    container.canvas?.requestRenderAll()
   }
 
   return configuredData

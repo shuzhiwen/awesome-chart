@@ -1,5 +1,7 @@
 import {select} from 'd3'
-import {DrawerTarget, FabricObject} from '../../types'
+import {fabric} from 'fabric'
+import {Canvas, IGroupOptions} from 'fabric/fabric-impl'
+import {DrawerTarget, FabricGroup} from '../../types'
 import {createLog, isCanvasContainer, isSvgContainer} from '../../utils'
 
 export class Selector {
@@ -18,7 +20,8 @@ export class Selector {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       target.attr('display', visible ? 'block' : 'none')
     } else if (this.engine === 'canvas' && isCanvasContainer(target)) {
-      this.log.warn('Method "setVisible" is not available to canvas selector')
+      target.visible = visible
+      target.canvas?.requestRenderAll()
     } else {
       this.log.error('Illegal parameter', {target, visible})
     }
@@ -28,32 +31,36 @@ export class Selector {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       return target.selectAll(`.${className}`)
     } else if (this.engine === 'canvas' && isCanvasContainer(target)) {
-      return target.getObjects().filter((item) => (item as FabricObject).className === className)
+      return target.getObjects().filter((item) => (item as FabricGroup).className === className)
     }
   }
 
-  getSubcontainer(target: Maybe<DrawerTarget>, className: string) {
+  getSubcontainer(target: Maybe<DrawerTarget>, className: string): Maybe<DrawerTarget> {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       const result = target.selectAll(`.${className}`)
       return result.size() !== 0 ? select(result.node()) : null
-    } else {
-      return target
+    } else if (this.engine === 'canvas' && isCanvasContainer(target)) {
+      return target.getObjects().find((item) => {
+        return (item as FabricGroup).className === className
+      }) as FabricGroup
     }
   }
 
-  createSubcontainer(target: Maybe<DrawerTarget>, className: string) {
+  createSubcontainer(target: Maybe<DrawerTarget | Canvas>, className: string): Maybe<DrawerTarget> {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       return target.append('g').attr('class', className)
+    } else if (this.engine === 'canvas' && isCanvasContainer(target)) {
+      const group = new fabric.Group([], {className} as IGroupOptions)
+      target.add(group)
+      return group
     }
-    return target
   }
 
   remove(target: Maybe<DrawerTarget>) {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       return target?.remove()
     } else if (this.engine === 'canvas' && isCanvasContainer(target)) {
-      target.remove(...target.getObjects())
+      return target.remove(...target.getObjects())
     }
-    return target
   }
 }

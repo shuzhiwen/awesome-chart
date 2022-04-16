@@ -76,6 +76,7 @@ export function drawText({
   }
 
   if (engine === 'canvas' && isCanvasContainer(container)) {
+    container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       const text = new fabric.Text(config.value, {
         className: config.className,
@@ -93,8 +94,9 @@ export function drawText({
         evented: false,
       } as TextOptions)
       text.rotate(config.rotation)
-      container.add(text)
+      container.addWithUpdate(text)
     })
+    container.canvas?.requestRenderAll()
   }
 
   return configuredData

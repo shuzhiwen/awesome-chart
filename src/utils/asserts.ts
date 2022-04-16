@@ -2,7 +2,7 @@ import {isArray, isNumber} from 'lodash'
 import {LayerAxis, LayerInteractive, LayerLegend} from '../layers'
 import {
   D3Selection,
-  FabricCanvas,
+  FabricGroup,
   Layer,
   RawRelation,
   RawTable,
@@ -19,7 +19,7 @@ export function isSvgContainer(selector: any): selector is D3Selection {
   return selector?.constructor.name === 'Selection'
 }
 
-export function isCanvasContainer(selector: any): selector is FabricCanvas {
+export function isCanvasContainer(selector: any): selector is FabricGroup {
   return selector?.constructor.name === 'klass'
 }
 

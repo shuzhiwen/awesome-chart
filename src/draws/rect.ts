@@ -62,6 +62,7 @@ export function drawRect({
   }
 
   if (engine === 'canvas' && isCanvasContainer(container)) {
+    container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       const rect = new fabric.Rect({
         className: config.className,
@@ -78,8 +79,9 @@ export function drawRect({
         source: config.source,
         selectable: false,
       } as IRectOptions)
-      container.add(rect)
+      container.addWithUpdate(rect)
     })
+    container.canvas?.requestRenderAll()
   }
 
   return configuredData

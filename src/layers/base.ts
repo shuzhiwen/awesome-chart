@@ -258,10 +258,10 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
     // delete the redundant group in the last rendering
     for (let i = 0; i < Math.max(this.backupData[sublayer].length, data.length); i++) {
       const groupClassName = `${sublayerClassName}-${i}`
-      let groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
+      const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
 
       if (i < data.length && !groupContainer) {
-        groupContainer = selector.createSubcontainer(sublayerContainer, groupClassName)
+        selector.createSubcontainer(sublayerContainer, groupClassName)
       } else if (i >= data.length) {
         selector.remove(groupContainer)
       }

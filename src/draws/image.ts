@@ -42,13 +42,15 @@ export function drawImage({
   }
 
   if (engine === 'canvas' && isCanvasContainer(container)) {
+    container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       fabric.Image.fromURL(
         config.url,
         (image) => {
           image.scaleX = config.width / (image.width || 1)
           image.scaleY = config.height / (image.height || 1)
-          container.add(image)
+          container.addWithUpdate(image)
+          container.canvas?.requestRenderAll()
         },
         {
           className: config.className,

@@ -56,6 +56,7 @@ export function drawPolygon({
   }
 
   if (engine === 'canvas' && isCanvasContainer(container)) {
+    container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       const polygon = new fabric.Polygon(config.points, {
         className: config.className,
@@ -66,8 +67,9 @@ export function drawPolygon({
         source: config.source,
         selectable: false,
       } as IPolylineOptions)
-      container.add(polygon)
+      container.addWithUpdate(polygon)
     })
+    container.canvas?.requestRenderAll()
   }
 
   return configuredData

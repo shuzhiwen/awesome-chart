@@ -71,7 +71,7 @@ export abstract class AnimationBase<T extends Options> {
     this.createTargets('targets', context)
 
     if (isCanvasContainer(context)) {
-      this.renderCanvas = context.requestRenderAll.bind(context)
+      this.renderCanvas = context.canvas?.requestRenderAll.bind(context.canvas)!
     }
 
     ANIMATION_LIFE_CYCLES.forEach((name) => {

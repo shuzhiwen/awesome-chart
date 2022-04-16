@@ -57,6 +57,7 @@ export function drawPath({
   }
 
   if (engine === 'canvas' && isCanvasContainer(container)) {
+    container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       const path = new fabric.Path(config.path, {
         className: config.className,
@@ -69,8 +70,9 @@ export function drawPath({
       } as IPathOptions)
       path.left = path.left ? path.left + config.centerX : config.centerX
       path.top = path.top ? path.top + config.centerY : config.centerY
-      container.add(path)
+      container.addWithUpdate(path)
     })
+    container.canvas?.requestRenderAll()
   }
 
   return configuredData

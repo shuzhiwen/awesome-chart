@@ -1,9 +1,9 @@
 import {Selection, Transition} from 'd3'
-import {Canvas, IEvent, Object} from 'fabric/fabric-impl'
+import {Group, IEvent, Object} from 'fabric/fabric-impl'
 import {GraphStyleShape, TextStyleShape} from './layer'
 import {drawerMapping} from '../draws'
 
-export type DrawerTarget = D3Selection | FabricCanvas
+export type DrawerTarget = D3Selection | FabricGroup
 
 export type DrawerDataParameter<T> = T[]
 
@@ -32,10 +32,12 @@ export interface D3Selection extends Selection<any, unknown, any, unknown> {}
 
 export interface D3Transition extends Transition<any, unknown, any, unknown> {}
 
-export interface FabricCanvas extends Canvas {}
-
 export interface FabricObject extends Object {
-  className: string
+  className?: string
+}
+
+export interface FabricGroup extends Group {
+  className?: string
 }
 
 export interface ElSourceShape extends AnyObject {

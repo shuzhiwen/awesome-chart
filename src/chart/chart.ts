@@ -1,4 +1,5 @@
 import {fabric} from 'fabric'
+import {Canvas} from 'fabric/fabric-impl'
 import {select, schemeCategory10} from 'd3'
 import {defaultLayoutCreator} from '../layout'
 import {layerMapping} from '../layers'
@@ -17,7 +18,6 @@ import {
   Layer,
   LayoutShape,
   ChartState,
-  DrawerTarget,
   LayoutCreator,
   ChartProps,
   LayerType,
@@ -26,6 +26,7 @@ import {
   GradientCreatorProps,
   LayerOptions,
   LayerScalesShape,
+  D3Selection,
 } from '../types'
 
 fabric.Object.prototype.objectCaching = false
@@ -51,7 +52,7 @@ export class Chart {
 
   readonly engine: Engine
 
-  readonly root: DrawerTarget & {
+  readonly root: (D3Selection | Canvas) & {
     defs?: AnyObject
   }
 
