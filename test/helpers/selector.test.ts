@@ -15,7 +15,7 @@ jest.mock('../../src/utils/create-log', () => ({
 test('Selector', () => {
   const svgContainer = select(document.createElement('svg'))
   const svgSelector = new Selector('svg')
-  const canvasContainer = new fabric.Canvas(document.createElement('canvas'))
+  const canvasContainer = new fabric.Group()
   const canvasSelector = new Selector('canvas')
 
   expect(svgSelector.createSubcontainer(svgContainer, 'sub')).not.toBeNull()
@@ -34,5 +34,5 @@ test('Selector', () => {
   expect(canvasSelector.getSubcontainer(canvasContainer, 'sub')).not.toBeUndefined()
 
   expect(svgSelector.remove(svgContainer)).toBeDefined()
-  expect(canvasSelector.remove(canvasContainer)).toBeDefined()
+  expect(canvasSelector.remove(canvasContainer)).toBeUndefined()
 })
