@@ -52,7 +52,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
 
   readonly options: T & ChartContext
 
-  protected root: DrawerTarget
+  readonly root: DrawerTarget
 
   protected readonly sublayers
 
@@ -254,7 +254,8 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
     }
 
     const {selector} = this,
-      evented = type !== 'text' && type !== 'line',
+      disableEventType = ['text', 'line', 'area'],
+      evented = !disableEventType.includes(type),
       sublayerClassName = `${this.className}-${sublayer}`,
       sublayerContainer =
         selector.getSubcontainer(this.root, sublayerClassName) ||

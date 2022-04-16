@@ -1,6 +1,6 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {isScaleLinear} from '../../utils'
+import {isCanvasContainer, isScaleLinear} from '../../utils'
 import {
   createColorMatrix,
   createScale,
@@ -69,6 +69,10 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
       options: {...defaultOptions, ...options},
       sublayers: ['text', 'line'],
     })
+
+    if (isCanvasContainer(this.root)) {
+      this.root.evented = false
+    }
   }
 
   setData(data: LayerAuxiliary['data']) {
