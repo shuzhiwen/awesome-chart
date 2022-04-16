@@ -46,11 +46,20 @@ export class Selector {
     }
   }
 
-  createSubcontainer(target: Maybe<DrawerTarget | Canvas>, className: string): Maybe<DrawerTarget> {
+  createSubcontainer(
+    target: Maybe<DrawerTarget | Canvas>,
+    className: string,
+    evented = true
+  ): Maybe<DrawerTarget> {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       return target.append('g').attr('class', className)
     } else if (this.engine === 'canvas' && isCanvasContainer(target)) {
-      const group = new fabric.Group([], {className} as IGroupOptions)
+      const group = new fabric.Group([], {
+        className,
+        selectable: false,
+        subTargetCheck: true,
+        evented,
+      } as IGroupOptions)
       target.add(group)
       return group
     }
@@ -60,7 +69,7 @@ export class Selector {
     if (this.engine === 'svg' && isSvgContainer(target)) {
       return target?.remove()
     } else if (this.engine === 'canvas' && isCanvasContainer(target)) {
-      return target.remove(...target.getObjects())
+      return target.group?.remove(target)
     }
   }
 }

@@ -28,6 +28,7 @@ import {
   LayerOptions,
   ChartContext,
   LayerScalesShape,
+  FabricGroup,
 } from '../types'
 
 export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
@@ -166,31 +167,34 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
     selector.setVisible(target, visible)
   }
 
-  private setEvent = (sublayer: string) => {
+  private bindEvent = (sublayer: string) => {
     if (isSvgContainer(this.root)) {
       const els = this.root.selectAll(`.chart-basic-${sublayer}`).style('cursor', 'pointer')
+
       COMMON_EVENTS.forEach((type) =>
         els.on(`${type}.common`, this.backupEvent.common[type][sublayer])
       )
-    } else if (isCanvasContainer(this.root)) {
-      const objects = this.root.getObjects() as FabricObject[]
-      const els = objects.filter(({className}) => className === `chart-basic-${sublayer}`)
-      COMMON_EVENTS.forEach((type) =>
-        els.forEach((el) => el.on(type, this.backupEvent.common[type][sublayer]))
-      )
-    }
-  }
 
-  private setTooltip = (sublayer: string) => {
-    if (this.tooltipTargets.indexOf(sublayer) !== -1) {
-      if (isSvgContainer(this.root)) {
-        const els = this.root.selectAll(`.chart-basic-${sublayer}`)
+      if (this.tooltipTargets.indexOf(sublayer) !== -1) {
         TOOLTIP_EVENTS.forEach((type) => els.on(`${type}.tooltip`, this.backupEvent.tooltip[type]))
-      } else if (isCanvasContainer(this.root)) {
-        const objects = this.root.getObjects() as FabricObject[],
-          els = objects.filter(({className}) => className === `chart-basic-${sublayer}`)
+      }
+    }
+
+    if (isCanvasContainer(this.root)) {
+      const els = (this.root.getObjects() as FabricGroup[])
+        .find(({className}) => className === `${this.className}-${sublayer}`)
+        ?.getObjects()
+        .reduce<FabricObject[]>((prev, cur) => [...prev, ...(cur as FabricGroup).getObjects()], [])
+
+      COMMON_EVENTS.forEach((type) =>
+        els?.forEach((el) => el.on(type, this.backupEvent.common[type][sublayer]))
+      )
+
+      if (this.tooltipTargets.indexOf(sublayer) !== -1) {
         TOOLTIP_EVENTS.forEach((type) =>
-          els.forEach((el) => el.on(type, this.backupEvent.tooltip[type]))
+          els?.forEach((el) => {
+            el.on(type, this.backupEvent.tooltip[type])
+          })
         )
       }
     }
@@ -250,10 +254,11 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
     }
 
     const {selector} = this,
+      evented = type !== 'text' && type !== 'line',
       sublayerClassName = `${this.className}-${sublayer}`,
       sublayerContainer =
         selector.getSubcontainer(this.root, sublayerClassName) ||
-        selector.createSubcontainer(this.root, sublayerClassName)
+        selector.createSubcontainer(this.root, sublayerClassName, evented)
 
     // delete the redundant group in the last rendering
     for (let i = 0; i < Math.max(this.backupData[sublayer].length, data.length); i++) {
@@ -261,7 +266,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
       const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
 
       if (i < data.length && !groupContainer) {
-        selector.createSubcontainer(sublayerContainer, groupClassName)
+        selector.createSubcontainer(sublayerContainer, groupClassName, evented)
       } else if (i >= data.length) {
         selector.remove(groupContainer)
       }
@@ -295,8 +300,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
       }
     })
 
-    this.setEvent(sublayer)
-    this.setTooltip(sublayer)
+    this.bindEvent(sublayer)
     this.createAnimation(sublayer)
   }
 

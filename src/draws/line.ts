@@ -67,7 +67,6 @@ export function drawLine({
         opacity: config.opacity,
         source: config.source,
         selectable: false,
-        evented: false,
       } as ILineOptions)
       container.addWithUpdate(line)
     })
