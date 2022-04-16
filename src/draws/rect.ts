@@ -77,7 +77,6 @@ export function drawRect({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
-        selectable: false,
       } as IRectOptions)
       container.addWithUpdate(rect)
     })

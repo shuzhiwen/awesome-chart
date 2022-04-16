@@ -65,7 +65,6 @@ export function drawPolygon({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
-        selectable: false,
       } as IPolylineOptions)
       container.addWithUpdate(polygon)
     })

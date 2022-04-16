@@ -58,7 +58,6 @@ export function drawImage({
           left: config.x,
           opacity: config.opacity,
           source: config.source,
-          selectable: false,
         } as IImageOptions
       )
     })

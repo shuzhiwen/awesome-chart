@@ -66,7 +66,6 @@ export function drawPath({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
-        selectable: false,
       } as IPathOptions)
       path.left = path.left ? path.left + config.centerX : config.centerX
       path.top = path.top ? path.top + config.centerY : config.centerY

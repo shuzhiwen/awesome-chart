@@ -66,7 +66,6 @@ export function drawLine({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
-        selectable: false,
       } as ILineOptions)
       container.addWithUpdate(line)
     })

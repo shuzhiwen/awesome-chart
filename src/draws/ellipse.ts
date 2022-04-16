@@ -70,7 +70,6 @@ export function drawEllipse({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
-        selectable: false,
       } as IEllipseOptions)
       container.addWithUpdate(ellipse)
     })

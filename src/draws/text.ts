@@ -90,7 +90,6 @@ export function drawText({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         shadow: config.shadow,
-        selectable: false,
       } as TextOptions)
       text.rotate(config.rotation)
       container.addWithUpdate(text)
