@@ -61,6 +61,9 @@ export class LayerInteractive extends LayerBase {
       }),
     ] as LayerInteractive['helperAuxiliary']
 
+    this.helperAuxiliary[0].setStyle({labelPosition: 'top'})
+    this.helperAuxiliary[1].setStyle({labelPosition: 'right'})
+
     event.on('MouseEvent', ({event}: {event: MouseEvent}) => {
       const {offsetX, offsetY} = event,
         {scaleX, scaleY} = this.scale,

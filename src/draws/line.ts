@@ -51,6 +51,7 @@ export function drawLine({
       .attr('y1', (d) => d.y1)
       .attr('x2', (d) => d.x2)
       .attr('y2', (d) => d.y2)
+      .style('pointer-events', 'none')
   }
 
   if (engine === 'canvas' && isCanvasContainer(container)) {
@@ -64,6 +65,7 @@ export function drawLine({
         opacity: config.opacity,
         source: config.source,
         selectable: false,
+        evented: false,
       } as ILineOptions)
       container.add(line)
     })
