@@ -15,6 +15,10 @@ export function isRealNumber(value: any): value is number {
   return isNumber(value) && !isNaN(value)
 }
 
+export function isApproximateNumber(n1: number, n2: number) {
+  return Math.abs(n1 - n2) <= 10 ** -8
+}
+
 export function isSvgContainer(selector: any): selector is D3Selection {
   return selector?.constructor.name === 'Selection'
 }

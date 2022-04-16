@@ -1,5 +1,5 @@
 import {isArray} from 'lodash'
-import {formatNumber, getAttr, getTextWidth} from '../../utils'
+import {formatNumber, getAttr, getTextWidth, isApproximateNumber} from '../../utils'
 import {CreateTextProps} from '../../types'
 
 export function createText(props: CreateTextProps) {
@@ -64,15 +64,14 @@ export function createArcText(props: Omit<CreateTextProps, 'position'> & {angle:
 
   return createText({
     ...props,
-    position:
-      angle === 0
-        ? 'top'
-        : angle === 180
-        ? 'bottom'
-        : angle > 180
-        ? 'left'
-        : angle < 180
-        ? 'right'
-        : 'center',
+    position: isApproximateNumber(angle, 0)
+      ? 'top'
+      : isApproximateNumber(angle, Math.PI)
+      ? 'bottom'
+      : angle > Math.PI
+      ? 'left'
+      : angle < Math.PI
+      ? 'right'
+      : 'center',
   })
 }
