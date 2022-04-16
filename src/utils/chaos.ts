@@ -27,7 +27,7 @@ export function download(data: string, fileName: string) {
   const dataUrl = URL.createObjectURL(new Blob([data]))
   const a = document.createElement('a')
   a.download = fileName
-  a.href = dataUrl
+  a.href = data.match('base64') ? data : dataUrl
   a.click()
 }
 

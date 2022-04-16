@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useRef, useState} from 'react'
-import {select} from 'd3-selection'
 import styles from './Chart.module.css'
 import {createChart, getStandardLayoutCreator, download} from '../src'
 
@@ -9,8 +8,12 @@ export const Chart = ({title, schema}) => {
   const [engine, setEngine] = useState('SVG')
   const toggleEngine = useCallback(() => setEngine(engine === 'SVG' ? 'CANVAS' : 'SVG'), [engine])
   const downloadSvg = useCallback(() => {
-    download((select(chartRef.current).selectAll('svg').nodes()[0] as any).outerHTML, 'chart.svg')
-  }, [])
+    if (engine === 'SVG') {
+      download(chartRef.current.children?.[0].outerHTML, 'chart.svg')
+    } else if (engine === 'CANVAS') {
+      download(chartRef.current.children?.[0].children?.[0].toDataURL(), 'chart.jpg')
+    }
+  }, [engine])
 
   useEffect(() => {
     try {
