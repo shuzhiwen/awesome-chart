@@ -26,7 +26,7 @@ export function createColorMatrix(props: CreateColorMatrixProps) {
         .sort()
       matrix = matrix.map((row) => selected.map((index) => row[index]))
       if (selected.length === 1) {
-        while (matrix.length < layer.data.headers.length) {
+        while (matrix.length < layer.data.lists[0].length) {
           matrix.push(matrix[0])
         }
       }
