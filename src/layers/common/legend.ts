@@ -153,7 +153,7 @@ export class LayerLegend extends LayerBase<LayerOptions> {
       (object: {data: {source: {index: number}}}) => {
         const {index} = object.data.source,
           layerIndex = counts.findIndex((_, i) => sum(counts.slice(0, i + 1)) > index),
-          startIndex = counts.slice(0, layerIndex).reduce((prev, cur) => prev + cur, 0),
+          start = counts.slice(0, layerIndex).reduce((prev, cur) => prev + cur, 0),
           layerData = originData[layerIndex],
           layer = layers[layerIndex],
           order: {
@@ -185,20 +185,18 @@ export class LayerLegend extends LayerBase<LayerOptions> {
 
         try {
           if (filterTypes[layerIndex] === 'row') {
-            const mapping = range(startIndex, startIndex + counts[layerIndex]).map((i) => active[i])
+            const mapping = range(start, start + counts[layerIndex] - 1).map((i) => active[i])
 
-            filteredData = layerData.select(layerData.headers)
-            filteredData.lists.forEach((list) => {
-              list.concat(list.filter((_, j) => mapping[j]))
-              list.splice(0, list.length / 2)
-            })
-            layerData.headers.forEach((dimension, i) => (order.mapping[dimension] = i))
+            filteredData = layerData.filterRows(
+              mapping.map((v, i) => (v === true ? i : -1)).filter((v) => v !== -1)
+            )
+            layerData.lists[0].forEach((category, i) => (order.mapping[category] = i))
             filteredData.options.order = order
           }
 
           if (filterTypes[layerIndex] === 'column') {
             filteredData = layerData.select(
-              layerData.headers.filter((_, i) => !i || active[startIndex + i - 1])
+              layerData.headers.filter((_, i) => !i || active[start + i - 1])
             )
             layerData.headers.slice(1).forEach((header, i) => (order.mapping[header] = i))
             filteredData.options.order = order

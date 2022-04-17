@@ -23,6 +23,17 @@ export class DataTableList extends DataBase<RawTableList, Options> {
     this.update(data, options)
   }
 
+  filterRows(rows: number[]) {
+    const data = this._data.map(({list, ...rest}) => ({
+      list: list.filter((_, index) => rows.includes(index)),
+      ...rest,
+    }))
+
+    const result = new DataTableList([[]], this.options)
+    result._data = data
+    return result
+  }
+
   select(headers: MaybeGroup<Meta>, options: Options = {}): DataTableList {
     const {mode = 'copy', target = 'row'} = options,
       headerArray = Array.isArray(headers) ? headers : [headers]
@@ -64,7 +75,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
       }
     }
 
-    const result = new DataTableList([[]], options)
+    const result = new DataTableList([[]], this.options)
     result._data = data
     return result
   }

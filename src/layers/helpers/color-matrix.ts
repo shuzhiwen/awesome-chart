@@ -15,8 +15,8 @@ export function createColorMatrix(props: CreateColorMatrixProps) {
     const {type, mapping} = order
 
     if (type === 'row') {
-      matrix = layer.data.headers
-        .map((dimension) => mapping[dimension])
+      matrix = layer.data.lists[0]
+        .map((category) => mapping[category])
         .sort()
         .map((index) => matrix[index])
     } else if (type === 'column') {

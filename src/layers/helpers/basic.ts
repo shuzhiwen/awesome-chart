@@ -12,7 +12,7 @@ export function createScale<T extends Maybe<LayerScalesShape>>(
     scales: LayerScalesShape = {nice}
 
   SCALE_TYPES.forEach((type) => {
-    scales[type] = incomingScale?.[type] || currentScale?.[type] || defaultScale?.[type]
+    scales[type] = incomingScale?.[type] || defaultScale?.[type] || currentScale?.[type]
   })
 
   return scales as Required<T>
