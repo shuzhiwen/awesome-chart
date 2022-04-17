@@ -26,6 +26,8 @@ import {
   TextDrawerProps,
 } from '../../types'
 
+const disableColor = '#E2E3E588'
+
 const defaultStyle: LayerLegendStyleShape = {
   align: 'end',
   verticalAlign: 'start',
@@ -143,11 +145,10 @@ export class LayerLegend extends LayerBase<LayerOptions> {
       counts = this.legendDataGroup.map(({legends}) => legends?.length),
       filterTypes = this.legendDataGroup.map(({filter}) => filter),
       colorMatrix = this.legendDataGroup.map(({colorMatrix}) => colorMatrix),
-      active = new Array<Boolean>(colors.length).fill(true),
-      disableColor = '#E2E3E588'
+      active = new Array<Boolean>(colors.length).fill(true)
 
     this.event.onWithOff(
-      'click-interactive',
+      'mousedown-interactive',
       this.options.id,
       (object: {data: {source: {index: number}}}) => {
         const {index} = object.data.source,
@@ -397,6 +398,9 @@ export class LayerLegend extends LayerBase<LayerOptions> {
       data: this.textData,
       ...this.style.text,
       fill: this.data.source.textColors,
+      textDecoration: this.data.source.textColors.map((color) =>
+        color === disableColor ? 'line-through' : 'none'
+      ),
     }
 
     this.drawBasic({type: 'text', data: [textData]})

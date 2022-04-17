@@ -18,6 +18,7 @@ export function drawText({
   rotation,
   transformOrigin,
   writingMode,
+  textDecoration,
   enableUpdateAnimation = false,
   updateAnimationDuration = 2000,
   updateAnimationDelay = 0,
@@ -44,6 +45,7 @@ export function drawText({
     shadow: getAttr(shadow, i, ''),
     transformOrigin: getAttr(transformOrigin, i, ''),
     writingMode: getAttr(writingMode, i, 'horizontal-tb'),
+    textDecoration: getAttr(textDecoration, i, 'none'),
   }))
 
   if (engine === 'svg' && isSvgContainer(container)) {
@@ -69,6 +71,7 @@ export function drawText({
       .attr('font-weight', (d) => d.fontWeight)
       .attr('writing-mode', (d) => d.writingMode)
       .style('text-shadow', (d) => d.shadow)
+      .style('text-decoration', (d) => d.textDecoration)
       .style('transform', (d) => `rotate(${d.rotation}deg)`)
       .style('transform-origin', (d) => d.transformOrigin)
       .style('dominant-baseline', 'central')
@@ -90,6 +93,9 @@ export function drawText({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         shadow: config.shadow,
+        linethrough: config.textDecoration === 'line-through',
+        overline: config.textDecoration === 'overline',
+        underline: config.textDecoration === 'underline',
       } as TextOptions)
       text.rotate(config.rotation)
       container.addWithUpdate(text)

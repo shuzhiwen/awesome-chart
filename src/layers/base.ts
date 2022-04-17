@@ -88,7 +88,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
       getMouseEvent = (event: ElEvent): MouseEvent =>
         event instanceof MouseEvent ? event : event.e,
       getData = (event: ElEvent, data?: ElConfigShape): ElConfigShape =>
-        event instanceof MouseEvent ? data : (event.target as any)
+        event instanceof MouseEvent ? data : ((event.subTargets?.[0] || event.target) as any)
 
     this.backupEvent = {
       common: {},
@@ -171,12 +171,16 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
     if (isSvgContainer(this.root)) {
       const els = this.root.selectAll(`.chart-basic-${sublayer}`).style('cursor', 'pointer')
 
-      COMMON_EVENTS.forEach((type) =>
+      COMMON_EVENTS.forEach((type) => {
+        els.on(`${type}.common`, null)
         els.on(`${type}.common`, this.backupEvent.common[type][sublayer])
-      )
+      })
 
       if (this.tooltipTargets.indexOf(sublayer) !== -1) {
-        TOOLTIP_EVENTS.forEach((type) => els.on(`${type}.tooltip`, this.backupEvent.tooltip[type]))
+        TOOLTIP_EVENTS.forEach((type) => {
+          els.on(`${type}.tooltip`, null)
+          els.on(`${type}.tooltip`, this.backupEvent.tooltip[type])
+        })
       }
     }
 
@@ -186,13 +190,17 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
         ?.getObjects()
         .reduce<FabricObject[]>((prev, cur) => [...prev, ...(cur as FabricGroup).getObjects()], [])
 
-      COMMON_EVENTS.forEach((type) =>
-        els?.forEach((el) => el.on(type, this.backupEvent.common[type][sublayer]))
-      )
+      COMMON_EVENTS.forEach((type) => {
+        els?.forEach((el) => {
+          el.off(type)
+          el.on(type, this.backupEvent.common[type][sublayer])
+        })
+      })
 
       if (this.tooltipTargets.indexOf(sublayer) !== -1) {
         TOOLTIP_EVENTS.forEach((type) =>
           els?.forEach((el) => {
+            el.off(type)
             el.on(type, this.backupEvent.tooltip[type])
           })
         )

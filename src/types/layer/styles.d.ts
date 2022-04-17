@@ -20,6 +20,7 @@ export type GraphStyleShape = Partial<{
 export type TextStyleShape = GraphStyleShape &
   Partial<{
     writingMode: 'horizontal-tb' | 'vertical-rl'
+    textDecoration: 'line-through' | 'overline' | 'underline' | 'none'
     fontFamily: MaybeGroup<string>
     fontWeight: MaybeGroup<string | number>
     fontSize: MaybeGroup<number>
