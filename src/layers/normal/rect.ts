@@ -268,28 +268,32 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
         max = Math.max(Number(data1.value), Number(data2.value))
 
       if (variant === 'column') {
+        const y1 = data1.value < 0 ? data1.y + data1.height : data1.y
+        const y2 = data2.value < 0 ? data2.y + data2.height : data2.y
+
         return [
           {
             ...data1,
             value: max - min,
-            y: Math.min(data1.y, data2.y),
-            height: Math.abs(data1.y - data2.y),
+            y: Math.min(y1, y2),
+            height: Math.abs(y1 - y2),
             source: group.map(({source}) => source),
           },
         ]
-      } else if (variant === 'bar') {
+      } else {
+        const x1 = data1.value < 0 ? data1.x : data1.x + data1.width
+        const x2 = data2.value < 0 ? data2.x : data2.x + data2.width
+
         return [
           {
             ...data1,
             value: max - min,
-            x: Math.min(data1.x + data1.width, data2.x + data2.width),
-            width: Math.abs(data1.x + data1.width - data2.x - data2.width),
+            x: Math.min(x1, x2),
+            width: Math.abs(x1 - x2),
             source: group.map(({source}) => source),
           },
         ]
       }
-
-      return group
     })
   }
 
@@ -298,20 +302,34 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
     if (variant === 'column') {
       this.rectData.forEach((group, i) => {
-        group.forEach((item) => {
-          i !== 0 && (item.y = this.rectData[i - 1][0].y - item.height)
+        group.forEach((cur) => {
+          if (i === 0) return
+          const prev = this.rectData[i - 1][0]
+          if (prev.value < 0) {
+            cur.y = prev.y + prev.height - (cur.value < 0 ? 0 : cur.height)
+          } else {
+            cur.y = prev.y - (cur.value < 0 ? 0 : cur.height)
+          }
         })
       })
-      const {y, height} = this.rectData[this.rectData.length - 1][0]
-      this.rectData[this.rectData.length - 1][0].y = y + height
-    } else if (variant === 'bar') {
+      const {y, height} = this.rectData.at(-1)![0]
+      this.rectData.at(-1)![0].y = y + height
+    }
+
+    if (variant === 'bar') {
       this.rectData.forEach((group, i) => {
-        group.forEach((item) => {
-          i !== 0 && (item.x = this.rectData[i - 1][0].x + this.rectData[i - 1][0].width)
+        group.forEach((cur) => {
+          if (i === 0) return
+          const prev = this.rectData[i - 1][0]
+          if (prev.value < 0) {
+            cur.x = prev.x - (cur.value < 0 ? cur.width : 0)
+          } else {
+            cur.x = prev.x + prev.width - (cur.value < 0 ? cur.width : 0)
+          }
         })
       })
-      const {x, width} = this.rectData[this.rectData.length - 1][0]
-      this.rectData[this.rectData.length - 1][0].x = x - width
+      const {x, width} = this.rectData.at(-1)![0]
+      this.rectData.at(-1)![0].x = x - width
     }
   }
 
@@ -320,7 +338,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       {width, height} = layout
 
     this.rectData.forEach((group) => {
-      const total = group.reduce((prev, cur) => prev + Number(cur.value), 0),
+      const total = group.reduce((prev, cur) => prev + Number(cur.value), Number.MIN_VALUE),
         percentages = group.map(({value}) => Number(value) / total)
 
       group.map((item, i) => {

@@ -1,5 +1,5 @@
 import {BasicAnimationOptions} from '../animation'
-import {CurveType} from '../draw'
+import {CurveType, ElConfigShape} from '../draw'
 import {FormatNumberConfig} from '../utils'
 
 export type GraphStyleShape = Partial<{
@@ -13,7 +13,7 @@ export type GraphStyleShape = Partial<{
   transformOrigin: MaybeGroup<string>
   rotation: MaybeGroup<number>
   transition: Maybe<BasicAnimationOptions>
-  mapping: (config: AnyObject) => AnyObject
+  mapping: (config: ElConfigShape) => ElConfigShape
 }>
 
 export type TextStyleShape = GraphStyleShape &
