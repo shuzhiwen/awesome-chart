@@ -94,7 +94,13 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
   }
 
   update() {
-    this.createScale()
+    if (this.data.lists.length <= 1) {
+      this.arcData = []
+      this.textData = []
+      return
+    } else {
+      this.createScale()
+    }
 
     const {layout, variant} = this.options,
       {width, height, top, left} = layout,
