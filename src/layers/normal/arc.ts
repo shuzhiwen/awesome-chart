@@ -99,7 +99,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       this.textData = []
       return
     } else {
-      this.createScale()
+      !this.scale && this.createScale()
     }
 
     const {layout, variant} = this.options,

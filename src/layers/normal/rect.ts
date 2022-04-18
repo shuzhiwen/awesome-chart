@@ -113,7 +113,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   }
 
   update() {
-    this.createScale()
+    !this.scale && this.createScale()
 
     const {variant, mode, layout} = this.options,
       {rect} = this.style,
@@ -170,7 +170,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
     this.rectData = this.rectData.map((group) => group.filter(({value}) => isRealNumber(value)))
 
-    if (this.rectData[0]?.length > 1) {
+    if (this.rectData[0]?.length > 1 && mode !== 'interval') {
       colorMatrix = createColorMatrix({
         layer: this,
         row: 1,

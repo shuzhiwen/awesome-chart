@@ -214,6 +214,10 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
   }
 
   update() {
+    if (this.data.source.shape.length === 0) {
+      return
+    }
+
     const {left, top, width, height} = this.options.layout,
       {align, verticalAlign, direction, shapeSize = 5, offset = [0, 0], gap, text} = this.style,
       [inner, outer] = gap!,

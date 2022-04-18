@@ -104,7 +104,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
   }
 
   update() {
-    this.createScale()
+    !this.scale && this.createScale()
 
     const {layout, mode, createGradient} = this.options,
       {height, top, left} = layout,
