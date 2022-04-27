@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "typings": "dist/index.d.ts",
+  "main": "dist/main.min.js",
   "author": {
     "name": "shuzhiwen",
     "email": "yuwen4012@gmail.com",
@@ -12,7 +13,8 @@
     "dev": "vite  --port 9527",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "package": "yarn tsc && cp -r src/types dist/types",
+    "package": "yarn tsc && babel dist -o dist/main.min.js -s && cp -r src/types dist/types",
+    "clear": "rm -rf tsconfig.tsbuildinfo dist",
     "test": "yarn jest"
   },
   "dependencies": {

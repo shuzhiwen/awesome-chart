@@ -52,7 +52,7 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
 
   readonly options: T & ChartContext
 
-  readonly root: DrawerTarget
+  protected root: DrawerTarget
 
   protected readonly sublayers
 
