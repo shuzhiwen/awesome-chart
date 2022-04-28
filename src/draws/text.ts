@@ -19,11 +19,9 @@ export function drawText({
   transformOrigin,
   writingMode,
   textDecoration,
-  enableUpdateAnimation = false,
-  updateAnimationDuration = 2000,
-  updateAnimationDelay = 0,
   mapping = noChange,
   data = [],
+  transition,
   container,
   className,
   ...rest
@@ -58,8 +56,8 @@ export function drawText({
       .attr('x', (d) => d.x)
       .attr('y', (d) => d.y - d.fontSize / 2)
       .transition()
-      .duration(enableUpdateAnimation ? updateAnimationDuration : 0)
-      .delay(enableUpdateAnimation ? updateAnimationDelay : 0)
+      .duration(transition?.duration ?? 0)
+      .delay(transition?.delay ?? 0)
       .attr('fill', (d) => d.fill)
       .attr('stroke', (d) => d.stroke)
       .attr('stroke-width', (d) => d.strokeWidth)

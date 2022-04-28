@@ -13,12 +13,10 @@ export function drawRect({
   fillOpacity,
   strokeOpacity,
   transformOrigin,
-  enableUpdateAnimation = false,
-  updateAnimationDuration = 2000,
-  updateAnimationDelay = 0,
   mapping = noChange,
   source = [],
   data = [],
+  transition,
   container,
   className,
   ...rest
@@ -44,8 +42,8 @@ export function drawRect({
       .join('rect')
       .attr('class', (d) => d.className)
       .transition()
-      .duration(enableUpdateAnimation ? updateAnimationDuration : 0)
-      .delay(enableUpdateAnimation ? updateAnimationDelay : 0)
+      .duration(transition?.duration ?? 0)
+      .delay(transition?.delay ?? 0)
       .attr('x', (d) => d.x)
       .attr('y', (d) => d.y)
       .attr('rx', (d) => d.rx || 0)

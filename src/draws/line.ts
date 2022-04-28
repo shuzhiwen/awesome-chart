@@ -10,12 +10,10 @@ export function drawLine({
   opacity,
   strokeOpacity,
   strokeDasharray,
-  enableUpdateAnimation = false,
-  updateAnimationDuration = 1000,
-  updateAnimationDelay = 0,
   mapping = noChange,
   source = [],
   data = [],
+  transition,
   container,
   className,
   ...rest
@@ -40,8 +38,8 @@ export function drawLine({
       .attr('class', (d) => d.className)
       .style('pointer-events', 'stroke')
       .transition()
-      .duration(enableUpdateAnimation ? updateAnimationDuration : 0)
-      .delay(enableUpdateAnimation ? updateAnimationDelay : 0)
+      .duration(transition?.duration ?? 0)
+      .delay(transition?.delay ?? 0)
       .attr('stroke', (d) => d.stroke)
       .attr('stroke-width', (d) => d.strokeWidth)
       .attr('stroke-dasharray', (d) => d.strokeDasharray)

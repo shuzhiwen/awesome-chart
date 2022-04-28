@@ -294,14 +294,13 @@ export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
             data: [],
           }
 
-        options.enableUpdateAnimation = false
+        options.transition = {}
         !groupData.hide && merge(options, groupData)
 
         if (this.backupData[sublayer][i] && this.backupAnimation.options?.[sublayer]) {
           const {duration, delay} = this.backupAnimation.options[sublayer].update || {}
-          options.enableUpdateAnimation = true
-          options.updateAnimationDuration = duration
-          options.updateAnimationDelay = delay
+          options.transition.duration = duration
+          options.transition.delay = delay
         }
 
         drawerMapping[type](options)

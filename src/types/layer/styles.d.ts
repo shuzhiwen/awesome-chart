@@ -1,3 +1,4 @@
+import {BasicAnimationOptions} from 'types/animation'
 import {CurveType} from '../draw'
 import {FormatNumberConfig} from '../utils'
 
@@ -11,9 +12,7 @@ export type GraphStyleShape = Partial<{
   strokeDasharray: MaybeGroup<string>
   transformOrigin: MaybeGroup<string>
   rotation: MaybeGroup<number>
-  enableUpdateAnimation: boolean
-  updateAnimationDuration: number
-  updateAnimationDelay: number
+  transition: Maybe<BasicAnimationOptions>
   mapping: (config: AnyObject) => AnyObject
 }>
 

@@ -11,12 +11,10 @@ export function drawPolygon({
   opacity,
   fillOpacity,
   strokeOpacity,
-  enableUpdateAnimation = false,
-  updateAnimationDuration = 2000,
-  updateAnimationDelay = 0,
   mapping = noChange,
   source = [],
   data = [],
+  transition,
   container,
   className,
   ...rest
@@ -43,8 +41,8 @@ export function drawPolygon({
       .join('polygon')
       .attr('class', (d) => d.className)
       .transition()
-      .duration(enableUpdateAnimation ? updateAnimationDuration : 0)
-      .delay(enableUpdateAnimation ? updateAnimationDelay : 0)
+      .duration(transition?.duration ?? 0)
+      .delay(transition?.delay ?? 0)
       .attr('points', (d) => d.pointString)
       .attr('fill', (d) => d.fill)
       .attr('stroke', (d) => d.stroke)
