@@ -1,3 +1,4 @@
+import {svgEasing} from 'animation'
 import {fabric} from 'fabric'
 import {IEllipseOptions} from 'fabric/fabric-impl'
 import {EllipseDrawerProps} from '../types'
@@ -41,6 +42,7 @@ export function drawEllipse({
       .transition()
       .duration(transition?.duration ?? 0)
       .delay(transition?.delay ?? 0)
+      .ease(svgEasing.get(transition?.easing)!)
       .attr('stroke', (d) => d.stroke)
       .attr('stroke-width', (d) => d.strokeWidth)
       .attr('cx', (d) => d.cx)

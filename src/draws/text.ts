@@ -1,3 +1,4 @@
+import {svgEasing} from 'animation'
 import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
 import {TextDrawerProps} from '../types'
@@ -58,6 +59,7 @@ export function drawText({
       .transition()
       .duration(transition?.duration ?? 0)
       .delay(transition?.delay ?? 0)
+      .ease(svgEasing.get(transition?.easing)!)
       .attr('fill', (d) => d.fill)
       .attr('stroke', (d) => d.stroke)
       .attr('stroke-width', (d) => d.strokeWidth)

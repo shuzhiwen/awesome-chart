@@ -2,6 +2,7 @@ import {fabric} from 'fabric'
 import {mergeAlpha, getAttr, noChange, isSvgContainer, isCanvasContainer} from '../utils'
 import {PolyDrawerProps} from '../types'
 import {IPolylineOptions} from 'fabric/fabric-impl'
+import {svgEasing} from 'animation'
 
 export function drawPolygon({
   engine,
@@ -43,6 +44,7 @@ export function drawPolygon({
       .transition()
       .duration(transition?.duration ?? 0)
       .delay(transition?.delay ?? 0)
+      .ease(svgEasing.get(transition?.easing)!)
       .attr('points', (d) => d.pointString)
       .attr('fill', (d) => d.fill)
       .attr('stroke', (d) => d.stroke)

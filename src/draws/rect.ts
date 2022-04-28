@@ -3,6 +3,7 @@ import {fabric} from 'fabric'
 import {mergeAlpha, getAttr, isSvgContainer, isCanvasContainer, noChange} from '../utils'
 import {DrawerDataShape, RectDrawerProps} from '../types'
 import {IRectOptions} from 'fabric/fabric-impl'
+import {svgEasing} from 'animation'
 
 export function drawRect({
   engine,
@@ -44,6 +45,7 @@ export function drawRect({
       .transition()
       .duration(transition?.duration ?? 0)
       .delay(transition?.delay ?? 0)
+      .ease(svgEasing.get(transition?.easing)!)
       .attr('x', (d) => d.x)
       .attr('y', (d) => d.y)
       .attr('rx', (d) => d.rx || 0)

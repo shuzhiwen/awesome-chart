@@ -1,3 +1,4 @@
+import {svgEasing} from 'animation'
 import {fabric} from 'fabric'
 import {IImageOptions} from 'fabric/fabric-impl'
 import {ImageDrawerProps} from '../types'
@@ -31,6 +32,7 @@ export function drawImage({
       .transition()
       .duration(transition?.duration ?? 0)
       .delay(transition?.delay ?? 0)
+      .ease(svgEasing.get(transition?.easing)!)
       .attr('opacity', (d) => d.opacity)
       .attr('x', (d) => d.x)
       .attr('y', (d) => d.y)

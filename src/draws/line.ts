@@ -1,3 +1,4 @@
+import {svgEasing} from 'animation'
 import {fabric} from 'fabric'
 import {ILineOptions} from 'fabric/fabric-impl'
 import {LineDrawerProps} from '../types'
@@ -40,6 +41,7 @@ export function drawLine({
       .transition()
       .duration(transition?.duration ?? 0)
       .delay(transition?.delay ?? 0)
+      .ease(svgEasing.get(transition?.easing)!)
       .attr('stroke', (d) => d.stroke)
       .attr('stroke-width', (d) => d.strokeWidth)
       .attr('stroke-dasharray', (d) => d.strokeDasharray)

@@ -2,6 +2,7 @@ import {fabric} from 'fabric'
 import {mergeAlpha, getAttr, noChange, isCanvasContainer, isSvgContainer} from '../utils'
 import {PathDrawerProps} from '../types'
 import {IPathOptions} from 'fabric/fabric-impl'
+import {svgEasing} from 'animation'
 
 export function drawPath({
   engine,
@@ -43,6 +44,7 @@ export function drawPath({
       .transition()
       .duration(transition?.duration ?? 0)
       .delay(transition?.delay ?? 0)
+      .ease(svgEasing.get(transition?.easing)!)
       .attr('d', (d) => d.path)
       .attr('fill', (d) => d.fill)
       .attr('stroke', (d) => d.stroke)
