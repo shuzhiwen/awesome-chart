@@ -13,8 +13,9 @@
     "dev": "vite  --port 9527",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "package": "yarn tsc && babel dist -o dist/main.min.js -s && cp -r src/types dist/types",
-    "clear": "rm -rf tsconfig.tsbuildinfo dist",
+    "package": "yarn tsc && cp -r src/types dist/types && yarn bundle && yarn clear",
+    "bundle": "babel dist -o dist/main.js -s && uglifyjs dist/main.js -m -o dist/main.min.js",
+    "clear": "rm tsconfig.tsbuildinfo dist/index.js && find dist/*/* -name '*.js' | xargs rm -f",
     "test": "yarn jest"
   },
   "dependencies": {
@@ -49,6 +50,7 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "5",
     "typescript": "^4.5.4",
+    "uglify-js": "^3.15.4",
     "vite": "^2.8.0",
     "vite-plugin-monaco-editor": "^1.0.10"
   },

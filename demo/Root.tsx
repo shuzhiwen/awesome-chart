@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import styles from './Root.module.css'
 import schema from './schema'
-import {SideBar} from './SideBar'
 import {Editor} from './Editor'
 import {Chart} from './Chart'
 import {tip} from './schema/base'
@@ -13,11 +12,6 @@ export function Root() {
 
   return (
     <div className={styles.container}>
-      <SideBar
-        onSelect={({code}) => {
-          setNewSchema(code)
-        }}
-      />
       <div className={styles.mainSection}>
         <Editor
           schema={newSchema}
