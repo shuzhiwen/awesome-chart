@@ -195,6 +195,8 @@ export class Chart {
       layers = this._layers.filter(({options}) => !disabledLayers.includes(options.type)),
       coordinate = axisLayer?.options.coordinate
 
+    isLayerAxis(axisLayer) && axisLayer.clearScale()
+
     layers.forEach((layer) => {
       const {scale, options} = layer,
         {axis} = options,

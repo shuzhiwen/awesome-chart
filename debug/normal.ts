@@ -3,7 +3,13 @@ import {DataTableList} from '../src/data'
 import {randomTableList} from '../src/utils'
 
 export function debugRectLayer(chart: Chart) {
-  const data = randomTableList({mode: 'normal', mu: 100, sigma: 1000, row: 3, column: 2}),
+  const data = randomTableList({
+      mode: 'normal',
+      mu: 100,
+      sigma: 1000,
+      row: 3,
+      column: 1 + Math.round(Math.random() * 2),
+    }),
     layers = chart.getLayersByType('rect')
 
   layers.forEach((layer) => {

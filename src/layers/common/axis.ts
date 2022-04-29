@@ -155,6 +155,10 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     })
   }
 
+  clearScale() {
+    Object.assign(this._scale, Object.fromEntries(SCALE_TYPES.map((type) => [type, null])))
+  }
+
   niceScale() {
     SCALE_TYPES.forEach((type) => {
       if (isScaleLinear(this.scale[type])) {
