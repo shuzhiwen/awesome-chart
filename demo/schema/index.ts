@@ -17,8 +17,23 @@ import sankey from './relation/sankey'
 import tree from './relation/tree'
 import treemap from './relation/treemap'
 import pack from './relation/pack'
+import {DebugLayerProps, debugRectLayer} from '../../test/debug/normal'
 
-export default {
+export interface MenuItemShape {
+  name: string
+  schema: ReturnType<typeof base>
+  debuggers?: ((props: DebugLayerProps) => void)[]
+}
+
+export interface MenuShape {
+  name: string
+  children: {
+    name: string
+    children: MenuItemShape[]
+  }[]
+}
+
+export const schemaMenu: MenuShape = {
   name: 'root',
   children: [
     {
@@ -26,7 +41,8 @@ export default {
       children: [
         {
           name: '基础文字',
-          code: base([
+          debuggers: [debugRectLayer],
+          schema: base([
             {
               type: 'text',
               options: {
@@ -42,12 +58,9 @@ export default {
               },
               animation: {
                 text: {
-                  // enter: {
-                  //   type: 'erase',
-                  //   delay: 0,
-                  //   duration: 3000,
-                  //   direction: 'left',
-                  // },
+                  enter: {
+                    type: 'fade',
+                  },
                 },
               },
             },
@@ -60,23 +73,23 @@ export default {
       children: [
         {
           name: '分组折线',
-          code: base(line({mode: 'default', hasArea: false, curve: 'curveLinear'})),
+          schema: base(line({mode: 'default', hasArea: false, curve: 'curveLinear'})),
         },
         {
           name: '堆叠折线',
-          code: base(line({mode: 'stack', hasArea: false, curve: 'curveLinear'})),
+          schema: base(line({mode: 'stack', hasArea: false, curve: 'curveLinear'})),
         },
         {
           name: '分组面积',
-          code: base(line({mode: 'default', hasArea: true, curve: 'curveMonotoneX'})),
+          schema: base(line({mode: 'default', hasArea: true, curve: 'curveMonotoneX'})),
         },
         {
           name: '堆叠面积',
-          code: base(line({mode: 'stack', hasArea: true, curve: 'curveMonotoneX'})),
+          schema: base(line({mode: 'stack', hasArea: true, curve: 'curveMonotoneX'})),
         },
         {
           name: '阶梯折线',
-          code: base(line({mode: 'default', hasArea: false, curve: 'curveStep'})),
+          schema: base(line({mode: 'default', hasArea: false, curve: 'curveStep'})),
         },
       ],
     },
@@ -85,23 +98,23 @@ export default {
       children: [
         {
           name: '分组柱状',
-          code: base(rect({type: 'column', mode: 'group'})),
+          schema: base(rect({type: 'column', mode: 'group'})),
         },
         {
           name: '堆叠柱状',
-          code: base(rect({type: 'column', mode: 'stack'})),
+          schema: base(rect({type: 'column', mode: 'stack'})),
         },
         {
           name: '区间柱状',
-          code: base(rect({type: 'column', mode: 'interval'})),
+          schema: base(rect({type: 'column', mode: 'interval'})),
         },
         {
           name: '瀑布柱状',
-          code: base(rect({type: 'column', mode: 'waterfall'})),
+          schema: base(rect({type: 'column', mode: 'waterfall'})),
         },
         {
           name: '百分比柱状',
-          code: base(rect({type: 'column', mode: 'percentage'})),
+          schema: base(rect({type: 'column', mode: 'percentage'})),
         },
       ],
     },
@@ -110,23 +123,23 @@ export default {
       children: [
         {
           name: '分组条形',
-          code: base(rect({type: 'bar', mode: 'group'})),
+          schema: base(rect({type: 'bar', mode: 'group'})),
         },
         {
           name: '堆叠条形',
-          code: base(rect({type: 'bar', mode: 'stack'})),
+          schema: base(rect({type: 'bar', mode: 'stack'})),
         },
         {
           name: '区间条形',
-          code: base(rect({type: 'bar', mode: 'interval'})),
+          schema: base(rect({type: 'bar', mode: 'interval'})),
         },
         {
           name: '瀑布条形',
-          code: base(rect({type: 'bar', mode: 'waterfall'})),
+          schema: base(rect({type: 'bar', mode: 'waterfall'})),
         },
         {
           name: '百分比条形',
-          code: base(rect({type: 'bar', mode: 'percentage'})),
+          schema: base(rect({type: 'bar', mode: 'percentage'})),
         },
       ],
     },
@@ -135,19 +148,19 @@ export default {
       children: [
         {
           name: '基础饼图',
-          code: base(pie({type: 'pie', mode: 'default', innerRadius: 0})),
+          schema: base(pie({type: 'pie', mode: 'default', innerRadius: 0})),
         },
         {
           name: '基础环图',
-          code: base(pie({type: 'pie', mode: 'default', innerRadius: 30})),
+          schema: base(pie({type: 'pie', mode: 'default', innerRadius: 30})),
         },
         {
           name: '南丁格尔玫瑰',
-          code: base(pie({type: 'nightingaleRose', mode: 'default', innerRadius: 30})),
+          schema: base(pie({type: 'nightingaleRose', mode: 'default', innerRadius: 30})),
         },
         {
           name: '堆叠南丁格尔玫瑰',
-          code: base(pie({type: 'nightingaleRose', mode: 'stack', innerRadius: 30})),
+          schema: base(pie({type: 'nightingaleRose', mode: 'stack', innerRadius: 30})),
         },
       ],
     },
@@ -156,11 +169,11 @@ export default {
       children: [
         {
           name: '分组雷达',
-          code: base(radar({mode: 'default'})),
+          schema: base(radar({mode: 'default'})),
         },
         {
           name: '堆叠雷达',
-          code: base(radar({mode: 'stack'})),
+          schema: base(radar({mode: 'stack'})),
         },
       ],
     },
@@ -169,11 +182,11 @@ export default {
       children: [
         {
           name: '基础散点',
-          code: base(scatter({pointSize: [10, 10]})),
+          schema: base(scatter({pointSize: [10, 10]})),
         },
         {
           name: '气泡',
-          code: base(scatter({pointSize: [10, 30]})),
+          schema: base(scatter({pointSize: [10, 30]})),
         },
       ],
     },
@@ -182,11 +195,11 @@ export default {
       children: [
         {
           name: '方形矩阵',
-          code: base(matrix({shape: 'rect'})),
+          schema: base(matrix({shape: 'rect'})),
         },
         {
           name: '圆形矩阵',
-          code: base(matrix({shape: 'circle'})),
+          schema: base(matrix({shape: 'circle'})),
         },
       ],
     },
@@ -195,27 +208,27 @@ export default {
       children: [
         {
           name: '边缘捆图',
-          code: base(edgeBundle()),
+          schema: base(edgeBundle()),
         },
         {
           name: '和弦图',
-          code: base(chord()),
+          schema: base(chord()),
         },
         {
           name: '桑基图',
-          code: base(sankey()),
+          schema: base(sankey()),
         },
         {
           name: '树图',
-          code: base(tree()),
+          schema: base(tree()),
         },
         {
           name: '矩阵树图',
-          code: base(treemap()),
+          schema: base(treemap()),
         },
         {
           name: '打包图',
-          code: base(pack()),
+          schema: base(pack()),
         },
       ],
     },
@@ -224,11 +237,11 @@ export default {
       children: [
         {
           name: '仪表盘',
-          code: base(dashboard({type: 'dashboard'})),
+          schema: base(dashboard({type: 'dashboard'})),
         },
         {
           name: '环形指标卡',
-          code: base(dashboard({type: 'indicator'})),
+          schema: base(dashboard({type: 'indicator'})),
         },
       ],
     },
@@ -237,11 +250,11 @@ export default {
       children: [
         {
           name: '翻牌器1',
-          code: base(digitalFlop({mode: 'vertical'})),
+          schema: base(digitalFlop({mode: 'vertical'})),
         },
         {
           name: '翻牌器2',
-          code: base(digitalFlop({mode: 'flop'})),
+          schema: base(digitalFlop({mode: 'flop'})),
         },
       ],
     },
@@ -250,15 +263,15 @@ export default {
       children: [
         {
           name: '指标卡',
-          code: base(indicator()),
+          schema: base(indicator()),
         },
         {
           name: '时间轴',
-          code: base(timeline()),
+          schema: base(timeline()),
         },
         {
           name: '切换菜单',
-          code: base(tabMenu()),
+          schema: base(tabMenu()),
         },
       ],
     },
@@ -267,7 +280,7 @@ export default {
       children: [
         {
           name: '基础地图',
-          code: base(map()),
+          schema: base(map()),
         },
       ],
     },

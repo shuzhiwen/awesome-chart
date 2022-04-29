@@ -1,14 +1,13 @@
 import React, {useState} from 'react'
 import styles from './Root.module.css'
-import schema from './schema'
+import {schemaMenu} from './schema'
 import {Editor} from './Editor'
 import {Chart} from './Chart'
 import {tip} from './schema/base'
 
-let backup = schema.children[0].children[0].code
-
 export function Root() {
-  const [newSchema, setNewSchema] = useState(backup)
+  const {schema, debuggers} = schemaMenu.children[0].children[0]
+  const [newSchema, setNewSchema] = useState(schema)
 
   return (
     <div className={styles.container}>
@@ -17,11 +16,10 @@ export function Root() {
           schema={newSchema}
           onChange={(value) => {
             setNewSchema(value)
-            backup = value
           }}
         />
         <div className={styles.chartSection}>
-          <Chart title="CURRENT" schema={newSchema} />
+          <Chart debuggers={debuggers} schema={newSchema} />
           <pre className={styles.tip}>{tip}</pre>
         </div>
       </div>

@@ -26,6 +26,7 @@ import {
   LayerOptions,
   LayerScalesShape,
   D3Selection,
+  LayerType,
 } from '../types'
 
 fabric.Object.prototype.objectCaching = false
@@ -163,14 +164,16 @@ export class Chart {
     return layer
   }
 
-  getLayer(id: string) {
-    const layer = this._layers.find(({options}) => options.id === id)
-    !layer && this.log.warn('Invalid ID', id)
-    return layer
+  getLayerById(id: string) {
+    return this._layers.find(({options}) => options.id === id)
+  }
+
+  getLayersByType(type: LayerType) {
+    return this._layers.filter(({options}) => options.type === type)
   }
 
   updateLayer(id: string, {data, scale, style, animation}: LayerSchema) {
-    const layer = this.getLayer(id)
+    const layer = this.getLayerById(id)
 
     if (layer) {
       !isNil(data) && layer.setData(data)
@@ -182,7 +185,7 @@ export class Chart {
   }
 
   setVisible(id: string, visible: boolean) {
-    this.getLayer(id)?.setVisible(visible)
+    this.getLayerById(id)?.setVisible(visible)
   }
 
   bindCoordinate() {
