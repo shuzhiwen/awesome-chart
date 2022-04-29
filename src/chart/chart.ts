@@ -20,7 +20,6 @@ import {
   ChartState,
   LayoutCreator,
   ChartProps,
-  LayerType,
   LayerSchema,
   ChartContext,
   GradientCreatorProps,
@@ -142,7 +141,7 @@ export class Chart {
     })
   }
 
-  createLayer(type: LayerType, options: LayerOptions) {
+  createLayer(options: LayerOptions) {
     const context: ChartContext = {
       root: this.root,
       theme: this.theme,
@@ -157,7 +156,7 @@ export class Chart {
       event: this.event,
     }
 
-    const layer = new layerMapping[type](options, context)
+    const layer = new layerMapping[options.type](options as any, context)
     this._layers.push(layer)
     this._state = 'ready'
     this.event.fire(this.state)

@@ -82,7 +82,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
     return this._style!
   }
 
-  constructor(options: LayerOptions, context: ChartContext) {
+  constructor(options: LayerRectOptions, context: ChartContext) {
     super({
       context,
       options: {...defaultOptions, ...options},

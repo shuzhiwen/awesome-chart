@@ -31,7 +31,7 @@ import {
   FabricGroup,
 } from '../types'
 
-export abstract class LayerBase<T extends LayerOptions = LayerOptions> {
+export abstract class LayerBase<T extends LayerOptions> {
   abstract data: Maybe<DataShape>
 
   abstract setData(data?: Maybe<DataShape>): void

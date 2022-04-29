@@ -16,8 +16,8 @@ import {
   CircleDrawerProps,
   DrawerDataShape,
   Layer,
+  LayerLegendOptions,
   LayerLegendStyleShape,
-  LayerOptions,
   LegendDataShape,
   LegendShape,
   LineDrawerProps,
@@ -41,7 +41,7 @@ const defaultStyle: LayerLegendStyleShape = {
   },
 }
 
-export class LayerLegend extends LayerBase<LayerOptions> {
+export class LayerLegend extends LayerBase<LayerLegendOptions> {
   private _data = new DataBase<{
     text: Meta[]
     shape: LegendShape[]
@@ -97,7 +97,7 @@ export class LayerLegend extends LayerBase<LayerOptions> {
     return this._style
   }
 
-  constructor(options: LayerOptions, context: ChartContext) {
+  constructor(options: LayerLegendOptions, context: ChartContext) {
     super({
       context,
       options,

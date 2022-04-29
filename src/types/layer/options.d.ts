@@ -1,34 +1,71 @@
 import {LayoutArea} from '../layout'
+import {LayerType} from './base'
 
-export type LayerOptions<T extends AnyObject = AnyObject> = Partial<T> & {
+type BasicLayerOptions<T extends LayerType, P extends AnyObject = {}> = Partial<P> & {
   id: string
+  type: T
   layout: LayoutArea
   coordinate?: Coordinate
   axis?: 'main' | 'minor'
 }
 
-export type LayerAxisOptions = LayerOptions<{
-  coordinate: Coordinate
-}>
+export type LayerOptions =
+  | LayerAxisOptions
+  | LayerAuxiliaryOptions
+  | LayerLineOptions
+  | LayerRectOptions
+  | LayerArcOptions
+  | LayerFlopperOptions
+  | LayerTextOptions
+  | LayerInteractiveOptions
+  | LayerLegendOptions
 
-export type LayerAuxiliaryOptions = LayerOptions<{
-  direction: Direction
-}>
+export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
-export type LayerLineOptions = LayerOptions<{
-  mode: 'cover' | 'stack'
-}>
+export type LayerLegendOptions = BasicLayerOptions<'legend'>
 
-export type LayerRectOptions = LayerOptions<{
-  variant: 'column' | 'bar'
-  mode: 'cover' | 'group' | 'stack' | 'interval' | 'waterfall' | 'percentage'
-}>
+export type LayerTextOptions = BasicLayerOptions<'text'>
 
-export type LayerArcOptions = LayerOptions<{
-  variant: 'pie' | 'nightingaleRose'
-}>
+export type LayerAxisOptions = BasicLayerOptions<
+  'axis',
+  {
+    coordinate: Coordinate
+  }
+>
 
-export type LayerFlopperOptions = LayerOptions<{
-  mode: 'vertical' | 'flop'
-  autoplay: boolean
-}>
+export type LayerAuxiliaryOptions = BasicLayerOptions<
+  'auxiliary',
+  {
+    direction: Direction
+  }
+>
+
+export type LayerLineOptions = BasicLayerOptions<
+  'line',
+  {
+    mode: 'cover' | 'stack'
+  }
+>
+
+export type LayerRectOptions = BasicLayerOptions<
+  'rect',
+  {
+    variant: 'column' | 'bar'
+    mode: 'cover' | 'group' | 'stack' | 'interval' | 'waterfall' | 'percentage'
+  }
+>
+
+export type LayerArcOptions = BasicLayerOptions<
+  'arc',
+  {
+    variant: 'pie' | 'nightingaleRose'
+  }
+>
+
+export type LayerFlopperOptions = BasicLayerOptions<
+  'flopper',
+  {
+    mode: 'vertical' | 'flop'
+    autoplay: boolean
+  }
+>

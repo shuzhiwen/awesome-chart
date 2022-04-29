@@ -1,6 +1,6 @@
 import {isArray} from 'lodash'
 import {DataTableList, DataTable, DataRelation, DataBase} from '../data'
-import {CreateChartSchema, CreateLayerSchema} from '../types'
+import {CreateChartSchema, CreateLayerSchema, LayerOptions} from '../types'
 import {Chart} from './chart'
 import {
   createLog,
@@ -18,8 +18,9 @@ import {
 const log = createLog('CreateChart')
 
 export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
-  const {type, options, data, scale, style, animation, event} = schema
-  const layer = chart.createLayer(type, {...options, layout: chart.layout[options.layout]})
+  const {type, options, data, scale, style, animation, event} = schema,
+    layerOptions = {type, ...options, layout: chart.layout[options.layout]} as LayerOptions,
+    layer = chart.createLayer(layerOptions)
   let dataSet = data
 
   if (type === 'legend' && isLayerLegend(layer)) {

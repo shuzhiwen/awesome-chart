@@ -27,9 +27,9 @@ export type BackupAnimationShape = Record<string, Maybe<AnyObject>> & {
 
 export type LegendShape = 'rect' | 'circle' | 'broken-line' | 'dotted-line' | 'star'
 
-export interface LayerBaseProps<T> {
+export interface LayerBaseProps<T extends LayerOptions> {
   context: ChartContext
-  options: T & LayerOptions
+  options: T
   tooltipTargets?: string[]
   sublayers?: string[]
 }

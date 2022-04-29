@@ -8,7 +8,7 @@ import {
   LegendDataShape,
   LayerAxisScaleShape,
   RectDrawerProps,
-  LayerOptions,
+  LayerInteractiveOptions,
 } from '../../types'
 import {LayerAuxiliary} from './auxiliary'
 import {isScaleLinear, uuid} from '../../utils'
@@ -19,7 +19,7 @@ const defaultStyle: LayerInteractiveStyleShape = {
   },
 }
 
-export class LayerInteractive extends LayerBase {
+export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
   public legendData: Maybe<LegendDataShape>
 
   private _data: Maybe<DataTableList>
@@ -44,19 +44,21 @@ export class LayerInteractive extends LayerBase {
     return this._style!
   }
 
-  constructor(options: LayerOptions, context: ChartContext) {
+  constructor(options: LayerInteractiveOptions, context: ChartContext) {
     super({context, options, sublayers: ['rect']})
     const {layout, createSublayer, event} = this.options
 
     this.helperAuxiliary = [
-      createSublayer('auxiliary', {
+      createSublayer({
         id: uuid(),
         layout,
+        type: 'auxiliary',
         direction: 'vertical',
       }),
-      createSublayer('auxiliary', {
+      createSublayer({
         id: uuid(),
         layout,
+        type: 'auxiliary',
         direction: 'horizontal',
       }),
     ] as LayerInteractive['helperAuxiliary']

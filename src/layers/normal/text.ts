@@ -6,7 +6,7 @@ import {
   BackupDataItemShape,
   ChartContext,
   DrawerDataShape,
-  LayerOptions,
+  LayerTextOptions,
   LayerTextStyleShape,
   TextDrawerProps,
 } from '../../types'
@@ -19,7 +19,7 @@ const defaultStyle: LayerTextStyleShape = {
   },
 }
 
-export class LayerText extends LayerBase {
+export class LayerText extends LayerBase<LayerTextOptions> {
   private _data: Maybe<DataBase<string>> = null
 
   private _style = defaultStyle
@@ -34,7 +34,7 @@ export class LayerText extends LayerBase {
     return this._style
   }
 
-  constructor(options: LayerOptions, context: ChartContext) {
+  constructor(options: LayerTextOptions, context: ChartContext) {
     super({options, context, sublayers: ['text']})
   }
 

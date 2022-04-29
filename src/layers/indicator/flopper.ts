@@ -65,7 +65,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
     return this._style
   }
 
-  constructor(options: LayerOptions, context: ChartContext) {
+  constructor(options: LayerFlopperOptions, context: ChartContext) {
     super({options: {...defaultOptions, ...options}, context})
 
     const {containerWidth, containerHeight, layout, root, autoplay} = this.options,
