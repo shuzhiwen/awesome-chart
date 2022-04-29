@@ -136,9 +136,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     SCALE_TYPES.forEach((type) => {
       if (!scale?.[type]) {
         return
-      } else if (!this.scale[type] || coordinate === 'geographic') {
-        this.scale[type] = scale?.[type]
-      } else if (isScaleLinear(this.scale[type])) {
+      } else if (isScaleLinear(this.scale[type]) && coordinate !== 'geographic') {
         const current = this.scale[type]?.domain()!,
           incoming = scale[type]?.domain()!
 
@@ -151,6 +149,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
             isReverse ? Math.min(current[1], incoming[1]) : Math.max(current[1], incoming[1]),
           ])
         }
+      } else {
+        this.scale[type] = scale?.[type]
       }
     })
   }

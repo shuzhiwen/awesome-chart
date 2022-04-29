@@ -14,7 +14,6 @@ import {
   ChartContext,
   DrawerDataShape,
   LayerLineScaleShape,
-  LayerOptions,
   LayerRectOptions,
   LayerRectScaleShape,
   LayerRectStyleShape,
@@ -44,6 +43,8 @@ const defaultStyle: LayerRectStyleShape = {
 
 export class LayerRect extends LayerBase<LayerRectOptions> {
   public legendData: Maybe<LegendDataShape>
+
+  private needRescale = false
 
   private _data: Maybe<DataTableList>
 
@@ -94,6 +95,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   setData(data: LayerRect['data']) {
     const {mode} = this.options
 
+    this.needRescale = true
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
       if (mode === 'interval') {
         return data.select(data.headers.slice(0, 3))
@@ -106,6 +108,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
   setScale(scale: LayerLineScaleShape) {
     this._scale = createScale(undefined, this.scale, scale)
+    this.needRescale = false
   }
 
   setStyle(style: LayerRectStyleShape) {
@@ -113,7 +116,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   }
 
   update() {
-    !this.scale && this.createScale()
+    this.needRescale && this.createScale()
 
     const {variant, mode, layout} = this.options,
       {rect} = this.style,
@@ -383,6 +386,8 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   }
 
   private createScale() {
+    this.needRescale = false
+
     const {layout, variant = 'column', mode} = this.options,
       {width, height} = layout,
       {headers} = this.data,

@@ -33,6 +33,8 @@ const defaultStyle: LayerArcStyleShape = {
 export class LayerArc extends LayerBase<LayerArcOptions> {
   public legendData: Maybe<LegendDataShape>
 
+  private needRescale = false
+
   private _data: Maybe<DataTableList>
 
   private _scale: LayerArcScaleShape
@@ -77,6 +79,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
   setData(data: LayerArc['data']) {
     const {variant} = this.options
 
+    this.needRescale = true
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
       if (variant === 'pie') {
         return data.select(data.headers.slice(0, 2))
@@ -87,10 +90,12 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
 
   setScale(scale: LayerArcScaleShape) {
     this._scale = createScale(undefined, this.scale, scale)
+    this.needRescale = false
   }
 
   setStyle(style: LayerArcStyleShape) {
     this._style = createStyle(defaultStyle, this.style, style)
+    this.needRescale = true
   }
 
   update() {
@@ -98,9 +103,9 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       this.arcData = []
       this.textData = []
       return
-    } else {
-      !this.scale && this.createScale()
     }
+
+    this.needRescale && this.createScale()
 
     const {layout, variant} = this.options,
       {width, height, top, left} = layout,
@@ -195,6 +200,8 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
   }
 
   private createScale() {
+    this.needRescale = false
+
     const {layout, variant} = this.options,
       {width, height} = layout,
       {headers} = this.data,

@@ -191,7 +191,8 @@ export class Chart {
   bindCoordinate() {
     const axisLayer = this._layers.find((layer) => isLayerAxis(layer)),
       interactiveLayer = this._layers.find((layer) => isLayerInteractive(layer)),
-      layers = this._layers.filter((layer) => !isLayerAxis(layer) && !isLayerBaseMap(layer)),
+      disabledLayers: LayerType[] = ['interactive', 'axis', 'legend', 'auxiliary'],
+      layers = this._layers.filter(({options}) => !disabledLayers.includes(options.type)),
       coordinate = axisLayer?.options.coordinate
 
     layers.forEach((layer) => {
@@ -220,7 +221,7 @@ export class Chart {
     isLayerAxis(axisLayer) && axisLayer.niceScale()
     interactiveLayer?.setScale(axisLayer?.scale)
 
-    layers.forEach((layer) => {
+    this._layers.forEach((layer) => {
       const scales = {...layer.scale, ...axisLayer?.scale},
         {axis, layout} = layer.options
 
@@ -240,10 +241,8 @@ export class Chart {
   }
 
   destroy() {
-    while (this._layers.length) {
-      this._layers.shift()?.destroy()
-    }
-
+    this._layers.forEach((layer) => layer.destroy())
+    this._layers.length = 0
     this._state = 'destroy'
     this.tooltip.destroy()
     this.event.fire(this.state)

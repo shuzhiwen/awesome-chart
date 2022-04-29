@@ -17,12 +17,13 @@ import sankey from './relation/sankey'
 import tree from './relation/tree'
 import treemap from './relation/treemap'
 import pack from './relation/pack'
-import {DebugLayerProps, debugRectLayer} from '../../test/debug/normal'
+import {debugRectLayer} from '../../debug'
+import {Chart} from '../../src'
 
 export interface MenuItemShape {
   name: string
   schema: ReturnType<typeof base>
-  debuggers?: ((props: DebugLayerProps) => void)[]
+  debuggers?: ((chart: Chart) => void)[]
 }
 
 export interface MenuShape {

@@ -21,7 +21,7 @@ export const Chart = (props: {
     }, [engine]),
     toggleDebug = useCallback(() => {
       if (chart && !isDebug) {
-        debuggers.forEach((fn) => fn({chart: chart, interval: 3000}))
+        debuggers.forEach((fn) => fn(chart))
         setDebug(true)
       }
     }, [engine, chart])
