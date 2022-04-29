@@ -1,4 +1,4 @@
-import {BasicAnimationOptions} from 'types/animation'
+import {BasicAnimationOptions} from '../animation'
 import {CurveType} from '../draw'
 import {FormatNumberConfig} from '../utils'
 

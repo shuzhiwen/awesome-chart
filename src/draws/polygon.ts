@@ -2,7 +2,7 @@ import {fabric} from 'fabric'
 import {mergeAlpha, getAttr, noChange, isSvgContainer, isCanvasContainer} from '../utils'
 import {PolyDrawerProps} from '../types'
 import {IPolylineOptions} from 'fabric/fabric-impl'
-import {svgEasing} from 'animation'
+import {svgEasing} from '../animation'
 
 export function drawPolygon({
   engine,

@@ -2,7 +2,7 @@ import {fabric} from 'fabric'
 import {mergeAlpha, getAttr, noChange, isCanvasContainer, isSvgContainer} from '../utils'
 import {PathDrawerProps} from '../types'
 import {IPathOptions} from 'fabric/fabric-impl'
-import {svgEasing} from 'animation'
+import {svgEasing} from '../animation'
 
 export function drawPath({
   engine,

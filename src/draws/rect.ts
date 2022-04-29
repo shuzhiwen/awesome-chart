@@ -3,7 +3,7 @@ import {fabric} from 'fabric'
 import {mergeAlpha, getAttr, isSvgContainer, isCanvasContainer, noChange} from '../utils'
 import {DrawerDataShape, RectDrawerProps} from '../types'
 import {IRectOptions} from 'fabric/fabric-impl'
-import {svgEasing} from 'animation'
+import {svgEasing} from '../animation'
 
 export function drawRect({
   engine,

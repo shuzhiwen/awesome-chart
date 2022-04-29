@@ -1,4 +1,4 @@
-import {svgEasing} from 'animation'
+import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
 import {TextDrawerProps} from '../types'

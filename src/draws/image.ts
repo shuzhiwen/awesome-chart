@@ -1,4 +1,4 @@
-import {svgEasing} from 'animation'
+import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {IImageOptions} from 'fabric/fabric-impl'
 import {ImageDrawerProps} from '../types'

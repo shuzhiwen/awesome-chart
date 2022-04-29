@@ -19,7 +19,6 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "composite": true,
-    "baseUrl": "src",
     "rootDir": "src",
     "outDir": "dist"
   },
