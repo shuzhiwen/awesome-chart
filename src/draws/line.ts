@@ -37,7 +37,6 @@ export function drawLine({
       .data(configuredData.map(mapping) as typeof configuredData)
       .join('line')
       .attr('class', (d) => d.className)
-      .style('pointer-events', 'stroke')
       .transition()
       .duration(transition?.duration ?? 0)
       .delay(transition?.delay ?? 0)
