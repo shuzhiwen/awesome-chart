@@ -12,7 +12,7 @@ import {
 
 type Shape = AnimationBase<Options>
 
-const bind = (animations: Shape[], callback: Function) => {
+const bind = (animations: Shape[], callback: AnyFunction) => {
   Promise.all(
     animations.map(
       (instance) =>
@@ -40,7 +40,7 @@ export class AnimationQueue extends AnimationBase<Options> {
     this.queue = [animationHead]
   }
 
-  connect(priorityConfig?: number[] | Function) {
+  connect(priorityConfig?: number[] | ((queues: Shape[]) => number[])) {
     this.queue.forEach((instance) => {
       instance.event.off('start')
       instance.event.off('end')

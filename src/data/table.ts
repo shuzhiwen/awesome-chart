@@ -31,7 +31,7 @@ export class DataTable extends DataBase<RawTable, Options> {
       columnsIndex = _columns.map((column) => this.columns.findIndex((value) => value === column))
 
     for (let i = 0; i < rowsIndex.length; i++) {
-      let row: Meta[] = []
+      const row: Meta[] = []
       for (let j = 0; j < columnsIndex.length; j++) {
         row.push(this.body[columnsIndex[j]][rowsIndex[i]])
       }

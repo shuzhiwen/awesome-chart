@@ -2,7 +2,7 @@ import {isNil, isFunction, isString} from 'lodash'
 import {group} from './chaos'
 import {uuid} from './random'
 
-type Callback = Function & {
+type Callback = AnyFunction & {
   category?: string
   isOnceDone?: boolean
 }

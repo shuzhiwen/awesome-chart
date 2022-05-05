@@ -127,9 +127,9 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
 
     this.legendDataGroup = layers.map((layer) => cloneDeep(layer.legendData)!)
     this.legendDataGroup.forEach(({legends}) => {
-      data.text.push(...legends?.map(({label}) => label)!)
-      data.shape.push(...legends?.map(({shape}) => shape)!)
-      data.shapeColors.push(...legends?.map(({color}) => color)!)
+      data.text.push(...(legends?.map(({label}) => label) ?? []))
+      data.shape.push(...(legends?.map(({shape}) => shape) ?? []))
+      data.shapeColors.push(...(legends?.map(({color}) => color) ?? []))
       data.textColors.push(...new Array(legends?.length).fill('white'))
     })
     this.filter(layers)
@@ -145,7 +145,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       counts = this.legendDataGroup.map(({legends}) => legends?.length),
       filterTypes = this.legendDataGroup.map(({filter}) => filter),
       colorMatrix = this.legendDataGroup.map(({colorMatrix}) => colorMatrix),
-      active = new Array<Boolean>(colors.length).fill(true)
+      active = new Array<boolean>(colors.length).fill(true)
 
     this.event.onWithOff(
       'mousedown-interactive',

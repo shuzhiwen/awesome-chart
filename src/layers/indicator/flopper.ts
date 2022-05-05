@@ -18,7 +18,6 @@ import {
   D3Selection,
   LayerFlopperOptions,
   LayerFlopperStyleShape,
-  LayerOptions,
 } from '../../types'
 
 const defaultOptions: Partial<LayerFlopperOptions> = {
@@ -108,7 +107,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
     this._data = validateAndCreateData('base', this.data, data)
     this.magnitudes = {}
 
-    const {value} = this.data?.source!,
+    const {value} = this.data?.source ?? {},
       [integer, decimal] = String(value).split('.')
 
     for (let i = 0; integer && i < integer.length; i++) {
@@ -298,12 +297,17 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       } else if (index !== prevIndex) {
         const cells = select(els[i]).selectAll(`.${this.className}-cell`).nodes().reverse(),
           [backCell, frontCell] = [cells[index], cells[prevIndex]],
-          _ = select(backCell).selectAll('.top').style('z-index', 1),
-          backBottom = select(backCell).selectAll('.bottom').style('z-index', 2),
-          frontTop = select(frontCell).selectAll('.top').style('z-index', 3),
-          frontBottom = select(frontCell).selectAll('.bottom').style('z-index', 1),
+          backTop = select(backCell).selectAll('.top'),
+          backBottom = select(backCell).selectAll('.bottom'),
+          frontTop = select(frontCell).selectAll('.top'),
+          frontBottom = select(frontCell).selectAll('.bottom'),
           getTransform = (selector: D3Selection, rotateX: number) =>
             safeTransform(selector.style('transform'), 'rotateX', rotateX, {unit: true})
+
+        backTop.style('z-index', 1)
+        backBottom.style('z-index', 2)
+        frontTop.style('z-index', 3)
+        frontBottom.style('z-index', 1)
 
         backBottom.style('transform', getTransform(backBottom, 180))
         anime({targets: backBottom.nodes(), rotateX: 0, duration, easing})

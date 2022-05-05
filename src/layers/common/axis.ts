@@ -136,9 +136,11 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     SCALE_TYPES.forEach((type) => {
       if (!scale?.[type]) {
         return
-      } else if (isScaleLinear(this.scale[type]) && coordinate !== 'geographic') {
-        const current = this.scale[type]?.domain()!,
-          incoming = scale[type]?.domain()!
+      } else if (!this.scale[type] || coordinate === 'geographic') {
+        this.scale[type] = scale?.[type]
+      } else if (isScaleLinear(this.scale[type])) {
+        const current = this.scale[type]?.domain() ?? [],
+          incoming = scale[type]?.domain() ?? []
 
         if (current[0] > current[1] !== incoming[0] > incoming[1]) {
           this.log.warn('Layers scale does not match', {current, incoming})

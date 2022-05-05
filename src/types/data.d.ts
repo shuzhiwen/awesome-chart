@@ -50,4 +50,4 @@ export interface TableOptions {
   target?: 'row' | 'column'
 }
 
-export interface RelationOptions {}
+export type RelationOptions = AnyObject<unknown>

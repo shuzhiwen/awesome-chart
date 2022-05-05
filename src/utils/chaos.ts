@@ -4,7 +4,7 @@ import {isArray, isNil, isNumber} from 'lodash'
 import {D3Selection} from '../types'
 
 const ctx = document.createElement('canvas').getContext('2d')!
-const fontFamily = "'PingFang SC', 'Helvetica Neue', Helvetica, Tahoma, Helvetica, sans-serif"
+const fontFamily = '"PingFang SC", "Helvetica Neue", Helvetica, Tahoma, Helvetica, sans-serif'
 
 export function noChange(input: any) {
   return input
@@ -48,7 +48,7 @@ export function mergeAlpha<T>(color: T, opacity: number) {
   }
 }
 
-export function addStyle(target: D3Selection, style: AnyObject = {}, index: number = 0) {
+export function addStyle(target: D3Selection, style: AnyObject = {}, index = 0) {
   Object.entries(style).forEach(([key, value]) => target.style(key, getAttr(value, index, '')))
   return target
 }
@@ -59,7 +59,7 @@ export function addEvent(target: D3Selection, event: AnyEventObject = {}, data?:
   return target
 }
 
-export function getAttr<T>(target: MaybeGroup<T>, index: number = 0, defaultValue: T): T {
+export function getAttr<T>(target: MaybeGroup<T>, index = 0, defaultValue: T): T {
   if (isArray(target)) {
     if (target.length > index && !isNil(target[index])) {
       return target[index] ?? defaultValue

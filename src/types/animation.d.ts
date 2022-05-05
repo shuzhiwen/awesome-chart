@@ -1,4 +1,4 @@
-import {Object} from 'fabric/fabric-impl'
+import {Object as FabricObject} from 'fabric/fabric-impl'
 import {animationMapping} from '../animation'
 import {D3Selection, DrawerTarget} from './draw'
 
@@ -34,7 +34,7 @@ export type AnimationEasing =
 export interface BasicAnimationOptions {
   id?: string
   type?: AnimationType
-  targets?: D3Selection | Object[]
+  targets?: D3Selection | FabricObject[]
   duration?: number
   delay?: number
   loop?: boolean
@@ -46,7 +46,7 @@ export interface AnimationProps<T extends BasicAnimationOptions> {
   options?: T
 }
 
-export interface AnimationEmptyOptions extends BasicAnimationOptions {}
+export type AnimationEmptyOptions = BasicAnimationOptions
 
 export interface AnimationFadeOptions extends BasicAnimationOptions {
   initialOpacity?: number

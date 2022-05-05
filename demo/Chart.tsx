@@ -24,7 +24,7 @@ export const Chart = (props: {
         debuggers.forEach((fn) => fn(chart))
         setDebug(true)
       }
-    }, [engine, chart])
+    }, [chart, isDebug, debuggers])
 
   useEffect(() => {
     try {
@@ -42,6 +42,7 @@ export const Chart = (props: {
     } catch (e) {
       console.error(e)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schema, engine])
 
   return (

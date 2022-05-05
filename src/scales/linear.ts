@@ -52,9 +52,9 @@ export function niceScale(scale: d3.ScaleLinear<number, number>, tick: number) {
       spaceThreshold = 0.1
 
     // step to ensure that the chart will not overflow
-    let step = Math.ceil(distance / tick / magnitude) * magnitude,
-      niceStart = Math.floor(start / step) * step,
-      niceEnd = niceStart + tick * step
+    let step = Math.ceil(distance / tick / magnitude) * magnitude
+    const niceStart = Math.floor(start / step) * step
+    let niceEnd = niceStart + tick * step
 
     if (niceEnd > end) {
       const isOverflow = () => end + (magnitude / 2) * tick >= niceEnd,

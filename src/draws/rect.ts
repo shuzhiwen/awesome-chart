@@ -90,7 +90,7 @@ const getTransformOrigin = (
   data: DrawerDataShape<RectDrawerProps>,
   transformOrigin: ArrayItem<RectDrawerProps['transformOrigin']>
 ) => {
-  let result: string = ''
+  let result = ''
   const {x, y, width, height} = data
 
   if (transformOrigin === 'center') {

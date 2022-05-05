@@ -77,7 +77,7 @@ export interface CreateLayerSchema {
   scale?: ScaleNiceShape
   style?: LayerSchema['style']
   animation?: LayerSchema['style']
-  event?: Record<string, Function>
+  event?: AnyEventObject
 }
 
 export interface CreateChartSchema extends ChartProps {

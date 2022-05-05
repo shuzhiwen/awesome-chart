@@ -101,7 +101,7 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
       })
 
     if (direction === 'horizontal' && isScaleLinear(scaleY)) {
-      this.lineData = rawTableList.map(([_, value], i) => ({
+      this.lineData = rawTableList.map(([, value], i) => ({
         value,
         x1: left,
         y1: top + (scaleY(value as number) ?? 0),
@@ -110,7 +110,7 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
         color: colorMatrix.get(i, 0),
       }))
     } else if (direction === 'vertical' && isScaleLinear(scaleX)) {
-      this.lineData = rawTableList.map(([_, value], i) => ({
+      this.lineData = rawTableList.map(([, value], i) => ({
         value,
         x1: left + (scaleX(value as number) ?? 0),
         y1: top,

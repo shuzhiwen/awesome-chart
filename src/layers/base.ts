@@ -124,28 +124,27 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   private createLifeCycles() {
     LAYER_LIFE_CYCLES.forEach((name) => {
-      const instance = this
-      const fn: Function = instance[name] || noop
+      const fn: AnyFunction = this[name] || noop
 
-      instance[name] = (...parameters: any) => {
+      this[name] = (...parameters: any) => {
         try {
           if (name === 'draw') {
-            instance.update()
-          } else if (name === 'update' && !instance.needRecalculated) {
+            this.update()
+          } else if (name === 'update' && !this.needRecalculated) {
             return
           }
 
-          instance.event.fire(`before:${name}`, {...parameters})
-          fn.call(instance, ...parameters)
-          instance.event.fire(name, {...parameters})
+          this.event.fire(`before:${name}`, {...parameters})
+          fn.call(this, ...parameters)
+          this.event.fire(name, {...parameters})
 
           if (name === 'setData' || name === 'setScale' || name === 'setStyle') {
-            instance.needRecalculated = true
+            this.needRecalculated = true
           } else if (name === 'update') {
-            instance.needRecalculated = false
+            this.needRecalculated = false
           }
         } catch (error) {
-          instance.log.error(`Layer life cycle (${name}) call exception`, error)
+          this.log.error(`Layer life cycle (${name}) call exception`, error)
         }
       }
     })

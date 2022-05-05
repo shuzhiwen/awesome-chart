@@ -1,8 +1,10 @@
 type Meta = number | string
 
-type AnyObject = Record<string, any>
+type AnyObject<T = any> = Record<string, T>
 
-type AnyEventObject = Record<string, Function>
+type AnyFunction = (...args: any) => any
+
+type AnyEventObject = Record<string, AnyFunction>
 
 type Maybe<T> = T | null | undefined
 

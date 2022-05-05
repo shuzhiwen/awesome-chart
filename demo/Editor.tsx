@@ -6,7 +6,7 @@ import {noop, throttle} from 'lodash'
 import chroma from 'chroma-js'
 
 const throttleDownload = throttle(download, 500)
-const stringify = (value: string, space: number) => {
+const stringify = (value: any, space: number) => {
   try {
     return JSON.stringify(value, null, space)
   } catch (error) {
@@ -21,10 +21,11 @@ const parse = (value: any) => {
   }
 }
 
-export function Editor({schema: _schema, onChange = noop}) {
-  const editorRef = useRef<HTMLDivElement>(null)
-  const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor>(null)
-  const schema = useMemo(() => stringify(_schema, 2), [_schema])
+export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
+  const {schema: _schema, onChange = noop} = props,
+    editorRef = useRef<HTMLDivElement>(null),
+    schema = useMemo(() => stringify(_schema, 2), [_schema]),
+    [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor>(null)
 
   useEffect(() => {
     if (editor && schema) {
@@ -37,11 +38,12 @@ export function Editor({schema: _schema, onChange = noop}) {
   }, [schema, editor])
 
   useEffect(() => {
-    const editor = monaco.editor.create(editorRef.current, {
-      value: localStorage.getItem('editorContent') || schema,
-      language: 'json',
-      fontSize: 14,
-    })
+    const container = editorRef.current,
+      editor = monaco.editor.create(container, {
+        value: localStorage.getItem('editorContent') || schema,
+        language: 'json',
+        fontSize: 14,
+      })
 
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
       onChange(parse(editor.getValue()))
@@ -51,8 +53,8 @@ export function Editor({schema: _schema, onChange = noop}) {
       const schemaForDownload = editor
         .getValue()
         .replace(
-          /(\'|\")#(.*?)(\'|\")/gi,
-          (color) => `"rgb(${chroma(color.split(/\'|\"/)[1]).rgb().join(',')})"`
+          /('|")#(.*?)('|")/gi,
+          (color) => `"rgb(${chroma(color.split(/'|"/)[1]).rgb().join(',')})"`
         )
       throttleDownload(schemaForDownload, 'schema.txt')
     })
@@ -62,9 +64,9 @@ export function Editor({schema: _schema, onChange = noop}) {
 
     return () => {
       editor.dispose()
-      editorRef.current.innerHTML = ''
+      container.innerHTML = ''
     }
-  }, [])
+  }, [onChange, schema])
 
   return <div className={styles.editor} ref={editorRef} />
 }

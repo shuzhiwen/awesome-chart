@@ -71,54 +71,53 @@ export abstract class AnimationBase<T extends Options> {
     this.createTargets('targets', context)
 
     if (isCanvasContainer(context)) {
-      this.renderCanvas = context.canvas?.requestRenderAll.bind(context.canvas)!
+      this.renderCanvas = context.canvas?.requestRenderAll.bind(context.canvas) ?? noop
     }
 
     ANIMATION_LIFE_CYCLES.forEach((name) => {
-      const instance = this
-      const fn = instance[name] || noChange
+      const fn = this[name] || noChange
 
-      instance[name] = (...parameter) => {
+      this[name] = (...parameter) => {
         try {
-          if (name === 'init' && instance._isInitialized) {
-            instance.log.warn('The animation is already initialized!')
+          if (name === 'init' && this._isInitialized) {
+            this.log.warn('The animation is already initialized!')
             return
           } else if (name === 'play') {
-            if (!instance._isAnimationAvailable) {
-              instance.log.warn('The animation is not available!')
+            if (!this._isAnimationAvailable) {
+              this.log.warn('The animation is not available!')
               return
             }
-            if (instance._isAnimationStarted) {
-              instance.log.warn('The animation is already started!')
+            if (this._isAnimationStarted) {
+              this.log.warn('The animation is already started!')
               return
             }
-            if (!instance.isInitialized) {
-              instance.init()
+            if (!this.isInitialized) {
+              this.init()
             }
           }
 
-          fn.call(instance, ...parameter)
-          instance.event.fire(name, {...parameter})
+          fn.call(this, ...parameter)
+          this.event.fire(name, {...parameter})
 
           if (name === 'init') {
-            instance._isInitialized = true
-            instance._isAnimationAvailable = true
+            this._isInitialized = true
+            this._isAnimationAvailable = true
           } else if (name === 'start') {
-            instance._isAnimationStarted = true
+            this._isAnimationStarted = true
           } else if (name === 'end') {
-            instance._isAnimationStarted = false
+            this._isAnimationStarted = false
           } else if (name === 'destroy') {
-            instance._isAnimationAvailable = false
-            instance._isInitialized = false
+            this._isAnimationAvailable = false
+            this._isInitialized = false
           }
         } catch (error) {
-          instance.log.error('Animation life cycle call exception', error)
+          this.log.error('Animation life cycle call exception', error)
         }
       }
 
-      instance.init = throttle(instance.init, 100)
-      instance.play = throttle(instance.play, 100)
-      instance.destroy = throttle(instance.destroy, 100)
+      this.init = throttle(this.init, 100)
+      this.play = throttle(this.play, 100)
+      this.destroy = throttle(this.destroy, 100)
     })
   }
 

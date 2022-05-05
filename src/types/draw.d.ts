@@ -28,9 +28,9 @@ export type CurveType =
   | 'curveStepAfter'
   | 'curveStepBefore'
 
-export interface D3Selection extends Selection<any, unknown, any, unknown> {}
+export type D3Selection = Selection<any, unknown, any, unknown>
 
-export interface D3Transition extends Transition<any, unknown, any, unknown> {}
+export type D3Transition = Transition<any, unknown, any, unknown>
 
 export interface FabricObject extends Object {
   className?: string
@@ -58,83 +58,73 @@ export interface GraphDrawerProps<T> extends GraphStyleShape, BasicDrawerProps<T
   hide?: boolean
 }
 
-export interface ArcDrawerProps
-  extends GraphDrawerProps<{
-    startAngle: number
-    endAngle: number
-    innerRadius: number
-    outerRadius: number
-    centerX: number
-    centerY: number
-  }> {}
+export type ArcDrawerProps = GraphDrawerProps<{
+  startAngle: number
+  endAngle: number
+  innerRadius: number
+  outerRadius: number
+  centerX: number
+  centerY: number
+}>
 
-export interface AreaDrawerProps
-  extends GraphDrawerProps<{
-    lines: {x: number; y1: number; y2: number}[]
-    curve: CurveType
-  }> {}
+export type AreaDrawerProps = GraphDrawerProps<{
+  lines: {x: number; y1: number; y2: number}[]
+  curve: CurveType
+}>
 
-export interface CircleDrawerProps
-  extends GraphDrawerProps<{
-    r: number
-    x: number
-    y: number
-  }> {}
+export type CircleDrawerProps = GraphDrawerProps<{
+  r: number
+  x: number
+  y: number
+}>
 
-export interface CurveDrawerProps
-  extends GraphDrawerProps<{
-    points: {x: number; y: number}[]
-    curve: CurveType
-  }> {}
+export type CurveDrawerProps = GraphDrawerProps<{
+  points: {x: number; y: number}[]
+  curve: CurveType
+}>
 
-export interface EllipseDrawerProps
-  extends GraphDrawerProps<{
-    rx: number
-    ry: number
-    cx: number
-    cy: number
-  }> {}
+export type EllipseDrawerProps = GraphDrawerProps<{
+  rx: number
+  ry: number
+  cx: number
+  cy: number
+}>
 
-export interface ImageDrawerProps
-  extends GraphDrawerProps<{
-    url: string
-    width: number
-    height: number
-    x: number
-    y: number
-  }> {}
+export type ImageDrawerProps = GraphDrawerProps<{
+  url: string
+  width: number
+  height: number
+  x: number
+  y: number
+}>
 
-export interface LineDrawerProps
-  extends GraphDrawerProps<{
-    x1: number
-    y1: number
-    x2: number
-    y2: number
-  }> {}
+export type LineDrawerProps = GraphDrawerProps<{
+  x1: number
+  y1: number
+  x2: number
+  y2: number
+}>
 
-export interface PathDrawerProps
-  extends GraphDrawerProps<{
-    path: string
-    centerX: number
-    centerY: number
-  }> {}
+export type PathDrawerProps = GraphDrawerProps<{
+  path: string
+  centerX: number
+  centerY: number
+}>
 
-export interface PolyDrawerProps
-  extends GraphDrawerProps<{
-    points: {x: number; y: number}[]
-    centerX: number
-    centerY: number
-  }> {}
+export type PolyDrawerProps = GraphDrawerProps<{
+  points: {x: number; y: number}[]
+  centerX: number
+  centerY: number
+}>
 
-export interface RectDrawerProps
-  extends GraphDrawerProps<{
-    width: number
-    height: number
-    x: number
-    y: number
-    rx?: number
-    ry?: number
-  }> {}
+export type RectDrawerProps = GraphDrawerProps<{
+  width: number
+  height: number
+  x: number
+  y: number
+  rx?: number
+  ry?: number
+}>
 
 export interface TextDrawerProps
   extends TextStyleShape,
