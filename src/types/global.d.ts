@@ -1,6 +1,8 @@
 type Meta = number | string
 
-type AnyObject<T = any> = Record<string, T>
+type AnyObject = Record<string, any>
+
+type EmptyObject = Record<string, unknown>
 
 type AnyFunction = (...args: any) => any
 

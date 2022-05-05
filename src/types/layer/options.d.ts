@@ -1,10 +1,7 @@
 import {LayoutArea} from '../layout'
 import {LayerType} from './base'
 
-type BasicLayerOptions<
-  T extends LayerType,
-  P extends AnyObject = AnyObject<unknown>
-> = Partial<P> & {
+type BasicLayerOptions<T extends LayerType, P extends AnyObject = EmptyObject> = Partial<P> & {
   id: string
   type: T
   layout: LayoutArea
