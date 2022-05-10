@@ -13,6 +13,7 @@
     "dev": "vite  --port 9527",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "prepare": "husky install",
     "bundle": "yarn webpack -c webpack.js && cp -r src/types dist/types",
     "package": "rm -rf dist tsconfig.tsbuildinfo && yarn tsc && yarn bundle && yarn clear",
     "clear": "rm dist/index.js && find dist/*/* -name '*.js' | xargs rm -f",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
     "@types/animejs": "^3.1.4",
     "@types/chroma-js": "^2.1.3",
     "@types/d3": "^7.1.0",
@@ -66,6 +68,12 @@
     "jsxBracketSameLine": false,
     "singleQuote": true,
     "semi": false
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-typescript"
+    ]
   },
   "jest": {
     "testEnvironment": "jsdom"
