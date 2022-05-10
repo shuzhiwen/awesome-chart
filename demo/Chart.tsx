@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react'
-import {createChart, getStandardLayoutCreator, download} from '../src'
+import {createChart, getStandardLayoutCreator, download} from '../dist/main.min'
 import {CreateChartSchema} from '../src/types'
 import {MenuItemShape} from './schema'
 import styles from './Chart.module.css'
