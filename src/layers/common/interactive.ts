@@ -48,6 +48,10 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     super({context, options, sublayers: ['rect']})
     const {layout, createSublayer, event} = this.options
 
+    this.event.on('destroy', () => {
+      this.helperAuxiliary.forEach((auxiliary) => auxiliary.destroy())
+    })
+
     this.helperAuxiliary = [
       createSublayer({
         id: uuid(),

@@ -5,6 +5,7 @@ type BasicLayerOptions<T extends LayerType, P extends AnyObject = EmptyObject> =
   id: string
   type: T
   layout: LayoutArea
+  sublayer?: boolean
   coordinate?: Coordinate
   axis?: 'main' | 'minor'
 }

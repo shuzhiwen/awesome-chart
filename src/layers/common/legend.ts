@@ -105,13 +105,9 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     })
   }
 
-  setData() {
-    this.log.warn('Method not implemented.')
-  }
+  setData() {}
 
-  setScale() {
-    this.log.warn('Method not implemented.')
-  }
+  setScale() {}
 
   setStyle(style: LayerLegendStyleShape) {
     this._style = createStyle(defaultStyle, this.style, style)

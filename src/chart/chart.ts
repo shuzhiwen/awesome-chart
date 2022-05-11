@@ -32,7 +32,7 @@ import {
 fabric.Object.prototype.objectCaching = false
 
 export class Chart {
-  private _state: ChartState = 'initialize'
+  public state: ChartState = 'initialize'
 
   private _layout: LayoutShape
 
@@ -62,16 +62,12 @@ export class Chart {
 
   readonly containerHeight: number
 
-  get state() {
-    return this._state
-  }
-
   get layout() {
     return this._layout
   }
 
   get layers() {
-    return this._layers
+    return this._layers.filter(({options}) => !options.sublayer)
   }
 
   constructor({
@@ -133,7 +129,7 @@ export class Chart {
       ...tooltipOptions,
       container: tooltipOptions?.container ?? this.container,
     })
-    this._state = 'initialize'
+    this.state = 'initialize'
     this.event.fire(this.state)
   }
 
@@ -146,7 +142,7 @@ export class Chart {
     })
   }
 
-  createLayer(options: LayerOptions) {
+  createLayer(options: LayerOptions, sublayer: false = false) {
     const context: ChartContext = {
       root: this.root,
       theme: this.theme,
@@ -157,13 +153,13 @@ export class Chart {
       containerHeight: this.containerHeight,
       bindCoordinate: this.bindCoordinate.bind(this),
       createGradient: getEasyGradientCreator({container: this.defs, engine: this.engine}),
-      createSublayer: this.createLayer.bind(this),
+      createSublayer: (options: LayerOptions) => this.createLayer(options, true as false),
       event: this.event,
     }
 
-    const layer = new layerMapping[options.type](options as any, context)
+    const layer = new layerMapping[options.type]({...options, sublayer} as any, context)
     this._layers.push(layer)
-    this._state = 'ready'
+    this.state = 'ready'
     this.event.fire(this.state)
     return layer
   }
@@ -249,7 +245,7 @@ export class Chart {
   destroy() {
     this._layers.forEach((layer) => layer.destroy())
     this._layers.length = 0
-    this._state = 'destroy'
+    this.state = 'destroy'
     this.tooltip.destroy()
     this.event.fire(this.state)
   }

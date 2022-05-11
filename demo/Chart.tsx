@@ -11,7 +11,6 @@ export const Chart = (props: {
   const {debuggers, schema} = props,
     chartRef = useRef(null),
     [chart, setChart] = useState(null),
-    [isDebug, setDebug] = useState(false),
     [engine, setEngine] = useState<'svg' | 'canvas'>('svg'),
     toggleEngine = useCallback(() => setEngine(engine === 'svg' ? 'canvas' : 'svg'), [engine]),
     downloadFile = useCallback(() => {
@@ -20,11 +19,10 @@ export const Chart = (props: {
         : download(chartRef.current.children?.[0].children?.[0].toDataURL(), 'chart.jpg')
     }, [engine]),
     toggleDebug = useCallback(() => {
-      if (chart && !isDebug) {
+      if (chart) {
         debuggers.forEach((fn) => fn(chart))
-        setDebug(true)
       }
-    }, [chart, isDebug, debuggers])
+    }, [chart, debuggers])
 
   useEffect(() => {
     try {

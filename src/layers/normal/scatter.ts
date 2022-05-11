@@ -25,6 +25,8 @@ const defaultStyle: LayerScatterStyleShape = {
 export class LayerScatter extends LayerBase<LayerScatterOptions> {
   public legendData: Maybe<LegendDataShape>
 
+  private needRescale = false
+
   private _data: Maybe<DataTableList>
 
   private _scale: LayerScatterScaleShape
@@ -61,6 +63,8 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
   setData(data: LayerScatter['data']) {
     this._data = validateAndCreateData('tableList', this.data, data)
+    this.needRescale = true
+
     const {headers} = this.data
 
     ;['x', 'y', 'value', 'category'].map((key) => {
@@ -72,6 +76,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
   setScale(scale: LayerScatterScaleShape) {
     this._scale = createScale(undefined, this.scale, scale)
+    this.needRescale = false
   }
 
   setStyle(style: LayerScatterStyleShape) {
@@ -79,7 +84,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
   }
 
   update() {
-    !this.scale && this.createScale()
+    this.needRescale && this.createScale()
 
     const {layout} = this.options,
       {top, left} = layout,
@@ -137,6 +142,8 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
   }
 
   private createScale() {
+    this.needRescale = false
+
     const {layout} = this.options,
       {width, height} = layout,
       {pointSize} = this.style
