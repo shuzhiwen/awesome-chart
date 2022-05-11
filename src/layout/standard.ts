@@ -7,23 +7,7 @@ export const getStandardLayoutCreator =
     const heightWithoutBrush = containerHeight - brushHeight
 
     return {
-      title: {
-        top: 0,
-        bottom: heightWithoutBrush,
-        height: heightWithoutBrush,
-        left: 0,
-        right: containerWidth,
-        width: containerWidth,
-      },
-      unit: {
-        top: 0,
-        bottom: heightWithoutBrush,
-        height: heightWithoutBrush,
-        left: 0,
-        right: containerWidth,
-        width: containerWidth,
-      },
-      legend: {
+      container: {
         top: 0,
         bottom: heightWithoutBrush,
         height: heightWithoutBrush,

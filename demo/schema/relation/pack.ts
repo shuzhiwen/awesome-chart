@@ -3,7 +3,7 @@ export default () => [
     type: 'text',
     options: {
       id: 'title',
-      layout: 'title',
+      layout: 'container',
     },
     data: '打包图',
     style: {

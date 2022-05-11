@@ -3,7 +3,7 @@ export default () => [
     type: 'text',
     options: {
       id: 'title',
-      layout: 'title',
+      layout: 'container',
     },
     data: '矩形树图',
     style: {

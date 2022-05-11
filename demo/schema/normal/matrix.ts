@@ -3,7 +3,7 @@ export default ({shape}) => [
     type: 'text',
     options: {
       id: 'title',
-      layout: 'title',
+      layout: 'container',
     },
     data: '矩阵图',
     style: {

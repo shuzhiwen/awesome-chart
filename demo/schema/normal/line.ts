@@ -3,7 +3,7 @@ export default ({mode, hasArea, curve}) => [
     type: 'text',
     options: {
       id: 'title',
-      layout: 'title',
+      layout: 'container',
     },
     data: '折线图',
     style: {
@@ -16,7 +16,7 @@ export default ({mode, hasArea, curve}) => [
     type: 'legend',
     options: {
       id: 'legend',
-      layout: 'legend',
+      layout: 'container',
     },
     style: {
       align: 'end',

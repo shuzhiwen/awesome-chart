@@ -3,7 +3,7 @@ export default ({pointSize}) => [
     type: 'text',
     options: {
       id: 'title',
-      layout: 'title',
+      layout: 'container',
     },
     data: '气泡图',
     style: {
@@ -16,7 +16,7 @@ export default ({pointSize}) => [
     type: 'legend',
     options: {
       id: 'legend',
-      layout: 'legend',
+      layout: 'container',
     },
     style: {
       align: 'end',

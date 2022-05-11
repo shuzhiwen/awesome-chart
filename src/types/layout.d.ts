@@ -7,7 +7,10 @@ export interface LayoutArea {
   height: number
 }
 
-export type LayoutShape = Record<string, LayoutArea>
+export interface LayoutShape extends Record<string, LayoutArea> {
+  main: LayoutArea
+  container: LayoutArea
+}
 
 export interface LayoutCreator {
   (props: LayoutProps): LayoutShape

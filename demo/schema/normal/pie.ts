@@ -3,7 +3,7 @@ export default ({type, mode, innerRadius}) => [
     type: 'text',
     options: {
       id: 'title',
-      layout: 'title',
+      layout: 'container',
     },
     data: '饼图',
     style: {
@@ -16,7 +16,7 @@ export default ({type, mode, innerRadius}) => [
     type: 'legend',
     options: {
       id: 'legend',
-      layout: 'legend',
+      layout: 'container',
     },
     style: {
       align: 'end',

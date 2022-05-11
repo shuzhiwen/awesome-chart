@@ -4,23 +4,7 @@ export const getFacetLayoutCreator =
   ({row, column}: GetFacetLayoutCreatorProps) =>
   ({containerWidth, containerHeight, padding}: LayoutProps): LayoutShape => {
     const layout: LayoutShape = {
-      title: {
-        top: 0,
-        bottom: containerHeight,
-        height: containerHeight,
-        left: 0,
-        right: containerWidth,
-        width: containerWidth,
-      },
-      unit: {
-        top: 0,
-        bottom: containerHeight,
-        height: containerHeight,
-        left: 0,
-        right: containerWidth,
-        width: containerWidth,
-      },
-      legend: {
+      container: {
         top: 0,
         bottom: containerHeight,
         height: containerHeight,
@@ -37,11 +21,12 @@ export const getFacetLayoutCreator =
         width: containerHeight - padding[1] - padding[3],
       },
     }
-    const {top, bottom, left, right} = layout.main
-    const facetWidth = (right - left) / column
-    const facetHeight = (bottom - top) / row
-    const rowGap = facetHeight / 20
-    const columnGap = facetWidth / 20
+
+    const {top, bottom, left, right} = layout.main,
+      facetWidth = (right - left) / column,
+      facetHeight = (bottom - top) / row,
+      rowGap = facetHeight / 20,
+      columnGap = facetWidth / 20
 
     for (let i = 0; i < row; i++) {
       for (let j = 0; j < column; j++) {

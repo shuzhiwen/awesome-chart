@@ -61,7 +61,7 @@ export default ({type}) => [
     type: 'text',
     options: {
       id: 'title',
-      layout: 'title',
+      layout: 'container',
     },
     data: '仪表盘',
     style: {

@@ -48,7 +48,7 @@ export const schemaMenu: MenuShape = {
               type: 'text',
               options: {
                 id: 'title',
-                layout: 'title',
+                layout: 'container',
               },
               data: '测试文本',
               style: {

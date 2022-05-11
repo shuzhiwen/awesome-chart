@@ -3,7 +3,7 @@ export default () => [
     type: 'text',
     options: {
       id: 'title',
-      layout: 'title',
+      layout: 'container',
     },
     data: '边缘捆图',
     style: {

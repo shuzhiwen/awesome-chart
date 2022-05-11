@@ -3,7 +3,7 @@ export default ({type, mode}) => [
     type: 'text',
     options: {
       id: 'title',
-      layout: 'title',
+      layout: 'container',
     },
     data: '柱状图',
     style: {
@@ -16,7 +16,7 @@ export default ({type, mode}) => [
     type: 'legend',
     options: {
       id: 'legend',
-      layout: 'legend',
+      layout: 'container',
     },
     style: {
       align: 'end',
