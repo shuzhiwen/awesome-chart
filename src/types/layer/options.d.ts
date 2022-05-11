@@ -19,12 +19,15 @@ export type LayerOptions =
   | LayerTextOptions
   | LayerInteractiveOptions
   | LayerLegendOptions
+  | LayerScatterOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
 export type LayerLegendOptions = BasicLayerOptions<'legend'>
 
 export type LayerTextOptions = BasicLayerOptions<'text'>
+
+export type LayerScatterOptions = BasicLayerOptions<'scatter'>
 
 export type LayerAxisOptions = BasicLayerOptions<
   'axis',

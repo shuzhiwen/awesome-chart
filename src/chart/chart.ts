@@ -34,7 +34,7 @@ fabric.Object.prototype.objectCaching = false
 export class Chart {
   private _state: ChartState = 'initialize'
 
-  private _layout: LayoutShape = {}
+  private _layout: LayoutShape
 
   private _layers: Layer[] = []
 
@@ -124,7 +124,11 @@ export class Chart {
 
     createDefs({schema: defineSchema, engine, container: this.defs})
 
-    this.setPadding(padding, layoutCreator)
+    this._layout = layoutCreator({
+      containerWidth: this.containerWidth,
+      containerHeight: this.containerHeight,
+      padding: this.padding,
+    })
     this.tooltip = new Tooltip({
       ...tooltipOptions,
       container: tooltipOptions?.container ?? this.container,

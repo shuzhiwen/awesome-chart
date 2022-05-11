@@ -9,7 +9,7 @@ export function createScale<T extends Maybe<LayerScalesShape>>(
   incomingScale?: T
 ) {
   const nice = merge({}, defaultScale?.nice, currentScale?.nice, incomingScale?.nice),
-    scales: LayerScalesShape = {nice}
+    scales: LayerScalesShape = {...currentScale, ...defaultScale, nice}
 
   SCALE_TYPES.forEach((type) => {
     scales[type] = incomingScale?.[type] || defaultScale?.[type] || currentScale?.[type]

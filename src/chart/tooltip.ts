@@ -35,8 +35,11 @@ export class Tooltip {
     const {container, backgroundColor} = this.options
     this.instance = select(container)
       .append('div')
-      .attr('class', 'chart-tooltip')
-      .style('border-radius', '2px')
+      .attr('class', 'tooltip')
+      .style('border-radius', '4px')
+      .style('padding', '8px')
+      .style('row-gap', '4px')
+      .style('flex-direction', 'column')
       .style('position', 'fixed')
       .style('overflow', 'hidden')
       .style('display', 'none')
@@ -46,17 +49,19 @@ export class Tooltip {
     // blurred background
     this.instance
       .append('div')
-      .attr('class', 'chart-tooltip-bg')
+      .attr('class', 'tooltip-bg')
       .style('filter', 'blur(1px)')
       .style('background-color', backgroundColor)
       .style('position', 'absolute')
       .style('width', '1000px')
       .style('height', '1000px')
+      .style('left', '0')
+      .style('top', '0')
   }
 
   show(event: MouseEvent) {
     this.isVisible = true
-    this.instance?.style('display', 'block')
+    this.instance?.style('display', 'flex')
     event && this.move(event)
   }
 
@@ -118,26 +123,24 @@ export class Tooltip {
     if (isArray(list) && !isEqual(this.backup, list)) {
       this.backup = list
       this.instance
-        .selectAll('.chart-tooltip-title')
+        .selectAll('.tooltip-title')
         .data([list[0]?.dimension])
         .join('div')
-        .attr('class', 'chart-tooltip-title')
-        .style('padding', '8px')
+        .attr('class', 'tooltip-title')
+        .style('display', (d) => (d ? 'block' : 'none'))
         .style('font-size', `${titleSize}px`)
         .style('color', titleColor)
         .style('position', 'relative')
         .text((d) => d!)
       const container = this.instance
-        .selectAll('.chart-tooltip-content')
+        .selectAll('.tooltip-content')
         .data([null])
         .join('div')
-        .attr('class', 'chart-tooltip-content')
+        .attr('class', 'tooltip-content')
         .style('display', 'flex')
         .style('flex-direction', 'column')
         .style('justify-content', 'space-between')
         .style('align-items', 'center')
-        .style('padding', `${list.length ? 8 : 0}px`)
-        .style('padding-top', '0px')
         .style('position', 'relative')
       container.selectAll('div').remove()
       const rows = container

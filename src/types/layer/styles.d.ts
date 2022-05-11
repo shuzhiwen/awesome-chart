@@ -102,6 +102,12 @@ export type LayerArcStyleShape = Partial<{
   text: TextStyleShape
 }>
 
+export type LayerScatterStyleShape = Partial<{
+  pointSize: [number, number]
+  point: GraphStyleShape
+  text: TextStyleShape
+}>
+
 export type LayerFlopperStyleShape = Partial<{
   scale: number
   integerPlace: number

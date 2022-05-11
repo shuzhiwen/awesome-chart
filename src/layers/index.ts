@@ -18,6 +18,7 @@ export const layerMapping = {
   line: layer.LayerLine,
   matrix: layer.LayerText,
   rect: layer.LayerRect,
+  scatter: layer.LayerScatter,
   tabMenu: layer.LayerText,
   text: layer.LayerText,
 }
