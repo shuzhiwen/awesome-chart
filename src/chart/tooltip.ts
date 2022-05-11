@@ -164,12 +164,14 @@ export class Tooltip {
         .style('margin-right', '5px')
         .style('background-color', (d) => d.pointColor)
       pointWidthLabel
-        .append('div')
+        .append('span')
+        .style('white-space', 'nowrap')
         .style('font-size', `${labelSize}px`)
         .style('color', labelColor)
         .text((d) => d.category!)
       rows
-        .append('div')
+        .append('span')
+        .style('white-space', 'nowrap')
         .style('font-weight', 'bold')
         .style('font-size', `${valueSize}px`)
         .style('color', valueColor)
