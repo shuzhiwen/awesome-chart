@@ -92,7 +92,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
           {duration = 0} = this.animation
 
         setTimeout(() => {
-          this.setData(new DataBase({value: Math.random() * 10 ** (integerPlace ?? 8)}, {}))
+          this.setData(new DataBase({value: Math.random() * 10 ** (integerPlace ?? 8)}))
           this.draw()
           this.playAnimation()
           this.log.info('Random Number', this.data?.source.value)

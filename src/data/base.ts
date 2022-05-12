@@ -28,7 +28,7 @@ export class DataBase<T, P extends AnyObject = AnyObject> {
     this._storage[key] = value
   }
 
-  constructor(source: T, options: P) {
+  constructor(source: T, options: P = {} as any) {
     this.log = createLog(this.constructor.name)
     this._options = {...options}
     this._source = source

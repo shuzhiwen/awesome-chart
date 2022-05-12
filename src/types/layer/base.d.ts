@@ -3,7 +3,7 @@ import {LayerOptions} from './options'
 import {ColorMatrix} from '../../utils'
 import {DrawerTarget, DrawerType, GraphDrawerProps} from '../draw'
 import {AnimationType, BasicAnimationOptions} from '../animation'
-import {Scale, ScaleNiceShape} from '../scale'
+import {RawScale, ScaleNiceShape} from '../scale'
 import {ChartContext} from '../chart'
 
 export type LayerType = keyof typeof layerMapping
@@ -63,12 +63,12 @@ export interface DrawBasicProps<T> {
 }
 
 export interface LayerScalesShape {
-  scaleX?: Scale
-  scaleY?: Scale
-  scaleXT?: Scale
-  scaleYR?: Scale
-  scaleAngle?: Scale
-  scaleRadius?: Scale
+  scaleX?: RawScale
+  scaleY?: RawScale
+  scaleXT?: RawScale
+  scaleYR?: RawScale
+  scaleAngle?: RawScale
+  scaleRadius?: RawScale
   nice?: ScaleNiceShape
 }
 

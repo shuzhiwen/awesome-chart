@@ -47,15 +47,12 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     shape: LegendShape[]
     textColors: string[]
     shapeColors: string[]
-  }>(
-    {
-      text: [],
-      shape: [],
-      textColors: [],
-      shapeColors: [],
-    },
-    {}
-  )
+  }>({
+    text: [],
+    shape: [],
+    textColors: [],
+    shapeColors: [],
+  })
 
   private _style = defaultStyle
 

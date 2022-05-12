@@ -7,8 +7,11 @@ export type ScaleBand = ReturnType<typeof scaleBand>
 
 export type ScaleLinear = ReturnType<typeof scaleLinear>
 
-export interface Scale<Domain = any> {
-  (x: Domain): any
+export interface RawScale<Domain = any> {
+  (input: Domain): any
+}
+
+export interface Scale<Domain = any> extends RawScale<Domain> {
   domain(): Domain[]
   domain(domain: Iterable<Domain>): this
   range(): any[]

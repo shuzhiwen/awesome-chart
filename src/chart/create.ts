@@ -40,7 +40,7 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
       dataSet = new DataTableList(isTableList(data) ? data : randomTableList(data))
     }
   } else {
-    dataSet = new DataBase(data ?? {}, {})
+    dataSet = new DataBase(data ?? {})
   }
 
   layer.setStyle({...style})

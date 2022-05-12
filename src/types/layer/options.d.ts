@@ -21,6 +21,7 @@ export type LayerOptions =
   | LayerInteractiveOptions
   | LayerLegendOptions
   | LayerScatterOptions
+  | LayerBaseMapOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
@@ -29,6 +30,8 @@ export type LayerLegendOptions = BasicLayerOptions<'legend'>
 export type LayerTextOptions = BasicLayerOptions<'text'>
 
 export type LayerScatterOptions = BasicLayerOptions<'scatter'>
+
+export type LayerBaseMapOptions = BasicLayerOptions<'baseMap'>
 
 export type LayerAxisOptions = BasicLayerOptions<
   'axis',
