@@ -71,11 +71,6 @@ export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => 
     interactiveConfig && createLayer(chart, interactiveConfig)
     // axis layer control all scales
     axisLayerConfig && chart.bindCoordinate()
-    // draw in order with schema
-    layers.forEach(({options}) => {
-      chart.layers.find(({options: {id}}) => id === options.id)?.draw()
-    })
-
     // TODO: throw and give control to users
     setTimeout(() => chart.layers.map((instance) => instance?.playAnimation()))
 

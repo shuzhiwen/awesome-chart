@@ -8,6 +8,7 @@ import {
 } from '../helpers'
 import {DataTableList} from '../../data'
 import {scaleLinear} from '../../scales'
+import {ungroup} from '../../utils'
 import {
   ChartContext,
   DrawerDataShape,
@@ -67,9 +68,9 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
     const {headers} = this.data
 
-    ;['x', 'y', 'value', 'category'].map((key) => {
+    ;['x', 'y'].map((key) => {
       if (!headers.includes(key)) {
-        this.log.error(`DataTableList 缺失特定列 "${key}"`)
+        this.log.error(`DataTableList 缺失必须列 "${key}"`)
       }
     })
   }
@@ -89,7 +90,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
     const {layout} = this.options,
       {top, left} = layout,
       {scaleX, scaleY, scalePointSize} = this.scale,
-      {text, point} = this.style,
+      {text, point, pointSize} = this.style,
       {headers, rawTableList} = this.data,
       xIndex = headers.findIndex((header) => header === 'x'),
       yIndex = headers.findIndex((header) => header === 'y'),
@@ -100,7 +101,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
         category: item[categoryIndex],
         x: left + scaleX(item[xIndex] as number) ?? NaN,
         y: top + scaleY(item[yIndex] as number) ?? NaN,
-        r: scalePointSize(item[valueIndex] as number) ?? 0,
+        r: scalePointSize(item[valueIndex] as number) ?? ungroup(pointSize),
         source: headers.map((header, j) => ({
           value: rawTableList[i][j],
           category: header,
@@ -116,7 +117,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
     this.pointData = categories.map((category, i) =>
       pointData
-        .filter((item) => item.category === category)
+        .filter((item) => item.category === category && item.x && item.y)
         .map((item) => ({...item, color: colorMatrix.get(0, i)}))
     )
 

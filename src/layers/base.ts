@@ -295,7 +295,7 @@ export abstract class LayerBase<T extends LayerOptions> {
           }
 
         options.transition = {}
-        !groupData.hide && merge(options, groupData)
+        !groupData.hidden && merge(options, groupData)
 
         if (this.backupData[sublayer][i] && this.backupAnimation.options?.[sublayer]) {
           const {duration, delay} = this.backupAnimation.options[sublayer].update || {}

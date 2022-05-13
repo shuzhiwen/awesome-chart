@@ -55,7 +55,7 @@ export interface BasicDrawerProps<T> {
 }
 
 export interface GraphDrawerProps<T> extends GraphStyleShape, BasicDrawerProps<T> {
-  hide?: boolean
+  hidden?: boolean
 }
 
 export type ArcDrawerProps = GraphDrawerProps<{

@@ -2,7 +2,7 @@ import {fabric} from 'fabric'
 import {Canvas} from 'fabric/fabric-impl'
 import {select, schemeCategory10} from 'd3'
 import {defaultLayoutCreator} from '../layout'
-import {layerMapping} from '../layers'
+import {LayerAxis, layerMapping} from '../layers'
 import {Tooltip} from './tooltip'
 import {isNil} from 'lodash'
 import {
@@ -27,6 +27,7 @@ import {
   LayerScalesShape,
   D3Selection,
   LayerType,
+  LayerAxisScaleShape,
 } from '../types'
 
 fabric.Object.prototype.objectCaching = false
@@ -188,15 +189,14 @@ export class Chart {
     this.getLayerById(id)?.setVisible(visible)
   }
 
-  bindCoordinate() {
-    const axisLayer = this._layers.find((layer) => isLayerAxis(layer)),
+  bindCoordinate(trigger?: Layer) {
+    const axisLayer = this._layers.find((layer) => isLayerAxis(layer)) as LayerAxis,
       interactiveLayer = this._layers.find((layer) => isLayerInteractive(layer)),
       disabledLayers: LayerType[] = ['interactive', 'axis', 'legend', 'auxiliary'],
       layers = this._layers.filter(({options}) => !disabledLayers.includes(options.type)),
       coordinate = axisLayer?.options.coordinate
 
-    isLayerAxis(axisLayer) && axisLayer.clearScale()
-
+    axisLayer.clearScale()
     layers.forEach((layer) => {
       const {scale, options} = layer,
         {axis} = options,
@@ -217,21 +217,25 @@ export class Chart {
         mergedScales.scaleY = scale?.scaleY
       }
 
-      axisLayer?.setScale(mergedScales)
+      axisLayer?.setScale(mergedScales as LayerAxisScaleShape)
     })
 
-    isLayerAxis(axisLayer) && axisLayer.niceScale()
+    axisLayer.niceScale()
     interactiveLayer?.setScale(axisLayer?.scale)
 
-    this._layers.forEach((layer) => {
+    layers.forEach((layer) => {
+      if (layer.options.id === trigger?.options.id) {
+        return
+      }
+
       const scales = {...layer.scale, ...axisLayer?.scale},
         {axis, layout} = layer.options
 
       if (coordinate === 'geographic') {
         layer.setScale({
           ...scales,
-          scaleX: (x: any) => (scales.scaleX?.(x) as number) - layout.left,
-          scaleY: (y: any) => (scales.scaleY?.(y) as number) - layout.top,
+          scaleX: (x: number) => (scales.scaleX?.(x) as number) - layout.left,
+          scaleY: (y: number) => (scales.scaleY?.(y) as number) - layout.top,
         } as LayerScalesShape)
       } else {
         layer.setScale({
@@ -239,6 +243,7 @@ export class Chart {
           scaleY: axis === 'minor' ? scales.scaleYR : scales.scaleY,
         })
       }
+      layer.draw()
     })
   }
 

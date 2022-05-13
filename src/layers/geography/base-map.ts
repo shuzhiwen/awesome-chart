@@ -119,7 +119,7 @@ export class LayerBaseMap extends LayerBase<LayerBaseMapOptions> {
         [left, top],
         [right, bottom],
       ],
-      this.data?.source
+      this.data.source
     )
 
     this._scale = createScale(
@@ -201,8 +201,7 @@ export class LayerBaseMap extends LayerBase<LayerBaseMapOptions> {
       ...this.style.block,
     }
     const textData = {
-      data: this.textData.map(({value}) => value),
-      position: this.textData.map(({x, y}) => [x, y]),
+      data: this.textData,
       ...this.style.text,
     }
     const rectData = {
@@ -216,7 +215,7 @@ export class LayerBaseMap extends LayerBase<LayerBaseMapOptions> {
 
     // reset coordinate system
     if (this.blockData.length) {
-      this.options.bindCoordinate()
+      this.options.bindCoordinate(this)
     }
 
     this.event.onWithOff('click-background', this.className, () => {
