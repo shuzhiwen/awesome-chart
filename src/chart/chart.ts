@@ -190,13 +190,13 @@ export class Chart {
   }
 
   bindCoordinate(trigger?: Layer) {
-    const axisLayer = this._layers.find((layer) => isLayerAxis(layer)) as LayerAxis,
+    const axisLayer = this._layers.find((layer) => isLayerAxis(layer)) as Maybe<LayerAxis>,
       interactiveLayer = this._layers.find((layer) => isLayerInteractive(layer)),
       disabledLayers: LayerType[] = ['interactive', 'axis', 'legend', 'auxiliary'],
       layers = this._layers.filter(({options}) => !disabledLayers.includes(options.type)),
       coordinate = axisLayer?.options.coordinate
 
-    axisLayer.clearScale()
+    axisLayer?.clearScale()
     layers.forEach((layer) => {
       const {scale, options} = layer,
         {axis} = options,
@@ -220,7 +220,7 @@ export class Chart {
       axisLayer?.setScale(mergedScales as LayerAxisScaleShape)
     })
 
-    axisLayer.niceScale()
+    axisLayer?.niceScale()
     interactiveLayer?.setScale(axisLayer?.scale)
 
     layers.forEach((layer) => {

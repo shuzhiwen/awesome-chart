@@ -131,7 +131,7 @@ export abstract class LayerBase<T extends LayerOptions> {
           if (name === 'draw') {
             this.update()
           } else if (name === 'update' && !this.needRecalculated) {
-            this.log.warn(`Skip lifeCycle(${name}) call`)
+            this.log.debug.warn(`Skip lifeCycle(${name}) call`)
             return
           }
 
