@@ -1,5 +1,5 @@
 import * as d3 from 'd3-random'
-import {characters} from './constants'
+import {CHARACTERS} from './constants'
 import {RawTable, RandomOptions, RawTableList} from '../types'
 
 const mapping = {
@@ -36,7 +36,7 @@ export const randomTable = (options: RandomOptions): RawTable => {
 export function uuid(n = 16) {
   let string = ''
   for (let i = 0; i < n; i++) {
-    string += characters.charAt(Math.floor(Math.random() * characters.length))
+    string += CHARACTERS.charAt(Math.floor(Math.random() * CHARACTERS.length))
   }
   return string
 }

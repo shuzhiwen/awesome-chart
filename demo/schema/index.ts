@@ -17,7 +17,7 @@ import sankey from './relation/sankey'
 import tree from './relation/tree'
 import treemap from './relation/treemap'
 import pack from './relation/pack'
-import {debugRectLayer} from '../../debug'
+import {debugRectLayer} from '../debug'
 import {Chart} from '../../src'
 
 export interface MenuItemShape {

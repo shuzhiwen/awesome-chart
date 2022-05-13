@@ -1,6 +1,6 @@
-import {Chart} from '../src/chart'
-import {DataTableList} from '../src/data'
-import {randomTableList} from '../src/utils'
+import {Chart} from '../../src/chart'
+import {DataTableList} from '../../src/data'
+import {randomTableList} from '../../src/utils'
 
 export function debugRectLayer(chart: Chart) {
   const data = randomTableList({

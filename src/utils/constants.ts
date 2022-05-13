@@ -1,4 +1,4 @@
-export const characters = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789'
+export const CHARACTERS = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789'
 
 export const SCALE_TYPES = ['scaleX', 'scaleY', 'scaleAngle', 'scaleRadius'] as const
 
