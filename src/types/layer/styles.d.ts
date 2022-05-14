@@ -1,3 +1,4 @@
+import {HeatmapConfiguration} from 'heatmap.js'
 import {BasicAnimationOptions} from '../animation'
 import {CurveType, ElConfigShape} from '../draw'
 import {FormatNumberConfig} from '../utils'
@@ -71,6 +72,8 @@ export type LayerBaseMapStyleShape = Partial<{
   block: GraphStyleShape
   text: TextStyleShape
 }>
+
+export type LayerHeatmapStyleShape = Partial<HeatmapConfiguration>
 
 export type LayerTextStyleShape = Partial<{
   align: Align

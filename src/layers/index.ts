@@ -13,6 +13,7 @@ export const layerMapping = {
   baseMap: layer.LayerBaseMap,
   chord: layer.LayerText,
   flopper: layer.LayerFlopper,
+  heatmap: layer.LayerHeatmap,
   indicator: layer.LayerText,
   interactive: layer.LayerInteractive,
   legend: layer.LayerLegend,
@@ -20,6 +21,5 @@ export const layerMapping = {
   matrix: layer.LayerText,
   rect: layer.LayerRect,
   scatter: layer.LayerScatter,
-  tabMenu: layer.LayerText,
   text: layer.LayerText,
 }
