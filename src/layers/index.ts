@@ -10,7 +10,7 @@ export const layerMapping = {
   arc: layer.LayerArc,
   auxiliary: layer.LayerAuxiliary,
   axis: layer.LayerAxis,
-  baseMap: layer.LayerBaseMap,
+  basemap: layer.LayerBasemap,
   chord: layer.LayerText,
   flopper: layer.LayerFlopper,
   heatmap: layer.LayerHeatmap,

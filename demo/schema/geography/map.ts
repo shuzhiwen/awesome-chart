@@ -22,9 +22,9 @@ export default () => [
     style: {},
   },
   {
-    type: 'baseMap',
+    type: 'basemap',
     options: {
-      id: 'baseMap',
+      id: 'basemap',
       layout: 'main',
     },
     data: 100000,

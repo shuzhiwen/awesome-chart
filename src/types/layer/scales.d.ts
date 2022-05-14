@@ -34,7 +34,7 @@ export type LayerRectScaleShape = Maybe<{
   scaleY: ScaleBand | ScaleLinear
 }>
 
-export type LayerBaseMapScaleShape = Maybe<{
+export type LayerBasemapScaleShape = Maybe<{
   scaleX: RawScale
   scaleY: RawScale
 }>

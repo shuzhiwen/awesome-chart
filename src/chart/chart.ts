@@ -9,7 +9,7 @@ import {
   createLog,
   createEvent,
   isLayerAxis,
-  isLayerBaseMap,
+  isLayerBasemap,
   createDefs,
   getEasyGradientCreator,
   isLayerInteractive,
@@ -217,7 +217,7 @@ export class Chart {
       } else if (coordinate === 'polar') {
         mergedScales.scaleAngle = scale?.scaleAngle
         mergedScales.scaleRadius = scale?.scaleRadius
-      } else if (coordinate === 'geographic' && isLayerBaseMap(layer)) {
+      } else if (coordinate === 'geographic' && isLayerBasemap(layer)) {
         mergedScales.scaleX = scale?.scaleX
         mergedScales.scaleY = scale?.scaleY
       }

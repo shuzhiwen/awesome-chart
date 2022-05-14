@@ -6,9 +6,9 @@ import {
   ChartContext,
   DrawerDataShape,
   ElSourceShape,
-  LayerBaseMapOptions,
-  LayerBaseMapScaleShape,
-  LayerBaseMapStyleShape,
+  LayerBasemapOptions,
+  LayerBasemapScaleShape,
+  LayerBasemapStyleShape,
   RectDrawerProps,
   TextDrawerProps,
 } from '../../types'
@@ -21,13 +21,13 @@ type GeoFeatureShape = {
 
 const getGeoJSON = (adcode: Meta) => `http://cdn.dtwave.com/waveview/geojson/${adcode}.json`
 
-const defaultStyle: LayerBaseMapStyleShape = {
+const defaultStyle: LayerBasemapStyleShape = {
   block: {
     fill: 'lightblue',
   },
 }
 
-export class LayerBaseMap extends LayerBase<LayerBaseMapOptions> {
+export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
   private _data: Maybe<
     DataBase<
       | number
@@ -38,7 +38,7 @@ export class LayerBaseMap extends LayerBase<LayerBaseMapOptions> {
     >
   >
 
-  private _scale: LayerBaseMapScaleShape
+  private _scale: LayerBasemapScaleShape
 
   private _style = defaultStyle
 
@@ -79,7 +79,7 @@ export class LayerBaseMap extends LayerBase<LayerBaseMapOptions> {
     return this._style
   }
 
-  constructor(options: LayerBaseMapOptions, context: ChartContext) {
+  constructor(options: LayerBasemapOptions, context: ChartContext) {
     super({
       options,
       context,
@@ -93,15 +93,15 @@ export class LayerBaseMap extends LayerBase<LayerBaseMapOptions> {
       .catch((e) => this.log.error('Fetch map data failed', e))
   }
 
-  setData(data: LayerBaseMap['data']) {
+  setData(data: LayerBasemap['data']) {
     this._data = validateAndCreateData('base', this.data, data)
   }
 
-  setScale(scale: LayerBaseMapScaleShape) {
+  setScale(scale: LayerBasemapScaleShape) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerBaseMapStyleShape) {
+  setStyle(style: LayerBasemapStyleShape) {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 

@@ -1,4 +1,4 @@
-import {HeatmapConfiguration} from 'heatmap.js'
+import {HeatmapConfiguration} from '@mars3d/heatmap.js'
 import {BasicAnimationOptions} from '../animation'
 import {CurveType, ElConfigShape} from '../draw'
 import {FormatNumberConfig} from '../utils'
@@ -68,7 +68,7 @@ export type LayerInteractiveStyleShape = Partial<{
   line: GraphStyleShape
 }>
 
-export type LayerBaseMapStyleShape = Partial<{
+export type LayerBasemapStyleShape = Partial<{
   block: GraphStyleShape
   text: TextStyleShape
 }>
