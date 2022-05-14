@@ -15,7 +15,7 @@ export function Root() {
   return (
     <div className={styles.container}>
       <div className={styles.mainSection}>
-        <Editor schema={newSchema} onChange={onChange} />
+        <Editor schema={schema} onChange={onChange} />
         <div className={styles.chartSection}>
           <Chart debuggers={debuggers} schema={newSchema} />
           <pre className={styles.tip}>{tip}</pre>

@@ -25,17 +25,7 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
   const {schema: _schema, onChange = noop} = props,
     editorRef = useRef<HTMLDivElement>(null),
     schema = useMemo(() => stringify(_schema, 2), [_schema]),
-    [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor>(null)
-
-  useEffect(() => {
-    if (editor && schema) {
-      const state = editor.saveViewState()
-      editor.setValue(schema)
-      editor.restoreViewState(state)
-      editor.trigger('source', 'editor.action.formatDocument', null)
-      localStorage.setItem('editorContent', schema)
-    }
-  }, [schema, editor])
+    [, setEditor] = useState<monaco.editor.IStandaloneCodeEditor>(null)
 
   useEffect(() => {
     const container = editorRef.current,
@@ -47,6 +37,8 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
 
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
       onChange(parse(editor.getValue()))
+      editor.trigger('source', 'editor.action.formatDocument', null)
+      localStorage.setItem('editorContent', editor.getValue())
     })
 
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyD, () => {

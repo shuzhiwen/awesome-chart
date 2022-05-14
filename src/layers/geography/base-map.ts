@@ -215,7 +215,7 @@ export class LayerBaseMap extends LayerBase<LayerBaseMapOptions> {
 
     // reset coordinate system
     if (this.blockData.length) {
-      this.options.bindCoordinate(this)
+      this.options.bindCoordinate({trigger: this, redraw: true})
     }
 
     this.event.onWithOff('click-background', this.className, () => {

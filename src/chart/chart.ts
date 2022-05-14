@@ -189,8 +189,9 @@ export class Chart {
     this.getLayerById(id)?.setVisible(visible)
   }
 
-  bindCoordinate(trigger?: Layer) {
-    const axisLayer = this._layers.find((layer) => isLayerAxis(layer)) as Maybe<LayerAxis>,
+  bindCoordinate(props: {trigger?: Layer; redraw?: boolean}) {
+    const {trigger, redraw} = props,
+      axisLayer = this._layers.find((layer) => isLayerAxis(layer)) as Maybe<LayerAxis>,
       interactiveLayer = this._layers.find((layer) => isLayerInteractive(layer)),
       disabledLayers: LayerType[] = ['interactive', 'axis', 'legend', 'auxiliary'],
       layers = this._layers.filter(({options}) => !disabledLayers.includes(options.type)),
@@ -243,8 +244,12 @@ export class Chart {
           scaleY: axis === 'minor' ? scales.scaleYR : scales.scaleY,
         })
       }
-      layer.draw()
+      redraw && layer.draw()
     })
+  }
+
+  draw() {
+    this._layers.forEach((layer) => layer.draw())
   }
 
   destroy() {

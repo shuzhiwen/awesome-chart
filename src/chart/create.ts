@@ -70,7 +70,8 @@ export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => 
     legendLayerConfig && createLayer(chart, legendLayerConfig)
     interactiveConfig && createLayer(chart, interactiveConfig)
     // axis layer control all scales
-    axisLayerConfig && chart.bindCoordinate()
+    axisLayerConfig && chart.bindCoordinate({redraw: false})
+    chart.draw()
     // TODO: throw and give control to users
     setTimeout(() => chart.layers.map((instance) => instance?.playAnimation()))
 
