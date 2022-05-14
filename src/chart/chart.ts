@@ -158,6 +158,10 @@ export class Chart {
       event: this.event,
     }
 
+    if (this.layers.find((layer) => layer.options.id === options.id)) {
+      this.log.error(`Duplicate layer id "${options.id}"`)
+    }
+
     const layer = new layerMapping[options.type]({...options, sublayer} as any, context)
     this._layers.push(layer)
     this.state = 'ready'
@@ -166,11 +170,11 @@ export class Chart {
   }
 
   getLayerById(id: string) {
-    return this._layers.find(({options}) => options.id === id)
+    return this.layers.find(({options}) => options.id === id)
   }
 
   getLayersByType(type: LayerType) {
-    return this._layers.filter(({options}) => options.type === type)
+    return this.layers.filter(({options}) => options.type === type)
   }
 
   updateLayer(id: string, {data, scale, style, animation}: LayerSchema) {
@@ -191,10 +195,10 @@ export class Chart {
 
   bindCoordinate(props: {trigger?: Layer; redraw?: boolean}) {
     const {trigger, redraw} = props,
-      axisLayer = this._layers.find((layer) => isLayerAxis(layer)) as Maybe<LayerAxis>,
-      interactiveLayer = this._layers.find((layer) => isLayerInteractive(layer)),
+      axisLayer = this.layers.find((layer) => isLayerAxis(layer)) as Maybe<LayerAxis>,
+      interactiveLayer = this.layers.find((layer) => isLayerInteractive(layer)),
       disabledLayers: LayerType[] = ['interactive', 'axis', 'legend', 'auxiliary'],
-      layers = this._layers.filter(({options}) => !disabledLayers.includes(options.type)),
+      layers = this.layers.filter(({options}) => !disabledLayers.includes(options.type)),
       coordinate = axisLayer?.options.coordinate
 
     axisLayer?.clearScale()
@@ -249,11 +253,11 @@ export class Chart {
   }
 
   draw() {
-    this._layers.forEach((layer) => layer.draw())
+    this.layers.forEach((layer) => layer.draw())
   }
 
   destroy() {
-    this._layers.forEach((layer) => layer.destroy())
+    this.layers.forEach((layer) => layer.destroy())
     this._layers.length = 0
     this.state = 'destroy'
     this.tooltip.destroy()
