@@ -23,8 +23,10 @@ export function drawPath({
 }: PathDrawerProps) {
   const configuredData = data.map((item, i) => ({
     ...rest,
-    ...item,
     className,
+    path: item.path,
+    centerX: item.centerX ?? 0,
+    centerY: item.centerY ?? 0,
     fill: getAttr(fill, i, '#fff'),
     stroke: getAttr(stroke, i, '#fff'),
     opacity: getAttr(opacity, i, 1),

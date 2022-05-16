@@ -54,6 +54,10 @@ export interface AnimationFadeOptions extends BasicAnimationOptions {
   endOpacity?: number
 }
 
+export interface AnimationPathOptions extends BasicAnimationOptions {
+  path?: string
+}
+
 export interface AnimationZoomOptions extends BasicAnimationOptions {
   initialScale?: number
   startScale?: number

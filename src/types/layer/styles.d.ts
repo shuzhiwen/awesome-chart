@@ -75,6 +75,13 @@ export type LayerBasemapStyleShape = Partial<{
 
 export type LayerHeatmapStyleShape = Partial<HeatmapConfiguration>
 
+export type LayerODLineStyleShape = Partial<{
+  odLine: GraphStyleShape
+  flyingObject: {
+    path: Maybe<string>
+  }
+}>
+
 export type LayerTextStyleShape = Partial<{
   align: Align
   verticalAlign: Align

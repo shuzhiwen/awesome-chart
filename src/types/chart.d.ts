@@ -76,7 +76,7 @@ export interface CreateLayerSchema {
   data: any
   scale?: ScaleNiceShape
   style?: LayerSchema['style']
-  animation?: LayerSchema['style']
+  animation?: LayerSchema['animation']
   event?: AnyEventObject
 }
 

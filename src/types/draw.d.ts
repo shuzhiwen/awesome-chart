@@ -107,8 +107,8 @@ export type LineDrawerProps = GraphDrawerProps<{
 
 export type PathDrawerProps = GraphDrawerProps<{
   path: string
-  centerX: number
-  centerY: number
+  centerX?: number
+  centerY?: number
 }>
 
 export type PolyDrawerProps = GraphDrawerProps<{

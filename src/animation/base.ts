@@ -68,7 +68,7 @@ export abstract class AnimationBase<T extends Options> {
     this.log = createLog(this.constructor.name)
     this.event = createEvent(this.constructor.name)
     this.options = merge({}, options, {context})
-    this.createTargets('targets', context)
+    this.createTargets('targets')
 
     if (isCanvasContainer(context)) {
       this.renderCanvas = context.canvas?.requestRenderAll.bind(context.canvas) ?? noop
@@ -121,8 +121,9 @@ export abstract class AnimationBase<T extends Options> {
     })
   }
 
-  protected createTargets(key: string, context: Props<T>['context']) {
-    const targets = this.options[key as 'targets']
+  protected createTargets(key: string) {
+    const targets = this.options[key as 'targets'],
+      {context} = this.options
 
     if (typeof targets === 'string') {
       if (isSvgContainer(context)) {

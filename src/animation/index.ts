@@ -5,6 +5,7 @@ export * from './erase'
 export * from './empty'
 export * from './fade'
 export * from './move'
+export * from './path'
 export * from './queue'
 export * from './zoom'
 
@@ -13,5 +14,6 @@ export const animationMapping = {
   empty: animation.AnimationEmpty,
   fade: animation.AnimationFade,
   move: animation.AnimationMove,
+  path: animation.AnimationPath,
   zoom: animation.AnimationZoom,
 }

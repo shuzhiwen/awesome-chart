@@ -44,6 +44,11 @@ export type LayerHeatmapScaleShape = Maybe<{
   scaleY: RawScale
 }>
 
+export type LayerODLineScaleShape = Maybe<{
+  scaleX: RawScale
+  scaleY: RawScale
+}>
+
 export type LayerArcScaleShape = Maybe<{
   scaleAngle: ScaleAngle
   scaleRadius: ScaleLinear

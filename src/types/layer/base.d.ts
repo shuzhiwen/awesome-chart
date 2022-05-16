@@ -17,7 +17,7 @@ export type BackupDataShape<T> = Record<string, BackupDataItemShape<T>>
 
 export type BackupAnimationOptions = Record<
   string,
-  Record<'enter' | 'loop' | 'update', BasicAnimationOptions>
+  Partial<Record<'enter' | 'loop' | 'update', AnyObject & BasicAnimationOptions>>
 >
 
 export type BackupAnimationShape = Record<string, Maybe<AnyObject>> & {
