@@ -69,14 +69,15 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
   update() {
     if (!this.scale || !this.data) return
 
-    const {scaleX, scaleY} = this.scale,
+    const {left, top} = this.options.layout,
+      {scaleX, scaleY} = this.scale,
       {rawTableList} = this.data
 
     this.pointData = rawTableList.map(([x, y, value]) => ({
       value: Number(value),
       // why?
-      x: Number(scaleX(x).toFixed(0)),
-      y: scaleY(y),
+      x: left + Number(scaleX(x).toFixed(0)),
+      y: top + scaleY(y),
     }))
   }
 

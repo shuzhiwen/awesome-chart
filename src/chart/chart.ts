@@ -24,7 +24,6 @@ import {
   ChartContext,
   GradientCreatorProps,
   LayerOptions,
-  LayerScalesShape,
   D3Selection,
   LayerType,
   LayerAxisScaleShape,
@@ -229,25 +228,12 @@ export class Chart {
     interactiveLayer?.setScale(axisLayer?.scale)
 
     layers.forEach((layer) => {
-      if (layer.options.id === trigger?.options.id) {
-        return
-      }
+      if (layer.options.id === trigger?.options.id) return
 
-      const scales = {...layer.scale, ...axisLayer?.scale},
-        {axis, layout} = layer.options
+      const {scaleY, scaleYR, ...rest} = {...layer.scale, ...axisLayer?.scale},
+        {axis} = layer.options
 
-      if (coordinate === 'geographic') {
-        layer.setScale({
-          ...scales,
-          scaleX: (x: number) => (scales.scaleX?.(x) as number) - layout.left,
-          scaleY: (y: number) => (scales.scaleY?.(y) as number) - layout.top,
-        } as LayerScalesShape)
-      } else {
-        layer.setScale({
-          ...scales,
-          scaleY: axis === 'minor' ? scales.scaleYR : scales.scaleY,
-        })
-      }
+      layer.setScale({...rest, scaleY: axis === 'minor' ? scaleYR : scaleY})
       redraw && layer.draw()
     })
   }

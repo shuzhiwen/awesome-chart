@@ -124,8 +124,8 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
 
     this._scale = createScale(
       {
-        scaleX: (x: number) => projection([x, 0])?.[0],
-        scaleY: (y: number) => projection([0, y])?.[1],
+        scaleX: (x: number) => (projection([x, 0])?.[0] ?? 0) - left,
+        scaleY: (y: number) => (projection([0, y])?.[1] ?? 0) - top,
       },
       this.scale
     )

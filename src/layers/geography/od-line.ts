@@ -86,7 +86,8 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
   update() {
     if (!this.scale) return
 
-    const {headers, rawTableList} = this.data,
+    const {left, top} = this.options.layout,
+      {headers, rawTableList} = this.data,
       {flyingObject} = this.style,
       fromXIndex = headers.findIndex((header) => header === 'fromX'),
       fromYIndex = headers.findIndex((header) => header === 'fromY'),
@@ -95,8 +96,13 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
       {scaleX, scaleY} = this.scale
 
     this.odLineData = rawTableList.map((d) => {
-      const [fromX, fromY, toX, toY] = [d[fromXIndex], d[fromYIndex], d[toXIndex], d[toYIndex]],
-        position = {fromX: scaleX(fromX), fromY: scaleY(fromY), toX: scaleX(toX), toY: scaleY(toY)}
+      const [fromX, fromY, toX, toY] = [d[fromXIndex], d[fromYIndex], d[toXIndex], d[toYIndex]]
+      const position = {
+        fromX: left + scaleX(fromX),
+        fromY: top + scaleY(fromY),
+        toX: left + scaleX(toX),
+        toY: top + scaleY(toY),
+      }
 
       return {
         source: [
