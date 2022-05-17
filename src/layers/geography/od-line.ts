@@ -116,7 +116,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
     })
 
     if (flyingObject?.path) {
-      this.flyingObjectData = this.odLineData.map(({path}) => ({path}))
+      this.flyingObjectData = [{path: flyingObject.path}]
       this.setAnimation(defaultAnimation)
     }
   }

@@ -17,7 +17,7 @@ export class AnimationPath extends AnimationBase<Options> {
     if (isSvgContainer(targets) && isSvgContainer(path)) {
       const animePath = anime.path(path.node())
       this.instance = anime({
-        targets,
+        targets: targets.nodes(),
         duration,
         delay,
         // translate must before at rotate

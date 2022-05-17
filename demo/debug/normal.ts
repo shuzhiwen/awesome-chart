@@ -2,7 +2,9 @@ import {Chart} from '../../src/chart'
 import {DataTableList} from '../../src/data'
 import {randomTableList} from '../../src/utils'
 
-export function debugRectLayer(chart: Chart) {
+type TableListLayerType = 'arc' | 'rect' | 'line'
+
+export const debugTableListLayer = (type: TableListLayerType) => (chart: Chart) => {
   const data = randomTableList({
       mode: 'normal',
       mu: 100,
@@ -10,14 +12,19 @@ export function debugRectLayer(chart: Chart) {
       row: 3,
       column: 1 + Math.round(Math.random() * 2),
     }),
-    layers = chart.getLayersByType('rect')
+    layers = chart.getLayersByType(type)
 
   layers.forEach((layer) => {
     layer.setData(new DataTableList(data))
     layer.update()
-    chart.bindCoordinate()
-    chart.layers.forEach((layer) => layer.draw())
+    chart.bindCoordinate({redraw: true})
   })
 
-  console.log('RandomData', data)
+  console.log(`RandomData(TableList) for ${type} layer`, data)
 }
+
+export const debugTableListLayers = [
+  debugTableListLayer('arc'),
+  debugTableListLayer('line'),
+  debugTableListLayer('rect'),
+]
