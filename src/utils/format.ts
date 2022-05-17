@@ -1,4 +1,4 @@
-import * as d3 from 'd3-format'
+import {format} from 'd3-format'
 import {isNil} from 'lodash'
 import {FormatNumberConfig, OverflowControlConfig} from '../types'
 import {getTextWidth} from './chaos'
@@ -12,12 +12,12 @@ export const formatNumber = (data: Meta, config?: FormatNumberConfig) => {
     if (isNil(data) || data === '') {
       return ''
     } else if (!Number.isNaN(number)) {
-      return d3.format(`.${8}~f`)(number)
+      return format(`.${8}~f`)(number)
     }
     return data
   }
 
-  return d3.format(`${thousandth ? ',' : ''}.${decimals}~${percentage ? '%' : 'f'}`)(number)
+  return format(`${thousandth ? ',' : ''}.${decimals}~${percentage ? '%' : 'f'}`)(number)
 }
 
 export const overflowControl = (data: Meta, config: OverflowControlConfig) => {

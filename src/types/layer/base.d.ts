@@ -73,7 +73,7 @@ export interface LayerScalesShape {
 }
 
 export interface Layer extends LayerBase<LayerOptions> {
-  scale?: LayerScalesShape
+  scale?: Maybe<LayerScalesShape>
   legendData?: Maybe<LegendDataShape>
 }
 

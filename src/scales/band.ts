@@ -1,10 +1,10 @@
 import {isNumber} from 'lodash'
 import {ScaleBandProps} from '../types'
-import * as d3 from 'd3-scale'
+import {scaleBand as d3ScaleBand} from 'd3-scale'
 
 export function scaleBand(this: any, {domain, range, nice = {}}: ScaleBandProps) {
   const {fixedBandwidth, fixedPaddingInner, fixedBoundary, paddingInner} = nice,
-    scale = d3.scaleBand().domain(domain).range(range),
+    scale = d3ScaleBand().domain(domain).range(range),
     distance = Math.abs(range[1] - range[0])
 
   if (isNumber(fixedBandwidth) && isNumber(fixedPaddingInner)) {

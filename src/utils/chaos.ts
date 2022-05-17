@@ -1,4 +1,4 @@
-import * as d3 from 'd3'
+import {range as d3Range} from 'd3'
 import chroma from 'chroma-js'
 import {isArray, isNil, isNumber} from 'lodash'
 import {D3Selection} from '../types'
@@ -32,9 +32,9 @@ export function download(data: string, fileName: string) {
 }
 
 export function range(start: number, end: number, step = 1, toFixed = 8) {
-  return d3
-    .range(start, end + (step > 0 ? 1 : -1) * 10 ** -(toFixed + 2), step)
-    .map((v) => Number(Number(v).toFixed(toFixed)))
+  return d3Range(start, end + (step > 0 ? 1 : -1) * 10 ** -(toFixed + 2), step).map((v) =>
+    Number(Number(v).toFixed(toFixed))
+  )
 }
 
 export function mergeAlpha<T>(color: T, opacity: number) {

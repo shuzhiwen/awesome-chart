@@ -51,15 +51,15 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
   }[] = []
 
   get scale() {
-    return this._scale!
+    return this._scale
   }
 
   get data() {
-    return this._data!
+    return this._data
   }
 
   get style() {
-    return this._style!
+    return this._style
   }
 
   constructor(options: LayerODLineOptions, context: ChartContext) {
@@ -84,7 +84,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
   }
 
   update() {
-    if (!this.scale) return
+    if (!this.data || !this.scale?.scaleX || !this.scale.scaleY) return
 
     const {left, top} = this.options.layout,
       {headers, rawTableList} = this.data,

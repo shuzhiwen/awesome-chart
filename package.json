@@ -16,7 +16,7 @@
     "prepare": "husky install",
     "bundle": "yarn webpack -c webpack.js && cp -r src/types dist/types",
     "package": "rm -rf dist tsconfig.tsbuildinfo && yarn tsc && yarn bundle && yarn clear",
-    "clear": "rm dist/index.js && find dist/*/* -name '*.js' | xargs rm -f",
+    "clear": "find dist/*/* -name '*.js' | xargs rm -f && rm dist/index.js dist/env.js",
     "test": "yarn jest"
   },
   "dependencies": {

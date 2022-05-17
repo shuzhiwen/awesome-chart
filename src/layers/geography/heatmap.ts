@@ -38,7 +38,7 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
   }
 
   get scale() {
-    return this._scale!
+    return this._scale
   }
 
   get style() {
@@ -67,7 +67,7 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
   }
 
   update() {
-    if (!this.scale || !this.data) return
+    if (!this.data || !this.scale?.scaleX || !this.scale.scaleY) return
 
     const {left, top} = this.options.layout,
       {scaleX, scaleY} = this.scale,
