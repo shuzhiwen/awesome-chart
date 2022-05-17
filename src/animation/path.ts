@@ -4,7 +4,7 @@ import {AnimationPathOptions as Options, AnimationProps as Props} from '../types
 import anime from 'animejs'
 
 export class AnimationPath extends AnimationBase<Options> {
-  instance: Maybe<anime.AnimeInstance> = null
+  private instances: anime.AnimeInstance[] = []
 
   constructor(props: Props<Options>) {
     super(props)
@@ -15,29 +15,35 @@ export class AnimationPath extends AnimationBase<Options> {
     const {targets, path, delay = 0, duration = 1000, easing = 'easeInOutSine'} = this.options
 
     if (isSvgContainer(targets) && isSvgContainer(path)) {
-      const animePath = anime.path(path.node())
-      this.instance = anime({
-        targets: targets.nodes(),
-        duration,
-        delay,
-        // translate must before at rotate
-        translateX: animePath('x'),
-        translateY: animePath('y'),
-        rotate: animePath('angle'),
-        update: this.process,
-        loopBegin: this.start,
-        loopComplete: this.end,
-        easing,
-      })
+      const animePaths = path.nodes().map((node) => anime.path(node)),
+        animationTargets = targets.nodes()
+
+      animationTargets.forEach((target, i) =>
+        this.instances.push(
+          anime({
+            targets: target,
+            duration,
+            delay,
+            // translate must before at rotate
+            translateX: animePaths[i]?.('x'),
+            translateY: animePaths[i]?.('y'),
+            rotate: animePaths[i]?.('angle'),
+            update: this.process,
+            loopBegin: this.start,
+            loopComplete: this.end,
+            easing,
+          })
+        )
+      )
     } else if (isCanvasContainer(targets)) {
       this.log.warn('Animation not support for canvas mode.')
     }
   }
 
   destroy() {
-    this.instance?.seek(0)
-    if (this.options.targets) {
-      anime.remove(this.options.targets)
+    if (isSvgContainer(this.options.targets)) {
+      this.instances.forEach((item) => item.seek(0))
+      anime.remove(this.options.targets.nodes())
     }
   }
 }
