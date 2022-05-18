@@ -257,7 +257,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   protected drawBasic<T>({type, data, sublayer = type}: DrawBasicProps<T>) {
     if (!this.sublayers.includes(sublayer)) {
-      this.log.error('Invalid sublayer type')
+      this.log.debug.error('Invalid sublayer type')
       return
     }
 

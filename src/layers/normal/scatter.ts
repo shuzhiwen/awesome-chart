@@ -70,7 +70,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
     ;['x', 'y'].map((key) => {
       if (!headers.includes(key)) {
-        this.log.error(`DataTableList 缺失必须列 "${key}"`)
+        this.log.error(`DataTableList lost specific column "${key}"`)
       }
     })
   }

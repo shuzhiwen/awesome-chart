@@ -143,7 +143,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
           incoming = scale[type]?.domain() ?? []
 
         if (current[0] > current[1] !== incoming[0] > incoming[1]) {
-          this.log.warn('Layers scale does not match', {current, incoming})
+          this.log.debug.warn('Layers scale does not match', {current, incoming})
         } else {
           const isReverse = current[0] > current[1]
           this.scale[type]?.domain([
