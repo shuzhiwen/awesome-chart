@@ -2,6 +2,7 @@ import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {GeoGeometryObjects, geoMercator, geoPath} from 'd3-geo'
 import {createScale, createStyle, createText, validateAndCreateData} from '../helpers'
+import {uuid} from '../../utils'
 import {
   ChartContext,
   DrawerDataShape,
@@ -18,6 +19,8 @@ type GeoFeatureShape = {
   properties: AnyObject
   geometry: GeoGeometryObjects
 }
+
+const animationKey = uuid()
 
 const getGeoJSON = (adcode: Meta) => `http://cdn.dtwave.com/waveview/geojson/${adcode}.json`
 
@@ -218,14 +221,14 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
       this.options.bindCoordinate({trigger: this, redraw: true})
     }
 
-    this.event.onWithOff('click-background', this.className, () => {
+    this.event.onWithOff('click-background', animationKey, () => {
       const parentCode = this.parentCode.pop()
       if (parentCode) {
         this.fetchOnlineData(parentCode)
       }
     })
 
-    this.event.onWithOff('click-block', this.className, ({data}) => {
+    this.event.onWithOff('click-block', animationKey, ({data}) => {
       const blockCode = data.source.find(
         ({category}: ElSourceShape) => category === 'adcode'
       )?.value

@@ -1,5 +1,4 @@
 import {randomNormal, randomPoisson} from 'd3-random'
-import {CHARACTERS} from './constants'
 import {RawTable, RandomOptions, RawTableList} from '../types'
 
 const mapping = {
@@ -34,7 +33,9 @@ export const randomTable = (options: RandomOptions): RawTable => {
 }
 
 export function uuid(n = 16) {
+  const CHARACTERS = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789'
   let string = ''
+
   for (let i = 0; i < n; i++) {
     string += CHARACTERS.charAt(Math.floor(Math.random() * CHARACTERS.length))
   }

@@ -12,12 +12,14 @@ import {
 
 type Shape = AnimationBase<Options>
 
+const animationKey = uuid()
+
 const bind = (animations: Shape[], callback: AnyFunction) => {
   Promise.all(
     animations.map(
       (instance) =>
         new Promise((resolve) => {
-          instance.event.onWithOff('end', 'bindAnimation', resolve)
+          instance.event.onWithOff('end', animationKey, resolve)
         })
     )
   ).then(() => {

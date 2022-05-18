@@ -10,6 +10,7 @@ import {
   isLayerAxis,
   range,
   ungroup,
+  uuid,
 } from '../../utils'
 import {
   ChartContext,
@@ -27,6 +28,8 @@ import {
 } from '../../types'
 
 const disableColor = '#E2E3E588'
+
+const animationKey = uuid()
 
 const defaultStyle: LayerLegendStyleShape = {
   align: 'end',
@@ -111,8 +114,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
   }
 
   bindLayers(originLayers: Layer[]) {
-    const {id} = this.options,
-      data = this.data.source,
+    const data = this.data.source,
       axisLayer = originLayers.find((layer) => isLayerAxis(layer)),
       layers = originLayers.filter((layer) => layer.legendData)
 
@@ -128,7 +130,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     this.filter(layers)
     this.isFiltering = false
 
-    axisLayer?.event.onWithOff('draw', id, () => !this.isFiltering && this.update())
+    axisLayer?.event.onWithOff('draw', animationKey, () => !this.isFiltering && this.update())
   }
 
   private filter = (layers: Layer[]) => {
@@ -142,7 +144,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
 
     this.event.onWithOff(
       'mousedown-interactive',
-      this.options.id,
+      animationKey,
       (object: {data: {source: {index: number}}}) => {
         const {index} = object.data.source,
           layerIndex = counts.findIndex((_, i) => sum(counts.slice(0, i + 1)) > index),

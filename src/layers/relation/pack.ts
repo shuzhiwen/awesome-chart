@@ -14,14 +14,14 @@ import {
   Node,
 } from '../../types'
 
+const animationKey = uuid()
+
 const defaultStyle: LayerPackStyleShape = {
   zoom: true,
   padding: 0,
 }
 
 export class LayerPack extends LayerBase<LayerPackOptions> {
-  private animationKey = uuid()
-
   private _data: Maybe<DataRelation> = null
 
   private _style = defaultStyle
@@ -144,7 +144,7 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
     this.drawBasic({type: 'text', data: textData.slice(textData.length - 1)})
 
     if (zoom && isSvgContainer(this.root)) {
-      this.event.onWithOff('click-circle', this.animationKey, this.zoom)
+      this.event.onWithOff('click-circle', animationKey, this.zoom)
     } else {
       this.log.warn('Zoom pack not support for canvas')
     }
