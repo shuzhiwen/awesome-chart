@@ -6,7 +6,6 @@ import {IRectOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 
 export function drawRect({
-  engine,
   fill,
   stroke,
   strokeWidth,
@@ -36,7 +35,7 @@ export function drawRect({
     transformOrigin: getTransformOrigin(item, getAttr(transformOrigin, i, '')),
   }))
 
-  if (engine === 'svg' && isSvgContainer(container)) {
+  if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
       .data(configuredData.map(mapping) as typeof configuredData)
@@ -61,7 +60,7 @@ export function drawRect({
       .style('transform-origin', (d) => d.transformOrigin)
   }
 
-  if (engine === 'canvas' && isCanvasContainer(container)) {
+  if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       const rect = new fabric.Rect({

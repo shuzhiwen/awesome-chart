@@ -5,7 +5,6 @@ import {LineDrawerProps} from '../types'
 import {isCanvasContainer, isSvgContainer, noChange, mergeAlpha, getAttr} from '../utils'
 
 export function drawLine({
-  engine,
   stroke,
   strokeWidth,
   opacity,
@@ -31,7 +30,7 @@ export function drawLine({
     source: getAttr(source, i, {}),
   }))
 
-  if (engine === 'svg' && isSvgContainer(container)) {
+  if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
       .data(configuredData.map(mapping) as typeof configuredData)
@@ -53,7 +52,7 @@ export function drawLine({
       .style('pointer-events', 'none')
   }
 
-  if (engine === 'canvas' && isCanvasContainer(container)) {
+  if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       const y1 = config.y1 - config.strokeWidth / 2

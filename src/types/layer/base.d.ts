@@ -8,10 +8,7 @@ import {ChartContext} from '../chart'
 
 export type LayerType = keyof typeof layerMapping
 
-export type BackupDataItemShape<T> = Omit<
-  GraphDrawerProps<T>,
-  'className' | 'container' | 'engine'
->[]
+export type BackupDataItemShape<T> = Omit<GraphDrawerProps<T>, 'className' | 'container'>[]
 
 export type BackupDataShape<T> = Record<string, BackupDataItemShape<T>>
 
@@ -43,7 +40,6 @@ export interface CreateAnimationConfigItemShape {
 
 export interface CreateAnimationProps {
   event: Event
-  engine: Engine
   sublayer: string
   context: DrawerTarget
   config: Record<

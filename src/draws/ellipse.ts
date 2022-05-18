@@ -5,7 +5,6 @@ import {EllipseDrawerProps} from '../types'
 import {mergeAlpha, getAttr, noChange, isSvgContainer, isCanvasContainer} from '../utils'
 
 export function drawEllipse({
-  engine,
   fill,
   stroke,
   strokeWidth,
@@ -33,7 +32,7 @@ export function drawEllipse({
     source: getAttr(source, i, {}),
   }))
 
-  if (engine === 'svg' && isSvgContainer(container)) {
+  if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
       .data(configuredData.map(mapping) as typeof configuredData)
@@ -56,7 +55,7 @@ export function drawEllipse({
       .style('transform-origin', (d) => `${d.cx}px ${d.cy}px`)
   }
 
-  if (engine === 'canvas' && isCanvasContainer(container)) {
+  if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       const ellipse = new fabric.Ellipse({

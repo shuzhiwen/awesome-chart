@@ -5,7 +5,6 @@ import {IPathOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 
 export function drawPath({
-  engine,
   fill,
   stroke,
   strokeWidth,
@@ -37,7 +36,7 @@ export function drawPath({
     transformOrigin: getAttr(transformOrigin, i, ''),
   }))
 
-  if (engine === 'svg' && isSvgContainer(container)) {
+  if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
       .data(configuredData.map(mapping) as typeof configuredData)
@@ -58,7 +57,7 @@ export function drawPath({
       .style('transform', (d) => `translate(${d.centerX}px,${d.centerY}px)`)
   }
 
-  if (engine === 'canvas' && isCanvasContainer(container)) {
+  if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       const path = new fabric.Path(config.path, {

@@ -5,7 +5,6 @@ import {TextDrawerProps} from '../types'
 import {mergeAlpha, getAttr, isSvgContainer, isCanvasContainer, noChange} from '../utils'
 
 export function drawText({
-  engine,
   fontFamily,
   fontSize,
   fontWeight,
@@ -47,7 +46,7 @@ export function drawText({
     textDecoration: getAttr(textDecoration, i, 'none'),
   }))
 
-  if (engine === 'svg' && isSvgContainer(container)) {
+  if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
       .data(configuredData.map(mapping) as typeof configuredData)
@@ -78,7 +77,7 @@ export function drawText({
       .style('pointer-events', 'none')
   }
 
-  if (engine === 'canvas' && isCanvasContainer(container)) {
+  if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       const text = new fabric.Text(config.value, {

@@ -5,7 +5,6 @@ import {IPolylineOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 
 export function drawPolygon({
-  engine,
   fill,
   stroke,
   strokeWidth,
@@ -35,7 +34,7 @@ export function drawPolygon({
     transformOrigin: `${centerX}px ${centerY}px`,
   }))
 
-  if (engine === 'svg' && isSvgContainer(container)) {
+  if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
       .data(configuredData.map(mapping) as typeof configuredData)
@@ -55,7 +54,7 @@ export function drawPolygon({
       .style('transform-origin', (d) => d.transformOrigin)
   }
 
-  if (engine === 'canvas' && isCanvasContainer(container)) {
+  if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       const polygon = new fabric.Polygon(config.points, {

@@ -47,7 +47,6 @@ export interface ElSourceShape extends AnyObject {
 }
 
 export interface BasicDrawerProps<T> {
-  engine: Engine
   data: DrawerDataParameter<T>
   source?: DrawerDataParameter<ElSourceShape>
   className: string

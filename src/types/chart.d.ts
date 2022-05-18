@@ -12,7 +12,6 @@ export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
 export interface ChartContext {
   root: Chart['root']
   theme: Chart['theme']
-  engine: Chart['engine']
   tooltip: Chart['tooltip']
   container: Chart['container']
   containerWidth: Chart['containerWidth']

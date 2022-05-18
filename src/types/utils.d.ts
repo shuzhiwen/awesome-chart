@@ -30,7 +30,6 @@ export interface GradientWithId extends fabric.Gradient {
 
 export interface GradientCreatorProps<T> {
   container: D3Selection | GradientWithId[]
-  engine: Engine
   schema: T
 }
 

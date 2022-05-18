@@ -118,7 +118,7 @@ export class Chart {
       this.root.on('mousemove', (event) => this.event.fire('MouseEvent', {event}))
     }
 
-    createDefs({schema: defineSchema, engine, container: this.defs})
+    createDefs({schema: defineSchema, container: this.defs})
 
     this._layout = layoutCreator({
       containerWidth: this.containerWidth,
@@ -145,16 +145,15 @@ export class Chart {
   createLayer(options: LayerOptions, sublayer: false = false) {
     const context: ChartContext = {
       root: this.root,
+      event: this.event,
       theme: this.theme,
-      engine: this.engine,
       tooltip: this.tooltip,
       container: this.container,
       containerWidth: this.containerWidth,
       containerHeight: this.containerHeight,
       bindCoordinate: this.bindCoordinate.bind(this),
-      createGradient: getEasyGradientCreator({container: this.defs, engine: this.engine}),
+      createGradient: getEasyGradientCreator({container: this.defs}),
       createSublayer: (options: LayerOptions) => this.createLayer(options, true as false),
-      event: this.event,
     }
 
     if (this.layers.find((layer) => layer.options.id === options.id)) {

@@ -76,7 +76,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     this.sublayers = sublayers || []
     this.tooltipTargets = tooltipTargets || []
     this.sublayers.forEach((name) => (this.backupData[name] = []))
-    this.selector = new Selector(this.options.engine)
+    this.selector = new Selector()
     this.root = this.selector.createSubcontainer(this.options.root, this.className)!
     this.backupData = Object.fromEntries(this.sublayers.map((name) => [name, []]))
     this.createLifeCycles()
@@ -288,7 +288,6 @@ export abstract class LayerBase<T extends LayerOptions> {
         const groupClassName = `${sublayerClassName}-${i}`,
           groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),
           options: GraphDrawerProps<any> = {
-            engine: this.selector.engine,
             className: `chart-basic-${sublayer}`,
             container: groupContainer!,
             data: [],

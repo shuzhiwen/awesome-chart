@@ -5,7 +5,6 @@ import {ImageDrawerProps} from '../types'
 import {getAttr, isCanvasContainer, isSvgContainer, noChange} from '../utils'
 
 export function drawImage({
-  engine,
   opacity,
   mapping = noChange,
   source = [],
@@ -23,7 +22,7 @@ export function drawImage({
     source: getAttr(source, i, {}),
   }))
 
-  if (engine === 'svg' && isSvgContainer(container)) {
+  if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
       .data(configuredData.map(mapping) as typeof configuredData)
@@ -41,7 +40,7 @@ export function drawImage({
       .attr('xlink:href', (d) => d.url)
   }
 
-  if (engine === 'canvas' && isCanvasContainer(container)) {
+  if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
     configuredData.forEach((config) => {
       fabric.Image.fromURL(

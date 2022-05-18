@@ -15,10 +15,9 @@ import {
 export const createLinearGradients = ({
   container,
   schema,
-  engine,
 }: GradientCreatorProps<LinearGradientSchema[]>) => {
   schema.forEach(({id, x1 = 0, x2 = 0, y1 = 0, y2 = 0, stops}) => {
-    if (engine === 'svg' && isSvgContainer(container)) {
+    if (isSvgContainer(container)) {
       const linearGradient = container
         .append('linearGradient')
         .attr('id', id)
@@ -52,10 +51,9 @@ export const createLinearGradients = ({
 export const createRadialGradients = ({
   container,
   schema,
-  engine,
 }: GradientCreatorProps<RadialGradientSchema[]>) => {
   schema.forEach(({id, r = 0, r2 = 0, x1 = 1, x2 = 1, y1 = 0, y2 = 0, stops}) => {
-    if (engine === 'svg' && isSvgContainer(container)) {
+    if (isSvgContainer(container)) {
       const radialGradient = container
         .append('radialGradient')
         .attr('id', id)
@@ -88,15 +86,15 @@ export const createRadialGradients = ({
 }
 
 export const createDefs = (props: GradientCreatorProps<CreateDefsSchema>) => {
-  const {container, schema, engine} = props,
+  const {container, schema} = props,
     {linearGradient, radialGradient} = schema
 
-  createLinearGradients({container, schema: group(linearGradient), engine})
-  createRadialGradients({container, schema: group(radialGradient), engine})
+  createLinearGradients({container, schema: group(linearGradient)})
+  createRadialGradients({container, schema: group(radialGradient)})
 }
 
 export const getEasyGradientCreator =
-  ({container, engine}: Pick<GradientCreatorProps<any>, 'container' | 'engine'>) =>
+  ({container}: Pick<GradientCreatorProps<any>, 'container'>) =>
   ({type, colors, direction, ...other}: EasyGradientCreatorProps) => {
     const schema: CreateDefsSchema = {},
       baseSchema = {
@@ -118,10 +116,10 @@ export const getEasyGradientCreator =
       }
     }
 
-    createDefs({container, engine, schema})
-    if (engine === 'svg' && isSvgContainer(container)) {
+    createDefs({container, schema})
+    if (isSvgContainer(container)) {
       return `url(#${baseSchema.id})`
-    } else if (engine === 'canvas' && isArray(container)) {
+    } else if (isArray(container)) {
       return container.find((gradient) => gradient.id === baseSchema.id, false)
     }
   }
