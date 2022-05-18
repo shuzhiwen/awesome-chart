@@ -143,3 +143,10 @@ export type LayerFlopperStyleShape = Partial<{
     backgroundColor: string
   }
 }>
+
+export type LayerPackStyleShape = Partial<{
+  zoom: boolean
+  padding: number
+  circle: GraphStyleShape
+  text: TextStyleShape
+}>

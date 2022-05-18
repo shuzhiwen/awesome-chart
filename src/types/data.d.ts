@@ -31,8 +31,8 @@ export interface Node {
   name: Meta
   value?: Meta
   level?: Meta
-  parents?: Meta[]
-  children?: Meta[]
+  parents?: Node[]
+  children?: Node[]
 }
 
 export interface RelationDataShape {

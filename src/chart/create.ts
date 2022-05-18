@@ -1,4 +1,3 @@
-import {isArray} from 'lodash'
 import {DataTableList, DataTable, DataRelation, DataBase} from '../data'
 import {CreateChartSchema, CreateLayerSchema, LayerOptions} from '../types'
 import {Chart} from './chart'
@@ -27,13 +26,13 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
     layer.bindLayers(chart.layers)
   } else if (isTable(data) || data?.type === 'table') {
     dataSet = new DataTable(isTable(data) ? data : randomTable(data))
-  } else if (isArray(data) && data.length === 2 && isRelation(data)) {
+  } else if (isRelation(data)) {
     if (type === 'chord') {
       dataSet = new DataTable(relationToTable(data)!)
     } else {
       dataSet = new DataRelation(data)
     }
-  } else if (type !== 'indicator' && (isTableList(data) || data?.type === 'tableList')) {
+  } else if (isTableList(data) || data?.type === 'tableList') {
     if (type === 'matrix') {
       dataSet = new DataTable(tableListToTable(data)!)
     } else {

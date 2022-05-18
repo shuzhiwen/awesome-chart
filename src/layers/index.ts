@@ -5,6 +5,7 @@ export * from './geography'
 export * from './helpers'
 export * from './indicator'
 export * from './normal'
+export * from './relation'
 
 export const layerMapping = {
   arc: layer.LayerArc,
@@ -20,6 +21,7 @@ export const layerMapping = {
   line: layer.LayerLine,
   matrix: layer.LayerText,
   odLine: layer.LayerODLine,
+  pack: layer.LayerPack,
   rect: layer.LayerRect,
   scatter: layer.LayerScatter,
   text: layer.LayerText,

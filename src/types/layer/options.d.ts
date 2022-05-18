@@ -24,6 +24,7 @@ export type LayerOptions =
   | LayerBasemapOptions
   | LayerHeatmapOptions
   | LayerODLineOptions
+  | LayerPackOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
@@ -38,6 +39,8 @@ export type LayerBasemapOptions = BasicLayerOptions<'basemap'>
 export type LayerHeatmapOptions = BasicLayerOptions<'heatmap'>
 
 export type LayerODLineOptions = BasicLayerOptions<'odLine'>
+
+export type LayerPackOptions = BasicLayerOptions<'pack'>
 
 export type LayerAxisOptions = BasicLayerOptions<
   'axis',

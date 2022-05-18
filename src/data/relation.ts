@@ -69,8 +69,8 @@ export class DataRelation extends DataBase<RawRelation, Options> {
         !completed[id] && this.roots.push(id)
       } else if (current) {
         const parents = prevIds.map((prevId) => this.nodes.find((node) => node.id === prevId))
-        current.parents?.push(...prevIds)
-        parents.forEach((parent) => parent?.children?.push(id))
+        current.parents?.push(...prevIds.map((id) => this.getNode(id)!))
+        parents.forEach((parent) => parent?.children?.push(this.getNode(id)!))
         prevIds.forEach((prevId) => !completed[prevId] && findRoot(prevId))
       }
       completed[id] = true

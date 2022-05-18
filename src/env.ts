@@ -12,4 +12,4 @@ const productionEnv: Env = {
   mode: 'production',
 }
 
-export const __env = productionEnv
+export const __env = developmentEnv
