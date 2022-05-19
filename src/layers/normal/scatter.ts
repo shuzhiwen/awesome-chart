@@ -26,8 +26,6 @@ const defaultStyle: LayerScatterStyleShape = {
 export class LayerScatter extends LayerBase<LayerScatterOptions> {
   public legendData: Maybe<LegendDataShape>
 
-  private needRescale = false
-
   private _data: Maybe<DataTableList>
 
   private _scale: LayerScatterScaleShape
@@ -67,7 +65,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
     if (!this.data) return
 
-    this.needRescale = true
+    this.createScale()
     ;['x', 'y'].map((key) => {
       if (!this.data?.headers.includes(key)) {
         this.log.error(`DataTableList lost specific column "${key}"`)
@@ -77,7 +75,6 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
   setScale(scale: LayerScatterScaleShape) {
     this._scale = createScale(undefined, this.scale, scale)
-    this.needRescale = false
   }
 
   setStyle(style: LayerScatterStyleShape) {
@@ -85,8 +82,6 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
   }
 
   update() {
-    this.needRescale && this.createScale()
-
     if (!this.data || !this.scale) return
 
     const {layout} = this.options,
@@ -146,8 +141,6 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
   private createScale() {
     if (!this.data) return
-
-    this.needRescale = false
 
     const {layout} = this.options,
       {width, height} = layout,

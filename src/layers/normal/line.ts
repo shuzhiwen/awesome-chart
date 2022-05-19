@@ -46,8 +46,6 @@ const defaultStyle: LayerLineStyleShape = {
 export class LayerLine extends LayerBase<LayerLineOptions> {
   public legendData: Maybe<LegendDataShape>
 
-  private needRescale = false
-
   private _data: Maybe<DataTableList>
 
   private _scale: LayerLineScaleShape
@@ -95,12 +93,11 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
 
   setData(data: LayerLine['data']) {
     this._data = validateAndCreateData('tableList', this.data, data)
-    this.needRescale = true
+    this.createScale()
   }
 
   setScale(scale: LayerLineScaleShape) {
     this._scale = createScale(undefined, this.scale, scale)
-    this.needRescale = false
   }
 
   setStyle(style: LayerLineStyleShape) {
@@ -108,8 +105,6 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
   }
 
   update() {
-    this.needRescale && this.createScale()
-
     if (!this.data || !this.scale) return
 
     const {layout, mode, createGradient} = this.options,
@@ -176,8 +171,6 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
 
   private createScale() {
     if (!this.data) return
-
-    this.needRescale = false
 
     const {layout, mode} = this.options,
       {width, height} = layout,

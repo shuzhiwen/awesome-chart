@@ -43,8 +43,6 @@ const defaultStyle: LayerRectStyleShape = {
 export class LayerRect extends LayerBase<LayerRectOptions> {
   public legendData: Maybe<LegendDataShape>
 
-  private needRescale = false
-
   private _data: Maybe<DataTableList>
 
   private _scale: LayerRectScaleShape
@@ -94,7 +92,6 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   setData(data: LayerRect['data']) {
     const {mode} = this.options
 
-    this.needRescale = true
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
       if (mode === 'interval') {
         return data?.select(data.headers.slice(0, 3)) ?? null
@@ -103,11 +100,11 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       }
       return data
     })
+    this.createScale()
   }
 
   setScale(scale: LayerRectScaleShape) {
     this._scale = createScale(undefined, this.scale, scale)
-    this.needRescale = false
   }
 
   setStyle(style: LayerRectStyleShape) {
@@ -115,8 +112,6 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   }
 
   update() {
-    this.needRescale && this.createScale()
-
     if (!this.data || !this.scale) return
 
     const {variant, mode, layout} = this.options,
@@ -388,8 +383,6 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
   private createScale() {
     if (!this.data) return
-
-    this.needRescale = false
 
     const {layout, variant = 'column', mode} = this.options,
       {width, height} = layout,

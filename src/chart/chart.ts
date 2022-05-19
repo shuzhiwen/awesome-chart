@@ -195,7 +195,7 @@ export class Chart {
     const {trigger, redraw} = props,
       axisLayer = this.layers.find((layer) => isLayerAxis(layer)) as Maybe<LayerAxis>,
       interactiveLayer = this.layers.find((layer) => isLayerInteractive(layer)),
-      disabledLayers: LayerType[] = ['interactive', 'axis', 'legend', 'auxiliary'],
+      disabledLayers: LayerType[] = ['interactive', 'axis', 'legend'],
       layers = this.layers.filter(({options}) => !disabledLayers.includes(options.type)),
       coordinate = axisLayer?.options.coordinate
 
@@ -226,7 +226,7 @@ export class Chart {
     axisLayer?.niceScale()
     interactiveLayer?.setScale(axisLayer?.scale)
 
-    layers.forEach((layer) => {
+    this.layers.forEach((layer) => {
       if (layer.options.id === trigger?.options.id) return
 
       const {scaleY, scaleYR, ...rest} = {...layer.scale, ...axisLayer?.scale},

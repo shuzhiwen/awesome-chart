@@ -7,7 +7,6 @@ import {
   createStar,
   formatNumber,
   getTextWidth,
-  isLayerAxis,
   range,
   ungroup,
   uuid,
@@ -87,8 +86,6 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
 
   private legendDataGroup: LegendDataShape[] = []
 
-  private isFiltering = false
-
   get data() {
     return this._data
   }
@@ -115,7 +112,6 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
 
   bindLayers(originLayers: Layer[]) {
     const data = this.data.source,
-      axisLayer = originLayers.find((layer) => isLayerAxis(layer)),
       layers = originLayers.filter((layer) => layer.legendData)
 
     Object.values(data).map((item) => item.length === 0)
@@ -128,13 +124,11 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       data.textColors.push(...new Array(legends?.length).fill('white'))
     })
     this.filter(layers)
-    this.isFiltering = false
-
-    axisLayer?.event.onWithOff('draw', animationKey, () => !this.isFiltering && this.update())
   }
 
   private filter = (layers: Layer[]) => {
     const data = this.data.source,
+      {bindCoordinate} = this.options,
       colors = cloneDeep(data.shapeColors),
       originData = cloneDeep(layers.map((layer) => layer.data)),
       counts = this.legendDataGroup.map(({legends}) => legends?.length),
@@ -160,13 +154,11 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
             colorMatrix: colorMatrix[layerIndex],
             mapping: {},
           }
+        let filteredData = layerData
 
         if (!(layerData instanceof DataTableList)) {
           return
         }
-
-        let filteredData = layerData
-        this.isFiltering = true
 
         if (!active[index]) {
           active[index] = true
@@ -198,7 +190,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
           }
 
           layer.setData(filteredData)
-          layer.draw()
+          bindCoordinate({trigger: this, redraw: true})
           this.needRecalculated = true
           this.draw()
         } catch (error) {
