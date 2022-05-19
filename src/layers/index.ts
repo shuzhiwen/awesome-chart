@@ -23,6 +23,7 @@ export const layerMapping = {
   odLine: layer.LayerODLine,
   pack: layer.LayerPack,
   rect: layer.LayerRect,
+  sankey: layer.LayerSankey,
   scatter: layer.LayerScatter,
   text: layer.LayerText,
 }

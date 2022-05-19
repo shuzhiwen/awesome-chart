@@ -44,7 +44,7 @@ export class DataRelation extends DataBase<RawRelation, Options> {
       this.nodes.forEach((node) => {
         const from = this.edges.filter(({from}) => from === node.id).map(({value}) => value),
           to = this.edges.filter(({to}) => to === node.id).map(({value}) => value)
-        node.value = formatNumber(max([sum(from), sum(to)])!)
+        node.value = Number(formatNumber(max([sum(from), sum(to)])!))
       })
     }
 

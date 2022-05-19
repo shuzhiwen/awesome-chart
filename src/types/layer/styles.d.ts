@@ -150,3 +150,14 @@ export type LayerPackStyleShape = Partial<{
   circle: GraphStyleShape
   text: TextStyleShape
 }>
+
+export type LayerSankeyStyleShape = Partial<{
+  nodeWidth: number
+  nodeGap: number
+  edgeGap: number
+  labelOffset: number
+  align: Align
+  node: GraphStyleShape
+  edge: GraphStyleShape
+  text: TextStyleShape
+}>

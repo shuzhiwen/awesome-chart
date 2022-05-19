@@ -23,14 +23,14 @@ export interface Edge {
   id: Meta
   from: Meta
   to: Meta
-  value?: Meta
+  value?: number
 }
 
 export interface Node {
   id: Meta
   name: Meta
-  value?: Meta
-  level?: Meta
+  value?: number
+  level?: number
   parents?: Node[]
   children?: Node[]
 }

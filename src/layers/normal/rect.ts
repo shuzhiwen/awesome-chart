@@ -13,7 +13,6 @@ import {
 import {
   ChartContext,
   DrawerDataShape,
-  LayerLineScaleShape,
   LayerRectOptions,
   LayerRectScaleShape,
   LayerRectStyleShape,
@@ -106,7 +105,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
     })
   }
 
-  setScale(scale: LayerLineScaleShape) {
+  setScale(scale: LayerRectScaleShape) {
     this._scale = createScale(undefined, this.scale, scale)
     this.needRescale = false
   }

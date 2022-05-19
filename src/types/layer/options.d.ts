@@ -25,6 +25,7 @@ export type LayerOptions =
   | LayerHeatmapOptions
   | LayerODLineOptions
   | LayerPackOptions
+  | LayerSankeyOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
@@ -83,5 +84,12 @@ export type LayerFlopperOptions = BasicLayerOptions<
   {
     mode: 'vertical' | 'flop'
     autoplay: boolean
+  }
+>
+
+export type LayerSankeyOptions = BasicLayerOptions<
+  'sankey',
+  {
+    direction: Direction
   }
 >

@@ -55,7 +55,7 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
   }
 
   setData(data: LayerPack['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    this._data = validateAndCreateData('relation', this.data, data)
 
     const {nodes} = this.data!,
       {width, height} = this.options.layout,
