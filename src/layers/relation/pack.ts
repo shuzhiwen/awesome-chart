@@ -22,7 +22,7 @@ const defaultStyle: LayerPackStyleShape = {
 }
 
 export class LayerPack extends LayerBase<LayerPackOptions> {
-  private _data: Maybe<DataRelation> = null
+  private _data: Maybe<DataRelation>
 
   private _style = defaultStyle
 

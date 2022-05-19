@@ -44,7 +44,7 @@ const defaultAnimation: BasicAnimationOptions = {
 const characterSet = ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.']
 
 export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
-  private _data: Maybe<DataBase<{value: number}>> = null
+  private _data: Maybe<DataBase<{value: number}>>
 
   private _style = defaultStyle
 

@@ -3,11 +3,11 @@ import {isNil} from 'lodash'
 import {FormatNumberConfig, OverflowControlConfig} from '../types'
 import {getTextWidth} from './chaos'
 
-export const formatNumber = (data: Meta, config?: FormatNumberConfig) => {
+// anonymous handle when config is undefined
+export const formatNumber = (data: Meta = '', config?: FormatNumberConfig) => {
   const number = Number(data)
   const {percentage = false, thousandth = false, decimals = 8} = config || {}
 
-  // anonymous
   if (!config) {
     if (isNil(data) || data === '') {
       return ''
@@ -20,7 +20,7 @@ export const formatNumber = (data: Meta, config?: FormatNumberConfig) => {
   return format(`${thousandth ? ',' : ''}.${decimals}~${percentage ? '%' : 'f'}`)(number)
 }
 
-export const overflowControl = (data: Meta, config: OverflowControlConfig) => {
+export const overflowControl = (data: Meta = '', config: OverflowControlConfig) => {
   const text = String(data)
   const {omit = true, width = Infinity, height = Infinity, fontSize = 12} = config
 

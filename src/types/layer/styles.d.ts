@@ -161,3 +161,12 @@ export type LayerSankeyStyleShape = Partial<{
   edge: GraphStyleShape
   text: TextStyleShape
 }>
+
+export type LayerTreemapStyleShape = Partial<{
+  title: 'treemapBinary' | 'treemapDice' | 'treemapSlice' | 'treemapSliceDice' | 'treemapSquarify'
+  align: Align
+  verticalAlign: Align
+  labelGap: number
+  rect: GraphStyleShape
+  text: TextStyleShape
+}>

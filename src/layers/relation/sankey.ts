@@ -30,7 +30,7 @@ const defaultStyle: LayerSankeyStyleShape = {
 }
 
 export class LayerSankey extends LayerBase<LayerSankeyOptions> {
-  private _data: Maybe<DataRelation> = null
+  private _data: Maybe<DataRelation>
 
   private _style = defaultStyle
 

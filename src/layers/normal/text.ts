@@ -20,7 +20,7 @@ const defaultStyle: LayerTextStyleShape = {
 }
 
 export class LayerText extends LayerBase<LayerTextOptions> {
-  private _data: Maybe<DataBase<string>> = null
+  private _data: Maybe<DataBase<string>>
 
   private _style = defaultStyle
 
