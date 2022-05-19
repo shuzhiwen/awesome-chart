@@ -71,15 +71,15 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   }[][] = []
 
   get scale() {
-    return this._scale!
+    return this._scale
   }
 
   get data() {
-    return this._data!
+    return this._data
   }
 
   get style() {
-    return this._style!
+    return this._style
   }
 
   constructor(options: LayerRectOptions, context: ChartContext) {
@@ -97,9 +97,9 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
     this.needRescale = true
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
       if (mode === 'interval') {
-        return data.select(data.headers.slice(0, 3))
+        return data?.select(data.headers.slice(0, 3)) ?? null
       } else if (mode === 'waterfall') {
-        return data.select(data.headers.slice(0, 2))
+        return data?.select(data.headers.slice(0, 2)) ?? null
       }
       return data
     })
@@ -116,6 +116,8 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
   update() {
     this.needRescale && this.createScale()
+
+    if (!this.data || !this.scale) return
 
     const {variant, mode, layout} = this.options,
       {rect} = this.style,
@@ -385,6 +387,8 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   }
 
   private createScale() {
+    if (!this.data) return
+
     this.needRescale = false
 
     const {layout, variant = 'column', mode} = this.options,

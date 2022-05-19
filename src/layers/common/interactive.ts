@@ -24,7 +24,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
 
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerAxisScaleShape
+  private _scale: LayerAxisScaleShape = {}
 
   private _style = defaultStyle
 
@@ -33,15 +33,15 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
   private helperAuxiliary: [LayerAuxiliary, LayerAuxiliary]
 
   get scale() {
-    return this._scale!
+    return this._scale
   }
 
   get data() {
-    return this._data!
+    return this._data
   }
 
   get style() {
-    return this._style!
+    return this._style
   }
 
   constructor(options: LayerInteractiveOptions, context: ChartContext) {

@@ -1,15 +1,13 @@
 import {RawScale, Scale, ScaleAngle, ScaleBand, ScaleLinear, ScaleNiceShape} from '../scale'
 
-export type LayerAxisScaleShape = Maybe<
-  Partial<{
-    scaleX: Scale
-    scaleY: Scale
-    scaleYR: Scale
-    scaleAngle: Scale
-    scaleRadius: Scale
-    nice: ScaleNiceShape
-  }>
->
+export type LayerAxisScaleShape = Partial<{
+  scaleX: Scale
+  scaleY: Scale
+  scaleYR: Scale
+  scaleAngle: Scale
+  scaleRadius: Scale
+  nice: ScaleNiceShape
+}>
 
 export type LayerAuxiliaryScaleShape = Maybe<
   Partial<{

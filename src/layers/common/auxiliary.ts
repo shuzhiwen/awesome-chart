@@ -52,15 +52,15 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
   }[] = []
 
   get scale() {
-    return this._scale!
+    return this._scale
   }
 
   get data() {
-    return this._data!
+    return this._data
   }
 
   get style() {
-    return this._style!
+    return this._style
   }
 
   constructor(options: LayerAuxiliaryOptions, context: ChartContext) {
@@ -88,6 +88,8 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
   }
 
   update() {
+    if (!this.data || !this.scale) return
+
     const {direction, layout} = this.options,
       {left, top, width, height} = layout,
       {scaleX, scaleY} = this.scale,

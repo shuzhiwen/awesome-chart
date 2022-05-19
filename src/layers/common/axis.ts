@@ -105,15 +105,15 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   }
 
   get scale() {
-    return this._scale!
+    return this._scale
   }
 
   get data() {
-    return this._data!
+    return this._data
   }
 
   get style() {
-    return this._style!
+    return this._style
   }
 
   constructor(options: LayerAxisOptions, context: ChartContext) {
@@ -184,6 +184,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   }
 
   update() {
+    if (!this.data) return
+
     const {containerWidth, layout} = this.options,
       {left, top, width, height, bottom} = layout,
       {titleX, titleY, titleYR, textX, textY, textYR, textAngle, textRadius} = this.style,

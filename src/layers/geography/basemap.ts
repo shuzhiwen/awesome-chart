@@ -71,7 +71,7 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
   }[] = []
 
   get scale() {
-    return this._scale!
+    return this._scale
   }
 
   get data() {

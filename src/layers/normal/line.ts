@@ -73,15 +73,15 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
   }[][] = []
 
   get scale() {
-    return this._scale!
+    return this._scale
   }
 
   get data() {
-    return this._data!
+    return this._data
   }
 
   get style() {
-    return this._style!
+    return this._style
   }
 
   constructor(options: LayerLineOptions, context: ChartContext) {
@@ -109,6 +109,8 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
 
   update() {
     this.needRescale && this.createScale()
+
+    if (!this.data || !this.scale) return
 
     const {layout, mode, createGradient} = this.options,
       {height, top, left} = layout,
@@ -173,6 +175,8 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
   }
 
   private createScale() {
+    if (!this.data) return
+
     this.needRescale = false
 
     const {layout, mode} = this.options,
@@ -197,6 +201,8 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
   }
 
   private fallbackFilter(position: {y?: number; y1?: number; y2?: number}[]) {
+    if (!this.scale) return []
+
     const {layout} = this.options,
       {fallback} = this.style,
       {scaleY} = this.scale

@@ -1,3 +1,3 @@
-export * from './base-map'
+export * from './basemap'
 export * from './heatmap'
 export * from './od-line'

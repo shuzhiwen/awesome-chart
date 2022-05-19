@@ -56,15 +56,15 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
   }[][] = []
 
   get scale() {
-    return this._scale!
+    return this._scale
   }
 
   get data() {
-    return this._data!
+    return this._data
   }
 
   get style() {
-    return this._style!
+    return this._style
   }
 
   constructor(options: LayerArcOptions, context: ChartContext) {
@@ -82,7 +82,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
     this.needRescale = true
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
       if (variant === 'pie') {
-        return data.select(data.headers.slice(0, 2))
+        return data?.select(data.headers.slice(0, 2)) ?? null
       }
       return data
     })
@@ -99,13 +99,13 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
   }
 
   update() {
-    if (this.data.lists.length <= 1) {
+    this.needRescale && this.createScale()
+
+    if (!this.data || this.data.lists.length <= 1 || !this.scale) {
       this.arcData = []
       this.textData = []
       return
     }
-
-    this.needRescale && this.createScale()
 
     const {layout, variant} = this.options,
       {width, height, top, left} = layout,
@@ -200,6 +200,8 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
   }
 
   private createScale() {
+    if (!this.data) return
+
     this.needRescale = false
 
     const {layout, variant} = this.options,

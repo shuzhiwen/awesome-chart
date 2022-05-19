@@ -47,15 +47,15 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
   }[][] = []
 
   get scale() {
-    return this._scale!
+    return this._scale
   }
 
   get data() {
-    return this._data!
+    return this._data
   }
 
   get style() {
-    return this._style!
+    return this._style
   }
 
   constructor(options: LayerScatterOptions, context: ChartContext) {
@@ -64,12 +64,12 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
   setData(data: LayerScatter['data']) {
     this._data = validateAndCreateData('tableList', this.data, data)
+
+    if (!this.data) return
+
     this.needRescale = true
-
-    const {headers} = this.data
-
     ;['x', 'y'].map((key) => {
-      if (!headers.includes(key)) {
+      if (!this.data?.headers.includes(key)) {
         this.log.error(`DataTableList lost specific column "${key}"`)
       }
     })
@@ -86,6 +86,8 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
   update() {
     this.needRescale && this.createScale()
+
+    if (!this.data || !this.scale) return
 
     const {layout} = this.options,
       {top, left} = layout,
@@ -143,6 +145,8 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
   }
 
   private createScale() {
+    if (!this.data) return
+
     this.needRescale = false
 
     const {layout} = this.options,
