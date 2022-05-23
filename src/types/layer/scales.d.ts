@@ -57,3 +57,8 @@ export type LayerTreeScaleShape = Maybe<{
   scaleX: ScalePoint<number>
   scaleY: ScalePoint<number>
 }>
+
+export type LayerMatrixScaleShape = Maybe<{
+  scaleX: ScaleBand
+  scaleY: ScaleBand
+}>

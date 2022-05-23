@@ -105,7 +105,10 @@ export class DataTable extends DataBase<RawTable, Options> {
     return result
   }
 
-  range() {
-    return [min(this.body.map((row) => min(row))), max(this.body.map((row) => max(row)))]
+  range(): [number, number] {
+    return [
+      Number(min(this.body.map((row) => min(row)))),
+      Number(max(this.body.map((row) => max(row)))),
+    ]
   }
 }

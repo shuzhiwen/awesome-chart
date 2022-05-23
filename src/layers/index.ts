@@ -19,7 +19,7 @@ export const layerMapping = {
   interactive: layer.LayerInteractive,
   legend: layer.LayerLegend,
   line: layer.LayerLine,
-  matrix: layer.LayerText,
+  matrix: layer.LayerMatrix,
   odLine: layer.LayerODLine,
   pack: layer.LayerPack,
   rect: layer.LayerRect,

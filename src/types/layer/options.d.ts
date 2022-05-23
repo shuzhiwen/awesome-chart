@@ -28,6 +28,7 @@ export type LayerOptions =
   | LayerSankeyOptions
   | LayerTreemapOptions
   | LayerTreeOptions
+  | LayerMatrixOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
@@ -36,6 +37,8 @@ export type LayerLegendOptions = BasicLayerOptions<'legend'>
 export type LayerTextOptions = BasicLayerOptions<'text'>
 
 export type LayerScatterOptions = BasicLayerOptions<'scatter'>
+
+export type LayerMatrixOptions = BasicLayerOptions<'matrix'>
 
 export type LayerBasemapOptions = BasicLayerOptions<'basemap'>
 
@@ -90,7 +93,7 @@ export type LayerArcOptions = BasicLayerOptions<
 export type LayerFlopperOptions = BasicLayerOptions<
   'flopper',
   {
-    mode: 'vertical' | 'flop'
+    variant: 'vertical' | 'flop'
     autoplay: boolean
   }
 >

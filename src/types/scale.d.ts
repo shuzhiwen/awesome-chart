@@ -28,7 +28,7 @@ export interface ScaleNiceShape {
 }
 
 export interface ScaleBandProps {
-  domain: string[]
+  domain: Meta[]
   range: [number, number]
   nice?: ScaleNiceShape
 }

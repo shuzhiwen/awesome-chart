@@ -183,3 +183,11 @@ export type LayerTreeStyleShape = Partial<{
   edge: GraphStyleShape
   text: TextStyleShape
 }>
+
+export type LayerMatrixStyleShape = Partial<{
+  shape: 'circle' | 'rect'
+  circleSize: [number | 'auto', number | 'auto']
+  circle: GraphStyleShape
+  rect: GraphStyleShape
+  text: TextStyleShape
+}>

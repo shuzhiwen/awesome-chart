@@ -21,7 +21,7 @@ import {
 } from '../../types'
 
 const defaultOptions: Partial<LayerFlopperOptions> = {
-  mode: 'vertical',
+  variant: 'vertical',
 }
 
 const defaultStyle: LayerFlopperStyleShape = {
@@ -162,12 +162,12 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       return
     }
 
-    const {mode} = this.options,
+    const {variant} = this.options,
       {url, characters, scale, cell} = this.style,
       {backgroundColor} = cell || {},
       {width, height} = this.cellSize,
-      characterData = mode === 'flop' ? cloneDeep(characterSet).reverse() : characterSet,
-      position = mode === 'flop' ? 'absolute' : 'relative',
+      characterData = variant === 'flop' ? cloneDeep(characterSet).reverse() : characterSet,
+      position = variant === 'flop' ? 'absolute' : 'relative',
       background = mergeAlpha(backgroundColor || 'black', 1)
 
     this.root
@@ -188,7 +188,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       .each((d, i, els) => {
         const container = addStyle(select(els[i]), cell)
 
-        if (mode === 'vertical') {
+        if (variant === 'vertical') {
           if (characters?.[d]) {
             const {left, top, width, height} = characters[d],
               [offsetX, offsetY] = [-width / 2 - left, -height / 2 - top]
@@ -206,7 +206,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
           } else {
             container.text(d).style('display', 'grid').style('place-items', 'center')
           }
-        } else if (mode === 'flop') {
+        } else if (variant === 'flop') {
           container
             .selectAll('.top')
             .data([null])
@@ -276,7 +276,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       return
     }
 
-    const {mode} = this.options,
+    const {variant} = this.options,
       {duration = 2000, delay = 0, easing = 'easeOutCubic'} = this.animation
 
     this.root.selectAll(`.${this.className}-group`).each((d, i, els) => {
@@ -286,7 +286,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       prevIndex = prevIndex === -1 ? 0 : prevIndex
       index = index === -1 ? 0 : index
 
-      if (index !== prevIndex && mode === 'vertical') {
+      if (index !== prevIndex && variant === 'vertical') {
         anime({
           targets: select(els[i]).nodes(),
           duration,
