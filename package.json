@@ -17,6 +17,7 @@
     "bundle": "yarn webpack -c webpack.js && cp -r src/types dist/types",
     "package": "rm -rf dist tsconfig.tsbuildinfo && yarn tsc && yarn bundle && yarn clear",
     "clear": "find dist/*/* -name '*.js' | xargs rm -f && rm dist/index.js dist/env.js",
+    "push": "yarn test && git push origin",
     "test": "yarn jest"
   },
   "dependencies": {
