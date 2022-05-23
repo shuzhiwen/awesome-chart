@@ -12,7 +12,7 @@ import {
 
 type Shape = AnimationBase<Options>
 
-const animationKey = uuid()
+const animationKey = `animationKey-${new Date().getTime()}`
 
 const bind = (animations: Shape[], callback: AnyFunction) => {
   Promise.all(

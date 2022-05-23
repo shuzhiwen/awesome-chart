@@ -2,15 +2,7 @@ import {LayerBase} from '../base'
 import {createStyle, createText} from '../helpers'
 import {DataBase, DataTableList} from '../../data'
 import {cloneDeep, sum} from 'lodash'
-import {
-  ColorMatrix,
-  createStar,
-  formatNumber,
-  getTextWidth,
-  range,
-  ungroup,
-  uuid,
-} from '../../utils'
+import {ColorMatrix, createStar, formatNumber, getTextWidth, range, ungroup} from '../../utils'
 import {
   ChartContext,
   CircleDrawerProps,
@@ -28,7 +20,7 @@ import {
 
 const disableColor = '#E2E3E588'
 
-const animationKey = uuid()
+const animationKey = `animationKey-${new Date().getTime()}`
 
 const defaultStyle: LayerLegendStyleShape = {
   align: 'end',

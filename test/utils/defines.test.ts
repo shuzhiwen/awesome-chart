@@ -4,8 +4,8 @@ import {getEasyGradientCreator} from '../../src'
 
 test('defines', () => {
   const svgContainer = select(document.createElement('svg')).append('defs')
-  const svgCreator = getEasyGradientCreator({container: svgContainer, engine: 'svg'})
-  const canvasCreator = getEasyGradientCreator({container: [], engine: 'canvas'})
+  const svgCreator = getEasyGradientCreator({container: svgContainer})
+  const canvasCreator = getEasyGradientCreator({container: []})
   const svgId = svgCreator({
     type: 'linear',
     direction: 'horizontal',

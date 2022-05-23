@@ -20,7 +20,7 @@ type GeoFeatureShape = {
   geometry: GeoGeometryObjects
 }
 
-const animationKey = uuid()
+const animationKey = `animationKey-${new Date().getTime()}`
 
 const getGeoJSON = (adcode: Meta) => `http://cdn.dtwave.com/waveview/geojson/${adcode}.json`
 

@@ -14,7 +14,7 @@ import {
   Node,
 } from '../../types'
 
-const animationKey = uuid()
+const animationKey = `animationKey-${new Date().getTime()}`
 
 const defaultStyle: LayerPackStyleShape = {
   zoom: true,
