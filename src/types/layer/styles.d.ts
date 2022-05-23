@@ -186,6 +186,7 @@ export type LayerTreeStyleShape = Partial<{
 
 export type LayerMatrixStyleShape = Partial<{
   shape: 'circle' | 'rect'
+  colorDomain: [number, number] | 'auto'
   circleSize: [number | 'auto', number | 'auto']
   circle: GraphStyleShape
   rect: GraphStyleShape

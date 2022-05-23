@@ -1,7 +1,8 @@
 import {LayerBase} from '../base'
 import {DataTable} from '../../data'
 import {scaleBand} from '../../scales'
-import {range, scaleLinear, scaleOrdinal} from 'd3'
+import {scaleLinear, scaleQuantize} from 'd3'
+import {getMagnitude, noChange} from '../../utils'
 import {
   createColorMatrix,
   createScale,
@@ -24,6 +25,7 @@ import {
 const defaultStyle: LayerMatrixStyleShape = {
   shape: 'rect',
   circleSize: ['auto', 'auto'],
+  colorDomain: 'auto',
 }
 
 export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
@@ -112,18 +114,18 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
       {left, top} = layout,
       {rows, columns, body} = this.data,
       {scaleX, scaleY} = this.scale,
-      {shape, circleSize, rect, circle, text} = this.style,
+      {shape, circleSize, rect, circle, text, colorDomain} = this.style,
       [bandwidthX, bandwidthY] = [scaleX.bandwidth(), scaleY.bandwidth()],
       [minValue, maxValue] = this.data.range(),
-      colorNumber = Number(Number(maxValue - minValue + 1).toFixed(0)),
+      distance = maxValue - minValue,
       colorMatrix = createColorMatrix({
         layer: this,
         row: 1,
-        column: colorNumber,
+        column: Math.ceil(distance / getMagnitude(distance, body.flatMap(noChange).length)),
         theme: shape === 'rect' ? rect?.fill : circle?.fill,
       }),
-      scaleColor = scaleOrdinal<string>()
-        .domain(range(0, maxValue - minValue).map(String))
+      scaleColor = scaleQuantize<string>()
+        .domain(colorDomain === 'auto' ? [minValue, maxValue] : colorDomain!)
         .range(colorMatrix.matrix[0])
 
     if (shape === 'rect') {
@@ -135,7 +137,7 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
           y: top + (scaleY(rows[i]) ?? 0),
           width: bandwidthX,
           height: bandwidthY,
-          color: scaleColor((Number(value) - minValue).toFixed(0)),
+          color: scaleColor(Number(value) - minValue),
         }))
       )
     }
@@ -148,7 +150,7 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
           x: left + (scaleX(columns[j]) ?? 0) + bandwidthX / 2,
           y: top + (scaleY(rows[i]) ?? 0) + bandwidthY / 2,
           r: Math.min(bandwidthX, bandwidthY) / 2,
-          color: scaleColor((Number(value) - minValue).toFixed(0)),
+          color: scaleColor(Number(value) - minValue),
         }))
       )
     }

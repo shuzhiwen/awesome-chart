@@ -1,5 +1,6 @@
 import {scaleLinear as d3ScaleLinear, ScaleLinear} from 'd3-scale'
 import {ScaleLinearProps} from '../types'
+import {getMagnitude} from '../utils'
 
 export function scaleLinear({domain, range, nice = {}}: ScaleLinearProps) {
   const scale = d3ScaleLinear().domain(domain).range(range)
@@ -48,7 +49,7 @@ export function niceScale(scale: d3.ScaleLinear<number, number>, tick: number) {
 
   if (tick > 1) {
     const distance = end - start,
-      magnitude = 10 ** Math.floor(Math.log10(Math.abs(distance / tick))),
+      magnitude = getMagnitude(distance, tick),
       spaceThreshold = 0.1
 
     // step to ensure that the chart will not overflow

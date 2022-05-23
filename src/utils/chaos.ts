@@ -23,6 +23,10 @@ export function getTextWidth(text: Meta, fontSize: number | string = 12) {
   return ctx.measureText(String(text)).width
 }
 
+export function getMagnitude(total: number, step: number) {
+  return 10 ** Math.floor(Math.log10(Math.abs(total / step)))
+}
+
 export function download(data: string, fileName: string) {
   const dataUrl = URL.createObjectURL(new Blob([data]))
   const a = document.createElement('a')
