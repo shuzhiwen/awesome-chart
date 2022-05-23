@@ -27,4 +27,5 @@ export const layerMapping = {
   scatter: layer.LayerScatter,
   text: layer.LayerText,
   treemap: layer.LayerTreemap,
+  tree: layer.LayerTree,
 }

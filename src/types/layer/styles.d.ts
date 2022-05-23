@@ -152,6 +152,7 @@ export type LayerPackStyleShape = Partial<{
 }>
 
 export type LayerSankeyStyleShape = Partial<{
+  direction: Direction
   nodeWidth: number
   nodeGap: number
   edgeGap: number
@@ -168,5 +169,17 @@ export type LayerTreemapStyleShape = Partial<{
   verticalAlign: Align
   labelGap: number
   rect: GraphStyleShape
+  text: TextStyleShape
+}>
+
+export type LayerTreeStyleShape = Partial<{
+  curveType: CurveType
+  direction: Direction
+  labelOffset: number
+  labelPosition: Position2
+  align: Align
+  nodeSize: number
+  node: GraphStyleShape
+  edge: GraphStyleShape
   text: TextStyleShape
 }>

@@ -6,7 +6,7 @@ import {D3Selection} from '../types'
 const ctx = document.createElement('canvas').getContext('2d')!
 const fontFamily = '"PingFang SC", "Helvetica Neue", Helvetica, Tahoma, Helvetica, sans-serif'
 
-export function noChange(input: any) {
+export function noChange<T = unknown>(input: T) {
   return input
 }
 

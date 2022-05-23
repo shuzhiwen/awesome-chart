@@ -1,3 +1,4 @@
+import {ScalePoint} from 'd3'
 import {RawScale, Scale, ScaleAngle, ScaleBand, ScaleLinear, ScaleNiceShape} from '../scale'
 
 export type LayerAxisScaleShape = Partial<{
@@ -50,4 +51,9 @@ export type LayerODLineScaleShape = Maybe<{
 export type LayerArcScaleShape = Maybe<{
   scaleAngle: ScaleAngle
   scaleRadius: ScaleLinear
+}>
+
+export type LayerTreeScaleShape = Maybe<{
+  scaleX: ScalePoint<number>
+  scaleY: ScalePoint<number>
 }>

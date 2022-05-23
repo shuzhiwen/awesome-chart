@@ -12,9 +12,10 @@ import {
   RectDrawerProps,
 } from '../../types'
 import {scaleLinear} from '../../scales'
-import {getAttr} from '../../utils'
+import {getAttr, noChange} from '../../utils'
 
 const defaultStyle: LayerSankeyStyleShape = {
+  direction: 'horizontal',
   nodeWidth: 10,
   nodeGap: 10,
   edgeGap: 0,
@@ -71,8 +72,9 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
     if (!this.data) return
 
     const {edges, nodes} = this.data,
-      {direction = 'horizontal', layout, createGradient} = this.options,
-      {labelOffset = 0, nodeWidth, nodeGap = 0, edgeGap = 0, align, text, node} = this.style,
+      {layout, createGradient} = this.options,
+      {align, text, node, direction} = this.style,
+      {labelOffset = 5, nodeWidth = 5, nodeGap = 0, edgeGap = 0} = this.style,
       levels = range(0, (max(nodes.map(({level}) => level ?? 0)) ?? 0) + 1),
       groups = levels.map((value) => nodes.filter(({level}) => level === value)),
       // calculate the theoretical maximum value including the gap
@@ -137,11 +139,11 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
       }
     })
 
-    const _nodes = this.nodeData.reduce((prev, cur) => [...prev, ...cur])
+    const flatNodes = this.nodeData.flatMap(noChange)
     this.edgeData = edges.map(({from, to, value}) => {
       const length = scaleNode(value ?? NaN),
-        fromNode = _nodes.find(({id}) => id === from)!,
-        toNode = _nodes.find(({id}) => id === to)!
+        fromNode = flatNodes.find(({id}) => id === from)!,
+        toNode = flatNodes.find(({id}) => id === to)!
 
       fromNode.stackedEdgeLength[1] += length
       toNode.stackedEdgeLength[0] += length
@@ -159,7 +161,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
         y3: toNode.y + toNode.stackedEdgeLength[0],
         color: createGradient({
           type: 'linear',
-          direction: direction,
+          direction: direction ?? 'horizontal',
           colors: [fromNode.color, toNode.color],
         }) as string,
       }

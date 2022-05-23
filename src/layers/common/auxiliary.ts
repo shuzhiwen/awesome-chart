@@ -18,10 +18,6 @@ import {
   LayerAuxiliaryOptions,
 } from '../../types'
 
-const defaultOptions: Partial<LayerAuxiliaryOptions> = {
-  direction: 'horizontal',
-}
-
 const defaultStyle: LayerAuxiliaryStyleShape = {
   enableLegend: true,
   labelPosition: 'right',
@@ -66,7 +62,7 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
   constructor(options: LayerAuxiliaryOptions, context: ChartContext) {
     super({
       context,
-      options: {...defaultOptions, ...options},
+      options: {...options, direction: 'horizontal'},
       sublayers: ['text', 'line'],
     })
 

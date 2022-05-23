@@ -27,6 +27,7 @@ export type LayerOptions =
   | LayerPackOptions
   | LayerSankeyOptions
   | LayerTreemapOptions
+  | LayerTreeOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
@@ -45,6 +46,10 @@ export type LayerODLineOptions = BasicLayerOptions<'odLine'>
 export type LayerPackOptions = BasicLayerOptions<'pack'>
 
 export type LayerTreemapOptions = BasicLayerOptions<'treemap'>
+
+export type LayerSankeyOptions = BasicLayerOptions<'sankey'>
+
+export type LayerTreeOptions = BasicLayerOptions<'tree'>
 
 export type LayerAxisOptions = BasicLayerOptions<
   'axis',
@@ -87,12 +92,5 @@ export type LayerFlopperOptions = BasicLayerOptions<
   {
     mode: 'vertical' | 'flop'
     autoplay: boolean
-  }
->
-
-export type LayerSankeyOptions = BasicLayerOptions<
-  'sankey',
-  {
-    direction: Direction
   }
 >
