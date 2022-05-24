@@ -21,6 +21,7 @@ const defaultAxisLine = {
   stroke: 'white',
   strokeWidth: 1,
   strokeOpacity: 0.5,
+  fill: 'none',
 }
 
 const defaultText = {
@@ -83,8 +84,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       x2?: number
       y1?: number
       y2?: number
-      cx?: number
-      cy?: number
+      x?: number
+      y?: number
       angle?: number
       r?: number
     }[]
@@ -218,16 +219,16 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
         angle: position,
         x1: left + width / 2,
         y1: top + height / 2,
-        x2: left + width / 2 + Math.sin((position / 180) * Math.PI) * maxRadius,
-        y2: top + height / 2 - Math.cos((position / 180) * Math.PI) * maxRadius,
+        x2: left + width / 2 + Math.sin(position) * maxRadius,
+        y2: top + height / 2 - Math.cos(position) * maxRadius,
       })
     )
 
     this.lineData.lineRadius = this.getLabelAndPosition(this.scale.scaleRadius!).map(
       ({label, position}) => ({
         value: label,
-        cx: left + width / 2,
-        cy: top + height / 2,
+        x: left + width / 2,
+        y: top + height / 2,
         r: position,
       })
     )
@@ -274,8 +275,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       createText({x: x2!, y: y2!, value: labelYR[i]?.label, style: textYR, position: 'right'})
     )
 
-    this.textData.textRadius = this.lineData.lineRadius.map(({value, cx, cy, r}) =>
-      createText({x: cx!, y: cy! - r!, value, style: textRadius, position: 'right'})
+    this.textData.textRadius = this.lineData.lineRadius.map(({value, x, y, r}) =>
+      createText({x: x!, y: y! - r!, value, style: textRadius, position: 'right'})
     )
 
     this.textData.textAngle = this.lineData.lineAngle.map(({value, x2, y2, angle = 0}) =>
@@ -285,9 +286,12 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
 
   private getLabelAndPosition(scale: Scale) {
     if (isScaleBand(scale)) {
-      return scale
-        .domain()
-        .map((label) => ({label, position: (scale(label) ?? 0) + scale.bandwidth() / 2}))
+      return scale.domain().map((label) => ({
+        label,
+        position:
+          (scale(label) ?? 0) +
+          (this.options.coordinate === 'cartesian' ? scale.bandwidth() / 2 : 0),
+      }))
     } else if (isScaleLinear(scale)) {
       const [min, max] = scale.domain()
 
@@ -338,11 +342,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     }
 
     if (coordinate === 'polar') {
-      this.drawBasic({
-        type: 'circle',
-        data: getRadiusData('lineRadius'),
-        sublayer: 'lineRadius',
-      })
+      this.drawBasic({type: 'circle', data: getRadiusData('lineRadius'), sublayer: 'lineRadius'})
       this.drawBasic({type: 'line', data: getLineData('lineAngle'), sublayer: 'lineAngle'})
       this.drawBasic({type: 'text', data: getTextData('textAngle'), sublayer: 'textAngle'})
       this.drawBasic({type: 'text', data: getTextData('textRadius'), sublayer: 'textRadius'})

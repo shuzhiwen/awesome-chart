@@ -192,3 +192,10 @@ export type LayerMatrixStyleShape = Partial<{
   rect: GraphStyleShape
   text: TextStyleShape
 }>
+
+export type LayerRadarStyleShape = Partial<{
+  circleSize: 6
+  circle: GraphStyleShape
+  polygon: GraphStyleShape
+  text: TextStyleShape
+}>

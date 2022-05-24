@@ -18,11 +18,10 @@ export const Chart = (props: {
         ? download(chartRef.current.children?.[0].outerHTML, 'chart.svg')
         : download(chartRef.current.children?.[0].children?.[0].toDataURL(), 'chart.jpg')
     }, [engine]),
-    toggleDebug = useCallback(() => {
-      if (chart) {
-        debuggers.forEach((fn) => fn(chart))
-      }
-    }, [chart, debuggers])
+    toggleDebug = useCallback(
+      () => chart && debuggers.forEach((fn) => fn(chart)),
+      [chart, debuggers]
+    )
 
   useEffect(() => {
     try {

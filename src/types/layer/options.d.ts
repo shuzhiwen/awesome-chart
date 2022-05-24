@@ -29,6 +29,7 @@ export type LayerOptions =
   | LayerTreemapOptions
   | LayerTreeOptions
   | LayerMatrixOptions
+  | LayerRadarOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
@@ -70,6 +71,13 @@ export type LayerAuxiliaryOptions = BasicLayerOptions<
 
 export type LayerLineOptions = BasicLayerOptions<
   'line',
+  {
+    mode: 'cover' | 'stack'
+  }
+>
+
+export type LayerRadarOptions = BasicLayerOptions<
+  'radar',
   {
     mode: 'cover' | 'stack'
   }

@@ -22,6 +22,7 @@ export const layerMapping = {
   matrix: layer.LayerMatrix,
   odLine: layer.LayerODLine,
   pack: layer.LayerPack,
+  radar: layer.LayerRadar,
   rect: layer.LayerRect,
   sankey: layer.LayerSankey,
   scatter: layer.LayerScatter,

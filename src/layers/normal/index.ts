@@ -1,6 +1,7 @@
 export * from './arc'
 export * from './line'
 export * from './matrix'
+export * from './radar'
 export * from './rect'
 export * from './scatter'
 export * from './text'

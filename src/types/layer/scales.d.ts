@@ -22,6 +22,11 @@ export type LayerLineScaleShape = Maybe<{
   scaleY: ScaleLinear
 }>
 
+export type LayerRadarScaleShape = Maybe<{
+  scaleAngle: ScaleBand
+  scaleRadius: ScaleLinear
+}>
+
 export type LayerScatterScaleShape = Maybe<{
   scaleX: ScaleLinear
   scaleY: ScaleLinear
