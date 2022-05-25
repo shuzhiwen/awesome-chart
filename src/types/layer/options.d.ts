@@ -30,6 +30,7 @@ export type LayerOptions =
   | LayerTreeOptions
   | LayerMatrixOptions
   | LayerRadarOptions
+  | LayerDashboardOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
@@ -54,6 +55,8 @@ export type LayerTreemapOptions = BasicLayerOptions<'treemap'>
 export type LayerSankeyOptions = BasicLayerOptions<'sankey'>
 
 export type LayerTreeOptions = BasicLayerOptions<'tree'>
+
+export type LayerDashboardOptions = BasicLayerOptions<'dashboard'>
 
 export type LayerAxisOptions = BasicLayerOptions<
   'axis',

@@ -194,8 +194,22 @@ export type LayerMatrixStyleShape = Partial<{
 }>
 
 export type LayerRadarStyleShape = Partial<{
-  circleSize: 6
-  circle: GraphStyleShape
+  pointSize: 6
+  point: GraphStyleShape
   polygon: GraphStyleShape
   text: TextStyleShape
+}>
+
+export type LayerDashboardStyleShape = Partial<{
+  step: [number, number]
+  startAngle: number
+  endAngle: number
+  arcWidth: number
+  arc: GraphStyleShape
+  tickSize: number
+  pointer: GraphStyleShape
+  tickLine: GraphStyleShape
+  tickText: TextStyleShape
+  valueText: TextStyleShape
+  labelText: TextStyleShape
 }>

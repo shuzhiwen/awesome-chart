@@ -25,8 +25,8 @@ const defaultOptions: Partial<LayerRadarOptions> = {
 }
 
 const defaultStyle: LayerRadarStyleShape = {
-  circleSize: 6,
-  circle: {},
+  pointSize: 6,
+  point: {},
   polygon: {
     strokeWidth: 2,
     fillOpacity: 0.4,
@@ -119,7 +119,7 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
       {headers, rawTableList} = this.data,
       {width, height, left, top} = layout,
       {scaleAngle, scaleRadius} = this.scale,
-      {circleSize = 6, polygon} = this.style,
+      {pointSize = 6, polygon} = this.style,
       [centerX, centerY] = [left + width / 2, top + height / 2],
       colorMatrix = createColorMatrix({
         layer: this,
@@ -135,7 +135,7 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
           x = centerX + Math.sin(angle) * centerR,
           y = centerY - Math.cos(angle) * centerR,
           source = {value, dimension, category: headers[i + 1]}
-        return {x, y, angle, r: circleSize / 2, color: colorMatrix.get(0, i), source}
+        return {x, y, angle, r: pointSize / 2, color: colorMatrix.get(0, i), source}
       })
     )
 
@@ -182,7 +182,7 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
     const pointData = this.pointData.map((group) => ({
       data: group,
       source: group.map(({source}) => source),
-      ...this.style.circle,
+      ...this.style.point,
       fill: group.map((item) => item.color),
     }))
     const textData = this.textData.map((group) => ({

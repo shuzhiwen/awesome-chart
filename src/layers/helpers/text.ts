@@ -60,7 +60,9 @@ export function createText(props: CreateTextProps) {
 }
 
 export function createArcText(props: Omit<CreateTextProps, 'position'> & {angle: number}) {
-  const {angle} = props
+  let angle = props.angle % (Math.PI * 2)
+
+  while (angle < 0) angle += Math.PI * 2
 
   return createText({
     ...props,

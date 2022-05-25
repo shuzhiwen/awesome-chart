@@ -197,22 +197,21 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
 
     // step curve mode needs to be optimized display
     if (curveType.match(/step/i) && this.edgeData.length) {
-      this.edgeData = Array.from(new Set(this.edgeData[0].map(({x1, y1}) => `${x1}-${y1}`))).map(
-        (key) => this.edgeData[0].filter(({x1, y1}) => `${x1}-${y1}` === key)
-      )
-      this.edgeData = this.edgeData.map((group) => {
-        const {x1, x2, y1, y2} = group[0],
-          medianX = direction === 'vertical' ? x1 : (x1 + x2) / 2,
-          medianY = direction === 'horizontal' ? y1 : (y1 + y2) / 2,
-          masterLine = {...group[0], x2: medianX, y2: medianY},
-          slaveLines = group.map(({...other}) => ({
-            ...other,
-            x1: medianX,
-            y1: medianY,
-          }))
+      this.edgeData = Array.from(new Set(this.edgeData[0].map(({x1, y1}) => `${x1}-${y1}`)))
+        .map((key) => this.edgeData[0].filter(({x1, y1}) => `${x1}-${y1}` === key))
+        .map((group) => {
+          const {x1, x2, y1, y2} = group[0],
+            medianX = direction === 'vertical' ? x1 : (x1 + x2) / 2,
+            medianY = direction === 'horizontal' ? y1 : (y1 + y2) / 2,
+            masterLine = {...group[0], x2: medianX, y2: medianY},
+            slaveLines = group.map(({...other}) => ({
+              ...other,
+              x1: medianX,
+              y1: medianY,
+            }))
 
-        return [masterLine, ...slaveLines]
-      })
+          return [masterLine, ...slaveLines]
+        })
     }
 
     this.textData = this.nodeData.map((group, i) => {
