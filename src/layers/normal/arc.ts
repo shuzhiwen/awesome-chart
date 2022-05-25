@@ -18,6 +18,8 @@ import {
   LayerArcOptions,
   LegendDataShape,
   LayerArcScaleShape,
+  ArcDrawerProps,
+  ElSourceShape,
 } from '../../types'
 
 const defaultOptions: Partial<LayerArcOptions> = {
@@ -43,17 +45,11 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
 
   private textData: DrawerDataShape<TextDrawerProps>[][] = []
 
-  private arcData: {
-    centerX: number
-    centerY: number
-    startAngle: number
-    endAngle: number
-    innerRadius: number
-    outerRadius: number
+  private arcData: (DrawerDataShape<ArcDrawerProps> & {
     value: Meta
-    source: AnyObject
+    source: ElSourceShape
     color?: string
-  }[][] = []
+  })[][] = []
 
   get scale() {
     return this._scale

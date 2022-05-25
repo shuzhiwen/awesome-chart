@@ -1,5 +1,7 @@
 import {LayerBase} from '../base'
 import {DataRelation} from '../../data'
+import {max, scalePoint} from 'd3'
+import {range} from '../../utils'
 import {
   createColorMatrix,
   createScale,
@@ -16,9 +18,8 @@ import {
   CircleDrawerProps,
   LayerTreeScaleShape,
   Node,
+  LineDrawerProps,
 } from '../../types'
-import {max, scalePoint} from 'd3'
-import {range} from '../../utils'
 
 const defaultStyle: LayerTreeStyleShape = {
   direction: 'horizontal',
@@ -55,13 +56,9 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
       })[]
     })[][] = []
 
-  private edgeData: {
-    x1: number
-    y1: number
-    x2: number
-    y2: number
+  private edgeData: (DrawerDataShape<LineDrawerProps> & {
     color: string
-  }[][] = []
+  })[][] = []
 
   private groups: (Node & {order?: number})[][] = []
 

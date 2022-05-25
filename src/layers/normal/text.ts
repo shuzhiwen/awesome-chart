@@ -3,7 +3,6 @@ import {getAttr, getTextWidth} from '../../utils'
 import {createStyle, createText, validateAndCreateData} from '../helpers'
 import {DataBase} from '../../data'
 import {
-  BackupDataItemShape,
   ChartContext,
   DrawerDataShape,
   LayerTextOptions,
@@ -24,7 +23,7 @@ export class LayerText extends LayerBase<LayerTextOptions> {
 
   private _style = defaultStyle
 
-  private textData: BackupDataItemShape<DrawerDataShape<TextDrawerProps>> = []
+  private textData: DrawerDataShape<TextDrawerProps>[] = []
 
   get data() {
     return this._data
@@ -72,11 +71,15 @@ export class LayerText extends LayerBase<LayerTextOptions> {
       y = top + height
     }
 
-    const textData = createText({x, y, value: this.data.source, style: text})
-    this.textData = [{data: [textData], ...textData, ...text}]
+    this.textData = [createText({x, y, value: this.data.source, style: text})]
   }
 
   draw() {
-    this.drawBasic({type: 'text', data: this.textData})
+    const textData = {
+      data: this.textData,
+      ...this.style.text,
+    }
+
+    this.drawBasic({type: 'text', data: [textData]})
   }
 }

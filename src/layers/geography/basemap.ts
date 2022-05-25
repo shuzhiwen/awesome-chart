@@ -2,7 +2,6 @@ import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {GeoGeometryObjects, geoMercator, geoPath} from 'd3-geo'
 import {createScale, createStyle, createText, validateAndCreateData} from '../helpers'
-import {uuid} from '../../utils'
 import {
   ChartContext,
   DrawerDataShape,

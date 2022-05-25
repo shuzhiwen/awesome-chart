@@ -17,6 +17,7 @@ import {
   LayerDashboardOptions,
   LineDrawerProps,
   ArcDrawerProps,
+  ElSourceShape,
 } from '../../types'
 
 const defaultStyle: LayerDashboardStyleShape = {
@@ -58,7 +59,7 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
   private valueTextData: DrawerDataShape<TextDrawerProps>[] = []
 
   private arcData: (DrawerDataShape<ArcDrawerProps> & {
-    source: AnyObject
+    source: ElSourceShape
     color: string
   })[] = []
 

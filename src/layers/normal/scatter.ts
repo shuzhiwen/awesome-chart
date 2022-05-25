@@ -17,6 +17,8 @@ import {
   LayerScatterScaleShape,
   TextDrawerProps,
   LegendDataShape,
+  CircleDrawerProps,
+  ElSourceShape,
 } from '../../types'
 
 const defaultStyle: LayerScatterStyleShape = {
@@ -34,15 +36,11 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
   private textData: DrawerDataShape<TextDrawerProps>[][] = []
 
-  private pointData: {
-    x: number
-    y: number
-    r: number
+  private pointData: (DrawerDataShape<CircleDrawerProps> & {
     value: Meta
     color: string
-    source: AnyObject
-    category: Meta
-  }[][] = []
+    source: ElSourceShape
+  })[][] = []
 
   get scale() {
     return this._scale
@@ -133,7 +131,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
       filter: 'column',
       legends: this.pointData.map((group, i) => ({
         shape: 'circle',
-        label: group.at(0)?.category ?? '',
+        label: group.at(0)?.source.category ?? '',
         color: colorMatrix.get(0, i),
       })),
     }

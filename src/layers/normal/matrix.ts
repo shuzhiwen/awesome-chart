@@ -14,6 +14,7 @@ import {
   ChartContext,
   CircleDrawerProps,
   DrawerDataShape,
+  ElSourceShape,
   LayerMatrixOptions,
   LayerMatrixScaleShape,
   LayerMatrixStyleShape,
@@ -39,13 +40,13 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
 
   private rectData: (DrawerDataShape<RectDrawerProps> & {
     value: Meta
-    source: AnyObject
+    source: ElSourceShape
     color: string
   })[][] = []
 
   private circleData: (DrawerDataShape<CircleDrawerProps> & {
     value: Meta
-    source: AnyObject
+    source: ElSourceShape
     color: string
   })[][] = []
 

@@ -4,7 +4,7 @@ import {TextStyleShape} from './styles'
 export interface CreateTextProps {
   x: number
   y: number
-  value: Meta
+  value?: Meta
   style?: TextStyleShape
   position?: Position9
   offset?: number

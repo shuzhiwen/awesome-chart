@@ -13,10 +13,12 @@ import {
 import {
   ChartContext,
   DrawerDataShape,
+  ElSourceShape,
   LayerRectOptions,
   LayerRectScaleShape,
   LayerRectStyleShape,
   LegendDataShape,
+  RectDrawerProps,
   ScaleBand,
   ScaleLinear,
   TextDrawerProps,
@@ -51,22 +53,13 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
   private textData: DrawerDataShape<TextDrawerProps>[][] = []
 
-  private rectData: {
-    x: number
-    y: number
-    width: number
-    height: number
+  private rectData: (DrawerDataShape<RectDrawerProps> & {
     value: Meta
-    source: AnyObject
+    source: ElSourceShape
     color: string
-  }[][] = []
+  })[][] = []
 
-  private backgroundData: {
-    x: number
-    y: number
-    width: number
-    height: number
-  }[][] = []
+  private backgroundData: DrawerDataShape<RectDrawerProps>[][] = []
 
   get scale() {
     return this._scale

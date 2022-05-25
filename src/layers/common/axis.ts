@@ -15,6 +15,9 @@ import {
   LayerAxisStyleShape,
   LayerAxisScaleShape,
   LayerAxisOptions,
+  DrawerDataShape,
+  LineDrawerProps,
+  CircleDrawerProps,
 } from '../../types'
 
 const defaultAxisLine = {
@@ -78,17 +81,10 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
 
   private lineData: Record<
     'lineAxisX' | 'lineAxisY' | 'lineAngle' | 'lineRadius',
-    {
+    (Partial<DrawerDataShape<LineDrawerProps> & DrawerDataShape<CircleDrawerProps>> & {
       value: Meta
-      x1?: number
-      x2?: number
-      y1?: number
-      y2?: number
-      x?: number
-      y?: number
       angle?: number
-      r?: number
-    }[]
+    })[]
   > = {lineAxisX: [], lineAxisY: [], lineAngle: [], lineRadius: []}
 
   private textData: Record<

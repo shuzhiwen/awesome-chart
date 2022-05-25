@@ -18,6 +18,7 @@ import {
   LayerRadarScaleShape,
   CircleDrawerProps,
   PolyDrawerProps,
+  ElSourceShape,
 } from '../../types'
 
 const defaultOptions: Partial<LayerRadarOptions> = {
@@ -46,7 +47,7 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
 
   private pointData: (DrawerDataShape<CircleDrawerProps> & {
     angle: number
-    source: AnyObject
+    source: ElSourceShape
     color: string
   })[][] = []
 

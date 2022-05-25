@@ -17,6 +17,9 @@ import {
   LayerLineOptions,
   LegendDataShape,
   LayerLineScaleShape,
+  CircleDrawerProps,
+  AreaDrawerProps,
+  ElSourceShape,
 } from '../../types'
 
 const defaultOptions: Partial<LayerLineOptions> = {
@@ -54,21 +57,15 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
 
   private textData: DrawerDataShape<TextDrawerProps>[][] = []
 
-  private pointData: {
-    x: number
-    y: number
-    r: number
+  private pointData: (DrawerDataShape<CircleDrawerProps> & {
     value: Meta
-    source: AnyObject
+    source: ElSourceShape
     color: string
-  }[][] = []
+  })[][] = []
 
-  private areaData: {
-    x: number
-    y1: number
-    y2: number
+  private areaData: (ArrayItem<DrawerDataShape<AreaDrawerProps>['lines']> & {
     fill: string
-  }[][] = []
+  })[][] = []
 
   get scale() {
     return this._scale

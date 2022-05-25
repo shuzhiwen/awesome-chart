@@ -16,7 +16,12 @@ import {
   LegendDataShape,
   LayerAuxiliaryScaleShape,
   LayerAuxiliaryOptions,
+  LineDrawerProps,
 } from '../../types'
+
+const defaultOptions: Partial<LayerAuxiliaryOptions> = {
+  direction: 'horizontal',
+}
 
 const defaultStyle: LayerAuxiliaryStyleShape = {
   enableLegend: true,
@@ -38,14 +43,10 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
 
   private textData: DrawerDataShape<TextDrawerProps>[] = []
 
-  private lineData: {
+  private lineData: (DrawerDataShape<LineDrawerProps> & {
     value: Meta
-    x1: number
-    x2: number
-    y1: number
-    y2: number
     color: string
-  }[] = []
+  })[] = []
 
   get scale() {
     return this._scale
@@ -62,7 +63,7 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
   constructor(options: LayerAuxiliaryOptions, context: ChartContext) {
     super({
       context,
-      options: {...options, direction: 'horizontal'},
+      options: {...defaultOptions, ...options},
       sublayers: ['text', 'line'],
     })
 
