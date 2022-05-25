@@ -53,8 +53,8 @@ export function drawPath({
       .attr('opacity', (d) => d.opacity)
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
-      .style('transform-origin', (d) => d.transformOrigin)
-      .style('transform', (d) => `translate(${d.centerX}px,${d.centerY}px)`)
+      .attr('transform-origin', (d) => d.transformOrigin)
+      .attr('transform', (d) => `translate(${d.centerX},${d.centerY})`)
   }
 
   if (isCanvasContainer(container)) {

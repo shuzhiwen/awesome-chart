@@ -51,7 +51,7 @@ export function drawPolygon({
       .attr('opacity', (d) => d.opacity)
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
-      .style('transform-origin', (d) => d.transformOrigin)
+      .attr('transform-origin', (d) => d.transformOrigin)
   }
 
   if (isCanvasContainer(container)) {

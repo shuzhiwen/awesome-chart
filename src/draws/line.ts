@@ -40,16 +40,16 @@ export function drawLine({
       .duration(transition?.duration ?? 0)
       .delay(transition?.delay ?? 0)
       .ease(svgEasing.get(transition?.easing)!)
-      .attr('stroke', (d) => d.stroke)
-      .attr('stroke-width', (d) => d.strokeWidth)
-      .attr('stroke-dasharray', (d) => d.strokeDasharray)
-      .attr('stroke-opacity', (d) => d.strokeOpacity)
-      .attr('opacity', (d) => d.opacity)
       .attr('x1', (d) => d.x1)
       .attr('y1', (d) => d.y1)
       .attr('x2', (d) => d.x2)
       .attr('y2', (d) => d.y2)
-      .style('pointer-events', 'none')
+      .attr('stroke', (d) => d.stroke)
+      .attr('opacity', (d) => d.opacity)
+      .attr('stroke-opacity', (d) => d.strokeOpacity)
+      .attr('stroke-width', (d) => d.strokeWidth)
+      .attr('stroke-dasharray', (d) => d.strokeDasharray)
+      .attr('pointer-events', 'none')
   }
 
   if (isCanvasContainer(container)) {

@@ -17,10 +17,9 @@ export const debugTableListLayer = (type: TableListLayerType) => (chart: Chart) 
   layers.forEach((layer) => {
     layer.setData(new DataTableList(data))
     layer.update()
-    chart.bindCoordinate({redraw: true})
   })
-
-  console.log(`RandomData(TableList) for ${type} layer`, data)
+  chart.bindCoordinate({redraw: true})
+  layers.length && console.info('Random TableList Data', data)
 }
 
 export const debugTableListLayers = [

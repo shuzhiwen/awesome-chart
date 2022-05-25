@@ -11,6 +11,7 @@ export function drawEllipse({
   opacity,
   fillOpacity,
   strokeOpacity,
+  transformOrigin,
   mapping = noChange,
   source = [],
   data = [],
@@ -29,6 +30,7 @@ export function drawEllipse({
     fillOpacity: getAttr(fillOpacity, i, 1),
     strokeOpacity: getAttr(strokeOpacity, i, 1),
     strokeWidth: getAttr(strokeWidth, i, 0),
+    transformOrigin: getAttr(transformOrigin, i, `${item.cx} ${item.cy}`),
     source: getAttr(source, i, {}),
   }))
 
@@ -52,7 +54,7 @@ export function drawEllipse({
       .attr('opacity', (d) => d.opacity)
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
-      .style('transform-origin', (d) => `${d.cx}px ${d.cy}px`)
+      .attr('transform-origin', (d) => d.transformOrigin)
   }
 
   if (isCanvasContainer(container)) {
