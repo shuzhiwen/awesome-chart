@@ -2,7 +2,14 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
 import {TextDrawerProps} from '../types'
-import {mergeAlpha, getAttr, isSvgContainer, isCanvasContainer, noChange} from '../utils'
+import {
+  mergeAlpha,
+  getAttr,
+  isSvgContainer,
+  isCanvasContainer,
+  noChange,
+  flatDrawerConfig,
+} from '../utils'
 
 export function drawText({
   fontFamily,
@@ -27,7 +34,7 @@ export function drawText({
   ...rest
 }: TextDrawerProps) {
   const configuredData = data.map((item, i) => ({
-    ...rest,
+    ...flatDrawerConfig(rest, i),
     ...item,
     className,
     fontSize: getAttr(fontSize, i, 12),

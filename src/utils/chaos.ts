@@ -113,3 +113,12 @@ export function safeTransform(
 
   return target.replace(regExp, `${key}(${append ? nextValue : value}${suffix})`)
 }
+
+export function flatDrawerConfig<T extends string, P>(
+  config: Partial<Record<T, P>>,
+  index: number
+) {
+  return Object.fromEntries(
+    Object.entries(config).map(([key, value]) => [key, getAttr(value, index, null)])
+  ) as FlatObject<Record<T, P>>
+}

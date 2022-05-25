@@ -1,8 +1,15 @@
 import {fabric} from 'fabric'
-import {mergeAlpha, getAttr, noChange, isCanvasContainer, isSvgContainer} from '../utils'
 import {PathDrawerProps} from '../types'
 import {IPathOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
+import {
+  mergeAlpha,
+  getAttr,
+  noChange,
+  isCanvasContainer,
+  isSvgContainer,
+  flatDrawerConfig,
+} from '../utils'
 
 export function drawPath({
   fill,
@@ -21,7 +28,7 @@ export function drawPath({
   ...rest
 }: PathDrawerProps) {
   const configuredData = data.map((item, i) => ({
-    ...rest,
+    ...flatDrawerConfig(rest, i),
     className,
     path: item.path,
     centerX: item.centerX ?? 0,

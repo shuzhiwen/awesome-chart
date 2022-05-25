@@ -1,9 +1,16 @@
 import {isArray} from 'lodash'
 import {fabric} from 'fabric'
-import {mergeAlpha, getAttr, isSvgContainer, isCanvasContainer, noChange} from '../utils'
 import {DrawerDataShape, RectDrawerProps} from '../types'
 import {IRectOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
+import {
+  mergeAlpha,
+  getAttr,
+  isSvgContainer,
+  isCanvasContainer,
+  noChange,
+  flatDrawerConfig,
+} from '../utils'
 
 export function drawRect({
   fill,
@@ -22,7 +29,7 @@ export function drawRect({
   ...rest
 }: RectDrawerProps) {
   const configuredData = data.map((item, i) => ({
-    ...rest,
+    ...flatDrawerConfig(rest, i),
     ...item,
     className,
     fill: getAttr(fill, i, '#fff'),

@@ -2,7 +2,14 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {ILineOptions} from 'fabric/fabric-impl'
 import {LineDrawerProps} from '../types'
-import {isCanvasContainer, isSvgContainer, noChange, mergeAlpha, getAttr} from '../utils'
+import {
+  isCanvasContainer,
+  isSvgContainer,
+  noChange,
+  mergeAlpha,
+  getAttr,
+  flatDrawerConfig,
+} from '../utils'
 
 export function drawLine({
   stroke,
@@ -19,7 +26,7 @@ export function drawLine({
   ...rest
 }: LineDrawerProps) {
   const configuredData = data.map((item, i) => ({
-    ...rest,
+    ...flatDrawerConfig(rest, i),
     ...item,
     className,
     stroke: getAttr(stroke, i, '#fff'),

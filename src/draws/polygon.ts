@@ -1,8 +1,15 @@
 import {fabric} from 'fabric'
-import {mergeAlpha, getAttr, noChange, isSvgContainer, isCanvasContainer} from '../utils'
 import {PolyDrawerProps} from '../types'
 import {IPolylineOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
+import {
+  mergeAlpha,
+  getAttr,
+  noChange,
+  isSvgContainer,
+  isCanvasContainer,
+  flatDrawerConfig,
+} from '../utils'
 
 export function drawPolygon({
   fill,
@@ -20,7 +27,7 @@ export function drawPolygon({
   ...rest
 }: PolyDrawerProps) {
   const configuredData = data.map(({points, centerX, centerY}, i) => ({
-    ...rest,
+    ...flatDrawerConfig(rest, i),
     points,
     className,
     fill: getAttr(fill, i, '#fff'),

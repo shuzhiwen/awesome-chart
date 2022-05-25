@@ -2,7 +2,7 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {IImageOptions} from 'fabric/fabric-impl'
 import {ImageDrawerProps} from '../types'
-import {getAttr, isCanvasContainer, isSvgContainer, noChange} from '../utils'
+import {flatDrawerConfig, getAttr, isCanvasContainer, isSvgContainer, noChange} from '../utils'
 
 export function drawImage({
   opacity,
@@ -15,7 +15,7 @@ export function drawImage({
   ...rest
 }: ImageDrawerProps) {
   const configuredData = data.map((item, i) => ({
-    ...rest,
+    ...flatDrawerConfig(rest, i),
     ...item,
     className,
     opacity: getAttr(opacity, i, 1),
