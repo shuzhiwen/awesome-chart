@@ -48,7 +48,9 @@ export class LayerText extends LayerBase<LayerTextOptions> {
   }
 
   update() {
-    if (!this.data) return
+    if (!this.data) {
+      throw new Error('Invalid data')
+    }
 
     const {align, verticalAlign, text} = this._style
     const {left, top, width, height} = this.options.layout

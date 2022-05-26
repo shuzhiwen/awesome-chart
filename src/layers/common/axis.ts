@@ -181,8 +181,6 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   }
 
   update() {
-    if (!this.data) return
-
     const {containerWidth, layout} = this.options,
       {left, top, width, height, bottom} = layout,
       {titleX, titleY, titleYR, textX, textY, textYR, textAngle, textRadius} = this.style,
@@ -233,7 +231,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       createText({
         x: left + width / 2,
         y: bottom - (textX?.offset?.[1] ?? 0) + (ungroup(textX?.fontSize) ?? 0),
-        value: this.data.source.titleX ?? '',
+        value: this.data?.source.titleX ?? '',
         style: titleX,
         position: 'bottom',
       }),
@@ -243,7 +241,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       createText({
         x: 0,
         y: top + height / 2,
-        value: this.data.source.titleY ?? '',
+        value: this.data?.source.titleY ?? '',
         style: titleY,
         position: 'center',
       }),
@@ -253,7 +251,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       createText({
         x: containerWidth,
         y: top + height / 2,
-        value: this.data.source.titleYR ?? '',
+        value: this.data?.source.titleYR ?? '',
         style: titleYR,
         position: 'center',
       }),

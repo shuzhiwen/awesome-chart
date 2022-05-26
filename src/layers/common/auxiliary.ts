@@ -85,7 +85,9 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
   }
 
   update() {
-    if (!this.data || !this.scale) return
+    if (!this.data || !this.scale) {
+      throw new Error('Invalid data or scale')
+    }
 
     const {direction, layout} = this.options,
       {left, top, width, height} = layout,

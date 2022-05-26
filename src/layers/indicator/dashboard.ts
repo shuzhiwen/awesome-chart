@@ -118,7 +118,9 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
   }
 
   update() {
-    if (!this.fragmentData) return
+    if (!this.fragmentData) {
+      throw new Error('Invalid data')
+    }
 
     const {left, top, width, height} = this.options.layout,
       {valueText, tickText, arc, labelText} = this.style,

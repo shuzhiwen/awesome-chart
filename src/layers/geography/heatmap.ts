@@ -67,7 +67,9 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
   }
 
   update() {
-    if (!this.data || !this.scale?.scaleX || !this.scale.scaleY) return
+    if (!this.data || !this.scale?.scaleX || !this.scale.scaleY) {
+      throw new Error('Invalid data or scale')
+    }
 
     const {left, top} = this.options.layout,
       {scaleX, scaleY} = this.scale,

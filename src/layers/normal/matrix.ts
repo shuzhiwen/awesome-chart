@@ -109,7 +109,9 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
   }
 
   update() {
-    if (!this.data || !this.scale) return
+    if (!this.data || !this.scale) {
+      throw new Error('Invalid data or scale')
+    }
 
     const {layout} = this.options,
       {left, top} = layout,

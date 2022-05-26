@@ -55,7 +55,9 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
   }
 
   update() {
-    if (!this.data) return
+    if (!this.data) {
+      throw new Error('Invalid data')
+    }
 
     const {nodes} = this.data,
       {layout} = this.options,

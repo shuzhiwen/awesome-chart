@@ -61,12 +61,14 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
   setData(data: LayerScatter['data']) {
     this._data = validateAndCreateData('tableList', this.data, data)
 
-    if (!this.data) return
+    if (!this.data) {
+      throw new Error('Invalid data')
+    }
 
     this.createScale()
     ;['x', 'y'].map((key) => {
       if (!this.data?.headers.includes(key)) {
-        this.log.error(`DataTableList lost specific column "${key}"`)
+        throw new Error(`DataTableList lost specific column "${key}"`)
       }
     })
   }
@@ -80,7 +82,9 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
   }
 
   update() {
-    if (!this.data || !this.scale) return
+    if (!this.data || !this.scale) {
+      throw new Error('Invalid data or scale')
+    }
 
     const {layout} = this.options,
       {top, left} = layout,

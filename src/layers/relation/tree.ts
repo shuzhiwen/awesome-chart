@@ -116,7 +116,9 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
     this.needRescale && this.createScale()
     this.nodeData = []
 
-    if (!this.data || !this.scale) return
+    if (!this.data || !this.scale) {
+      throw new Error('Invalid data or scale')
+    }
 
     const {layout} = this.options,
       {edges} = this.data,

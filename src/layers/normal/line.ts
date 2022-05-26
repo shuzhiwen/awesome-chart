@@ -102,7 +102,9 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
   }
 
   update() {
-    if (!this.data || !this.scale) return
+    if (!this.data || !this.scale) {
+      throw new Error('Invalid data or scale')
+    }
 
     const {layout, mode, createGradient} = this.options,
       {height, top, left} = layout,

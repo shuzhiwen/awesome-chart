@@ -105,6 +105,5 @@ export type LayerFlopperOptions = BasicLayerOptions<
   'flopper',
   {
     variant: 'vertical' | 'flop'
-    autoplay: boolean
   }
 >

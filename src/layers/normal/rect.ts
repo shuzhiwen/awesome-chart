@@ -105,7 +105,9 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   }
 
   update() {
-    if (!this.data || !this.scale) return
+    if (!this.data || !this.scale) {
+      throw new Error('Invalid data or scale')
+    }
 
     const {variant, mode, layout} = this.options,
       {rect} = this.style,

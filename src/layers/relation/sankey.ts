@@ -69,7 +69,9 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
   }
 
   update() {
-    if (!this.data) return
+    if (!this.data) {
+      throw new Error('Invalid data')
+    }
 
     const {edges, nodes} = this.data,
       {layout, createGradient} = this.options,

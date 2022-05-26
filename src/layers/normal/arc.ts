@@ -98,9 +98,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
     this.needRescale && this.createScale()
 
     if (!this.data || this.data.lists.length <= 1 || !this.scale) {
-      this.arcData = []
-      this.textData = []
-      return
+      throw new Error('Invalid data or scale')
     }
 
     const {layout, variant} = this.options,

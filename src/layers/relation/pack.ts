@@ -84,7 +84,9 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
   }
 
   update() {
-    if (!this.data || !this.zoomConfig || !this.treeData) return
+    if (!this.data || !this.zoomConfig || !this.treeData) {
+      throw new Error('Invalid data')
+    }
 
     const {left, top} = this.options.layout,
       {padding = 0, circle, text} = this.style,

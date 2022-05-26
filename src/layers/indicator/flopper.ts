@@ -67,7 +67,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
   constructor(options: LayerFlopperOptions, context: ChartContext) {
     super({options: {...defaultOptions, ...options}, context})
 
-    const {containerWidth, containerHeight, layout, root, autoplay} = this.options,
+    const {containerWidth, containerHeight, layout, root} = this.options,
       {left, top, width, height} = layout
 
     if (isSvgContainer(root)) {
@@ -84,22 +84,6 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
         .style('display', 'flex')
         .style('flex-direction', 'row')
         .style('overflow', 'hidden')
-    }
-
-    if (autoplay) {
-      const random = () => {
-        const {integerPlace = 8} = this.style,
-          {duration = 0} = this.animation
-
-        setTimeout(() => {
-          this.setData(new DataBase({value: Math.random() * 10 ** (integerPlace ?? 8)}))
-          this.draw()
-          this.playAnimation()
-          this.log.info('Random Number', this.data?.source.value)
-          random()
-        }, duration + 2000)
-      }
-      random()
     }
   }
 

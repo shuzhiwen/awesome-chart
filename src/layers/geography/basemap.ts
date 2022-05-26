@@ -109,7 +109,7 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
 
   update() {
     if (!this.data) {
-      return
+      throw new Error('Invalid data')
     } else if (typeof this.data.source === 'number') {
       this.fetchOnlineData(this.data.source)
       return

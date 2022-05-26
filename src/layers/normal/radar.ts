@@ -114,7 +114,9 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
   }
 
   update() {
-    if (!this.data || !this.scale) return
+    if (!this.data || !this.scale) {
+      throw new Error('Invalid data or scale')
+    }
 
     const {mode, layout} = this.options,
       {headers, rawTableList} = this.data,
