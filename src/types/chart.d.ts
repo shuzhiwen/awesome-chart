@@ -33,9 +33,11 @@ export interface TooltipOptions {
   valueSize?: number
   valueColor?: string
   backgroundColor?: string
-  render?: Maybe<
-    (container: HTMLElement, data: ElConfigShape, backup: BackupDataShape<AnyObject>) => void
-  >
+  render?: (
+    container: HTMLElement,
+    data: Partial<ElConfigShape>,
+    backup: BackupDataShape<AnyObject>
+  ) => void
 }
 
 export interface ChartProps {

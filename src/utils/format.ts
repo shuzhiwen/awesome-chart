@@ -4,8 +4,8 @@ import {FormatNumberConfig, OverflowControlConfig} from '../types'
 import {getTextWidth} from './chaos'
 
 // anonymous handle when config is undefined
-export const formatNumber = (data: Meta = '', config?: FormatNumberConfig) => {
-  const number = Number(data)
+export const formatNumber = (data: Maybe<Meta>, config?: FormatNumberConfig) => {
+  const number = Number(data ?? '')
   const {percentage = false, thousandth = false, decimals = 8} = config || {}
 
   if (!config) {
@@ -20,8 +20,8 @@ export const formatNumber = (data: Meta = '', config?: FormatNumberConfig) => {
   return format(`${thousandth ? ',' : ''}.${decimals}~${percentage ? '%' : 'f'}`)(number)
 }
 
-export const overflowControl = (data: Meta = '', config: OverflowControlConfig) => {
-  const text = String(data)
+export const overflowControl = (data: Maybe<Meta>, config: OverflowControlConfig) => {
+  const text = String(data ?? '')
   const {omit = true, width = Infinity, height = Infinity, fontSize = 12} = config
 
   if (fontSize > height) {

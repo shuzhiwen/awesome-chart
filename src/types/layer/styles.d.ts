@@ -59,6 +59,7 @@ export type LayerAuxiliaryStyleShape = Partial<{
   enableLegend: boolean
   labelPosition: Position4
   labelOffset: number
+  labelBackground: GraphStyleShape
   line: GraphStyleShape
   text: TextStyleShape
 }>

@@ -1,6 +1,6 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {isCanvasContainer, isScaleLinear} from '../../utils'
+import {getAttr, isCanvasContainer, isScaleLinear} from '../../utils'
 import {
   createColorMatrix,
   createScale,
@@ -17,6 +17,7 @@ import {
   LayerAuxiliaryScaleShape,
   LayerAuxiliaryOptions,
   LineDrawerProps,
+  RectDrawerProps,
 } from '../../types'
 
 const defaultOptions: Partial<LayerAuxiliaryOptions> = {
@@ -30,6 +31,9 @@ const defaultStyle: LayerAuxiliaryStyleShape = {
   line: {
     strokeDasharray: '5 5',
   },
+  labelBackground: {
+    fill: '#ffffff3f',
+  },
 }
 
 export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
@@ -41,7 +45,11 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[] = []
+  private textData: (DrawerDataShape<TextDrawerProps> & {
+    textWidth: number
+  })[] = []
+
+  private backgroundData: DrawerDataShape<RectDrawerProps>[] = []
 
   private lineData: (DrawerDataShape<LineDrawerProps> & {
     value: Meta
@@ -64,7 +72,7 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
     super({
       context,
       options: {...defaultOptions, ...options},
-      sublayers: ['text', 'line'],
+      sublayers: ['text', 'line', 'background'],
     })
 
     if (isCanvasContainer(this.root)) {
@@ -132,6 +140,13 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
       })
     )
 
+    this.backgroundData = this.textData.map(({x, y, textWidth}) => ({
+      x: x - 4,
+      y: y - getAttr(text?.fontSize, 0, 12) - 4,
+      width: textWidth + 8,
+      height: getAttr(text?.fontSize, 0, 12) + 8,
+    }))
+
     if (enableLegend) {
       this.legendData = {
         colorMatrix,
@@ -155,7 +170,12 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
       ...this.style.line,
       stroke: this.lineData.map(({color}) => color),
     }
+    const backgroundData = {
+      data: this.backgroundData,
+      ...this.style.labelBackground,
+    }
 
+    this.drawBasic({type: 'rect', data: [backgroundData], sublayer: 'background'})
     this.drawBasic({type: 'line', data: [lineData]})
     this.drawBasic({type: 'text', data: [textData]})
   }

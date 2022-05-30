@@ -73,7 +73,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     nice: {
       count: 5,
       zero: false,
-      paddingInner: 0,
+      paddingInner: 0.3,
     },
   }
 

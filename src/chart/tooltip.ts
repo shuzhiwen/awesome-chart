@@ -3,7 +3,7 @@ import {createLog, getAttr, group, ungroup} from '../utils'
 import {isEqual, isArray, merge, isFunction} from 'lodash'
 import {ElConfigShape, D3Selection, BackupDataShape, TooltipOptions} from '../types'
 
-const defaultOptions: Required<TooltipOptions> = {
+const defaultOptions = {
   container: null,
   mode: 'single',
   pointSize: 10,
@@ -14,8 +14,7 @@ const defaultOptions: Required<TooltipOptions> = {
   valueSize: 12,
   valueColor: '#383d41',
   backgroundColor: '#c3c4c5',
-  render: null,
-}
+} as Required<TooltipOptions>
 
 export class Tooltip {
   readonly log = createLog(Tooltip.name)
@@ -24,11 +23,15 @@ export class Tooltip {
 
   private options = defaultOptions
 
-  private backup: Maybe<any> = null
+  private _data: Maybe<any> = null
 
   public isVisible = false
 
   public isAvailable = false
+
+  get data() {
+    return this._data
+  }
 
   constructor(options: TooltipOptions) {
     this.options = merge({}, defaultOptions, options)
@@ -40,23 +43,13 @@ export class Tooltip {
       .style('padding', '8px')
       .style('row-gap', '4px')
       .style('flex-direction', 'column')
+      .style('background-color', backgroundColor)
       .style('position', 'fixed')
       .style('overflow', 'hidden')
       .style('display', 'none')
-      .style('z-index', 999)
+      .style('z-index', 999999)
       .style('left', 0)
       .style('top', 0)
-    // blurred background
-    this.instance
-      .append('div')
-      .attr('class', 'tooltip-bg')
-      .style('filter', 'blur(1px)')
-      .style('background-color', backgroundColor)
-      .style('position', 'absolute')
-      .style('width', '1000px')
-      .style('height', '1000px')
-      .style('left', '0')
-      .style('top', '0')
   }
 
   show(event: MouseEvent) {
@@ -70,7 +63,7 @@ export class Tooltip {
     this.instance?.style('display', 'none')
   }
 
-  private getListData<T>(data: ElConfigShape, backup: BackupDataShape<T>) {
+  private getListData<T>(data: Partial<ElConfigShape>, backup: BackupDataShape<T>) {
     try {
       if (this.options.mode === 'single') {
         const {fill, stroke, source} = data,
@@ -81,7 +74,7 @@ export class Tooltip {
 
       if (this.options.mode === 'dimension') {
         const {dimension} = getAttr(data.source, 0, {}),
-          elType = data.className.split('-').at(-1)!,
+          elType = data.className?.split('-').at(-1) ?? '',
           groups = backup[elType].filter(({source}) => source?.[0].dimension === dimension),
           {source, fill, stroke} = groups[0]
 
@@ -93,7 +86,7 @@ export class Tooltip {
 
       if (this.options.mode === 'category') {
         const {category} = getAttr(data.source, 0, {}),
-          elType = data.className.split('-').at(-1)!,
+          elType = data.className?.split('-').at(-1) ?? '',
           groups = backup[elType]
             .map(({source}) => source?.filter((item) => item.category === category))
             .reduce((prev, cur) => [...prev!, ...cur!], [])
@@ -110,7 +103,12 @@ export class Tooltip {
     }
   }
 
-  update<T>({data, backup}: {data: ElConfigShape; backup: BackupDataShape<T>}) {
+  update<T>({data, backup = {}}: {data: Partial<ElConfigShape>; backup?: BackupDataShape<T>}) {
+    if (!data) {
+      this.instance.html('')
+      return
+    }
+
     if (isFunction(this.options.render)) {
       this.options.render(this.instance.node(), data, backup)
       return
@@ -120,8 +118,8 @@ export class Tooltip {
     const {titleSize, titleColor, pointSize, labelSize, labelColor, valueSize, valueColor} =
       this.options
 
-    if (isArray(list) && !isEqual(this.backup, list)) {
-      this.backup = list
+    if (isArray(list) && !isEqual(this.data, list)) {
+      this._data = list
       this.instance
         .selectAll('.tooltip-title')
         .data([list[0]?.dimension])
@@ -186,7 +184,6 @@ export class Tooltip {
     const drift = 10
     const rect = this.instance.node().getBoundingClientRect()
 
-    // boundary judgement
     if (pageX + rect.width > document.body.clientWidth) {
       pageX -= rect.width + drift
     } else {
@@ -203,7 +200,7 @@ export class Tooltip {
 
   destroy() {
     this.hide()
-    this.backup = null
+    this._data = null
     this.isAvailable = false
     this.instance.remove()
   }
