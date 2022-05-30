@@ -2,6 +2,7 @@ import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {isScaleBand, isScaleLinear, range, SCALE_TYPES, ungroup} from '../../utils'
 import {scaleBand, scaleLinear} from '../../scales'
+import {sum} from 'd3'
 import {
   createArcText,
   createScale,
@@ -42,6 +43,7 @@ const defaultOptions: Partial<LayerAxisOptions> = {
 }
 
 const defaultStyle: LayerAxisStyleShape = {
+  maxScaleXTextNumber: Infinity,
   lineAxisX: defaultAxisLine,
   lineAxisY: defaultAxisLine,
   lineAngle: defaultAxisLine,
@@ -260,6 +262,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     this.textData.textX = this.lineData.lineAxisX.map(({value, x2, y2}) =>
       createText({x: x2!, y: y2!, value, style: textX, position: 'bottom'})
     )
+    this.reduceScaleXTextNumber()
 
     this.textData.textY = this.lineData.lineAxisY.map(({value, x1, y1}) =>
       createText({x: x1!, y: y1!, value, style: textY, position: 'left'})
@@ -276,6 +279,23 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     this.textData.textAngle = this.lineData.lineAngle.map(({value, x2, y2, angle = 0}) =>
       createArcText({x: x2!, y: y2!, value, style: textAngle, angle})
     )
+  }
+
+  private reduceScaleXTextNumber() {
+    const {width} = this.options.layout,
+      {maxScaleXTextNumber = Infinity} = this.style
+    let totalTextWidth = sum(this.textData.textX.map(({textWidth}) => textWidth))
+
+    if (maxScaleXTextNumber === 'auto') {
+      while (totalTextWidth > width && this.textData.textX.length > 1) {
+        this.textData.textX = this.textData.textX.filter((_, i) => i % 2 === 0)
+        totalTextWidth = sum(this.textData.textX.map(({textWidth}) => textWidth))
+      }
+    } else {
+      while (this.textData.textX.length > maxScaleXTextNumber) {
+        this.textData.textX = this.textData.textX.filter((_, i) => i % 2 === 0)
+      }
+    }
   }
 
   private getLabelAndPosition(scale: Scale) {

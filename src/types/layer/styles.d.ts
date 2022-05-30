@@ -30,6 +30,7 @@ export type TextStyleShape = GraphStyleShape &
   }>
 
 export type LayerAxisStyleShape = Partial<{
+  maxScaleXTextNumber: 'auto' | number
   lineAxisX: GraphStyleShape
   lineAxisY: GraphStyleShape
   lineAngle: GraphStyleShape
