@@ -114,7 +114,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
       colorMatrix = createColorMatrix({
         layer: this,
         row: 1,
-        column: this.pointData[0]?.length,
+        column: rawTableList[0].length - 1,
         theme: curve?.stroke,
       })
 

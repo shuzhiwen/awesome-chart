@@ -238,7 +238,15 @@ export class Chart {
   }
 
   draw() {
-    this.layers.forEach((layer) => layer.draw())
+    const specialLayers = ['axis', 'legend', 'interactive', 'mark']
+
+    this.layers.find(({options: {type}}) => type === 'axis')?.draw()
+    this.layers
+      .filter(({options: {type}}) => !specialLayers.find((item) => item === type))
+      .map((layer) => layer.draw())
+    this.getLayersByType('mark').map((layer) => layer.draw())
+    this.layers.find(({options: {type}}) => type === 'legend')?.draw()
+    this.layers.find(({options: {type}}) => type === 'interactive')?.draw()
   }
 
   destroy() {

@@ -60,7 +60,7 @@ export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => 
     // special layers need scale
     specialLayers
       .filter((type) => type !== 'axis')
-      .map((type) => layers.find((item) => item.type === type)!)
+      .flatMap((type) => layers.filter((item) => item.type === type)!)
       .filter(Boolean)
       .map((config) => createLayer(chart, config))
     // axis layer control all scales
