@@ -1,9 +1,11 @@
 {
   "name": "awesome-chart",
-  "private": true,
   "version": "0.0.0",
   "typings": "dist/index.d.ts",
   "main": "dist/main.min.js",
+  "files": [
+    "dist"
+  ],
   "author": {
     "name": "shuzhiwen",
     "email": "yuwen4012@gmail.com",
