@@ -44,9 +44,11 @@ export function range(start: number, end: number, step = 1, toFixed = 8) {
 export function mergeAlpha<T>(color: T, opacity: number) {
   try {
     if (typeof color !== 'string' && typeof color !== 'number') {
-      throw new Error()
+      throw new Error('Invalid Color')
     }
-    return chroma(color).alpha(opacity).hex()
+    return chroma(color)
+      .alpha(chroma(color).alpha() * opacity)
+      .hex()
   } catch (error) {
     return color
   }
