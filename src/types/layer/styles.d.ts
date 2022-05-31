@@ -215,3 +215,9 @@ export type LayerDashboardStyleShape = Partial<{
   valueText: TextStyleShape
   labelText: TextStyleShape
 }>
+
+export type LayerMarkStyleShape = Partial<{
+  size: number
+  mark: GraphStyleShape
+  text: TextStyleShape
+}>

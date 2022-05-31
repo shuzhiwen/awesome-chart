@@ -101,3 +101,14 @@ export const createKnuckle = (
       return []
   }
 }
+
+export const createDroplet = (left: number, top: number, width: number, height: number) => {
+  const r = height / 3,
+    centerX = left + width / 2
+
+  return [
+    `M ${centerX},${top + height}`,
+    `L ${centerX - (height * Math.sqrt(3)) / 6},${top + 1.5 * r}`,
+    `A ${r},${r},0,1,1,${centerX + (height * Math.sqrt(3)) / 6},${top + 1.5 * r} Z`,
+  ].join(' ')
+}

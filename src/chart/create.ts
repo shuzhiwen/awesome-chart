@@ -6,7 +6,6 @@ import {
   isTable,
   isTableList,
   isRelation,
-  relationToTable,
   tableListToTable,
   randomTableList,
   randomTable,
@@ -15,6 +14,7 @@ import {
 } from '../utils'
 
 const log = createLog('CreateChart')
+const specialLayers = ['axis', 'legend', 'interactive', 'mark']
 
 export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
   const {type, options, data, scale, style, animation, event} = schema,
@@ -27,11 +27,7 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
   } else if (isTable(data) || data?.type === 'table') {
     dataSet = new DataTable(isTable(data) ? data : randomTable(data))
   } else if (isRelation(data)) {
-    if (type === 'chord') {
-      dataSet = new DataTable(relationToTable(data)!)
-    } else {
-      dataSet = new DataRelation(data)
-    }
+    dataSet = new DataRelation(data)
   } else if (isTableList(data) || data?.type === 'tableList') {
     if (type === 'matrix') {
       dataSet = new DataTable(tableListToTable(data)!)
@@ -56,18 +52,17 @@ export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => 
     const {layers = [], ...initialConfig} = schema,
       chart = existedChart ?? new Chart(initialConfig),
       axisLayerConfig = layers.find(({type}) => type === 'axis'),
-      legendLayerConfig = layers.find(({type}) => type === 'legend'),
-      interactiveConfig = layers.find(({type}) => type === 'interactive'),
-      normalLayerConfigs = layers.filter(
-        ({type}) => type !== 'axis' && type !== 'legend' && type !== 'interactive'
-      )
+      normalLayerConfigs = layers.filter(({type}) => !specialLayers.includes(type))
 
     // layer instance
     axisLayerConfig && createLayer(chart, axisLayerConfig)
     normalLayerConfigs.forEach((layer) => createLayer(chart, layer).update())
-    // legend and interactive is the last one
-    legendLayerConfig && createLayer(chart, legendLayerConfig)
-    interactiveConfig && createLayer(chart, interactiveConfig)
+    // special layers need scale
+    specialLayers
+      .filter((type) => type !== 'axis')
+      .map((type) => layers.find((item) => item.type === type)!)
+      .filter(Boolean)
+      .map((config) => createLayer(chart, config))
     // axis layer control all scales
     axisLayerConfig && chart.bindCoordinate({redraw: false})
     chart.draw()

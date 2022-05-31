@@ -53,6 +53,11 @@ export type LayerODLineScaleShape = Maybe<{
   scaleY: RawScale
 }>
 
+export type LayerMarkScaleShape = Maybe<{
+  scaleX: RawScale
+  scaleY: RawScale
+}>
+
 export type LayerArcScaleShape = Maybe<{
   scaleAngle: ScaleAngle
   scaleRadius: ScaleLinear
