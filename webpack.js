@@ -32,5 +32,5 @@ module.exports = {
       },
     ],
   },
-  externals: Object.keys(dependencies).filter((key) => key.search('-') === -1),
+  externals: Object.keys(dependencies).filter((key) => key !== 'chroma-js'),
 }
