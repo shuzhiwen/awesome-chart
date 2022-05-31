@@ -28,8 +28,8 @@ test('mergeAlpha', () => {
   expect(typeof mergeAlpha('#ffffff', 0.5)).toBe('string')
   expect(typeof mergeAlpha('rgb(255,255,0)', 0.5)).toBe('string')
   expect(typeof mergeAlpha('black', 0.5)).toBe('string')
-  expect(mergeAlpha('#33445588', 0)).toBe('#33445500')
-  expect(mergeAlpha('#33445588', 1)).toBe('#334455')
+  expect(mergeAlpha('#33445580', 0)).toBe('#33445500')
+  expect(mergeAlpha('#33445580', 1)).toBe('#33445580')
   // invalid
   expect(mergeAlpha('color', 0.5)).toBe('color')
   expect(mergeAlpha(new Error('wrong'), 0.5)).toEqual(new Error('wrong'))
