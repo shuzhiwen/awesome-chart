@@ -86,25 +86,6 @@ export class DataTable extends DataBase<RawTable, Options> {
     })
   }
 
-  sort() {
-    const result = cloneDeep(this.body),
-      column = this.columns.length,
-      data = this.body.reduce((prev, cur) => [...prev, ...cur], []),
-      order = new Array(data.length).fill(null).map((v, i) => i)
-
-    for (let i = 0; i < data.length; i++) {
-      for (let j = i + 1; j < data.length; j++) {
-        if (data[i] > data[j]) {
-          ;[data[i], data[j]] = [data[j], data[i]]
-          ;[order[i], order[j]] = [order[j], order[i]]
-        }
-      }
-    }
-
-    order.forEach((value, i) => (result[Math.floor(value / column)][value % column] = i))
-    return result
-  }
-
   range(): [number, number] {
     return [
       Number(min(this.body.map((row) => min(row)))),
