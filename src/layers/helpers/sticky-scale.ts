@@ -1,9 +1,12 @@
 import {ScaleBand} from '../../types'
 
-export function stickyBandScale(scale: ScaleBand, value: number): [Meta, number] {
+export function stickyBandScale(scale: ScaleBand, value: number) {
   const [min] = scale.range(),
-    index = Math.round((value - min) / scale.step()),
-    domainValue = scale.domain()[index]
+    index = Math.round((value - min - scale.bandwidth() / 2) / scale.step()),
+    domain = scale.domain()[index]
 
-  return [domainValue, scale(domainValue) ?? 0]
+  return {
+    domain: domain,
+    value: scale(domain) ?? 0,
+  }
 }

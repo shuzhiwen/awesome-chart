@@ -1,6 +1,6 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {getAttr, isCanvasContainer, isScaleLinear} from '../../utils'
+import {getAttr, isCanvasContainer, isScaleBand, isScaleLinear} from '../../utils'
 import {
   createColorMatrix,
   createScale,
@@ -102,6 +102,8 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
       {scaleX, scaleY} = this.scale,
       {labelPosition, labelOffset, line, text, enableLegend} = this.style,
       {rawTableList} = this.data,
+      offsetX = isScaleBand(scaleX) ? scaleX.bandwidth() / 2 : 0,
+      offsetY = isScaleBand(scaleY) ? scaleY.bandwidth() / 2 : 0,
       colorMatrix = createColorMatrix({
         layer: this,
         row: rawTableList.length,
@@ -109,21 +111,21 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
         theme: line?.stroke,
       })
 
-    if (direction === 'horizontal' && isScaleLinear(scaleY)) {
+    if (direction === 'horizontal' && (isScaleLinear(scaleY) || isScaleBand(scaleY))) {
       this.lineData = rawTableList.map(([, value], i) => ({
         value,
         x1: left,
-        y1: top + (scaleY(value as number) ?? 0),
+        y1: top + (scaleY(value as number) ?? 0) + offsetY,
         x2: left + width,
-        y2: top + (scaleY(value as number) ?? 0),
+        y2: top + (scaleY(value as number) ?? 0) + offsetY,
         color: colorMatrix.get(i, 0),
       }))
-    } else if (direction === 'vertical' && isScaleLinear(scaleX)) {
+    } else if (direction === 'vertical' && (isScaleLinear(scaleX) || isScaleBand(scaleX))) {
       this.lineData = rawTableList.map(([, value], i) => ({
         value,
-        x1: left + (scaleX(value as number) ?? 0),
+        x1: left + (scaleX(value as number) ?? 0) + offsetX,
         y1: top,
-        x2: left + (scaleX(value as number) ?? 0),
+        x2: left + (scaleX(value as number) ?? 0) + offsetX,
         y2: top + height,
         color: colorMatrix.get(i, 0),
       }))

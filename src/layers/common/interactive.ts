@@ -4,14 +4,13 @@ import {createScale, createStyle, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
   LayerInteractiveStyleShape,
-  DrawerDataShape,
   LegendDataShape,
   LayerAxisScaleShape,
-  RectDrawerProps,
   LayerInteractiveOptions,
 } from '../../types'
 import {LayerAuxiliary} from './auxiliary'
-import {isScaleLinear, uuid} from '../../utils'
+import {isScaleBand, isScaleLinear, uuid} from '../../utils'
+import {stickyBandScale} from '../helpers/sticky-scale'
 
 const defaultStyle: LayerInteractiveStyleShape = {
   line: {
@@ -27,8 +26,6 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
   private _scale: LayerAxisScaleShape = {}
 
   private _style = defaultStyle
-
-  private rectData: DrawerDataShape<RectDrawerProps>[] = []
 
   private helperAuxiliary: [LayerAuxiliary, LayerAuxiliary]
 
@@ -93,6 +90,15 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
           ])
         )
         helperAuxiliaryX.draw()
+      } else if (isScaleBand(scaleX)) {
+        helperAuxiliaryX.setVisible(true)
+        helperAuxiliaryX.setData(
+          new DataTableList([
+            ['label', 'value'],
+            ['helperAuxiliaryX', stickyBandScale(scaleX, offsetX - left).domain],
+          ])
+        )
+        helperAuxiliaryX.draw()
       }
 
       if (isScaleLinear(scaleY)) {
@@ -102,6 +108,15 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
           new DataTableList([
             ['label', 'value'],
             ['helperAuxiliaryY', Number(y).toFixed(2)],
+          ])
+        )
+        helperAuxiliaryY.draw()
+      } else if (isScaleBand(scaleY)) {
+        helperAuxiliaryY.setVisible(true)
+        helperAuxiliaryY.setData(
+          new DataTableList([
+            ['label', 'value'],
+            ['helperAuxiliaryY', stickyBandScale(scaleY, offsetY - top).domain],
           ])
         )
         helperAuxiliaryY.draw()
@@ -125,12 +140,5 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
 
   update() {}
 
-  draw() {
-    const interactiveData = {
-      data: this.rectData,
-      ...this.style.interactive,
-    }
-
-    this.drawBasic({type: 'rect', data: [interactiveData]})
-  }
+  draw() {}
 }
