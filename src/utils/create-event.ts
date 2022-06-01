@@ -9,18 +9,18 @@ type Callback = AnyFunction & {
 
 const isCallback = (fn: unknown): fn is Callback => isFunction(fn)
 
-export const createEvent = (key: string) => {
+export function createEvent<T extends string = string, F extends string = string>(key: string) {
   const id = `__event-${key}-${uuid()}`
-  const rename = (name: string) => `${id}-${name}`
+  const rename = (name: T) => `${id}-${name}`
   const cache: Record<string, Callback[]> = {}
 
   return {
-    onWithOff(name: string, category: string, fn: Callback) {
+    onWithOff(name: T, category: F, fn: Callback) {
       this.off(name, fn, category)
       this.on(name, fn, category)
     },
 
-    on(name: string, fn: Callback, category: string = name) {
+    on(name: T, fn: Callback, category?: F) {
       if (isString(name) && isCallback(fn)) {
         const prefixedName = rename(name)
         cache[prefixedName] = cache[prefixedName] || []
@@ -29,7 +29,7 @@ export const createEvent = (key: string) => {
       }
     },
 
-    once(name: string, fn: Callback, category: string = name) {
+    once(name: T, fn: Callback, category?: F) {
       if (isString(name) && isCallback(fn)) {
         const prefixedName = rename(name)
         cache[prefixedName] = cache[prefixedName] || []
@@ -39,7 +39,7 @@ export const createEvent = (key: string) => {
       }
     },
 
-    off(name: string, fn?: Callback, category?: string) {
+    off(name: T, fn?: Callback, category?: F) {
       const prefixedName = rename(name)
       if (!fn && !category) {
         delete cache[prefixedName]
@@ -61,7 +61,7 @@ export const createEvent = (key: string) => {
       }
     },
 
-    fire(name: string, args?: unknown, context?: unknown) {
+    fire(name: T, args?: unknown, context?: unknown) {
       const fns = cache[rename(name)]
       if (fns) {
         let fn
@@ -77,7 +77,7 @@ export const createEvent = (key: string) => {
       }
     },
 
-    has(name: string) {
+    has(name: T) {
       return !!cache[rename(name)]
     },
   }

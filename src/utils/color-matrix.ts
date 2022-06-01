@@ -1,10 +1,9 @@
 import {mean} from 'd3'
 import chroma from 'chroma-js'
-import {Log} from '../types'
 import {createLog} from './create-log'
 
 export class ColorMatrix {
-  readonly log: Log = createLog(ColorMatrix.name)
+  readonly log = createLog(ColorMatrix.name)
 
   private _matrix: string[][]
 

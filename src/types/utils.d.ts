@@ -1,9 +1,4 @@
-import {createEvent, createLog} from '../utils'
 import {D3Selection} from './draw'
-
-export type Log = ReturnType<typeof createLog>
-
-export type Event = ReturnType<typeof createEvent>
 
 export interface FormatNumberConfig {
   percentage?: boolean // 0.1234 or 12.34%

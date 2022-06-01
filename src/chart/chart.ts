@@ -46,7 +46,7 @@ export class Chart {
 
   private tooltip: Tooltip
 
-  private event = createEvent(Chart.name)
+  private event = createEvent<'MouseEvent' | ChartState>(Chart.name)
 
   readonly log = createLog(Chart.name)
 

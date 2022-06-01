@@ -1,5 +1,5 @@
 import {throttle, merge, noop} from 'lodash'
-import {Log, Event, AnimationProps as Props, BasicAnimationOptions as Options} from '../types'
+import {AnimationProps as Props, BasicAnimationOptions as Options} from '../types'
 import {
   ANIMATION_LIFE_CYCLES,
   createEvent,
@@ -11,9 +11,9 @@ import {
 } from '../utils'
 
 export abstract class AnimationBase<T extends Options> {
-  readonly log: Log
+  readonly log = createLog(this.constructor.name)
 
-  readonly event: Event
+  readonly event = createEvent(this.constructor.name)
 
   readonly options
 
@@ -65,8 +65,6 @@ export abstract class AnimationBase<T extends Options> {
   }
 
   constructor({options, context}: Props<T>) {
-    this.log = createLog(this.constructor.name)
-    this.event = createEvent(this.constructor.name)
     this.options = merge({}, options, {context})
     this.createTargets('targets')
 

@@ -12,8 +12,6 @@ import {
   createEvent,
 } from '../utils'
 import {
-  Log,
-  Event,
   BackupDataShape,
   ElConfigShape,
   DataShape,
@@ -46,11 +44,11 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   abstract draw(): void
 
-  readonly log: Log
+  readonly className = this.constructor.name
 
-  readonly event: Event
+  readonly log = createLog(this.className)
 
-  readonly className: string
+  readonly event = createEvent(this.className)
 
   readonly options: T & ChartContext
 
@@ -71,14 +69,11 @@ export abstract class LayerBase<T extends LayerOptions> {
   private backupAnimation: BackupAnimationShape = {timer: {}}
 
   constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<T>) {
-    this.className = this.constructor.name
-    this.log = createLog(this.className)
-    this.event = createEvent(this.className)
     this.options = merge(options, context)
-    this.sublayers = sublayers || []
-    this.tooltipTargets = tooltipTargets || []
-    this.sublayers.forEach((name) => (this.backupData[name] = []))
     this.selector = new Selector()
+    this.tooltipTargets = tooltipTargets || []
+    this.sublayers = sublayers || []
+    this.sublayers.forEach((name) => (this.backupData[name] = []))
     this.root = this.selector.createSubcontainer(this.options.root, this.className)!
     this.backupData = Object.fromEntries(this.sublayers.map((name) => [name, []]))
     this.createLifeCycles()

@@ -3,7 +3,7 @@ import {ElConfigShape} from './draw'
 import {BackupDataShape, LayerOptions, LayerScalesShape, LayerType} from './layer'
 import {LayoutCreator} from './layout'
 import {DataShape} from './data'
-import {Event, RandomOptions} from './utils'
+import {RandomOptions} from './utils'
 import {ScaleNiceShape} from './scale'
 import {getEasyGradientCreator} from '../utils'
 
@@ -12,6 +12,7 @@ export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
 export interface ChartContext {
   root: Chart['root']
   theme: Chart['theme']
+  event: Chart['event']
   tooltip: Chart['tooltip']
   container: Chart['container']
   containerWidth: Chart['containerWidth']
@@ -19,7 +20,6 @@ export interface ChartContext {
   bindCoordinate: Chart['bindCoordinate']
   createSublayer: Chart['createLayer']
   createGradient: ReturnType<typeof getEasyGradientCreator>
-  event: Event
 }
 
 export interface TooltipOptions {
