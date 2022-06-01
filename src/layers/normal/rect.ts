@@ -111,7 +111,10 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
     const {variant, mode, layout} = this.options,
       {rect} = this.style,
-      {rawTableList, headers} = this.data
+      {rawTableList: _rawTableList, headers} = this.data,
+      rawTableList = _rawTableList.map((row) =>
+        row.map((item) => (isRealNumber(item) ? Math.abs(item) : item))
+      )
     let colorMatrix: ColorMatrix
 
     if (variant === 'column') {
@@ -240,14 +243,36 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
     if (variant === 'column') {
       this.rectData.forEach((group) => {
+        let [top, bottom] = [0, 0]
+
         group.forEach((item, i) => {
-          i !== 0 && (item.y = group[i - 1].y - item.height)
+          if (i === 0) {
+            top = item.y
+            bottom = item.y + item.height
+          } else if (item.value < 0) {
+            item.y = bottom
+            bottom += item.height
+          } else {
+            item.y = top - item.height
+            top = item.y
+          }
         })
       })
     } else if (variant === 'bar') {
       this.rectData.forEach((group) => {
+        let [left, right] = [0, 0]
+
         group.forEach((item, i) => {
-          i !== 0 && (item.x = group[i - 1].x + group[i - 1].width)
+          if (i === 0) {
+            left = item.x
+            right = item.x + item.width
+          } else if (item.value < 0) {
+            item.x = left - item.width
+            left = item.x
+          } else {
+            item.x = right
+            right += item.width
+          }
         })
       })
     }
