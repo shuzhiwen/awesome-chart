@@ -16,8 +16,6 @@ type Padding = [number, number, number, number]
 
 type ArrayItem<T> = T extends Array<infer U> ? U : T
 
-type Keys<T> = T extends Record<infer U, any> ? U : T
-
 type Values<T> = T extends Record<any, infer U> ? U : T
 
 type FlatObject<T> = T extends Record<infer F, MaybeGroup<infer P>> ? Record<F, P> : never

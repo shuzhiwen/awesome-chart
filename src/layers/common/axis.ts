@@ -321,19 +321,19 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   draw() {
     const {coordinate} = this.options,
       {scaleX, scaleY} = this.scale,
-      getLineData = (key: Keys<LayerAxis['lineData']>) => [
+      getLineData = (key: keyof LayerAxis['lineData']) => [
         {
           data: this.lineData[key],
           ...this.style[key],
         },
       ],
-      getRadiusData = (key: Keys<LayerAxis['lineData']>) => [
+      getRadiusData = (key: keyof LayerAxis['lineData']) => [
         {
           data: this.lineData[key],
           ...this.style[key],
         },
       ],
-      getTextData = (key: Keys<LayerAxis['textData']>, rotation?: number) => [
+      getTextData = (key: keyof LayerAxis['textData'], rotation?: number) => [
         {
           data: this.textData[key],
           transformOrigin: this.textData[key].map((group) => group.transformOrigin),

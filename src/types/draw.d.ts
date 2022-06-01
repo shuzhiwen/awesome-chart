@@ -7,7 +7,7 @@ export type DrawerTarget = D3Selection | FabricGroup
 
 export type DrawerDataParameter<T> = T[]
 
-export type DrawerType = Keys<typeof drawerMapping>
+export type DrawerType = keyof typeof drawerMapping
 
 export type DrawerDataShape<T> = T extends BasicDrawerProps<infer U> ? U : T
 
