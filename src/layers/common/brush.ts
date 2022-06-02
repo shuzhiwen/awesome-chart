@@ -1,17 +1,40 @@
 import {LayerBase} from '../base'
 import {createScale, createStyle} from '../helpers'
+import {addStyle, isSvgContainer, transformAttr} from '../../utils'
+import {BrushBehavior, D3BrushEvent, brushX, brushY} from 'd3'
 import {
   ChartContext,
   LayerAxisScaleShape,
   LayerBrushOptions,
   LayerBrushStyleShape,
 } from '../../types'
-import {isSvgContainer} from '../../utils'
-import {BrushBehavior, D3BrushEvent, brushX, brushY} from 'd3'
 
 const defaultStyle: LayerBrushStyleShape = {
-  direction: 'horizontal',
   targets: [],
+  direction: 'horizontal',
+  selection: {
+    fill: 'rgb(0,119,255)',
+    fillOpacity: 0.3,
+    strokeWidth: 0,
+    rx: 4,
+    ry: 4,
+  },
+  background: {
+    stroke: '#ffffff',
+    strokeOpacity: 0.3,
+    rx: 4,
+    ry: 4,
+  },
+  leftHandle: {
+    stroke: 'gray',
+    strokeWidth: 1,
+    fill: 'white',
+  },
+  rightHandle: {
+    stroke: 'gray',
+    strokeWidth: 1,
+    fill: 'white',
+  },
 }
 
 export class LayerBrush extends LayerBase<LayerBrushOptions> {
@@ -87,10 +110,7 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
       zoomFactor = total / (selection[1] - selection[0])
 
     Object.entries(this.scale).forEach(([name, scale]) => {
-      if (!targets?.includes(name)) {
-        return
-      }
-
+      if (!targets?.includes(name)) return
       if (!this.originScaleRangeMap.has(name)) {
         this.originScaleRangeMap.set(name, scale.range())
       }
@@ -104,6 +124,28 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
     })
 
     bindCoordinate({trigger: this, redraw: true})
+
+    if (isSvgContainer(this.root)) {
+      addStyle(this.root.selectAll('.overlay'), transformAttr(this.style.background ?? {}))
+      addStyle(this.root.selectAll('.selection'), transformAttr(this.style.selection ?? {}))
+      addStyle(this.root.selectAll('.handle--w'), transformAttr(this.style.leftHandle ?? {}))
+      addStyle(this.root.selectAll('.handle--e'), transformAttr(this.style.rightHandle ?? {}))
+
+      const leftHandle = this.root.selectAll('.handle--w'),
+        rightHandle = this.root.selectAll('.handle--e')
+
+      ;[leftHandle, rightHandle].forEach((handle) => {
+        const [x, y, width, height] = [
+          Number(handle.attr('x')),
+          Number(handle.attr('y')),
+          Number(handle.attr('width')),
+          Number(handle.attr('height')),
+        ]
+        handle.attr('transform-origin', `${x + width / 2} ${y + height / 2}`)
+        handle.attr('stroke-width', Number(handle.attr('stroke-width')) * 2)
+        handle.attr('transform', 'scale(0.5)')
+      })
+    }
   }
 
   draw() {}

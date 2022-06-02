@@ -222,7 +222,16 @@ export type LayerMarkStyleShape = Partial<{
   text: TextStyleShape
 }>
 
+type BrushGraphStyleShape = Omit<GraphStyleShape, 'mapping'> & {
+  rx?: number
+  ry?: number
+}
+
 export type LayerBrushStyleShape = Partial<{
-  direction: Direction | 'both'
   targets: string[]
+  direction: Direction | 'both'
+  background: BrushGraphStyleShape
+  selection: BrushGraphStyleShape
+  leftHandle: BrushGraphStyleShape
+  rightHandle: BrushGraphStyleShape
 }>
