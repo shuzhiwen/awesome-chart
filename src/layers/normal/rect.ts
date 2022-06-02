@@ -1,8 +1,9 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {scaleBand, scaleLinear} from '../../scales'
-import {ColorMatrix, formatNumber, isRealNumber} from '../../utils'
+import {ColorMatrix, formatNumber, isRealNumber, swap} from '../../utils'
 import {cloneDeep, isArray} from 'lodash'
+import {sum} from 'd3'
 import {
   createColorMatrix,
   createScale,
@@ -54,12 +55,12 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   private textData: DrawerDataShape<TextDrawerProps>[][] = []
 
   private rectData: (DrawerDataShape<RectDrawerProps> & {
-    value: Meta
+    value: number
     source: ElSourceShape
     color: string
   })[][] = []
 
-  private backgroundData: DrawerDataShape<RectDrawerProps>[][] = []
+  private backgroundData: DrawerDataShape<RectDrawerProps>[] = []
 
   get scale() {
     return this._scale
@@ -83,16 +84,31 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   }
 
   setData(data: LayerRect['data']) {
-    const {mode} = this.options
+    const {mode, sort} = this.options
 
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
+      if (!data) return null
+
       if (mode === 'interval') {
-        return data?.select(data.headers.slice(0, 3)) ?? null
+        return data.select(data.headers.slice(0, 3)) ?? null
       } else if (mode === 'waterfall') {
-        return data?.select(data.headers.slice(0, 2)) ?? null
+        return data.select(data.headers.slice(0, 2)) ?? null
       }
+
+      const {rawTableList, headers} = data
+
+      if (sort === 'asc') {
+        rawTableList.sort((a, b) => sum(a.slice(1) as number[]) - sum(b.slice(1) as number[]))
+        rawTableList.unshift(headers)
+        return new DataTableList(rawTableList)
+      } else if (sort === 'desc') {
+        rawTableList.sort((a, b) => sum(b.slice(1) as number[]) - sum(a.slice(1) as number[]))
+        return new DataTableList(rawTableList)
+      }
+
       return data
     })
+
     this.createScale()
   }
 
@@ -109,11 +125,11 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       throw new Error('Invalid data or scale')
     }
 
-    const {variant, mode, layout} = this.options,
-      {rect} = this.style,
+    const {rect} = this.style,
+      {variant, mode, layout} = this.options,
       {rawTableList: _rawTableList, headers} = this.data,
       rawTableList = _rawTableList.map((row) =>
-        row.map((item) => (isRealNumber(item) ? Math.abs(item) : item))
+        row.map((item) => (mode === 'percentage' ? Math.abs(Number(item)) : item))
       )
     let colorMatrix: ColorMatrix
 
@@ -123,7 +139,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
       this.rectData = rawTableList.map(([dimension, ...values]) =>
         values.map((value, i) => ({
-          value,
+          value: Number(value),
           x: layout.left + (scaleX(dimension as string) || 0),
           y: layout.top + (value > 0 ? scaleY(value as number) : scaleY(0)),
           width: scaleX.bandwidth(),
@@ -132,21 +148,19 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
           color: '#000',
         }))
       )
-      this.backgroundData = rawTableList.map(([dimension]) => [
-        {
-          x: layout.left + (scaleX(dimension as string) || 0),
-          y: layout.top,
-          width: scaleX.bandwidth(),
-          height: layout.height,
-        },
-      ])
-    } else if (variant === 'bar') {
+      this.backgroundData = rawTableList.map(([dimension]) => ({
+        x: layout.left + (scaleX(dimension as string) || 0),
+        y: layout.top,
+        width: scaleX.bandwidth(),
+        height: layout.height,
+      }))
+    } else {
       const scaleX = this.scale.scaleX as ScaleLinear,
         scaleY = this.scale.scaleY as ScaleBand
 
       this.rectData = rawTableList.map(([dimension, ...values]) =>
         values.map((value, i) => ({
-          value,
+          value: Number(value),
           y: layout.top + (scaleY(dimension as string) || 0),
           x: layout.left + (value < 0 ? scaleX(value as number) : scaleX(0)),
           width: Math.abs(scaleX(value as number) - scaleX(0)),
@@ -155,14 +169,12 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
           color: '#000',
         }))
       )
-      this.backgroundData = rawTableList.map(([dimension]) => [
-        {
-          x: layout.left,
-          y: layout.top + (scaleY(dimension as string) || 0),
-          width: layout.width,
-          height: scaleY.bandwidth(),
-        },
-      ])
+      this.backgroundData = rawTableList.map(([dimension]) => ({
+        x: layout.left,
+        y: layout.top + (scaleY(dimension as string) || 0),
+        width: layout.width,
+        height: scaleY.bandwidth(),
+      }))
     }
 
     this.rectData = this.rectData.map((group) => group.filter(({value}) => isRealNumber(value)))
@@ -201,8 +213,9 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       this.transformWaterfall()
     }
 
-    this.createRectLabel()
+    this.sortRectData()
     this.transformFixed()
+    this.createRectLabel()
 
     if (mode !== 'interval' && mode !== 'waterfall') {
       this.legendData = {
@@ -215,6 +228,27 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
         })),
       }
     }
+  }
+
+  private sortRectData() {
+    const {sort, variant} = this.options,
+      target = variant === 'column' ? 'x' : 'y9'
+
+    if (!sort) return
+
+    this.rectData.map((group) => {
+      for (let i = 0; i < group.length; i++) {
+        for (let j = i + 1; j < group.length; j++) {
+          if (sort === 'asc' && group[i].value > group[j].value) {
+            swap(group[i], group[j], target)
+            swap(group, group, i, j)
+          } else if (sort === 'desc' && group[i].value < group[j].value) {
+            swap(group[i], group[j], target)
+            swap(group, group, i, j)
+          }
+        }
+      }
+    })
   }
 
   private transformGroup() {
@@ -361,7 +395,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
         percentages = group.map(({value}) => Number(value) / total)
 
       group.map((item, i) => {
-        item.value = formatNumber(percentages[i], {decimals: 4})
+        item.value = Number(formatNumber(percentages[i], {decimals: 4}))
         if (variant === 'column') {
           item.y = item.y + item.height - height * percentages[i]
           item.height = height * percentages[i]
@@ -501,7 +535,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       fill: group.map(({color}) => color),
     }))
     const background = this.backgroundData.map((group) => ({
-      data: group,
+      data: [group],
       ...this.style.background,
     }))
     const textData = this.textData.map((group) => ({

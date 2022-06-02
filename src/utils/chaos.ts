@@ -124,3 +124,19 @@ export function flatDrawerConfig<T extends string, P>(
     Object.entries(config).map(([key, value]) => [key, getAttr(value, index, null)])
   ) as FlatObject<Record<T, P>>
 }
+
+export function swap(a: any, b: any, key1?: Meta, key2?: Meta) {
+  if (!key1) {
+    ;[a, b] = [b, a]
+    return
+  } else if (!key2) {
+    key2 = key1
+  }
+
+  if (
+    (isArray(a) && isArray(b) && isNumber(key1) && isNumber(key2)) ||
+    (typeof a === 'object' && typeof b === 'object')
+  ) {
+    ;[a[key1], b[key2]] = [b[key2], a[key1]]
+  }
+}

@@ -94,6 +94,7 @@ export type LayerRectOptions = BasicLayerOptions<
   {
     variant: 'column' | 'bar'
     mode: 'cover' | 'group' | 'stack' | 'interval' | 'waterfall' | 'percentage'
+    sort: 'asc' | 'desc'
   }
 >
 

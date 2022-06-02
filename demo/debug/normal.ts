@@ -9,8 +9,8 @@ export const debugTableListLayer = (type: TableListLayerType) => (chart: Chart) 
       mode: 'normal',
       mu: 100,
       sigma: 1000,
-      row: 3,
-      column: 1 + Math.round(Math.random() * 2),
+      row: 4,
+      column: 2,
     }),
     layers = chart.getLayersByType(type)
 
