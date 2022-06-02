@@ -12,6 +12,7 @@ export const layerMapping = {
   auxiliary: layer.LayerAuxiliary,
   axis: layer.LayerAxis,
   basemap: layer.LayerBasemap,
+  brush: layer.LayerBrush,
   dashboard: layer.LayerDashboard,
   flopper: layer.LayerFlopper,
   heatmap: layer.LayerHeatmap,

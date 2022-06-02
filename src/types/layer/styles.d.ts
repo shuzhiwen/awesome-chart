@@ -221,3 +221,8 @@ export type LayerMarkStyleShape = Partial<{
   mark: GraphStyleShape
   text: TextStyleShape
 }>
+
+export type LayerBrushStyleShape = Partial<{
+  direction: Direction | 'both'
+  targets: string[]
+}>

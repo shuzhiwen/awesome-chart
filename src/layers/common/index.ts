@@ -1,4 +1,5 @@
 export * from './auxiliary'
 export * from './axis'
+export * from './brush'
 export * from './interactive'
 export * from './legend'

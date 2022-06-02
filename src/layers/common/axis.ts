@@ -138,22 +138,33 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       } else if (!this.scale[type] || coordinate === 'geographic') {
         this.scale[type] = scale?.[type]
       } else if (isScaleLinear(this.scale[type])) {
-        const current = this.scale[type]?.domain() ?? [],
-          incoming = scale[type]?.domain() ?? []
-
-        if (current[0] > current[1] !== incoming[0] > incoming[1]) {
-          this.log.debug.warn('Layers scale does not match', {current, incoming})
-        } else {
-          const isReverse = current[0] > current[1]
-          this.scale[type]?.domain([
-            isReverse ? Math.max(current[0], incoming[0]) : Math.min(current[0], incoming[0]),
-            isReverse ? Math.min(current[1], incoming[1]) : Math.max(current[1], incoming[1]),
-          ])
-        }
+        this.mergeScale(scale[type], type, 'domain')
       } else {
         this.scale[type] = scale?.[type]
       }
+
+      this.scale[type]?.range(scale[type]?.range() ?? [])
     })
+  }
+
+  private mergeScale(
+    scale: Maybe<Scale>,
+    type: keyof Omit<LayerAxis['scale'], 'nice'>,
+    target: 'domain' | 'range'
+  ) {
+    const current = this.scale[type]?.[target]() ?? [],
+      incoming = scale?.[target]() ?? []
+
+    if (current[0] > current[1] !== incoming[0] > incoming[1]) {
+      this.log.debug.warn('Layers scale does not match', {current, incoming, target})
+      return
+    }
+
+    const isReverse = current[0] > current[1]
+    this.scale[type]?.[target]([
+      isReverse ? Math.max(current[0], incoming[0]) : Math.min(current[0], incoming[0]),
+      isReverse ? Math.min(current[1], incoming[1]) : Math.max(current[1], incoming[1]),
+    ])
   }
 
   clearScale() {

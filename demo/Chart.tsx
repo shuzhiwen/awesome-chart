@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react'
-import {createChart, getStandardLayoutCreator, download} from '../src'
+import {createChart, download} from '../src'
 import {CreateChartSchema} from '../src/types'
 import {MenuItemShape} from './schema'
 import styles from './Chart.module.css'
@@ -25,12 +25,10 @@ export const Chart = (props: {
 
   useEffect(() => {
     try {
-      const container = chartRef.current,
-        layoutCreator = getStandardLayoutCreator({brush: false})
+      const container = chartRef.current
 
       schema.engine = engine
       schema.container = schema.container ?? container
-      schema.layoutCreator = schema.layoutCreator ?? layoutCreator
 
       chart?.destroy()
       schema && setChart(createChart(schema as CreateChartSchema))

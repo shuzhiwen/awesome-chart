@@ -167,6 +167,10 @@ export class Chart {
     return layer
   }
 
+  setVisible(id: string, visible: boolean) {
+    this.getLayerById(id)?.setVisible(visible)
+  }
+
   getLayerById(id: string) {
     return this.layers.find(({options}) => options.id === id)
   }
@@ -185,10 +189,6 @@ export class Chart {
       !isNil(animation) && layer.setAnimation(animation)
       layer.draw()
     }
-  }
-
-  setVisible(id: string, visible: boolean) {
-    this.getLayerById(id)?.setVisible(visible)
   }
 
   bindCoordinate(props: {trigger?: Layer; redraw?: boolean}) {
