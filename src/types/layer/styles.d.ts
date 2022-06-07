@@ -229,7 +229,8 @@ type BrushGraphStyleShape = Omit<GraphStyleShape, 'mapping'> & {
 
 export type LayerBrushStyleShape = Partial<{
   targets: string[]
-  direction: Direction | 'both'
+  handleZoom: number
+  direction: Direction
   background: BrushGraphStyleShape
   selection: BrushGraphStyleShape
   leftHandle: BrushGraphStyleShape
