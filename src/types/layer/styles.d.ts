@@ -154,6 +154,7 @@ export type LayerPackStyleShape = Partial<{
 }>
 
 export type LayerSankeyStyleShape = Partial<{
+  edgeVariant: 'curve' | 'ribbon'
   direction: Direction
   nodeWidth: number
   nodeGap: number

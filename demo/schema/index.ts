@@ -60,7 +60,6 @@ export const schemaMenu: MenuShape = {
               style: {
                 text: {
                   fill: 'white',
-                  fontSize: 50,
                 },
               },
               animation: {

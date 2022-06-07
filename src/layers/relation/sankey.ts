@@ -1,7 +1,9 @@
 import {max, range, sum} from 'd3'
 import {LayerBase} from '../base'
 import {DataRelation} from '../../data'
+import {scaleLinear} from '../../scales'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
+import {getAttr, noChange} from '../../utils'
 import {
   ChartContext,
   DrawerDataShape,
@@ -11,19 +13,18 @@ import {
   Node,
   RectDrawerProps,
 } from '../../types'
-import {scaleLinear} from '../../scales'
-import {getAttr, noChange} from '../../utils'
 
 const defaultStyle: LayerSankeyStyleShape = {
+  edgeVariant: 'curve',
   direction: 'horizontal',
   nodeWidth: 10,
   nodeGap: 10,
-  edgeGap: 0,
+  edgeGap: 2,
   labelOffset: 5,
   align: 'start',
   edge: {
     fillOpacity: 0.7,
-    strokeOpacity: 0,
+    strokeOpacity: 0.7,
   },
   text: {
     fontSize: 12,
@@ -43,7 +44,8 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
   } & Node)[][] = []
 
   private edgeData: (Record<'x1' | 'y1' | 'x2' | 'y2' | 'x3' | 'y3' | 'x4' | 'y4', number> & {
-    color?: string
+    color: string
+    length: number
   })[] = []
 
   get data() {
@@ -151,8 +153,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
       toNode.stackedEdgeLength[0] += length
 
       return {
-        from: fromNode,
-        to: toNode,
+        length,
         x1: fromNode.x + fromNode.width + edgeGap,
         y1: fromNode.y + fromNode.stackedEdgeLength[1] - length,
         x4: fromNode.x + fromNode.width + edgeGap,
@@ -219,29 +220,47 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
     })
   }
 
-  private getPath = (data: ArrayItem<LayerSankey['edgeData']>) => {
-    const {direction} = this.options,
-      {x1, y1, x2, y2, x3, y3, x4, y4} = data
+  private getPath = (data: Omit<ArrayItem<LayerSankey['edgeData']>, 'color' | 'length'>) => {
+    const {x1, y1, x2, y2, x3, y3, x4, y4} = data,
+      {edgeVariant, direction} = this.style
 
-    if (direction === 'horizontal') {
-      return [
-        `M ${x1},${y1}`,
-        `C ${(x1 + x2) / 2},${y1} ${(x1 + x2) / 2},${y2} ${x2},${y2}`,
-        `L ${x3},${y3}`,
-        `C ${(x3 + x4) / 2},${y3} ${(x3 + x4) / 2},${y4} ${x4},${y4} Z`,
-      ].join(' ')
-    } else if (direction === 'vertical') {
-      return [
-        `M ${x1},${y1}`,
-        `C ${x1},${(y1 + y2) / 2} ${x2},${(y1 + y2) / 2} ${x2},${y2}`,
-        `L ${x3},${y3}`,
-        `C ${x3},${(y3 + y4) / 2} ${x4},${(y3 + y4) / 2} ${x4},${y4} Z`,
-      ].join(' ')
+    if (edgeVariant === 'ribbon') {
+      if (direction === 'horizontal') {
+        return [
+          `M ${x1},${y1}`,
+          `C ${(x1 + x2) / 2},${y1} ${(x1 + x2) / 2},${y2} ${x2},${y2}`,
+          `L ${x3},${y3}`,
+          `C ${(x3 + x4) / 2},${y3} ${(x3 + x4) / 2},${y4} ${x4},${y4} Z`,
+        ].join(' ')
+      } else if (direction === 'vertical') {
+        return [
+          `M ${x1},${y1}`,
+          `C ${x1},${(y1 + y2) / 2} ${x2},${(y1 + y2) / 2} ${x2},${y2}`,
+          `L ${x3},${y3}`,
+          `C ${x3},${(y3 + y4) / 2} ${x4},${(y3 + y4) / 2} ${x4},${y4} Z`,
+        ].join(' ')
+      }
+    } else {
+      if (direction === 'horizontal') {
+        return [
+          `M ${x1},${(y1 + y4) / 2}`,
+          `C ${(x1 + x2) / 2},${(y1 + y4) / 2} ${(x1 + x2) / 2},${(y2 + y3) / 2} ${x2},${
+            (y2 + y3) / 2
+          }`,
+        ].join(' ')
+      } else if (direction === 'vertical') {
+        return [
+          `M ${(x1 + x4) / 2},${y1}`,
+          `C ${(x1 + x4) / 2},${(y1 + y2) / 2} ${(x2 + x3) / 2},${(y1 + y2) / 2} ${
+            (x2 + x3) / 2
+          },${y2}`,
+        ].join(' ')
+      }
     }
-    return ''
   }
 
   draw() {
+    const {edgeVariant, edge} = this.style
     const nodeData = this.nodeData.map((group) => ({
       data: group.map(({width, height, x, y}) => ({x, y, width, height})),
       source: group.map(({value, name}) => ({category: name, value})),
@@ -249,10 +268,12 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
       ...this.style.node,
       fill: group.map(({color}) => color ?? 'black'),
     }))
-    const edgeData = this.edgeData.map(({color, ...rest}) => ({
+    const edgeData = this.edgeData.map(({color, length, ...rest}) => ({
       data: [{path: this.getPath(rest)}],
       ...this.style.edge,
-      fill: color,
+      fill: edgeVariant === 'ribbon' ? color : '#00000000',
+      stroke: edgeVariant === 'curve' ? color : edge?.stroke,
+      strokeWidth: edgeVariant === 'curve' ? length : edge?.strokeWidth,
     }))
     const textData = this.textData.map((group) => ({
       data: group,
