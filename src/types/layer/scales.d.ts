@@ -1,4 +1,4 @@
-import {ScalePoint} from 'd3'
+import {ScalePoint, ScaleQuantize} from 'd3'
 import {RawScale, Scale, ScaleAngle, ScaleBand, ScaleLinear, ScaleNiceShape} from '../scale'
 
 export type LayerAxisScaleShape = Partial<{
@@ -7,6 +7,7 @@ export type LayerAxisScaleShape = Partial<{
   scaleYR: Scale
   scaleAngle: Scale
   scaleRadius: Scale
+  scaleColor: Scale
   nice: ScaleNiceShape
 }>
 
@@ -71,4 +72,5 @@ export type LayerTreeScaleShape = Maybe<{
 export type LayerMatrixScaleShape = Maybe<{
   scaleX: ScaleBand
   scaleY: ScaleBand
+  scaleColor?: ScaleQuantize<string>
 }>

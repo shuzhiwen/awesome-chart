@@ -40,7 +40,7 @@ const defaultStyle: LayerBrushStyleShape = {
 export class LayerBrush extends LayerBase<LayerBrushOptions> {
   private _scale: Omit<LayerAxisScaleShape, 'nice'> = {}
 
-  private originScaleRangeMap: Map<string, number[]> = new Map()
+  private originScaleRangeMap: Map<string, any[]> = new Map()
 
   private brush: Maybe<BrushBehavior<unknown>>
 
@@ -107,20 +107,37 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
       {width, height, left, top} = layout,
       total = direction === 'horizontal' ? width : height,
       selection = (event.selection ?? [0, total]) as [number, number],
-      zoomFactor = total / (selection[1] - selection[0])
+      zoomFactor = total / Math.max(selection[1] - selection[0], Number.MIN_VALUE)
 
     Object.entries(this.scale).forEach(([name, scale]) => {
-      if (!targets?.includes(name)) return
+      if (!targets?.includes(name) || !scale) return
+
       if (!this.originScaleRangeMap.has(name)) {
-        this.originScaleRangeMap.set(name, scale.range())
+        if (name === 'scaleColor') {
+          this.originScaleRangeMap.set(name, [0, scale.range().length - 1, scale.range()])
+        } else {
+          this.originScaleRangeMap.set(name, scale.range())
+        }
       }
 
-      const [start, end] = this.originScaleRangeMap.get(name) ?? [0, 0],
-        nextEnd = start + (end - start) * zoomFactor,
+      const [start, end, colors] = this.originScaleRangeMap.get(name) ?? [0, 0],
+        relativeEnd = start + (end - start) * zoomFactor,
         offsetFactor = (selection[0] - (direction === 'horizontal' ? left : top)) / total,
-        offset = offsetFactor * (nextEnd - start)
+        offset = offsetFactor * (relativeEnd - start)
 
-      scale.range([start - offset, nextEnd - offset])
+      // consider boundary
+      if (name === 'scaleColor') {
+        const relativeColorEnd = start + (end - start) / zoomFactor - Number.MIN_VALUE,
+          colorOffset = offsetFactor * (relativeColorEnd - start)
+
+        scale.range(
+          colors.map((color: string, i: number) =>
+            i >= start + colorOffset && i <= relativeColorEnd + colorOffset ? color : '#00000000'
+          )
+        )
+      } else {
+        scale.range([start - offset, relativeEnd - offset])
+      }
     })
 
     bindCoordinate({trigger: this, redraw: true})

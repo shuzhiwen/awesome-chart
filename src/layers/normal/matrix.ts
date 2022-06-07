@@ -127,9 +127,15 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
         column: Math.ceil(distance / getMagnitude(distance, body.flatMap(noChange).length)),
         theme: shape === 'rect' ? rect?.fill : circle?.fill,
       }),
-      scaleColor = scaleQuantize<string>()
-        .domain(colorDomain === 'auto' ? [minValue, maxValue] : colorDomain!)
-        .range(colorMatrix.matrix[0])
+      scaleColor =
+        this.scale.scaleColor ||
+        scaleQuantize<string>()
+          .domain(colorDomain === 'auto' ? [minValue, maxValue] : colorDomain!)
+          .range(colorMatrix.matrix[0])
+
+    if (!this.scale.scaleColor) {
+      this._scale = createScale({...this.scale, scaleColor}, this.scale)
+    }
 
     if (shape === 'rect') {
       this.rectData = body.map((values, i) =>
@@ -140,7 +146,7 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
           y: top + (scaleY(rows[i]) ?? 0),
           width: bandwidthX,
           height: bandwidthY,
-          color: scaleColor(Number(value) - minValue),
+          color: scaleColor(Number(value)),
         }))
       )
     }

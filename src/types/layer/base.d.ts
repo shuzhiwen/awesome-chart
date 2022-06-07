@@ -65,6 +65,7 @@ export interface LayerScalesShape {
   scaleYR?: RawScale
   scaleAngle?: RawScale
   scaleRadius?: RawScale
+  scaleColor?: RawScale
   nice?: ScaleNiceShape
 }
 

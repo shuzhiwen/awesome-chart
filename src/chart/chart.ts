@@ -9,7 +9,6 @@ import {
   createLog,
   createEvent,
   isLayerAxis,
-  isLayerBasemap,
   createDefs,
   getEasyGradientCreator,
   isLayerInteractive,
@@ -202,22 +201,14 @@ export class Chart {
     axisLayer?.clearScale()
     layers.forEach((layer) => {
       const {scale, options} = layer,
-        {axis} = options,
-        mergedScales: Layer['scale'] = {}
+        mergedScales: Layer['scale'] = {...scale}
 
       if (coordinate === 'cartesian') {
-        mergedScales.scaleX = scale?.scaleX
-        if (axis === 'minor') {
+        if (options.axis === 'minor') {
           mergedScales.scaleYR = scale?.scaleY
         } else {
           mergedScales.scaleY = scale?.scaleY
         }
-      } else if (coordinate === 'polar') {
-        mergedScales.scaleAngle = scale?.scaleAngle
-        mergedScales.scaleRadius = scale?.scaleRadius
-      } else if (coordinate === 'geographic' && isLayerBasemap(layer)) {
-        mergedScales.scaleX = scale?.scaleX
-        mergedScales.scaleY = scale?.scaleY
       }
 
       axisLayer?.setScale(mergedScales as LayerAxisScaleShape)

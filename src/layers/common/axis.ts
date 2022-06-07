@@ -173,6 +173,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
 
   niceScale() {
     SCALE_TYPES.forEach((type) => {
+      if (type === 'scaleColor') return
+
       if (isScaleLinear(this.scale[type])) {
         this.scale[type] = scaleLinear({
           domain: this.scale[type]?.domain() as [number, number],
