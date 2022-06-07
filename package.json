@@ -14,8 +14,6 @@
   "scripts": {
     "dev": "vite  --port 9527",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "prepare": "husky install",
     "bundle": "yarn webpack -c webpack.js && cp -r src/types dist/types",
     "package": "rm -rf dist tsconfig.tsbuildinfo && yarn tsc && yarn bundle && yarn clear",
     "clear": "find dist/*/* -name '*.js' | xargs rm -f && rm dist/index.js dist/env.js",
