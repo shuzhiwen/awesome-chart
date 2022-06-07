@@ -109,13 +109,21 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
         colors: this.scale.scaleColor.range(),
       }) as string
 
-      this.root.selectAll('.overlay').attr('fill', backgroundColor)
+      this.root
+        .selectAll('.overlay')
+        .attr('fill', backgroundColor)
+        .attr('clip-path', `url(#brush-selection-${this.options.id})`)
       this.root
         .selectAll('clipPath')
         .data([null])
         .join('clipPath')
         .attr('id', `brush-selection-${this.options.id}`)
         .append('rect')
+        .attr('fill', '#ffffff')
+        .attr('x', left)
+        .attr('y', top)
+        .attr('width', width)
+        .attr('height', height)
     }
   }
 
@@ -144,8 +152,8 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
 
       // consider boundary
       if (name === 'scaleColor') {
-        const relativeColorEnd = start + (end - start) / zoomFactor - Number.MIN_VALUE,
-          colorOffset = offsetFactor * (relativeColorEnd - start)
+        const relativeColorEnd = start + (end - start) / zoomFactor - Number.MIN_VALUE
+        const colorOffset = offsetFactor * (end - start)
 
         scale.range(
           colors.map((color: string, i: number) =>
@@ -181,7 +189,8 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
       })
 
       this.root
-        .select(`brush-selection-${this.options.id}`)
+        .select(`#brush-selection-${this.options.id}`)
+        .selectAll('rect')
         .attr('x', selection.attr('x'))
         .attr('y', selection.attr('y'))
         .attr('width', selection.attr('width'))
