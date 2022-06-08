@@ -3,9 +3,9 @@ import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
 import {Selector} from './helpers'
 import {
-  COMMON_EVENTS,
-  LAYER_LIFE_CYCLES,
-  TOOLTIP_EVENTS,
+  commonEvents,
+  layerLifeCycles,
+  tooltipEvents,
   isSvgContainer,
   isCanvasContainer,
   createLog,
@@ -104,7 +104,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       },
     }
 
-    COMMON_EVENTS.forEach((type) => {
+    commonEvents.forEach((type) => {
       this.backupEvent.common[type] = Object.fromEntries(
         this.sublayers.map((sublayer) => [
           sublayer,
@@ -120,7 +120,7 @@ export abstract class LayerBase<T extends LayerOptions> {
   }
 
   private createLifeCycles() {
-    LAYER_LIFE_CYCLES.forEach((name) => {
+    layerLifeCycles.forEach((name) => {
       const fn: AnyFunction = this[name] || noop
 
       this[name] = (...parameters: any) => {
@@ -168,13 +168,13 @@ export abstract class LayerBase<T extends LayerOptions> {
     if (isSvgContainer(this.root)) {
       const els = this.root.selectAll(`.chart-basic-${sublayer}`).style('cursor', 'pointer')
 
-      COMMON_EVENTS.forEach((type) => {
+      commonEvents.forEach((type) => {
         els.on(`${type}.common`, null)
         els.on(`${type}.common`, this.backupEvent.common[type][sublayer])
       })
 
       if (this.tooltipTargets.indexOf(sublayer) !== -1) {
-        TOOLTIP_EVENTS.forEach((type) => {
+        tooltipEvents.forEach((type) => {
           els.on(`${type}.tooltip`, null)
           els.on(`${type}.tooltip`, this.backupEvent.tooltip[type])
         })
@@ -187,7 +187,7 @@ export abstract class LayerBase<T extends LayerOptions> {
         ?.getObjects()
         .reduce<FabricObject[]>((prev, cur) => [...prev, ...(cur as FabricGroup).getObjects()], [])
 
-      COMMON_EVENTS.forEach((type) => {
+      commonEvents.forEach((type) => {
         els?.forEach((el) => {
           el.off(type)
           el.on(type, this.backupEvent.common[type][sublayer])
@@ -195,7 +195,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       })
 
       if (this.tooltipTargets.indexOf(sublayer) !== -1) {
-        TOOLTIP_EVENTS.forEach((type) =>
+        tooltipEvents.forEach((type) =>
           els?.forEach((el) => {
             el.off(type)
             el.on(type, this.backupEvent.tooltip[type])

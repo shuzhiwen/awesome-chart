@@ -1,7 +1,7 @@
 import {throttle, merge, noop} from 'lodash'
 import {AnimationProps as Props, BasicAnimationOptions as Options} from '../types'
 import {
-  ANIMATION_LIFE_CYCLES,
+  animationLifeCycles,
   createEvent,
   createLog,
   isCanvasContainer,
@@ -72,7 +72,7 @@ export abstract class AnimationBase<T extends Options> {
       this.renderCanvas = context.canvas?.requestRenderAll.bind(context.canvas) ?? noop
     }
 
-    ANIMATION_LIFE_CYCLES.forEach((name) => {
+    animationLifeCycles.forEach((name) => {
       const fn = this[name] || noChange
 
       this[name] = (...parameter) => {

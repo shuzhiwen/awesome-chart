@@ -1,10 +1,24 @@
-export const TOOLTIP_EVENTS = ['mouseover', 'mouseout', 'mousemove'] as const
+export const tooltipEvents = new Set(['mouseover', 'mouseout', 'mousemove'] as const)
 
-export const ANIMATION_LIFE_CYCLES = ['init', 'play', 'start', 'process', 'end', 'destroy'] as const
+export const animationLifeCycles = new Set([
+  'init',
+  'play',
+  'start',
+  'process',
+  'end',
+  'destroy',
+] as const)
 
-export const SCALE_TYPES = ['scaleX', 'scaleY', 'scaleAngle', 'scaleRadius', 'scaleColor'] as const
+export const scaleTypes = new Set([
+  'scaleX',
+  'scaleY',
+  'scaleYR',
+  'scaleAngle',
+  'scaleRadius',
+  'scaleColor',
+] as const)
 
-export const LAYER_LIFE_CYCLES = [
+export const layerLifeCycles = new Set([
   'setData',
   'setScale',
   'setStyle',
@@ -13,13 +27,13 @@ export const LAYER_LIFE_CYCLES = [
   'destroy',
   'drawBasic',
   'playAnimation',
-] as const
+] as const)
 
-export const COMMON_EVENTS = [
+export const commonEvents = new Set([
   'click',
   'mouseover',
   'mouseout',
   'mousemove',
   'mouseup',
   'mousedown',
-] as const
+] as const)

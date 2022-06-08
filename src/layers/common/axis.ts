@@ -1,6 +1,6 @@
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
-import {isScaleBand, isScaleLinear, range, SCALE_TYPES, ungroup} from '../../utils'
+import {isScaleBand, isScaleLinear, range, scaleTypes, ungroup} from '../../utils'
 import {scaleBand, scaleLinear} from '../../scales'
 import {sum} from 'd3'
 import {
@@ -132,7 +132,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     const {coordinate} = this.options
     this._scale = createScale(undefined, this.scale, {nice: scale?.nice})
 
-    SCALE_TYPES.forEach((type) => {
+    scaleTypes.forEach((type) => {
       if (!scale?.[type]) {
         return
       } else if (!this.scale[type] || coordinate === 'geographic') {
@@ -168,11 +168,14 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   }
 
   clearScale() {
-    Object.assign(this._scale, Object.fromEntries(SCALE_TYPES.map((type) => [type, null])))
+    Object.assign(
+      this._scale,
+      Object.fromEntries(Array.from(scaleTypes).map((type) => [type, null]))
+    )
   }
 
   niceScale() {
-    SCALE_TYPES.forEach((type) => {
+    scaleTypes.forEach((type) => {
       if (type === 'scaleColor') return
 
       if (isScaleLinear(this.scale[type])) {
