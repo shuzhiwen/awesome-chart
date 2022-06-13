@@ -35,7 +35,7 @@ export default ({mode}) => [
     options: {
       id: 'axis',
       layout: 'main',
-      type: 'polar',
+      coordinate: 'polar',
     },
     scale: {
       count: 5,

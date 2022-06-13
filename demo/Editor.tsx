@@ -25,12 +25,12 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
   const {schema: _schema, onChange = noop} = props,
     editorRef = useRef<HTMLDivElement>(null),
     schema = useMemo(() => stringify(_schema, 2), [_schema]),
-    [, setEditor] = useState<monaco.editor.IStandaloneCodeEditor>(null)
+    [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor>(null)
 
   useEffect(() => {
     const container = editorRef.current,
       editor = monaco.editor.create(container, {
-        value: localStorage.getItem('editorContent') || schema,
+        value: localStorage.getItem('editorContent'),
         language: 'json',
         fontSize: 14,
       })
@@ -58,7 +58,11 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
       editor.dispose()
       container.innerHTML = ''
     }
-  }, [onChange, schema])
+  }, [onChange])
+
+  useEffect(() => {
+    editor?.setValue(schema)
+  }, [editor, schema])
 
   return <div className={styles.editor} ref={editorRef} />
 }

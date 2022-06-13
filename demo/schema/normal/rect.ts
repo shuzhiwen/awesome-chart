@@ -1,4 +1,4 @@
-export default ({type, mode}) => [
+export default ({mode, variant}) => [
   {
     type: 'text',
     options: {
@@ -34,8 +34,7 @@ export default ({type, mode}) => [
     options: {
       id: 'auxiliary',
       layout: 'main',
-      type: type === 'column' ? 'horizontal' : 'vertical',
-      bind: 'axis',
+      direction: variant === 'column' ? 'horizontal' : 'vertical',
     },
     data: [
       ['标签', '数值'],
@@ -60,7 +59,6 @@ export default ({type, mode}) => [
     options: {
       id: 'axis',
       layout: 'main',
-      type: 'cartesian',
     },
     data: {
       titleX: 'titleX',
@@ -83,8 +81,8 @@ export default ({type, mode}) => [
       id: 'rect',
       layout: 'main',
       axis: 'main',
-      mode: 'mode}',
-      type: 'type}',
+      mode,
+      variant,
     },
     data: {
       type: 'tableList',
@@ -97,9 +95,8 @@ export default ({type, mode}) => [
     },
     style: {
       labelPosition:
-        mode === 'group' ? (type === 'column' ? 'top-outer' : 'right-outer') : 'center',
+        mode === 'group' ? (variant === 'column' ? 'top-outer' : 'right-outer') : 'center',
       rect: {
-        // fill: ['red', 'green'],
         mapping: (elData) => {
           if (elData.source.value > 900) {
             elData.fill = 'gray'
@@ -114,7 +111,7 @@ export default ({type, mode}) => [
       text: {
         fontSize: 10,
         format: {
-          decimalPlace: 2,
+          decimals: 2,
         },
       },
     },

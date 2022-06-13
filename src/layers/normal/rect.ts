@@ -127,10 +127,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
     const {rect} = this.style,
       {variant, mode, layout} = this.options,
-      {rawTableList: _rawTableList, headers} = this.data,
-      rawTableList = _rawTableList.map((row) =>
-        row.map((item) => (mode === 'percentage' ? Math.abs(Number(item)) : item))
-      )
+      {rawTableList, headers} = this.data
     let colorMatrix: ColorMatrix
 
     if (variant === 'column') {

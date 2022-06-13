@@ -17,13 +17,13 @@ export default () => [
     options: {
       id: 'sankey',
       layout: 'main',
-      type: 'horizontal',
     },
     scale: {
       fixedBandwidth: 7,
     },
     data: [nodes, links],
     style: {
+      direction: 'horizontal',
       align: 'middle',
       labelOffset: 10,
       text: {

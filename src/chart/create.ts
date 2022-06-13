@@ -14,7 +14,7 @@ import {
 } from '../utils'
 
 const log = createLog('CreateChart')
-const specialLayers = ['axis', 'legend', 'interactive', 'mark']
+const specialLayers = ['axis', 'legend', 'interactive', 'mark', 'auxiliary', 'heatmap', 'odLine']
 
 export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
   const {type, options, data, scale, style, animation, event} = schema,
@@ -54,18 +54,18 @@ export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => 
       axisLayerConfig = layers.find(({type}) => type === 'axis'),
       normalLayerConfigs = layers.filter(({type}) => !specialLayers.includes(type))
 
-    // layer instance
     axisLayerConfig && createLayer(chart, axisLayerConfig)
     normalLayerConfigs.forEach((layer) => createLayer(chart, layer).update())
-    // special layers need scale
+
     specialLayers
       .filter((type) => type !== 'axis')
       .flatMap((type) => layers.filter((item) => item.type === type)!)
       .filter(Boolean)
       .map((config) => createLayer(chart, config))
-    // axis layer control all scales
+
     axisLayerConfig && chart.bindCoordinate({redraw: false})
     chart.draw()
+
     // TODO: throw and give control to users
     setTimeout(() => chart.layers.map((instance) => instance?.playAnimation()))
 

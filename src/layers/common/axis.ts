@@ -137,6 +137,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
         return
       } else if (!this.scale[type] || coordinate === 'geographic') {
         this.scale[type] = scale?.[type]
+        return
       } else if (isScaleLinear(this.scale[type])) {
         this.mergeScale(scale[type], type, 'domain')
       } else {

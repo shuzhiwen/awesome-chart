@@ -16,8 +16,8 @@ export default () => [
     type: 'axis',
     options: {
       id: 'axis',
-      layout: 'main',
-      type: 'geographic',
+      layout: 'container',
+      coordinate: 'geographic',
     },
     style: {},
   },
@@ -25,7 +25,7 @@ export default () => [
     type: 'basemap',
     options: {
       id: 'basemap',
-      layout: 'main',
+      layout: 'container',
     },
     data: 100000,
     style: {
@@ -46,7 +46,7 @@ export default () => [
     type: 'heatmap',
     options: {
       id: 'heatmap',
-      layout: 'main',
+      layout: 'container',
     },
     data: [
       ['x', 'y', 'value'],
@@ -62,7 +62,7 @@ export default () => [
     type: 'odLine',
     options: {
       id: 'odLine',
-      layout: 'main',
+      layout: 'container',
     },
     data: [
       ['fromX', 'fromY', 'toX', 'toY'],
@@ -82,7 +82,7 @@ export default () => [
     type: 'scatter',
     options: {
       id: 'scatter',
-      layout: 'main',
+      layout: 'container',
       axis: 'main',
     },
     data: [

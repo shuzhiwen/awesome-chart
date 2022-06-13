@@ -5,14 +5,9 @@ import pie from './normal/pie'
 import radar from './normal/radar'
 import scatter from './normal/scatter'
 import matrix from './normal/matrix'
-import digitalFlop from './form-control/digital-flop'
-import tabMenu from './form-control/tab-menu'
-import timeline from './form-control/timeline'
+import digitalFlop from './indicator/digital-flop'
 import map from './geography/map'
-import dashboard from './normal/dashboard'
-import indicator from './form-control/indicator'
-import edgeBundle from './relation/edge-bundle'
-import chord from './relation/chord'
+import dashboard from './indicator/dashboard'
 import sankey from './relation/sankey'
 import tree from './relation/tree'
 import treemap from './relation/treemap'
@@ -79,23 +74,23 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '分组折线',
-          schema: base(line({mode: 'default', hasArea: false, curve: 'curveLinear'})),
+          schema: base(line({mode: 'default', hasArea: false, curveType: 'curveLinear'})),
         },
         {
           name: '堆叠折线',
-          schema: base(line({mode: 'stack', hasArea: false, curve: 'curveLinear'})),
+          schema: base(line({mode: 'stack', hasArea: false, curveType: 'curveLinear'})),
         },
         {
           name: '分组面积',
-          schema: base(line({mode: 'default', hasArea: true, curve: 'curveMonotoneX'})),
+          schema: base(line({mode: 'default', hasArea: true, curveType: 'curveMonotoneX'})),
         },
         {
           name: '堆叠面积',
-          schema: base(line({mode: 'stack', hasArea: true, curve: 'curveMonotoneX'})),
+          schema: base(line({mode: 'stack', hasArea: true, curveType: 'curveMonotoneX'})),
         },
         {
           name: '阶梯折线',
-          schema: base(line({mode: 'default', hasArea: false, curve: 'curveStep'})),
+          schema: base(line({mode: 'default', hasArea: false, curveType: 'curveStep'})),
         },
       ],
     },
@@ -104,23 +99,23 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '分组柱状',
-          schema: base(rect({type: 'column', mode: 'group'})),
+          schema: base(rect({variant: 'column', mode: 'group'})),
         },
         {
           name: '堆叠柱状',
-          schema: base(rect({type: 'column', mode: 'stack'})),
+          schema: base(rect({variant: 'column', mode: 'stack'})),
         },
         {
           name: '区间柱状',
-          schema: base(rect({type: 'column', mode: 'interval'})),
+          schema: base(rect({variant: 'column', mode: 'interval'})),
         },
         {
           name: '瀑布柱状',
-          schema: base(rect({type: 'column', mode: 'waterfall'})),
+          schema: base(rect({variant: 'column', mode: 'waterfall'})),
         },
         {
           name: '百分比柱状',
-          schema: base(rect({type: 'column', mode: 'percentage'})),
+          schema: base(rect({variant: 'column', mode: 'percentage'})),
         },
       ],
     },
@@ -129,23 +124,23 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '分组条形',
-          schema: base(rect({type: 'bar', mode: 'group'})),
+          schema: base(rect({variant: 'bar', mode: 'group'})),
         },
         {
           name: '堆叠条形',
-          schema: base(rect({type: 'bar', mode: 'stack'})),
+          schema: base(rect({variant: 'bar', mode: 'stack'})),
         },
         {
           name: '区间条形',
-          schema: base(rect({type: 'bar', mode: 'interval'})),
+          schema: base(rect({variant: 'bar', mode: 'interval'})),
         },
         {
           name: '瀑布条形',
-          schema: base(rect({type: 'bar', mode: 'waterfall'})),
+          schema: base(rect({variant: 'bar', mode: 'waterfall'})),
         },
         {
           name: '百分比条形',
-          schema: base(rect({type: 'bar', mode: 'percentage'})),
+          schema: base(rect({variant: 'bar', mode: 'percentage'})),
         },
       ],
     },
@@ -154,19 +149,19 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础饼图',
-          schema: base(pie({type: 'pie', mode: 'default', innerRadius: 0})),
+          schema: base(pie({variant: 'pie', mode: 'default', innerRadius: 0})),
         },
         {
           name: '基础环图',
-          schema: base(pie({type: 'pie', mode: 'default', innerRadius: 30})),
+          schema: base(pie({variant: 'pie', mode: 'default', innerRadius: 30})),
         },
         {
           name: '南丁格尔玫瑰',
-          schema: base(pie({type: 'nightingaleRose', mode: 'default', innerRadius: 30})),
+          schema: base(pie({variant: 'nightingaleRose', mode: 'default', innerRadius: 30})),
         },
         {
           name: '堆叠南丁格尔玫瑰',
-          schema: base(pie({type: 'nightingaleRose', mode: 'stack', innerRadius: 30})),
+          schema: base(pie({variant: 'nightingaleRose', mode: 'stack', innerRadius: 30})),
         },
       ],
     },
@@ -213,14 +208,6 @@ export const schemaMenu: MenuShape = {
       name: '关系图',
       children: [
         {
-          name: '边缘捆图',
-          schema: base(edgeBundle()),
-        },
-        {
-          name: '和弦图',
-          schema: base(chord()),
-        },
-        {
           name: '桑基图',
           schema: base(sankey()),
         },
@@ -256,28 +243,11 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '翻牌器1',
-          schema: base(digitalFlop({mode: 'vertical'})),
+          schema: base(digitalFlop({variant: 'vertical'})),
         },
         {
           name: '翻牌器2',
-          schema: base(digitalFlop({mode: 'flop'})),
-        },
-      ],
-    },
-    {
-      name: '表单控件',
-      children: [
-        {
-          name: '指标卡',
-          schema: base(indicator()),
-        },
-        {
-          name: '时间轴',
-          schema: base(timeline()),
-        },
-        {
-          name: '切换菜单',
-          schema: base(tabMenu()),
+          schema: base(digitalFlop({variant: 'flop'})),
         },
       ],
     },

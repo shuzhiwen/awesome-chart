@@ -1,4 +1,4 @@
-export default ({type, mode, innerRadius}) => [
+export default ({variant, mode, innerRadius}) => [
   {
     type: 'text',
     options: {
@@ -35,7 +35,7 @@ export default ({type, mode, innerRadius}) => [
     options: {
       id: 'axis',
       layout: 'main',
-      type: 'polar',
+      coordinate: 'polar',
     },
     scale: {
       count: 5,
@@ -48,7 +48,7 @@ export default ({type, mode, innerRadius}) => [
     options: {
       id: 'arc',
       layout: 'main',
-      type,
+      variant,
       mode,
     },
     data: {

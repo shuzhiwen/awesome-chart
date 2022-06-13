@@ -17,7 +17,7 @@ export default ({shape}) => [
     options: {
       id: 'axis',
       layout: 'main',
-      type: 'cartesian',
+      coordinate: 'cartesian',
     },
     scale: {
       count: 5,
@@ -31,7 +31,6 @@ export default ({shape}) => [
       id: 'matrix',
       layout: 'main',
       axis: 'main',
-      shape,
     },
     data: {
       type: 'table',
@@ -46,6 +45,7 @@ export default ({shape}) => [
       paddingInner: 0,
     },
     style: {
+      shape,
       circleSize: ['auto', 'auto'],
       rect: {},
       text: {

@@ -1,4 +1,4 @@
-export default ({mode, hasArea, curve}) => [
+export default ({mode, hasArea, curveType}) => [
   {
     type: 'text',
     options: {
@@ -35,8 +35,7 @@ export default ({mode, hasArea, curve}) => [
     options: {
       id: 'auxiliary',
       layout: 'main',
-      type: 'horizontal',
-      bind: 'axis',
+      direction: 'horizontal',
     },
     data: [
       ['标签', '数值'],
@@ -61,7 +60,6 @@ export default ({mode, hasArea, curve}) => [
     options: {
       id: 'axis',
       layout: 'main',
-      type: 'cartesian',
     },
     scale: {
       count: 5,
@@ -75,7 +73,6 @@ export default ({mode, hasArea, curve}) => [
       id: 'line',
       layout: 'main',
       axis: 'main',
-      fallback: 'break',
       mode,
     },
     data: {
@@ -88,9 +85,10 @@ export default ({mode, hasArea, curve}) => [
       decimalPlace: 1,
     },
     style: {
+      fallback: 'break',
       labelPosition: 'top',
+      curveType,
       curve: {
-        curve,
         strokeWidth: 2,
       },
       area: {
@@ -109,14 +107,14 @@ export default ({mode, hasArea, curve}) => [
           delay: 0,
           duration: 2000,
         },
-        loop: {
-          type: 'scan',
-          delay: 2000,
-          duration: 3000,
-          color: 'rgb(255,255,255)',
-          direction: 'right',
-          scope: 'stroke',
-        },
+        // loop: {
+        //   type: 'scan',
+        //   delay: 2000,
+        //   duration: 3000,
+        //   color: 'rgb(255,255,255)',
+        //   direction: 'right',
+        //   scope: 'stroke',
+        // },
       },
       area: {
         enter: {

@@ -35,8 +35,7 @@ export default ({pointSize}) => [
     options: {
       id: 'auxiliary1',
       layout: 'main',
-      type: 'horizontal',
-      bind: 'axis',
+      direction: 'horizontal',
     },
     data: [
       ['标签', '数值'],
@@ -61,8 +60,7 @@ export default ({pointSize}) => [
     options: {
       id: 'auxiliary2',
       layout: 'main',
-      type: 'vertical',
-      bind: 'axis',
+      direction: 'vertical',
     },
     data: [
       ['标签', '数值'],
@@ -86,7 +84,7 @@ export default ({pointSize}) => [
     options: {
       id: 'axis',
       layout: 'main',
-      type: 'cartesian',
+      coordinate: 'cartesian',
     },
     style: {},
   },

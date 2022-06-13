@@ -17,10 +17,10 @@ export default () => [
     options: {
       id: 'tree',
       layout: 'main',
-      type: 'horizontal', // or vertical
     },
     data: [nodes, links],
     style: {
+      direction: 'horizontal', // or vertical
       align: 'middle',
       labelPosition: 'outer',
       labelOffset: 10,

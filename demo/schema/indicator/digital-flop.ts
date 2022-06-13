@@ -1,19 +1,19 @@
 import character from '../../../assets/character.png'
 
-export default ({mode}) => [
+export default ({variant}) => [
   {
-    type: 'digitalFlop',
+    type: 'flopper',
     options: {
-      id: 'digitalFlop',
+      id: 'flopper',
       layout: 'main',
-      mode,
+      variant,
     },
     data: {
       value: 12034.456,
     },
     style: {
       url: character,
-      character: {
+      characters: {
         0: {
           left: 0,
           top: 0,

@@ -1,22 +1,21 @@
 const createDashboardData = (type) => {
   const value = Math.floor(Math.random() * 100)
+
   if (type === 'dashboard') {
     return {
       value,
-      label: '仪表盘',
       fragments: [
-        [0, 30, '低'],
-        [30, 60, '中'],
-        [60, 100, '高'],
+        {label: '低', start: 0, end: 30},
+        {label: '中', start: 30, end: 60},
+        {label: '高', start: 60, end: 100},
       ],
     }
   }
   return {
     value,
-    label: '环形指标卡',
     fragments: [
-      [0, value, '当前'],
-      [value, 100, '剩余'],
+      {label: '当前', start: 0, end: value},
+      {label: '剩余', start: value, end: 100},
     ],
   }
 }
@@ -38,16 +37,13 @@ const createDashBoardStyle = (type) => {
     tickSize: 10,
     pointerSize: 5,
     tickLine: {
-      hide: true,
+      hidden: true,
     },
     pointer: {
-      hide: true,
-    },
-    pointerAnchor: {
-      hide: true,
+      hidden: true,
     },
     tickText: {
-      hide: true,
+      hidden: true,
     },
     valueText: {
       fontSize: 15,
