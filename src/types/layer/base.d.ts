@@ -61,7 +61,6 @@ export interface DrawBasicProps<T> {
 export interface LayerScalesShape {
   scaleX?: RawScale
   scaleY?: RawScale
-  scaleXT?: RawScale
   scaleYR?: RawScale
   scaleAngle?: RawScale
   scaleRadius?: RawScale

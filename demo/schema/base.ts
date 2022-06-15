@@ -1,4 +1,4 @@
-export default (layers: AnyObject[]) => ({
+export default (layers: any[]) => ({
   adjust: true,
   width: 100,
   height: 100,
@@ -18,7 +18,7 @@ export default (layers: AnyObject[]) => ({
     'rgb(238,52,161)',
   ],
   tooltipOptions: {
-    mode: 'dimension',
+    mode: 'single',
   },
   layers,
 })

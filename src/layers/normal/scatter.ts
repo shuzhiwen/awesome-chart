@@ -8,7 +8,7 @@ import {
 } from '../helpers'
 import {DataTableList} from '../../data'
 import {scaleLinear} from '../../scales'
-import {ungroup} from '../../utils'
+import {isRealNumber, ungroup} from '../../utils'
 import {
   ChartContext,
   DrawerDataShape,
@@ -114,9 +114,9 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
         theme: point?.fill,
       })
 
-    this.pointData = categories.map((category, i) =>
+    this.pointData = categories.map((_category, i) =>
       pointData
-        .filter((item) => item.category === category && item.x && item.y)
+        .filter(({category, x, y}) => category === _category && isRealNumber(x) && isRealNumber(y))
         .map((item) => ({...item, color: colorMatrix.get(0, i)}))
     )
 

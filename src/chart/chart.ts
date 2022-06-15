@@ -12,6 +12,7 @@ import {
   createDefs,
   getEasyGradientCreator,
   isLayerInteractive,
+  isLayerBasemap,
 } from '../utils'
 import {
   Layer,
@@ -201,14 +202,22 @@ export class Chart {
     axisLayer?.clearScale()
     layers.forEach((layer) => {
       const {scale, options} = layer,
-        mergedScales: Layer['scale'] = {...scale}
+        {scaleX, scaleY, scaleAngle, scaleRadius, ...rest} = scale ?? {},
+        mergedScales: Layer['scale'] = {...rest}
 
       if (coordinate === 'cartesian') {
+        mergedScales.scaleX = scaleX
         if (options.axis === 'minor') {
-          mergedScales.scaleYR = scale?.scaleY
+          mergedScales.scaleYR = scaleY
         } else {
-          mergedScales.scaleY = scale?.scaleY
+          mergedScales.scaleY = scaleY
         }
+      } else if (coordinate === 'polar') {
+        mergedScales.scaleAngle = scaleAngle
+        mergedScales.scaleRadius = scaleRadius
+      } else if (coordinate === 'geographic' && isLayerBasemap(layer)) {
+        mergedScales.scaleX = scaleX
+        mergedScales.scaleY = scaleY
       }
 
       axisLayer?.setScale(mergedScales as LayerAxisScaleShape)
