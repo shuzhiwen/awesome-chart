@@ -24,7 +24,7 @@ export function isSvgContainer(selector: any): selector is D3Selection {
 }
 
 export function isCanvasContainer(selector: any): selector is FabricGroup {
-  return selector?.constructor.name === 'klass'
+  return selector?.constructor.name === 'klass' && selector?.getObjects
 }
 
 export function isLayerAxis(instance: Maybe<Layer>): instance is LayerAxis {

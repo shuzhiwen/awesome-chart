@@ -34,7 +34,7 @@ export type AnimationEasing =
 export interface BasicAnimationOptions {
   id?: string
   type?: AnimationType
-  targets?: D3Selection | FabricObject[]
+  targets?: Maybe<D3Selection | FabricObject[]>
   duration?: number
   delay?: number
   loop?: boolean

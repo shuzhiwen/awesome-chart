@@ -13,7 +13,7 @@ export class AnimationErase extends AnimationBase<Options> {
   }
 
   init() {
-    const {targets, context} = this.options
+    const {targets, context, direction} = this.options
 
     if (isSvgContainer(targets) && isSvgContainer(context)) {
       this.defs = context.append('defs')
@@ -21,21 +21,22 @@ export class AnimationErase extends AnimationBase<Options> {
         .append('clipPath')
         .attr('id', `erase-${this.id}`)
         .append('rect')
-        .attr('x', '0%')
-        .attr('y', '0%')
-        .attr('width', '100%')
-        .attr('height', '100%')
+        .attr('x', direction === 'left' ? '100%' : '0%')
+        .attr('y', direction === 'top' ? '100%' : '0%')
+        .attr('width', direction === 'left' || direction === 'right' ? '0%' : '100%')
+        .attr('height', direction === 'top' || direction === 'bottom' ? '0%' : '100%')
       targets.attr('clip-path', `url(#erase-${this.id})`)
     } else if (!isSvgContainer(targets)) {
-      targets?.forEach(
-        (object) =>
-          (object.clipPath = new fabric.Rect({
-            left: -(object.left ?? 0) - (object.width ?? 0) / 2,
-            top: -(object.top ?? 0) - (object.height ?? 0) / 2,
-            width: object.canvas?.width ?? 0,
-            height: object.canvas?.height ?? 0,
-          }))
-      )
+      targets?.forEach((target) => {
+        const {width = 0, height = 0} = target
+
+        target.clipPath = new fabric.Rect({
+          left: -width / 2 + (direction === 'left' ? width : 0),
+          top: -height / 2 + (direction === 'top' ? height : 0),
+          width: direction === 'left' || direction === 'right' ? 0 : width,
+          height: direction === 'top' || direction === 'bottom' ? 0 : height,
+        })
+      })
       this.renderCanvas()
     }
   }
@@ -55,19 +56,19 @@ export class AnimationErase extends AnimationBase<Options> {
         .selectAll(`#erase-${this.id} rect`)
         .transition()
         .delay(delay)
-        .attr('x', '0%')
-        .attr('y', '0%')
-        .attr('width', '100%')
-        .attr('height', '100%')
+        .attr('x', direction === 'left' ? '100%' : '0%')
+        .attr('y', direction === 'top' ? '100%' : '0%')
+        .attr('width', direction === 'left' || direction === 'right' ? '0%' : '100%')
+        .attr('height', direction === 'top' || direction === 'bottom' ? '0%' : '100%')
         .transition()
         .duration(duration)
         .ease(svgEasing.get(easing)!)
         .on('start', this.start)
         .on('end', this.end)
-        .attr('x', direction !== 'right' ? '0%' : '100%')
-        .attr('y', direction !== 'bottom' ? '0%' : '100%')
-        .attr('width', direction === 'left' || direction === 'right' ? '0%' : '100%')
-        .attr('height', direction === 'top' || direction === 'bottom' ? '0%' : '100%')
+        .attr('x', '0%')
+        .attr('y', '0%')
+        .attr('width', '100%')
+        .attr('height', '100%')
     } else if (isCanvasContainer(context) && !isSvgContainer(targets) && targets) {
       transition()
         .delay(delay)
@@ -76,13 +77,20 @@ export class AnimationErase extends AnimationBase<Options> {
         .on('start', () => {
           this.start()
           targets.forEach((target) => {
-            const {left = 0, top = 0, width = 0, height = 0} = target.clipPath!
+            const {width = 0, height = 0} = target
+
+            target.clipPath = Object.assign(target.clipPath!, {
+              left: -width / 2 + (direction === 'left' ? width : 0),
+              top: -height / 2 + (direction === 'top' ? height : 0),
+              width: direction === 'left' || direction === 'right' ? 0 : width,
+              height: direction === 'top' || direction === 'bottom' ? 0 : height,
+            })
             target.clipPath?.animate(
               {
-                left: direction !== 'right' ? left : left + width,
-                top: direction !== 'bottom' ? top : top + height,
-                width: direction === 'left' || direction === 'right' ? 0 : width,
-                height: direction === 'top' || direction === 'bottom' ? 0 : height,
+                left: -width / 2,
+                top: -height / 2,
+                width,
+                height,
               },
               {
                 duration,
@@ -95,6 +103,17 @@ export class AnimationErase extends AnimationBase<Options> {
             )
           })
         })
+    }
+  }
+
+  destroy() {
+    const {targets} = this.options
+
+    if (isSvgContainer(targets)) {
+      targets.attr('clip-path', '')
+      this.defs?.remove()
+    } else if (isCanvasContainer(targets)) {
+      targets.forEach((target) => (target.clipPath = undefined))
     }
   }
 }

@@ -1,7 +1,7 @@
 import {select} from 'd3'
 import {fabric} from 'fabric'
 import {Canvas, IGroupOptions} from 'fabric/fabric-impl'
-import {DrawerTarget, FabricGroup} from '../../types'
+import {D3Selection, DrawerTarget, FabricGroup, FabricObject} from '../../types'
 import {createLog, isCanvasContainer, isSvgContainer} from '../../utils'
 
 export class Selector {
@@ -18,11 +18,21 @@ export class Selector {
     }
   }
 
-  getChildren(target: Maybe<DrawerTarget>, className: string) {
+  getChildren(
+    target: Maybe<DrawerTarget>,
+    className: string
+  ): Maybe<D3Selection | FabricObject[] | FabricGroup[]> {
     if (isSvgContainer(target)) {
       return target.selectAll(`.${className}`)
     } else if (isCanvasContainer(target)) {
-      return target.getObjects().filter((item) => (item as FabricGroup).className === className)
+      return target
+        .getObjects()
+        .flatMap((item) => {
+          return isCanvasContainer(item)
+            ? (this.getChildren(item, className) as FabricGroup[])
+            : (item as FabricObject)
+        })
+        .filter((item) => item.className === className)
     }
   }
 
