@@ -11,7 +11,6 @@ import {
   transformAttr,
   DataBase,
   validateAndCreateData,
-  createStyle,
   createEvent,
 } from '../src'
 
@@ -57,13 +56,13 @@ class TabMenu {
 
   private root: D3Selection
 
-  private data: DataBase<MenuItem>
+  private data: Maybe<DataBase<MenuItem>>
 
-  private activeNodes = []
+  private activeNodes: any[] = []
 
-  private originTabData = []
+  private originTabData: any[] = []
 
-  private activeTabData = []
+  private activeTabData: any[] = []
 
   private style = defaultStyle
 
@@ -90,16 +89,16 @@ class TabMenu {
   blur() {
     this.activeNodes.map((node) => (node.isActive = false))
     this.activeNodes.length = 0
-    this.setStyle()
+    this.update()
     this.draw()
   }
 
   setData(data: TabMenu['data']) {
     this.data = validateAndCreateData('base', this.data, data)
 
-    const tree = hierarchy(this.data.source)
+    const tree = hierarchy(this.data?.source)
     const nodes = tree.descendants()
-    const maxDepth = max(nodes.map(({depth}) => depth))
+    const maxDepth = max(nodes.map(({depth}) => depth)) ?? 0
 
     // the root is not visible
     this.originTabData = range(1, maxDepth, 1).map((depth) =>
@@ -107,9 +106,7 @@ class TabMenu {
     )
   }
 
-  setStyle(style?: TabMenu['style']) {
-    this.style = createStyle(defaultStyle, this.style, style)
-
+  update() {
     const {width, height} = this.layout
     const {text, active, inactive} = this.style
 
@@ -123,7 +120,7 @@ class TabMenu {
 
     // create drawable data
     this.activeTabData = this.activeTabData.map((group, i) => {
-      const textStyle = cloneDeep(text)
+      const textStyle = cloneDeep(text ?? {})
 
       Object.entries(textStyle).forEach(
         ([key, value]) => (textStyle[key] = getAttr(value, i, undefined))
@@ -148,9 +145,9 @@ class TabMenu {
       .style('display', 'flex')
       .style('overflow', 'scroll')
       .style('flex-direction', 'column')
-      .each((groupData, index, groups) => {
+      .each((groupData: any, index, groups) => {
         const groupEl = select(groups[index])
-        const groupStyle = transformAttr(this.style.group)
+        const groupStyle = transformAttr(this.style.group ?? {})
         addStyle(groupEl, groupStyle, index)
         groupEl
           .selectAll('.item')
@@ -160,7 +157,7 @@ class TabMenu {
           .style('display', 'grid')
           .style('place-items', 'center')
           .style('cursor', 'pointer')
-          .each((itemData, itemIndex, items) => {
+          .each((itemData: any, itemIndex, items) => {
             const itemEl = select(items[itemIndex])
             const itemStyle = transformAttr(itemData)
             addStyle(itemEl, itemStyle)
@@ -179,7 +176,7 @@ class TabMenu {
               .forEach((child) => (child.isActive = false))
             node.isActive = true
             node.event = event
-            this.setStyle()
+            this.update()
             this.draw()
           })
       })
@@ -210,10 +207,13 @@ export const Menu = (props: {onChange: (data: any) => void}) => {
   const {onChange} = props
 
   useEffect(() => {
+    if (!ref.current) return
+
     const target = select(ref.current)
     const tabMenu = new TabMenu({container: ref.current})
 
     tabMenu.setData(new DataBase(schemaMenu))
+    tabMenu.update()
     tabMenu.draw()
     tabMenu.event.onWithOff('click-tab', 'menu', ({data}) => {
       if (data.node.data.schema) {
@@ -223,7 +223,7 @@ export const Menu = (props: {onChange: (data: any) => void}) => {
     })
 
     return () => {
-      target.html('')
+      target.remove()
     }
   }, [onChange])
 

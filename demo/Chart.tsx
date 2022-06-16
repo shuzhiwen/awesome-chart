@@ -1,44 +1,46 @@
 import {useCallback, useEffect, useRef, useState} from 'react'
-import {createChart, download} from '../src'
+import {Chart as ChartShape, createChart, download} from '../src'
 import {CreateChartSchema} from '../src/types'
 import {MenuItemShape} from './schema'
 import styles from './Chart.module.css'
+import {cloneDeep} from 'lodash'
 
 export const Chart = (props: {
   debuggers: MenuItemShape['debuggers']
   schema: MenuItemShape['schema'] & AnyObject
 }) => {
-  const {debuggers, schema} = props,
-    chartRef = useRef(null),
-    [chart, setChart] = useState(null),
+  const {debuggers, schema: _schema} = props,
+    chartRef = useRef<any>(null),
+    [chart, setChart] = useState<ChartShape>(),
     [engine, setEngine] = useState<'svg' | 'canvas'>('svg'),
     toggleEngine = useCallback(() => setEngine(engine === 'svg' ? 'canvas' : 'svg'), [engine]),
     downloadFile = useCallback(() => {
       engine === 'svg'
-        ? download(chartRef.current.children?.[0].outerHTML, 'chart.svg')
-        : download(chartRef.current.children?.[0].children?.[0].toDataURL(), 'chart.jpg')
+        ? download(chartRef.current?.children?.[0].outerHTML ?? '', 'chart.svg')
+        : download(chartRef.current?.children?.[0].children?.[0].toDataURL(), 'chart.jpg')
     }, [engine]),
     toggleDebug = useCallback(
-      () => chart && debuggers.forEach((fn) => fn(chart)),
+      () => chart && debuggers?.forEach((fn) => fn(chart)),
       [chart, debuggers]
     )
 
   useEffect(() => {
     try {
       const container = chartRef.current
+      const schema = {
+        container,
+        ...cloneDeep(_schema),
+        engine,
+      }
 
-      schema.engine = engine
-      schema.container = schema.container ?? container
-
-      chart?.destroy()
-      schema && setChart(createChart(schema as CreateChartSchema))
+      setChart(createChart(schema as CreateChartSchema))
 
       return () => chart?.destroy()
-    } catch (e) {
-      console.error(e)
+    } catch (error) {
+      console.error(error)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema, engine])
+  }, [_schema, engine])
 
   return (
     <div className={styles.chartContainer}>
