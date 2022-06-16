@@ -112,6 +112,7 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
       throw new Error('Invalid data')
     } else if (typeof this.data.source === 'number') {
       this.fetchOnlineData(this.data.source)
+      this._scale = {scaleX: () => NaN, scaleY: () => NaN}
       return
     }
 
