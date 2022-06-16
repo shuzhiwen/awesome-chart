@@ -1,5 +1,15 @@
 export const tooltipEvents = new Set(['mouseover', 'mouseout', 'mousemove'] as const)
 
+export const dependantLayers = new Set([
+  'heatmap',
+  'odLine',
+  'mark',
+  'auxiliary',
+  'legend',
+  'brush',
+  'interactive',
+] as const)
+
 export const animationLifeCycles = new Set([
   'init',
   'play',

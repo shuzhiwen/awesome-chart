@@ -13,6 +13,8 @@ import {
   getEasyGradientCreator,
   isLayerInteractive,
   isLayerBasemap,
+  isLayerBrush,
+  dependantLayers,
 } from '../utils'
 import {
   Layer,
@@ -194,13 +196,14 @@ export class Chart {
   bindCoordinate(props: {trigger?: Layer; redraw?: boolean}) {
     const {trigger, redraw} = props,
       axisLayer = this.layers.find((layer) => isLayerAxis(layer)) as Maybe<LayerAxis>,
+      brushLayer = this.layers.find((layer) => isLayerBrush(layer)),
       interactiveLayer = this.layers.find((layer) => isLayerInteractive(layer)),
-      disabledLayers: LayerType[] = ['interactive', 'axis', 'legend'],
-      layers = this.layers.filter(({options}) => !disabledLayers.includes(options.type)),
+      layers = this.layers.filter(({options: {type}}) => !dependantLayers.has(type as any)),
       coordinate = axisLayer?.options.coordinate
 
     axisLayer?.clearScale()
-    layers.forEach((layer) => {
+
+    layers.concat(brushLayer ? [brushLayer] : []).forEach((layer) => {
       const {scale, options} = layer,
         {scaleX, scaleY, scaleAngle, scaleRadius, ...rest} = scale ?? {},
         mergedScales: Layer['scale'] = {...rest}
@@ -238,15 +241,13 @@ export class Chart {
   }
 
   draw() {
-    const specialLayers = ['axis', 'legend', 'interactive', 'mark']
-
     this.layers.find(({options: {type}}) => type === 'axis')?.draw()
     this.layers
-      .filter(({options: {type}}) => !specialLayers.find((item) => item === type))
+      .filter(({options: {type}}) => !dependantLayers.has(type as any))
       .map((layer) => layer.draw())
-    this.getLayersByType('mark').map((layer) => layer.draw())
-    this.layers.find(({options: {type}}) => type === 'legend')?.draw()
-    this.layers.find(({options: {type}}) => type === 'interactive')?.draw()
+    dependantLayers.forEach((name) => {
+      this.getLayersByType(name).forEach((layer) => layer.draw())
+    })
   }
 
   destroy() {

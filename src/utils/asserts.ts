@@ -1,5 +1,5 @@
 import {isArray, isNumber} from 'lodash'
-import {LayerAxis, LayerBasemap, LayerInteractive, LayerLegend} from '../layers'
+import {LayerAxis, LayerBasemap, LayerBrush, LayerInteractive, LayerLegend} from '../layers'
 import {
   D3Selection,
   FabricGroup,
@@ -29,6 +29,10 @@ export function isCanvasContainer(selector: any): selector is FabricGroup {
 
 export function isLayerAxis(instance: Maybe<Layer>): instance is LayerAxis {
   return instance instanceof LayerAxis
+}
+
+export function isLayerBrush(instance: Maybe<Layer>): instance is LayerBrush {
+  return instance instanceof LayerBrush
 }
 
 export function isLayerLegend(instance: Maybe<Layer>): instance is LayerLegend {

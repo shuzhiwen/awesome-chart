@@ -144,6 +144,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
         this.scale[type] = scale?.[type]
       }
 
+      // dangerous: latecomers first
       this.scale[type]?.range(scale[type]?.range() ?? [])
     })
   }
