@@ -7,6 +7,7 @@ import {
   LayerODLineOptions,
   LayerODLineScaleShape,
   LayerODLineStyleShape,
+  AnimationPathOptions,
 } from '../../types'
 import {path as d3Path} from 'd3-path'
 import {isRealNumber} from '../../utils'
@@ -21,7 +22,7 @@ const defaultStyle: LayerODLineStyleShape = {
   },
 }
 
-const defaultAnimation: BackupAnimationOptions = {
+const defaultAnimation: BackupAnimationOptions<AnimationPathOptions> = {
   flyingObject: {
     loop: {
       type: 'path',

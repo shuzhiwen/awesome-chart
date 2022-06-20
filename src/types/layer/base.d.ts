@@ -12,9 +12,9 @@ export type BackupDataItemShape<T> = Omit<GraphDrawerProps<T>, 'className' | 'co
 
 export type BackupDataShape<T> = Record<string, BackupDataItemShape<T>>
 
-export type BackupAnimationOptions = Record<
+export type BackupAnimationOptions<T = BasicAnimationOptions> = Record<
   string,
-  Partial<Record<'enter' | 'loop' | 'update', AnyObject & BasicAnimationOptions>>
+  Partial<Record<'enter' | 'loop' | 'update', T>>
 >
 
 export type BackupAnimationShape = Record<string, Maybe<AnyObject>> & {

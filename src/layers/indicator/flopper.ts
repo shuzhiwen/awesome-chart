@@ -13,7 +13,7 @@ import {
   safeTransform,
 } from '../../utils'
 import {
-  BasicAnimationOptions,
+  AnimationEasing,
   ChartContext,
   D3Selection,
   LayerFlopperOptions,
@@ -35,7 +35,12 @@ const defaultStyle: LayerFlopperStyleShape = {
   },
 }
 
-const defaultAnimation: BasicAnimationOptions = {
+const defaultAnimation: {
+  duration?: number
+  delay?: number
+  loop?: boolean
+  easing?: AnimationEasing
+} = {
   delay: 0,
   duration: 2000,
   easing: 'easeOutSine',
@@ -250,7 +255,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       })
   }
 
-  setAnimation(options: BasicAnimationOptions) {
+  setAnimation(options: LayerFlopper['animation']) {
     merge(this.animation, options)
   }
 

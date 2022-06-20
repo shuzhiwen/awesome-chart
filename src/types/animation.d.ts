@@ -31,9 +31,9 @@ export type AnimationEasing =
   | 'easeOutQuad'
   | 'easeOutSine'
 
-export interface BasicAnimationOptions {
+export interface BasicAnimationOptions<T extends AnimationType = AnimationType> {
   id?: string
-  type?: AnimationType
+  type?: T
   targets?: Maybe<D3Selection | FabricObject[]>
   duration?: number
   delay?: number
@@ -46,30 +46,30 @@ export interface AnimationProps<T extends BasicAnimationOptions> {
   options?: T
 }
 
-export type AnimationEmptyOptions = BasicAnimationOptions
+export type AnimationEmptyOptions = BasicAnimationOptions<'empty'>
 
-export interface AnimationFadeOptions extends BasicAnimationOptions {
+export interface AnimationFadeOptions extends BasicAnimationOptions<'fade'> {
   initialOpacity?: number
   startOpacity?: number
   endOpacity?: number
 }
 
-export interface AnimationPathOptions extends BasicAnimationOptions {
+export interface AnimationPathOptions extends BasicAnimationOptions<'path'> {
   path?: string
 }
 
-export interface AnimationZoomOptions extends BasicAnimationOptions {
+export interface AnimationZoomOptions extends BasicAnimationOptions<'zoom'> {
   initialScale?: number
   startScale?: number
   endScale?: number
 }
 
-export interface AnimationMoveOptions extends BasicAnimationOptions {
+export interface AnimationMoveOptions extends BasicAnimationOptions<'move'> {
   initialOffset?: [number, number]
   startOffset?: [number, number]
   endOffset?: [number, number]
 }
 
-export interface AnimationEraseOptions extends BasicAnimationOptions {
+export interface AnimationEraseOptions extends BasicAnimationOptions<'erase'> {
   direction?: Position4
 }

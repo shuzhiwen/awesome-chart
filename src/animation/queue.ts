@@ -96,7 +96,7 @@ export class AnimationQueue extends AnimationBase<Options> {
     this.isConnected = false
     this.queue.push(
       new animationMapping[type]({
-        options: {id: uuid(), ...options},
+        options: {id: uuid(), ...(options as AnyObject)},
         context,
       })
     )
