@@ -20,11 +20,8 @@ import {
   RectDrawerProps,
 } from '../../types'
 
-const defaultOptions: Partial<LayerAuxiliaryOptions> = {
-  direction: 'horizontal',
-}
-
 const defaultStyle: LayerAuxiliaryStyleShape = {
+  direction: 'horizontal',
   enableLegend: true,
   labelPosition: 'right',
   labelOffset: 5,
@@ -69,11 +66,7 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
   }
 
   constructor(options: LayerAuxiliaryOptions, context: ChartContext) {
-    super({
-      context,
-      options: {...defaultOptions, ...options},
-      sublayers: ['text', 'line', 'background'],
-    })
+    super({context, options, sublayers: ['text', 'line', 'background']})
 
     if (isCanvasContainer(this.root)) {
       this.root.evented = false
@@ -97,11 +90,10 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
       throw new Error('Invalid data or scale')
     }
 
-    const {direction, layout} = this.options,
-      {left, top, width, height} = layout,
+    const {rawTableList} = this.data,
       {scaleX, scaleY} = this.scale,
-      {labelPosition, labelOffset, line, text, enableLegend} = this.style,
-      {rawTableList} = this.data,
+      {left, top, width, height} = this.options.layout,
+      {labelPosition, direction, labelOffset, line, text, enableLegend} = this.style,
       offsetX = isScaleBand(scaleX) ? scaleX.bandwidth() / 2 : 0,
       offsetY = isScaleBand(scaleY) ? scaleY.bandwidth() / 2 : 0,
       colorMatrix = createColorMatrix({

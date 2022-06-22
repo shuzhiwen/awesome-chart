@@ -57,6 +57,7 @@ export type LayerLegendStyleShape = Partial<{
 }>
 
 export type LayerAuxiliaryStyleShape = Partial<{
+  direction: Direction
   enableLegend: boolean
   labelPosition: Position4
   labelOffset: number

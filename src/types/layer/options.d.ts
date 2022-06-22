@@ -64,17 +64,12 @@ export type LayerMarkOptions = BasicLayerOptions<'mark'>
 
 export type LayerBrushOptions = BasicLayerOptions<'brush'>
 
+export type LayerAuxiliaryOptions = BasicLayerOptions<'auxiliary'>
+
 export type LayerAxisOptions = BasicLayerOptions<
   'axis',
   {
     coordinate: Coordinate
-  }
->
-
-export type LayerAuxiliaryOptions = BasicLayerOptions<
-  'auxiliary',
-  {
-    direction: Direction
   }
 >
 
