@@ -33,7 +33,7 @@ import {
 export abstract class LayerBase<T extends LayerOptions> {
   abstract data: Maybe<DataShape>
 
-  abstract style: Maybe<EmptyObject>
+  abstract style: Maybe<UnknownObject>
 
   abstract setData(data?: Maybe<DataShape>): void
 

@@ -54,18 +54,16 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
         id: uuid(),
         layout,
         type: 'auxiliary',
-        direction: 'vertical',
       }),
       createSublayer({
         id: uuid(),
         layout,
         type: 'auxiliary',
-        direction: 'horizontal',
       }),
     ] as LayerInteractive['helperAuxiliary']
 
-    this.helperAuxiliary[0].setStyle({labelPosition: 'top'})
-    this.helperAuxiliary[1].setStyle({labelPosition: 'right'})
+    this.helperAuxiliary[0].setStyle({labelPosition: 'top', direction: 'vertical'})
+    this.helperAuxiliary[1].setStyle({labelPosition: 'right', direction: 'horizontal'})
 
     event.on('MouseEvent', ({event}: {event: MouseEvent}) => {
       const {offsetX, offsetY} = event,

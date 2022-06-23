@@ -3,7 +3,7 @@ import {LayerType} from './base'
 
 type BasicLayerOptions<
   T extends LayerType,
-  P extends AnyObject = Record<string, never>
+  P extends AnyObject = Record<never, never>
 > = Partial<P> & {
   id: string
   type: T

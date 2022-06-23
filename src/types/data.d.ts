@@ -50,4 +50,4 @@ export interface TableOptions {
   target?: 'row' | 'column'
 }
 
-export type RelationOptions = EmptyObject
+export type RelationOptions = UnknownObject

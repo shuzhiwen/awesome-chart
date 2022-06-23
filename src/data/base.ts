@@ -3,7 +3,7 @@ import {createLog} from '../utils'
 export class DataBase<T, P extends AnyObject = AnyObject> {
   readonly log = createLog(this.constructor.name)
 
-  private readonly _storage: EmptyObject
+  private readonly _storage: UnknownObject
 
   private readonly _source: T
 
