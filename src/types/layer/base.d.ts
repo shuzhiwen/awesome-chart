@@ -8,7 +8,9 @@ import {ChartContext} from '../chart'
 
 export type LayerType = keyof typeof layerMapping
 
-export type BackupDataItemShape<T> = Omit<GraphDrawerProps<T>, 'className' | 'container'>[]
+export type BackupDataItemShape<T> = Omit<GraphDrawerProps<T>, 'className' | 'container'>[] & {
+  renderOrderCache?: Map<Meta, number>
+}
 
 export type BackupDataShape<T> = Record<string, BackupDataItemShape<T>>
 
@@ -27,8 +29,8 @@ export type LegendShape = 'rect' | 'circle' | 'broken-line' | 'dotted-line' | 's
 export interface LayerBaseProps<T extends LayerOptions> {
   context: ChartContext
   options: T
-  tooltipTargets?: string[]
   sublayers?: string[]
+  tooltipTargets?: string[]
 }
 
 export interface CreateAnimationConfigItemShape {

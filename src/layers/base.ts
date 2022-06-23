@@ -1,7 +1,7 @@
 import {cloneDeep, isEqual, merge, noop} from 'lodash'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
-import {Selector} from './helpers'
+import {selector} from './helpers'
 import {
   commonEvents,
   layerLifeCycles,
@@ -27,7 +27,6 @@ import {
   LayerOptions,
   ChartContext,
   LayerScalesShape,
-  FabricGroup,
 } from '../types'
 
 export abstract class LayerBase<T extends LayerOptions> {
@@ -59,8 +58,6 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   protected readonly tooltipTargets
 
-  protected readonly selector
-
   protected needRecalculated = false
 
   private backupData: BackupDataShape<AnyObject> = {}
@@ -71,11 +68,10 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<T>) {
     this.options = merge(options, context)
-    this.selector = new Selector()
-    this.tooltipTargets = tooltipTargets || []
     this.sublayers = sublayers || []
+    this.tooltipTargets = tooltipTargets || []
     this.sublayers.forEach((name) => (this.backupData[name] = []))
-    this.root = this.selector.createSubcontainer(this.options.root, this.className)!
+    this.root = selector.createSubcontainer(this.options.root, this.className)!
     this.backupData = Object.fromEntries(this.sublayers.map((name) => [name, []]))
     this.createLifeCycles()
     this.createEvent()
@@ -159,8 +155,7 @@ export abstract class LayerBase<T extends LayerOptions> {
   }
 
   setVisible(visible: boolean, sublayer?: string) {
-    const {selector} = this,
-      className = `${this.className}-${sublayer}`,
+    const className = `${this.className}-${sublayer}`,
       target = sublayer ? selector.getSubcontainer(this.root, className) : this.root
     selector.setVisible(target, visible)
   }
@@ -183,10 +178,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     }
 
     if (isCanvasContainer(this.root)) {
-      const els = (this.root.getObjects() as FabricGroup[])
-        .find(({className}) => className === `${this.className}-${sublayer}`)
-        ?.getObjects()
-        .reduce<FabricObject[]>((prev, cur) => [...prev, ...(cur as FabricGroup).getObjects()], [])
+      const els = selector.getChildren(this.root, `.chart-basic-${sublayer}`) as FabricObject[]
 
       commonEvents.forEach((type) => {
         els?.forEach((el) => {
@@ -208,7 +200,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   private createAnimation = (sublayer: string) => {
     const {options} = this.backupAnimation,
-      targets = this.selector.getChildren(this.root, `chart-basic-${sublayer}`),
+      targets = selector.getChildren(this.root, `chart-basic-${sublayer}`),
       prefix = `${sublayer}-animation-`
     let isFirstPlay = true
 
@@ -259,7 +251,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       return
     }
 
-    const {selector} = this,
+    const backupTarget = this.backupData[sublayer],
       evented = !disableEventDrawerType.has(type as any),
       sublayerClassName = `${this.className}-${sublayer}`,
       sublayerContainer =
@@ -267,7 +259,7 @@ export abstract class LayerBase<T extends LayerOptions> {
         selector.createSubcontainer(this.root, sublayerClassName, evented)
 
     // delete the redundant group in the last rendering
-    for (let i = 0; i < Math.max(this.backupData[sublayer].length, data.length); i++) {
+    for (let i = 0; i < Math.max(backupTarget.length, data.length); i++) {
       const groupClassName = `${sublayerClassName}-${i}`
       const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
 
@@ -278,10 +270,32 @@ export abstract class LayerBase<T extends LayerOptions> {
       }
     }
 
-    this.backupData[sublayer].length = data.length
+    if (!backupTarget.renderOrderCache) {
+      backupTarget.renderOrderCache = new Map(
+        data.map((item, i) => [item.source?.at(0)?.dimension ?? '', i])
+      )
+    } else {
+      const {renderOrderCache} = backupTarget,
+        orderedGroupData = new Array(data.length),
+        curRenderOrder = data.map((item) => item.source?.at(0)?.dimension ?? '')
 
+      curRenderOrder.forEach((dimension, i) => {
+        if (renderOrderCache?.has(dimension)) {
+          orderedGroupData[renderOrderCache.get(dimension)!] = data[i]
+        } else {
+          orderedGroupData.push(data[i])
+        }
+      })
+
+      data = orderedGroupData.filter(Boolean)
+      data.forEach((group, i) => {
+        renderOrderCache.set(group.source?.at(0)?.dimension ?? '', i)
+      })
+    }
+
+    backupTarget.length = data.length
     data.forEach((groupData, i) => {
-      if (isEqual(this.backupData[sublayer][i], groupData)) return
+      if (isEqual(backupTarget[i], groupData)) return
 
       const groupClassName = `${sublayerClassName}-${i}`,
         groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),
@@ -291,13 +305,12 @@ export abstract class LayerBase<T extends LayerOptions> {
           container: groupContainer!,
         }
 
-      // not first render
-      if (this.backupData[sublayer][i]) {
+      if (backupTarget[i]) {
         options.transition = this.backupAnimation.options?.[sublayer]?.update
       }
 
       drawerMapping[type](options)
-      this.backupData[sublayer][i] = cloneDeep(groupData)
+      backupTarget[i] = cloneDeep(groupData)
     })
 
     this.bindEvent(sublayer)
@@ -306,6 +319,6 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   destroy() {
     this.sublayers.forEach((name) => this.backupAnimation[name]?.destroy())
-    this.root && this.selector.remove(this.root)
+    this.root && selector.remove(this.root)
   }
 }

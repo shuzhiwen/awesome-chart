@@ -1,4 +1,6 @@
-export default ({mode, variant}) => [
+import {LayerRectOptions} from '../../../src/types'
+
+export default ({mode, variant, sort}: Partial<LayerRectOptions>) => [
   {
     type: 'text',
     options: {
@@ -83,6 +85,7 @@ export default ({mode, variant}) => [
       axis: 'main',
       mode,
       variant,
+      sort,
     },
     data: {
       type: 'tableList',
@@ -126,7 +129,7 @@ export default ({mode, variant}) => [
         },
         update: {
           delay: 0,
-          duration: 2000,
+          duration: 200,
         },
         // loop: {
         //   type: 'scan',
@@ -135,14 +138,6 @@ export default ({mode, variant}) => [
         //   color: 'rgba(255,255,255,1)',
         //   direction: type === 'bar' ? 'right' : 'top',
         // },
-      },
-      text: {
-        enter: {
-          type: 'fade',
-          delay: 2000,
-          duration: 1000,
-          mode: 'fadeIn',
-        },
       },
     },
     event: {

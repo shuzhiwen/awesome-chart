@@ -52,8 +52,6 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
   private _style = defaultStyle
 
-  private originRenderMap: Map<Meta, number> = new Map()
-
   private textData: DrawerDataShape<TextDrawerProps>[][] = []
 
   private rectData: (DrawerDataShape<RectDrawerProps> & {
@@ -246,29 +244,6 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
         }
       }
     })
-
-    // render memory
-    if (!this.originRenderMap.size) {
-      this.rectData.forEach((group, i) =>
-        this.originRenderMap.set(group.at(0)?.source.dimension ?? '', i)
-      )
-    } else {
-      const orderedRectData = new Array(this.rectData.length)
-      const curRenderOrder = this.rectData.map((group) => group.at(0)?.source.dimension ?? '')
-
-      curRenderOrder.forEach((dimension, i) => {
-        if (this.originRenderMap.has(dimension)) {
-          orderedRectData[this.originRenderMap.get(dimension)!] = this.rectData[i]
-        } else {
-          orderedRectData.push(this.rectData[i])
-        }
-      })
-
-      this.rectData = orderedRectData.filter(Boolean)
-      this.rectData.forEach((group, i) =>
-        this.originRenderMap.set(group.at(0)?.source.dimension ?? '', i)
-      )
-    }
   }
 
   private transformGroup() {

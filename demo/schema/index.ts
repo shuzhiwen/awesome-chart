@@ -132,6 +132,10 @@ export const schemaMenu: MenuShape = {
           name: '百分比条形',
           schema: base(rect({variant: 'bar', mode: 'percentage'})),
         },
+        {
+          name: '有序的条形图',
+          schema: base(rect({variant: 'bar', mode: 'group', sort: 'desc'})),
+        },
       ],
     },
     {

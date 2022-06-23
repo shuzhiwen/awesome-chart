@@ -4,7 +4,7 @@ import {Canvas, IGroupOptions} from 'fabric/fabric-impl'
 import {D3Selection, DrawerTarget, FabricGroup, FabricObject} from '../../types'
 import {createLog, isCanvasContainer, isSvgContainer} from '../../utils'
 
-export class Selector {
+class Selector {
   readonly log = createLog(Selector.name)
 
   setVisible(target: Maybe<DrawerTarget>, visible: boolean) {
@@ -74,3 +74,5 @@ export class Selector {
     }
   }
 }
+
+export const selector = new Selector()
