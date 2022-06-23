@@ -34,7 +34,6 @@ export default ({mode, variant}) => [
     options: {
       id: 'auxiliary',
       layout: 'main',
-      direction: variant === 'column' ? 'horizontal' : 'vertical',
     },
     data: [
       ['标签', '数值'],
@@ -42,6 +41,7 @@ export default ({mode, variant}) => [
       ['最小值', 600],
     ],
     style: {
+      direction: variant === 'column' ? 'horizontal' : 'vertical',
       labelPosition: 'right',
       line: {
         stroke: 'yellow',
@@ -123,6 +123,10 @@ export default ({mode, variant}) => [
           duration: 2000,
           mode: 'enlarge',
           direction: 'both',
+        },
+        update: {
+          delay: 0,
+          duration: 2000,
         },
         // loop: {
         //   type: 'scan',

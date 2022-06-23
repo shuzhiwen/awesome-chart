@@ -12,14 +12,10 @@ import sankey from './relation/sankey'
 import tree from './relation/tree'
 import treemap from './relation/treemap'
 import pack from './relation/pack'
-import {debugDashboardLayer, debugFlopperLayer, debugTableListLayers} from '../debug'
-import {Chart} from '../../src'
-import {debugODLineLayer} from '../debug/geography'
 
 export interface MenuItemShape {
   name: string
   schema: ReturnType<typeof base>
-  debuggers?: ((chart: Chart) => void)[]
 }
 
 export interface MenuShape {
@@ -38,12 +34,6 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础文字',
-          debuggers: [
-            ...debugTableListLayers,
-            debugODLineLayer,
-            debugDashboardLayer,
-            debugFlopperLayer,
-          ],
           schema: base([
             {
               type: 'text',

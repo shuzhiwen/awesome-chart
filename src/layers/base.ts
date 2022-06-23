@@ -10,6 +10,7 @@ import {
   isCanvasContainer,
   createLog,
   createEvent,
+  disableEventDrawerType,
 } from '../utils'
 import {
   BackupDataShape,
@@ -259,8 +260,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     }
 
     const {selector} = this,
-      disableEventType = ['text', 'line', 'area'],
-      evented = !disableEventType.includes(type),
+      evented = !disableEventDrawerType.has(type as any),
       sublayerClassName = `${this.className}-${sublayer}`,
       sublayerContainer =
         selector.getSubcontainer(this.root, sublayerClassName) ||
@@ -281,27 +281,23 @@ export abstract class LayerBase<T extends LayerOptions> {
     this.backupData[sublayer].length = data.length
 
     data.forEach((groupData, i) => {
-      if (!isEqual(this.backupData[sublayer][i], groupData)) {
-        const groupClassName = `${sublayerClassName}-${i}`,
-          groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),
-          options: GraphDrawerProps<any> = {
-            className: `chart-basic-${sublayer}`,
-            container: groupContainer!,
-            data: [],
-          }
+      if (isEqual(this.backupData[sublayer][i], groupData)) return
 
-        options.transition = {}
-        !groupData.hidden && merge(options, groupData)
-
-        if (this.backupData[sublayer][i] && this.backupAnimation.options?.[sublayer]) {
-          const {duration, delay} = this.backupAnimation.options[sublayer].update || {}
-          options.transition.duration = duration
-          options.transition.delay = delay
+      const groupClassName = `${sublayerClassName}-${i}`,
+        groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),
+        options: GraphDrawerProps<any> = {
+          ...(groupData.hidden ? {data: []} : groupData),
+          className: `chart-basic-${sublayer}`,
+          container: groupContainer!,
         }
 
-        drawerMapping[type](options)
-        this.backupData[sublayer][i] = cloneDeep(groupData)
+      // not first render
+      if (this.backupData[sublayer][i]) {
+        options.transition = this.backupAnimation.options?.[sublayer]?.update
       }
+
+      drawerMapping[type](options)
+      this.backupData[sublayer][i] = cloneDeep(groupData)
     })
 
     this.bindEvent(sublayer)

@@ -1,5 +1,7 @@
 export const tooltipEvents = new Set(['mouseover', 'mouseout', 'mousemove'] as const)
 
+export const disableEventDrawerType = new Set(['text', 'line', 'area'] as const)
+
 export const dependantLayers = new Set([
   'heatmap',
   'odLine',

@@ -5,9 +5,11 @@ import {Editor} from './Editor'
 import {Chart} from './Chart'
 import {tip} from './schema/base'
 import {Menu} from './TabMenu'
+import {debugDynamicRectLayer} from './debug'
 
 export function Root() {
-  const {schema, debuggers} = schemaMenu.children[0].children[0],
+  const {schema} = schemaMenu.children[0].children[0],
+    debuggers = [debugDynamicRectLayer],
     [newSchema, setNewSchema] = useState(schema),
     onChange = useCallback((value) => setNewSchema(value), [])
 
