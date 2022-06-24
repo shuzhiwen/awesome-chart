@@ -196,6 +196,10 @@ export const schemaMenu: MenuShape = {
           name: '圆形矩阵',
           schema: base(matrix({shape: 'circle'})),
         },
+        {
+          name: '带笔刷的矩阵',
+          schema: base(matrix({shape: 'rect', brush: true})),
+        },
       ],
     },
     {

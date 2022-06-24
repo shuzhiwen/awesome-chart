@@ -15,6 +15,7 @@ import {
   isLayerBasemap,
   isLayerBrush,
   dependantLayers,
+  uuid,
 } from '../utils'
 import {
   Layer,
@@ -158,14 +159,19 @@ export class Chart {
       createSublayer: (options: LayerOptions) => this.createLayer(options, true as false),
     }
 
-    if (this.layers.find((layer) => layer.options.id === options.id)) {
+    if (isNil(options.id)) {
+      options.id = uuid()
+      this.log.warn(`Create id "${options.id}" for layer`)
+    } else if (this.layers.find((layer) => layer.options.id === options.id)) {
       this.log.error(`Duplicate layer id "${options.id}"`)
     }
 
     const layer = new layerMapping[options.type]({...options, sublayer} as any, context)
+
     this._layers.push(layer)
     this.state = 'ready'
     this.event.fire(this.state)
+
     return layer
   }
 
