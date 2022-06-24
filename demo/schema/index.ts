@@ -12,6 +12,7 @@ import sankey from './relation/sankey'
 import tree from './relation/tree'
 import treemap from './relation/treemap'
 import pack from './relation/pack'
+import candle from './normal/candle'
 
 export interface MenuItemShape {
   name: string
@@ -169,6 +170,15 @@ export const schemaMenu: MenuShape = {
         {
           name: '堆叠雷达',
           schema: base(radar({mode: 'stack'})),
+        },
+      ],
+    },
+    {
+      name: 'K线图',
+      children: [
+        {
+          name: '基础K线',
+          schema: base(candle({})),
         },
       ],
     },

@@ -2,7 +2,7 @@ export default (layers: any[]) => ({
   adjust: true,
   width: 100,
   height: 100,
-  padding: [60, 60, 60, 60],
+  padding: [50, 50, 50, 50],
   engine: 'svg',
   theme: [
     'rgb(52,200,254)',

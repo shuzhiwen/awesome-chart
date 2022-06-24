@@ -36,6 +36,7 @@ export type LayerOptions =
   | LayerDashboardOptions
   | LayerMarkOptions
   | LayerBrushOptions
+  | LayerCandleOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
@@ -68,6 +69,8 @@ export type LayerMarkOptions = BasicLayerOptions<'mark'>
 export type LayerBrushOptions = BasicLayerOptions<'brush'>
 
 export type LayerAuxiliaryOptions = BasicLayerOptions<'auxiliary'>
+
+export type LayerCandleOptions = BasicLayerOptions<'candle'>
 
 export type LayerAxisOptions = BasicLayerOptions<
   'axis',

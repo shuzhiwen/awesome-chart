@@ -15,6 +15,7 @@ export type GraphStyleShape = Partial<{
   rotation: MaybeGroup<number>
   transition: Maybe<BasicAnimationOptions>
   mapping: (config: ElConfigShape) => ElConfigShape
+  hidden: boolean
 }>
 
 export type TextStyleShape = GraphStyleShape &
@@ -237,4 +238,11 @@ export type LayerBrushStyleShape = Partial<{
   selection: BrushGraphStyleShape
   leftHandle: BrushGraphStyleShape
   rightHandle: BrushGraphStyleShape
+}>
+
+export type LayerCandleStyleShape = Partial<{
+  positiveColor: string
+  negativeColor: string
+  rect: LayerRectStyleShape
+  line: LayerRectStyleShape
 }>

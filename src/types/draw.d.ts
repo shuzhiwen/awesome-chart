@@ -53,9 +53,7 @@ export interface BasicDrawerProps<T> {
   container: DrawerTarget
 }
 
-export interface GraphDrawerProps<T> extends GraphStyleShape, BasicDrawerProps<T> {
-  hidden?: boolean
-}
+export type GraphDrawerProps<T> = GraphStyleShape & BasicDrawerProps<T>
 
 export type ArcDrawerProps = GraphDrawerProps<{
   startAngle: number

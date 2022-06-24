@@ -13,6 +13,7 @@ export const layerMapping = {
   axis: layer.LayerAxis,
   basemap: layer.LayerBasemap,
   brush: layer.LayerBrush,
+  candle: layer.LayerCandle,
   dashboard: layer.LayerDashboard,
   flopper: layer.LayerFlopper,
   heatmap: layer.LayerHeatmap,

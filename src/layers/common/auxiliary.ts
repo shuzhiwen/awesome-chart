@@ -74,7 +74,7 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
   }
 
   setData(data: LayerAuxiliary['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    this._data = validateAndCreateData('tableList', this.data, data)
   }
 
   setScale(scale: LayerAuxiliaryScaleShape) {
