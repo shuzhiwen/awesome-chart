@@ -2,19 +2,15 @@ import {select} from 'd3'
 import {fabric} from 'fabric'
 import {Canvas, IGroupOptions} from 'fabric/fabric-impl'
 import {D3Selection, DrawerTarget, FabricGroup, FabricObject} from '../../types'
-import {createLog, isCanvasContainer, isSvgContainer} from '../../utils'
+import {isCanvasContainer, isSvgContainer} from '../../utils'
 
 class Selector {
-  readonly log = createLog(Selector.name)
-
   setVisible(target: Maybe<DrawerTarget>, visible: boolean) {
     if (isSvgContainer(target)) {
       target.attr('display', visible ? 'block' : 'none')
     } else if (isCanvasContainer(target)) {
       target.visible = visible
       target.canvas?.requestRenderAll()
-    } else {
-      this.log.error('Illegal parameter', {target, visible})
     }
   }
 

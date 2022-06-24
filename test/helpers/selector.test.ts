@@ -1,6 +1,6 @@
 import {select} from 'd3'
 import {fabric} from 'fabric'
-import {Selector} from '../../src'
+import {selector} from '../../src'
 
 // disable log message
 jest.mock('../../src/utils/create-log', () => ({
@@ -19,25 +19,23 @@ jest.mock('../../src/utils/create-log', () => ({
 
 test('Selector', () => {
   const svgContainer = select(document.createElement('svg'))
-  const svgSelector = new Selector()
   const canvasContainer = new fabric.Group()
-  const canvasSelector = new Selector()
 
-  expect(svgSelector.createSubcontainer(svgContainer, 'sub')).not.toBeNull()
-  expect(svgSelector.createSubcontainer(svgContainer, 'sub')).not.toBeUndefined()
-  expect(canvasSelector.createSubcontainer(canvasContainer, 'sub')).not.toBeNull()
-  expect(canvasSelector.createSubcontainer(canvasContainer, 'sub')).not.toBeUndefined()
+  expect(selector.createSubcontainer(svgContainer, 'sub')).not.toBeNull()
+  expect(selector.createSubcontainer(svgContainer, 'sub')).not.toBeUndefined()
+  expect(selector.createSubcontainer(canvasContainer, 'sub')).not.toBeNull()
+  expect(selector.createSubcontainer(canvasContainer, 'sub')).not.toBeUndefined()
 
-  expect(svgSelector.setVisible(svgContainer, true))
-  expect(svgSelector.setVisible(svgContainer, false))
-  expect(canvasSelector.setVisible(canvasContainer, true))
-  expect(canvasSelector.setVisible(canvasContainer, false))
+  expect(selector.setVisible(svgContainer, true))
+  expect(selector.setVisible(svgContainer, false))
+  expect(selector.setVisible(canvasContainer, true))
+  expect(selector.setVisible(canvasContainer, false))
 
-  expect(svgSelector.getSubcontainer(svgContainer, 'sub')).not.toBeNull()
-  expect(svgSelector.getSubcontainer(svgContainer, 'sub')).not.toBeUndefined()
-  expect(canvasSelector.getSubcontainer(canvasContainer, 'sub')).not.toBeNull()
-  expect(canvasSelector.getSubcontainer(canvasContainer, 'sub')).not.toBeUndefined()
+  expect(selector.getSubcontainer(svgContainer, 'sub')).not.toBeNull()
+  expect(selector.getSubcontainer(svgContainer, 'sub')).not.toBeUndefined()
+  expect(selector.getSubcontainer(canvasContainer, 'sub')).not.toBeNull()
+  expect(selector.getSubcontainer(canvasContainer, 'sub')).not.toBeUndefined()
 
-  expect(svgSelector.remove(svgContainer)).toBeDefined()
-  expect(canvasSelector.remove(canvasContainer)).toBeUndefined()
+  expect(selector.remove(svgContainer)).toBeDefined()
+  expect(selector.remove(canvasContainer)).toBeUndefined()
 })
