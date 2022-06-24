@@ -103,6 +103,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
         return new DataTableList(rawTableList)
       } else if (sort === 'desc') {
         rawTableList.sort((a, b) => sum(b.slice(1) as number[]) - sum(a.slice(1) as number[]))
+        rawTableList.unshift(headers)
         return new DataTableList(rawTableList)
       }
 

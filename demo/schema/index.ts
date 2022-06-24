@@ -134,7 +134,7 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '有序的条形图',
-          schema: base(rect({variant: 'bar', mode: 'group', sort: 'desc'})),
+          schema: base(rect({variant: 'bar', mode: 'group', sort: 'desc', updateDuration: 200})),
         },
       ],
     },

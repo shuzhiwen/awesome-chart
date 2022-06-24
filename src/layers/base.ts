@@ -258,7 +258,7 @@ export abstract class LayerBase<T extends LayerOptions> {
         selector.getSubcontainer(this.root, sublayerClassName) ||
         selector.createSubcontainer(this.root, sublayerClassName, evented)
 
-    // delete the redundant group in the last rendering
+    // delete redundant groups in the last rendering
     for (let i = 0; i < Math.max(backupTarget.length, data.length); i++) {
       const groupClassName = `${sublayerClassName}-${i}`
       const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
@@ -272,7 +272,9 @@ export abstract class LayerBase<T extends LayerOptions> {
 
     if (!backupTarget.renderOrderCache) {
       backupTarget.renderOrderCache = new Map(
-        data.map((item, i) => [item.source?.at(0)?.dimension ?? '', i])
+        data
+          .filter((item) => item.source?.at(0)?.dimension)
+          .map((item, i) => [item.source?.at(0)?.dimension as Meta, i])
       )
     } else {
       const {renderOrderCache} = backupTarget,
@@ -288,8 +290,10 @@ export abstract class LayerBase<T extends LayerOptions> {
       })
 
       data = orderedGroupData.filter(Boolean)
-      data.forEach((group, i) => {
-        renderOrderCache.set(group.source?.at(0)?.dimension ?? '', i)
+      data.forEach((item, i) => {
+        if (item.source?.at(0)?.dimension) {
+          renderOrderCache.set(item.source?.at(0)?.dimension as Meta, i)
+        }
       })
     }
 

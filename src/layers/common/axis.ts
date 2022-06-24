@@ -339,26 +339,16 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   draw() {
     const {coordinate} = this.options,
       {scaleX, scaleY} = this.scale,
-      getLineData = (key: keyof LayerAxis['lineData']) => [
-        {
-          data: this.lineData[key],
-          ...this.style[key],
-        },
-      ],
-      getRadiusData = (key: keyof LayerAxis['lineData']) => [
-        {
-          data: this.lineData[key],
-          ...this.style[key],
-        },
-      ],
-      getTextData = (key: keyof LayerAxis['textData'], rotation?: number) => [
-        {
-          data: this.textData[key],
-          transformOrigin: this.textData[key].map((group) => group.transformOrigin),
+      getLineData = (key: keyof LayerAxis['lineData']) =>
+        this.lineData[key].map((item) => ({data: [item], ...this.style[key]})),
+      getTextData = (key: keyof LayerAxis['textData'], rotation?: number) =>
+        this.textData[key].map((item) => ({
+          data: [item],
+          source: [{dimension: item.value}],
+          transformOrigin: item.transformOrigin,
           rotation,
           ...this.style[key],
-        },
-      ]
+        }))
 
     if (coordinate === 'cartesian') {
       isScaleLinear(scaleX) &&
@@ -374,7 +364,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     }
 
     if (coordinate === 'polar') {
-      this.drawBasic({type: 'circle', data: getRadiusData('lineRadius'), sublayer: 'lineRadius'})
+      this.drawBasic({type: 'circle', data: getLineData('lineRadius'), sublayer: 'lineRadius'})
       this.drawBasic({type: 'line', data: getLineData('lineAngle'), sublayer: 'lineAngle'})
       this.drawBasic({type: 'text', data: getTextData('textAngle'), sublayer: 'textAngle'})
       this.drawBasic({type: 'text', data: getTextData('textRadius'), sublayer: 'textRadius'})

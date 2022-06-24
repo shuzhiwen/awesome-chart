@@ -1,6 +1,11 @@
 import {LayerRectOptions} from '../../../src/types'
 
-export default ({mode, variant, sort}: Partial<LayerRectOptions>) => [
+export default ({
+  mode,
+  variant,
+  sort,
+  updateDuration = 2000,
+}: Partial<LayerRectOptions> & {updateDuration?: number}) => [
   {
     type: 'text',
     options: {
@@ -76,6 +81,14 @@ export default ({mode, variant, sort}: Partial<LayerRectOptions>) => [
       // fixedBoundary: 'start',
     },
     style: {},
+    animation: {
+      textY: {
+        update: {
+          delay: 0,
+          duration: updateDuration,
+        },
+      },
+    },
   },
   {
     type: 'rect',
@@ -97,8 +110,7 @@ export default ({mode, variant, sort}: Partial<LayerRectOptions>) => [
       decimalPlace: 1,
     },
     style: {
-      labelPosition:
-        mode === 'group' ? (variant === 'column' ? 'top-outer' : 'right-outer') : 'center',
+      labelPosition: mode === 'group' ? (variant === 'column' ? 'top' : 'right') : 'center',
       rect: {
         mapping: (elData) => {
           if (elData.source.value > 900) {
@@ -129,7 +141,7 @@ export default ({mode, variant, sort}: Partial<LayerRectOptions>) => [
         },
         update: {
           delay: 0,
-          duration: 200,
+          duration: updateDuration,
         },
         // loop: {
         //   type: 'scan',
@@ -138,6 +150,12 @@ export default ({mode, variant, sort}: Partial<LayerRectOptions>) => [
         //   color: 'rgba(255,255,255,1)',
         //   direction: type === 'bar' ? 'right' : 'top',
         // },
+      },
+      text: {
+        update: {
+          delay: 0,
+          duration: updateDuration,
+        },
       },
     },
     event: {
