@@ -52,8 +52,8 @@ export class AnimationZoom extends AnimationBase<Options> {
         this.start()
 
         targets.forEach((target) => {
-          target.scaleX = 0
-          target.scaleY = 0
+          target.scaleX = start
+          target.scaleY = start
           target.animate(
             {
               scaleX: end,
