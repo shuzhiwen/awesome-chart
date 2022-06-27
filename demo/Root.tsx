@@ -7,6 +7,12 @@ import {tip} from './schema/base'
 import {Menu} from './TabMenu'
 import {debugDynamicRectLayer} from './debug'
 
+window.AWESOME_CHART = {
+  __env: {
+    mode: 'development',
+  },
+}
+
 export function Root() {
   const {schema} = schemaMenu.children[0].children[0],
     debuggers = [debugDynamicRectLayer],

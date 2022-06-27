@@ -1,8 +1,6 @@
-import {__env} from '../env'
-
-const isDebug = __env.mode === 'development'
-
 export function createLog(key: string) {
+  const isDebug = window.AWESOME_CHART?.__env.mode === 'development'
+
   return {
     info(message: string, ...data: any[]) {
       console.info(`${key}: ${message}\n`, ...data)

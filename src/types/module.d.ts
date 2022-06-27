@@ -7,3 +7,11 @@ declare module '*.png' {
   const image: string
   export default image
 }
+
+interface Window {
+  AWESOME_CHART?: {
+    __env: {
+      mode: 'development' | 'production'
+    }
+  }
+}
