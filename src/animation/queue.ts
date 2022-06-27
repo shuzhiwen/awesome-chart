@@ -59,22 +59,29 @@ export class AnimationQueue extends AnimationBase<Options> {
 
     // group animations by priority config
     const groupedQueue: Shape[][] = range(0, max(finalPriority)!).map(() => [])
+
     finalPriority.forEach((priority, animationIndex) => {
       groupedQueue[priority].push(this.queue[animationIndex])
     })
 
     groupedQueue.reduce((previousAnimations, currentAnimations, priority) => {
       currentAnimations.forEach((animation) => {
-        const mapToState = (state: string) => ({id: animation.options.id, priority, state})
-        const [startState, processState, endState] = ['start', 'process', 'end'].map(mapToState)
+        const [startState, processState, endState] = ['start', 'process', 'end'].map(
+          (state: string) => ({id: animation.options.id, priority, state})
+        )
 
         animation.event.on('start', () => this.process(startState))
         animation.event.on('process', (data: any) => this.process({...processState, data}))
         animation.event.on('end', () => this.process(endState))
       })
 
-      if (priority === Math.max(...finalPriority)) bind(currentAnimations, () => this.end())
-      bind(previousAnimations, () => currentAnimations.forEach((instance) => instance.play()))
+      if (priority === Math.max(...finalPriority)) {
+        bind(currentAnimations, () => this.end())
+      }
+
+      bind(previousAnimations, () => {
+        currentAnimations.forEach((instance) => instance.play())
+      })
 
       return currentAnimations
     })
@@ -117,15 +124,12 @@ export class AnimationQueue extends AnimationBase<Options> {
     if (!this.isConnected && this.queue.length > 1) {
       this.connect()
     }
-    this.queue[0].play()
+    this.queue.at(0)?.play()
   }
 
   end() {
     if (this.isAnimationAvailable && this.options.loop && this.queue.length > 1) {
-      this.queue.forEach((instance) => {
-        instance.destroy()
-        instance.init()
-      })
+      this.queue.forEach((instance) => instance.destroy())
       this.play()
     }
   }
