@@ -74,7 +74,6 @@ export function drawPolygon({
       } as IPolylineOptions)
       container.addWithUpdate(polygon)
     })
-    container.canvas?.requestRenderAll()
   }
 
   return configuredData

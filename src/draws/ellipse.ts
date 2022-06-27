@@ -81,7 +81,6 @@ export function drawEllipse({
       } as IEllipseOptions)
       container.addWithUpdate(ellipse)
     })
-    container.canvas?.requestRenderAll()
   }
 
   return configuredData

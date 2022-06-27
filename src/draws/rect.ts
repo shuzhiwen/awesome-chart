@@ -86,7 +86,6 @@ export function drawRect({
       } as IRectOptions)
       container.addWithUpdate(rect)
     })
-    container.canvas?.requestRenderAll()
   }
 
   return configuredData

@@ -106,7 +106,6 @@ export function drawText({
       text.rotate(config.rotation)
       container.addWithUpdate(text)
     })
-    container.canvas?.requestRenderAll()
   }
 
   return configuredData

@@ -74,7 +74,6 @@ export function drawLine({
       } as ILineOptions)
       container.addWithUpdate(line)
     })
-    container.canvas?.requestRenderAll()
   }
 
   return configuredData

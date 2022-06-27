@@ -79,7 +79,6 @@ export function drawPath({
       path.top = path.top ? path.top + config.centerY : config.centerY
       container.addWithUpdate(path)
     })
-    container.canvas?.requestRenderAll()
   }
 
   return configuredData
