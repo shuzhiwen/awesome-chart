@@ -317,6 +317,10 @@ export abstract class LayerBase<T extends LayerOptions> {
       backupTarget[i] = cloneDeep(groupData)
     })
 
+    if (isCanvasContainer(this.root)) {
+      this.root.canvas?.requestRenderAll()
+    }
+
     this.bindEvent(sublayer)
     this.createAnimation(sublayer)
   }
