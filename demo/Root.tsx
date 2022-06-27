@@ -5,7 +5,12 @@ import {Editor} from './Editor'
 import {Chart} from './Chart'
 import {tip} from './schema/base'
 import {Menu} from './TabMenu'
-import {debugDynamicRectLayer} from './debug'
+import {
+  debugDashboardLayer,
+  debugFlopperLayer,
+  debugODLineLayer,
+  debugTableListLayer,
+} from './debug'
 
 window.AWESOME_CHART = {
   __env: {
@@ -15,9 +20,15 @@ window.AWESOME_CHART = {
 
 export function Root() {
   const {schema} = schemaMenu.children[0].children[0],
-    debuggers = [debugDynamicRectLayer],
     [newSchema, setNewSchema] = useState(schema),
-    onChange = useCallback((value) => setNewSchema(value), [])
+    onChange = useCallback((value) => setNewSchema(value), []),
+    debuggers = [
+      debugTableListLayer('arc'),
+      debugTableListLayer('line'),
+      debugDashboardLayer,
+      debugFlopperLayer,
+      debugODLineLayer,
+    ]
 
   return (
     <div className={styles.container}>

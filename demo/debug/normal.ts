@@ -21,9 +21,3 @@ export const debugTableListLayer = (type: TableListLayerType) => (chart: Chart) 
   chart.bindCoordinate({redraw: true})
   layers.length && console.info('Random TableList Data', data)
 }
-
-export const debugTableListLayers = [
-  debugTableListLayer('arc'),
-  debugTableListLayer('line'),
-  debugTableListLayer('rect'),
-]

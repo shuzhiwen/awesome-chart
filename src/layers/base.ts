@@ -289,6 +289,7 @@ export abstract class LayerBase<T extends LayerOptions> {
         }
       })
 
+      renderOrderCache.clear()
       data = orderedGroupData.filter(Boolean)
       data.forEach((item, i) => {
         if (item.source?.at(0)?.dimension) {
