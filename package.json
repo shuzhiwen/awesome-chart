@@ -1,8 +1,10 @@
 {
   "name": "awesome-chart",
   "version": "0.0.0",
+  "description": "A lightweight 2d chart library",
   "typings": "dist/index.d.ts",
   "main": "dist/main.min.js",
+  "license": "MIT",
   "files": [
     "dist"
   ],
