@@ -53,6 +53,13 @@ export interface BasicDrawerProps<T> {
   container: DrawerTarget
 }
 
+export type TextDrawerProps = TextStyleShape &
+  BasicDrawerProps<{
+    value: string
+    x: number
+    y: number
+  }>
+
 export type GraphDrawerProps<T> = GraphStyleShape & BasicDrawerProps<T>
 
 export type ArcDrawerProps = GraphDrawerProps<{
@@ -122,11 +129,3 @@ export type RectDrawerProps = GraphDrawerProps<{
   rx?: number
   ry?: number
 }>
-
-export interface TextDrawerProps
-  extends TextStyleShape,
-    BasicDrawerProps<{
-      value: string
-      x: number
-      y: number
-    }> {}

@@ -1,15 +1,15 @@
-export interface LayoutArea {
+export type LayoutArea = Readonly<{
   top: number
   right: number
   bottom: number
   left: number
   width: number
   height: number
-}
+}>
 
 export interface LayoutShape extends Record<string, LayoutArea> {
-  main: LayoutArea
-  container: LayoutArea
+  readonly main: LayoutArea
+  readonly container: LayoutArea
 }
 
 export interface LayoutCreator {
