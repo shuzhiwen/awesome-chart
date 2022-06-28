@@ -12,7 +12,7 @@ import sankey from './relation/sankey'
 import tree from './relation/tree'
 import treemap from './relation/treemap'
 import pack from './relation/pack'
-import candle from './normal/candle'
+import candle from './combine/candle'
 
 export interface MenuItemShape {
   name: string

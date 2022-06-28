@@ -1,7 +1,7 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {createScale, createStyle, validateAndCreateData} from '../helpers'
-import {LayerRect} from './rect'
+import {LayerRect} from '../normal'
 import {
   ChartContext,
   LayerCandleStyleShape,

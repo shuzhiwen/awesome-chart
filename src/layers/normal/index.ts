@@ -1,5 +1,4 @@
 export * from './arc'
-export * from './candle'
 export * from './line'
 export * from './matrix'
 export * from './radar'
