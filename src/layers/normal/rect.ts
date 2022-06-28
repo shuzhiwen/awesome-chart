@@ -3,7 +3,6 @@ import {DataTableList} from '../../data'
 import {scaleBand, scaleLinear} from '../../scales'
 import {ColorMatrix, formatNumber, isRealNumber, swap} from '../../utils'
 import {cloneDeep, isArray} from 'lodash'
-import {sum} from 'd3'
 import {
   createColorMatrix,
   createScale,
@@ -57,7 +56,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   private rectData: (DrawerDataShape<RectDrawerProps> & {
     value: number
     source: ElSourceShape
-    color: string
+    color?: string
   })[][] = []
 
   private backgroundData: DrawerDataShape<RectDrawerProps>[] = []
@@ -95,17 +94,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
         return data.select(data.headers.slice(0, 2)) ?? null
       }
 
-      const {rawTableList, headers} = data
-
-      if (sort === 'asc') {
-        rawTableList.sort((a, b) => sum(a.slice(1) as number[]) - sum(b.slice(1) as number[]))
-        rawTableList.unshift(headers)
-        return new DataTableList(rawTableList)
-      } else if (sort === 'desc') {
-        rawTableList.sort((a, b) => sum(b.slice(1) as number[]) - sum(a.slice(1) as number[]))
-        rawTableList.unshift(headers)
-        return new DataTableList(rawTableList)
-      }
+      sort && data.sort({mode: sort, targets: 'groupWeight'})
 
       return data
     })
@@ -138,12 +127,11 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       this.rectData = rawTableList.map(([dimension, ...values]) =>
         values.map((value, i) => ({
           value: Number(value),
+          source: {dimension, category: headers[i + 1], value},
           x: layout.left + (scaleX(dimension as string) || 0),
           y: layout.top + (value > 0 ? scaleY(value as number) : scaleY(0)),
           width: scaleX.bandwidth(),
           height: Math.abs(scaleY(value as number) - scaleY(0)),
-          source: {dimension, category: headers[i + 1], value},
-          color: '#000',
         }))
       )
       this.backgroundData = rawTableList.map(([dimension]) => ({
@@ -159,12 +147,11 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       this.rectData = rawTableList.map(([dimension, ...values]) =>
         values.map((value, i) => ({
           value: Number(value),
+          source: {dimension, category: headers[i + 1], value},
           y: layout.top + (scaleY(dimension as string) || 0),
           x: layout.left + (value < 0 ? scaleX(value as number) : scaleX(0)),
           width: Math.abs(scaleX(value as number) - scaleX(0)),
           height: scaleY.bandwidth(),
-          source: {dimension, category: headers[i + 1], value},
-          color: '#000',
         }))
       )
       this.backgroundData = rawTableList.map(([dimension]) => ({
@@ -175,7 +162,9 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       }))
     }
 
-    this.rectData = this.rectData.map((group) => group.filter(({value}) => isRealNumber(value)))
+    this.rectData = this.rectData.map((group) => {
+      return group.filter(({value}) => isRealNumber(value))
+    })
 
     if (this.rectData[0]?.length > 1 && mode !== 'interval') {
       colorMatrix = createColorMatrix({
@@ -211,7 +200,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       this.transformWaterfall()
     }
 
-    this.sortRectData()
+    this.sortRectDataInGroup()
     this.transformFixed()
     this.createRectLabel()
 
@@ -228,7 +217,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
     }
   }
 
-  private sortRectData() {
+  private sortRectDataInGroup() {
     const {sort, variant} = this.options,
       target = variant === 'column' ? 'x' : 'y'
 
@@ -528,7 +517,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       source: group.map((item) => item.source),
       transformOrigin: variant === 'column' ? 'bottom' : 'left',
       ...this.style.rect,
-      fill: group.map(({color}) => color),
+      fill: group.map(({color}) => color ?? 'black'),
     }))
     const background = this.backgroundData.map((group) => ({
       data: [group],

@@ -78,7 +78,10 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
   }
 
   setData(data: LayerCandle['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data)
+    this._data = validateAndCreateData('tableList', this.data, data, (tableList) => {
+      tableList?.sort({mode: 'asc', targets: 'dimension', variant: 'date'})
+      return tableList
+    })
 
     if (!this.data) return
 

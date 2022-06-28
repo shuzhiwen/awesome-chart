@@ -149,4 +149,27 @@ export class DataTableList extends DataBase<RawTableList, Options> {
       Number(max(this._data.map(({list, max: value}) => max([value, max(list)])))),
     ]
   }
+
+  sort(options: {mode: 'asc' | 'desc'; targets: 'dimension' | 'groupWeight'; variant?: 'date'}) {
+    const {rawTableList} = this,
+      {mode, targets, variant} = options,
+      getValue = (value: Meta) => (variant === 'date' ? new Date(value).getTime() : value)
+
+    if (targets === 'groupWeight') {
+      if (mode === 'asc') {
+        rawTableList.sort((a, b) => sum(a.slice(1)) - sum(b.slice(1)))
+      } else if (mode === 'desc') {
+        rawTableList.sort((a, b) => sum(b.slice(1)) - sum(a.slice(1)))
+      }
+    } else if (targets === 'dimension') {
+      if (mode === 'asc') {
+        rawTableList.sort((a, b) => (getValue(a[0]) > getValue(b[0]) ? 1 : -1))
+      } else if (mode === 'desc') {
+        rawTableList.sort((a, b) => (getValue(b[0]) > getValue(a[0]) ? 1 : -1))
+      }
+    }
+
+    this._data = []
+    this.update(rawTableList)
+  }
 }
