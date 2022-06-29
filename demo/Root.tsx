@@ -7,6 +7,7 @@ import {tip} from './schema/base'
 import {Menu} from './TabMenu'
 import {
   debugDashboardLayer,
+  debugDynamicRectLayer,
   debugFlopperLayer,
   debugODLineLayer,
   debugTableListLayer,
@@ -25,6 +26,8 @@ export function Root() {
     debuggers = [
       debugTableListLayer('arc'),
       debugTableListLayer('line'),
+      debugTableListLayer('rect'),
+      debugDynamicRectLayer,
       debugDashboardLayer,
       debugFlopperLayer,
       debugODLineLayer,

@@ -2,6 +2,7 @@
 import {Chart} from '../../src/chart'
 import {DataTableList} from '../../src/data'
 import data from '../../assets/covid19.json'
+import {LayerRect} from '../../src/layers'
 
 const rawTableLists = data.map((group) =>
   ([['country', 'count']] as Meta[][]).concat(
@@ -33,7 +34,7 @@ const rawTableLists2 = [
 ]
 
 export const debugDynamicRectLayer = (chart: Chart) => {
-  const layers = chart.getLayersByType('rect')
+  const layers = chart.getLayersByType('rect').filter((item) => (item as LayerRect).options.sort)
 
   rawTableLists.forEach((data, i) => {
     setTimeout(() => {

@@ -61,14 +61,14 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
       this.lineLayer.destroy()
     })
 
-    this.rectLayer = createSublayer({
+    this.lineLayer = createSublayer({
       id: uuid(),
       layout,
       type: 'rect',
       mode: 'interval',
       variant: 'column',
     }) as LayerRect
-    this.lineLayer = createSublayer({
+    this.rectLayer = createSublayer({
       id: uuid(),
       layout,
       type: 'rect',
@@ -124,8 +124,8 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
   }
 
   draw() {
-    this.rectLayer.draw()
     this.lineLayer.draw()
+    this.rectLayer.draw()
   }
 
   setVisible(visible: boolean, sublayer?: string) {

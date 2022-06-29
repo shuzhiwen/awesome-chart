@@ -151,7 +151,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
   }
 
   sort(options: {mode: 'asc' | 'desc'; targets: 'dimension' | 'groupWeight'; variant?: 'date'}) {
-    const {rawTableList} = this,
+    const {rawTableList, headers} = this,
       {mode, targets, variant} = options,
       getValue = (value: Meta) => (variant === 'date' ? new Date(value).getTime() : value)
 
@@ -170,6 +170,6 @@ export class DataTableList extends DataBase<RawTableList, Options> {
     }
 
     this._data = []
-    this.update(rawTableList)
+    this.update([headers].concat(rawTableList))
   }
 }
