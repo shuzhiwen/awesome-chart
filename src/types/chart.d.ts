@@ -1,11 +1,11 @@
 import {Chart} from '../chart'
 import {ElConfigShape} from './draw'
-import {BackupDataShape, LayerOptions, LayerScalesShape, LayerType} from './layer'
 import {LayoutCreator} from './layout'
 import {DataShape} from './data'
 import {RandomOptions} from './utils'
 import {ScaleNiceShape} from './scale'
 import {getEasyGradientCreator} from '../utils'
+import {LayerOptions, LayerScalesShape, LayerType} from './layer'
 
 export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
 
@@ -36,17 +36,12 @@ export interface TooltipOptions {
   mode?: 'single' | 'dimension' | 'category'
   pointSize?: number
   titleSize?: number
-  titleColor?: string
   labelSize?: number
-  labelColor?: string
   valueSize?: number
-  valueColor?: string
+  textColor?: string
   backgroundColor?: string
-  render?: (
-    container: HTMLElement,
-    data: Partial<ElConfigShape>,
-    backup: BackupDataShape<AnyObject>
-  ) => void
+  setTooltipData?: (data: TooltipDataShape, options: TooltipOptions) => TooltipDataShape
+  render?: (container: HTMLElement, data: Partial<ElConfigShape>) => void
 }
 
 export interface ChartProps {

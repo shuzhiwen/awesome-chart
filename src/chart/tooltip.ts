@@ -1,6 +1,6 @@
 import {select} from 'd3'
 import {createLog, getAttr, group, ungroup} from '../utils'
-import {isEqual, merge, isFunction} from 'lodash'
+import {isEqual, merge, isNil} from 'lodash'
 import {
   ElConfigShape,
   D3Selection,
@@ -14,11 +14,9 @@ const defaultOptions = {
   mode: 'single',
   pointSize: 10,
   titleSize: 14,
-  titleColor: '#383d41',
   labelSize: 12,
-  labelColor: '#383d41',
   valueSize: 12,
-  valueColor: '#383d41',
+  textColor: '#383d41',
   backgroundColor: '#c3c4c5',
 } as Required<TooltipOptions>
 
@@ -65,7 +63,7 @@ export class Tooltip {
     this.instance?.style('display', 'none')
   }
 
-  setOptions(options: TooltipOptions) {
+  setOptions(options: Partial<TooltipOptions>) {
     this.options = merge({}, this.options, options)
   }
 
@@ -122,19 +120,17 @@ export class Tooltip {
   }
 
   update<T>({data, backup = {}}: {data: Partial<ElConfigShape>; backup?: BackupDataShape<T>}) {
-    if (!data) {
-      this.instance.html('')
+    if (!isNil(this.options.render)) {
+      this.options.render(this.instance.node(), data)
       return
     }
 
-    if (isFunction(this.options.render)) {
-      this.options.render(this.instance.node(), data, backup)
-      return
-    }
+    const {titleSize, pointSize, labelSize, valueSize, textColor, setTooltipData} = this.options
+    let tooltipData = this.getListData(data, backup)
 
-    const tooltipData = this.getListData(data, backup)
-    const {titleSize, titleColor, pointSize, labelSize, labelColor, valueSize, valueColor} =
-      this.options
+    if (setTooltipData) {
+      tooltipData = setTooltipData(tooltipData, this.options)
+    }
 
     if (tooltipData && !isEqual(this.data, tooltipData)) {
       this.data = tooltipData
@@ -145,7 +141,7 @@ export class Tooltip {
         .attr('class', 'tooltip-title')
         .style('display', (d) => (d ? 'block' : 'none'))
         .style('font-size', `${titleSize}px`)
-        .style('color', titleColor)
+        .style('color', textColor)
         .style('position', 'relative')
         .text((d) => d!)
       const container = this.instance
@@ -186,14 +182,14 @@ export class Tooltip {
         .append('span')
         .style('white-space', 'nowrap')
         .style('font-size', `${labelSize}px`)
-        .style('color', labelColor)
+        .style('color', textColor)
         .text((d) => d.label ?? '')
       rows
         .append('span')
         .style('white-space', 'nowrap')
         .style('font-weight', 'bold')
         .style('font-size', `${valueSize}px`)
-        .style('color', valueColor)
+        .style('color', textColor)
         .text((d) => d.value ?? '')
     }
   }
