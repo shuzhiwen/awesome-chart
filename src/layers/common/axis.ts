@@ -300,9 +300,13 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   }
 
   private reduceScaleXTextNumber() {
-    const {width} = this.options.layout,
+    const {width, left, right} = this.options.layout,
       {maxScaleXTextNumber = Infinity} = this.style
     let totalTextWidth = sum(this.textData.textX.map(({textWidth}) => textWidth))
+
+    this.textData.textX = this.textData.textX.filter(
+      ({x, textWidth}) => x + textWidth > left && x < right
+    )
 
     if (maxScaleXTextNumber === 'auto') {
       while (totalTextWidth > width && this.textData.textX.length > 1) {
