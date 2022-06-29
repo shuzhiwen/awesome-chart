@@ -40,11 +40,14 @@ export function drawEllipse({
     transformOrigin: getAttr(transformOrigin, i, `${item.cx} ${item.cy}`),
     source: getAttr(source, i, {}),
   }))
+  const mappedData = configuredData.map((datum) => {
+    return mapping(datum) as typeof datum
+  })
 
   if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
-      .data(configuredData.map(mapping) as typeof configuredData)
+      .data(mappedData)
       .join('ellipse')
       .attr('class', (d) => d.className)
       .transition()
@@ -66,7 +69,7 @@ export function drawEllipse({
 
   if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
-    configuredData.forEach((config) => {
+    mappedData.forEach((config) => {
       const ellipse = new fabric.Ellipse({
         className: config.className,
         rx: config.rx,
@@ -82,6 +85,4 @@ export function drawEllipse({
       container.addWithUpdate(ellipse)
     })
   }
-
-  return configuredData
 }

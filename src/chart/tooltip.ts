@@ -1,7 +1,13 @@
 import {select} from 'd3'
 import {createLog, getAttr, group, ungroup} from '../utils'
-import {isEqual, isArray, merge, isFunction} from 'lodash'
-import {ElConfigShape, D3Selection, BackupDataShape, TooltipOptions} from '../types'
+import {isEqual, merge, isFunction} from 'lodash'
+import {
+  ElConfigShape,
+  D3Selection,
+  BackupDataShape,
+  TooltipOptions,
+  TooltipDataShape,
+} from '../types'
 
 const defaultOptions = {
   container: null,
@@ -23,18 +29,14 @@ export class Tooltip {
 
   private options = defaultOptions
 
-  private _data: Maybe<any> = null
+  private data: Maybe<any> = null
 
   public isVisible = false
 
   public isAvailable = false
 
-  get data() {
-    return this._data
-  }
-
   constructor(options: TooltipOptions) {
-    this.options = merge({}, defaultOptions, options)
+    this.setOptions(options)
     const {container, backgroundColor} = this.options
     this.instance = select(container)
       .append('div')
@@ -63,40 +65,56 @@ export class Tooltip {
     this.instance?.style('display', 'none')
   }
 
-  private getListData<T>(data: Partial<ElConfigShape>, backup: BackupDataShape<T>) {
+  setOptions(options: TooltipOptions) {
+    this.options = merge({}, this.options, options)
+  }
+
+  private getListData<T>(
+    data: Partial<ElConfigShape>,
+    backup: BackupDataShape<T>
+  ): TooltipDataShape {
     try {
       if (this.options.mode === 'single') {
-        const {fill, stroke, source} = data,
-          pointColor = ungroup(fill) || ungroup(stroke) || '#000'
+        const {fill, stroke, source = {}} = data,
+          color = fill || stroke || '#000'
 
-        return group(source).map((item) => ({pointColor, ...item}))
+        return {
+          title: ungroup(source)?.dimension ?? '',
+          list: group(source).map(({value, category: label}) => ({color, label, value})),
+        }
       }
 
       if (this.options.mode === 'dimension') {
         const {dimension} = getAttr(data.source, 0, {}),
-          elType = data.className?.split('-').at(-1) ?? '',
-          groups = backup[elType].filter(({source}) => source?.[0].dimension === dimension),
+          sublayer = data.className?.split('-').at(-1) ?? '',
+          groups = backup[sublayer].filter(({source}) => source?.at(0)?.dimension === dimension),
           {source, fill, stroke} = groups[0]
 
-        return source?.map((item, i) => ({
-          pointColor: getAttr(fill, i, null) || getAttr(stroke, i, null) || '#000',
-          ...item,
-        }))
+        return {
+          title: dimension ?? '',
+          list: (source ?? []).map((item, i) => ({
+            color: getAttr(fill, i, null) || getAttr(stroke, i, null) || '#000',
+            label: item.category,
+            value: item.value,
+          })),
+        }
       }
 
       if (this.options.mode === 'category') {
         const {category} = getAttr(data.source, 0, {}),
-          elType = data.className?.split('-').at(-1) ?? '',
-          groups = backup[elType]
-            .map(({source}) => source?.filter((item) => item.category === category))
-            .reduce((prev, cur) => [...prev!, ...cur!], [])
+          sublayer = data.className?.split('-').at(-1) ?? '',
+          groups = backup[sublayer]
+            .map(({source}) => source?.filter((item) => item.category === category) ?? [])
+            .reduce((prev, cur) => [...prev, ...cur], [])
 
-        return groups?.map((item, i) => ({
-          ...item,
-          pointColor: getAttr(data.fill, i, null) || getAttr(data.stroke, i, null) || '#000',
-          category: item.dimension,
-          dimension: item.category,
-        }))
+        return {
+          title: groups.at(0)?.category ?? '',
+          list: groups.map((item, i) => ({
+            color: getAttr(data.fill, i, null) || getAttr(data.stroke, i, null) || '#000',
+            label: item.dimension,
+            value: item.value,
+          })),
+        }
       }
     } catch (error) {
       this.log.warn(`The layer does not support ${this.options.mode} mode`, error)
@@ -114,15 +132,15 @@ export class Tooltip {
       return
     }
 
-    const list = this.getListData(data, backup)
+    const tooltipData = this.getListData(data, backup)
     const {titleSize, titleColor, pointSize, labelSize, labelColor, valueSize, valueColor} =
       this.options
 
-    if (isArray(list) && !isEqual(this.data, list)) {
-      this._data = list
+    if (tooltipData && !isEqual(this.data, tooltipData)) {
+      this.data = tooltipData
       this.instance
         .selectAll('.tooltip-title')
-        .data([list[0]?.dimension])
+        .data([tooltipData.title])
         .join('div')
         .attr('class', 'tooltip-title')
         .style('display', (d) => (d ? 'block' : 'none'))
@@ -143,7 +161,7 @@ export class Tooltip {
       container.selectAll('div').remove()
       const rows = container
         .selectAll('div')
-        .data(list)
+        .data(tooltipData.list)
         .join('div')
         .style('display', 'flex')
         .style('flex-direction', 'row')
@@ -163,26 +181,26 @@ export class Tooltip {
         .style('height', `${pointSize}px`)
         .style('border-radius', '100%')
         .style('margin-right', '5px')
-        .style('background-color', (d) => d.pointColor)
+        .style('background-color', (d) => d.color ?? '')
       pointWidthLabel
         .append('span')
         .style('white-space', 'nowrap')
         .style('font-size', `${labelSize}px`)
         .style('color', labelColor)
-        .text((d) => d.category!)
+        .text((d) => d.label ?? '')
       rows
         .append('span')
         .style('white-space', 'nowrap')
         .style('font-weight', 'bold')
         .style('font-size', `${valueSize}px`)
         .style('color', valueColor)
-        .text((d) => d.value!)
+        .text((d) => d.value ?? '')
     }
   }
 
   move({pageX, pageY}: MouseEvent) {
-    const drift = 10
     const rect = this.instance.node().getBoundingClientRect()
+    const drift = 10
 
     if (pageX + rect.width > document.body.clientWidth) {
       pageX -= rect.width + drift
@@ -200,7 +218,7 @@ export class Tooltip {
 
   destroy() {
     this.hide()
-    this._data = null
+    this.data = null
     this.isAvailable = false
     this.instance.remove()
   }

@@ -15,8 +15,6 @@ export type ElEvent = MouseEvent | IEvent<MouseEvent>
 
 export type ElEventType = 'click' | 'mouseover' | 'mouseout' | 'mousemove' | 'mouseup' | 'mousedown'
 
-export type ElConfigShape = ArrayItem<ReturnType<Values<typeof drawerMapping>>>
-
 export type CurveType =
   | 'curveLinear'
   | 'curveNatural'
@@ -51,6 +49,17 @@ export interface BasicDrawerProps<T> {
   source?: DrawerDataParameter<ElSourceShape>
   className: string
   container: DrawerTarget
+}
+
+export type ElConfigShape = {
+  className: string
+  fill: string
+  stroke: string
+  opacity: number
+  fillOpacity: number
+  strokeOpacity: number
+  strokeWidth: number
+  source: MaybeGroup<ElSourceShape>
 }
 
 export type TextDrawerProps = TextStyleShape &

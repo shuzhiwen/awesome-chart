@@ -42,11 +42,14 @@ export function drawPath({
     source: getAttr(source, i, {}),
     transformOrigin: getAttr(transformOrigin, i, ''),
   }))
+  const mappedData = configuredData.map((datum) => {
+    return mapping(datum) as typeof datum
+  })
 
   if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
-      .data(configuredData.map(mapping) as typeof configuredData)
+      .data(mappedData)
       .join('path')
       .attr('class', (d) => d.className)
       .transition()
@@ -66,7 +69,7 @@ export function drawPath({
 
   if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
-    configuredData.forEach((config) => {
+    mappedData.forEach((config) => {
       const path = new fabric.Path(config.path, {
         className: config.className,
         fill: mergeAlpha(config.fill, config.fillOpacity),
@@ -80,6 +83,4 @@ export function drawPath({
       container.addWithUpdate(path)
     })
   }
-
-  return configuredData
 }

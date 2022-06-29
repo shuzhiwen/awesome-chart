@@ -21,11 +21,14 @@ export function drawImage({
     opacity: getAttr(opacity, i, 1),
     source: getAttr(source, i, {}),
   }))
+  const mappedData = configuredData.map((datum) => {
+    return mapping(datum as any) as typeof datum
+  })
 
   if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
-      .data(configuredData.map(mapping) as typeof configuredData)
+      .data(mappedData)
       .join('image')
       .attr('class', (d) => d.className)
       .transition()
@@ -42,7 +45,7 @@ export function drawImage({
 
   if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
-    configuredData.forEach((config) => {
+    mappedData.forEach((config) => {
       fabric.Image.fromURL(
         config.url,
         (image) => {
@@ -61,6 +64,4 @@ export function drawImage({
       )
     })
   }
-
-  return configuredData
 }

@@ -41,11 +41,14 @@ export function drawRect({
     source: getAttr(source, i, {}),
     transformOrigin: getTransformOrigin(item, getAttr(transformOrigin, i, '')),
   }))
+  const mappedData = configuredData.map((datum) => {
+    return mapping(datum) as typeof datum
+  })
 
   if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
-      .data(configuredData.map(mapping) as typeof configuredData)
+      .data(mappedData)
       .join('rect')
       .attr('class', (d) => d.className)
       .transition()
@@ -69,7 +72,7 @@ export function drawRect({
 
   if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
-    configuredData.forEach((config) => {
+    mappedData.forEach((config) => {
       const rect = new fabric.Rect({
         className: config.className,
         top: config.y,
@@ -87,8 +90,6 @@ export function drawRect({
       container.addWithUpdate(rect)
     })
   }
-
-  return configuredData
 }
 
 const getTransformOrigin = (

@@ -52,11 +52,14 @@ export function drawText({
     writingMode: getAttr(writingMode, i, 'horizontal-tb'),
     textDecoration: getAttr(textDecoration, i, 'none'),
   }))
+  const mappedData = configuredData.map((datum) => {
+    return mapping(datum as any) as typeof datum
+  })
 
   if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
-      .data(configuredData.map(mapping) as typeof configuredData)
+      .data(mappedData)
       .join('text')
       .text((d) => d.value)
       .attr('class', (d) => d.className)
@@ -86,7 +89,7 @@ export function drawText({
 
   if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
-    configuredData.forEach((config) => {
+    mappedData.forEach((config) => {
       const text = new fabric.Text(config.value, {
         className: config.className,
         left: config.x,
@@ -107,6 +110,4 @@ export function drawText({
       container.addWithUpdate(text)
     })
   }
-
-  return configuredData
 }

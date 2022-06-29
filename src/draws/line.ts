@@ -36,11 +36,14 @@ export function drawLine({
     strokeDasharray: getAttr(strokeDasharray, i, ''),
     source: getAttr(source, i, {}),
   }))
+  const mappedData = configuredData.map((datum) => {
+    return mapping(datum as any) as typeof datum
+  })
 
   if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
-      .data(configuredData.map(mapping) as typeof configuredData)
+      .data(mappedData)
       .join('line')
       .attr('class', (d) => d.className)
       .transition()
@@ -61,7 +64,7 @@ export function drawLine({
 
   if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
-    configuredData.forEach((config) => {
+    mappedData.forEach((config) => {
       const y1 = config.y1 - config.strokeWidth / 2
       const y2 = config.y2 - config.strokeWidth / 2
       const line = new fabric.Line([config.x1, y1, config.x2, y2], {
@@ -75,6 +78,4 @@ export function drawLine({
       container.addWithUpdate(line)
     })
   }
-
-  return configuredData
 }

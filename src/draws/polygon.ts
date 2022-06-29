@@ -40,11 +40,14 @@ export function drawPolygon({
     pointString: points.reduce((prev, cur) => `${prev} ${cur.x},${cur.y}`, ''),
     transformOrigin: `${centerX}px ${centerY}px`,
   }))
+  const mappedData = configuredData.map((datum) => {
+    return mapping(datum) as typeof datum
+  })
 
   if (isSvgContainer(container)) {
     container
       .selectAll(`.${className}`)
-      .data(configuredData.map(mapping) as typeof configuredData)
+      .data(mappedData)
       .join('polygon')
       .attr('class', (d) => d.className)
       .transition()
@@ -63,7 +66,7 @@ export function drawPolygon({
 
   if (isCanvasContainer(container)) {
     container.remove(...container.getObjects())
-    configuredData.forEach((config) => {
+    mappedData.forEach((config) => {
       const polygon = new fabric.Polygon(config.points, {
         className: config.className,
         fill: mergeAlpha(config.fill, config.fillOpacity),
@@ -75,6 +78,4 @@ export function drawPolygon({
       container.addWithUpdate(polygon)
     })
   }
-
-  return configuredData
 }

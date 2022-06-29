@@ -22,6 +22,15 @@ export interface ChartContext {
   createGradient: ReturnType<typeof getEasyGradientCreator>
 }
 
+export type TooltipDataShape = Maybe<{
+  title: Meta
+  list: Partial<{
+    label?: Meta
+    value?: Meta
+    color?: string
+  }>[]
+}>
+
 export interface TooltipOptions {
   container: HTMLElement | null
   mode?: 'single' | 'dimension' | 'category'
