@@ -4,6 +4,20 @@ export type DataType = keyof typeof dataMapping
 
 export type DataShape = DataBase<any> | DataTableList | DataTable | DataRelation
 
+export type DataBaseOptions = Partial<{
+  skip: Meta[]
+  order: AnyObject
+}>
+
+export type TableListOptions = Partial<{
+  target: 'row' | 'column'
+  mode: 'sum' | 'percentage' | 'copy'
+}>
+
+export type TableOptions = Partial<{
+  target: 'row' | 'column'
+}>
+
 export type RawTableList = Meta[][]
 
 export type RawTable = [Meta[], Meta[], RawTableList]
@@ -40,14 +54,3 @@ export interface RelationDataShape {
   nodes: Node[]
   edges: Edge[]
 }
-
-export interface TableListOptions {
-  mode?: 'sum' | 'percentage' | 'copy'
-  target?: 'row' | 'column'
-}
-
-export interface TableOptions {
-  target?: 'row' | 'column'
-}
-
-export type RelationOptions = UnknownObject

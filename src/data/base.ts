@@ -1,15 +1,15 @@
+import {merge} from 'lodash'
+import {DataBaseOptions} from '../types'
 import {createLog} from '../utils'
 
-export class DataBase<T, P extends AnyObject = AnyObject> {
+export class DataBase<T, P extends DataBaseOptions = DataBaseOptions> {
   readonly log = createLog(this.constructor.name)
 
   private readonly _storage: UnknownObject
 
   private readonly _source: T
 
-  private readonly _options: P & {
-    order?: AnyObject
-  }
+  private readonly _options: P
 
   get source() {
     return this._source
@@ -27,8 +27,8 @@ export class DataBase<T, P extends AnyObject = AnyObject> {
     this._storage[key] = value
   }
 
-  constructor(source: T, options: P = {} as any) {
-    this._options = {...options}
+  constructor(source: T, options?: P) {
+    this._options = merge({}, this.options, options)
     this._source = source
     this._storage = {}
   }

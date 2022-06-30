@@ -1,10 +1,10 @@
 import {cloneDeep, sum, min, max} from 'lodash'
 import {isTableList, transpose} from '../utils'
 import {DataBase} from './base'
-import {RawTableList, TableListDataShape as Shape, TableListOptions as Options} from '../types'
+import {DataBaseOptions, RawTableList, TableListDataShape, TableListOptions} from '../types'
 
-export class DataTableList extends DataBase<RawTableList, Options> {
-  private _data: Shape = []
+export class DataTableList extends DataBase<RawTableList> {
+  private _data: TableListDataShape = []
 
   get headers() {
     return this._data.map(({header}) => header)
@@ -18,9 +18,9 @@ export class DataTableList extends DataBase<RawTableList, Options> {
     return transpose(this.lists)
   }
 
-  constructor(data: RawTableList, options: Options = {}) {
+  constructor(data: RawTableList, options: DataBaseOptions) {
     super(data, options)
-    this.update(data, options)
+    this.update(data)
   }
 
   filterRows(rows: number[]) {
@@ -34,8 +34,8 @@ export class DataTableList extends DataBase<RawTableList, Options> {
     return result
   }
 
-  select(headers: MaybeGroup<Meta>, options: Options = {}): DataTableList {
-    const {mode = 'copy', target = 'row'} = options,
+  select(headers: MaybeGroup<Meta>, options?: TableListOptions): DataTableList {
+    const {mode = 'copy', target = 'row'} = options || {},
       headerArray = Array.isArray(headers) ? headers : [headers]
     let data = cloneDeep(this._data.filter(({header}) => headerArray.includes(header)))
 
@@ -113,7 +113,7 @@ export class DataTableList extends DataBase<RawTableList, Options> {
   }
 
   remove(headers: MaybeGroup<string>) {
-    const removedList: Shape[] = [],
+    const removedList: TableListDataShape[] = [],
       headerArray = Array.isArray(headers) ? headers : [headers]
 
     headerArray.forEach((header) => {

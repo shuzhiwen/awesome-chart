@@ -1,16 +1,10 @@
 import {DataBase} from './base'
 import {merge, max, sum} from 'lodash'
 import {isRelation, formatNumber, tableListToObjects} from '../utils'
-import {
-  RelationDataShape as Shape,
-  RelationOptions as Options,
-  RawRelation,
-  Node,
-  Edge,
-} from '../types'
+import {RelationDataShape, RawRelation, Node, Edge} from '../types'
 
-export class DataRelation extends DataBase<RawRelation, Options> {
-  private _data: Shape = {nodes: [], edges: [], roots: []}
+export class DataRelation extends DataBase<RawRelation> {
+  private _data: RelationDataShape = {nodes: [], edges: [], roots: []}
 
   get nodes() {
     return this._data.nodes
@@ -24,8 +18,8 @@ export class DataRelation extends DataBase<RawRelation, Options> {
     return this._data.roots
   }
 
-  constructor(source: RawRelation, options: Options = {}) {
-    super(source, options)
+  constructor(source: RawRelation) {
+    super(source)
     this.update(source)
   }
 
@@ -36,6 +30,7 @@ export class DataRelation extends DataBase<RawRelation, Options> {
     }
 
     const [nodeTableList, edgeTableList] = relation
+
     this._data.nodes = tableListToObjects(nodeTableList) as Node[]
     this._data.edges = tableListToObjects(edgeTableList) as Edge[]
     this.nodes.forEach((node) => merge(node, {children: [], parents: []}))

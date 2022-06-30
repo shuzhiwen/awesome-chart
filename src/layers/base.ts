@@ -302,6 +302,10 @@ export abstract class LayerBase<T extends LayerOptions> {
     data.forEach((groupData, i) => {
       if (isEqual(backupTarget[i], groupData)) return
 
+      groupData.source = groupData.source?.filter(({category}) => {
+        return category && !this.data?.options.skip?.includes(category)
+      })
+
       const groupClassName = `${sublayerClassName}-${i}`,
         groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),
         options: GraphDrawerProps<any> = {

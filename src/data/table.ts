@@ -1,10 +1,10 @@
-import {RawTable, TableDataShape as Shape, TableOptions as Options} from '../types'
+import {RawTable, TableDataShape, TableOptions} from '../types'
 import {cloneDeep, min, max, isArray} from 'lodash'
 import {isTable} from '../utils'
 import {DataBase} from './base'
 
-export class DataTable extends DataBase<RawTable, Options> {
-  private _data: Shape = [[], [], []]
+export class DataTable extends DataBase<RawTable> {
+  private _data: TableDataShape = [[], [], []]
 
   get rows() {
     return this._data[0]
@@ -18,12 +18,12 @@ export class DataTable extends DataBase<RawTable, Options> {
     return this._data[2]
   }
 
-  constructor(data: RawTable, options: Options = {}) {
-    super(data, options)
+  constructor(data: RawTable) {
+    super(data)
     this.update(data)
   }
 
-  select(rows: Meta[], columns: Meta[], options: Options = {}) {
+  select(rows: Meta[], columns: Meta[]) {
     const _rows = isArray(rows) ? rows : [rows],
       _columns = isArray(columns) ? columns : [columns],
       data: RawTable = [_rows, _columns, []],
@@ -38,7 +38,7 @@ export class DataTable extends DataBase<RawTable, Options> {
       data[2].push(row)
     }
 
-    const result = new DataTable([[], [], []], options)
+    const result = new DataTable([[], [], []])
     result._data = cloneDeep(data)
     return result
   }
@@ -52,7 +52,7 @@ export class DataTable extends DataBase<RawTable, Options> {
     this._data = table
   }
 
-  push(target: Options['target'] = 'row', ...data: Meta[][]) {
+  push(target: TableOptions['target'] = 'row', ...data: Meta[][]) {
     data.forEach((item) => {
       if (
         (target === 'row' && item.length !== this.rows.length) ||
@@ -73,7 +73,7 @@ export class DataTable extends DataBase<RawTable, Options> {
     })
   }
 
-  remove(target: Options['target'] = 'row', ...data: Meta[]) {
+  remove(target: TableOptions['target'] = 'row', ...data: Meta[]) {
     const removedList: Meta[][] = []
     data.forEach((dimension) => {
       if (target === 'row') {

@@ -39,7 +39,8 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
   private pointData: (DrawerDataShape<CircleDrawerProps> & {
     value: Meta
     color: string
-    source: ElSourceShape
+    category: Meta
+    source: ElSourceShape[]
   })[][] = []
 
   get scale() {
@@ -135,7 +136,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
       filter: 'column',
       legends: this.pointData.map((group, i) => ({
         shape: 'circle',
-        label: group.at(0)?.source.category ?? '',
+        label: group.at(0)?.category ?? '',
         color: colorMatrix.get(0, i),
       })),
     }
