@@ -46,12 +46,12 @@ export interface ElSourceShape extends AnyObject {
 
 export interface BasicDrawerProps<T> {
   data: DrawerDataParameter<T>
-  source?: DrawerDataParameter<ElSourceShape>
+  source?: DrawerDataParameter<ElSourceShape | ElSourceShape[]>
   className: string
   container: DrawerTarget
 }
 
-export type ElConfigShape = {
+export interface ElConfigShape {
   className: string
   fill: string
   stroke: string

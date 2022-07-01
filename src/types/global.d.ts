@@ -12,6 +12,8 @@ type Maybe<T> = T | null | undefined
 
 type MaybeGroup<T> = T | T[] | null | undefined
 
+type Ungroup<T> = T extends Array<infer F> ? Ungroup<F> : T
+
 type Padding = [number, number, number, number]
 
 type ArrayItem<T> = T extends Array<infer U> ? U : T

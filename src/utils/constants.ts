@@ -1,8 +1,9 @@
 export const tooltipEvents = new Set(['mouseover', 'mouseout', 'mousemove'] as const)
 
-export const disableEventDrawerType = new Set(['text', 'line', 'area'] as const)
+export const disableEventDrawerType = new Set(['text', 'line', 'area'])
 
 export const dependantLayers = new Set([
+  'axis',
   'heatmap',
   'odLine',
   'mark',
@@ -10,7 +11,7 @@ export const dependantLayers = new Set([
   'legend',
   'brush',
   'interactive',
-] as const)
+])
 
 export const animationLifeCycles = new Set([
   'init',

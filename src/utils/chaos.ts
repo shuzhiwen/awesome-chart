@@ -14,8 +14,8 @@ export function group<T>(input: MaybeGroup<T>) {
   return isNil(input) ? [] : isArray(input) ? input : [input]
 }
 
-export function ungroup<T>(input: MaybeGroup<T>): Maybe<T> {
-  return !isArray(input) ? input : input.length ? ungroup(input[0]) : null
+export function ungroup<T>(input: T): Ungroup<T> {
+  return !isArray(input) ? input : ungroup(input.at(0))
 }
 
 export function getTextWidth(text: Meta, fontSize: number | string = 12) {
@@ -125,18 +125,27 @@ export function flatDrawerConfig<T extends string, P>(
   ) as FlatObject<Record<T, P>>
 }
 
-export function swap(a: any, b: any, key1?: Meta, key2?: Meta) {
-  if (!key1) {
-    ;[a, b] = [b, a]
-    return
-  } else if (!key2) {
-    key2 = key1
-  }
-
+export function swap(a: any, b: any, key1: Meta, key2: Meta = key1) {
   if (
     (isArray(a) && isArray(b) && isNumber(key1) && isNumber(key2)) ||
     (typeof a === 'object' && typeof b === 'object')
   ) {
     ;[a[key1], b[key2]] = [b[key2], a[key1]]
+  } else {
+    ;[a, b] = [b, a]
+  }
+}
+
+export function errorCatcher(
+  fn: AnyFunction,
+  thisArg: unknown,
+  onError: (error: Error) => unknown
+) {
+  return (...args: any) => {
+    try {
+      return fn.call(thisArg, ...args)
+    } catch (error) {
+      onError(error as Error)
+    }
   }
 }

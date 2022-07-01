@@ -96,7 +96,7 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
 
     this.root
       .selectAll('.chart-brush')
-      .data([null as any])
+      .data([null])
       .join('g')
       .attr('class', 'chart-brush')
       .call(this.brush as any)
@@ -150,11 +150,11 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
         offsetFactor = (selection[0] - (direction === 'horizontal' ? left : top)) / total,
         offset = offsetFactor * (relativeEnd - start)
 
-      // consider boundary
       if (name === 'scaleColor') {
         const relativeColorEnd = start + (end - start) / zoomFactor - Number.MIN_VALUE
         const colorOffset = offsetFactor * (end - start)
 
+        // boundary
         scale.range(
           colors.map((color: string, i: number) =>
             i >= start + colorOffset && i <= relativeColorEnd + colorOffset ? color : '#00000000'

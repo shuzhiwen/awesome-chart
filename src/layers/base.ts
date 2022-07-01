@@ -11,6 +11,7 @@ import {
   createLog,
   createEvent,
   disableEventDrawerType,
+  ungroup,
 } from '../utils'
 import {
   BackupDataShape,
@@ -52,6 +53,12 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   readonly options: T & ChartContext
 
+  readonly backupData: BackupDataShape<AnyObject> = {}
+
+  private backupAnimation: BackupAnimationShape = {timer: {}}
+
+  private backupEvent: AnyObject = {}
+
   protected root: DrawerTarget
 
   protected readonly sublayers
@@ -59,12 +66,6 @@ export abstract class LayerBase<T extends LayerOptions> {
   protected readonly tooltipTargets
 
   protected needRecalculated = false
-
-  private backupData: BackupDataShape<AnyObject> = {}
-
-  private backupEvent: AnyObject = {}
-
-  private backupAnimation: BackupAnimationShape = {timer: {}}
 
   constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<T>) {
     this.options = merge(options, context)
@@ -82,20 +83,15 @@ export abstract class LayerBase<T extends LayerOptions> {
       getMouseEvent = (event: ElEvent): MouseEvent =>
         event instanceof MouseEvent ? event : event.e,
       getData = (event: ElEvent, data?: ElConfigShape): ElConfigShape =>
-        event instanceof MouseEvent ? data : ((event.subTargets?.[0] || event.target) as any)
+        event instanceof MouseEvent ? data : ((event.subTargets?.at(0) || event.target) as any)
 
     this.backupEvent = {
       common: {},
       tooltip: {
         mouseout: () => tooltip.hide(),
-        mousemove: (event: ElEvent) => {
-          tooltip.move(getMouseEvent(event))
-        },
+        mousemove: (event: ElEvent) => tooltip.move(getMouseEvent(event)),
         mouseover: (event: ElEvent, data?: ElConfigShape) => {
-          tooltip.update({
-            backup: this.backupData,
-            data: getData(event, data),
-          })
+          tooltip.update({data: getData(event, data)})
           tooltip.show(getMouseEvent(event))
         },
       },
@@ -252,7 +248,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     }
 
     const backupTarget = this.backupData[sublayer],
-      evented = !disableEventDrawerType.has(type as any),
+      evented = !disableEventDrawerType.has(type),
       sublayerClassName = `${this.className}-${sublayer}`,
       sublayerContainer =
         selector.getSubcontainer(this.root, sublayerClassName) ||
@@ -273,13 +269,13 @@ export abstract class LayerBase<T extends LayerOptions> {
     if (!backupTarget.renderOrderCache) {
       backupTarget.renderOrderCache = new Map(
         data
-          .filter((item) => item.source?.at(0)?.dimension)
-          .map((item, i) => [item.source?.at(0)?.dimension as Meta, i])
+          .filter((item) => ungroup(item.source?.at(0))?.dimension)
+          .map((item, i) => [ungroup(item.source?.at(0))?.dimension as Meta, i])
       )
     } else {
       const {renderOrderCache} = backupTarget,
         orderedGroupData = new Array(data.length),
-        curRenderOrder = data.map((item) => item.source?.at(0)?.dimension ?? '')
+        curRenderOrder = data.map((item) => ungroup(item.source?.at(0))?.dimension ?? '')
 
       curRenderOrder.forEach((dimension, i) => {
         if (renderOrderCache?.has(dimension)) {
@@ -292,8 +288,8 @@ export abstract class LayerBase<T extends LayerOptions> {
       renderOrderCache.clear()
       data = orderedGroupData.filter(Boolean)
       data.forEach((item, i) => {
-        if (item.source?.at(0)?.dimension) {
-          renderOrderCache.set(item.source?.at(0)?.dimension as Meta, i)
+        if (ungroup(item.source?.at(0))?.dimension) {
+          renderOrderCache.set(ungroup(item.source?.at(0))?.dimension as Meta, i)
         }
       })
     }
@@ -301,10 +297,6 @@ export abstract class LayerBase<T extends LayerOptions> {
     backupTarget.length = data.length
     data.forEach((groupData, i) => {
       if (isEqual(backupTarget[i], groupData)) return
-
-      groupData.source = groupData.source?.filter(({category}) => {
-        return category && !this.data?.options.skip?.includes(category)
-      })
 
       const groupClassName = `${sublayerClassName}-${i}`,
         groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),

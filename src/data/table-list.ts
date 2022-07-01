@@ -18,7 +18,7 @@ export class DataTableList extends DataBase<RawTableList> {
     return transpose(this.lists)
   }
 
-  constructor(data: RawTableList, options: DataBaseOptions) {
+  constructor(data: RawTableList, options?: DataBaseOptions) {
     super(data, options)
     this.update(data)
   }

@@ -5,7 +5,7 @@ import {DataShape} from './data'
 import {RandomOptions} from './utils'
 import {ScaleNiceShape} from './scale'
 import {getEasyGradientCreator} from '../utils'
-import {LayerOptions, LayerScalesShape, LayerType} from './layer'
+import {BackupDataItemShape, LayerOptions, LayerScalesShape, LayerType} from './layer'
 
 export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
 
@@ -40,8 +40,9 @@ export interface TooltipOptions {
   valueSize?: number
   textColor?: string
   backgroundColor?: string
-  setTooltipData?: (data: TooltipDataShape, options: TooltipOptions) => TooltipDataShape
   render?: (container: HTMLElement, data: Partial<ElConfigShape>) => void
+  setTooltipData?: (data: TooltipDataShape, options: TooltipOptions) => TooltipDataShape
+  getLayersBackupData?: () => BackupDataItemShape<unknown>
 }
 
 export interface ChartProps {

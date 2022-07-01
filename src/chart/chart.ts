@@ -15,6 +15,7 @@ import {
   isLayerBasemap,
   isLayerBrush,
   dependantLayers,
+  noChange,
   uuid,
 } from '../utils'
 import {
@@ -55,9 +56,7 @@ export class Chart {
 
   readonly engine: Engine
 
-  readonly root: (D3Selection | Canvas) & {
-    defs?: AnyObject
-  }
+  readonly root: D3Selection | Canvas
 
   readonly theme: string[]
 
@@ -108,7 +107,6 @@ export class Chart {
         .style('position', 'absolute')
       this.defs = []
       this.root = new fabric.Canvas(canvas.node(), {selection: false, hoverCursor: 'pointer'})
-      this.root.defs = this.defs
       this.root.on('mouse:move', ({e: event}) => this.event.fire('MouseEvent', {event}))
     } else {
       this.root = d3Container
@@ -123,6 +121,8 @@ export class Chart {
 
     createDefs({schema: defineSchema, container: this.defs})
 
+    this.state = 'initialize'
+    this.event.fire(this.state)
     this._layout = layoutCreator({
       containerWidth: this.containerWidth,
       containerHeight: this.containerHeight,
@@ -131,9 +131,11 @@ export class Chart {
     this.tooltip = new Tooltip({
       ...tooltipOptions,
       container: tooltipOptions?.container ?? this.container,
+      getLayersBackupData: () =>
+        this._layers
+          .filter(({options}) => options.type !== 'axis')
+          .flatMap((layer) => Object.values(layer.backupData).flatMap(noChange)),
     })
-    this.state = 'initialize'
-    this.event.fire(this.state)
   }
 
   setPadding(padding?: Padding, creator: LayoutCreator = defaultLayoutCreator) {
@@ -145,7 +147,7 @@ export class Chart {
     })
   }
 
-  createLayer(options: LayerOptions, sublayer: false = false) {
+  createLayer(options: LayerOptions) {
     const context: ChartContext = {
       root: this.root,
       event: this.event,
@@ -156,7 +158,9 @@ export class Chart {
       containerHeight: this.containerHeight,
       bindCoordinate: this.bindCoordinate.bind(this),
       createGradient: getEasyGradientCreator({container: this.defs}),
-      createSublayer: (options: LayerOptions) => this.createLayer(options, true as false),
+      createSublayer: (options: LayerOptions) => {
+        return this.createLayer({...options, sublayer: true})
+      },
     }
 
     if (isNil(options.id)) {
@@ -166,7 +170,7 @@ export class Chart {
       this.log.error(`Duplicate layer id "${options.id}"`)
     }
 
-    const layer = new layerMapping[options.type]({...options, sublayer} as any, context)
+    const layer = new layerMapping[options.type](options as never, context)
 
     this._layers.push(layer)
     this.state = 'ready'
@@ -204,7 +208,7 @@ export class Chart {
       axisLayer = this.layers.find((layer) => isLayerAxis(layer)) as Maybe<LayerAxis>,
       brushLayer = this.layers.find((layer) => isLayerBrush(layer)),
       interactiveLayer = this.layers.find((layer) => isLayerInteractive(layer)),
-      layers = this.layers.filter(({options: {type}}) => !dependantLayers.has(type as any)),
+      layers = this.layers.filter(({options: {type}}) => !dependantLayers.has(type)),
       coordinate = axisLayer?.options.coordinate
 
     axisLayer?.clearScale()
@@ -238,21 +242,20 @@ export class Chart {
     this.layers.forEach((layer) => {
       if (layer.options.id === trigger?.options.id) return
 
-      const {scaleY, scaleYR, ...rest} = {...layer.scale, ...axisLayer?.scale},
-        {axis} = layer.options
+      const {scaleY, scaleYR, ...rest} = {...layer.scale, ...axisLayer?.scale}
 
-      layer.setScale({...rest, scaleY: axis === 'minor' ? scaleYR : scaleY})
+      layer.setScale({...rest, scaleY: layer.options.axis === 'minor' ? scaleYR : scaleY})
       redraw && layer.draw()
     })
   }
 
   draw() {
-    this.layers.find(({options: {type}}) => type === 'axis')?.draw()
+    this.getLayersByType('axis').at(0)?.draw()
     this.layers
-      .filter(({options: {type}}) => !dependantLayers.has(type as any))
+      .filter(({options: {type}}) => !dependantLayers.has(type))
       .map((layer) => layer.draw())
     dependantLayers.forEach((name) => {
-      this.getLayersByType(name).forEach((layer) => layer.draw())
+      name !== 'axis' && this.getLayersByType(name as LayerType).forEach((layer) => layer.draw())
     })
   }
 

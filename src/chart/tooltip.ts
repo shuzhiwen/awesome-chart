@@ -1,13 +1,7 @@
 import {select} from 'd3'
-import {createLog, getAttr, group, ungroup} from '../utils'
+import {errorCatcher, createLog, getAttr, group, ungroup} from '../utils'
 import {isEqual, merge, isNil} from 'lodash'
-import {
-  ElConfigShape,
-  D3Selection,
-  BackupDataShape,
-  TooltipOptions,
-  TooltipDataShape,
-} from '../types'
+import {ElConfigShape, D3Selection, TooltipOptions, TooltipDataShape} from '../types'
 
 const defaultOptions = {
   container: null,
@@ -35,7 +29,7 @@ export class Tooltip {
 
   constructor(options: TooltipOptions) {
     this.setOptions(options)
-    const {container, backgroundColor} = this.options
+    const {container, backgroundColor, mode} = this.options
     this.instance = select(container)
       .append('div')
       .attr('class', 'tooltip')
@@ -50,6 +44,9 @@ export class Tooltip {
       .style('z-index', 999999)
       .style('left', 0)
       .style('top', 0)
+    this.getListData = errorCatcher(this.getListData, this, (error) => {
+      this.log.warn(`The layer does not support ${mode} mode`, error)
+    })
   }
 
   show(event: MouseEvent) {
@@ -67,66 +64,60 @@ export class Tooltip {
     this.options = merge({}, this.options, options)
   }
 
-  private getListData<T>(
-    data: Partial<ElConfigShape>,
-    backup: BackupDataShape<T>
-  ): TooltipDataShape {
-    try {
-      if (this.options.mode === 'single') {
-        const {fill, stroke, source = {}} = data,
-          color = fill || stroke || '#000'
+  private getListData(data: Partial<ElConfigShape>): TooltipDataShape {
+    const {dimension, category} = getAttr(data.source, 0, {}),
+      backups = this.options.getLayersBackupData()
+    let title: NonNullable<TooltipDataShape>['title'] = ''
+    let list: NonNullable<TooltipDataShape>['list'] = []
 
-        return {
-          title: ungroup(source)?.dimension ?? '',
-          list: group(source).map(({value, category: label}) => ({color, label, value})),
-        }
-      }
-
-      if (this.options.mode === 'dimension') {
-        const {dimension} = getAttr(data.source, 0, {}),
-          sublayer = data.className?.split('-').at(-1) ?? '',
-          groups = backup[sublayer].filter(({source}) => source?.at(0)?.dimension === dimension),
-          {source, fill, stroke} = groups[0]
-
-        return {
-          title: dimension ?? '',
-          list: (source ?? []).map((item, i) => ({
-            color: getAttr(fill, i, null) || getAttr(stroke, i, null) || '#000',
-            label: item.category,
-            value: item.value,
-          })),
-        }
-      }
-
-      if (this.options.mode === 'category') {
-        const {category} = getAttr(data.source, 0, {}),
-          sublayer = data.className?.split('-').at(-1) ?? '',
-          groups = backup[sublayer]
-            .map(({source}) => source?.filter((item) => item.category === category) ?? [])
-            .reduce((prev, cur) => [...prev, ...cur], [])
-
-        return {
-          title: groups.at(0)?.category ?? '',
-          list: groups.map((item, i) => ({
-            color: getAttr(data.fill, i, null) || getAttr(data.stroke, i, null) || '#000',
-            label: item.dimension,
-            value: item.value,
-          })),
-        }
-      }
-    } catch (error) {
-      this.log.warn(`The layer does not support ${this.options.mode} mode`, error)
+    if (this.options.mode === 'single') {
+      title = ungroup(data.source)?.dimension ?? ''
+      list = group(data.source).map(({value, category: label}) => ({
+        color: data.fill || data.stroke || '#000',
+        label,
+        value,
+      }))
     }
+
+    if (this.options.mode === 'dimension') {
+      title = dimension ?? ''
+      list = backups
+        .filter(({source}) => ungroup(source)?.dimension === dimension)
+        .flatMap(
+          ({source, fill, stroke}) =>
+            source?.flatMap((item, i) =>
+              group(item).map(({category, value}) => ({
+                color: getAttr(fill, i, null) || getAttr(stroke, i, null) || '#000',
+                label: category,
+                value,
+              }))
+            ) ?? []
+        )
+    }
+
+    if (this.options.mode === 'category') {
+      const groups = backups.flatMap(
+        ({source}) => source?.filter((item) => ungroup(item)?.category === category) ?? []
+      )
+      title = ungroup(groups)?.category ?? ''
+      list = groups.map((item, i) => ({
+        color: getAttr(data.fill, i, null) || getAttr(data.stroke, i, null) || '#000',
+        label: ungroup(item)?.dimension,
+        value: ungroup(item)?.value,
+      }))
+    }
+
+    return {title, list}
   }
 
-  update<T>({data, backup = {}}: {data: Partial<ElConfigShape>; backup?: BackupDataShape<T>}) {
+  update({data}: {data: Partial<ElConfigShape>}) {
     if (!isNil(this.options.render)) {
       this.options.render(this.instance.node(), data)
       return
     }
 
     const {titleSize, pointSize, labelSize, valueSize, textColor, setTooltipData} = this.options
-    let tooltipData = this.getListData(data, backup)
+    let tooltipData = this.getListData(data)
 
     if (setTooltipData) {
       tooltipData = setTooltipData(tooltipData, this.options)
