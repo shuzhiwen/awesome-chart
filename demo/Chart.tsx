@@ -6,7 +6,7 @@ import styles from './Chart.module.css'
 import {cloneDeep} from 'lodash'
 
 export const Chart = (props: {
-  debuggers: MenuItemShape['debuggers']
+  debuggers: AnyFunction[]
   schema: MenuItemShape['schema'] & AnyObject
 }) => {
   const {debuggers, schema: _schema} = props,

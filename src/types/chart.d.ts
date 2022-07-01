@@ -1,4 +1,4 @@
-import {Chart} from '../chart'
+import {Chart} from '../core'
 import {ElConfigShape} from './draw'
 import {LayoutCreator} from './layout'
 import {DataShape} from './data'

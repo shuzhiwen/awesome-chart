@@ -1,5 +1,5 @@
 export * from './animation'
-export * from './chart'
+export * from './core'
 export * from './data'
 export * from './draws'
 export * from './layers'
