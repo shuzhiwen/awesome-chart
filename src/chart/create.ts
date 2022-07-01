@@ -11,6 +11,7 @@ import {
   randomTable,
   isLayerLegend,
   isLayerAxis,
+  errorCatcher,
 } from '../utils'
 
 const log = createLog('CreateChart')
@@ -47,8 +48,8 @@ export const createLayer = (chart: Chart, schema: CreateLayerSchema) => {
   return layer
 }
 
-export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => {
-  try {
+export const createChart = errorCatcher(
+  (schema: CreateChartSchema, existedChart?: Chart) => {
     const {layers = [], ...initialConfig} = schema,
       chart = existedChart ?? new Chart(initialConfig),
       axisLayerConfig = layers.find(({type}) => type === 'axis'),
@@ -66,11 +67,11 @@ export const createChart = (schema: CreateChartSchema, existedChart?: Chart) => 
     axisLayerConfig && chart.bindCoordinate({redraw: false})
     chart.draw()
 
-    // TODO: throw and give control to users
-    setTimeout(() => chart.layers.map((instance) => instance?.playAnimation()))
+    chart.layers.map((instance) => instance?.playAnimation())
 
     return chart
-  } catch (error) {
+  },
+  (error) => {
     log.error('Chart initialization failed', error)
   }
-}
+)

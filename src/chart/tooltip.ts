@@ -29,7 +29,9 @@ export class Tooltip {
 
   constructor(options: TooltipOptions) {
     this.setOptions(options)
+
     const {container, backgroundColor, mode} = this.options
+
     this.instance = select(container)
       .append('div')
       .attr('class', 'tooltip')
@@ -44,9 +46,14 @@ export class Tooltip {
       .style('z-index', 999999)
       .style('left', 0)
       .style('top', 0)
-    this.getListData = errorCatcher(this.getListData, this, (error) => {
+
+    this.getListData = errorCatcher(this.getListData.bind(this), (error) => {
       this.log.warn(`The layer does not support ${mode} mode`, error)
     })
+  }
+
+  setOptions(options: Partial<TooltipOptions>) {
+    this.options = merge({}, this.options, options)
   }
 
   show(event: MouseEvent) {
@@ -58,10 +65,6 @@ export class Tooltip {
   hide() {
     this.isVisible = false
     this.instance?.style('display', 'none')
-  }
-
-  setOptions(options: Partial<TooltipOptions>) {
-    this.options = merge({}, this.options, options)
   }
 
   private getListData(data: Partial<ElConfigShape>): TooltipDataShape {
@@ -102,9 +105,9 @@ export class Tooltip {
     }
 
     if (this.options.mode === 'category' && category) {
-      const groups = backups.flatMap(
-        ({source}) => source?.filter((item) => ungroup(item)?.category === category) ?? []
-      )
+      const groups = backups.flatMap(({source}) => {
+        return source?.filter((item) => ungroup(item)?.category === category) ?? []
+      })
 
       return {
         title: ungroup(groups)?.category ?? '',

@@ -136,14 +136,10 @@ export function swap(a: any, b: any, key1: Meta, key2: Meta = key1) {
   }
 }
 
-export function errorCatcher(
-  fn: AnyFunction,
-  thisArg: unknown,
-  onError: (error: Error) => unknown
-) {
+export function errorCatcher(fn: AnyFunction, onError: (error: Error) => unknown) {
   return (...args: any) => {
     try {
-      return fn.call(thisArg, ...args)
+      return fn.call(null, ...args)
     } catch (error) {
       onError(error as Error)
     }
