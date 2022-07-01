@@ -11,7 +11,6 @@ import {
   isLayerAxis,
   createDefs,
   getEasyGradientCreator,
-  isLayerInteractive,
   isLayerBasemap,
   isLayerBrush,
   dependantLayers,
@@ -24,7 +23,6 @@ import {
   ChartState,
   LayoutCreator,
   ChartProps,
-  LayerSchema,
   ChartContext,
   GradientCreatorProps,
   LayerOptions,
@@ -132,9 +130,9 @@ export class Chart {
       ...tooltipOptions,
       container: tooltipOptions?.container ?? this.container,
       getLayersBackupData: () =>
-        this._layers
-          .filter(({options}) => options.type !== 'axis')
-          .flatMap((layer) => Object.values(layer.backupData).flatMap(noChange)),
+        this._layers.flatMap(({tooltipTargets, backupData}) =>
+          tooltipTargets.map((sublayer) => backupData[sublayer]).flatMap(noChange)
+        ),
     })
   }
 
@@ -179,10 +177,6 @@ export class Chart {
     return layer
   }
 
-  setVisible(id: string, visible: boolean) {
-    this.getLayerById(id)?.setVisible(visible)
-  }
-
   getLayerById(id: string) {
     return this.layers.find(({options}) => options.id === id)
   }
@@ -191,27 +185,16 @@ export class Chart {
     return this.layers.filter(({options}) => options.type === type)
   }
 
-  updateLayer(id: string, {data, scale, style, animation}: LayerSchema) {
-    const layer = this.getLayerById(id)
-
-    if (layer) {
-      !isNil(data) && layer.setData(data)
-      !isNil(scale) && layer.setScale(scale)
-      !isNil(style) && layer.setStyle(style)
-      !isNil(animation) && layer.setAnimation(animation)
-      layer.draw()
-    }
-  }
-
   bindCoordinate(props: {trigger?: Layer; redraw?: boolean}) {
     const {trigger, redraw} = props,
       axisLayer = this.layers.find((layer) => isLayerAxis(layer)) as Maybe<LayerAxis>,
       brushLayer = this.layers.find((layer) => isLayerBrush(layer)),
-      interactiveLayer = this.layers.find((layer) => isLayerInteractive(layer)),
       layers = this.layers.filter(({options: {type}}) => !dependantLayers.has(type)),
       coordinate = axisLayer?.options.coordinate
 
-    axisLayer?.clearScale()
+    if (!axisLayer) throw new Error('There is no axis layer')
+
+    axisLayer.clearScale()
 
     layers.concat(brushLayer ? [brushLayer] : []).forEach((layer) => {
       const {scale, options} = layer,
@@ -233,19 +216,18 @@ export class Chart {
         mergedScales.scaleY = scaleY
       }
 
-      axisLayer?.setScale(mergedScales as LayerAxisScaleShape)
+      axisLayer.setScale(mergedScales as LayerAxisScaleShape)
     })
 
-    axisLayer?.niceScale()
-    interactiveLayer?.setScale(axisLayer?.scale)
+    axisLayer.niceScale()
 
     this.layers.forEach((layer) => {
-      if (layer.options.id === trigger?.options.id) return
+      const {scaleY, scaleYR, ...rest} = {...layer.scale, ...axisLayer.scale}
 
-      const {scaleY, scaleYR, ...rest} = {...layer.scale, ...axisLayer?.scale}
-
-      layer.setScale({...rest, scaleY: layer.options.axis === 'minor' ? scaleYR : scaleY})
-      redraw && layer.draw()
+      if (layer.options.id !== trigger?.options.id) {
+        layer.setScale({...rest, scaleY: layer.options.axis === 'minor' ? scaleYR : scaleY})
+        redraw && layer.draw()
+      }
     })
   }
 

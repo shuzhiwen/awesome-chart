@@ -65,25 +65,30 @@ export class Tooltip {
   }
 
   private getListData(data: Partial<ElConfigShape>): TooltipDataShape {
-    const {dimension, category} = getAttr(data.source, 0, {}),
+    const {mode} = this.options,
+      {dimension, category} = getAttr(data.source, 0, {}),
       backups = this.options.getLayersBackupData()
-    let title: NonNullable<TooltipDataShape>['title'] = ''
-    let list: NonNullable<TooltipDataShape>['list'] = []
 
     if (this.options.mode === 'single') {
-      title = ungroup(data.source)?.dimension ?? ''
-      list = group(data.source).map(({value, category: label}) => ({
-        color: data.fill || data.stroke || '#000',
-        label,
-        value,
-      }))
+      return {
+        title: ungroup(data.source)?.dimension ?? '',
+        list: group(data.source).map(({value, category}) => ({
+          color: data.fill || data.stroke || '#000',
+          label: category,
+          value,
+        })),
+      }
     }
 
+    if ((mode === 'dimension' && !dimension) || (mode === 'category' && !category))
+      throw new Error()
+
     if (this.options.mode === 'dimension') {
-      title = dimension ?? ''
-      list = backups
-        .filter(({source}) => ungroup(source)?.dimension === dimension)
-        .flatMap(
+      const groups = backups.filter(({source}) => ungroup(source)?.dimension === dimension)
+
+      return {
+        title: dimension!,
+        list: groups.flatMap(
           ({source, fill, stroke}) =>
             source?.flatMap((item, i) =>
               group(item).map(({category, value}) => ({
@@ -92,22 +97,24 @@ export class Tooltip {
                 value,
               }))
             ) ?? []
-        )
+        ),
+      }
     }
 
-    if (this.options.mode === 'category') {
+    if (this.options.mode === 'category' && category) {
       const groups = backups.flatMap(
         ({source}) => source?.filter((item) => ungroup(item)?.category === category) ?? []
       )
-      title = ungroup(groups)?.category ?? ''
-      list = groups.map((item, i) => ({
-        color: getAttr(data.fill, i, null) || getAttr(data.stroke, i, null) || '#000',
-        label: ungroup(item)?.dimension,
-        value: ungroup(item)?.value,
-      }))
-    }
 
-    return {title, list}
+      return {
+        title: ungroup(groups)?.category ?? '',
+        list: groups.map((item, i) => ({
+          color: getAttr(data.fill, i, null) || getAttr(data.stroke, i, null) || '#000',
+          label: ungroup(item)?.dimension,
+          value: ungroup(item)?.value,
+        })),
+      }
+    }
   }
 
   update({data}: {data: Partial<ElConfigShape>}) {

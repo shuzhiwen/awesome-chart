@@ -119,8 +119,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     super({
       context,
       options: {...defaultOptions, ...options},
-      tooltipTargets: ['interactive'],
-      sublayers: ['interactive', ...lineKey, ...labelKey, ...titleKey],
+      sublayers: [...lineKey, ...labelKey, ...titleKey],
     })
   }
 

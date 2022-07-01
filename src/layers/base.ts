@@ -45,9 +45,11 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   abstract draw(): void
 
-  readonly className = this.constructor.name
+  readonly sublayers
 
-  readonly log = createLog(this.className)
+  readonly tooltipTargets
+
+  readonly className = this.constructor.name
 
   readonly event = createEvent(this.className)
 
@@ -61,11 +63,9 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   protected root: DrawerTarget
 
-  protected readonly sublayers
-
-  protected readonly tooltipTargets
-
   protected needRecalculated = false
+
+  protected log = createLog(this.className)
 
   constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<T>) {
     this.options = merge(options, context)
@@ -165,7 +165,7 @@ export abstract class LayerBase<T extends LayerOptions> {
         els.on(`${type}.common`, this.backupEvent.common[type][sublayer])
       })
 
-      if (this.tooltipTargets.indexOf(sublayer) !== -1) {
+      if (this.tooltipTargets.includes(sublayer)) {
         tooltipEvents.forEach((type) => {
           els.on(`${type}.tooltip`, null)
           els.on(`${type}.tooltip`, this.backupEvent.tooltip[type])
@@ -183,7 +183,7 @@ export abstract class LayerBase<T extends LayerOptions> {
         })
       })
 
-      if (this.tooltipTargets.indexOf(sublayer) !== -1) {
+      if (this.tooltipTargets.includes(sublayer)) {
         tooltipEvents.forEach((type) =>
           els?.forEach((el) => {
             el.off(type)
