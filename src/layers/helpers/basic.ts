@@ -36,3 +36,7 @@ export function validateAndCreateData<T>(
 export function createStyle<T>(defaultStyle: T, currentStyle: T, incomingStyle: T) {
   return merge({}, defaultStyle, currentStyle, incomingStyle)
 }
+
+export function generateClass(sublayer: string, dot: boolean) {
+  return `${dot ? '.' : ''}chart-basic-${sublayer}`
+}

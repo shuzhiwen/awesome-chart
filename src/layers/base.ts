@@ -1,7 +1,7 @@
 import {cloneDeep, isEqual, merge, noop} from 'lodash'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
-import {selector} from './helpers'
+import {generateClass, selector} from './helpers'
 import {
   commonEvents,
   layerLifeCycles,
@@ -57,9 +57,9 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   readonly backupData: BackupDataShape<AnyObject> = {}
 
-  private backupAnimation: BackupAnimationShape = {timer: {}}
+  private readonly backupAnimation: BackupAnimationShape = {timer: {}}
 
-  private backupEvent: AnyObject = {}
+  private readonly backupEvent: AnyObject = {common: {}, tooltip: {}}
 
   protected root: DrawerTarget
 
@@ -85,15 +85,12 @@ export abstract class LayerBase<T extends LayerOptions> {
       getData = (event: ElEvent, data?: ElConfigShape): ElConfigShape =>
         event instanceof MouseEvent ? data : ((event.subTargets?.at(0) || event.target) as any)
 
-    this.backupEvent = {
-      common: {},
-      tooltip: {
-        mouseout: () => tooltip.hide(),
-        mousemove: (event: ElEvent) => tooltip.move(getMouseEvent(event)),
-        mouseover: (event: ElEvent, data?: ElConfigShape) => {
-          tooltip.update({data: getData(event, data)})
-          tooltip.show(getMouseEvent(event))
-        },
+    this.backupEvent.tooltip = {
+      mouseout: () => tooltip.hide(),
+      mousemove: (event: ElEvent) => tooltip.move(getMouseEvent(event)),
+      mouseover: (event: ElEvent, data?: ElConfigShape) => {
+        tooltip.update({data: getData(event, data)})
+        tooltip.show(getMouseEvent(event))
       },
     }
 
@@ -158,7 +155,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   private bindEvent = (sublayer: string) => {
     if (isSvgContainer(this.root)) {
-      const els = this.root.selectAll(`.chart-basic-${sublayer}`).style('cursor', 'pointer')
+      const els = this.root.selectAll(generateClass(sublayer, true)).style('cursor', 'pointer')
 
       commonEvents.forEach((type) => {
         els.on(`${type}.common`, null)
@@ -174,10 +171,10 @@ export abstract class LayerBase<T extends LayerOptions> {
     }
 
     if (isCanvasContainer(this.root)) {
-      const els = selector.getChildren(this.root, `.chart-basic-${sublayer}`) as FabricObject[]
+      const els = selector.getChildren(this.root, generateClass(sublayer, false)) as FabricObject[]
 
       commonEvents.forEach((type) => {
-        els?.forEach((el) => {
+        els.forEach((el) => {
           el.off(type)
           el.on(type, this.backupEvent.common[type][sublayer])
         })
@@ -185,7 +182,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
       if (this.tooltipTargets.includes(sublayer)) {
         tooltipEvents.forEach((type) =>
-          els?.forEach((el) => {
+          els.forEach((el) => {
             el.off(type)
             el.on(type, this.backupEvent.tooltip[type])
           })
@@ -196,7 +193,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   private createAnimation = (sublayer: string) => {
     const {options} = this.backupAnimation,
-      targets = selector.getChildren(this.root, `chart-basic-${sublayer}`),
+      targets = selector.getChildren(this.root, generateClass(sublayer, false)),
       prefix = `${sublayer}-animation-`
     let isFirstPlay = true
 
@@ -302,7 +299,7 @@ export abstract class LayerBase<T extends LayerOptions> {
         groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),
         options: GraphDrawerProps<any> = {
           ...(groupData.hidden ? {data: []} : groupData),
-          className: `chart-basic-${sublayer}`,
+          className: generateClass(sublayer, false),
           container: groupContainer!,
         }
 

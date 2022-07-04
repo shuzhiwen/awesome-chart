@@ -1,6 +1,6 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {createScale, createStyle, validateAndCreateData} from '../helpers'
+import {createScale, createStyle, generateClass, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
   BackupAnimationOptions,
@@ -26,7 +26,7 @@ const defaultAnimation: BackupAnimationOptions<AnimationPathOptions> = {
   flyingObject: {
     loop: {
       type: 'path',
-      path: '.chart-basic-odLine',
+      path: generateClass('odLine', true),
     },
   },
 }

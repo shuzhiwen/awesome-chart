@@ -1,20 +1,31 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {createScale, createStyle, validateAndCreateData} from '../helpers'
+import {createScale, createStyle, generateClass, selector, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
   LayerInteractiveStyleShape,
   LegendDataShape,
   LayerAxisScaleShape,
   LayerInteractiveOptions,
+  RectDrawerProps,
+  DrawerDataShape,
+  ElSourceShape,
+  FabricObject,
 } from '../../types'
 import {LayerAuxiliary} from './auxiliary'
-import {isScaleBand, isScaleLinear, uuid} from '../../utils'
+import {isScaleBand, isScaleLinear, isSvgContainer, uuid} from '../../utils'
 import {stickyBandScale} from '../helpers/sticky-scale'
+import {select} from 'd3'
+
+const shadowOpacity = 0.1
 
 const defaultStyle: LayerInteractiveStyleShape = {
   line: {
     stroke: 'yellow',
+  },
+  interactive: {
+    opacity: 0,
+    fill: 'yellow',
   },
 }
 
@@ -26,6 +37,14 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
   private _scale: LayerAxisScaleShape = {}
 
   private _style = defaultStyle
+
+  private rectDataX: (DrawerDataShape<RectDrawerProps> & {
+    source: ElSourceShape
+  })[] = []
+
+  private rectDataY: (DrawerDataShape<RectDrawerProps> & {
+    source: ElSourceShape
+  })[] = []
 
   private helperAuxiliary: [LayerAuxiliary, LayerAuxiliary]
 
@@ -42,7 +61,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
   }
 
   constructor(options: LayerInteractiveOptions, context: ChartContext) {
-    super({context, options, sublayers: ['rect']})
+    super({context, options, sublayers: ['rect', 'interactive']})
     const {layout, createSublayer, event} = this.options
 
     this.event.on('destroy', () => {
@@ -136,7 +155,62 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     this.helperAuxiliary.map((layer) => layer.setStyle(this.style))
   }
 
-  update() {}
+  update() {
+    if (!this.scale.scaleX || !this.scale.scaleY) {
+      throw new Error('Invalid scale')
+    }
 
-  draw() {}
+    const {scaleX, scaleY} = this.scale,
+      {width, height, left, top} = this.options.layout
+
+    if (isScaleBand(scaleX)) {
+      this.rectDataX = scaleX.domain().map((domain) => ({
+        x: left + (scaleX(domain) ?? 0),
+        y: top,
+        height,
+        width: scaleX.bandwidth(),
+        source: {dimension: domain},
+      }))
+    }
+
+    if (isScaleBand(scaleY)) {
+      this.rectDataY = scaleY.domain().map((domain) => ({
+        x: left,
+        y: top + (scaleY(domain) ?? 0),
+        width,
+        height: scaleY.bandwidth(),
+        source: {dimension: domain},
+      }))
+    }
+  }
+
+  draw() {
+    const rectData = [...this.rectDataY, ...this.rectDataX].map((data) => ({
+      data: [data],
+      source: [data.source],
+      ...this.style.interactive,
+    }))
+
+    this.drawBasic({type: 'rect', data: rectData, sublayer: 'interactive'})
+    this.event.onWithOff('mouseover-interactive', this.options.id, ({data, event}) => {
+      if (isSvgContainer(this.root)) {
+        this.root.selectAll(generateClass('interactive', true)).attr('opacity', shadowOpacity)
+        select(event.originalTarget).attr('opacity', 1)
+      } else {
+        ;(
+          selector.getChildren(this.root, generateClass('interactive', false)) as FabricObject[]
+        ).forEach((child) => (child.opacity = shadowOpacity))
+        ;(data as FabricObject).opacity = 1
+      }
+    })
+    this.event.onWithOff('mouseout-interactive', this.options.id, () => {
+      if (isSvgContainer(this.root)) {
+        this.root.selectAll(generateClass('interactive', true)).attr('opacity', 0)
+      } else {
+        ;(
+          selector.getChildren(this.root, generateClass('interactive', false)) as FabricObject[]
+        ).forEach((child) => (child.opacity = 0))
+      }
+    })
+  }
 }
