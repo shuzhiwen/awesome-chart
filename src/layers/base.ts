@@ -28,6 +28,7 @@ import {
   LayerOptions,
   ChartContext,
   LayerScalesShape,
+  BackupEventShape,
 } from '../types'
 
 export abstract class LayerBase<T extends LayerOptions> {
@@ -59,7 +60,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   private readonly backupAnimation: BackupAnimationShape = {timer: {}}
 
-  private readonly backupEvent: AnyObject = {common: {}, tooltip: {}}
+  private readonly backupEvent: BackupEventShape = {common: {}, tooltip: {}}
 
   protected root: DrawerTarget
 
