@@ -4,11 +4,11 @@ import {ColorMatrix} from '../../utils'
 import {DrawerTarget, DrawerType, GraphDrawerProps} from '../draw'
 import {AnimationType, BasicAnimationOptions} from '../animation'
 import {RawScale, ScaleNiceShape} from '../scale'
-import {ChartContext} from '../chart'
+import {ChartContext} from '../core'
 
 export type LayerType = keyof typeof layerMapping
 
-export type LegendShape = 'rect' | 'circle' | 'broken-line' | 'dotted-line' | 'star'
+export type LegendShape = 'rect' | 'circle' | 'brokenLine' | 'dottedLine' | 'star'
 
 export type BackupDataItemShape<T> = Omit<GraphDrawerProps<T>, 'className' | 'container'>[] & {
   renderOrderCache?: Map<Meta, number>
@@ -65,15 +65,15 @@ export interface DrawBasicProps<T> {
   sublayer?: string
 }
 
-export interface LayerScalesShape {
-  scaleX?: RawScale
-  scaleY?: RawScale
-  scaleYR?: RawScale
-  scaleAngle?: RawScale
-  scaleRadius?: RawScale
-  scaleColor?: RawScale
-  nice?: ScaleNiceShape
-}
+export type LayerScalesShape = Partial<{
+  scaleX: RawScale
+  scaleY: RawScale
+  scaleYR: RawScale
+  scaleAngle: RawScale
+  scaleRadius: RawScale
+  scaleColor: RawScale
+  nice: ScaleNiceShape
+}>
 
 export interface Layer extends LayerBase<LayerOptions> {
   scale?: Maybe<LayerScalesShape>

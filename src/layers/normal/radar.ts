@@ -169,7 +169,7 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
       filter: 'column',
       legends: headers.slice(1).map((header, i) => ({
         label: header,
-        shape: 'broken-line',
+        shape: 'brokenLine',
         color: colorMatrix.get(0, i),
       })),
     }

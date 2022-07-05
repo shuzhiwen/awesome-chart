@@ -299,7 +299,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
         r: size / 2,
         fill: color,
       })
-    } else if (shape === 'broken-line') {
+    } else if (shape === 'brokenLine') {
       this.lineData.push(
         {
           x1: x - size * 2,
@@ -325,7 +325,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
         stroke: color,
         strokeWidth: size / 5,
       })
-    } else if (shape === 'dotted-line') {
+    } else if (shape === 'dottedLine') {
       this.lineData.push({
         x1: x - size * 2,
         x2: x,

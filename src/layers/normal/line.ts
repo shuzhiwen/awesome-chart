@@ -162,7 +162,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
       filter: 'column',
       legends: this.data.headers.slice(1).map((header, i) => ({
         label: header,
-        shape: 'broken-line',
+        shape: 'brokenLine',
         color: colorMatrix.get(0, i),
       })),
     }

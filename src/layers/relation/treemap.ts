@@ -94,23 +94,23 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
       const fontSize = getAttr(text?.fontSize, i, 12)
 
       if (align === 'start' && verticalAlign === 'start') {
-        ;[nameX, nameY, position] = [x, y, 'right-bottom']
+        ;[nameX, nameY, position] = [x, y, 'rightBottom']
       } else if (align === 'middle' && verticalAlign === 'start') {
         ;[nameX, nameY, position] = [x + width / 2, y, 'bottom']
       } else if (align === 'end' && verticalAlign === 'start') {
-        ;[nameX, nameY, position] = [x + width, y, 'left-bottom']
+        ;[nameX, nameY, position] = [x + width, y, 'leftBottom']
       } else if (align === 'start' && verticalAlign === 'middle') {
-        ;[nameX, nameY, position] = [x, y + height / 2 - labelGap / 2, 'right-top']
+        ;[nameX, nameY, position] = [x, y + height / 2 - labelGap / 2, 'rightTop']
       } else if (align === 'middle' && verticalAlign === 'middle') {
         ;[nameX, nameY, position] = [x + width / 2, y + height / 2 - labelGap / 2, 'top']
       } else if (align === 'end' && verticalAlign === 'middle') {
-        ;[nameX, nameY, position] = [x + width, y + height / 2 - labelGap / 2, 'left-top']
+        ;[nameX, nameY, position] = [x + width, y + height / 2 - labelGap / 2, 'leftTop']
       } else if (align === 'start' && verticalAlign === 'end') {
-        ;[nameX, nameY, position] = [x, y + height - fontSize - labelGap, 'right-top']
+        ;[nameX, nameY, position] = [x, y + height - fontSize - labelGap, 'rightTop']
       } else if (align === 'middle' && verticalAlign === 'end') {
         ;[nameX, nameY, position] = [x + width / 2, y + height - fontSize - labelGap, 'top']
       } else if (align === 'end' && verticalAlign === 'end') {
-        ;[nameX, nameY, position] = [x + width, y + height - fontSize - labelGap, 'left-top']
+        ;[nameX, nameY, position] = [x + width, y + height - fontSize - labelGap, 'leftTop']
       }
 
       const nameText = overflowControl(name, {width, height: (height - labelGap) / 2})

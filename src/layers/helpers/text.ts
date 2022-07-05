@@ -3,7 +3,7 @@ import {formatNumber, getAttr, getTextWidth, isApproximateNumber} from '../../ut
 import {CreateTextProps} from '../../types'
 
 export function createText(props: CreateTextProps) {
-  const {x, y, value, style = {}, position = 'right-top', offset = 0} = props,
+  const {x, y, value, style = {}, position = 'rightTop', offset = 0} = props,
     {fontSize: _fontSize = 12, writingMode, format} = style,
     fontSize = getAttr(_fontSize, 0, 12),
     formattedText = String(formatNumber(value, format)),
@@ -25,16 +25,16 @@ export function createText(props: CreateTextProps) {
   } else if (position === 'bottom') {
     positionX -= textWidth / 2
     positionY += fontSize + offset
-  } else if (position === 'left-top') {
+  } else if (position === 'leftTop') {
     positionX -= textWidth + offset
     positionY -= offset
-  } else if (position === 'right-top') {
+  } else if (position === 'rightTop') {
     positionX += offset
     positionY -= offset
-  } else if (position === 'left-bottom') {
+  } else if (position === 'leftBottom') {
     positionX -= textWidth + offset
     positionY += fontSize + offset
-  } else if (position === 'right-bottom') {
+  } else if (position === 'rightBottom') {
     positionX += offset
     positionY += fontSize + offset
   }

@@ -36,4 +36,6 @@ type Position4 = 'top' | 'right' | 'bottom' | 'left'
 
 type Position5 = Position4 | 'center'
 
-type Position9 = Position5 | 'left-top' | 'left-bottom' | 'right-top' | 'right-bottom'
+type Position9 = Position5 | 'leftTop' | 'leftBottom' | 'rightTop' | 'rightBottom'
+
+type Priority = 'topHigh' | 'topLow' | 'bottomHigh' | 'bottomLow' | 'other'

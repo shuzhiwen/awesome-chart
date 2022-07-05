@@ -147,7 +147,7 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
         filter: 'row',
         legends: rawTableList.map(([label], i) => ({
           label,
-          shape: 'dotted-line',
+          shape: 'dottedLine',
           color: colorMatrix.get(i, 0),
         })),
       }

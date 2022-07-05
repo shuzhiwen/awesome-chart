@@ -1,7 +1,7 @@
 import './global'
 import './module'
 export * from './animation'
-export * from './chart'
+export * from './core'
 export * from './data'
 export * from './draw'
 export * from './layer'
