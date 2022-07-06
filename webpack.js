@@ -2,6 +2,7 @@
 
 const path = require('path')
 const {dependencies} = require('./package.json')
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
 
 module.exports = {
   mode: 'production',
@@ -18,6 +19,13 @@ module.exports = {
       type: 'module',
     },
   },
+  plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      reportFilename: 'BundleReport.html',
+      logLevel: 'info',
+    }),
+  ],
   module: {
     rules: [
       {
