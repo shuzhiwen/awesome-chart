@@ -2,14 +2,7 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {IEllipseOptions} from 'fabric/fabric-impl'
 import {EllipseDrawerProps} from '../types'
-import {
-  mergeAlpha,
-  getAttr,
-  noChange,
-  isSvgContainer,
-  isCanvasContainer,
-  flatDrawerConfig,
-} from '../utils'
+import {mergeAlpha, getAttr, noChange, isSvgContainer, isCanvasContainer} from '../utils'
 
 export function drawEllipse({
   fill,
@@ -25,10 +18,8 @@ export function drawEllipse({
   transition,
   container,
   className,
-  ...rest
 }: EllipseDrawerProps) {
   const configuredData = data.map((item, i) => ({
-    ...flatDrawerConfig(rest, i),
     ...item,
     className,
     fill: getAttr(fill, i, '#fff'),

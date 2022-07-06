@@ -3,14 +3,7 @@ import {fabric} from 'fabric'
 import {DrawerDataShape, RectDrawerProps} from '../types'
 import {IRectOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
-import {
-  mergeAlpha,
-  getAttr,
-  isSvgContainer,
-  isCanvasContainer,
-  noChange,
-  flatDrawerConfig,
-} from '../utils'
+import {mergeAlpha, getAttr, isSvgContainer, isCanvasContainer, noChange} from '../utils'
 
 export function drawRect({
   fill,
@@ -26,10 +19,8 @@ export function drawRect({
   transition,
   container,
   className,
-  ...rest
 }: RectDrawerProps) {
   const configuredData = data.map((item, i) => ({
-    ...flatDrawerConfig(rest, i),
     ...item,
     className,
     fill: getAttr(fill, i, '#fff'),

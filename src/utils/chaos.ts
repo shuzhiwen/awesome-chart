@@ -116,15 +116,6 @@ export function safeTransform(
   return target.replace(regExp, `${key}(${append ? nextValue : value}${suffix})`)
 }
 
-export function flatDrawerConfig<T extends string, P>(
-  config: Partial<Record<T, P>>,
-  index: number
-) {
-  return Object.fromEntries(
-    Object.entries(config).map(([key, value]) => [key, getAttr(value, index, null)])
-  ) as FlatObject<Record<T, P>>
-}
-
 export function swap(a: any, b: any, key1: Meta, key2: Meta = key1) {
   if (
     (isArray(a) && isArray(b) && isNumber(key1) && isNumber(key2)) ||
