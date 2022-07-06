@@ -36,7 +36,7 @@ export function drawPolygon({
     fillOpacity: getAttr(fillOpacity, i, 1),
     strokeOpacity: getAttr(strokeOpacity, i, 1),
     strokeWidth: getAttr(strokeWidth, i, 0),
-    source: getAttr(source, i, {}),
+    source: getAttr(source, i, null),
     pointString: points.reduce((prev, cur) => `${prev} ${cur.x},${cur.y}`, ''),
     transformOrigin: `${centerX}px ${centerY}px`,
   }))

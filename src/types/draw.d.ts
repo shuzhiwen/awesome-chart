@@ -13,8 +13,6 @@ export type DrawerDataShape<T> = T extends BasicDrawerProps<infer U> ? U : T
 
 export type ElEvent = MouseEvent | IEvent<MouseEvent>
 
-export type ElEventType = 'click' | 'mouseover' | 'mouseout' | 'mousemove' | 'mouseup' | 'mousedown'
-
 export type CurveType =
   | 'curveLinear'
   | 'curveNatural'
@@ -46,7 +44,7 @@ export interface ElSourceShape extends AnyObject {
 
 export interface BasicDrawerProps<T> {
   data: DrawerDataParameter<T>
-  source?: DrawerDataParameter<ElSourceShape | ElSourceShape[]>
+  source?: DrawerDataParameter<MaybeGroup<ElSourceShape>>
   className: string
   container: DrawerTarget
 }

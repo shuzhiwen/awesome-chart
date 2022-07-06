@@ -1,5 +1,9 @@
+import {select} from 'd3'
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
+import {LayerAuxiliary} from './auxiliary'
+import {stickyBandScale} from '../helpers/sticky-scale'
+import {isScaleBand, isScaleLinear, isSvgContainer, uuid} from '../../utils'
 import {createScale, createStyle, generateClass, selector, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
@@ -12,12 +16,8 @@ import {
   ElSourceShape,
   FabricObject,
 } from '../../types'
-import {LayerAuxiliary} from './auxiliary'
-import {isScaleBand, isScaleLinear, isSvgContainer, uuid} from '../../utils'
-import {stickyBandScale} from '../helpers/sticky-scale'
-import {select} from 'd3'
 
-const shadowOpacity = 0.1
+const shadowOpacity = 0.5
 
 const defaultStyle: LayerInteractiveStyleShape = {
   line: {
@@ -25,7 +25,7 @@ const defaultStyle: LayerInteractiveStyleShape = {
   },
   interactive: {
     opacity: 0,
-    fill: 'yellow',
+    fill: '#000000',
   },
 }
 
@@ -39,12 +39,12 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
   private _style = defaultStyle
 
   private rectDataX: (DrawerDataShape<RectDrawerProps> & {
-    source: ElSourceShape
-  })[] = []
+    source?: ElSourceShape
+  })[][] = []
 
   private rectDataY: (DrawerDataShape<RectDrawerProps> & {
-    source: ElSourceShape
-  })[] = []
+    source?: ElSourceShape
+  })[][] = []
 
   private helperAuxiliary: [LayerAuxiliary, LayerAuxiliary]
 
@@ -164,43 +164,93 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       {width, height, left, top} = this.options.layout
 
     if (isScaleBand(scaleX)) {
-      this.rectDataX = scaleX.domain().map((domain) => ({
-        x: left + (scaleX(domain) ?? 0),
-        y: top,
-        height,
-        width: scaleX.bandwidth(),
-        source: {dimension: domain},
-      }))
+      this.rectDataX = scaleX.domain().map((domain, i) => [
+        {
+          x: left,
+          y: top,
+          height,
+          width: scaleX(domain) ?? 0,
+          source: {key: `x-${i}`},
+        },
+        {
+          x: left + (scaleX(domain) ?? 0),
+          y: top,
+          height,
+          width: scaleX.bandwidth(),
+          source: {key: `x-${i}`, dimension: domain},
+        },
+        {
+          x: left + (scaleX(domain) ?? 0) + scaleX.bandwidth(),
+          y: top,
+          height,
+          width: width - (scaleX(domain) ?? 0) - scaleX.bandwidth(),
+          source: {key: `x-${i}`},
+        },
+      ])
     }
 
     if (isScaleBand(scaleY)) {
-      this.rectDataY = scaleY.domain().map((domain) => ({
-        x: left,
-        y: top + (scaleY(domain) ?? 0),
-        width,
-        height: scaleY.bandwidth(),
-        source: {dimension: domain},
-      }))
+      this.rectDataY = scaleY.domain().map((domain, i) => [
+        {
+          x: left,
+          y: top,
+          width,
+          height: scaleY(domain) ?? 0,
+          source: {key: `y-${i}`},
+        },
+        {
+          x: left,
+          y: top + (scaleY(domain) ?? 0),
+          width,
+          height: scaleY.bandwidth(),
+          source: {key: `y-${i}`, dimension: domain},
+        },
+        {
+          x: left,
+          y: top + (scaleY(domain) ?? 0) + scaleY.bandwidth(),
+          width,
+          height: height - (scaleY(domain) ?? 0) - scaleY.bandwidth(),
+          source: {key: `y-${i}`},
+        },
+      ])
     }
   }
 
   draw() {
-    const rectData = [...this.rectDataY, ...this.rectDataX].map((data) => ({
-      data: [data],
-      source: [data.source],
+    const darkRectData = [...this.rectDataY, ...this.rectDataX].map(([head, , tail]) => ({
+      data: [head, tail],
+      source: [head.source, tail.source],
+      ...this.style.interactive,
+    }))
+    const lightRectData = [...this.rectDataY, ...this.rectDataX].map(([, body]) => ({
+      data: [body],
+      source: [body.source],
       ...this.style.interactive,
     }))
 
-    this.drawBasic({type: 'rect', data: rectData, sublayer: 'interactive', priority: 'bottomHigh'})
+    this.drawBasic({
+      type: 'rect',
+      data: darkRectData.concat(lightRectData),
+      sublayer: 'interactive',
+    })
+
     this.event.onWithOff('mouseover-interactive', this.options.id, ({data, event}) => {
       if (isSvgContainer(this.root)) {
-        this.root.selectAll(generateClass('interactive', true)).attr('opacity', shadowOpacity)
-        select(event.originalTarget).attr('opacity', 1)
+        this.root.selectAll(generateClass('interactive', true)).each((d, i, els) => {
+          if ((d as any).source?.key === data.source.key) {
+            select(els[i]).attr('opacity', shadowOpacity)
+          }
+        })
+        select(event.target).attr('opacity', 0)
       } else {
         ;(
           selector.getChildren(this.root, generateClass('interactive', false)) as FabricObject[]
-        ).forEach((child) => (child.opacity = shadowOpacity))
-        ;(data as FabricObject).opacity = 1
+        ).forEach((child) => {
+          if ((child as any).source?.key === data.source.key) {
+            child.opacity = shadowOpacity
+          }
+        })
+        ;(data as FabricObject).opacity = 0
       }
     })
     this.event.onWithOff('mouseout-interactive', this.options.id, () => {

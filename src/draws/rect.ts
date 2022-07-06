@@ -38,7 +38,7 @@ export function drawRect({
     fillOpacity: getAttr(fillOpacity, i, 1),
     strokeOpacity: getAttr(strokeOpacity, i, 1),
     strokeWidth: getAttr(strokeWidth, i, 0),
-    source: getAttr(source, i, {}),
+    source: getAttr(source, i, null),
     transformOrigin: getTransformOrigin(item, getAttr(transformOrigin, i, '')),
   }))
   const mappedData = configuredData.map((datum) => {

@@ -1,6 +1,6 @@
 import {select} from 'd3'
-import {errorCatcher, createLog, getAttr, group, ungroup} from '../utils'
 import {isEqual, merge, isNil} from 'lodash'
+import {errorCatcher, createLog, getAttr, group, ungroup} from '../utils'
 import {ElConfigShape, D3Selection, TooltipOptions, TooltipDataShape} from '../types'
 
 const defaultOptions = {

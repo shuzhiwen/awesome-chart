@@ -38,7 +38,7 @@ export function drawEllipse({
     strokeOpacity: getAttr(strokeOpacity, i, 1),
     strokeWidth: getAttr(strokeWidth, i, 0),
     transformOrigin: getAttr(transformOrigin, i, `${item.cx} ${item.cy}`),
-    source: getAttr(source, i, {}),
+    source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
     return mapping(datum) as typeof datum

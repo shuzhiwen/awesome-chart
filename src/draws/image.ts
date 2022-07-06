@@ -19,7 +19,7 @@ export function drawImage({
     ...item,
     className,
     opacity: getAttr(opacity, i, 1),
-    source: getAttr(source, i, {}),
+    source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
     return mapping(datum as any) as typeof datum

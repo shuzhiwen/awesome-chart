@@ -34,7 +34,7 @@ export function drawLine({
     strokeOpacity: getAttr(strokeOpacity, i, 1),
     strokeWidth: getAttr(strokeWidth, i, 1),
     strokeDasharray: getAttr(strokeDasharray, i, ''),
-    source: getAttr(source, i, {}),
+    source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
     return mapping(datum as any) as typeof datum
