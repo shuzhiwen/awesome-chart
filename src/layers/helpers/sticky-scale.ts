@@ -7,6 +7,6 @@ export function stickyBandScale(scale: ScaleBand, value: number) {
 
   return {
     domain: domain,
-    value: scale(domain) ?? 0,
+    value: (scale(domain) ?? 0) + scale.bandwidth() / 2,
   }
 }

@@ -15,7 +15,7 @@ export function group<T>(input: MaybeGroup<T>) {
 }
 
 export function ungroup<T>(input: T): Ungroup<T> {
-  return !isArray(input) ? input : ungroup(input.at(0))
+  return !isArray(input) ? input : ungroup(input[0])
 }
 
 export function getTextWidth(text: Meta, fontSize: number | string = 12) {
