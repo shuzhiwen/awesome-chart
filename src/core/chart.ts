@@ -3,6 +3,7 @@ import {Canvas} from 'fabric/fabric-impl'
 import {select, schemeCategory10} from 'd3'
 import {defaultLayoutCreator} from '../layout'
 import {LayerAxis, layerMapping} from '../layers'
+import {PriorityQueue} from './controller'
 import {Tooltip} from './tooltip'
 import {isNil} from 'lodash'
 import {
@@ -42,21 +43,23 @@ export class Chart {
 
   private padding: Padding
 
-  private container: HTMLElement
+  private log = createLog(Chart.name)
 
   private defs: GradientCreatorProps<unknown>['container']
 
-  private tooltip: Tooltip
+  readonly event = createEvent<'MouseEvent' | ChartState>(Chart.name)
 
-  private event = createEvent<'MouseEvent' | ChartState>(Chart.name)
-
-  readonly log = createLog(Chart.name)
+  readonly drawerController: PriorityQueue = new PriorityQueue()
 
   readonly engine: Engine
+
+  readonly tooltip: Tooltip
 
   readonly root: D3Selection | Canvas
 
   readonly theme: string[]
+
+  readonly container: HTMLElement
 
   readonly containerWidth: number
 
@@ -147,18 +150,9 @@ export class Chart {
 
   createLayer(options: LayerOptions) {
     const context: ChartContext = {
-      root: this.root,
-      event: this.event,
-      theme: this.theme,
-      tooltip: this.tooltip,
-      container: this.container,
-      containerWidth: this.containerWidth,
-      containerHeight: this.containerHeight,
-      bindCoordinate: this.bindCoordinate.bind(this),
+      ...this,
       createGradient: getEasyGradientCreator({container: this.defs}),
-      createSublayer: (options: LayerOptions) => {
-        return this.createLayer({...options, sublayer: true})
-      },
+      createSublayer: (options) => this.createLayer({...options, sublayer: true}),
     }
 
     if (isNil(options.id)) {
@@ -232,13 +226,11 @@ export class Chart {
   }
 
   draw() {
-    this.getLayersByType('axis').at(0)?.draw()
-    this.layers
-      .filter(({options: {type}}) => !dependantLayers.has(type))
-      .map((layer) => layer.draw())
-    dependantLayers.forEach((name) => {
-      name !== 'axis' && this.getLayersByType(name as LayerType).forEach((layer) => layer.draw())
-    })
+    this.layers.forEach((layer) => layer.draw())
+    if (this.drawerController.size) {
+      this.drawerController.run()
+      this.drawerController.clear()
+    }
   }
 
   destroy() {

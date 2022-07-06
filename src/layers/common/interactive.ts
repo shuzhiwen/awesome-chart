@@ -191,7 +191,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       ...this.style.interactive,
     }))
 
-    this.drawBasic({type: 'rect', data: rectData, sublayer: 'interactive'})
+    this.drawBasic({type: 'rect', data: rectData, sublayer: 'interactive', priority: 'bottomHigh'})
     this.event.onWithOff('mouseover-interactive', this.options.id, ({data, event}) => {
       if (isSvgContainer(this.root)) {
         this.root.selectAll(generateClass('interactive', true)).attr('opacity', shadowOpacity)

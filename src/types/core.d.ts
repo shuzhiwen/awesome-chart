@@ -9,17 +9,20 @@ import {BackupDataItemShape, LayerOptions, LayerScalesShape, LayerType} from './
 
 export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
 
-export interface ChartContext {
-  root: Chart['root']
-  theme: Chart['theme']
-  event: Chart['event']
-  tooltip: Chart['tooltip']
-  container: Chart['container']
-  containerWidth: Chart['containerWidth']
-  containerHeight: Chart['containerHeight']
-  bindCoordinate: Chart['bindCoordinate']
-  createSublayer: Chart['createLayer']
+export type ChartContext = Pick<
+  Chart,
+  | 'bindCoordinate'
+  | 'container'
+  | 'containerWidth'
+  | 'containerHeight'
+  | 'drawerController'
+  | 'event'
+  | 'root'
+  | 'theme'
+  | 'tooltip'
+> & {
   createGradient: ReturnType<typeof getEasyGradientCreator>
+  createSublayer: Chart['createLayer']
 }
 
 export type TooltipDataShape = Maybe<{

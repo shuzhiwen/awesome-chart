@@ -63,6 +63,7 @@ export interface DrawBasicProps<T> {
   type: DrawerType
   data: BackupDataItemShape<T>
   sublayer?: string
+  priority?: Priority
 }
 
 export type LayerScalesShape = Partial<{

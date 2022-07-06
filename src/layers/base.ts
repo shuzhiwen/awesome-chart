@@ -1,3 +1,4 @@
+import {range} from 'd3'
 import {cloneDeep, isEqual, merge, noop} from 'lodash'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
@@ -239,30 +240,39 @@ export abstract class LayerBase<T extends LayerOptions> {
     }
   }
 
-  protected drawBasic<T>({type, data, sublayer = type}: DrawBasicProps<T>) {
+  protected drawBasic<T>({type, data, sublayer = type, priority}: DrawBasicProps<T>) {
     if (!this.sublayers.includes(sublayer)) {
       this.log.debug.error('Invalid sublayer type for drawBasic')
       return
     }
 
-    const backupTarget = this.backupData[sublayer],
+    const {drawerController} = this.options,
+      backupTarget = this.backupData[sublayer],
       evented = !disableEventDrawerType.has(type),
       sublayerClassName = `${this.className}-${sublayer}`,
+      maxGroupIndex = Math.max(backupTarget.length, data.length),
+      isFirstDraw = backupTarget.length === 0,
       sublayerContainer =
         selector.getSubcontainer(this.root, sublayerClassName) ||
-        selector.createSubcontainer(this.root, sublayerClassName, evented)
+        selector.createSubcontainer(this.root, sublayerClassName, evented),
+      afterDraw = () => {
+        this.bindEvent(sublayer)
+        this.createAnimation(sublayer)
+        if (isCanvasContainer(this.root)) {
+          this.root.canvas?.requestRenderAll()
+        }
+      }
 
-    // delete redundant groups in the last rendering
-    for (let i = 0; i < Math.max(backupTarget.length, data.length); i++) {
-      const groupClassName = `${sublayerClassName}-${i}`
+    range(0, maxGroupIndex).map((groupIndex) => {
+      const groupClassName = `${sublayerClassName}-${groupIndex}`
       const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
 
-      if (i < data.length && !groupContainer) {
+      if (groupIndex < data.length && !groupContainer) {
         selector.createSubcontainer(sublayerContainer, groupClassName, evented)
-      } else if (i >= data.length) {
+      } else if (groupIndex >= data.length) {
         selector.remove(groupContainer)
       }
-    }
+    })
 
     if (!backupTarget.renderOrderCache) {
       backupTarget.renderOrderCache = new Map(
@@ -292,32 +302,32 @@ export abstract class LayerBase<T extends LayerOptions> {
       })
     }
 
-    backupTarget.length = data.length
     data.forEach((groupData, i) => {
       if (isEqual(backupTarget[i], groupData)) return
 
-      const groupClassName = `${sublayerClassName}-${i}`,
-        groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName),
-        options: GraphDrawerProps<any> = {
-          ...(groupData.hidden ? {data: []} : groupData),
-          className: generateClass(sublayer, false),
-          container: groupContainer!,
-        }
-
-      if (backupTarget[i]) {
-        options.transition = this.backupAnimation.options?.[sublayer]?.update
+      const groupClassName = `${sublayerClassName}-${i}`
+      const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
+      const options: GraphDrawerProps<any> = {
+        ...(groupData.hidden ? {data: []} : groupData),
+        className: generateClass(sublayer, false),
+        container: groupContainer!,
       }
 
-      drawerMapping[type](options)
+      if (isFirstDraw) {
+        drawerController.registerListener(priority ?? 'other', () => drawerMapping[type](options))
+      } else {
+        options.transition = this.backupAnimation.options?.[sublayer]?.update
+        drawerMapping[type](options)
+      }
+
       backupTarget[i] = cloneDeep(groupData)
     })
 
-    if (isCanvasContainer(this.root)) {
-      this.root.canvas?.requestRenderAll()
+    if (isFirstDraw) {
+      drawerController.event.onWithOff('run', this.options.id + sublayer, afterDraw)
+    } else {
+      afterDraw()
     }
-
-    this.bindEvent(sublayer)
-    this.createAnimation(sublayer)
   }
 
   destroy() {

@@ -4,7 +4,7 @@ type AnyObject = Record<string, any>
 
 type UnknownObject = Record<string, unknown>
 
-type AnyFunction = (...args: any) => any
+type AnyFunction<T = unknown> = (...args: any) => T
 
 type AnyEventObject = Record<string, AnyFunction>
 
