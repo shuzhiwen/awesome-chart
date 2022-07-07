@@ -12,7 +12,7 @@ export class AnimationPath extends AnimationBase<Options> {
   }
 
   play() {
-    const {targets, path, delay = 0, duration = 1000, easing = 'easeInOutSine'} = this.options
+    const {targets, path, delay, duration, easing} = this.options
 
     if (isSvgContainer(targets) && isSvgContainer(path)) {
       const animePaths = path.nodes().map((node) => anime.path(node)),

@@ -1,5 +1,5 @@
 import {path as d3Path} from 'd3-path'
-import {Chart} from '../../src/chart'
+import {Chart} from '../../src/core'
 import {LayerODLine} from '../../src/layers'
 
 export const debugODLineLayer = (chart: Chart) => {

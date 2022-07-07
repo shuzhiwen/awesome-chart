@@ -48,7 +48,7 @@ export const defaultTheme: ChartTheme = {
       easing: 'easeInOutSine',
     },
     update: {
-      duration: 0,
+      duration: 2000,
       delay: 0,
       easing: 'easeInOutSine',
     },

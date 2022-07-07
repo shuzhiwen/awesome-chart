@@ -23,14 +23,7 @@ export class AnimationZoom extends AnimationBase<Options> {
   }
 
   play() {
-    const {
-        targets,
-        delay = 0,
-        duration = 1000,
-        easing = 'easeInOutSine',
-        startScale = 0,
-        endScale = 1,
-      } = this.options,
+    const {targets, delay, duration, easing, startScale = 0, endScale = 1} = this.options,
       start = Math.max(startScale, Number.MIN_VALUE),
       end = Math.max(endScale, Number.MIN_VALUE)
 

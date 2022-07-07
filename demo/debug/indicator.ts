@@ -1,5 +1,5 @@
 import {LayerFlopper} from '../../src'
-import {Chart} from '../../src/chart'
+import {Chart} from '../../src/core'
 import {DataBase} from '../../src/data'
 
 export const debugDashboardLayer = (chart: Chart) => {

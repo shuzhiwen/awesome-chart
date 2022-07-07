@@ -1,6 +1,9 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
+import {path as d3Path} from 'd3-path'
+import {isRealNumber} from '../../utils'
 import {createScale, createStyle, generateClass, validateAndCreateData} from '../helpers'
+import {defaultTheme} from '../../core/theme'
 import {
   ChartContext,
   BackupAnimationOptions,
@@ -8,9 +11,9 @@ import {
   LayerODLineScaleShape,
   LayerODLineStyleShape,
   AnimationPathOptions,
+  PathDrawerProps,
+  DrawerDataShape,
 } from '../../types'
-import {path as d3Path} from 'd3-path'
-import {isRealNumber} from '../../utils'
 
 const defaultStyle: LayerODLineStyleShape = {
   odLine: {
@@ -27,6 +30,7 @@ const defaultAnimation: BackupAnimationOptions<AnimationPathOptions> = {
     loop: {
       type: 'path',
       path: generateClass('odLine', true),
+      ...defaultTheme.animation.loop,
     },
   },
 }
@@ -38,9 +42,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
 
   private _style = defaultStyle
 
-  private flyingObjectData: {
-    path: string
-  }[] = []
+  private flyingObjectData: DrawerDataShape<PathDrawerProps>[] = []
 
   private odLineData: {
     path: string
@@ -119,8 +121,12 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
     })
 
     if (flyingObject?.path) {
-      this.flyingObjectData = this.odLineData.map(() => ({path: flyingObject.path!}))
       this.setAnimation(defaultAnimation)
+      this.flyingObjectData = this.odLineData.map(() => ({
+        path: flyingObject.path!,
+        centerX: -1000,
+        centerY: -1000,
+      }))
     }
   }
 

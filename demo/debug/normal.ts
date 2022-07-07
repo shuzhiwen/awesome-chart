@@ -1,4 +1,4 @@
-import {Chart} from '../../src/chart'
+import {Chart} from '../../src/core'
 import {DataTableList} from '../../src/data'
 import {randomTableList} from '../../src/utils'
 

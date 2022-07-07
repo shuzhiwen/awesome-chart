@@ -91,19 +91,19 @@ export class Chart {
     this.engine = engine
     this.padding = padding
     this.container = container
-    const d3Container = select(this.container)
-    d3Container.html('')
+
+    const domContainer = select(this.container).html('')
 
     if (adjust) {
-      this.containerWidth = +(d3Container.style('width').match(/^\d*/)?.[0] || width)
-      this.containerHeight = +(d3Container.style('height').match(/^\d*/)?.[0] || height)
+      this.containerWidth = +(domContainer.style('width').match(/^\d*/)?.[0] || width)
+      this.containerHeight = +(domContainer.style('height').match(/^\d*/)?.[0] || height)
     } else {
       this.containerWidth = width
       this.containerHeight = height
     }
 
     if (engine === 'canvas') {
-      const canvas = d3Container
+      const canvas = domContainer
         .append('canvas')
         .attr('width', this.containerWidth)
         .attr('height', this.containerHeight)
@@ -112,7 +112,7 @@ export class Chart {
       this.root = new fabric.Canvas(canvas.node(), {selection: false, hoverCursor: 'pointer'})
       this.root.on('mouse:move', ({e: event}) => this.event.fire('MouseEvent', {event}))
     } else {
-      this.root = d3Container
+      this.root = domContainer
         .append('svg')
         .attr('width', this.containerWidth)
         .attr('height', this.containerHeight)
@@ -124,8 +124,6 @@ export class Chart {
 
     createDefs({schema: defineSchema, container: this.defs})
 
-    this.state = 'initialize'
-    this.event.fire(this.state)
     this._layout = layoutCreator({
       containerWidth: this.containerWidth,
       containerHeight: this.containerHeight,
@@ -139,6 +137,9 @@ export class Chart {
           tooltipTargets.map((sublayer) => backupData[sublayer]).flatMap(noChange)
         ),
     })
+
+    this.state = 'initialize'
+    this.event.fire(this.state)
   }
 
   setPadding(padding?: Padding, creator: LayoutCreator = defaultLayoutCreator) {
@@ -153,6 +154,7 @@ export class Chart {
   createLayer(options: LayerOptions) {
     const context: ChartContext = {
       ...this,
+      bindCoordinate: this.bindCoordinate.bind(this),
       createGradient: getEasyGradientCreator({container: this.defs}),
       createSublayer: (options) => this.createLayer({...options, sublayer: true}),
     }
@@ -167,8 +169,8 @@ export class Chart {
     const layer = new layerMapping[options.type](options as never, context)
 
     this._layers.push(layer)
-    this.event.fire(this.state)
     this.state = 'ready'
+    this.event.fire(this.state)
 
     return layer
   }
@@ -238,8 +240,8 @@ export class Chart {
   destroy() {
     this.layers.forEach((layer) => layer.destroy())
     this._layers.length = 0
-    this.state = 'destroy'
     this.tooltip.destroy()
+    this.state = 'destroy'
     this.event.fire(this.state)
   }
 }

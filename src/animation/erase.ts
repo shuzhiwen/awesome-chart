@@ -42,14 +42,7 @@ export class AnimationErase extends AnimationBase<Options> {
   }
 
   play() {
-    const {
-      targets,
-      context,
-      delay = 0,
-      duration = 1000,
-      easing = 'easeInOutSine',
-      direction = 'right',
-    } = this.options
+    const {targets, context, delay, duration, easing, direction = 'right'} = this.options
 
     if (isSvgContainer(context)) {
       context

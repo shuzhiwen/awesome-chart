@@ -26,6 +26,9 @@ const defaultStyle: LayerDashboardStyleShape = {
   endAngle: 120,
   arcWidth: 5,
   tickSize: 10,
+  tickLine: {
+    strokeWidth: 2,
+  },
   pointer: {
     strokeWidth: 2,
   },

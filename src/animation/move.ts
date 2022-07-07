@@ -39,9 +39,9 @@ export class AnimationMove extends AnimationBase<Options> {
   play() {
     const {
       targets,
-      delay = 0,
-      duration = 1000,
-      easing = 'easeInOutSine',
+      delay,
+      duration,
+      easing,
       initialOffset = [0, 0],
       startOffset = [0, 0],
       endOffset = [0, 0],

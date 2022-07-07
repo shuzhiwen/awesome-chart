@@ -20,14 +20,7 @@ export class AnimationFade extends AnimationBase<Options> {
   }
 
   play() {
-    const {
-      targets,
-      delay = 0,
-      duration = 1000,
-      easing = 'easeInOutSine',
-      startOpacity = 0,
-      endOpacity = 1,
-    } = this.options
+    const {targets, delay, duration, easing, startOpacity = 0, endOpacity = 1} = this.options
 
     if (isSvgContainer(targets)) {
       targets

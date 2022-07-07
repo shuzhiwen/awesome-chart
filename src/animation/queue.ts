@@ -3,12 +3,7 @@ import {range, uuid} from '../utils'
 import {AnimationBase} from './base'
 import {AnimationEmpty} from './empty'
 import {animationMapping} from '.'
-import {
-  AnimationType,
-  AnimationProps as Props,
-  BasicAnimationOptions as Options,
-  DrawerTarget,
-} from '../types'
+import {AnimationType, DrawerTarget, BasicAnimationOptions as Options} from '../types'
 
 type Shape = AnimationBase<Options>
 
@@ -33,8 +28,8 @@ export class AnimationQueue extends AnimationBase<Options> {
 
   private queue: Shape[]
 
-  constructor({options, context}: Props<Options>) {
-    super({options, context})
+  constructor({options}: {options: {loop: boolean}}) {
+    super({options: options as Options})
     const animationHead = new AnimationEmpty({})
 
     animationHead.event.on('start', this.start)
@@ -103,7 +98,7 @@ export class AnimationQueue extends AnimationBase<Options> {
     this.isConnected = false
     this.queue.push(
       new animationMapping[type]({
-        options: {id: uuid(), ...(options as AnyObject)},
+        options: {id: uuid(), ...options} as any,
         context,
       })
     )
@@ -130,6 +125,7 @@ export class AnimationQueue extends AnimationBase<Options> {
   end() {
     if (this.isAnimationAvailable && this.options.loop && this.queue.length > 1) {
       this.queue.forEach((instance) => instance.destroy())
+      this.queue.forEach((instance) => instance.init())
       this.play()
     }
   }

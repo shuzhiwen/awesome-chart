@@ -35,10 +35,10 @@ export interface BasicAnimationOptions<T extends AnimationType = AnimationType> 
   id?: string
   type?: T
   targets?: Maybe<D3Selection | FabricObject[]>
-  duration?: number
-  delay?: number
   loop?: boolean
-  easing?: AnimationEasing
+  easing: AnimationEasing
+  duration: number
+  delay: number
 }
 
 export interface AnimationProps<T extends BasicAnimationOptions> {
