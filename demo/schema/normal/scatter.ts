@@ -111,7 +111,7 @@ export default ({pointSize}) => [
     style: {
       pointSize,
       text: {
-        hide: true,
+        hidden: true,
         fontSize: 10,
       },
     },

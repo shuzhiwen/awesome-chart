@@ -65,7 +65,7 @@ export default ({variant, mode, innerRadius}) => [
       innerRadius,
       text: {
         fontSize: 8,
-        hide: false,
+        hidden: false,
       },
     },
     animation: {

@@ -95,7 +95,7 @@ export default () => [
     style: {
       circleSize: [10, 10],
       text: {
-        hide: true,
+        hidden: true,
         fontSize: 10,
       },
     },

@@ -94,6 +94,7 @@ export type LayerTextStyleShape = Partial<{
 
 export type LayerLineStyleShape = Partial<{
   fallback: 'zero' | 'continue' | 'break'
+  areaGradient: boolean
   pointSize: number
   labelPosition: Position5
   curveType: CurveType

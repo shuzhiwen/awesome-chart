@@ -92,7 +92,7 @@ export default ({mode, hasArea, curveType}) => [
         strokeWidth: 2,
       },
       area: {
-        hide: hasArea ? false : true,
+        hidden: hasArea ? false : true,
         fillOpacity: 0.5,
       },
       text: {

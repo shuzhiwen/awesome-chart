@@ -41,9 +41,6 @@ const defaultStyle: LayerLineStyleShape = {
     fill: 'white',
     strokeWidth: 2,
   },
-  area: {
-    opacity: 0.3,
-  },
 }
 
 export class LayerLine extends LayerBase<LayerLineOptions> {
@@ -109,7 +106,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
     const {layout, mode, createGradient} = this.options,
       {height, top, left} = layout,
       {scaleX, scaleY} = this.scale,
-      {labelPosition, pointSize = 5, text, curve} = this.style,
+      {labelPosition, pointSize = 5, areaGradient, text, curve} = this.style,
       {headers, rawTableList} = this.data,
       colorMatrix = createColorMatrix({
         layer: this,
@@ -147,12 +144,14 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
       group.map(({y, color = 'rgb(255,255,255)', ...item}, j) => ({
         y1: y,
         y2: mode === 'stack' && j !== 0 ? this.pointData[i][j - 1].y : height + top,
-        fill: (!i &&
-          createGradient({
-            type: 'linear',
-            direction: 'vertical',
-            colors: [color, mergeAlpha(color, 0)],
-          })) as string,
+        fill:
+          !i && areaGradient
+            ? (createGradient({
+                type: 'linear',
+                direction: 'vertical',
+                colors: [color, mergeAlpha(color, 0)],
+              }) as string)
+            : color,
         ...item,
       }))
     )
