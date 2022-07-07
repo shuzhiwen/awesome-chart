@@ -10,7 +10,6 @@ import {
   group,
   ungroup,
   getMagnitude,
-  flatDrawerConfig,
   swap,
   errorCatcher,
   safeTransform,
@@ -127,29 +126,6 @@ test('safeTransform', () => {
   expect(safeTransform('scale(0.2)', 'translateX', 100, {unit: true, append: false})).toBe(
     'scale(0.2)translateX(100px)'
   )
-})
-
-test('flatDrawerConfig', () => {
-  const config = {
-    fill: ['red', 'blue'],
-    stroke: ['green'],
-    strokeWidth: ['1px', '2px', '3px'],
-  }
-  expect(flatDrawerConfig(config, 0)).toEqual({
-    fill: 'red',
-    stroke: 'green',
-    strokeWidth: '1px',
-  })
-  expect(flatDrawerConfig(config, 1)).toEqual({
-    fill: 'blue',
-    stroke: null,
-    strokeWidth: '2px',
-  })
-  expect(flatDrawerConfig(config, 2)).toEqual({
-    fill: null,
-    stroke: null,
-    strokeWidth: '3px',
-  })
 })
 
 test('swap', () => {

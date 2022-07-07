@@ -19,18 +19,23 @@ export function drawRect({
   transition,
   container,
   className,
+  theme,
 }: RectDrawerProps) {
+  const {
+    graph,
+    animation: {update},
+  } = theme
   const configuredData = data.map((item, i) => ({
     ...item,
     className,
-    fill: getAttr(fill, i, '#fff'),
-    stroke: getAttr(stroke, i, '#fff'),
-    opacity: getAttr(opacity, i, 1),
-    fillOpacity: getAttr(fillOpacity, i, 1),
-    strokeOpacity: getAttr(strokeOpacity, i, 1),
-    strokeWidth: getAttr(strokeWidth, i, 0),
-    source: getAttr(source, i, null),
+    fill: getAttr(fill, i, graph.fill),
+    stroke: getAttr(stroke, i, graph.stroke),
+    opacity: getAttr(opacity, i, graph.opacity),
+    fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
+    strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
+    strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     transformOrigin: getTransformOrigin(item, getAttr(transformOrigin, i, '')),
+    source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
     return mapping(datum) as typeof datum
@@ -43,9 +48,9 @@ export function drawRect({
       .join('rect')
       .attr('class', (d) => d.className)
       .transition()
-      .duration(transition?.duration ?? 0)
-      .delay(transition?.delay ?? 0)
-      .ease(svgEasing.get(transition?.easing)!)
+      .ease(svgEasing.get(transition?.easing ?? update.easing)!)
+      .duration(transition?.duration ?? update.duration)
+      .delay(transition?.delay ?? update.delay)
       .attr('x', (d) => d.x)
       .attr('y', (d) => d.y)
       .attr('rx', (d) => d.rx || 0)

@@ -7,7 +7,7 @@ import {CreateColorMatrixProps} from '../../types'
 export function createColorMatrix(props: CreateColorMatrixProps) {
   const {layer, row, column, theme, nice} = props,
     order = layer.data?.options.order,
-    colors = !theme ? layer.options.theme : isArray(theme) ? theme : [theme],
+    colors = !theme ? layer.options.theme.palette.main : isArray(theme) ? theme : [theme],
     chromaScale = chroma.scale(colors).mode('lch')
   let matrix: string[][] = order?.colorMatrix?.matrix || []
 

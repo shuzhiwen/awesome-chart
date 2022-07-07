@@ -18,20 +18,25 @@ export function drawPath({
   transition,
   container,
   className,
+  theme,
 }: PathDrawerProps) {
+  const {
+    graph,
+    animation: {update},
+  } = theme
   const configuredData = data.map((item, i) => ({
     className,
     path: item.path,
     centerX: item.centerX ?? 0,
     centerY: item.centerY ?? 0,
-    fill: getAttr(fill, i, '#fff'),
-    stroke: getAttr(stroke, i, '#fff'),
-    opacity: getAttr(opacity, i, 1),
-    fillOpacity: getAttr(fillOpacity, i, 1),
-    strokeOpacity: getAttr(strokeOpacity, i, 1),
-    strokeWidth: getAttr(strokeWidth, i, 0),
-    source: getAttr(source, i, null),
+    fill: getAttr(fill, i, graph.fill),
+    stroke: getAttr(stroke, i, graph.stroke),
+    opacity: getAttr(opacity, i, graph.opacity),
+    fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
+    strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
+    strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     transformOrigin: getAttr(transformOrigin, i, ''),
+    source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
     return mapping(datum) as typeof datum
@@ -44,9 +49,9 @@ export function drawPath({
       .join('path')
       .attr('class', (d) => d.className)
       .transition()
-      .duration(transition?.duration ?? 0)
-      .delay(transition?.delay ?? 0)
-      .ease(svgEasing.get(transition?.easing)!)
+      .ease(svgEasing.get(transition?.easing ?? update.easing)!)
+      .duration(transition?.duration ?? update.duration)
+      .delay(transition?.delay ?? update.delay)
       .attr('d', (d) => d.path)
       .attr('fill', (d) => d.fill)
       .attr('stroke', (d) => d.stroke)

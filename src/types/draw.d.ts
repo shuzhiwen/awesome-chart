@@ -2,6 +2,7 @@ import {Selection, Transition} from 'd3'
 import {Group, IEvent, Object} from 'fabric/fabric-impl'
 import {GraphStyleShape, TextStyleShape} from './layer'
 import {drawerMapping} from '../draws'
+import {ChartTheme} from './core'
 
 export type DrawerTarget = D3Selection | FabricGroup
 
@@ -47,6 +48,7 @@ export interface BasicDrawerProps<T> {
   source?: DrawerDataParameter<MaybeGroup<ElSourceShape>>
   className: string
   container: DrawerTarget
+  theme: ChartTheme
 }
 
 export interface ElConfigShape {

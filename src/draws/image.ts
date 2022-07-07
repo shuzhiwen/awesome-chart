@@ -12,11 +12,16 @@ export function drawImage({
   transition,
   container,
   className,
+  theme,
 }: ImageDrawerProps) {
+  const {
+    graph,
+    animation: {update},
+  } = theme
   const configuredData = data.map((item, i) => ({
     ...item,
     className,
-    opacity: getAttr(opacity, i, 1),
+    opacity: getAttr(opacity, i, graph.opacity),
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
@@ -30,9 +35,9 @@ export function drawImage({
       .join('image')
       .attr('class', (d) => d.className)
       .transition()
-      .duration(transition?.duration ?? 0)
-      .delay(transition?.delay ?? 0)
-      .ease(svgEasing.get(transition?.easing)!)
+      .ease(svgEasing.get(transition?.easing ?? update.easing)!)
+      .duration(transition?.duration ?? update.duration)
+      .delay(transition?.delay ?? update.delay)
       .attr('opacity', (d) => d.opacity)
       .attr('x', (d) => d.x)
       .attr('y', (d) => d.y)

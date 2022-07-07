@@ -17,19 +17,24 @@ export function drawPolygon({
   transition,
   container,
   className,
+  theme,
 }: PolyDrawerProps) {
+  const {
+    graph,
+    animation: {update},
+  } = theme
   const configuredData = data.map(({points, centerX, centerY}, i) => ({
     points,
     className,
-    fill: getAttr(fill, i, '#fff'),
-    stroke: getAttr(stroke, i, '#fff'),
-    opacity: getAttr(opacity, i, 1),
-    fillOpacity: getAttr(fillOpacity, i, 1),
-    strokeOpacity: getAttr(strokeOpacity, i, 1),
-    strokeWidth: getAttr(strokeWidth, i, 0),
-    source: getAttr(source, i, null),
+    fill: getAttr(fill, i, graph.fill),
+    stroke: getAttr(stroke, i, graph.stroke),
+    opacity: getAttr(opacity, i, graph.opacity),
+    fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
+    strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
+    strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     pointString: points.reduce((prev, cur) => `${prev} ${cur.x},${cur.y}`, ''),
     transformOrigin: `${centerX}px ${centerY}px`,
+    source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
     return mapping(datum) as typeof datum
@@ -42,9 +47,9 @@ export function drawPolygon({
       .join('polygon')
       .attr('class', (d) => d.className)
       .transition()
-      .duration(transition?.duration ?? 0)
-      .delay(transition?.delay ?? 0)
-      .ease(svgEasing.get(transition?.easing)!)
+      .ease(svgEasing.get(transition?.easing ?? update.easing)!)
+      .duration(transition?.duration ?? update.duration)
+      .delay(transition?.delay ?? update.delay)
       .attr('points', (d) => d.pointString)
       .attr('fill', (d) => d.fill)
       .attr('stroke', (d) => d.stroke)

@@ -6,6 +6,7 @@ import {RandomOptions} from './utils'
 import {ScaleNiceShape} from './scale'
 import {getEasyGradientCreator} from '../utils'
 import {BackupDataItemShape, LayerOptions, LayerScalesShape, LayerType} from './layer'
+import {AnimationEasing} from './animation'
 
 export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
 
@@ -24,6 +25,38 @@ export type ChartContext = Pick<
   createGradient: ReturnType<typeof getEasyGradientCreator>
   createSublayer: Chart['createLayer']
 }
+
+export type ChartTheme = Readonly<
+  Record<
+    'graph' | 'text',
+    {
+      opacity: number
+      fillOpacity: number
+      strokeOpacity: number
+      strokeWidth: number
+      fill: string
+      stroke: string
+    }
+  > & {
+    palette: {
+      main: string[]
+    }
+    text: {
+      fontFamily: string
+      fontSize: number
+      fontWeight: number
+      shadow: string
+    }
+    animation: Record<
+      'enter' | 'loop' | 'update',
+      {
+        duration: number
+        delay: number
+        easing: AnimationEasing
+      }
+    >
+  }
+>
 
 export type TooltipDataShape = Maybe<{
   title: Meta
@@ -54,7 +87,7 @@ export interface ChartProps {
   height?: number
   adjust?: boolean
   engine?: Engine
-  theme?: string[]
+  theme?: ChartTheme
   padding?: Padding
   defineSchema?: AnyObject
   tooltipOptions?: TooltipOptions

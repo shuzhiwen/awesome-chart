@@ -15,6 +15,10 @@ const defaultOptions = {
 } as Required<TooltipOptions>
 
 export class Tooltip {
+  public isVisible = false
+
+  public isAvailable = false
+
   readonly log = createLog(Tooltip.name)
 
   private instance: D3Selection
@@ -22,10 +26,6 @@ export class Tooltip {
   private options = defaultOptions
 
   private data: Maybe<any> = null
-
-  public isVisible = false
-
-  public isAvailable = false
 
   constructor(options: TooltipOptions) {
     this.setOptions(options)

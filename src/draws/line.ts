@@ -16,14 +16,19 @@ export function drawLine({
   transition,
   container,
   className,
+  theme,
 }: LineDrawerProps) {
+  const {
+    graph,
+    animation: {update},
+  } = theme
   const configuredData = data.map((item, i) => ({
     ...item,
     className,
-    stroke: getAttr(stroke, i, '#fff'),
-    opacity: getAttr(opacity, i, 1),
-    strokeOpacity: getAttr(strokeOpacity, i, 1),
-    strokeWidth: getAttr(strokeWidth, i, 1),
+    stroke: getAttr(stroke, i, graph.stroke),
+    opacity: getAttr(opacity, i, graph.opacity),
+    strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
+    strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     strokeDasharray: getAttr(strokeDasharray, i, ''),
     source: getAttr(source, i, null),
   }))
@@ -38,9 +43,9 @@ export function drawLine({
       .join('line')
       .attr('class', (d) => d.className)
       .transition()
-      .duration(transition?.duration ?? 0)
-      .delay(transition?.delay ?? 0)
-      .ease(svgEasing.get(transition?.easing)!)
+      .ease(svgEasing.get(transition?.easing ?? update.easing)!)
+      .duration(transition?.duration ?? update.duration)
+      .delay(transition?.delay ?? update.delay)
       .attr('x1', (d) => d.x1)
       .attr('y1', (d) => d.y1)
       .attr('x2', (d) => d.x2)

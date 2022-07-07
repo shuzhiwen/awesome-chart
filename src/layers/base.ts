@@ -195,6 +195,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   private createAnimation = (sublayer: string) => {
     const {options} = this.backupAnimation,
+      {animation: theme} = this.options.theme,
       targets = selector.getChildren(this.root, generateClass(sublayer, false)),
       prefix = `${sublayer}-animation-`
     let isFirstPlay = true
@@ -216,12 +217,12 @@ export abstract class LayerBase<T extends LayerOptions> {
       event = animationQueue.event
 
     if (isFirstPlay && enter?.type) {
-      enterQueue.pushAnimation(enter.type, {...enter, targets}, this.root)
+      enterQueue.pushAnimation(enter.type, {...theme.enter, ...enter, targets}, this.root)
       animationQueue.pushQueue(enterQueue)
     }
 
     if (loop?.type) {
-      loopQueue.pushAnimation(loop.type, {...loop, targets}, this.root)
+      loopQueue.pushAnimation(loop.type, {...theme.loop, ...loop, targets}, this.root)
       animationQueue.pushQueue(loopQueue)
     }
 
@@ -232,7 +233,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
     if (!isFirstPlay) {
       clearTimeout(this.backupAnimation.timer[sublayer])
-      const {duration = 2000, delay = 0} = update || {}
+      const {duration, delay} = {...theme.update, ...update}
       this.backupAnimation.timer[sublayer] = setTimeout(
         () => this.backupAnimation[sublayer]?.play(),
         duration + delay
@@ -246,7 +247,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       return
     }
 
-    const {drawerController} = this.options,
+    const {drawerController, theme} = this.options,
       backupTarget = this.backupData[sublayer],
       evented = !disableEventDrawerType.has(type),
       sublayerClassName = `${this.className}-${sublayer}`,
@@ -311,6 +312,7 @@ export abstract class LayerBase<T extends LayerOptions> {
         ...(groupData.hidden ? {data: []} : groupData),
         className: generateClass(sublayer, false),
         container: groupContainer!,
+        theme,
       }
 
       if (isFirstDraw) {

@@ -10,7 +10,10 @@ export type LayerType = keyof typeof layerMapping
 
 export type LegendShape = 'rect' | 'circle' | 'brokenLine' | 'dottedLine' | 'star'
 
-export type BackupDataItemShape<T> = Omit<GraphDrawerProps<T>, 'className' | 'container'>[] & {
+export type BackupDataItemShape<T> = Omit<
+  GraphDrawerProps<T>,
+  'className' | 'container' | 'theme'
+>[] & {
   renderOrderCache?: Map<Meta, number>
 }
 

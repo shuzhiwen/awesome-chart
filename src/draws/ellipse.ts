@@ -18,16 +18,21 @@ export function drawEllipse({
   transition,
   container,
   className,
+  theme,
 }: EllipseDrawerProps) {
+  const {
+    graph,
+    animation: {update},
+  } = theme
   const configuredData = data.map((item, i) => ({
     ...item,
     className,
-    fill: getAttr(fill, i, '#fff'),
-    stroke: getAttr(stroke, i, '#fff'),
-    opacity: getAttr(opacity, i, 1),
-    fillOpacity: getAttr(fillOpacity, i, 1),
-    strokeOpacity: getAttr(strokeOpacity, i, 1),
-    strokeWidth: getAttr(strokeWidth, i, 0),
+    fill: getAttr(fill, i, graph.fill),
+    stroke: getAttr(stroke, i, graph.stroke),
+    opacity: getAttr(opacity, i, graph.opacity),
+    fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
+    strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
+    strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     transformOrigin: getAttr(transformOrigin, i, `${item.cx} ${item.cy}`),
     source: getAttr(source, i, null),
   }))
@@ -42,9 +47,9 @@ export function drawEllipse({
       .join('ellipse')
       .attr('class', (d) => d.className)
       .transition()
-      .duration(transition?.duration ?? 0)
-      .delay(transition?.delay ?? 0)
-      .ease(svgEasing.get(transition?.easing)!)
+      .ease(svgEasing.get(transition?.easing ?? update.easing)!)
+      .duration(transition?.duration ?? update.duration)
+      .delay(transition?.delay ?? update.delay)
       .attr('stroke', (d) => d.stroke)
       .attr('stroke-width', (d) => d.strokeWidth)
       .attr('cx', (d) => d.cx)

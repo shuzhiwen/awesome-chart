@@ -4,6 +4,8 @@ import {cloneDeep, merge} from 'lodash'
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {createStyle, validateAndCreateData} from '../helpers'
+import {ChartContext, D3Selection, LayerFlopperOptions, LayerFlopperStyleShape} from '../../types'
+import {defaultTheme} from '../../core/theme'
 import {
   addStyle,
   isCanvasContainer,
@@ -12,13 +14,6 @@ import {
   range,
   safeTransform,
 } from '../../utils'
-import {
-  AnimationEasing,
-  ChartContext,
-  D3Selection,
-  LayerFlopperOptions,
-  LayerFlopperStyleShape,
-} from '../../types'
 
 const defaultOptions: Partial<LayerFlopperOptions> = {
   variant: 'vertical',
@@ -35,17 +30,6 @@ const defaultStyle: LayerFlopperStyleShape = {
   },
 }
 
-const defaultAnimation: {
-  duration?: number
-  delay?: number
-  loop?: boolean
-  easing?: AnimationEasing
-} = {
-  delay: 0,
-  duration: 2000,
-  easing: 'easeOutSine',
-}
-
 const characterSet = ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.']
 
 export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
@@ -59,7 +43,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
 
   private cellData: {text: string; prevText?: string}[] = []
 
-  private animation = defaultAnimation
+  private animation = {...defaultTheme.animation.update}
 
   get data() {
     return this._data
@@ -255,8 +239,8 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       })
   }
 
-  setAnimation(options: LayerFlopper['animation']) {
-    merge(this.animation, options)
+  setAnimation(options: Partial<LayerFlopper['animation']>) {
+    this.animation = merge({}, this.options.theme.animation.update, this.animation, options)
   }
 
   playAnimation() {
@@ -265,8 +249,12 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       return
     }
 
-    const {variant} = this.options,
-      {duration = 2000, delay = 0, easing = 'easeOutCubic'} = this.animation
+    const {variant, theme} = this.options
+    const {
+      duration = theme.animation.update.duration,
+      delay = theme.animation.update.delay,
+      easing = theme.animation.update.easing,
+    } = this.animation
 
     this.root.selectAll(`.${this.className}-group`).each((d, i, els) => {
       let prevIndex = characterSet.findIndex((value) => value === (d as any).prevText),

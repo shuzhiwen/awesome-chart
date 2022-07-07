@@ -24,24 +24,29 @@ export function drawText({
   transition,
   container,
   className,
+  theme,
 }: TextDrawerProps) {
+  const {
+    text,
+    animation: {update},
+  } = theme
   const configuredData = data.map((item, i) => ({
     ...item,
     className,
-    fontSize: getAttr(fontSize, i, 12),
-    fontFamily: getAttr(fontFamily, i, ''),
-    fontWeight: getAttr(fontWeight, i, 300),
-    fill: getAttr(fill, i, '#fff'),
-    stroke: getAttr(stroke, i, '#fff'),
-    opacity: getAttr(opacity, i, 1),
-    fillOpacity: getAttr(fillOpacity, i, 1),
-    strokeOpacity: getAttr(strokeOpacity, i, 1),
-    strokeWidth: getAttr(strokeWidth, i, 0),
-    rotation: getAttr(rotation, i, 0),
-    shadow: getAttr(shadow, i, ''),
-    transformOrigin: getAttr(transformOrigin, i, ''),
+    fill: getAttr(fill, i, text.fill),
+    stroke: getAttr(stroke, i, text.stroke),
+    opacity: getAttr(opacity, i, text.opacity),
+    fillOpacity: getAttr(fillOpacity, i, text.fillOpacity),
+    strokeOpacity: getAttr(strokeOpacity, i, text.strokeOpacity),
+    strokeWidth: getAttr(strokeWidth, i, text.strokeWidth),
+    shadow: getAttr(shadow, i, text.shadow),
+    fontSize: getAttr(fontSize, i, text.fontSize),
+    fontFamily: getAttr(fontFamily, i, text.fontFamily),
+    fontWeight: getAttr(fontWeight, i, text.fontWeight),
     writingMode: getAttr(writingMode, i, 'horizontal-tb'),
     textDecoration: getAttr(textDecoration, i, 'none'),
+    transformOrigin: getAttr(transformOrigin, i, ''),
+    rotation: getAttr(rotation, i, 0),
   }))
   const mappedData = configuredData.map((datum) => {
     return mapping(datum as any) as unknown as typeof datum
@@ -55,9 +60,9 @@ export function drawText({
       .text((d) => d.value)
       .attr('class', (d) => d.className)
       .transition()
-      .duration(transition?.duration ?? 0)
-      .delay(transition?.delay ?? 0)
-      .ease(svgEasing.get(transition?.easing)!)
+      .ease(svgEasing.get(transition?.easing ?? update.easing)!)
+      .duration(transition?.duration ?? update.duration)
+      .delay(transition?.delay ?? update.delay)
       .attr('x', (d) => d.x)
       .attr('y', (d) => d.y - d.fontSize / 2)
       .attr('fill', (d) => d.fill)

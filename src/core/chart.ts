@@ -1,8 +1,9 @@
+import {select} from 'd3'
 import {fabric} from 'fabric'
 import {Canvas} from 'fabric/fabric-impl'
-import {select, schemeCategory10} from 'd3'
 import {defaultLayoutCreator} from '../layout'
 import {LayerAxis, layerMapping} from '../layers'
+import {defaultTheme} from './theme'
 import {PriorityQueue} from './controller'
 import {Tooltip} from './tooltip'
 import {isNil} from 'lodash'
@@ -30,6 +31,7 @@ import {
   D3Selection,
   LayerType,
   LayerAxisScaleShape,
+  ChartTheme,
 } from '../types'
 
 fabric.Object.prototype.objectCaching = false
@@ -57,7 +59,7 @@ export class Chart {
 
   readonly root: D3Selection | Canvas
 
-  readonly theme: string[]
+  readonly theme: ChartTheme
 
   readonly container: HTMLElement
 
@@ -80,7 +82,7 @@ export class Chart {
     adjust = true,
     engine = 'svg',
     padding = [0, 0, 0, 0],
-    theme = [...schemeCategory10],
+    theme = defaultTheme,
     layoutCreator = defaultLayoutCreator,
     defineSchema = {},
     tooltipOptions,
@@ -165,8 +167,8 @@ export class Chart {
     const layer = new layerMapping[options.type](options as never, context)
 
     this._layers.push(layer)
-    this.state = 'ready'
     this.event.fire(this.state)
+    this.state = 'ready'
 
     return layer
   }
