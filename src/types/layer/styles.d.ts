@@ -13,7 +13,7 @@ export type GraphStyleShape = Partial<{
   strokeDasharray: MaybeGroup<string>
   transformOrigin: MaybeGroup<string>
   rotation: MaybeGroup<number>
-  transition: Maybe<BasicAnimationOptions>
+  transition: Maybe<Partial<BasicAnimationOptions>>
   mapping: (config: ElConfigShape) => ElConfigShape
   hidden: boolean
 }>

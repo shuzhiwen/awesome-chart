@@ -316,6 +316,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       }
 
       if (isFirstDraw) {
+        options.transition = {duration: 0, delay: 0}
         drawerController.registerListener(priority ?? 'other', () => drawerMapping[type](options))
       } else {
         options.transition = this.backupAnimation.options?.[sublayer]?.update
