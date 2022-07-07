@@ -49,7 +49,7 @@ export default ({
     ],
     style: {
       direction: variant === 'column' ? 'horizontal' : 'vertical',
-      labelPosition: 'right',
+      labelPosition: variant === 'column' ? 'right' : 'top',
       line: {
         stroke: 'yellow',
         strokeWidth: 2,
@@ -100,15 +100,24 @@ export default ({
       variant,
       sort,
     },
-    data: {
-      type: 'tableList',
-      mode: 'normal',
-      row: 6,
-      column: 3,
-      mu: 500,
-      sigma: 200,
-      decimalPlace: 1,
-    },
+    data:
+      mode === 'waterfall'
+        ? [
+            ['支出项', '数量'],
+            ['房租', 2000],
+            ['饮食', 2500],
+            ['服装', 500],
+            ['总计', 5000],
+          ]
+        : {
+            type: 'tableList',
+            mode: 'normal',
+            row: 6,
+            column: 3,
+            mu: 500,
+            sigma: 200,
+            decimalPlace: 1,
+          },
     style: {
       labelPosition: mode === 'group' ? (variant === 'column' ? 'top' : 'right') : 'center',
       rect: {
@@ -127,6 +136,7 @@ export default ({
         fontSize: 10,
         format: {
           decimals: 2,
+          percentage: mode === 'percentage',
         },
       },
     },
