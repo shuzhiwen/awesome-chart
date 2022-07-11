@@ -37,6 +37,7 @@ export type LayerOptions =
   | LayerMarkOptions
   | LayerBrushOptions
   | LayerCandleOptions
+  | LayerForceOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
@@ -55,6 +56,8 @@ export type LayerHeatmapOptions = BasicLayerOptions<'heatmap'>
 export type LayerODLineOptions = BasicLayerOptions<'odLine'>
 
 export type LayerPackOptions = BasicLayerOptions<'pack'>
+
+export type LayerForceOptions = BasicLayerOptions<'force'>
 
 export type LayerTreemapOptions = BasicLayerOptions<'treemap'>
 

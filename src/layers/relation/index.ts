@@ -1,3 +1,4 @@
+export * from './force'
 export * from './pack'
 export * from './sankey'
 export * from './treemap'

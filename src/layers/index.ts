@@ -17,6 +17,7 @@ export const layerMapping = {
   candle: layer.LayerCandle,
   dashboard: layer.LayerDashboard,
   flopper: layer.LayerFlopper,
+  force: layer.LayerForce,
   heatmap: layer.LayerHeatmap,
   interactive: layer.LayerInteractive,
   legend: layer.LayerLegend,

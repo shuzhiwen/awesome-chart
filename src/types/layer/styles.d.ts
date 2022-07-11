@@ -156,6 +156,12 @@ export type LayerPackStyleShape = Partial<{
   text: TextStyleShape
 }>
 
+export type LayerForceStyleShape = Partial<{
+  nodeSize: [number, number]
+  node: GraphStyleShape
+  text: TextStyleShape
+}>
+
 export type LayerSankeyStyleShape = Partial<{
   edgeVariant: 'curve' | 'ribbon'
   direction: Direction

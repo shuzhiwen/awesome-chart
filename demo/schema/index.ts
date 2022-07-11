@@ -13,6 +13,7 @@ import tree from './relation/tree'
 import treemap from './relation/treemap'
 import pack from './relation/pack'
 import candle from './combine/candle'
+import force from './relation/force'
 
 export interface MenuItemShape {
   name: string
@@ -230,6 +231,10 @@ export const schemaMenu: MenuShape = {
         {
           name: '打包图',
           schema: base(pack()),
+        },
+        {
+          name: '重力气泡图',
+          schema: base(force()),
         },
       ],
     },

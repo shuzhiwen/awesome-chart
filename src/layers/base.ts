@@ -63,11 +63,11 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   private readonly backupEvent: BackupEventShape = {common: {}, tooltip: {}}
 
-  protected root: DrawerTarget
+  protected readonly log = createLog(this.className)
 
   protected needRecalculated = false
 
-  protected log = createLog(this.className)
+  protected root: DrawerTarget
 
   constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<T>) {
     this.options = merge(options, context)

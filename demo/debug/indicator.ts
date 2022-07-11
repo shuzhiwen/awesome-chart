@@ -16,7 +16,7 @@ export const debugDashboardLayer = (chart: Chart) => {
   layers.forEach((layer) => {
     layer.setData(new DataBase(data))
     layer.draw()
-    layer.log.info('Random Data', data)
+    console.info('Random Data', data)
   })
 }
 
@@ -29,6 +29,6 @@ export const debugFlopperLayer = (chart: Chart) => {
     layer.setData(new DataBase({value: Math.random() * 10 ** (integerPlace ?? 8)}))
     layer.draw()
     layer.playAnimation()
-    layer.log.info('Random Data', layer.data?.source.value)
+    console.info('Random Data', layer.data?.source.value)
   })
 }
