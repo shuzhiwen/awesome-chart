@@ -72,7 +72,7 @@ export function getAttr<T>(target: MaybeGroup<T>, index = 0, defaultValue: T): T
     }
     return defaultValue
   }
-  return target ?? defaultValue
+  return isNil(target) ? defaultValue : target
 }
 
 export function transformAttr(object: AnyObject) {

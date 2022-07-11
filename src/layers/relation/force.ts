@@ -3,6 +3,7 @@ import {DataTableList} from '../../data'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 import {forceCollide, forceSimulation, Simulation, forceX, forceY} from 'd3'
 import {scaleLinear} from '../../scales'
+import {merge} from 'lodash'
 import {
   ChartContext,
   DrawerDataShape,
@@ -10,6 +11,7 @@ import {
   CircleDrawerProps,
   LayerForceStyleShape,
   LayerForceOptions,
+  BackupAnimationOptions,
 } from '../../types'
 
 const defaultStyle: LayerForceStyleShape = {
@@ -43,11 +45,20 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
     super({options, context, sublayers: ['node', 'text'], tooltipTargets: ['node']})
   }
 
+  setScale() {}
+
+  setAnimation(options: BackupAnimationOptions) {
+    super.setAnimation(
+      merge(options, {
+        node: {update: {duration: 0, delay: 0}},
+        text: {update: {duration: 0, delay: 0}},
+      })
+    )
+  }
+
   setData(data: LayerForce['data']) {
     this._data = validateAndCreateData('tableList', this.data, data)
   }
-
-  setScale() {}
 
   setStyle(style: LayerForceStyleShape) {
     this._style = createStyle(defaultStyle, this._style, style)
