@@ -10,6 +10,10 @@ export interface CreateTextProps {
   offset?: number
 }
 
+export interface CreateLimitTextProps extends CreateTextProps {
+  maxTextWidth: number
+}
+
 export interface CreateColorMatrixProps {
   layer: Layer
   row: number

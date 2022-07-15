@@ -2,7 +2,13 @@ import {hierarchy, HierarchyNode, max, pack, range} from 'd3'
 import {LayerBase} from '../base'
 import {DataRelation} from '../../data'
 import {isSvgContainer, uuid} from '../../utils'
-import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
+import {
+  createColorMatrix,
+  createLimitText,
+  createStyle,
+  createText,
+  validateAndCreateData,
+} from '../helpers'
 import {
   ChartContext,
   DrawerDataShape,
@@ -16,6 +22,10 @@ import {
 
 const animationKey = `animationKey-${new Date().getTime()}`
 
+const defaultOptions: Partial<LayerPackOptions> = {
+  variant: 'pack',
+}
+
 const defaultStyle: LayerPackStyleShape = {
   zoom: true,
   padding: 0,
@@ -26,7 +36,9 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[][] = []
+  private textData: (DrawerDataShape<TextDrawerProps> & {
+    fontSize?: number
+  })[][] = []
 
   private treeData: Maybe<HierarchyNode<Node>>
 
@@ -51,24 +63,31 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
   }
 
   constructor(options: LayerPackOptions, context: ChartContext) {
-    super({options, context, sublayers: ['circle', 'text'], tooltipTargets: ['circle']})
+    super({
+      context,
+      options: {...defaultOptions, ...options},
+      sublayers: ['circle', 'text'],
+      tooltipTargets: ['circle'],
+    })
   }
 
   setData(data: LayerPack['data']) {
     this._data = validateAndCreateData('relation', this.data, data)
 
     const {nodes} = this.data!,
-      {width, height} = this.options.layout,
-      root = {
-        id: uuid(),
-        name: 'root',
-        children: nodes.filter(({level}) => level === 0),
-        value: 0,
-      }
+      {layout} = this.options,
+      {width, height} = layout
 
+    const root = {
+      id: uuid(),
+      name: 'root',
+      children: nodes.filter(({level}) => level === 0),
+      value: 0,
+    }
     this.treeData = hierarchy(root)
       .sum((d) => d.value)
       .sort((a, b) => b.data.value - a.data.value)
+
     this.zoomConfig = {
       maxHeight: max(this.treeData.descendants().map(({height}) => height + 1)) ?? -1,
       view: [width, height],
@@ -88,7 +107,8 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
       throw new Error('Invalid data')
     }
 
-    const {left, top} = this.options.layout,
+    const {layout, variant} = this.options,
+      {left, top} = layout,
       {padding = 0, circle, text} = this.style,
       {view, offset, maxHeight} = this.zoomConfig,
       nodes = pack<Node>().size(view).padding(padding)(this.treeData).descendants(),
@@ -119,30 +139,39 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
 
     this.textData = this.circleData.map((group) =>
       group.map((item) =>
-        createText({
-          ...item,
-          style: text,
-          position: 'center',
-        })
+        variant === 'pack'
+          ? createText({
+              ...item,
+              style: text,
+              position: 'center',
+            })
+          : createLimitText({
+              ...item,
+              style: text,
+              position: 'center',
+              maxTextWidth: item.r * 2 * 0.9,
+            })
       )
     )
   }
 
   draw() {
+    const {variant} = this.options
     const {zoom, circle, text} = this.style
     const circleData = this.circleData.map((group) => ({
       data: group,
       source: group,
       ...circle,
       fill: group.map(({color}) => color!),
+      fillOpacity: variant === 'wordCloud' ? 0 : circle?.fillOpacity,
     }))
     const textData = this.textData.map((group) => ({
       data: group,
       ...text,
+      fontSize: variant === 'pack' ? text?.fontSize : group.flatMap(({fontSize}) => fontSize),
     }))
 
     this.drawBasic({type: 'circle', data: circleData})
-    // only show the innermost label to prevent occlusion
     this.drawBasic({type: 'text', data: textData.slice(textData.length - 1)})
 
     if (zoom && isSvgContainer(this.root)) {

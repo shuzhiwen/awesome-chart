@@ -14,6 +14,7 @@ import treemap from './relation/treemap'
 import pack from './relation/pack'
 import candle from './combine/candle'
 import force from './relation/force'
+import wordCloud from './relation/word-cloud'
 
 export interface MenuItemShape {
   name: string
@@ -235,6 +236,10 @@ export const schemaMenu: MenuShape = {
         {
           name: '重力气泡图',
           schema: base(force()),
+        },
+        {
+          name: '词云',
+          schema: base(wordCloud()),
         },
       ],
     },

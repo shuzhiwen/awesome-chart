@@ -90,7 +90,7 @@ export class DataRelation extends DataBase<RawRelation> {
 
     this.edges.forEach(({to}) => findRoot(to))
     this.roots.forEach((root) => updateLevel(root, []))
-    this.nodes.map((node) => (node.level = level[node.id]))
+    this.nodes.map((node) => (node.level = level[node.id] === -1 ? 0 : level[node.id]))
     this.nodes.forEach(({parents, children}, i) => {
       this.nodes[i].parents = Array.from(new Set(parents))
       this.nodes[i].children = Array.from(new Set(children))

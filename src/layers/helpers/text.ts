@@ -1,10 +1,10 @@
-import {isArray} from 'lodash'
+import {isArray, merge} from 'lodash'
 import {formatNumber, getAttr, getTextWidth, isApproximateNumber} from '../../utils'
-import {CreateTextProps} from '../../types'
+import {CreateLimitTextProps, CreateTextProps} from '../../types'
 
 export function createText(props: CreateTextProps) {
   const {x, y, value, style = {}, position = 'rightTop', offset = 0} = props,
-    {fontSize: _fontSize = 12, writingMode, format} = style,
+    {fontSize: _fontSize, writingMode, format} = style,
     fontSize = getAttr(_fontSize, 0, 12),
     formattedText = String(formatNumber(value, format)),
     textWidth = getTextWidth(formattedText, fontSize)
@@ -76,4 +76,17 @@ export function createArcText(props: Omit<CreateTextProps, 'position'> & {angle:
       ? 'right'
       : 'center',
   })
+}
+
+export function createLimitText(props: CreateLimitTextProps) {
+  const {value, style = {}, maxTextWidth} = props,
+    {fontSize: _fontSize, format} = style,
+    formattedText = String(formatNumber(value, format))
+  let fontSize = getAttr(_fontSize, 0, 12)
+
+  while (getTextWidth(formattedText, fontSize) > maxTextWidth) {
+    --fontSize
+  }
+
+  return {...createText(merge(props, {style: {fontSize}})), fontSize}
 }

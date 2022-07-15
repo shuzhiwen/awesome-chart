@@ -55,8 +55,6 @@ export type LayerHeatmapOptions = BasicLayerOptions<'heatmap'>
 
 export type LayerODLineOptions = BasicLayerOptions<'odLine'>
 
-export type LayerPackOptions = BasicLayerOptions<'pack'>
-
 export type LayerForceOptions = BasicLayerOptions<'force'>
 
 export type LayerTreemapOptions = BasicLayerOptions<'treemap'>
@@ -116,5 +114,12 @@ export type LayerFlopperOptions = BasicLayerOptions<
   'flopper',
   {
     variant: 'vertical' | 'flop'
+  }
+>
+
+export type LayerPackOptions = BasicLayerOptions<
+  'pack',
+  {
+    variant: 'pack' | 'wordCloud'
   }
 >
