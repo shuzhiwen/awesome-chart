@@ -4,6 +4,7 @@ import styles from './Editor.module.css'
 import {download} from '../src'
 import {noop, throttle} from 'lodash'
 import chroma from 'chroma-js'
+import React from 'react'
 
 const throttleDownload = throttle(download, 500)
 const stringify = (value: any, space: number) => {

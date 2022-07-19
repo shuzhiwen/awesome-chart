@@ -4,6 +4,7 @@ import {CreateChartSchema} from '../src/types'
 import {MenuItemShape} from './schema'
 import styles from './Chart.module.css'
 import {cloneDeep} from 'lodash'
+import React from 'react'
 
 export const Chart = (props: {
   debuggers: AnyFunction[]

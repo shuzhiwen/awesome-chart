@@ -4,6 +4,7 @@ import {useEffect, useRef} from 'react'
 import {D3Selection, LayoutArea} from '../src/types'
 import {schemaMenu} from './schema'
 import s from './TabMenu.module.css'
+import React from 'react'
 import {
   addStyle,
   getAttr,
