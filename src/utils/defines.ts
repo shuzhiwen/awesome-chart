@@ -1,8 +1,7 @@
 import {fabric} from 'fabric'
 import {isArray} from 'lodash'
-import {isSvgContainer} from './asserts'
-import {mergeAlpha, group} from './chaos'
 import {uuid} from './random'
+import {group, isSvgContainer, mergeAlpha} from '.'
 import {
   GradientCreatorProps,
   GradientWithId,

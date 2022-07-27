@@ -1,4 +1,5 @@
 export * from './asserts'
+export * from './attribute'
 export * from './chaos'
 export * from './color-matrix'
 export * from './constants'
