@@ -56,21 +56,29 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
   setData(data: LayerCarousel['data']) {
     this._data = validateAndCreateData('tableList', this.data, data)
 
-    const {rawTableList = []} = this.data!
+    const {mode, layout} = this.options,
+      {rawTableList = []} = this.data!,
+      {width, height, left, top} = layout
 
     this.currentIndex = rawTableList.length
-    this.carouselData = [
-      ...rawTableList.map(([url], i) => ({
+
+    if (mode === 'slide') {
+      this.carouselData = [...rawTableList, ...rawTableList].map(([url], i) => ({
         url,
         carouselIndex: i,
         opacity: Math.abs(i - this.currentIndex) > 1 ? 0 : 1,
-      })),
-      ...rawTableList.map(([url], i) => ({
-        url,
-        carouselIndex: i + rawTableList.length,
-        opacity: Math.abs(i + rawTableList.length - this.currentIndex) > 1 ? 0 : 1,
-      })),
-    ] as LayerCarousel['carouselData']
+      })) as LayerCarousel['carouselData']
+    } else if (mode === 'fade') {
+      this.carouselData = [...rawTableList, ...rawTableList].map(([url], i) => ({
+        url: url as string,
+        carouselIndex: i,
+        opacity: i === this.currentIndex ? 1 : 0,
+        width,
+        height,
+        x: left,
+        y: top,
+      }))
+    }
   }
 
   setScale() {}
@@ -84,63 +92,80 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
       throw new Error('Invalid data')
     }
 
-    const {padding = 0, zoom = 1, direction} = this.style,
-      {left, top, width, height, right, bottom} = this.options.layout
+    const {mode, layout} = this.options,
+      {padding = 0, zoom = 1, direction} = this.style,
+      {left, top, width, height, right, bottom} = layout
 
-    if (direction === 'left' || direction === 'right') {
-      const groupWidth = width * zoom + padding
+    if (mode === 'slide') {
+      if (direction === 'left' || direction === 'right') {
+        const groupWidth = width * zoom + padding
 
+        this.carouselData = this.carouselData.map(({carouselIndex, ...rest}) => ({
+          ...rest,
+          carouselIndex,
+          width: carouselIndex === this.currentIndex ? width : width * zoom,
+          height: carouselIndex === this.currentIndex ? height : height * zoom,
+          y: carouselIndex === this.currentIndex ? top : top + (height * (1 - zoom)) / 2,
+          x:
+            this.currentIndex - carouselIndex > 0
+              ? left - (this.currentIndex - carouselIndex) * groupWidth
+              : this.currentIndex - carouselIndex < 0
+              ? right + (carouselIndex - this.currentIndex) * groupWidth - width * zoom
+              : left,
+        }))
+      } else if (direction === 'top' || direction === 'bottom') {
+        const groupHeight = height * zoom + padding
+
+        this.carouselData = this.carouselData.map(({carouselIndex, ...rest}) => ({
+          ...rest,
+          carouselIndex,
+          width: carouselIndex === this.currentIndex ? width : width * zoom,
+          height: carouselIndex === this.currentIndex ? height : height * zoom,
+          x: carouselIndex === this.currentIndex ? left : left + (width * (1 - zoom)) / 2,
+          y:
+            this.currentIndex - carouselIndex > 0
+              ? top - (this.currentIndex - carouselIndex) * groupHeight
+              : this.currentIndex - carouselIndex < 0
+              ? bottom + (carouselIndex - this.currentIndex) * groupHeight - height * zoom
+              : top,
+        }))
+      }
+    }
+
+    if (mode === 'fade') {
       this.carouselData = this.carouselData.map(({carouselIndex, ...rest}) => ({
         ...rest,
         carouselIndex,
-        width: carouselIndex === this.currentIndex ? width : width * zoom,
-        height: carouselIndex === this.currentIndex ? height : height * zoom,
-        y: carouselIndex === this.currentIndex ? top : top + (height * (1 - zoom)) / 2,
-        x:
-          this.currentIndex - carouselIndex > 0
-            ? left - (this.currentIndex - carouselIndex) * groupWidth
-            : this.currentIndex - carouselIndex < 0
-            ? right + (carouselIndex - this.currentIndex) * groupWidth - width * zoom
-            : left,
-      }))
-    } else if (direction === 'top' || direction === 'bottom') {
-      const groupHeight = height * zoom + padding
-
-      this.carouselData = this.carouselData.map(({carouselIndex, ...rest}) => ({
-        ...rest,
-        carouselIndex,
-        width: carouselIndex === this.currentIndex ? width : width * zoom,
-        height: carouselIndex === this.currentIndex ? height : height * zoom,
-        x: carouselIndex === this.currentIndex ? left : left + (width * (1 - zoom)) / 2,
-        y:
-          this.currentIndex - carouselIndex > 0
-            ? top - (this.currentIndex - carouselIndex) * groupHeight
-            : this.currentIndex - carouselIndex < 0
-            ? bottom + (carouselIndex - this.currentIndex) * groupHeight - height * zoom
-            : top,
+        opacity: carouselIndex === this.currentIndex ? 1 : 0,
       }))
     }
   }
 
   next() {
-    const {direction} = this.style,
+    const {mode} = this.options,
+      {direction} = this.style,
       _min = min(this.carouselData.map(({carouselIndex}) => carouselIndex)),
       _max = max(this.carouselData.map(({carouselIndex}) => carouselIndex)),
       minIndex = this.carouselData.findIndex((item) => item.carouselIndex === _min),
       maxIndex = this.carouselData.findIndex((item) => item.carouselIndex === _max)
 
-    if (direction === 'left' || direction === 'top') {
+    if (mode === 'slide') {
+      if (direction === 'left' || direction === 'top') {
+        this.currentIndex++
+        this.carouselData[minIndex].carouselIndex = (_max ?? 0) + 1
+        this.carouselData.forEach(({carouselIndex}, i) => {
+          this.carouselData[i].opacity = Math.abs(carouselIndex - this.currentIndex) > 1 ? 0 : 1
+        })
+      } else if (direction === 'right' || direction === 'bottom') {
+        this.currentIndex--
+        this.carouselData[maxIndex].carouselIndex = (_min ?? 0) - 1
+        this.carouselData.forEach(({carouselIndex}, i) => {
+          this.carouselData[i].opacity = Math.abs(carouselIndex - this.currentIndex) > 1 ? 0 : 1
+        })
+      }
+    } else if (mode === 'fade') {
       this.currentIndex++
       this.carouselData[minIndex].carouselIndex = (_max ?? 0) + 1
-      this.carouselData.forEach(({carouselIndex}, i) => {
-        this.carouselData[i].opacity = Math.abs(carouselIndex - this.currentIndex) > 1 ? 0 : 1
-      })
-    } else if (direction === 'right' || direction === 'bottom') {
-      this.currentIndex--
-      this.carouselData[maxIndex].carouselIndex = (_min ?? 0) - 1
-      this.carouselData.forEach(({carouselIndex}, i) => {
-        this.carouselData[i].opacity = Math.abs(carouselIndex - this.currentIndex) > 1 ? 0 : 1
-      })
     }
 
     this.needRecalculated = true
