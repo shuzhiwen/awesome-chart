@@ -58,18 +58,21 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
 
     const {mode, layout} = this.options,
       {rawTableList = []} = this.data!,
-      {width, height, left, top} = layout
+      {width, height, left, top} = layout,
+      prefix = [...rawTableList, ...rawTableList].slice(-2),
+      suffix = [...rawTableList, ...rawTableList].slice(0, 2),
+      total = [...prefix, ...rawTableList, ...suffix]
 
-    this.currentIndex = rawTableList.length
+    this.currentIndex = Math.floor(total.length / 2)
 
     if (mode === 'slide') {
-      this.carouselData = [...rawTableList, ...rawTableList].map(([url], i) => ({
+      this.carouselData = total.map(([url], i) => ({
         url,
         carouselIndex: i,
         opacity: Math.abs(i - this.currentIndex) > 1 ? 0 : 1,
       })) as LayerCarousel['carouselData']
     } else if (mode === 'fade') {
-      this.carouselData = [...rawTableList, ...rawTableList].map(([url], i) => ({
+      this.carouselData = total.map(([url], i) => ({
         url: url as string,
         carouselIndex: i,
         opacity: i === this.currentIndex ? 1 : 0,
