@@ -8,6 +8,7 @@ import matrix from './normal/matrix'
 import digitalFlop from './indicator/digital-flop'
 import map from './geography/map'
 import dashboard from './indicator/dashboard'
+import carousel from './indicator/carousel'
 import sankey from './relation/sankey'
 import tree from './relation/tree'
 import treemap from './relation/treemap'
@@ -275,6 +276,16 @@ export const schemaMenu: MenuShape = {
         {
           name: '基础地图',
           schema: base(map()),
+        },
+      ],
+    },
+
+    {
+      name: '轮播图',
+      children: [
+        {
+          name: '基础轮播',
+          schema: base(carousel()),
         },
       ],
     },

@@ -38,6 +38,7 @@ export type LayerOptions =
   | LayerBrushOptions
   | LayerCandleOptions
   | LayerForceOptions
+  | LayerCarouselOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
@@ -121,5 +122,12 @@ export type LayerPackOptions = BasicLayerOptions<
   'pack',
   {
     variant: 'pack' | 'wordCloud'
+  }
+>
+
+export type LayerCarouselOptions = BasicLayerOptions<
+  'carousel',
+  {
+    mode: 'slide' | 'fade'
   }
 >

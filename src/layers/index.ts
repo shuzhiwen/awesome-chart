@@ -15,6 +15,7 @@ export const layerMapping = {
   basemap: layer.LayerBasemap,
   brush: layer.LayerBrush,
   candle: layer.LayerCandle,
+  carousel: layer.LayerCarousel,
   dashboard: layer.LayerDashboard,
   flopper: layer.LayerFlopper,
   force: layer.LayerForce,
