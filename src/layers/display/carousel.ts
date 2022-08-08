@@ -43,6 +43,8 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
 
   private currentIndex = 0
 
+  private startIndex = 0
+
   get data() {
     return this._data
   }
@@ -63,13 +65,14 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
     this._data = validateAndCreateData('tableList', this.data, data)
 
     const {mode, layout} = this.options,
-      {rawTableList = []} = this.data!,
+      {rawTableList: _data = []} = this.data!,
       {width, height, left, top} = layout,
-      prefix = [...rawTableList, ...rawTableList].slice(-2),
-      suffix = [...rawTableList, ...rawTableList].slice(0, 2),
-      total = [...prefix, ...rawTableList, ...suffix]
+      prefix = _data.length < 4 ? _data.concat(_data) : _data.slice(2),
+      suffix = _data.length < 4 ? _data.concat(_data) : _data.slice(0, 2),
+      total = [...prefix, ..._data, ...suffix]
 
-    this.currentIndex = 2
+    this.currentIndex = prefix.length
+    this.startIndex = prefix.length
 
     if (mode === 'slide') {
       this.carouselData = total.map(([url], i) => ({
@@ -112,17 +115,18 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
           ? (width - totalDotPadding) / (imageCount + 1)
           : maxDotSize,
       dotHeight = max([dotWidth / 10, 4]) ?? 0,
-      totalDotWidth = dotWidth * (imageCount + 1) + totalDotPadding
+      totalDotWidth = dotWidth * (imageCount + 1) + totalDotPadding,
+      relativeIndex = (this.currentIndex - this.startIndex) % imageCount
 
     this.dotData = range(0, imageCount).map((index) => ({
-      opacity: (this.currentIndex - 2) % imageCount === index ? 1 : 0.5,
-      width: (this.currentIndex - 2) % imageCount === index ? dotWidth * 2 : dotWidth,
+      opacity: relativeIndex % imageCount === index ? 1 : 0.5,
+      width: relativeIndex % imageCount === index ? dotWidth * 2 : dotWidth,
       height: dotHeight,
       y: top + height - dotHeight,
       x:
         left +
         (width - totalDotWidth) / 2 +
-        ((this.currentIndex - 2) % imageCount >= index
+        (relativeIndex % imageCount >= index
           ? index * (dotWidth + dotPadding)
           : index * (dotWidth + dotPadding) + dotWidth),
     }))
