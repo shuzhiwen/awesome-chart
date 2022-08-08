@@ -4,7 +4,7 @@ export * from './common'
 export * from './base'
 export * from './geography'
 export * from './helpers'
-export * from './indicator'
+export * from './display'
 export * from './normal'
 export * from './relation'
 
