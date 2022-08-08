@@ -1,13 +1,16 @@
+import {range} from 'd3'
 import {isNil, max, min} from 'lodash'
 import {LayerBase} from '../base'
 import {createStyle, validateAndCreateData} from '../helpers'
 import {DataTableList} from '../../data'
+import {getAttr} from '../../utils'
 import {
   ChartContext,
   DrawerDataShape,
   ImageDrawerProps,
   LayerCarouselOptions,
   LayerCarouselStyleShape,
+  RectDrawerProps,
 } from '../../types'
 
 const defaultOptions: Partial<LayerCarouselOptions> = {
@@ -19,6 +22,7 @@ const defaultStyle: LayerCarouselStyleShape = {
   padding: 10,
   zoom: 0.7,
   interval: 2000,
+  maxDotSize: 10,
 }
 
 export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
@@ -26,12 +30,14 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
 
   private _style = defaultStyle
 
-  private carouselData: Required<
-    DrawerDataShape<ImageDrawerProps> & {
-      carouselIndex: number
-      opacity: number
-    }
-  >[] = []
+  private carouselData: (DrawerDataShape<ImageDrawerProps> & {
+    carouselIndex: number
+    opacity: number
+  })[] = []
+
+  private dotData: (DrawerDataShape<RectDrawerProps> & {
+    opacity: number
+  })[] = []
 
   private timer: Maybe<NodeJS.Timeout>
 
@@ -49,7 +55,7 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
     super({
       context,
       options: {...defaultOptions, ...options},
-      sublayers: ['carousel', 'text'],
+      sublayers: ['carousel', 'dot', 'text'],
     })
   }
 
@@ -63,7 +69,7 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
       suffix = [...rawTableList, ...rawTableList].slice(0, 2),
       total = [...prefix, ...rawTableList, ...suffix]
 
-    this.currentIndex = Math.floor(total.length / 2)
+    this.currentIndex = 2
 
     if (mode === 'slide') {
       this.carouselData = total.map(([url], i) => ({
@@ -96,8 +102,30 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
     }
 
     const {mode, layout} = this.options,
-      {padding = 0, zoom = 1, direction} = this.style,
-      {left, top, width, height, right, bottom} = layout
+      {left, top, width, height, right, bottom} = layout,
+      {padding = 0, zoom = 1, direction, maxDotSize = 0} = this.style,
+      imageCount = this.data.rawTableList.length,
+      dotPadding = 4,
+      totalDotPadding = (imageCount - 1) * dotPadding,
+      dotWidth =
+        (imageCount + 1) * maxDotSize + totalDotPadding > width
+          ? (width - totalDotPadding) / (imageCount + 1)
+          : maxDotSize,
+      dotHeight = max([dotWidth / 10, 4]) ?? 0,
+      totalDotWidth = dotWidth * (imageCount + 1) + totalDotPadding
+
+    this.dotData = range(0, imageCount).map((index) => ({
+      opacity: (this.currentIndex - 2) % imageCount === index ? 1 : 0.5,
+      width: (this.currentIndex - 2) % imageCount === index ? dotWidth * 2 : dotWidth,
+      height: dotHeight,
+      y: top + height - dotHeight,
+      x:
+        left +
+        (width - totalDotWidth) / 2 +
+        ((this.currentIndex - 2) % imageCount >= index
+          ? index * (dotWidth + dotPadding)
+          : index * (dotWidth + dotPadding) + dotWidth),
+    }))
 
     if (mode === 'slide') {
       if (direction === 'left' || direction === 'right') {
@@ -180,8 +208,14 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
       data: this.carouselData,
       opacity: this.carouselData.map(({opacity}) => opacity),
     }
+    const dotData = {
+      data: this.dotData,
+      ...this.style.dot,
+      opacity: this.dotData.map(({opacity}, i) => opacity * getAttr(this.style.dot?.opacity, i, 1)),
+    }
 
     this.drawBasic({type: 'image', data: [carouselData], sublayer: 'carousel'})
+    this.drawBasic({type: 'rect', data: [dotData], sublayer: 'dot'})
 
     !isNil(this.timer) && clearTimeout(this.timer)
     this.timer = setTimeout(this.next.bind(this), this.style.interval)
