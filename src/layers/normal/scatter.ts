@@ -8,7 +8,7 @@ import {
 } from '../helpers'
 import {DataTableList} from '../../data'
 import {scaleLinear} from '../../scales'
-import {isRealNumber, ungroup} from '../../utils'
+import {isRealNumber, tableListToObjects, ungroup} from '../../utils'
 import {
   ChartContext,
   DrawerDataShape,
@@ -20,6 +20,8 @@ import {
   CircleDrawerProps,
   ElSourceShape,
 } from '../../types'
+
+type DataKey = 'x' | 'y' | 'value' | 'category'
 
 const defaultStyle: LayerScatterStyleShape = {
   pointSize: [5, 5],
@@ -92,16 +94,13 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
       {scaleX, scaleY, scalePointSize} = this.scale,
       {text, point, pointSize} = this.style,
       {headers, rawTableList} = this.data,
-      xIndex = headers.findIndex((header) => header === 'x'),
-      yIndex = headers.findIndex((header) => header === 'y'),
-      valueIndex = headers.findIndex((header) => header === 'value'),
-      categoryIndex = headers.findIndex((header) => header === 'category'),
-      pointData = rawTableList.map((item, i) => ({
-        value: item[valueIndex],
-        category: item[categoryIndex],
-        x: left + scaleX(item[xIndex] as number) ?? NaN,
-        y: top + scaleY(item[yIndex] as number) ?? NaN,
-        r: scalePointSize(item[valueIndex] as number) ?? ungroup(pointSize),
+      tableList = [headers].concat(rawTableList),
+      pointData = tableListToObjects<DataKey>(tableList).map((item, i) => ({
+        value: item.value,
+        category: item.category,
+        x: left + scaleX(item.x as number) ?? NaN,
+        y: top + scaleY(item.y as number) ?? NaN,
+        r: scalePointSize(item.value as number) ?? ungroup(pointSize),
         source: headers.map((header, j) => ({
           value: rawTableList[i][j],
           category: header,

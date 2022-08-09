@@ -1,5 +1,6 @@
 import {LayerBase} from '../base'
 import {createScale, createStyle, createText, validateAndCreateData} from '../helpers'
+import {createDroplet, isScaleBand, tableListToObjects} from '../../utils'
 import {DataTableList} from '../../data'
 import {
   ChartContext,
@@ -10,7 +11,8 @@ import {
   PathDrawerProps,
   TextDrawerProps,
 } from '../../types'
-import {createDroplet, isScaleBand} from '../../utils'
+
+type DataKey = 'x' | 'y' | 'value'
 
 const defaultStyle: LayerMarkStyleShape = {
   size: 30,
@@ -72,20 +74,18 @@ export class LayerMark extends LayerBase<LayerMarkOptions> {
     }
 
     const {scaleX, scaleY} = this.scale,
-      {headers, rawTableList} = this.data,
+      {rawTableList, headers} = this.data,
       {size = 10, text} = this.style,
       {left, top} = this.options.layout,
-      xIndex = headers.findIndex((header) => header === 'x'),
-      yIndex = headers.findIndex((header) => header === 'y'),
-      valueIndex = headers.findIndex((header) => header === 'value'),
       offsetX = isScaleBand(scaleX) ? scaleX.bandwidth() / 2 : 0,
-      offsetY = isScaleBand(scaleY) ? scaleY.bandwidth() / 2 : 0
+      offsetY = isScaleBand(scaleY) ? scaleY.bandwidth() / 2 : 0,
+      tableList = [headers].concat(rawTableList)
 
-    this.markData = rawTableList.map((item) => ({
-      value: item[valueIndex] ?? '',
+    this.markData = tableListToObjects<DataKey>(tableList).map((item) => ({
+      value: item.value ?? '',
       path: createDroplet(-size / 2, -size / 2, size, size),
-      centerX: left + scaleX(item[xIndex]) + offsetX,
-      centerY: top + scaleY(item[yIndex]) - size / 2 + offsetY,
+      centerX: left + scaleX(item.x) + offsetX,
+      centerY: top + scaleY(item.y) - size / 2 + offsetY,
     }))
 
     this.textData = this.markData.map(({centerX, centerY, value}) =>

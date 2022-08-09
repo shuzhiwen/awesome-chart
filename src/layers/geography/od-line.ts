@@ -1,7 +1,7 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {path as d3Path} from 'd3-path'
-import {isRealNumber} from '../../utils'
+import {isRealNumber, tableListToObjects} from '../../utils'
 import {createScale, createStyle, generateClass, validateAndCreateData} from '../helpers'
 import {defaultTheme} from '../../core/theme'
 import {
@@ -14,6 +14,8 @@ import {
   PathDrawerProps,
   DrawerDataShape,
 } from '../../types'
+
+type DataKey = 'fromX' | 'fromY' | 'toX' | 'toY'
 
 const defaultStyle: LayerODLineStyleShape = {
   odLine: {
@@ -46,7 +48,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
 
   private odLineData: {
     path: string
-    position: Record<'fromX' | 'fromY' | 'toX' | 'toY', number>
+    position: Record<DataKey, number>
     source: {
       category: 'from' | 'to'
       value: string
@@ -76,6 +78,11 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
 
   setData(data: LayerODLine['data']) {
     this._data = validateAndCreateData('tableList', this.data, data)
+    ;['fromX', 'fromY', 'toX', 'toY'].map((key) => {
+      if (!this.data?.headers.includes(key)) {
+        throw new Error(`DataTableList lost specific column "${key}"`)
+      }
+    })
   }
 
   setScale(scale: LayerODLineScaleShape) {
@@ -92,27 +99,23 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
     }
 
     const {left, top} = this.options.layout,
-      {headers, rawTableList} = this.data,
+      {rawTableList, headers} = this.data,
       {flyingObject} = this.style,
-      fromXIndex = headers.findIndex((header) => header === 'fromX'),
-      fromYIndex = headers.findIndex((header) => header === 'fromY'),
-      toXIndex = headers.findIndex((header) => header === 'toX'),
-      toYIndex = headers.findIndex((header) => header === 'toY'),
-      {scaleX, scaleY} = this.scale
+      {scaleX, scaleY} = this.scale,
+      tableList = [headers].concat(rawTableList)
 
-    this.odLineData = rawTableList.map((d) => {
-      const [fromX, fromY, toX, toY] = [d[fromXIndex], d[fromYIndex], d[toXIndex], d[toYIndex]]
+    this.odLineData = tableListToObjects<DataKey>(tableList).map((d) => {
       const position = {
-        fromX: left + scaleX(fromX),
-        fromY: top + scaleY(fromY),
-        toX: left + scaleX(toX),
-        toY: top + scaleY(toY),
+        fromX: left + scaleX(d.fromX),
+        fromY: top + scaleY(d.fromY),
+        toX: left + scaleX(d.toX),
+        toY: top + scaleY(d.toY),
       }
 
       return {
         source: [
-          {category: 'from', value: `(${fromX},${fromY})`},
-          {category: 'to', value: `(${toX},${toY})`},
+          {category: 'from', value: `(${d.fromX},${d.fromY})`},
+          {category: 'to', value: `(${d.toX},${d.toY})`},
         ],
         // geo coordinates => svg coordinates
         path: this.getPath(position),

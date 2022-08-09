@@ -1,13 +1,14 @@
 import {RawRelation, RawTable, RawTableList} from '../types'
 import {isTableList} from './asserts'
 
-export function tableListToObjects(tableList: RawTableList): AnyObject {
+export function tableListToObjects<T extends Meta, P = Meta>(tableList: RawTableList) {
   if (!isTableList(tableList)) {
     throw new Error('invalid input')
   }
 
   return tableList.slice(1).map((item) => {
-    return Object.fromEntries(tableList[0].map((key, i) => [key, item[i]]))
+    const entries = tableList[0].map((key, i) => [key, item[i]])
+    return Object.fromEntries(entries) as unknown as Record<T, P>
   })
 }
 
