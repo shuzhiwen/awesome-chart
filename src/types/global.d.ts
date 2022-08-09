@@ -22,6 +22,8 @@ type Values<T> = T extends Record<any, infer U> ? U : T extends Array<infer F> ?
 
 type FlatObject<T> = T extends Record<infer F, MaybeGroup<infer P>> ? Record<F, P> : never
 
+type SetKeys<T> = T extends Set<infer P> ? P : T
+
 type Engine = 'svg' | 'canvas'
 
 type Direction = 'horizontal' | 'vertical'
