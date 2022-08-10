@@ -8,8 +8,6 @@ import {getEasyGradientCreator} from '../utils'
 import {BackupDataItemShape, LayerOptions, LayerScalesShape, LayerType} from './layer'
 import {AnimationEasing} from './animation'
 
-export type ChartState = 'initialize' | 'destroy' | 'ready' | 'warn'
-
 export type ChartContext = Pick<
   Chart,
   | 'bindCoordinate'

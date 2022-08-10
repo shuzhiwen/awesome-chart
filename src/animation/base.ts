@@ -13,7 +13,7 @@ import {
 export abstract class AnimationBase<T extends Options> {
   readonly log = createLog(this.constructor.name)
 
-  readonly event = createEvent(this.constructor.name)
+  readonly event = createEvent<SetKeys<typeof animationLifeCycles>>(this.constructor.name)
 
   readonly options
 

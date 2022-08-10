@@ -18,11 +18,11 @@ import {
   dependantLayers,
   noChange,
   uuid,
+  chartLifeCycles,
 } from '../utils'
 import {
   Layer,
   LayoutShape,
-  ChartState,
   LayoutCreator,
   ChartProps,
   ChartContext,
@@ -37,8 +37,6 @@ import {
 fabric.Object.prototype.objectCaching = false
 
 export class Chart {
-  public state: ChartState = 'initialize'
-
   private _layout: LayoutShape
 
   private _layers: Layer[] = []
@@ -49,7 +47,7 @@ export class Chart {
 
   private defs: GradientCreatorProps<unknown>['container']
 
-  readonly event = createEvent<'MouseEvent' | ChartState>(Chart.name)
+  readonly event = createEvent<'MouseEvent' | SetKeys<typeof chartLifeCycles>>(Chart.name)
 
   readonly drawerController: PriorityQueue = new PriorityQueue()
 
@@ -138,8 +136,7 @@ export class Chart {
         ),
     })
 
-    this.state = 'initialize'
-    this.event.fire(this.state)
+    this.event.fire('initialized')
   }
 
   setPadding(padding?: Padding, creator: LayoutCreator = defaultLayoutCreator) {
@@ -167,10 +164,7 @@ export class Chart {
     }
 
     const layer = new layerMapping[options.type](options as never, context)
-
     this._layers.push(layer)
-    this.state = 'ready'
-    this.event.fire(this.state)
 
     return layer
   }
@@ -241,7 +235,6 @@ export class Chart {
     this.layers.forEach((layer) => layer.destroy())
     this._layers.length = 0
     this.tooltip.destroy()
-    this.state = 'destroy'
-    this.event.fire(this.state)
+    this.event.fire('destroy')
   }
 }

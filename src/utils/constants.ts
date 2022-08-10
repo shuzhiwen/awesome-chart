@@ -2,6 +2,8 @@ export const tooltipEvents = new Set(['mouseover', 'mouseout', 'mousemove'] as c
 
 export const disableEventDrawerType = new Set(['text', 'line', 'area'])
 
+export const chartLifeCycles = new Set(['initialized', 'destroy'])
+
 export const dependantLayers = new Set([
   'axis',
   'heatmap',
