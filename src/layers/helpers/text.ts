@@ -7,7 +7,8 @@ export function createText(props: CreateTextProps) {
     {fontSize: _fontSize, writingMode, format} = style,
     fontSize = getAttr(_fontSize, 0, 12),
     formattedText = String(formatNumber(value, format)),
-    textWidth = getTextWidth(formattedText, fontSize)
+    textWidth = getTextWidth(formattedText, fontSize),
+    arcOffset = offset / Math.SQRT2
   let [positionX, positionY] = [x, y]
 
   if (position === 'center') {
@@ -26,17 +27,17 @@ export function createText(props: CreateTextProps) {
     positionX -= textWidth / 2
     positionY += fontSize + offset
   } else if (position === 'leftTop') {
-    positionX -= textWidth + offset
-    positionY -= offset
+    positionX -= textWidth + arcOffset
+    positionY -= arcOffset
   } else if (position === 'rightTop') {
-    positionX += offset
-    positionY -= offset
+    positionX += arcOffset
+    positionY -= arcOffset
   } else if (position === 'leftBottom') {
-    positionX -= textWidth + offset
-    positionY += fontSize + offset
+    positionX -= textWidth + arcOffset
+    positionY += fontSize + arcOffset
   } else if (position === 'rightBottom') {
-    positionX += offset
-    positionY += fontSize + offset
+    positionX += arcOffset
+    positionY += fontSize + arcOffset
   }
 
   if (writingMode === 'vertical-rl') {
@@ -70,10 +71,14 @@ export function createArcText(props: Omit<CreateTextProps, 'position'> & {angle:
       ? 'top'
       : isApproximateNumber(angle, Math.PI)
       ? 'bottom'
-      : angle > Math.PI
-      ? 'left'
       : angle < Math.PI
-      ? 'right'
+      ? angle < Math.PI * 0.5
+        ? 'rightTop'
+        : 'rightBottom'
+      : angle > Math.PI
+      ? angle > Math.PI * 1.5
+        ? 'leftTop'
+        : 'leftBottom'
       : 'center',
   })
 }

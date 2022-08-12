@@ -86,6 +86,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     (Partial<DrawerDataShape<LineDrawerProps> & DrawerDataShape<CircleDrawerProps>> & {
       value: Meta
       angle?: number
+      labelX?: number
+      labelY?: number
     })[]
   > = {lineAxisX: [], lineAxisY: [], lineAngle: [], lineRadius: []}
 
@@ -204,7 +206,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       {left, top, width, height, bottom} = layout,
       {titleX, titleY, titleYR, textX, textY, textYR, textAngle, textRadius} = this.style,
       maxRadius = this.scale.scaleRadius?.range()[1] || Math.max(width / 2, height / 2),
-      labelYR = this.getLabelAndPosition(this.scale.scaleYR!)
+      labelYR = this.getLabelAndPosition(this.scale.scaleYR!),
+      offset = 5
 
     this.lineData.lineAxisX = this.getLabelAndPosition(this.scale.scaleX!).map(
       ({label, position}) => ({
@@ -234,6 +237,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
         y1: top + height / 2,
         x2: left + width / 2 + Math.sin(position) * maxRadius,
         y2: top + height / 2 - Math.cos(position) * maxRadius,
+        labelX: left + width / 2 + Math.sin(position) * (maxRadius + offset),
+        labelY: top + height / 2 - Math.cos(position) * (maxRadius + offset),
       })
     )
 
@@ -290,11 +295,11 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     )
 
     this.textData.textRadius = this.lineData.lineRadius.map(({value, x, y, r}) =>
-      createText({x: x!, y: y! - r!, value, style: textRadius, position: 'right'})
+      createText({x: x!, y: y! - r!, value, style: textRadius, position: 'left', offset})
     )
 
-    this.textData.textAngle = this.lineData.lineAngle.map(({value, x2, y2, angle = 0}) =>
-      createArcText({x: x2!, y: y2!, value, style: textAngle, angle})
+    this.textData.textAngle = this.lineData.lineAngle.map(({value, labelX, labelY, angle = 0}) =>
+      createArcText({x: labelX!, y: labelY!, value, style: textAngle, angle, offset})
     )
   }
 
