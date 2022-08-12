@@ -262,3 +262,10 @@ export type LayerCarouselStyleShape = Partial<{
   dot: GraphStyleShape
   maxDotSize: number
 }>
+
+export type LayerRadialStyleShape = Partial<{
+  innerRadius: number
+  cornerRadius: number
+  arc: GraphStyleShape
+  text: TextStyleShape
+}>

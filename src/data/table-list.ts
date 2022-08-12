@@ -1,5 +1,5 @@
 import {cloneDeep, sum, min, max} from 'lodash'
-import {isTableList, transpose} from '../utils'
+import {group, isTableList, transpose} from '../utils'
 import {DataBase} from './base'
 import {DataBaseOptions, RawTableList, TableListDataShape, TableListOptions} from '../types'
 
@@ -35,9 +35,8 @@ export class DataTableList extends DataBase<RawTableList> {
   }
 
   select(headers: MaybeGroup<Meta>, options?: TableListOptions): DataTableList {
-    const {mode = 'copy', target = 'row'} = options || {},
-      headerArray = Array.isArray(headers) ? headers : [headers]
-    let data = cloneDeep(this._data.filter(({header}) => headerArray.includes(header)))
+    const {mode = 'copy', target = 'row'} = options || {}
+    let data = cloneDeep(this._data.filter(({header}) => group(headers).includes(header)))
 
     if (mode === 'sum') {
       if (target === 'row') {
@@ -113,10 +112,9 @@ export class DataTableList extends DataBase<RawTableList> {
   }
 
   remove(headers: MaybeGroup<string>) {
-    const removedList: TableListDataShape[] = [],
-      headerArray = Array.isArray(headers) ? headers : [headers]
+    const removedList: TableListDataShape[] = []
 
-    headerArray.forEach((header) => {
+    group(headers).forEach((header) => {
       const index = this.headers.findIndex((_header) => _header === header)
       if (index !== -1) {
         removedList.concat(this._data.splice(index, 1))

@@ -78,6 +78,7 @@ export type ArcDrawerProps = GraphDrawerProps<{
   outerRadius: number
   centerX: number
   centerY: number
+  cornerRadius?: number
 }>
 
 export type AreaDrawerProps = GraphDrawerProps<{

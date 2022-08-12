@@ -34,7 +34,7 @@ export const defaultTheme: ChartTheme = {
     strokeWidth: 0,
     fill: 'white',
     stroke: 'white',
-    shadow: '',
+    shadow: '0 0 4px black, 0 0 4px black',
   },
   animation: {
     enter: {

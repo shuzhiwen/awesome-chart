@@ -16,6 +16,7 @@ import pack from './relation/pack'
 import candle from './combine/candle'
 import force from './relation/force'
 import wordCloud from './relation/word-cloud'
+import radial from './normal/radial'
 
 export interface MenuItemShape {
   name: string
@@ -139,6 +140,10 @@ export const schemaMenu: MenuShape = {
         {
           name: '有序的条形图',
           schema: base(rect({variant: 'bar', mode: 'group', sort: 'desc', updateDuration: 200})),
+        },
+        {
+          name: '玉玦图',
+          schema: base(radial()),
         },
       ],
     },

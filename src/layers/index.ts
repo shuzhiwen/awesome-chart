@@ -28,6 +28,7 @@ export const layerMapping = {
   odLine: layer.LayerODLine,
   pack: layer.LayerPack,
   radar: layer.LayerRadar,
+  radial: layer.LayerRadial,
   rect: layer.LayerRect,
   sankey: layer.LayerSankey,
   scatter: layer.LayerScatter,
