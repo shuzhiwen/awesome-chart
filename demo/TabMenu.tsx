@@ -75,6 +75,7 @@ class TabMenu {
 
     this.layout = {left: x, top: y, width, height, right: x + width, bottom: y + height}
     this.root = select(container)
+      .html('')
       .append('foreignObject')
       .style('width', width)
       .style('height', height)
@@ -204,13 +205,12 @@ class TabMenu {
 }
 
 export const Menu = (props: {onChange: (data: any) => void}) => {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
   const {onChange} = props
 
   useEffect(() => {
     if (!ref.current) return
 
-    const target = select(ref.current)
     const tabMenu = new TabMenu({container: ref.current})
 
     tabMenu.setData(new DataBase(schemaMenu))
@@ -222,10 +222,6 @@ export const Menu = (props: {onChange: (data: any) => void}) => {
         tabMenu.blur()
       }
     })
-
-    return () => {
-      target.remove()
-    }
   }, [onChange])
 
   return (
