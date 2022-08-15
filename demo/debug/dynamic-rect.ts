@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import data from '../../assets/covid19.json'
 import {Chart} from '../../src/core'
 import {DataTableList} from '../../src/data'
-import data from '../../assets/covid19.json'
 import {LayerRect} from '../../src/layers'
 
 const rawTableLists = data.map((group) =>
@@ -35,6 +35,8 @@ const rawTableLists2 = [
 
 export const debugDynamicRectLayer = (chart: Chart) => {
   const layers = chart.getLayersByType('rect').filter((item) => (item as LayerRect).options.sort)
+
+  if (!layers.length) return
 
   rawTableLists.forEach((data, i) => {
     setTimeout(() => {

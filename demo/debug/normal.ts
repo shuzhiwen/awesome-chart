@@ -14,6 +14,8 @@ export const debugTableListLayer = (type: TableListLayerType) => (chart: Chart) 
     }),
     layers = chart.getLayersByType(type)
 
+  if (!layers.length) return
+
   layers.forEach((layer) => {
     layer.setData(new DataTableList(data))
     layer.update()

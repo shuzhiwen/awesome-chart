@@ -56,7 +56,6 @@ export default ({type}) => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '仪表盘',
@@ -69,7 +68,6 @@ export default ({type}) => [
   {
     type: 'dashboard',
     options: {
-      id: 'dashboard',
       layout: 'main',
     },
     data: createDashboardData(type),

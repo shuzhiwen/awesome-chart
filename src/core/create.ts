@@ -60,14 +60,12 @@ export const createChart = errorCatcher(
       axisLayerConfig = layers.find(({type}) => type === 'axis'),
       normalLayerConfigs = layers.filter(({type}) => !dependantLayers.has(type))
 
-    axisLayerConfig && createLayer(chart, axisLayerConfig)
-    normalLayerConfigs.forEach((layer) => createLayer(chart, layer)?.update())
+    // define order is draw order
+    layers.forEach((layer) => createLayer(chart, layer))
 
-    Array.from(dependantLayers)
-      .filter((type) => type !== 'axis')
-      .flatMap((type) => layers.filter((item) => item.type === type)!)
-      .filter(Boolean)
-      .map((config) => createLayer(chart, config))
+    normalLayerConfigs.forEach(({type}) =>
+      chart.getLayersByType(type).forEach((layer) => layer.update())
+    )
 
     axisLayerConfig && chart.bindCoordinate({redraw: false})
     chart.draw()

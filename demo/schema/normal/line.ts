@@ -2,7 +2,6 @@ export default ({mode, hasArea, curveType}) => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '折线图',
@@ -15,7 +14,6 @@ export default ({mode, hasArea, curveType}) => [
   {
     type: 'legend',
     options: {
-      id: 'legend',
       layout: 'container',
     },
     style: {
@@ -26,14 +24,12 @@ export default ({mode, hasArea, curveType}) => [
       gap: [5, 10],
       text: {
         fontSize: 12,
-        // fill: 'red',
       },
     },
   },
   {
     type: 'auxiliary',
     options: {
-      id: 'auxiliary',
       layout: 'main',
       direction: 'horizontal',
     },
@@ -58,7 +54,6 @@ export default ({mode, hasArea, curveType}) => [
   {
     type: 'axis',
     options: {
-      id: 'axis',
       layout: 'main',
     },
     scale: {
@@ -70,7 +65,6 @@ export default ({mode, hasArea, curveType}) => [
   {
     type: 'line',
     options: {
-      id: 'line',
       layout: 'main',
       axis: 'main',
       mode,
@@ -107,14 +101,6 @@ export default ({mode, hasArea, curveType}) => [
           delay: 0,
           duration: 2000,
         },
-        // loop: {
-        //   type: 'scan',
-        //   delay: 2000,
-        //   duration: 3000,
-        //   color: 'rgb(255,255,255)',
-        //   direction: 'right',
-        //   scope: 'stroke',
-        // },
       },
       area: {
         enter: {
@@ -131,9 +117,6 @@ export default ({mode, hasArea, curveType}) => [
           mode: 'fadeIn',
         },
       },
-    },
-    event: {
-      'click-circle': (d) => console.log(d),
     },
   },
 ]

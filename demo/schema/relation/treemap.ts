@@ -2,7 +2,6 @@ export default () => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '矩形树图',
@@ -15,7 +14,6 @@ export default () => [
   {
     type: 'treemap',
     options: {
-      id: 'treemap',
       layout: 'main',
     },
     data: [nodes, links],

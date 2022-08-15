@@ -2,7 +2,6 @@ export default ({variant, mode, innerRadius}) => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '饼图',
@@ -15,7 +14,6 @@ export default ({variant, mode, innerRadius}) => [
   {
     type: 'legend',
     options: {
-      id: 'legend',
       layout: 'container',
     },
     style: {
@@ -26,14 +24,12 @@ export default ({variant, mode, innerRadius}) => [
       gap: [5, 10],
       text: {
         fontSize: 12,
-        // fill: 'red',
       },
     },
   },
   {
     type: 'axis',
     options: {
-      id: 'axis',
       layout: 'main',
       coordinate: 'polar',
     },
@@ -46,7 +42,6 @@ export default ({variant, mode, innerRadius}) => [
   {
     type: 'arc',
     options: {
-      id: 'arc',
       layout: 'main',
       variant,
       mode,
@@ -86,9 +81,6 @@ export default ({variant, mode, innerRadius}) => [
           mode: 'fadeIn',
         },
       },
-    },
-    event: {
-      'click-arc': (d) => console.log(d),
     },
   },
 ]

@@ -23,6 +23,8 @@ export const debugDashboardLayer = (chart: Chart) => {
 export const debugFlopperLayer = (chart: Chart) => {
   const layers = chart.getLayersByType('flopper')
 
+  if (!layers.length) return
+
   layers.forEach((layer) => {
     const {integerPlace} = (layer as LayerFlopper).style
 

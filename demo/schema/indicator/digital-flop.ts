@@ -4,7 +4,6 @@ export default ({variant}) => [
   {
     type: 'flopper',
     options: {
-      id: 'flopper',
       layout: 'main',
       variant,
     },

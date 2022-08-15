@@ -2,7 +2,6 @@ export default () => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '桑基图',
@@ -15,7 +14,6 @@ export default () => [
   {
     type: 'sankey',
     options: {
-      id: 'sankey',
       layout: 'main',
     },
     scale: {

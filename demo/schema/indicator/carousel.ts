@@ -24,7 +24,6 @@ export default () => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '轮播图',
@@ -37,7 +36,6 @@ export default () => [
   {
     type: 'carousel',
     options: {
-      id: 'carousel',
       layout: 'main',
     },
     data: images,

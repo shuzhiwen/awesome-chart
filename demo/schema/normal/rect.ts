@@ -9,7 +9,6 @@ export default ({
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '柱状图',
@@ -22,7 +21,6 @@ export default ({
   {
     type: 'legend',
     options: {
-      id: 'legend',
       layout: 'container',
     },
     style: {
@@ -39,7 +37,6 @@ export default ({
   {
     type: 'auxiliary',
     options: {
-      id: 'auxiliary',
       layout: 'main',
     },
     data: [
@@ -64,7 +61,6 @@ export default ({
   {
     type: 'axis',
     options: {
-      id: 'axis',
       layout: 'main',
     },
     data: {
@@ -76,9 +72,6 @@ export default ({
       count: 5,
       zero: true,
       paddingInner: 0.382,
-      // fixedPaddingInner: 10,
-      // fixedBandwidth: 30,
-      // fixedBoundary: 'start',
     },
     style: {},
     animation: {
@@ -93,7 +86,6 @@ export default ({
   {
     type: 'rect',
     options: {
-      id: 'rect',
       layout: 'main',
       axis: 'main',
       mode,
@@ -120,14 +112,6 @@ export default ({
           },
     style: {
       labelPosition: mode === 'group' ? (variant === 'column' ? 'top' : 'right') : 'center',
-      rect: {
-        mapping: (elData) => {
-          if (elData.source.value > 900) {
-            elData.fill = 'gray'
-          }
-          return elData
-        },
-      },
       background: {
         fill: 'gray',
         fillOpacity: 0.3,
@@ -153,13 +137,6 @@ export default ({
           delay: 0,
           duration: updateDuration,
         },
-        // loop: {
-        //   type: 'scan',
-        //   delay: 2000,
-        //   duration: 3000,
-        //   color: 'rgba(255,255,255,1)',
-        //   direction: type === 'bar' ? 'right' : 'top',
-        // },
       },
       text: {
         update: {
@@ -167,9 +144,6 @@ export default ({
           duration: updateDuration,
         },
       },
-    },
-    event: {
-      'click-rect': (d) => console.log(d),
     },
   },
 ]

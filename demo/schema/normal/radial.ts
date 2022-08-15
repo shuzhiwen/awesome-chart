@@ -2,7 +2,6 @@ export default () => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '玉玦图',
@@ -13,22 +12,8 @@ export default () => [
     },
   },
   {
-    type: 'axis',
-    options: {
-      id: 'axis',
-      layout: 'main',
-      coordinate: 'polar',
-    },
-    scale: {
-      count: 0,
-      fixedPaddingInner: 4,
-    },
-    style: {},
-  },
-  {
     type: 'radial',
     options: {
-      id: 'radial',
       layout: 'main',
     },
     data: [
@@ -57,5 +42,17 @@ export default () => [
         },
       },
     },
+  },
+  {
+    type: 'axis',
+    options: {
+      layout: 'main',
+      coordinate: 'polar',
+    },
+    scale: {
+      count: 0,
+      fixedPaddingInner: 4,
+    },
+    style: {},
   },
 ]

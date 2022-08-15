@@ -2,7 +2,6 @@ export default () => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '仿词云',
@@ -16,7 +15,6 @@ export default () => [
     type: 'pack',
     options: {
       variant: 'wordCloud',
-      id: 'pack',
       layout: 'main',
       zoom: true,
     },

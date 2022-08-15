@@ -2,7 +2,6 @@ export default () => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '打包图',
@@ -15,7 +14,6 @@ export default () => [
   {
     type: 'pack',
     options: {
-      id: 'pack',
       layout: 'main',
       zoom: true,
     },

@@ -3,7 +3,6 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
     {
       type: 'text',
       options: {
-        id: 'title',
         layout: 'container',
       },
       data: '矩阵图',
@@ -16,7 +15,6 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
     {
       type: 'axis',
       options: {
-        id: 'axis',
         layout: 'main',
         coordinate: 'cartesian',
       },
@@ -29,7 +27,6 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
     {
       type: 'matrix',
       options: {
-        id: 'matrix',
         layout: 'main',
         axis: 'main',
       },
@@ -81,10 +78,6 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
             mode: 'fadeIn',
           },
         },
-      },
-      event: {
-        'click-rect': (d) => console.log(d),
-        'click-circle': (d) => console.log(d),
       },
     },
   ].concat(

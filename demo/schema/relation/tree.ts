@@ -2,7 +2,6 @@ export default () => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '树形图',
@@ -15,7 +14,6 @@ export default () => [
   {
     type: 'tree',
     options: {
-      id: 'tree',
       layout: 'main',
     },
     data: [nodes, links],

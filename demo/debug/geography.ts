@@ -6,6 +6,8 @@ export const debugODLineLayer = (chart: Chart) => {
   const path = d3Path(),
     layers = chart.getLayersByType('odLine') as LayerODLine[]
 
+  if (!layers.length) return
+
   path.moveTo(0, 0)
   path.lineTo(-30, 10)
   path.lineTo(-30, -10)

@@ -2,7 +2,6 @@ export default ({pointSize}) => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '气泡图',
@@ -15,7 +14,6 @@ export default ({pointSize}) => [
   {
     type: 'legend',
     options: {
-      id: 'legend',
       layout: 'container',
     },
     style: {
@@ -26,14 +24,12 @@ export default ({pointSize}) => [
       gap: [5, 10],
       text: {
         fontSize: 12,
-        // fill: 'red',
       },
     },
   },
   {
     type: 'auxiliary',
     options: {
-      id: 'auxiliary1',
       layout: 'main',
       direction: 'horizontal',
     },
@@ -58,7 +54,6 @@ export default ({pointSize}) => [
   {
     type: 'auxiliary',
     options: {
-      id: 'auxiliary2',
       layout: 'main',
       direction: 'vertical',
     },
@@ -82,7 +77,6 @@ export default ({pointSize}) => [
   {
     type: 'axis',
     options: {
-      id: 'axis',
       layout: 'main',
       coordinate: 'cartesian',
     },
@@ -91,7 +85,6 @@ export default ({pointSize}) => [
   {
     type: 'scatter',
     options: {
-      id: 'scatter',
       layout: 'main',
       axis: 'main',
     },
@@ -124,13 +117,6 @@ export default ({pointSize}) => [
           mode: 'enlarge',
           direction: 'both',
         },
-        loop: {
-          type: 'scan',
-          delay: 1000,
-          duration: 3000,
-          color: 'rgba(255,255,255,0.5)',
-          direction: 'outer',
-        },
       },
       text: {
         enter: {
@@ -140,9 +126,6 @@ export default ({pointSize}) => [
           mode: 'fadeIn',
         },
       },
-    },
-    event: {
-      'click-circle': (d) => console.log(d),
     },
   },
 ]

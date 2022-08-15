@@ -2,7 +2,6 @@ export default () => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '重力气泡图',
@@ -15,7 +14,6 @@ export default () => [
   {
     type: 'force',
     options: {
-      id: 'force',
       layout: 'main',
       zoom: true,
     },

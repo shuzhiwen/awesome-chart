@@ -2,7 +2,6 @@ export default ({mode}) => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '饼图',
@@ -15,7 +14,6 @@ export default ({mode}) => [
   {
     type: 'legend',
     options: {
-      id: 'legend',
       layout: 'container',
     },
     style: {
@@ -26,14 +24,12 @@ export default ({mode}) => [
       gap: [5, 10],
       text: {
         fontSize: 12,
-        // fill: 'red',
       },
     },
   },
   {
     type: 'axis',
     options: {
-      id: 'axis',
       layout: 'main',
       coordinate: 'polar',
     },
@@ -46,7 +42,6 @@ export default ({mode}) => [
   {
     type: 'radar',
     options: {
-      id: 'radar',
       layout: 'main',
       axis: 'main',
       mode,
@@ -104,9 +99,6 @@ export default ({mode}) => [
           mode: 'fadeIn',
         },
       },
-    },
-    event: {
-      'click-circle': (d) => console.log(d),
     },
   },
 ]

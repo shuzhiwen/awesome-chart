@@ -2,7 +2,6 @@ export default () => [
   {
     type: 'text',
     options: {
-      id: 'title',
       layout: 'container',
     },
     data: '二维地图',
@@ -15,7 +14,6 @@ export default () => [
   {
     type: 'axis',
     options: {
-      id: 'axis',
       layout: 'container',
       coordinate: 'geographic',
     },
@@ -24,7 +22,6 @@ export default () => [
   {
     type: 'basemap',
     options: {
-      id: 'basemap',
       layout: 'container',
     },
     data: 100000,
@@ -38,14 +35,10 @@ export default () => [
         },
       },
     },
-    event: {
-      'click-block': (d) => console.log(d),
-    },
   },
   {
     type: 'heatmap',
     options: {
-      id: 'heatmap',
       layout: 'container',
     },
     data: [
@@ -61,7 +54,6 @@ export default () => [
   {
     type: 'odLine',
     options: {
-      id: 'odLine',
       layout: 'container',
     },
     data: [
@@ -81,7 +73,6 @@ export default () => [
   {
     type: 'scatter',
     options: {
-      id: 'scatter',
       layout: 'container',
       axis: 'main',
     },
@@ -117,9 +108,6 @@ export default () => [
           mode: 'fadeIn',
         },
       },
-    },
-    event: {
-      'click-circle': (d) => console.log(d),
     },
   },
 ]
