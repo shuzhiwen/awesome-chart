@@ -133,6 +133,13 @@ export default ({
           mode: 'enlarge',
           direction: 'both',
         },
+        loop: !sort && {
+          type: 'scan',
+          delay: 0,
+          duration: 5000,
+          direction: variant === 'bar' ? 'right' : 'top',
+          opacity: 0.5,
+        },
         update: {
           delay: 0,
           duration: updateDuration,

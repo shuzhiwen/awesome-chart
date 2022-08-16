@@ -48,28 +48,40 @@ export interface AnimationProps<T extends BasicAnimationOptions> {
 
 export type AnimationEmptyOptions = BasicAnimationOptions<'empty'>
 
-export interface AnimationFadeOptions extends BasicAnimationOptions<'fade'> {
-  initialOpacity?: number
-  startOpacity?: number
-  endOpacity?: number
-}
+export type AnimationFadeOptions = BasicAnimationOptions<'fade'> &
+  Partial<{
+    initialOpacity: number
+    startOpacity: number
+    endOpacity: number
+  }>
 
-export interface AnimationPathOptions extends BasicAnimationOptions<'path'> {
-  path?: string
-}
+export type AnimationPathOptions = BasicAnimationOptions<'path'> &
+  Partial<{
+    path: string
+  }>
 
-export interface AnimationZoomOptions extends BasicAnimationOptions<'zoom'> {
-  initialScale?: number
-  startScale?: number
-  endScale?: number
-}
+export type AnimationZoomOptions = BasicAnimationOptions<'zoom'> &
+  Partial<{
+    initialScale: number
+    startScale: number
+    endScale: number
+  }>
 
-export interface AnimationMoveOptions extends BasicAnimationOptions<'move'> {
-  initialOffset?: [number, number]
-  startOffset?: [number, number]
-  endOffset?: [number, number]
-}
+export type AnimationMoveOptions = BasicAnimationOptions<'move'> &
+  Partial<{
+    initialOffset: [number, number]
+    startOffset: [number, number]
+    endOffset: [number, number]
+  }>
 
-export interface AnimationEraseOptions extends BasicAnimationOptions<'erase'> {
-  direction?: Position4
-}
+export type AnimationEraseOptions = BasicAnimationOptions<'erase'> &
+  Partial<{
+    direction: Position4
+  }>
+
+export type AnimationScanOptions = BasicAnimationOptions<'scan'> &
+  Partial<{
+    direction: Position4 | Position2
+    color: string
+    opacity: number
+  }>
