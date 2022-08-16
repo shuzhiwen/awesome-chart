@@ -101,12 +101,26 @@ export default ({mode, hasArea, curveType}) => [
           delay: 0,
           duration: 2000,
         },
+        loop: {
+          type: 'scan',
+          delay: 0,
+          duration: 5000,
+          direction: 'right',
+          opacity: 0.5,
+        },
       },
       area: {
         enter: {
           type: 'erase',
           delay: 0,
           duration: 2000,
+        },
+        loop: {
+          type: 'scan',
+          delay: 0,
+          duration: 5000,
+          direction: 'right',
+          opacity: 0.5,
         },
       },
       text: {

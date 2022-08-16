@@ -1,6 +1,5 @@
-import {Object as FabricObject} from 'fabric/fabric-impl'
 import {animationMapping} from '../animation'
-import {D3Selection, DrawerTarget} from './draw'
+import {D3Selection, DrawerTarget, FabricObject} from './draw'
 
 export type AnimationType = keyof typeof animationMapping
 

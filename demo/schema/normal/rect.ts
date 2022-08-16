@@ -63,11 +63,6 @@ export default ({
     options: {
       layout: 'main',
     },
-    data: {
-      titleX: 'titleX',
-      titleY: 'titleY',
-      titleYR: 'titleYR',
-    },
     scale: {
       count: 5,
       zero: true,
