@@ -205,7 +205,12 @@ export abstract class LayerBase<T extends LayerOptions> {
       isFirstPlay = false
     }
 
-    if (this.backupData[sublayer].length === 0 || !options || !options[sublayer]) {
+    if (
+      !options ||
+      !options[sublayer] ||
+      this.backupData[sublayer].length === 0 ||
+      (isSvgContainer(targets) ? targets.size() === 0 : targets?.length === 0)
+    ) {
       this.backupAnimation[sublayer] = null
       return
     }

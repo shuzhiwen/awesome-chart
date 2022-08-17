@@ -107,6 +107,7 @@ export default ({mode, hasArea, curveType}) => [
           duration: 5000,
           direction: 'right',
           opacity: 0.5,
+          color: 'white',
         },
       },
       area: {
@@ -121,6 +122,7 @@ export default ({mode, hasArea, curveType}) => [
           duration: 5000,
           direction: 'right',
           opacity: 0.5,
+          color: 'white',
         },
       },
       text: {

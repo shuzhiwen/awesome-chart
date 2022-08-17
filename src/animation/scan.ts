@@ -77,11 +77,11 @@ const createCanvasGradient = (props: {
   color: string
   opacity: number
 }) => {
-  const {direction, color, opacity} = props
-  const attributes = getAttributes(direction)
-  const minColor = mergeAlpha(color, 0)
-  const maxColor = mergeAlpha(color, opacity)
-  const config = {type: '', coords: {x1: 0, x2: 0, y1: 0, y2: 0, r1: 0, r2: 0}}
+  const {direction, color, opacity} = props,
+    attributes = getAttributes(direction),
+    minColor = mergeAlpha(color, 0),
+    maxColor = mergeAlpha(color, opacity),
+    config = {type: '', coords: {x1: 0, x2: 0, y1: 0, y2: 0, r1: 0, r2: 0}}
 
   if (attributes?.[0] === 'r') {
     merge(config, {
@@ -124,7 +124,14 @@ export class AnimationScan extends AnimationBase<Options> {
   }
 
   init() {
-    const {targets, context, direction = 'top', color = 'white', opacity = 1} = this.options
+    const {
+      targets,
+      context,
+      scope = 'all',
+      direction = 'top',
+      color = 'white',
+      opacity = 1,
+    } = this.options
 
     if (isSvgContainer(targets) && isSvgContainer(context)) {
       this.defs = context.append('defs')
@@ -135,22 +142,26 @@ export class AnimationScan extends AnimationBase<Options> {
         color,
         opacity,
       })
-      this.extraNode = context.append('g').attr('id', `scan-target-${this.id}`)
-      this.extraNode
+      this.extraNode = context
         .append('rect')
         .attr('x', 0)
         .attr('y', 0)
         .attr('width', '100%')
         .attr('height', '100%')
-        .attr('clip-path', `url(#scan-clip-path-${this.id})`)
+        .attr('mask', `url(#scan-mask-${this.id})`)
         .attr('filter', `url(#scan-filter-${this.id})`)
         .attr('fill', `url(#scan-gradient-${this.id})`)
         .style('pointer-events', 'none')
 
-      const clipPath = this.defs.append('clipPath').attr('id', `scan-clip-path-${this.id}`).node()
+      const mask = this.defs.append('mask').attr('id', `scan-mask-${this.id}`).node()
 
       targets.nodes().forEach((item) => {
-        clipPath?.appendChild(select(item).clone(false).node())
+        const cloneNode = select(item)
+          .clone(false)
+          .attr('fill', scope === 'stroke' ? 'black' : 'white')
+          .attr('stroke', scope === 'fill' ? 'black' : 'white')
+          .node()
+        mask?.appendChild(cloneNode)
       })
     }
 

@@ -80,6 +80,7 @@ export type AnimationEraseOptions = BasicAnimationOptions<'erase'> &
 
 export type AnimationScanOptions = BasicAnimationOptions<'scan'> &
   Partial<{
+    scope: 'stroke' | 'fill' | 'all'
     direction: Position4 | Position2
     color: string
     opacity: number
