@@ -156,12 +156,13 @@ export class AnimationScan extends AnimationBase<Options> {
       const mask = this.defs.append('mask').attr('id', `scan-mask-${this.id}`).node()
 
       targets.nodes().forEach((item) => {
-        const cloneNode = select(item)
-          .clone(false)
-          .attr('fill', scope === 'stroke' ? 'black' : 'white')
-          .attr('stroke', scope === 'fill' ? 'black' : 'white')
-          .node()
-        mask?.appendChild(cloneNode)
+        mask?.appendChild(
+          select(item)
+            .clone(false)
+            .attr('fill', scope === 'stroke' ? 'black' : 'white')
+            .attr('stroke', scope === 'fill' ? 'black' : 'white')
+            .node()
+        )
       })
     }
 
@@ -218,7 +219,12 @@ export class AnimationScan extends AnimationBase<Options> {
         loopComplete: this.end,
         update: (...args) => {
           this.process(...args)
-          if (this.target && !isSvgContainer(this.target) && !isSvgContainer(this.extraNode)) {
+          if (
+            this.target &&
+            !isSvgContainer(this.target) &&
+            !isSvgContainer(this.extraNode) &&
+            this.extraNode?.clipPath
+          ) {
             this.target.coords = coords
             this.extraNode?.drawClipPathOnCache(context.toCanvasElement().getContext('2d')!)
             this.renderCanvas()
