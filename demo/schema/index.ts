@@ -120,7 +120,7 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '带轴交互的柱状图',
-          schema: base(rect({variant: 'column', mode: 'group', hasInteractive: true})),
+          schema: base(rect({variant: 'column', mode: 'group', hasInteractive: true}), 'dimension'),
         },
       ],
     },

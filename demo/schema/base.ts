@@ -1,11 +1,11 @@
-export default (layers: any[]) => ({
+export default (layers: any[], tooltipMode?: string) => ({
   adjust: true,
   width: 100,
   height: 100,
   padding: [50, 50, 50, 50],
   engine: 'svg',
   tooltipOptions: {
-    mode: 'single',
+    mode: tooltipMode ?? 'single',
   },
   layers,
 })
