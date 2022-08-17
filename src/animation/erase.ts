@@ -8,6 +8,8 @@ import {fabric} from 'fabric'
 export class AnimationErase extends AnimationBase<Options> {
   private defs: Maybe<D3Selection>
 
+  private maskNode?: Maybe<fabric.Rect>
+
   constructor(props: Props<Options>) {
     super(props)
   }
@@ -26,17 +28,20 @@ export class AnimationErase extends AnimationBase<Options> {
         .attr('width', direction === 'left' || direction === 'right' ? '0%' : '100%')
         .attr('height', direction === 'top' || direction === 'bottom' ? '0%' : '100%')
       targets.attr('clip-path', `url(#erase-${this.id})`)
-    } else if (!isSvgContainer(targets)) {
-      targets?.forEach((target) => {
-        const {width = 0, height = 0} = target
+    }
 
-        target.clipPath = new fabric.Rect({
-          left: -width / 2 + (direction === 'left' ? width : 0),
-          top: -height / 2 + (direction === 'top' ? height : 0),
-          width: direction === 'left' || direction === 'right' ? 0 : width,
-          height: direction === 'top' || direction === 'bottom' ? 0 : height,
-        })
+    if (!isSvgContainer(targets) && isCanvasContainer(context)) {
+      const {width = 0, height = 0} = context
+
+      this.maskNode = new fabric.Rect({
+        left: -width / 2 + (direction === 'left' ? width : 0),
+        top: -height / 2 + (direction === 'top' ? height : 0),
+        width: direction === 'left' || direction === 'right' ? 0 : width,
+        height: direction === 'top' || direction === 'bottom' ? 0 : height,
       })
+
+      targets?.forEach((target) => (target.clipPath = this.maskNode!))
+
       this.renderCanvas()
     }
   }
@@ -62,39 +67,41 @@ export class AnimationErase extends AnimationBase<Options> {
         .attr('y', '0%')
         .attr('width', '100%')
         .attr('height', '100%')
-    } else if (isCanvasContainer(context) && !isSvgContainer(targets) && targets) {
+    }
+
+    if (isCanvasContainer(context) && !isSvgContainer(targets) && targets) {
       transition()
         .delay(delay)
         .duration(duration)
         .on('end', this.end)
         .on('start', () => {
-          this.start()
-          targets.forEach((target) => {
-            const {width = 0, height = 0} = target
+          const {width = 0, height = 0} = context
 
-            target.clipPath = Object.assign(target.clipPath!, {
-              left: -width / 2 + (direction === 'left' ? width : 0),
-              top: -height / 2 + (direction === 'top' ? height : 0),
-              width: direction === 'left' || direction === 'right' ? 0 : width,
-              height: direction === 'top' || direction === 'bottom' ? 0 : height,
-            })
-            target.clipPath?.animate(
-              {
-                left: -width / 2,
-                top: -height / 2,
-                width,
-                height,
-              },
-              {
-                duration,
-                easing: canvasEasing.get(easing),
-                onChange: () => {
-                  target.drawClipPathOnCache(context.toCanvasElement().getContext('2d')!)
-                  this.renderCanvas()
-                },
-              }
-            )
+          this.start()
+          this.maskNode = Object.assign(this.maskNode!, {
+            left: -width / 2 + (direction === 'left' ? width : 0),
+            top: -height / 2 + (direction === 'top' ? height : 0),
+            width: direction === 'left' || direction === 'right' ? 0 : width,
+            height: direction === 'top' || direction === 'bottom' ? 0 : height,
           })
+          this.maskNode.animate(
+            {
+              left: -width / 2,
+              top: -height / 2,
+              width,
+              height,
+            },
+            {
+              duration,
+              easing: canvasEasing.get(easing),
+              onChange: () => {
+                targets.forEach((item) => {
+                  item.clipPath && item.drawClipPathOnCache(this.getCanvasContext()!)
+                })
+                this.renderCanvas()
+              },
+            }
+          )
         })
     }
   }
@@ -103,10 +110,13 @@ export class AnimationErase extends AnimationBase<Options> {
     const {targets} = this.options
 
     if (isSvgContainer(targets)) {
-      targets.attr('clip-path', '')
       this.defs?.remove()
+      targets.attr('clip-path', '')
     } else if (isCanvasContainer(targets)) {
       targets.forEach((target) => (target.clipPath = undefined))
     }
+
+    this.defs = null
+    this.maskNode = null
   }
 }

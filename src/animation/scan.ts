@@ -113,9 +113,9 @@ const createCanvasGradient = (props: {
 export class AnimationScan extends AnimationBase<Options> {
   private defs: Maybe<D3Selection>
 
-  private target: Maybe<D3Selection | GradientWithId>
+  private gradientNode: Maybe<D3Selection | GradientWithId>
 
-  private extraNode: Maybe<D3Selection | Rect>
+  private maskNode: Maybe<D3Selection | Rect>
 
   private instance: Maybe<AnimeInstance>
 
@@ -135,14 +135,14 @@ export class AnimationScan extends AnimationBase<Options> {
 
     if (isSvgContainer(targets) && isSvgContainer(context)) {
       this.defs = context.append('defs')
-      this.target = createSvgGradient({
+      this.gradientNode = createSvgGradient({
         id: this.id,
         parentNode: this.defs,
         direction,
         color,
         opacity,
       })
-      this.extraNode = context
+      this.maskNode = context
         .append('rect')
         .attr('x', 0)
         .attr('y', 0)
@@ -167,17 +167,17 @@ export class AnimationScan extends AnimationBase<Options> {
     }
 
     if (!isSvgContainer(targets) && isCanvasContainer(context)) {
-      this.target = createCanvasGradient({direction, color, opacity})
+      this.gradientNode = createCanvasGradient({direction, color, opacity})
 
-      this.extraNode = new fabric.Rect({
+      this.maskNode = new fabric.Rect({
         top: -(context.height ?? 0) / 2,
         left: -(context.width ?? 0) / 2,
         width: context.width,
         height: context.height,
-        fill: this.target,
+        fill: this.gradientNode,
       })
 
-      context.addWithUpdate(this.extraNode)
+      context.addWithUpdate(this.maskNode)
     }
   }
 
@@ -185,9 +185,9 @@ export class AnimationScan extends AnimationBase<Options> {
     const {context, delay, duration, easing, direction = 'top'} = this.options
     const attributes = getAttributes(direction)
 
-    if (isSvgContainer(context) && isSvgContainer(this.target)) {
+    if (isSvgContainer(context) && isSvgContainer(this.gradientNode)) {
       const configs: AnimeParams = {
-        targets: this.target.node(),
+        targets: this.gradientNode.node(),
         duration,
         delay,
         update: this.process,
@@ -208,8 +208,8 @@ export class AnimationScan extends AnimationBase<Options> {
       this.instance = anime(configs)
     }
 
-    if (isCanvasContainer(context) && !isSvgContainer(this.target)) {
-      const coords = cloneDeep(this.target?.coords ?? {})
+    if (isCanvasContainer(context) && !isSvgContainer(this.gradientNode)) {
+      const coords = cloneDeep(this.gradientNode?.coords ?? {})
       const configs: AnimeParams = {
         targets: coords,
         duration,
@@ -220,13 +220,13 @@ export class AnimationScan extends AnimationBase<Options> {
         update: (...args) => {
           this.process(...args)
           if (
-            this.target &&
-            !isSvgContainer(this.target) &&
-            !isSvgContainer(this.extraNode) &&
-            this.extraNode?.clipPath
+            this.gradientNode &&
+            !isSvgContainer(this.gradientNode) &&
+            !isSvgContainer(this.maskNode) &&
+            this.maskNode?.clipPath
           ) {
-            this.target.coords = coords
-            this.extraNode?.drawClipPathOnCache(context.toCanvasElement().getContext('2d')!)
+            this.gradientNode.coords = coords
+            this.maskNode?.drawClipPathOnCache(this.getCanvasContext()!)
             this.renderCanvas()
           }
         },
@@ -248,10 +248,15 @@ export class AnimationScan extends AnimationBase<Options> {
 
     if (isSvgContainer(targets)) {
       this.defs?.remove()
-      isSvgContainer(this.extraNode) && this.extraNode.remove()
+      isSvgContainer(this.maskNode) && this.maskNode.remove()
       this.instance && anime.remove(this.instance)
-    } else if (isCanvasContainer(this.extraNode)) {
-      this.extraNode.group?.remove(this.extraNode)
+    } else if (isCanvasContainer(this.maskNode)) {
+      this.maskNode.group?.remove(this.maskNode)
     }
+
+    this.defs = null
+    this.instance = null
+    this.maskNode = null
+    this.gradientNode = null
   }
 }

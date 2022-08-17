@@ -1,4 +1,4 @@
-import {throttle, merge, noop} from 'lodash'
+import {throttle, merge} from 'lodash'
 import {AnimationProps as Props, BasicAnimationOptions as Options} from '../types'
 import {
   animationLifeCycles,
@@ -18,8 +18,6 @@ export abstract class AnimationBase<T extends Options> {
   readonly options
 
   protected id = uuid()
-
-  protected renderCanvas = noop
 
   protected _isInitialized = false
 
@@ -64,13 +62,21 @@ export abstract class AnimationBase<T extends Options> {
     return args
   }
 
+  protected getCanvasContext = () => {
+    if (isCanvasContainer(this.options.context)) {
+      return this.options.context.toCanvasElement().getContext('2d')!
+    }
+  }
+
+  protected renderCanvas = () => {
+    if (isCanvasContainer(this.options.context)) {
+      this.options.context.canvas?.requestRenderAll()
+    }
+  }
+
   constructor({options, context}: Props<T>) {
     this.options = merge({}, options, {context})
     this.createTargets('targets')
-
-    if (isCanvasContainer(context)) {
-      this.renderCanvas = context.canvas?.requestRenderAll.bind(context.canvas) ?? noop
-    }
 
     animationLifeCycles.forEach((name) => {
       const fn = this[name] || noChange
