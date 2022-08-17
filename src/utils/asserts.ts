@@ -1,3 +1,5 @@
+import {select} from 'd3'
+import {fabric} from 'fabric'
 import {isArray, isNumber} from 'lodash'
 import {LayerAxis, LayerBasemap, LayerBrush, LayerInteractive, LayerLegend} from '../layers'
 import {
@@ -20,11 +22,11 @@ export function isApproximateNumber(n1: number, n2: number) {
 }
 
 export function isSvgCntr(selector: any): selector is D3Selection {
-  return selector?.constructor.name === 'Selection'
+  return selector?.constructor.name === select(null).constructor.name
 }
 
 export function isCanvasCntr(selector: any): selector is FabricGroup {
-  return selector?.constructor.name === 'klass' && selector?.getObjects
+  return selector?.constructor.name === fabric.Group.name && selector?.getObjects
 }
 
 export function isLayerAxis(instance: Maybe<Layer>): instance is LayerAxis {
