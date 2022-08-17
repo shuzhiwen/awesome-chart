@@ -2,7 +2,7 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {ILineOptions} from 'fabric/fabric-impl'
 import {LineDrawerProps} from '../types'
-import {isCanvasContainer, isSvgContainer, noChange, mergeAlpha, getAttr} from '../utils'
+import {isCanvasCntr, isSvgCntr, noChange, mergeAlpha, getAttr} from '../utils'
 
 export function drawLine({
   stroke,
@@ -36,7 +36,7 @@ export function drawLine({
     return mapping(datum as any) as unknown as typeof datum
   })
 
-  if (isSvgContainer(container)) {
+  if (isSvgCntr(container)) {
     container
       .selectAll(`.${className}`)
       .data(mappedData)
@@ -58,7 +58,7 @@ export function drawLine({
       .attr('pointer-events', 'none')
   }
 
-  if (isCanvasContainer(container)) {
+  if (isCanvasCntr(container)) {
     container.remove(...container.getObjects())
     mappedData.forEach((config) => {
       const y1 = config.y1 - config.strokeWidth / 2

@@ -7,8 +7,8 @@ import {
   commonEvents,
   layerLifeCycles,
   tooltipEvents,
-  isSvgContainer,
-  isCanvasContainer,
+  isSvgCntr,
+  isCanvasCntr,
   createLog,
   createEvent,
   disableEventDrawerType,
@@ -156,7 +156,7 @@ export abstract class LayerBase<T extends LayerOptions> {
   }
 
   private bindEvent = (sublayer: string) => {
-    if (isSvgContainer(this.root)) {
+    if (isSvgCntr(this.root)) {
       const els = this.root.selectAll(generateClass(sublayer, true)).style('cursor', 'pointer')
 
       commonEvents.forEach((type) => {
@@ -172,7 +172,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       }
     }
 
-    if (isCanvasContainer(this.root)) {
+    if (isCanvasCntr(this.root)) {
       const els = selector.getChildren(this.root, generateClass(sublayer, false)) as FabricObject[]
 
       commonEvents.forEach((type) => {
@@ -209,7 +209,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       !options ||
       !options[sublayer] ||
       this.backupData[sublayer].length === 0 ||
-      (isSvgContainer(targets) ? targets.size() === 0 : targets?.length === 0)
+      (isSvgCntr(targets) ? targets.size() === 0 : targets?.length === 0)
     ) {
       this.backupAnimation[sublayer] = null
       return
@@ -264,7 +264,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       afterDraw = () => {
         this.bindEvent(sublayer)
         this.createAnimation(sublayer)
-        if (isCanvasContainer(this.root)) {
+        if (isCanvasCntr(this.root)) {
           this.root.canvas?.requestRenderAll()
         }
       }

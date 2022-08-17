@@ -3,7 +3,7 @@ import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {LayerAuxiliary} from './auxiliary'
 import {stickyBandScale} from '../helpers/sticky-scale'
-import {isScaleBand, isScaleLinear, isSvgContainer, uuid} from '../../utils'
+import {isScaleBand, isScaleLinear, isSvgCntr, uuid} from '../../utils'
 import {createScale, createStyle, generateClass, selector, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
@@ -235,7 +235,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     })
 
     this.event.onWithOff('mouseover-interactive', this.options.id, ({data, event}) => {
-      if (isSvgContainer(this.root)) {
+      if (isSvgCntr(this.root)) {
         this.root.selectAll(generateClass('interactive', true)).each((d, i, els) => {
           if ((d as any).source?.key === data.source.key) {
             select(els[i]).attr('opacity', shadowOpacity)
@@ -254,7 +254,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       }
     })
     this.event.onWithOff('mouseout-interactive', this.options.id, () => {
-      if (isSvgContainer(this.root)) {
+      if (isSvgCntr(this.root)) {
         this.root.selectAll(generateClass('interactive', true)).attr('opacity', 0)
       } else {
         ;(

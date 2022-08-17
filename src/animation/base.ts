@@ -4,8 +4,8 @@ import {
   animationLifeCycles,
   createEvent,
   createLog,
-  isCanvasContainer,
-  isSvgContainer,
+  isCanvasCntr,
+  isSvgCntr,
   noChange,
   uuid,
 } from '../utils'
@@ -63,13 +63,13 @@ export abstract class AnimationBase<T extends Options> {
   }
 
   protected getCanvasContext = () => {
-    if (isCanvasContainer(this.options.context)) {
+    if (isCanvasCntr(this.options.context)) {
       return this.options.context.toCanvasElement().getContext('2d')!
     }
   }
 
   protected renderCanvas = () => {
-    if (isCanvasContainer(this.options.context)) {
+    if (isCanvasCntr(this.options.context)) {
       this.options.context.canvas?.requestRenderAll()
     }
   }
@@ -130,9 +130,9 @@ export abstract class AnimationBase<T extends Options> {
       {context} = this.options
 
     if (typeof targets === 'string') {
-      if (isSvgContainer(context)) {
+      if (isSvgCntr(context)) {
         merge(this.options, {className: targets, [key]: context.selectAll(targets)})
-      } else if (isCanvasContainer(context)) {
+      } else if (isCanvasCntr(context)) {
         merge(this.options, {className: targets, [key]: context.getObjects()})
       }
     } else {

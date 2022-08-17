@@ -1,6 +1,6 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {getAttr, isCanvasContainer, isScaleBand, isScaleLinear} from '../../utils'
+import {getAttr, isCanvasCntr, isScaleBand, isScaleLinear} from '../../utils'
 import {
   createColorMatrix,
   createScale,
@@ -68,7 +68,7 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
   constructor(options: LayerAuxiliaryOptions, context: ChartContext) {
     super({context, options, sublayers: ['text', 'line', 'background']})
 
-    if (isCanvasContainer(this.root)) {
+    if (isCanvasCntr(this.root)) {
       this.root.evented = false
     }
   }

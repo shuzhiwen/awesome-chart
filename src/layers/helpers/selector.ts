@@ -2,13 +2,13 @@ import {select} from 'd3'
 import {fabric} from 'fabric'
 import {Canvas, IGroupOptions} from 'fabric/fabric-impl'
 import {D3Selection, DrawerTarget, FabricGroup, FabricObject} from '../../types'
-import {isCanvasContainer, isSvgContainer} from '../../utils'
+import {isCanvasCntr, isSvgCntr} from '../../utils'
 
 class Selector {
   setVisible(target: Maybe<DrawerTarget>, visible: boolean) {
-    if (isSvgContainer(target)) {
+    if (isSvgCntr(target)) {
       target.attr('display', visible ? 'block' : 'none')
-    } else if (isCanvasContainer(target)) {
+    } else if (isCanvasCntr(target)) {
       target.visible = visible
       target.canvas?.requestRenderAll()
     }
@@ -18,13 +18,13 @@ class Selector {
     target: Maybe<DrawerTarget>,
     className: string
   ): Maybe<D3Selection | FabricObject[] | FabricGroup[]> {
-    if (isSvgContainer(target)) {
+    if (isSvgCntr(target)) {
       return target.selectAll(`.${className}`)
-    } else if (isCanvasContainer(target)) {
+    } else if (isCanvasCntr(target)) {
       return target
         .getObjects()
         .flatMap((item) => {
-          return isCanvasContainer(item)
+          return isCanvasCntr(item)
             ? (this.getChildren(item, className) as FabricGroup[])
             : (item as FabricObject)
         })
@@ -33,10 +33,10 @@ class Selector {
   }
 
   getSubcontainer(target: Maybe<DrawerTarget>, className: string): Maybe<DrawerTarget> {
-    if (isSvgContainer(target)) {
+    if (isSvgCntr(target)) {
       const result = target.selectAll(`.${className}`)
       return result.size() !== 0 ? select(result.node()) : null
-    } else if (isCanvasContainer(target)) {
+    } else if (isCanvasCntr(target)) {
       return target.getObjects().find((item) => {
         return (item as FabricGroup).className === className
       }) as FabricGroup
@@ -48,9 +48,9 @@ class Selector {
     className: string,
     evented = true
   ): Maybe<DrawerTarget> {
-    if (isSvgContainer(target)) {
+    if (isSvgCntr(target)) {
       return target.append('g').attr('class', className)
-    } else if (isCanvasContainer(target)) {
+    } else if (isCanvasCntr(target)) {
       const group = new fabric.Group([], {
         className,
         selectable: false,
@@ -63,9 +63,9 @@ class Selector {
   }
 
   remove(target: Maybe<DrawerTarget>) {
-    if (isSvgContainer(target)) {
+    if (isSvgCntr(target)) {
       return target?.remove()
-    } else if (isCanvasContainer(target)) {
+    } else if (isCanvasCntr(target)) {
       return target.group?.remove(target)
     }
   }

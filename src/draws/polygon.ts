@@ -2,7 +2,7 @@ import {fabric} from 'fabric'
 import {PolyDrawerProps} from '../types'
 import {IPolylineOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
-import {mergeAlpha, getAttr, noChange, isSvgContainer, isCanvasContainer} from '../utils'
+import {mergeAlpha, getAttr, noChange, isSvgCntr, isCanvasCntr} from '../utils'
 
 export function drawPolygon({
   fill,
@@ -40,7 +40,7 @@ export function drawPolygon({
     return mapping(datum) as typeof datum
   })
 
-  if (isSvgContainer(container)) {
+  if (isSvgCntr(container)) {
     container
       .selectAll(`.${className}`)
       .data(mappedData)
@@ -60,7 +60,7 @@ export function drawPolygon({
       .attr('transform-origin', (d) => d.transformOrigin)
   }
 
-  if (isCanvasContainer(container)) {
+  if (isCanvasCntr(container)) {
     container.remove(...container.getObjects())
     mappedData.forEach((config) => {
       const polygon = new fabric.Polygon(config.points, {

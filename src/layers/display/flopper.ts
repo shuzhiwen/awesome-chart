@@ -3,17 +3,10 @@ import {select} from 'd3'
 import {cloneDeep, merge} from 'lodash'
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
-import {createStyle, validateAndCreateData} from '../helpers'
-import {ChartContext, D3Selection, LayerFlopperOptions, LayerFlopperStyleShape} from '../../types'
 import {defaultTheme} from '../../core/theme'
-import {
-  addStyle,
-  isCanvasContainer,
-  isSvgContainer,
-  mergeAlpha,
-  range,
-  safeTransform,
-} from '../../utils'
+import {ChartContext, D3Selection, LayerFlopperOptions, LayerFlopperStyleShape} from '../../types'
+import {addStyle, isCanvasCntr, isSvgCntr, mergeAlpha, range, safeTransform} from '../../utils'
+import {createStyle, validateAndCreateData} from '../helpers'
 
 const defaultOptions: Partial<LayerFlopperOptions> = {
   variant: 'vertical',
@@ -59,7 +52,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
     const {containerWidth, containerHeight, layout, root} = this.options,
       {left, top, width, height} = layout
 
-    if (isSvgContainer(root)) {
+    if (isSvgCntr(root)) {
       this.root = root
         .append('foreignObject')
         .style('width', containerWidth)
@@ -130,7 +123,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
   }
 
   draw() {
-    if (isCanvasContainer(this.root)) {
+    if (isCanvasCntr(this.root)) {
       this.log.error('Not support canvas flopper')
       return
     }
@@ -244,7 +237,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
   }
 
   playAnimation() {
-    if (isCanvasContainer(this.root)) {
+    if (isCanvasCntr(this.root)) {
       this.log.error('Not support canvas flopper')
       return
     }

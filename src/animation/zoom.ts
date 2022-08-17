@@ -1,5 +1,5 @@
 import {AnimationBase} from './base'
-import {isSvgContainer, safeTransform} from '../utils'
+import {isSvgCntr, safeTransform} from '../utils'
 import {AnimationZoomOptions as Options, AnimationProps as Props} from '../types'
 import {canvasEasing, svgEasing} from './easing'
 
@@ -11,7 +11,7 @@ export class AnimationZoom extends AnimationBase<Options> {
   init() {
     const {targets, initialScale: initial = 0} = this.options
 
-    if (isSvgContainer(targets)) {
+    if (isSvgCntr(targets)) {
       targets.attr('transform', safeTransform(targets.attr('transform'), 'scale', initial))
     } else if (targets) {
       targets.forEach((target) => {
@@ -27,7 +27,7 @@ export class AnimationZoom extends AnimationBase<Options> {
       start = Math.max(startScale, Number.MIN_VALUE),
       end = Math.max(endScale, Number.MIN_VALUE)
 
-    if (isSvgContainer(targets)) {
+    if (isSvgCntr(targets)) {
       targets
         .transition()
         .delay(delay)

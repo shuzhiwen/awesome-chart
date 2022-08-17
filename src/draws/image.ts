@@ -2,7 +2,7 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {IImageOptions} from 'fabric/fabric-impl'
 import {ImageDrawerProps} from '../types'
-import {getAttr, isCanvasContainer, isSvgContainer, noChange} from '../utils'
+import {getAttr, isCanvasCntr, isSvgCntr, noChange} from '../utils'
 
 export function drawImage({
   opacity,
@@ -28,7 +28,7 @@ export function drawImage({
     return mapping(datum as any) as unknown as typeof datum
   })
 
-  if (isSvgContainer(container)) {
+  if (isSvgCntr(container)) {
     container
       .selectAll(`.${className}`)
       .data(mappedData)
@@ -46,7 +46,7 @@ export function drawImage({
       .attr('xlink:href', (d) => d.url)
   }
 
-  if (isCanvasContainer(container)) {
+  if (isCanvasCntr(container)) {
     container.remove(...container.getObjects())
     mappedData.forEach((config) => {
       fabric.Image.fromURL(

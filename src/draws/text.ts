@@ -2,7 +2,7 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
 import {TextDrawerProps} from '../types'
-import {mergeAlpha, getAttr, isSvgContainer, isCanvasContainer, noChange} from '../utils'
+import {mergeAlpha, getAttr, isSvgCntr, isCanvasCntr, noChange} from '../utils'
 
 export function drawText({
   fontFamily,
@@ -52,7 +52,7 @@ export function drawText({
     return mapping(datum as any) as unknown as typeof datum
   })
 
-  if (isSvgContainer(container)) {
+  if (isSvgCntr(container)) {
     container
       .selectAll(`.${className}`)
       .data(mappedData)
@@ -83,7 +83,7 @@ export function drawText({
       .style('pointer-events', 'none')
   }
 
-  if (isCanvasContainer(container)) {
+  if (isCanvasCntr(container)) {
     container.remove(...container.getObjects())
     mappedData.forEach((config) => {
       const text = new fabric.Text(config.value, {

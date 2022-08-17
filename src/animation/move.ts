@@ -1,5 +1,5 @@
 import {AnimationBase} from './base'
-import {isSvgContainer, safeTransform} from '../utils'
+import {isSvgCntr, safeTransform} from '../utils'
 import {canvasEasing, svgEasing} from './easing'
 import {
   AnimationMoveOptions as Options,
@@ -25,7 +25,7 @@ export class AnimationMove extends AnimationBase<Options> {
   init() {
     const {targets, initialOffset = [0, 0]} = this.options
 
-    if (isSvgContainer(targets)) {
+    if (isSvgCntr(targets)) {
       targets.call(addTransformForSvgContainer, targets, initialOffset)
     } else if (targets) {
       targets.forEach((target) => {
@@ -47,7 +47,7 @@ export class AnimationMove extends AnimationBase<Options> {
       endOffset = [0, 0],
     } = this.options
 
-    if (isSvgContainer(targets)) {
+    if (isSvgCntr(targets)) {
       targets
         .transition()
         .delay(delay)

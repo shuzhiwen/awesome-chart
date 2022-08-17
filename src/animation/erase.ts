@@ -1,5 +1,5 @@
 import {AnimationBase} from './base'
-import {isCanvasContainer, isSvgContainer} from '../utils'
+import {isCanvasCntr, isSvgCntr} from '../utils'
 import {AnimationEraseOptions as Options, AnimationProps as Props, D3Selection} from '../types'
 import {canvasEasing, svgEasing} from './easing'
 import {transition} from 'd3-transition'
@@ -17,7 +17,7 @@ export class AnimationErase extends AnimationBase<Options> {
   init() {
     const {targets, context, direction} = this.options
 
-    if (isSvgContainer(targets) && isSvgContainer(context)) {
+    if (isSvgCntr(targets) && isSvgCntr(context)) {
       this.defs = context.append('defs')
       this.defs
         .append('clipPath')
@@ -30,7 +30,7 @@ export class AnimationErase extends AnimationBase<Options> {
       targets.attr('clip-path', `url(#erase-${this.id})`)
     }
 
-    if (!isSvgContainer(targets) && isCanvasContainer(context)) {
+    if (!isSvgCntr(targets) && isCanvasCntr(context)) {
       const {width = 0, height = 0} = context
 
       this.maskNode = new fabric.Rect({
@@ -49,7 +49,7 @@ export class AnimationErase extends AnimationBase<Options> {
   play() {
     const {targets, context, delay, duration, easing, direction = 'right'} = this.options
 
-    if (isSvgContainer(context)) {
+    if (isSvgCntr(context)) {
       context
         .selectAll(`#erase-${this.id} rect`)
         .transition()
@@ -69,7 +69,7 @@ export class AnimationErase extends AnimationBase<Options> {
         .attr('height', '100%')
     }
 
-    if (isCanvasContainer(context) && !isSvgContainer(targets) && targets) {
+    if (isCanvasCntr(context) && !isSvgCntr(targets) && targets) {
       transition()
         .delay(delay)
         .duration(duration)
@@ -109,10 +109,10 @@ export class AnimationErase extends AnimationBase<Options> {
   destroy() {
     const {targets} = this.options
 
-    if (isSvgContainer(targets)) {
+    if (isSvgCntr(targets)) {
       this.defs?.remove()
       targets.attr('clip-path', '')
-    } else if (isCanvasContainer(targets)) {
+    } else if (isCanvasCntr(targets)) {
       targets.forEach((target) => (target.clipPath = undefined))
     }
 

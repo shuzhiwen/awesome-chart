@@ -19,11 +19,11 @@ export function isApproximateNumber(n1: number, n2: number) {
   return Math.abs(n1 - n2) <= 10 ** -8
 }
 
-export function isSvgContainer(selector: any): selector is D3Selection {
+export function isSvgCntr(selector: any): selector is D3Selection {
   return selector?.constructor.name === 'Selection'
 }
 
-export function isCanvasContainer(selector: any): selector is FabricGroup {
+export function isCanvasCntr(selector: any): selector is FabricGroup {
   return selector?.constructor.name === 'klass' && selector?.getObjects
 }
 

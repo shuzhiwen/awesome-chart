@@ -1,6 +1,6 @@
 import {LayerBase} from '../base'
 import {createScale, createStyle} from '../helpers'
-import {addStyle, isSvgContainer, transformAttr} from '../../utils'
+import {addStyle, isSvgCntr, transformAttr} from '../../utils'
 import {BrushBehavior, D3BrushEvent, brushX, brushY} from 'd3'
 import {
   ChartContext,
@@ -78,7 +78,7 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
       throw new Error('Invalid scale')
     }
 
-    if (!isSvgContainer(this.root)) {
+    if (!isSvgCntr(this.root)) {
       this.log.warn('The brush only supports svg')
       return
     }
@@ -167,7 +167,7 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
 
     bindCoordinate({trigger: this, redraw: true})
 
-    if (isSvgContainer(this.root)) {
+    if (isSvgCntr(this.root)) {
       addStyle(this.root.selectAll('.overlay'), transformAttr(this.style.background ?? {}))
       addStyle(this.root.selectAll('.selection'), transformAttr(this.style.selection ?? {}))
       addStyle(this.root.selectAll('.handle--w'), transformAttr(this.style.leftHandle ?? {}))

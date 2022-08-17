@@ -1,5 +1,5 @@
 import {AnimationBase} from './base'
-import {isSvgContainer} from '../utils'
+import {isSvgCntr} from '../utils'
 import {AnimationFadeOptions as Options, AnimationProps as Props} from '../types'
 import {canvasEasing, svgEasing} from './easing'
 
@@ -11,7 +11,7 @@ export class AnimationFade extends AnimationBase<Options> {
   init() {
     const {targets, initialOpacity = 0} = this.options
 
-    if (isSvgContainer(targets)) {
+    if (isSvgCntr(targets)) {
       targets.attr('opacity', initialOpacity)
     } else if (targets) {
       targets.forEach((target) => (target.opacity = initialOpacity))
@@ -22,7 +22,7 @@ export class AnimationFade extends AnimationBase<Options> {
   play() {
     const {targets, delay, duration, easing, startOpacity = 0, endOpacity = 1} = this.options
 
-    if (isSvgContainer(targets)) {
+    if (isSvgCntr(targets)) {
       targets
         .transition()
         .delay(delay)

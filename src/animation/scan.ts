@@ -4,7 +4,7 @@ import {AnimationBase} from './base'
 import {cloneDeep, merge} from 'lodash'
 import {Rect} from 'fabric/fabric-impl'
 import anime, {AnimeInstance, AnimeParams} from 'animejs'
-import {isCanvasContainer, isSvgContainer, mergeAlpha} from '../utils'
+import {isCanvasCntr, isSvgCntr, mergeAlpha} from '../utils'
 import {
   AnimationScanOptions as Options,
   AnimationProps as Props,
@@ -133,7 +133,7 @@ export class AnimationScan extends AnimationBase<Options> {
       opacity = 1,
     } = this.options
 
-    if (isSvgContainer(targets) && isSvgContainer(context)) {
+    if (isSvgCntr(targets) && isSvgCntr(context)) {
       this.defs = context.append('defs')
       this.gradientNode = createSvgGradient({
         id: this.id,
@@ -166,7 +166,7 @@ export class AnimationScan extends AnimationBase<Options> {
       })
     }
 
-    if (!isSvgContainer(targets) && isCanvasContainer(context)) {
+    if (!isSvgCntr(targets) && isCanvasCntr(context)) {
       this.gradientNode = createCanvasGradient({direction, color, opacity})
 
       this.maskNode = new fabric.Rect({
@@ -185,7 +185,7 @@ export class AnimationScan extends AnimationBase<Options> {
     const {context, delay, duration, easing, direction = 'top'} = this.options
     const attributes = getAttributes(direction)
 
-    if (isSvgContainer(context) && isSvgContainer(this.gradientNode)) {
+    if (isSvgCntr(context) && isSvgCntr(this.gradientNode)) {
       const configs: AnimeParams = {
         targets: this.gradientNode.node(),
         duration,
@@ -208,7 +208,7 @@ export class AnimationScan extends AnimationBase<Options> {
       this.instance = anime(configs)
     }
 
-    if (isCanvasContainer(context) && !isSvgContainer(this.gradientNode)) {
+    if (isCanvasCntr(context) && !isSvgCntr(this.gradientNode)) {
       const coords = cloneDeep(this.gradientNode?.coords ?? {})
       const configs: AnimeParams = {
         targets: coords,
@@ -221,8 +221,8 @@ export class AnimationScan extends AnimationBase<Options> {
           this.process(...args)
           if (
             this.gradientNode &&
-            !isSvgContainer(this.gradientNode) &&
-            !isSvgContainer(this.maskNode) &&
+            !isSvgCntr(this.gradientNode) &&
+            !isSvgCntr(this.maskNode) &&
             this.maskNode?.clipPath
           ) {
             this.gradientNode.coords = coords
@@ -246,11 +246,11 @@ export class AnimationScan extends AnimationBase<Options> {
   destroy() {
     const {targets} = this.options
 
-    if (isSvgContainer(targets)) {
+    if (isSvgCntr(targets)) {
       this.defs?.remove()
-      isSvgContainer(this.maskNode) && this.maskNode.remove()
+      isSvgCntr(this.maskNode) && this.maskNode.remove()
       this.instance && anime.remove(this.instance)
-    } else if (isCanvasContainer(this.maskNode)) {
+    } else if (isCanvasCntr(this.maskNode)) {
       this.maskNode.group?.remove(this.maskNode)
     }
 
