@@ -87,6 +87,12 @@ export const schemaMenu: MenuShape = {
           name: '阶梯折线',
           schema: base(line({mode: 'default', hasArea: false, curveType: 'curveStep'})),
         },
+        {
+          name: '带标记的折线图',
+          schema: base(
+            line({mode: 'default', hasArea: false, curveType: 'curveLinear', hasMark: true})
+          ),
+        },
       ],
     },
     {
@@ -111,6 +117,10 @@ export const schemaMenu: MenuShape = {
         {
           name: '百分比柱状',
           schema: base(rect({variant: 'column', mode: 'percentage'})),
+        },
+        {
+          name: '带轴交互的柱状图',
+          schema: base(rect({variant: 'column', mode: 'group', hasInteractive: true})),
         },
       ],
     },

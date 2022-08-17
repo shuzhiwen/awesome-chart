@@ -22,6 +22,7 @@ const shadowOpacity = 0.5
 const defaultStyle: LayerInteractiveStyleShape = {
   line: {
     stroke: 'yellow',
+    strokeWidth: 1,
   },
   interactive: {
     opacity: 0,
@@ -83,6 +84,9 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
 
     this.helperAuxiliary[0].setStyle({labelPosition: 'top', direction: 'vertical'})
     this.helperAuxiliary[1].setStyle({labelPosition: 'right', direction: 'horizontal'})
+    this.helperAuxiliary.forEach((layer) => {
+      layer.options.theme.animation.update.duration = 100
+    })
 
     event.on('MouseEvent', ({event}: {event: MouseEvent}) => {
       const {offsetX, offsetY} = event,
@@ -170,7 +174,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
           y: top,
           height,
           width: scaleX(domain) ?? 0,
-          source: {key: `x-${i}`},
+          source: {key: `x-${i}-secondary`},
         },
         {
           x: left + (scaleX(domain) ?? 0),
@@ -184,7 +188,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
           y: top,
           height,
           width: width - (scaleX(domain) ?? 0) - scaleX.bandwidth(),
-          source: {key: `x-${i}`},
+          source: {key: `x-${i}-secondary`},
         },
       ])
     }
@@ -196,7 +200,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
           y: top,
           width,
           height: scaleY(domain) ?? 0,
-          source: {key: `y-${i}`},
+          source: {key: `y-${i}-secondary`},
         },
         {
           x: left,
@@ -210,7 +214,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
           y: top + (scaleY(domain) ?? 0) + scaleY.bandwidth(),
           width,
           height: height - (scaleY(domain) ?? 0) - scaleY.bandwidth(),
-          source: {key: `y-${i}`},
+          source: {key: `y-${i}-secondary`},
         },
       ])
     }
@@ -235,9 +239,13 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     })
 
     this.event.onWithOff('mouseover-interactive', this.options.id, ({data, event}) => {
+      if (data.source.key.match('secondary')) {
+        return
+      }
+
       if (isSvgCntr(this.root)) {
         this.root.selectAll(generateClass('interactive', true)).each((d, i, els) => {
-          if ((d as any).source?.key === data.source.key) {
+          if ((d as any).source?.key.match(data.source.key)) {
             select(els[i]).attr('opacity', shadowOpacity)
           }
         })
@@ -246,7 +254,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
         ;(
           selector.getChildren(this.root, generateClass('interactive', false)) as FabricObject[]
         ).forEach((child) => {
-          if ((child as any).source?.key === data.source.key) {
+          if ((child as any).source?.key.match(data.source.key)) {
             child.opacity = shadowOpacity
           }
         })
