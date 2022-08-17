@@ -1,7 +1,7 @@
 import {createEvent} from '../../src'
 
 test('createEvent', () => {
-  const event = createEvent('abc')
+  const event = createEvent<any, any>('abc')
   let value = 0
 
   event.on('addOne', () => value++)
