@@ -158,7 +158,7 @@ export class Tooltip {
       container.selectAll('div').remove()
       const rows = container
         .selectAll('div')
-        .data(tooltipData.list)
+        .data(tooltipData.list.filter(({label}) => label))
         .join('div')
         .style('display', 'flex')
         .style('flex-direction', 'row')
