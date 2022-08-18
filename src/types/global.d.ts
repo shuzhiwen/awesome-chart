@@ -16,13 +16,15 @@ type Ungroup<T> = T extends Array<infer F> ? Ungroup<F> : T
 
 type Padding = [number, number, number, number]
 
+type SetKeys<T> = T extends Set<infer P> ? P : T
+
 type ArrayItem<T> = T extends Array<infer U> ? U : T
 
 type Values<T> = T extends Record<any, infer U> ? U : T extends Array<infer F> ? F : T
 
 type FlatObject<T> = T extends Record<infer F, MaybeGroup<infer P>> ? Record<F, P> : never
 
-type SetKeys<T> = T extends Set<infer P> ? P : T
+type Newable<T, P = never, F = never, Q = never> = {new (arg0: P, arg1: F, arg2: Q): T}
 
 type Engine = 'svg' | 'canvas'
 

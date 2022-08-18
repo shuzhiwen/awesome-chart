@@ -1,4 +1,7 @@
 import * as layer from '.'
+import {BasicLayerOptions, ChartContext} from '../types'
+import {LayerBase} from './base'
+
 export * from './combine'
 export * from './common'
 export * from './base'
@@ -35,4 +38,20 @@ export const layerMapping = {
   text: layer.LayerText,
   treemap: layer.LayerTreemap,
   tree: layer.LayerTree,
+}
+
+export function registerCustomLayer<T extends LayerBase<BasicLayerOptions<any>>>(
+  key: string,
+  Klass: Newable<T, BasicLayerOptions<any>, ChartContext>
+) {
+  if (Object.keys(layerMapping).includes(key)) {
+    console.error('Duplicate key for registerCustomLayer!')
+    return
+  }
+
+  try {
+    Object.assign(layerMapping, {[key]: Klass})
+  } catch (e) {
+    console.error('Invalid Class Constructor!\n', e)
+  }
 }
