@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react'
-import {Chart as ChartShape, createChart, download} from '../src'
+import {Chart as ChartShape, createChart, download, getStandardLayoutCreator} from '../src'
 import {CreateChartSchema} from '../src/types'
 import {MenuItemShape} from './schema'
 import styles from './Chart.module.css'
@@ -28,13 +28,15 @@ export const Chart = (props: {
   useEffect(() => {
     try {
       const container = chartRef.current
-      const schema = {
-        container,
-        ...cloneDeep(_schema),
-        engine,
-      }
 
-      setChart(createChart(schema as CreateChartSchema))
+      setChart(
+        createChart({
+          ...cloneDeep(_schema),
+          layoutCreator: getStandardLayoutCreator({brush: true}),
+          container,
+          engine,
+        } as CreateChartSchema)
+      )
 
       return () => chart?.destroy()
     } catch (error) {

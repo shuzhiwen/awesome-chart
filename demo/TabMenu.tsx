@@ -1,10 +1,10 @@
+import React from 'react'
+import s from './TabMenu.module.css'
 import {hierarchy, select} from 'd3'
 import {cloneDeep, max, merge} from 'lodash'
 import {useEffect, useRef} from 'react'
-import {D3Selection, LayoutArea} from '../src/types'
 import {schemaMenu} from './schema'
-import s from './TabMenu.module.css'
-import React from 'react'
+import {BasicLayerOptions, ChartContext, D3Selection, LayerArcOptions} from '../src/types'
 import {
   addStyle,
   getAttr,
@@ -12,7 +12,10 @@ import {
   transformAttr,
   DataBase,
   validateAndCreateData,
-  createEvent,
+  registerCustomLayer,
+  Chart,
+  uuid,
+  LayerBase,
 } from '../src'
 
 type MenuItem = {
@@ -52,12 +55,10 @@ const defaultStyle: TabMenuStyleShape = {
   },
 }
 
-class TabMenu {
-  readonly event = createEvent('TabMenu')
+class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
+  private _data: Maybe<DataBase<MenuItem>>
 
-  private root: D3Selection
-
-  private data: Maybe<DataBase<MenuItem>>
+  private _style = defaultStyle
 
   private activeNodes: any[] = []
 
@@ -65,25 +66,28 @@ class TabMenu {
 
   private activeTabData: any[] = []
 
-  private style = defaultStyle
+  get data() {
+    return this._data
+  }
 
-  private layout: LayoutArea
+  get style() {
+    return this._style
+  }
 
-  constructor(props: {container: HTMLElement}) {
-    const {container} = props
-    const {x, y, width, height} = container.getBoundingClientRect()
+  constructor(options: LayerArcOptions, context: ChartContext) {
+    super({context, options})
 
-    this.layout = {left: x, top: y, width, height, right: x + width, bottom: y + height}
-    this.root = select(container)
-      .html('')
+    const {left, top, width, height} = options.layout
+
+    this.root = (this.root as D3Selection)
       .append('foreignObject')
       .style('width', width)
       .style('height', height)
       .append('xhtml:div')
       .style('width', `${width}px`)
       .style('height', `${height}px`)
-      .style('margin-left', `${x}px`)
-      .style('margin-top', `${y}px`)
+      .style('margin-left', `${left}px`)
+      .style('margin-top', `${top}px`)
       .style('display', 'flex')
       .on('mouseleave', () => this.blur())
   }
@@ -91,12 +95,16 @@ class TabMenu {
   blur() {
     this.activeNodes.map((node) => (node.isActive = false))
     this.activeNodes.length = 0
-    this.update()
+    this.needRecalculated = true
     this.draw()
   }
 
-  setData(data: TabMenu['data']) {
-    this.data = validateAndCreateData('base', this.data, data)
+  setScale() {}
+
+  setStyle() {}
+
+  setData(data: LayerTabMenu['data']) {
+    this._data = validateAndCreateData('base', this.data, data)
 
     const tree = hierarchy(this.data?.source)
     const nodes = tree.descendants()
@@ -109,7 +117,7 @@ class TabMenu {
   }
 
   update() {
-    const {width, height} = this.layout
+    const {width, height} = this.options.layout
     const {text, active, inactive} = this.style
 
     this.activeTabData = this.originTabData.slice(0, 1)
@@ -139,7 +147,7 @@ class TabMenu {
   }
 
   draw() {
-    this.root
+    ;(this.root as D3Selection)
       .selectAll('.group')
       .data(this.activeTabData)
       .join('xhtml:div')
@@ -178,7 +186,7 @@ class TabMenu {
               .forEach((child) => (child.isActive = false))
             node.isActive = true
             node.event = event
-            this.update()
+            this.needRecalculated = true
             this.draw()
           })
       })
@@ -204,6 +212,8 @@ class TabMenu {
   }
 }
 
+registerCustomLayer('tabMenu', LayerTabMenu)
+
 export const Menu = (props: {onChange: (data: any) => void}) => {
   const ref = useRef<HTMLDivElement>(null)
   const {onChange} = props
@@ -211,15 +221,23 @@ export const Menu = (props: {onChange: (data: any) => void}) => {
   useEffect(() => {
     if (!ref.current) return
 
-    const tabMenu = new TabMenu({container: ref.current})
+    const chart = new Chart({
+      container: ref.current,
+      padding: [0, 0, 0, 0],
+    })
+    const layer = chart.createLayer({
+      id: uuid(),
+      type: 'tabMenu' as any,
+      layout: chart.layout.container,
+    }) as unknown as LayerTabMenu
 
-    tabMenu.setData(new DataBase(schemaMenu))
-    tabMenu.update()
-    tabMenu.draw()
-    tabMenu.event.onWithOff('click-tab', 'menu', ({data}) => {
+    layer.setData(new DataBase(schemaMenu))
+    layer.update()
+    layer.draw()
+    layer.event.onWithOff('click-tab', 'menu', ({data}) => {
       if (data.node.data.schema) {
         onChange(data.node.data.schema)
-        tabMenu.blur()
+        layer.blur()
       }
     })
   }, [onChange])

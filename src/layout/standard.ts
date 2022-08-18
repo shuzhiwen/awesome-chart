@@ -34,4 +34,4 @@ export const getStandardLayoutCreator =
     }
   }
 
-export const defaultLayoutCreator = getStandardLayoutCreator({brush: true})
+export const defaultLayoutCreator = getStandardLayoutCreator({brush: false})
