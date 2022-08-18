@@ -14,7 +14,7 @@ export type ChartContext = Pick<
   | 'container'
   | 'containerWidth'
   | 'containerHeight'
-  | 'drawerController'
+  | 'drawerScheduler'
   | 'event'
   | 'root'
   | 'theme'

@@ -1,8 +1,8 @@
 import {sum} from 'lodash'
 import {createEvent} from '../utils'
 
-export class PriorityQueue {
-  readonly event = createEvent<'run'>(PriorityQueue.name)
+export class Scheduler {
+  readonly event = createEvent<'run'>(Scheduler.name)
 
   private queue: Record<Priority, AnyFunction[]> = {
     topHigh: [],
@@ -12,7 +12,7 @@ export class PriorityQueue {
     other: [],
   }
 
-  get size() {
+  get taskSize() {
     return sum(Object.values(this.queue).map((queue) => queue.length))
   }
 

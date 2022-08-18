@@ -252,7 +252,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       return
     }
 
-    const {drawerController, theme} = this.options,
+    const {drawerScheduler, theme} = this.options,
       backupTarget = this.backupData[sublayer],
       evented = !disableEventDrawerType.has(type),
       sublayerClassName = `${this.className}-${sublayer}`,
@@ -322,7 +322,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
       if (isFirstDraw) {
         options.transition = {duration: 0, delay: 0}
-        drawerController.registerListener(priority ?? 'other', () => drawerMapping[type](options))
+        drawerScheduler.registerListener(priority ?? 'other', () => drawerMapping[type](options))
       } else {
         options.transition = this.backupAnimation.options?.[sublayer]?.update
         drawerMapping[type](options)
@@ -332,7 +332,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     })
 
     if (isFirstDraw) {
-      drawerController.event.onWithOff('run', this.options.id + sublayer, afterDraw)
+      drawerScheduler.event.onWithOff('run', this.options.id + sublayer, afterDraw)
     } else {
       afterDraw()
     }
