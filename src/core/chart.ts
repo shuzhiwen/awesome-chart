@@ -70,7 +70,7 @@ export class Chart {
   }
 
   get layers() {
-    return this._layers.filter(({options}) => !options.sublayer)
+    return this._layers.filter(({options}) => !options.sublayerConfig)
   }
 
   constructor({
@@ -151,9 +151,10 @@ export class Chart {
   createLayer(options: LayerOptions) {
     const context: ChartContext = {
       ...this,
+      root: options.sublayerConfig?.root || this.root,
+      createSublayer: this.createLayer.bind(this),
       bindCoordinate: this.bindCoordinate.bind(this),
       createGradient: getEasyGradientCreator({container: this.defs}),
-      createSublayer: (options) => this.createLayer({...options, sublayer: true}),
     }
 
     if (isNil(options.id)) {

@@ -1,3 +1,4 @@
+import {DrawerTarget} from '../draw'
 import {LayoutArea} from '../layout'
 import {LayerType} from './base'
 
@@ -8,9 +9,11 @@ type BasicLayerOptions<
   id: string
   type: T
   layout: LayoutArea
-  sublayer?: boolean
-  coordinate?: Coordinate
   axis?: 'main' | 'minor'
+  coordinate?: Coordinate
+  sublayerConfig?: {
+    root: DrawerTarget
+  }
 }
 
 export type LayerOptions =

@@ -67,6 +67,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
       type: 'rect',
       mode: 'interval',
       variant: 'column',
+      sublayerConfig: {root: this.root},
     }) as LayerRect
     this.rectLayer = createSublayer({
       id: uuid(),
@@ -74,6 +75,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
       type: 'rect',
       mode: 'interval',
       variant: 'column',
+      sublayerConfig: {root: this.root},
     }) as LayerRect
   }
 

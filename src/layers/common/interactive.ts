@@ -74,11 +74,13 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
         id: uuid(),
         layout,
         type: 'auxiliary',
+        sublayerConfig: {root: this.root},
       }),
       createSublayer({
         id: uuid(),
         layout,
         type: 'auxiliary',
+        sublayerConfig: {root: this.root},
       }),
     ] as LayerInteractive['helperAuxiliary']
 
