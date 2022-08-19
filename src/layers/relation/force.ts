@@ -43,6 +43,10 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
 
   constructor(options: LayerForceOptions, context: ChartContext) {
     super({options, context, sublayers: ['node', 'text'], tooltipTargets: ['node']})
+
+    this.event.onWithOff('destroy', 'default', () => {
+      this.simulation?.on('tick', null).stop()
+    })
   }
 
   setScale() {}

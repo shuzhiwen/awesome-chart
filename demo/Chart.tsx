@@ -28,17 +28,16 @@ export const Chart = (props: {
   useEffect(() => {
     try {
       const container = chartRef.current
+      const newChart = createChart({
+        ...cloneDeep(_schema),
+        layoutCreator: getStandardLayoutCreator({brush: true}),
+        container,
+        engine,
+      } as CreateChartSchema)
 
-      setChart(
-        createChart({
-          ...cloneDeep(_schema),
-          layoutCreator: getStandardLayoutCreator({brush: true}),
-          container,
-          engine,
-        } as CreateChartSchema)
-      )
+      setChart(newChart)
 
-      return () => chart?.destroy()
+      return () => newChart?.destroy()
     } catch (error) {
       console.error(error)
     }
