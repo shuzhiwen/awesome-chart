@@ -60,6 +60,7 @@ export function drawPath({
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('transform-origin', (d) => d.transformOrigin)
+      // transition occur attribute attach delay
       .attr('transform', (d) => `translate(${d.centerX},${d.centerY})`)
   }
 
