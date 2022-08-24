@@ -100,3 +100,11 @@ export type AnimationScanOptions = BasicAnimationOptions<
     opacity: number
   }
 >
+
+export type AnimationBreatheOptions = BasicAnimationOptions<
+  'breathe',
+  {
+    stdDeviation: number
+    minOpacity: number
+  }
+>

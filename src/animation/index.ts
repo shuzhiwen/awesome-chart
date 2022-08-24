@@ -1,5 +1,6 @@
 import * as animation from '.'
 export * from './base'
+export * from './breathe'
 export * from './easing'
 export * from './erase'
 export * from './empty'
@@ -11,6 +12,7 @@ export * from './queue'
 export * from './zoom'
 
 export const animationMapping = {
+  breathe: animation.AnimationBreathe,
   erase: animation.AnimationErase,
   empty: animation.AnimationEmpty,
   fade: animation.AnimationFade,

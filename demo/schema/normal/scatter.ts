@@ -4,7 +4,7 @@ export default ({pointSize}) => [
     options: {
       layout: 'container',
     },
-    data: '气泡图',
+    data: '散点气泡图',
     style: {
       text: {
         fontSize: 16,
@@ -109,13 +109,18 @@ export default ({pointSize}) => [
       },
     },
     animation: {
-      circle: {
+      point: {
         enter: {
           type: 'zoom',
           delay: 0,
           duration: 2000,
           mode: 'enlarge',
           direction: 'both',
+        },
+        loop: {
+          type: 'breathe',
+          duration: 2000,
+          delay: 0,
         },
       },
       text: {
