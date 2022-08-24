@@ -1,5 +1,5 @@
 import {DataTableList, DataTable, DataRelation, DataBase} from '../data'
-import {CreateChartSchema, CreateLayerSchema, LayerOptions} from '../types'
+import {CreateChartSchema, LayerOptions} from '../types'
 import {Chart} from './chart'
 import {
   createLog,
@@ -18,8 +18,8 @@ import {
 const log = createLog('CreateChart')
 
 export const createLayer = errorCatcher(
-  (chart: Chart, schema: CreateLayerSchema) => {
-    const {type, options, data, scale, style, animation, event} = schema,
+  (chart: Chart, schema: ArrayItem<CreateChartSchema['layers']>) => {
+    const {type, options, data, scale, style, animation, event} = schema!,
       layerOptions = {type, ...options, layout: chart.layout[options.layout]} as LayerOptions,
       layer = chart.createLayer(layerOptions)
     let dataSet = data

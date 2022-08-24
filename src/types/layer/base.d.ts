@@ -29,26 +29,26 @@ export type BackupAnimationShape = Record<string, Maybe<AnyObject>> & {
   options?: BackupAnimationOptions
 }
 
-export interface BackupEventShape {
+export type BackupEventShape = {
   common: Record<string, Record<string, AnyFunction>>
   tooltip: Record<string, AnyFunction>
 }
 
-export interface LayerBaseProps<T extends LayerOptions> {
+export type LayerBaseProps<T extends LayerOptions> = {
   context: ChartContext
   options: T
   sublayers?: string[]
   tooltipTargets?: string[]
 }
 
-export interface CreateAnimationConfigItemShape {
+export type CreateAnimationConfigItemShape = {
   type: AnimationType
   duration?: number
   delay?: number
   loop?: boolean
 }
 
-export interface CreateAnimationProps {
+export type CreateAnimationProps = {
   event: Event
   sublayer: string
   context: DrawerTarget
@@ -62,7 +62,7 @@ export interface CreateAnimationProps {
   >
 }
 
-export interface DrawBasicProps<T> {
+export type DrawBasicProps<T> = {
   type: DrawerType
   data: BackupDataItemShape<T>
   sublayer?: string
@@ -79,12 +79,12 @@ export type LayerScalesShape = Partial<{
   nice: ScaleNiceShape
 }>
 
-export interface Layer extends LayerBase<LayerOptions> {
+export type Layer = LayerBase<LayerOptions> & {
   scale?: Maybe<LayerScalesShape>
   legendData?: Maybe<LegendDataShape>
 }
 
-export interface LegendDataShape {
+export type LegendDataShape = {
   filter: 'column' | 'row'
   colorMatrix: ColorMatrix
   legends: {

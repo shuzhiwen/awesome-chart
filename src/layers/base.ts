@@ -115,7 +115,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     layerLifeCycles.forEach((name) => {
       const fn: AnyFunction = this[name] || noop
 
-      this[name] = (...parameters: any) => {
+      this[name] = (...parameters: unknown[]) => {
         try {
           if (name === 'draw') {
             this.update()
@@ -231,9 +231,9 @@ export abstract class LayerBase<T extends LayerOptions> {
       animationQueue.pushQueue(loopQueue)
     }
 
-    event.on('start', (d: any) => this.event.fire(`${prefix}start`, d))
-    event.on('process', (d: any) => this.event.fire(`${prefix}process`, d))
-    event.on('end', (d: any) => this.event.fire(`${prefix}end`, d))
+    event.on('start', (d: unknown) => this.event.fire(`${prefix}start`, d))
+    event.on('process', (d: unknown) => this.event.fire(`${prefix}process`, d))
+    event.on('end', (d: unknown) => this.event.fire(`${prefix}end`, d))
     this.backupAnimation[sublayer] = animationQueue
 
     if (!isFirstPlay) {

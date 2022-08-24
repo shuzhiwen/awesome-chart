@@ -1,18 +1,8 @@
 import {Selection, Transition} from 'd3'
-import {Group, IEvent, Object} from 'fabric/fabric-impl'
+import {Group, IEvent, Object as _Object} from 'fabric/fabric-impl'
 import {GraphStyleShape, TextStyleShape} from './layer'
 import {drawerMapping} from '../draws'
 import {ChartTheme} from './core'
-
-export type DrawerTarget = D3Selection | FabricGroup
-
-export type DrawerDataParameter<T> = T[]
-
-export type DrawerType = keyof typeof drawerMapping
-
-export type DrawerDataShape<T> = T extends BasicDrawerProps<infer U> ? U : T
-
-export type ElEvent = MouseEvent | IEvent<MouseEvent>
 
 export type CurveType =
   | 'curveLinear'
@@ -25,25 +15,36 @@ export type CurveType =
   | 'curveStepAfter'
   | 'curveStepBefore'
 
+export type DrawerTarget = D3Selection | FabricGroup
+
+export type DrawerDataParameter<T> = T[]
+
+export type DrawerType = keyof typeof drawerMapping
+
+export type DrawerDataShape<T> = T extends BasicDrawerProps<infer U> ? U : T
+
+export type ElEvent = MouseEvent | IEvent<MouseEvent>
+
 export type D3Selection = Selection<any, unknown, any, unknown>
 
 export type D3Transition = Transition<any, unknown, any, unknown>
 
-export interface FabricObject extends Object {
+export type FabricObject = _Object & {
   className?: string
 }
 
-export interface FabricGroup extends Group {
+export type FabricGroup = Group & {
   className?: string
 }
 
-export interface ElSourceShape extends AnyObject {
-  dimension?: Meta
-  category?: Meta
-  value?: Meta
-}
+export type ElSourceShape = AnyObject &
+  Partial<{
+    dimension: Meta
+    category: Meta
+    value: Meta
+  }>
 
-export interface BasicDrawerProps<T> {
+export type BasicDrawerProps<T> = {
   data: DrawerDataParameter<T>
   source?: DrawerDataParameter<MaybeGroup<ElSourceShape>>
   className: string
@@ -51,7 +52,7 @@ export interface BasicDrawerProps<T> {
   theme: ChartTheme
 }
 
-export interface ElConfigShape {
+export type ElConfigShape = {
   className: string
   fill: string
   stroke: string

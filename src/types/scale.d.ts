@@ -18,34 +18,34 @@ export interface Scale<Domain = any> extends RawScale<Domain> {
   range(range: Iterable<any>): this
 }
 
-export interface ScaleNiceShape {
-  count?: number
-  zero?: boolean
-  paddingInner?: number
-  fixedPaddingInner?: number
-  fixedBandwidth?: number
-  fixedBoundary?: 'start' | 'end'
-}
+export type ScaleNiceShape = Partial<{
+  count: number
+  zero: boolean
+  paddingInner: number
+  fixedPaddingInner: number
+  fixedBandwidth: number
+  fixedBoundary: 'start' | 'end'
+}>
 
-export interface ScaleBandProps {
+export type ScaleBandProps = {
   domain: Meta[]
   range: [number, number]
   nice?: ScaleNiceShape
 }
 
-export interface ScaleLinearProps {
+export type ScaleLinearProps = {
   domain: [number, number]
   range: [number, number]
   nice?: Pick<ScaleNiceShape, 'count' | 'zero'>
 }
 
-export interface ScaleArcProps {
+export type ScaleArcProps = {
   domain: DataTableList
   range: [number, number]
   nice?: Pick<ScaleNiceShape, 'paddingInner'>
 }
 
-export interface ScaleArcRangeItem {
+export type ScaleArcRangeItem = {
   startAngle: number
   endAngle: number
 }

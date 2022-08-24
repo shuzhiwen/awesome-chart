@@ -1,3 +1,7 @@
+export interface LayoutCreator {
+  (props: LayoutProps): LayoutShape
+}
+
 export type LayoutArea = Readonly<{
   top: number
   right: number
@@ -7,26 +11,22 @@ export type LayoutArea = Readonly<{
   height: number
 }>
 
-export interface LayoutShape extends Record<string, LayoutArea> {
+export type LayoutShape = Record<string, LayoutArea> & {
   readonly main: LayoutArea
   readonly container: LayoutArea
 }
 
-export interface LayoutCreator {
-  (props: LayoutProps): LayoutShape
-}
-
-export interface LayoutProps {
+export type LayoutProps = {
   containerWidth: number
   containerHeight: number
   padding: Padding
 }
 
-export interface GetStandardLayoutCreatorProps {
+export type GetStandardLayoutCreatorProps = {
   brush: boolean
 }
 
-export interface GetFacetLayoutCreatorProps {
+export type GetFacetLayoutCreatorProps = {
   row: number
   column: number
 }

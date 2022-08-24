@@ -1,40 +1,40 @@
 import {D3Selection} from './draw'
 
-export interface FormatNumberConfig {
-  percentage?: boolean // 0.1234 or 12.34%
-  thousandth?: boolean // 1234 or 1,234
-  decimals?: number // 12.3 or 12.34
-}
+export type FormatNumberConfig = Partial<{
+  percentage: boolean // 0.1234 => 12.34%
+  thousandth: boolean // 1234 => 1,234
+  decimals: number // 12.3412312 => 12.34
+}>
 
-export interface OverflowControlConfig {
-  omit?: boolean // add '...' or not
-  width?: number // max display width
-  height?: number // max display height
-  fontSize?: number
-}
+export type OverflowControlConfig = Partial<{
+  omit: boolean // add '...' or not
+  width: number // max display width
+  height: number // max display height
+  fontSize: number
+}>
 
-export interface Stop {
-  color?: string
-  offset?: number
-  opacity?: number
-}
+export type Stop = Partial<{
+  color: string
+  offset: number
+  opacity: number
+}>
 
-export interface GradientWithId extends fabric.Gradient {
+export type GradientWithId = fabric.Gradient & {
   id?: string
 }
 
-export interface GradientCreatorProps<T> {
+export type GradientCreatorProps<T> = {
   container: D3Selection | GradientWithId[]
   schema: T
 }
 
-export interface EasyGradientCreatorProps {
+export type EasyGradientCreatorProps = {
   type: 'linear' | 'radial'
   direction: 'horizontal' | 'vertical'
   colors: string[]
 }
 
-export interface LinearGradientSchema {
+export type LinearGradientSchema = {
   id: string
   x1?: number
   y1?: number
@@ -43,7 +43,7 @@ export interface LinearGradientSchema {
   stops: Stop[]
 }
 
-export interface RadialGradientSchema {
+export type RadialGradientSchema = {
   id: string
   r?: number
   r2?: number
@@ -54,12 +54,12 @@ export interface RadialGradientSchema {
   stops: Stop[]
 }
 
-export interface CreateDefsSchema {
+export type CreateDefsSchema = Partial<{
   linearGradient?: MaybeGroup<LinearGradientSchema>
   radialGradient?: MaybeGroup<RadialGradientSchema>
-}
+}>
 
-export interface RandomOptions {
+export type RandomOptions = {
   mode: 'normal' | 'poisson'
   row: number
   column: number

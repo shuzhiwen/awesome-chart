@@ -1,7 +1,7 @@
 import {Layer} from './base'
 import {TextStyleShape} from './styles'
 
-export interface CreateTextProps {
+export type CreateTextProps = {
   x: number
   y: number
   value: Maybe<Meta>
@@ -10,11 +10,11 @@ export interface CreateTextProps {
   offset?: number
 }
 
-export interface CreateLimitTextProps extends CreateTextProps {
+export type CreateLimitTextProps = CreateTextProps & {
   maxTextWidth: number
 }
 
-export interface CreateColorMatrixProps {
+export type CreateColorMatrixProps = {
   layer: Layer
   row: number
   column: number

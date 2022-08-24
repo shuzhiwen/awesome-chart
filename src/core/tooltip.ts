@@ -25,7 +25,7 @@ export class Tooltip {
 
   private options = defaultOptions
 
-  private data: Maybe<any> = null
+  private data: Maybe<TooltipDataShape> = null
 
   constructor(options: TooltipOptions) {
     this.setOptions(options)

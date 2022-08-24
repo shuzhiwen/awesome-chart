@@ -2,7 +2,7 @@ import {DataBase, dataMapping, DataRelation, DataTable, DataTableList} from '../
 
 export type DataType = keyof typeof dataMapping
 
-export type DataShape = DataBase<any> | DataTableList | DataTable | DataRelation
+export type DataShape = DataBase<unknown> | DataTableList | DataTable | DataRelation
 
 export type DataBaseOptions = Partial<{
   skip: Meta[]
@@ -33,14 +33,14 @@ export type TableListDataShape = {
   max?: Meta
 }[]
 
-export interface Edge {
+export type Edge = {
   id: Meta
   from: Meta
   to: Meta
   value?: number
 }
 
-export interface Node {
+export type Node = {
   id: Meta
   name: Meta
   value?: number
@@ -49,7 +49,7 @@ export interface Node {
   children?: Node[]
 }
 
-export interface RelationDataShape {
+export type RelationDataShape = {
   roots: Meta[]
   nodes: Node[]
   edges: Edge[]

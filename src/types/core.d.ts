@@ -59,13 +59,13 @@ export type ChartTheme = Readonly<
 export type TooltipDataShape = Maybe<{
   title: Meta
   list: Partial<{
-    label?: Meta
-    value?: Meta
-    color?: string
+    label: Meta
+    value: Meta
+    color: string
   }>[]
 }>
 
-export interface TooltipOptions {
+export type TooltipOptions = {
   container: HTMLElement | null
   mode?: 'single' | 'dimension' | 'category'
   pointSize?: number
@@ -79,7 +79,7 @@ export interface TooltipOptions {
   getLayersBackupData?: () => BackupDataItemShape<unknown>
 }
 
-export interface ChartProps {
+export type ChartProps = {
   container: HTMLElement
   width?: number
   height?: number
@@ -92,34 +92,32 @@ export interface ChartProps {
   layoutCreator?: LayoutCreator
 }
 
-export interface LayerSchema {
-  options?: LayerOptions
-  data?: Maybe<DataShape>
-  scale?: LayerScalesShape
-  style?: AnyObject
-  animation?: AnyObject
-}
+export type LayerSchema = Partial<{
+  options: LayerOptions
+  data: Maybe<DataShape>
+  scale: LayerScalesShape
+  style: AnyObject
+  animation: AnyObject
+}>
 
-export interface RandomDataSchema extends RandomOptions {
+export type RandomDataSchema = RandomOptions & {
   type: 'table' | 'tableList'
 }
 
-export interface CreateLayerSchema {
-  type: LayerType
-  options: {
-    id: string
-    layout: string
-    coordinate?: Coordinate
-    axis?: 'main' | 'minor'
-    mode?: string
-  }
-  data: any
-  scale?: ScaleNiceShape
-  style?: LayerSchema['style']
-  animation?: LayerSchema['animation']
-  event?: AnyEventObject
-}
-
-export interface CreateChartSchema extends ChartProps {
-  layers?: CreateLayerSchema[]
+export type CreateChartSchema = ChartProps & {
+  layers?: {
+    type: LayerType
+    data: any
+    scale?: ScaleNiceShape
+    style?: LayerSchema['style']
+    animation?: LayerSchema['animation']
+    event?: AnyEventObject
+    options: {
+      id: string
+      layout: string
+      coordinate?: Coordinate
+      axis?: 'main' | 'minor'
+      mode?: string
+    }
+  }[]
 }
