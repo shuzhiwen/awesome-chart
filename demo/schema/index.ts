@@ -205,11 +205,11 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础散点',
-          schema: base(scatter({pointSize: [10, 10]})),
+          schema: base(scatter({pointSize: [5, 5]})),
         },
         {
           name: '气泡',
-          schema: base(scatter({pointSize: [10, 30]})),
+          schema: base(scatter({pointSize: [5, 15]})),
         },
       ],
     },

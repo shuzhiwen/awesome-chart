@@ -29,11 +29,6 @@ export default () => [
       block: {
         fill: 'skyblue',
       },
-      text: {
-        shadow: {
-          blur: 4,
-        },
-      },
     },
   },
   {
