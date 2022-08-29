@@ -1,8 +1,9 @@
 import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {IImageOptions} from 'fabric/fabric-impl'
-import {ImageDrawerProps} from '../types'
+import {ElConfigShape, ImageDrawerProps} from '../types'
 import {getAttr, isCanvasCntr, isSvgCntr, noChange} from '../utils'
+import {merge} from 'lodash'
 
 export function drawImage({
   opacity,
@@ -25,7 +26,7 @@ export function drawImage({
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return mapping(datum as any) as unknown as typeof datum
+    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
   })
 
   if (isSvgCntr(container)) {

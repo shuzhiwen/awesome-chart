@@ -1,8 +1,9 @@
 import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {ILineOptions} from 'fabric/fabric-impl'
-import {LineDrawerProps} from '../types'
+import {ElConfigShape, LineDrawerProps} from '../types'
 import {isCanvasCntr, isSvgCntr, noChange, mergeAlpha, getAttr} from '../utils'
+import {merge} from 'lodash'
 
 export function drawLine({
   stroke,
@@ -33,7 +34,7 @@ export function drawLine({
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return mapping(datum as any) as unknown as typeof datum
+    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
   })
 
   if (isSvgCntr(container)) {

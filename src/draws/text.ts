@@ -1,9 +1,9 @@
 import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
-import {TextDrawerProps} from '../types'
+import {ElConfigShape, TextDrawerProps} from '../types'
 import {mergeAlpha, getAttr, isSvgCntr, isCanvasCntr, noChange} from '../utils'
-import {drawImage} from './image'
+import {merge} from 'lodash'
 
 export function drawText({
   fontFamily,
@@ -20,7 +20,6 @@ export function drawText({
   transformOrigin,
   writingMode,
   textDecoration,
-  attachImage,
   mapping = noChange,
   data = [],
   transition,
@@ -51,20 +50,8 @@ export function drawText({
     rotation: getAttr(rotation, i, 0),
   }))
   const mappedData = configuredData.map((datum) => {
-    return mapping(datum as any) as unknown as typeof datum
+    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
   })
-
-  if (attachImage) {
-    mappedData.forEach((datum) => {
-      drawImage({
-        ...datum,
-        data: [attachImage(datum)],
-        className: 'attachImage',
-        container,
-        theme,
-      })
-    })
-  }
 
   if (isSvgCntr(container)) {
     container

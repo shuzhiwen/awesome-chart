@@ -1,8 +1,9 @@
 import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {IEllipseOptions} from 'fabric/fabric-impl'
-import {EllipseDrawerProps} from '../types'
+import {ElConfigShape, EllipseDrawerProps} from '../types'
 import {mergeAlpha, getAttr, noChange, isSvgCntr, isCanvasCntr} from '../utils'
+import {merge} from 'lodash'
 
 export function drawEllipse({
   fill,
@@ -37,7 +38,7 @@ export function drawEllipse({
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return mapping(datum) as typeof datum
+    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
   })
 
   if (isSvgCntr(container)) {

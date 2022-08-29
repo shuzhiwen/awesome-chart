@@ -52,7 +52,7 @@ export type BasicDrawerProps<T> = {
   theme: ChartTheme
 }
 
-export type ElConfigShape = {
+export type ElConfigShape = Partial<{
   className: string
   fill: string
   stroke: string
@@ -61,7 +61,16 @@ export type ElConfigShape = {
   strokeOpacity: number
   strokeWidth: number
   source: MaybeGroup<ElSourceShape>
-}
+}> &
+  DrawerDataShape<
+    | EllipseDrawerProps
+    | ImageDrawerProps
+    | LineDrawerProps
+    | PathDrawerProps
+    | PolyDrawerProps
+    | RectDrawerProps
+    | TextDrawerProps
+  >
 
 export type TextDrawerProps = TextStyleShape &
   BasicDrawerProps<{

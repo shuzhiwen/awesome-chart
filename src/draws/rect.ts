@@ -1,6 +1,6 @@
-import {isArray} from 'lodash'
+import {isArray, merge} from 'lodash'
 import {fabric} from 'fabric'
-import {DrawerDataShape, RectDrawerProps} from '../types'
+import {DrawerDataShape, ElConfigShape, RectDrawerProps} from '../types'
 import {IRectOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, isSvgCntr, isCanvasCntr, noChange} from '../utils'
@@ -38,7 +38,7 @@ export function drawRect({
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return mapping(datum) as typeof datum
+    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
   })
 
   if (isSvgCntr(container)) {

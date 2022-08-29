@@ -1,6 +1,6 @@
 import {HeatmapConfiguration} from '@mars3d/heatmap.js'
 import {BasicAnimationOptions} from '../animation'
-import {CurveType, DrawerDataShape, ElConfigShape, ImageDrawerProps, TextDrawerProps} from '../draw'
+import {BasicDrawerProps, CurveType, ElConfigShape} from '../draw'
 import {FormatNumberConfig} from '../utils'
 
 export type GraphStyleShape = Partial<{
@@ -14,8 +14,10 @@ export type GraphStyleShape = Partial<{
   transformOrigin: MaybeGroup<string>
   rotation: MaybeGroup<number>
   transition: Maybe<Partial<BasicAnimationOptions>>
-  mapping: (config: ElConfigShape) => ElConfigShape
   hidden: boolean
+  mapping: (
+    config: ElConfigShape & Pick<BasicDrawerProps<unknown>, 'container' | 'theme'>
+  ) => void | Partial<ElConfigShape>
 }>
 
 export type TextStyleShape = GraphStyleShape &
@@ -28,9 +30,6 @@ export type TextStyleShape = GraphStyleShape &
     shadow: MaybeGroup<string>
     format: FormatNumberConfig
     offset: [number, number]
-    attachImage: (
-      props: FlatObject<TextStyleShape> & DrawerDataShape<TextDrawerProps>
-    ) => DrawerDataShape<ImageDrawerProps>
   }>
 
 export type LayerAxisStyleShape = Partial<{

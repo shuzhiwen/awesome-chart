@@ -1,8 +1,9 @@
 import {fabric} from 'fabric'
-import {PathDrawerProps} from '../types'
+import {ElConfigShape, PathDrawerProps} from '../types'
 import {IPathOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, noChange, isCanvasCntr, isSvgCntr} from '../utils'
+import {merge} from 'lodash'
 
 export function drawPath({
   fill,
@@ -39,7 +40,7 @@ export function drawPath({
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return mapping(datum) as typeof datum
+    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
   })
 
   if (isSvgCntr(container)) {

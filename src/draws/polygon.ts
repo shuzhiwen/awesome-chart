@@ -1,8 +1,9 @@
 import {fabric} from 'fabric'
-import {PolyDrawerProps} from '../types'
+import {ElConfigShape, PolyDrawerProps} from '../types'
 import {IPolylineOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, noChange, isSvgCntr, isCanvasCntr} from '../utils'
+import {merge} from 'lodash'
 
 export function drawPolygon({
   fill,
@@ -23,8 +24,8 @@ export function drawPolygon({
     graph,
     animation: {update},
   } = theme
-  const configuredData = data.map(({points, centerX, centerY}, i) => ({
-    points,
+  const configuredData = data.map((item, i) => ({
+    ...item,
     className,
     fill: getAttr(fill, i, graph.fill),
     stroke: getAttr(stroke, i, graph.stroke),
@@ -32,12 +33,12 @@ export function drawPolygon({
     fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
-    pointString: points.reduce((prev, cur) => `${prev} ${cur.x},${cur.y}`, ''),
-    transformOrigin: `${centerX}px ${centerY}px`,
+    pointString: item.points.reduce((prev, cur) => `${prev} ${cur.x},${cur.y}`, ''),
+    transformOrigin: `${item.centerX}px ${item.centerY}px`,
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return mapping(datum) as typeof datum
+    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
   })
 
   if (isSvgCntr(container)) {
