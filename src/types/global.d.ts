@@ -22,7 +22,7 @@ type ArrayItem<T> = T extends Array<infer U> ? U : T
 
 type Values<T> = T extends Record<any, infer U> ? U : T extends Array<infer F> ? F : T
 
-type FlatObject<T> = T extends Record<infer F, MaybeGroup<infer P>> ? Record<F, P> : never
+type FlatObject<T> = T extends Partial<Record<infer F, unknown>> ? {[Q in F]?: Ungroup<T[Q]>} : T
 
 type Newable<T, P = never, F = never, Q = never> = {new (arg0: P, arg1: F, arg2: Q): T}
 

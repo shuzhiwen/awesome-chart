@@ -3,6 +3,7 @@ import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
 import {TextDrawerProps} from '../types'
 import {mergeAlpha, getAttr, isSvgCntr, isCanvasCntr, noChange} from '../utils'
+import {drawImage} from './image'
 
 export function drawText({
   fontFamily,
@@ -19,6 +20,7 @@ export function drawText({
   transformOrigin,
   writingMode,
   textDecoration,
+  attachImage,
   mapping = noChange,
   data = [],
   transition,
@@ -51,6 +53,18 @@ export function drawText({
   const mappedData = configuredData.map((datum) => {
     return mapping(datum as any) as unknown as typeof datum
   })
+
+  if (attachImage) {
+    mappedData.forEach((datum) => {
+      drawImage({
+        ...datum,
+        data: [attachImage(datum)],
+        className: 'attachImage',
+        container,
+        theme,
+      })
+    })
+  }
 
   if (isSvgCntr(container)) {
     container
