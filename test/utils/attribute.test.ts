@@ -1,5 +1,5 @@
 import {select} from 'd3'
-import {getAttr, addStyle, addEvent, mergeAlpha, transformAttr, safeTransform} from '../../src'
+import {getAttr, addStyle, addEvent, mergeAlpha, transformAttr} from '../../src'
 
 test('mergeAlpha', () => {
   expect(typeof mergeAlpha(0xffffff, 0.5)).toBe('string')
@@ -58,16 +58,4 @@ test('transformAttr', () => {
     'font-size': '12px',
     'abc-def': null,
   })
-})
-
-test('safeTransform', () => {
-  expect(safeTransform('', 'translateX', 1000, {unit: false, append: false})).toBe(
-    'translateX(1000)'
-  )
-  expect(safeTransform('', 'translateX', 100, {unit: true, append: false})).toBe(
-    'translateX(100px)'
-  )
-  expect(safeTransform('scale(0.2)', 'translateX', 100, {unit: true, append: false})).toBe(
-    'scale(0.2)translateX(100px)'
-  )
 })

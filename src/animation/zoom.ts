@@ -33,7 +33,6 @@ export class AnimationZoom extends AnimationBase<Options> {
       start = Math.max(startScale, 5e-6),
       end = Math.max(endScale, 5e-6)
 
-    console.log(start, end)
     if (isSvgCntr(targets)) {
       anime({
         targets: targets.nodes(),

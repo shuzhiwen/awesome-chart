@@ -34,7 +34,7 @@ export function drawRect({
     fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
-    transformOrigin: getTransformOrigin(item, getAttr(transformOrigin, i, '')),
+    transformOrigin: getAttr(transformOrigin, i, ''),
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
@@ -63,7 +63,7 @@ export function drawRect({
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('opacity', (d) => d.opacity)
-      .attr('transform-origin', (d) => d.transformOrigin)
+      .attr('transform-origin', (d) => getTransformOrigin(d, d.transformOrigin))
   }
 
   if (isCanvasCntr(container)) {
@@ -82,6 +82,7 @@ export function drawRect({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
+        ...getTransformFabricAttr(config, config.transformOrigin),
       } as IRectOptions)
       container.addWithUpdate(rect)
     })
@@ -90,24 +91,69 @@ export function drawRect({
 
 const getTransformOrigin = (
   data: DrawerDataShape<RectDrawerProps>,
-  transformOrigin: ArrayItem<RectDrawerProps['transformOrigin']>
+  origin: ArrayItem<RectDrawerProps['transformOrigin']>
 ) => {
-  let result = ''
   const {x, y, width, height} = data
 
-  if (transformOrigin === 'center') {
-    result = `${x + width / 2}px ${y + height / 2}px`
-  } else if (transformOrigin === 'left') {
-    result = `${x}px ${y + height / 2}px`
-  } else if (transformOrigin === 'right') {
-    result = `${x + width}px ${y + height / 2}px`
-  } else if (transformOrigin === 'top') {
-    result = `${x + width / 2}px ${y}px`
-  } else if (transformOrigin === 'bottom') {
-    result = `${x + width / 2}px ${y + height}px`
-  } else if (isArray(transformOrigin)) {
-    result = `${transformOrigin[0]}px ${transformOrigin[1]}px`
+  switch (origin) {
+    case 'center':
+      return `${x + width / 2}px ${y + height / 2}px`
+    case 'left':
+      return `${x}px ${y + height / 2}px`
+    case 'right':
+      return `${x + width}px ${y + height / 2}px`
+    case 'top':
+      return `${x + width / 2}px ${y}px`
+    case 'bottom':
+      return `${x + width / 2}px ${y + height}px`
+    default:
+      return isArray(origin) ? `${origin[0]}px ${origin[1]}px` : ''
   }
+}
 
-  return result
+const getTransformFabricAttr = (
+  data: DrawerDataShape<RectDrawerProps>,
+  origin: ArrayItem<RectDrawerProps['transformOrigin']>
+) => {
+  const {x, y, width, height} = data
+
+  switch (origin) {
+    case 'center':
+      return {
+        left: x + width / 2,
+        top: y + height / 2,
+        originX: 'center',
+        originY: 'center',
+      }
+    case 'top':
+      return {
+        left: x + width / 2,
+        top: y,
+        originX: 'center',
+        originY: 'top',
+      }
+    case 'bottom':
+      return {
+        left: x + width / 2,
+        top: y + height,
+        originX: 'center',
+        originY: 'bottom',
+      }
+    case 'left':
+      return {
+        left: x,
+        top: y + height / 2,
+        originX: 'left',
+        originY: 'center',
+      }
+    case 'right':
+      return {
+        left: x + width,
+        top: y + height / 2,
+        originX: 'right',
+        originY: 'center',
+      }
+    default:
+      return null
+  }
 }
