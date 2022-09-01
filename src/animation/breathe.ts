@@ -1,7 +1,7 @@
 import {AnimationBase} from './base'
 import {isSvgCntr} from '../utils'
-import anime, {AnimeInstance} from 'animejs'
 import {AnimationBreatheOptions as Options, AnimationProps as Props, D3Selection} from '../types'
+import anime from 'animejs'
 
 const createSvgFilter = (props: {parentNode: D3Selection; id: string}) => {
   const {parentNode, id} = props
@@ -37,8 +37,6 @@ export class AnimationBreathe extends AnimationBase<Options> {
 
   private filterNode: Maybe<D3Selection>
 
-  private instance: Maybe<AnimeInstance>
-
   constructor(props: Props<Options>) {
     super(props)
   }
@@ -61,7 +59,7 @@ export class AnimationBreathe extends AnimationBase<Options> {
     const {targets, delay, duration, easing, minOpacity = 0.3, stdDeviation = 10} = this.options
 
     if (isSvgCntr(targets)) {
-      this.instance = anime({
+      anime({
         targets: this.filterNode?.node(),
         duration,
         delay,
@@ -73,10 +71,6 @@ export class AnimationBreathe extends AnimationBase<Options> {
         easing,
       })
     }
-
-    if (!isSvgCntr(targets)) {
-      this.log.warn('Animation not support for canvas mode.')
-    }
   }
 
   destroy() {
@@ -84,12 +78,10 @@ export class AnimationBreathe extends AnimationBase<Options> {
 
     if (isSvgCntr(targets)) {
       this.defs?.remove()
-      this.instance && anime.remove(this.instance)
-      targets.attr('filter', '')
+      targets.attr('filter', null)
     }
 
     this.defs = null
-    this.instance = null
     this.filterNode = null
   }
 }

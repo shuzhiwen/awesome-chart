@@ -11,6 +11,12 @@ export class AnimationPath extends AnimationBase<Options> {
     this.createTargets('path')
   }
 
+  init() {
+    if (isCanvasCntr(this.options.context)) {
+      this.log.warn('Animation not support for canvas mode.')
+    }
+  }
+
   play() {
     const {targets, path, delay, duration, easing} = this.options
 
@@ -35,8 +41,6 @@ export class AnimationPath extends AnimationBase<Options> {
           })
         )
       )
-    } else if (isCanvasCntr(targets)) {
-      this.log.warn('Animation not support for canvas mode.')
     }
   }
 

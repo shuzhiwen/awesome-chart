@@ -1,7 +1,8 @@
 import {AnimationBase} from './base'
 import {isSvgCntr} from '../utils'
 import {AnimationFadeOptions as Options, AnimationProps as Props} from '../types'
-import {canvasEasing, svgEasing} from './easing'
+import {canvasEasing} from './easing'
+import anime from 'animejs'
 
 export class AnimationFade extends AnimationBase<Options> {
   constructor(props: Props<Options>) {
@@ -23,18 +24,18 @@ export class AnimationFade extends AnimationBase<Options> {
     const {targets, delay, duration, easing, startOpacity = 0, endOpacity = 1} = this.options
 
     if (isSvgCntr(targets)) {
-      targets
-        .transition()
-        .delay(delay)
-        .duration(0)
-        .attr('opacity', startOpacity)
-        .transition()
-        .duration(duration)
-        .ease(svgEasing.get(easing)!)
-        .on('start', this.start)
-        .on('end', this.end)
-        .attr('opacity', endOpacity)
-    } else if (targets) {
+      anime({
+        targets: targets.nodes(),
+        duration,
+        delay,
+        easing,
+        loopBegin: this.start,
+        loopComplete: this.end,
+        opacity: [startOpacity, endOpacity],
+      })
+    }
+
+    if (targets && !isSvgCntr(targets)) {
       setTimeout(() => {
         setTimeout(this.end, duration)
         this.start()

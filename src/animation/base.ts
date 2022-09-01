@@ -46,7 +46,7 @@ export abstract class AnimationBase<T extends Options> {
   }
 
   protected end(...args: any) {
-    this.options.loop && this.play()
+    this.options.loop && this._isAnimationAvailable && this.play()
     return args
   }
 

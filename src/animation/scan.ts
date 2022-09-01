@@ -3,7 +3,7 @@ import {fabric} from 'fabric'
 import {AnimationBase} from './base'
 import {cloneDeep, merge} from 'lodash'
 import {Rect} from 'fabric/fabric-impl'
-import anime, {AnimeInstance, AnimeParams} from 'animejs'
+import anime, {AnimeParams} from 'animejs'
 import {isCanvasCntr, isSvgCntr, mergeAlpha} from '../utils'
 import {
   AnimationScanOptions as Options,
@@ -117,8 +117,6 @@ export class AnimationScan extends AnimationBase<Options> {
 
   private maskNode: Maybe<D3Selection | Rect>
 
-  private instance: Maybe<AnimeInstance>
-
   constructor(props: Props<Options>) {
     super(props)
   }
@@ -205,7 +203,7 @@ export class AnimationScan extends AnimationBase<Options> {
         configs[attributes[0]] = direction === 'inner' ? ['300%', '0%'] : ['0%', '300%']
       }
 
-      this.instance = anime(configs)
+      anime(configs)
     }
 
     if (isCanvasCntr(context) && !isSvgCntr(this.gradientNode)) {
@@ -239,7 +237,7 @@ export class AnimationScan extends AnimationBase<Options> {
         configs[attributes[0]] = direction === 'inner' ? [3, 0] : [0, 3]
       }
 
-      this.instance = anime(configs)
+      anime(configs)
     }
   }
 
@@ -249,13 +247,11 @@ export class AnimationScan extends AnimationBase<Options> {
     if (isSvgCntr(targets)) {
       this.defs?.remove()
       isSvgCntr(this.maskNode) && this.maskNode.remove()
-      this.instance && anime.remove(this.instance)
     } else if (isCanvasCntr(this.maskNode)) {
       this.maskNode.group?.remove(this.maskNode)
     }
 
     this.defs = null
-    this.instance = null
     this.maskNode = null
     this.gradientNode = null
   }

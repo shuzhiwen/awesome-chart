@@ -48,31 +48,3 @@ export function transformAttr(object: AnyObject) {
     })
   )
 }
-
-function getTransformSuffix(key: string) {
-  if (key.match(/rotate/)) {
-    return 'deg'
-  } else if (key.match(/(translateX|translateY)/)) {
-    return 'px'
-  }
-  return ''
-}
-
-export function safeTransform(
-  transform: string,
-  key: string,
-  value: number,
-  {unit = false, append = false} = {}
-) {
-  const target = transform === 'none' || !transform ? '' : transform,
-    suffix = unit ? getTransformSuffix(key) : '',
-    regExp = new RegExp(`${key}\\(.*?\\)`),
-    prevValue = target.match(regExp)?.[0].split(/\(|\)/).at(1)?.replaceAll(suffix, '') ?? '',
-    nextValue = value + Number(prevValue)
-
-  if (!target.match(key)) {
-    return `${target ?? ''}${key}(${value}${suffix})`
-  }
-
-  return target.replace(regExp, `${key}(${append ? nextValue : value}${suffix})`)
-}

@@ -4,8 +4,8 @@ import {cloneDeep, merge} from 'lodash'
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {defaultTheme} from '../../core/theme'
-import {ChartContext, D3Selection, LayerFlopperOptions, LayerFlopperStyleShape} from '../../types'
-import {addStyle, isCanvasCntr, isSvgCntr, mergeAlpha, range, safeTransform} from '../../utils'
+import {ChartContext, LayerFlopperOptions, LayerFlopperStyleShape} from '../../types'
+import {addStyle, isCanvasCntr, isSvgCntr, mergeAlpha, range} from '../../utils'
 import {createStyle, validateAndCreateData} from '../helpers'
 
 const defaultOptions: Partial<LayerFlopperOptions> = {
@@ -270,19 +270,18 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
           backTop = select(backCell).selectAll('.top'),
           backBottom = select(backCell).selectAll('.bottom'),
           frontTop = select(frontCell).selectAll('.top'),
-          frontBottom = select(frontCell).selectAll('.bottom'),
-          getTransform = (selector: D3Selection, rotateX: number) =>
-            safeTransform(selector.style('transform'), 'rotateX', rotateX, {unit: true})
+          frontBottom = select(frontCell).selectAll('.bottom')
 
         backTop.style('z-index', 1)
         backBottom.style('z-index', 2)
         frontTop.style('z-index', 3)
         frontBottom.style('z-index', 1)
 
-        backBottom.style('transform', getTransform(backBottom, 180))
+        anime({targets: backBottom.nodes(), rotateX: 180, duration: 0})
         anime({targets: backBottom.nodes(), rotateX: 0, duration, easing})
         anime({targets: frontTop.nodes(), rotateX: 180, duration, easing}).finished.then(() => {
-          frontTop.style('z-index', 'auto').style('transform', getTransform(frontTop, 0))
+          anime({targets: frontTop.nodes(), rotateX: 0, duration: 0})
+          frontTop.style('z-index', 'auto')
           frontBottom.style('z-index', 'auto')
         })
       }

@@ -1,14 +1,15 @@
 import {AnimationBase} from './base'
 import {isCanvasCntr, isSvgCntr} from '../utils'
 import {AnimationEraseOptions as Options, AnimationProps as Props, D3Selection} from '../types'
-import {canvasEasing, svgEasing} from './easing'
+import {canvasEasing} from './easing'
 import {transition} from 'd3-transition'
 import {fabric} from 'fabric'
+import anime from 'animejs'
 
 export class AnimationErase extends AnimationBase<Options> {
   private defs: Maybe<D3Selection>
 
-  private maskNode?: Maybe<fabric.Rect>
+  private maskNode: Maybe<fabric.Rect>
 
   constructor(props: Props<Options>) {
     super(props)
@@ -50,26 +51,22 @@ export class AnimationErase extends AnimationBase<Options> {
     const {targets, context, delay, duration, easing, direction = 'right'} = this.options
 
     if (isSvgCntr(context)) {
-      context
-        .selectAll(`#erase-${this.id} rect`)
-        .transition()
-        .delay(delay)
-        .attr('x', direction === 'left' ? '100%' : '0%')
-        .attr('y', direction === 'top' ? '100%' : '0%')
-        .attr('width', direction === 'left' || direction === 'right' ? '0%' : '100%')
-        .attr('height', direction === 'top' || direction === 'bottom' ? '0%' : '100%')
-        .transition()
-        .duration(duration)
-        .ease(svgEasing.get(easing)!)
-        .on('start', this.start)
-        .on('end', this.end)
-        .attr('x', '0%')
-        .attr('y', '0%')
-        .attr('width', '100%')
-        .attr('height', '100%')
+      anime({
+        targets: context.selectAll(`#erase-${this.id} rect`).nodes(),
+        duration,
+        delay,
+        easing,
+        update: this.process,
+        loopBegin: this.start,
+        loopComplete: this.end,
+        x: [direction === 'left' ? '100%' : '0%', '0%'],
+        y: [direction === 'top' ? '100%' : '0%', '0%'],
+        width: [direction === 'left' || direction === 'right' ? '0%' : '100%', '100%'],
+        height: [direction === 'top' || direction === 'bottom' ? '0%' : '100%', '100%'],
+      })
     }
 
-    if (isCanvasCntr(context) && !isSvgCntr(targets) && targets) {
+    if (isCanvasCntr(context) && targets && !isSvgCntr(targets)) {
       transition()
         .delay(delay)
         .duration(duration)
@@ -111,7 +108,7 @@ export class AnimationErase extends AnimationBase<Options> {
 
     if (isSvgCntr(targets)) {
       this.defs?.remove()
-      targets.attr('clip-path', '')
+      targets.attr('clip-path', null)
     } else if (isCanvasCntr(targets)) {
       targets.forEach((target) => (target.clipPath = undefined))
     }

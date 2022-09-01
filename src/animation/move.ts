@@ -1,21 +1,8 @@
 import {AnimationBase} from './base'
-import {isSvgCntr, safeTransform} from '../utils'
-import {canvasEasing, svgEasing} from './easing'
-import {
-  AnimationMoveOptions as Options,
-  AnimationProps as Props,
-  D3Selection,
-  D3Transition,
-} from '../types'
-
-const addTransformForSvgContainer = (
-  targets: D3Selection | D3Transition,
-  selection: D3Selection,
-  translate: [number, number]
-) => {
-  targets.attr('transform', safeTransform(selection.attr('transform'), 'translateX', translate[0]))
-  targets.attr('transform', safeTransform(selection.attr('transform'), 'translateY', translate[1]))
-}
+import {isSvgCntr} from '../utils'
+import {canvasEasing} from './easing'
+import {AnimationMoveOptions as Options, AnimationProps as Props} from '../types'
+import anime from 'animejs'
 
 export class AnimationMove extends AnimationBase<Options> {
   constructor(props: Props<Options>) {
@@ -26,7 +13,13 @@ export class AnimationMove extends AnimationBase<Options> {
     const {targets, initialOffset = [0, 0]} = this.options
 
     if (isSvgCntr(targets)) {
-      targets.call(addTransformForSvgContainer, targets, initialOffset)
+      anime({
+        targets,
+        translateX: initialOffset[0],
+        translateY: initialOffset[1],
+        duration: 0,
+        delay: 0,
+      })
     } else if (targets) {
       targets.forEach((target) => {
         target.left = (target.left ?? 0) + initialOffset[0]
@@ -48,18 +41,19 @@ export class AnimationMove extends AnimationBase<Options> {
     } = this.options
 
     if (isSvgCntr(targets)) {
-      targets
-        .transition()
-        .delay(delay)
-        .duration(0)
-        .call(addTransformForSvgContainer, targets, startOffset)
-        .transition()
-        .duration(duration)
-        .ease(svgEasing.get(easing)!)
-        .on('start', this.start)
-        .on('end', this.end)
-        .call(addTransformForSvgContainer, targets, endOffset)
-    } else if (targets) {
+      anime({
+        targets: targets.nodes(),
+        duration,
+        delay,
+        easing,
+        loopBegin: this.start,
+        loopComplete: this.end,
+        translateX: [startOffset[0], endOffset[0]],
+        translateY: [startOffset[1], endOffset[1]],
+      })
+    }
+
+    if (targets && !isSvgCntr(targets)) {
       setTimeout(() => {
         setTimeout(this.end, duration)
         this.start()
