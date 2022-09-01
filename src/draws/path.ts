@@ -62,7 +62,8 @@ export function drawPath({
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('transform-origin', (d) => d.transformOrigin)
       // transition occur attribute attach delay
-      .attr('transform', (d) => `translate(${d.centerX},${d.centerY})`)
+      // css transform will override attr transform
+      .style('transform', (d) => `translate(${d.centerX}px,${d.centerY}px)`)
   }
 
   if (isCanvasCntr(container)) {
@@ -75,6 +76,8 @@ export function drawPath({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
+        originX: 'center',
+        originY: 'center',
       } as IPathOptions)
       path.left = path.left ? path.left + config.centerX : config.centerX
       path.top = path.top ? path.top + config.centerY : config.centerY

@@ -25,13 +25,13 @@ const defaultSplitLine = {
   stroke: 'white',
   strokeWidth: 1,
   strokeOpacity: 0.5,
-  fill: 'none',
+  fillOpacity: 0,
 }
 
 const defaultAxisLine = {
   stroke: 'white',
   strokeWidth: 1,
-  fill: 'none',
+  fillOpacity: 0,
 }
 
 const defaultText = {

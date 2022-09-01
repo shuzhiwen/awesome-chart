@@ -146,7 +146,9 @@ export abstract class LayerBase<T extends LayerOptions> {
   }
 
   playAnimation() {
-    this.sublayers.forEach((type) => this.backupAnimation[type]?.play())
+    setTimeout(() => {
+      this.sublayers.forEach((type) => this.backupAnimation[type]?.play())
+    })
   }
 
   setVisible(visible: boolean, sublayer?: string) {
