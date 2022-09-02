@@ -53,17 +53,23 @@ export function drawImage({
       fabric.Image.fromURL(
         config.url,
         (image) => {
-          image.scaleX = config.width / (image.width || 1)
-          image.scaleY = config.height / (image.height || 1)
+          const scaleX = config.width / (image.width || 1),
+            scaleY = config.height / (image.height || 1),
+            minScale = Math.min(scaleX, scaleY)
+
+          image.scaleX = minScale
+          image.scaleY = minScale
           container.addWithUpdate(image)
           container.canvas?.requestRenderAll()
         },
         {
           className: config.className,
-          top: config.y,
-          left: config.x,
+          left: config.x + config.width / 2,
+          top: config.y + config.height / 2,
           opacity: config.opacity,
           source: config.source,
+          originX: 'center',
+          originY: 'center',
         } as IImageOptions
       )
     })
