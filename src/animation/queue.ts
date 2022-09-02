@@ -120,6 +120,7 @@ export class AnimationQueue extends AnimationBase<Options> {
       this.connect()
     }
     this.queue.at(0)?.play()
+    this.event.fire('start')
   }
 
   end() {

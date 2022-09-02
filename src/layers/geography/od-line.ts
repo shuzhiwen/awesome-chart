@@ -1,7 +1,7 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {path as d3Path} from 'd3-path'
-import {isRealNumber, tableListToObjects} from '../../utils'
+import {isRealNumber, isSvgCntr, tableListToObjects} from '../../utils'
 import {createScale, createStyle, generateClass, validateAndCreateData} from '../helpers'
 import {defaultTheme} from '../../core/theme'
 import {
@@ -30,7 +30,6 @@ const defaultStyle: LayerODLineStyleShape = {
 const defaultAnimation: BackupAnimationOptions<AnimationPathOptions> = {
   flyingObject: {
     loop: {
-      type: 'path',
       path: generateClass('odLine', true),
       ...defaultTheme.animation.loop,
     },
@@ -47,7 +46,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
   private flyingObjectData: DrawerDataShape<PathDrawerProps>[] = []
 
   private odLineData: {
-    path: string
+    path: string | null
     position: Record<DataKey, number>
     source: {
       category: 'from' | 'to'
@@ -130,6 +129,12 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
         centerX: -1000,
         centerY: -1000,
       }))
+
+      this.event.on('flyingObject-animation-start', () => {
+        if (isSvgCntr(this.root) && this.odLineData.some(({path}) => path)) {
+          this.root.selectAll(generateClass('flyingObject', true)).style('transform', null)
+        }
+      })
     }
   }
 
@@ -145,7 +150,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
       ]
 
     if (Object.values(props).some((value) => !isRealNumber(value))) {
-      return ''
+      return null
     }
 
     path.moveTo(fromX, fromY)
