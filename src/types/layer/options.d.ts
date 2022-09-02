@@ -43,6 +43,7 @@ export type LayerOptions =
   | LayerForceOptions
   | LayerCarouselOptions
   | LayerRadialOptions
+  | LayerWaveOptions
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 
@@ -79,6 +80,8 @@ export type LayerAuxiliaryOptions = BasicLayerOptions<'auxiliary'>
 export type LayerCandleOptions = BasicLayerOptions<'candle'>
 
 export type LayerRadialOptions = BasicLayerOptions<'radial'>
+
+export type LayerWaveOptions = BasicLayerOptions<'wave'>
 
 export type LayerAxisOptions = BasicLayerOptions<
   'axis',

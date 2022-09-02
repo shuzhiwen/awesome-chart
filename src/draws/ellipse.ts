@@ -71,13 +71,15 @@ export function drawEllipse({
         className: config.className,
         rx: config.rx,
         ry: config.ry,
-        left: config.cx - config.rx,
-        top: config.cy - config.ry,
+        left: config.cx,
+        top: config.cy,
         fill: mergeAlpha(config.fill, config.fillOpacity),
         stroke: mergeAlpha(config.stroke, config.strokeOpacity),
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
+        originX: 'center',
+        originY: 'center',
       } as IEllipseOptions)
       container.addWithUpdate(ellipse)
     })

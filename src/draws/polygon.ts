@@ -71,6 +71,8 @@ export function drawPolygon({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
+        originX: 'center',
+        originY: 'center',
       } as IPolylineOptions)
       container.addWithUpdate(polygon)
     })

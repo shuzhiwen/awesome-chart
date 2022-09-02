@@ -78,6 +78,7 @@ export type AnimationZoomOptions = BasicAnimationOptions<
 export type AnimationMoveOptions = BasicAnimationOptions<
   'move',
   {
+    mode: 'normal' | 'reverse' | 'alternate'
     initialOffset: [number, number]
     startOffset: [number, number]
     endOffset: [number, number]

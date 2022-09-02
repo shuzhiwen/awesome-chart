@@ -11,6 +11,7 @@ import {
   debugFlopperLayer,
   debugODLineLayer,
   debugTableListLayer,
+  debugWaveLayer,
 } from './debug'
 
 window.AWESOME_CHART = {
@@ -31,6 +32,7 @@ export function Root() {
       debugDashboardLayer,
       debugFlopperLayer,
       debugODLineLayer,
+      debugWaveLayer,
     ]
 
   return (

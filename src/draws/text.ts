@@ -2,8 +2,15 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
 import {ElConfigShape, TextDrawerProps} from '../types'
-import {mergeAlpha, getAttr, isSvgCntr, isCanvasCntr, noChange} from '../utils'
 import {merge} from 'lodash'
+import {
+  mergeAlpha,
+  getAttr,
+  isSvgCntr,
+  isCanvasCntr,
+  noChange,
+  svgShadowToFabricShadow,
+} from '../utils'
 
 export function drawText({
   fontFamily,
@@ -76,12 +83,12 @@ export function drawText({
       .attr('font-size', (d) => d.fontSize)
       .attr('font-weight', (d) => d.fontWeight)
       .attr('writing-mode', (d) => d.writingMode)
+      .attr('transform-origin', (d) => d.transformOrigin)
+      .attr('text-decoration', (d) => d.textDecoration)
+      .attr('dominant-baseline', 'central')
+      .attr('pointer-events', 'none')
       .style('text-shadow', (d) => d.shadow)
-      .style('text-decoration', (d) => d.textDecoration)
-      .style('transform', (d) => `rotate(${d.rotation}deg)`)
-      .style('transform-origin', (d) => d.transformOrigin)
-      .style('dominant-baseline', 'central')
-      .style('pointer-events', 'none')
+      .style('transform', (d) => `rotate(${d.rotation})`)
   }
 
   if (isCanvasCntr(container)) {
@@ -98,7 +105,7 @@ export function drawText({
         stroke: mergeAlpha(config.stroke, config.strokeOpacity),
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
-        shadow: config.shadow,
+        shadow: svgShadowToFabricShadow(config.shadow),
         linethrough: config.textDecoration === 'line-through',
         overline: config.textDecoration === 'overline',
         underline: config.textDecoration === 'underline',

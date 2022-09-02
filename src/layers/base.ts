@@ -59,9 +59,9 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   readonly backupData: BackupDataShape<AnyObject> = {}
 
-  private readonly backupAnimation: BackupAnimationShape = {timer: {}}
+  protected readonly backupAnimation: BackupAnimationShape = {timer: {}}
 
-  private readonly backupEvent: BackupEventShape = {common: {}, tooltip: {}}
+  protected readonly backupEvent: BackupEventShape = {common: {}, tooltip: {}}
 
   protected readonly log = createLog(this.className)
 

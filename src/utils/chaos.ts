@@ -59,3 +59,14 @@ export function errorCatcher<T extends AnyFunction>(fn: T, onError: (error: Erro
     }
   }
 }
+
+export function svgShadowToFabricShadow(shadows: string) {
+  return shadows
+    .split(',')
+    .map((shadow) => {
+      const shadowAttrs = shadow.split(' ')
+      shadowAttrs.unshift(shadowAttrs.pop()!)
+      return shadowAttrs.reduce((prev, cur) => `${prev} ${cur}`)
+    })
+    .at(0)
+}

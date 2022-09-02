@@ -9,6 +9,7 @@ import digitalFlop from './indicator/digital-flop'
 import map from './geography/map'
 import dashboard from './indicator/dashboard'
 import carousel from './indicator/carousel'
+import wave from './indicator/wave'
 import sankey from './relation/sankey'
 import tree from './relation/tree'
 import treemap from './relation/treemap'
@@ -158,7 +159,7 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '折线柱状图',
-          schema: base(rectLine({})),
+          schema: base(rectLine()),
         },
       ],
     },
@@ -265,7 +266,7 @@ export const schemaMenu: MenuShape = {
       ],
     },
     {
-      name: '仪表盘',
+      name: '指标系列',
       children: [
         {
           name: '仪表盘',
@@ -274,6 +275,10 @@ export const schemaMenu: MenuShape = {
         {
           name: '环形指标卡',
           schema: base(dashboard({type: 'indicator'})),
+        },
+        {
+          name: '水波球',
+          schema: base(wave()),
         },
       ],
     },
@@ -299,7 +304,6 @@ export const schemaMenu: MenuShape = {
         },
       ],
     },
-
     {
       name: '轮播图',
       children: [

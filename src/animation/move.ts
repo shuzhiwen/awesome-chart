@@ -35,6 +35,7 @@ export class AnimationMove extends AnimationBase<Options> {
       delay,
       duration,
       easing,
+      mode = 'normal',
       initialOffset = [0, 0],
       startOffset = [0, 0],
       endOffset = [0, 0],
@@ -46,10 +47,15 @@ export class AnimationMove extends AnimationBase<Options> {
         duration,
         delay,
         easing,
+        direction: mode === 'alternate' ? 'normal' : mode,
         loopBegin: this.start,
         loopComplete: this.end,
-        translateX: [startOffset[0], endOffset[0]],
-        translateY: [startOffset[1], endOffset[1]],
+        translateX: [startOffset[0], endOffset[0]].concat(
+          mode === 'alternate' ? [startOffset[0]] : []
+        ),
+        translateY: [startOffset[1], endOffset[1]].concat(
+          mode === 'alternate' ? [startOffset[1]] : []
+        ),
       })
     }
 
@@ -64,7 +70,7 @@ export class AnimationMove extends AnimationBase<Options> {
             onChange: this.renderCanvas,
             from: (target.left ?? 0) - initialOffset[0] + startOffset[0],
           })
-          target.animate('top', endOffset[0], {
+          target.animate('top', endOffset[1], {
             duration,
             easing: canvasEasing.get(easing),
             onChange: this.renderCanvas,

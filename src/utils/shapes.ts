@@ -1,3 +1,5 @@
+import {range} from 'd3'
+
 export const createParallelogram = (
   left: number,
   top: number,
@@ -111,4 +113,30 @@ export const createDroplet = (left: number, top: number, width: number, height: 
     `L ${centerX - (height * Math.sqrt(3)) / 6},${top + 1.5 * r}`,
     `A ${r},${r},0,1,1,${centerX + (height * Math.sqrt(3)) / 6},${top + 1.5 * r} Z`,
   ].join(' ')
+}
+
+export const createSinusoidal = (
+  left: number,
+  top: number,
+  width: number,
+  height: number,
+  lengthen = 0
+) => {
+  const points = [
+    [left, top + height * 0.5],
+    [left + width * 0.25, top + height],
+    [left + width * 0.5, top + height * 0.5],
+    [left + width * 0.75, top],
+    [left + width, top + height * 0.5],
+  ]
+  const leftExtendPoints = range(-lengthen, 0).flatMap((i) => [
+    [points[(i % 2) * -2][0] + Math.floor((i - 1) / 2) * width, points[(i % 2) * -2][1]],
+    [points[(i % 2) * -2 + 1][0] + Math.floor((i - 1) / 2) * width, points[(i % 2) * -2 + 1][1]],
+  ])
+  const rightExtendPoints = range(0, lengthen).flatMap((i) => [
+    [points[(i % 2) * 2 + 1][0] + (Math.floor(i / 2) + 1) * width, points[(i % 2) * 2 + 1][1]],
+    [points[(i % 2) * 2 + 2][0] + (Math.floor(i / 2) + 1) * width, points[(i % 2) * 2 + 2][1]],
+  ])
+
+  return [...leftExtendPoints, ...points, ...rightExtendPoints]
 }

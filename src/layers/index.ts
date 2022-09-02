@@ -38,6 +38,7 @@ export const layerMapping = {
   text: layer.LayerText,
   treemap: layer.LayerTreemap,
   tree: layer.LayerTree,
+  wave: layer.LayerWave,
 }
 
 export function registerCustomLayer<T extends LayerBase<BasicLayerOptions<any>>>(

@@ -273,3 +273,12 @@ export type LayerRadialStyleShape = Partial<{
   arc: GraphStyleShape
   text: TextStyleShape
 }>
+
+export type LayerWaveStyleShape = Partial<{
+  amplitudeFactor: number
+  areaNumber: number
+  areaGap: number
+  area: GraphStyleShape
+  background: GraphStyleShape
+  text: TextStyleShape
+}>
