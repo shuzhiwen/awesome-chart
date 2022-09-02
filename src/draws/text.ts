@@ -88,7 +88,7 @@ export function drawText({
       .attr('dominant-baseline', 'central')
       .attr('pointer-events', 'none')
       .style('text-shadow', (d) => d.shadow)
-      .style('transform', (d) => `rotate(${d.rotation})`)
+      .style('transform', (d) => `rotate(${d.rotation}deg)`)
   }
 
   if (isCanvasCntr(container)) {
