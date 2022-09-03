@@ -19,6 +19,7 @@ import force from './relation/force'
 import wordCloud from './relation/word-cloud'
 import radial from './normal/radial'
 import rectLine from './normal/rect-line'
+import rich from './normal/rich'
 
 export interface MenuItemShape {
   name: string
@@ -37,32 +38,11 @@ export const schemaMenu: MenuShape = {
   name: 'root',
   children: [
     {
-      name: '测试',
+      name: '基础',
       children: [
         {
-          name: '基础文字',
-          schema: base([
-            {
-              type: 'text',
-              options: {
-                id: 'title',
-                layout: 'container',
-              },
-              data: '测试文本',
-              style: {
-                text: {
-                  fill: 'white',
-                },
-              },
-              animation: {
-                text: {
-                  enter: {
-                    type: 'fade',
-                  },
-                },
-              },
-            },
-          ]),
+          name: '栅格文本',
+          schema: base(rich()),
         },
       ],
     },

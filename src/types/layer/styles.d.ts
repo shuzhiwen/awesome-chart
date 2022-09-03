@@ -91,9 +91,19 @@ export type LayerODLineStyleShape = Partial<{
 }>
 
 export type LayerTextStyleShape = Partial<{
-  align: Align
-  verticalAlign: Align
-  text: TextStyleShape
+  sanger: [number, number]
+  text: Partial<
+    TextStyleShape & {
+      align: Align
+      verticalAlign: Align
+    }
+  >
+  groupText: Partial<
+    TextStyleShape & {
+      align: Align
+      verticalAlign: Align
+    }
+  >[]
 }>
 
 export type LayerLineStyleShape = Partial<{

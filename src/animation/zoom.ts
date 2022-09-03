@@ -14,7 +14,7 @@ export class AnimationZoom extends AnimationBase<Options> {
 
     if (isSvgCntr(targets)) {
       anime({
-        targets,
+        targets: targets.nodes(),
         scale: initialScale,
         duration: 0,
         delay: 0,

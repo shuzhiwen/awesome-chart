@@ -79,7 +79,7 @@ export type AnimationZoomOptions = BasicAnimationOptions<
 export type AnimationMoveOptions = BasicAnimationOptions<
   'move',
   {
-    mode: 'normal' | 'reverse' | 'alternate'
+    alternate: boolean
     stagger: number
     decayFactor: number
     initialOffset: [number, number]

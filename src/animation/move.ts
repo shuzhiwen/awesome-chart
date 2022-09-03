@@ -15,7 +15,7 @@ export class AnimationMove extends AnimationBase<Options> {
 
     if (isSvgCntr(targets)) {
       anime({
-        targets,
+        targets: targets.nodes(),
         translateX: initialOffset[0],
         translateY: initialOffset[1],
         duration: 0,
@@ -36,8 +36,8 @@ export class AnimationMove extends AnimationBase<Options> {
       delay,
       duration,
       easing,
+      alternate,
       stagger = null,
-      mode = 'normal',
       decayFactor = 1,
       initialOffset = [0, 0],
       startOffset = [0, 0],
@@ -45,21 +45,36 @@ export class AnimationMove extends AnimationBase<Options> {
     } = this.options
 
     if (isSvgCntr(targets)) {
-      targets.nodes().forEach((node, i) => {
+      targets.nodes().forEach((node, i, array) => {
         anime({
           targets: node,
           easing,
           duration,
-          delay: stagger ? stagger * i : delay,
-          direction: mode === 'alternate' ? 'normal' : mode,
           loopBegin: i === 0 ? this.start : noop,
-          loopComplete: i === 0 ? this.end : noop,
-          translateX: [startOffset[0], endOffset[0]]
-            .concat(mode === 'alternate' ? [startOffset[0]] : [])
-            .map((value) => value * Math.pow(decayFactor, i)),
-          translateY: [startOffset[1], endOffset[1]]
-            .concat(mode === 'alternate' ? [startOffset[1]] : [])
-            .map((value) => value * Math.pow(decayFactor, i)),
+          loopComplete: i === array.length - 1 ? this.end : noop,
+          keyframes: [
+            {
+              translateX: startOffset[0],
+              translateY: startOffset[1],
+              duration: 0,
+              delay: 0,
+            },
+            {
+              translateX: endOffset[0] * Math.pow(decayFactor, i),
+              translateY: endOffset[1] * Math.pow(decayFactor, i),
+              delay: stagger ? stagger * i : delay,
+            },
+            alternate
+              ? {
+                  translateX: startOffset[0],
+                  translateY: startOffset[1],
+                  delay: 0,
+                }
+              : {
+                  duration: 0,
+                  delay: 0,
+                },
+          ],
         })
       })
     }
