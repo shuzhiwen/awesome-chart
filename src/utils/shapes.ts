@@ -130,8 +130,8 @@ export const createSinusoidal = (
     [left + width, top + height * 0.5],
   ]
   const leftExtendPoints = range(-lengthen, 0).flatMap((i) => [
-    [points[(i % 2) * -2][0] + Math.floor((i - 1) / 2) * width, points[(i % 2) * -2][1]],
-    [points[(i % 2) * -2 + 1][0] + Math.floor((i - 1) / 2) * width, points[(i % 2) * -2 + 1][1]],
+    [points[(i % 2) * -2][0] + Math.ceil((i - 1) / 2) * width, points[(i % 2) * -2][1]],
+    [points[(i % 2) * -2 + 1][0] + Math.ceil((i - 1) / 2) * width, points[(i % 2) * -2 + 1][1]],
   ])
   const rightExtendPoints = range(0, lengthen).flatMap((i) => [
     [points[(i % 2) * 2 + 1][0] + (Math.floor(i / 2) + 1) * width, points[(i % 2) * 2 + 1][1]],

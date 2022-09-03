@@ -150,7 +150,7 @@ export const schemaMenu: MenuShape = {
           schema: base(rect({variant: 'bar', mode: 'percentage'})),
         },
         {
-          name: '有序的条形图',
+          name: '有序条形图',
           schema: base(rect({variant: 'bar', mode: 'group', sort: 'desc', updateDuration: 200})),
         },
         {

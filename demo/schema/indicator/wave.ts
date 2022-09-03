@@ -20,16 +20,22 @@ export default () => [
       value: 70,
       maxValue: 100,
     },
-    style: {},
+    style: {
+      area: {
+        fillOpacity: [0.4, 0.7],
+      },
+    },
     animation: {
       area: {
         loop: {
           type: 'move',
-          duration: 5000,
+          duration: 10000,
           delay: 0,
           startOffset: [0, 0],
           endOffset: [200, 0],
           mode: 'alternate',
+          stagger: 100,
+          decayFactor: 2,
         },
       },
     },

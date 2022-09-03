@@ -69,6 +69,7 @@ export type AnimationPathOptions = BasicAnimationOptions<
 export type AnimationZoomOptions = BasicAnimationOptions<
   'zoom',
   {
+    stagger: number
     initialScale: number
     startScale: number
     endScale: number
@@ -79,6 +80,8 @@ export type AnimationMoveOptions = BasicAnimationOptions<
   'move',
   {
     mode: 'normal' | 'reverse' | 'alternate'
+    stagger: number
+    decayFactor: number
     initialOffset: [number, number]
     startOffset: [number, number]
     endOffset: [number, number]

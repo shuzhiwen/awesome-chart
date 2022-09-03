@@ -29,16 +29,24 @@ export class AnimationZoom extends AnimationBase<Options> {
   }
 
   play() {
-    const {targets, delay, duration, easing, startScale = 0, endScale = 1} = this.options,
+    const {
+        targets,
+        delay,
+        duration,
+        easing,
+        stagger = null,
+        startScale = 0,
+        endScale = 1,
+      } = this.options,
       start = Math.max(startScale, 5e-6),
       end = Math.max(endScale, 5e-6)
 
     if (isSvgCntr(targets)) {
       anime({
         targets: targets.nodes(),
-        duration,
-        delay,
         easing,
+        duration,
+        delay: stagger ? anime.stagger(stagger) : delay,
         loopBegin: this.start,
         loopComplete: this.end,
         scale: [start, end],

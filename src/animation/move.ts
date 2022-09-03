@@ -3,6 +3,7 @@ import {isSvgCntr} from '../utils'
 import {canvasEasing} from './easing'
 import {AnimationMoveOptions as Options, AnimationProps as Props} from '../types'
 import anime from 'animejs'
+import {noop} from 'lodash'
 
 export class AnimationMove extends AnimationBase<Options> {
   constructor(props: Props<Options>) {
@@ -35,27 +36,31 @@ export class AnimationMove extends AnimationBase<Options> {
       delay,
       duration,
       easing,
+      stagger = null,
       mode = 'normal',
+      decayFactor = 1,
       initialOffset = [0, 0],
       startOffset = [0, 0],
       endOffset = [0, 0],
     } = this.options
 
     if (isSvgCntr(targets)) {
-      anime({
-        targets: targets.nodes(),
-        duration,
-        delay,
-        easing,
-        direction: mode === 'alternate' ? 'normal' : mode,
-        loopBegin: this.start,
-        loopComplete: this.end,
-        translateX: [startOffset[0], endOffset[0]].concat(
-          mode === 'alternate' ? [startOffset[0]] : []
-        ),
-        translateY: [startOffset[1], endOffset[1]].concat(
-          mode === 'alternate' ? [startOffset[1]] : []
-        ),
+      targets.nodes().forEach((node, i) => {
+        anime({
+          targets: node,
+          easing,
+          duration,
+          delay: stagger ? stagger * i : delay,
+          direction: mode === 'alternate' ? 'normal' : mode,
+          loopBegin: i === 0 ? this.start : noop,
+          loopComplete: i === 0 ? this.end : noop,
+          translateX: [startOffset[0], endOffset[0]]
+            .concat(mode === 'alternate' ? [startOffset[0]] : [])
+            .map((value) => value * Math.pow(decayFactor, i)),
+          translateY: [startOffset[1], endOffset[1]]
+            .concat(mode === 'alternate' ? [startOffset[1]] : [])
+            .map((value) => value * Math.pow(decayFactor, i)),
+        })
       })
     }
 

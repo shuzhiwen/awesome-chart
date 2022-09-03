@@ -15,7 +15,8 @@ import {
 } from '../../types'
 
 const defaultStyle: LayerWaveStyleShape = {
-  amplitudeFactor: 0.1,
+  wavelength: 50,
+  amplitude: 20,
   areaNumber: 2,
   areaGap: 100,
   area: {
@@ -104,9 +105,8 @@ export class LayerWave extends LayerBase<LayerWaveOptions> {
     }
 
     const {value, maxValue} = this.data.source,
-      {areaNumber = 1, amplitudeFactor = 1, areaGap = 0, area} = this.style,
+      {areaNumber = 1, wavelength = 0, amplitude = 0, areaGap = 0, area} = this.style,
       {left, width, height, top, bottom} = this.options.layout,
-      waveHeight = height * amplitudeFactor,
       colorMatrix = createColorMatrix({
         layer: this,
         row: 1,
@@ -120,10 +120,10 @@ export class LayerWave extends LayerBase<LayerWaveOptions> {
       value: value / maxValue,
       lines: createSinusoidal(
         left - areaGap * index,
-        top - waveHeight / 2 + (1 - value / maxValue) * height,
-        width,
-        waveHeight,
-        10
+        top - amplitude / 2 + (1 - value / maxValue) * height,
+        wavelength * (1 + (areaNumber - index) / areaNumber),
+        amplitude,
+        Math.round(20 / ((areaNumber - index) / areaNumber))
       ).map(([x, y]) => ({
         x,
         y1: y,

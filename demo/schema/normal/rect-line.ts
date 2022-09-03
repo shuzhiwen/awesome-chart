@@ -5,7 +5,7 @@ export default () =>
       options: {
         layout: 'container',
       },
-      data: '柱状图',
+      data: '折线柱状图',
       style: {
         text: {
           fontSize: 16,
@@ -90,6 +90,12 @@ export default () =>
           },
         },
         text: {
+          enter: {
+            type: 'fade',
+            delay: 2000,
+            duration: 1000,
+            mode: 'fadeIn',
+          },
           update: {
             delay: 0,
             duration: 2000,

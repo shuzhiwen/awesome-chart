@@ -126,9 +126,11 @@ export default ({
           enter: {
             type: 'zoom',
             delay: 0,
-            duration: 2000,
+            duration: 1000,
             mode: 'enlarge',
             direction: 'both',
+            easing: 'easeOutBack',
+            stagger: 20,
           },
           loop: !sort && {
             type: 'scan',
@@ -143,6 +145,12 @@ export default ({
           },
         },
         text: {
+          enter: {
+            type: 'fade',
+            delay: 2000,
+            duration: 1000,
+            mode: 'fadeIn',
+          },
           update: {
             delay: 0,
             duration: updateDuration,

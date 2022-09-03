@@ -275,7 +275,8 @@ export type LayerRadialStyleShape = Partial<{
 }>
 
 export type LayerWaveStyleShape = Partial<{
-  amplitudeFactor: number
+  wavelength: number
+  amplitude: number
   areaNumber: number
   areaGap: number
   area: GraphStyleShape
