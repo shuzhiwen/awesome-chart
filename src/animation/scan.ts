@@ -166,16 +166,19 @@ export class AnimationScan extends AnimationBase<Options> {
 
     if (!isSvgCntr(targets) && isCanvasCntr(context)) {
       this.gradientNode = createCanvasGradient({direction, color, opacity})
-
       this.maskNode = new fabric.Rect({
-        top: -(context.height ?? 0) / 2,
-        left: -(context.width ?? 0) / 2,
-        width: context.width,
-        height: context.height,
+        top: 0,
+        left: 0,
+        width: context.canvas?.width,
+        height: context.canvas?.height,
         fill: this.gradientNode,
+        absolutePositioned: true,
       })
 
       context.addWithUpdate(this.maskNode)
+      targets?.at(0)?.group?.group?.clone((cloned: fabric.Group) => {
+        ;(this.maskNode as Rect).clipPath = cloned
+      })
     }
   }
 
@@ -249,6 +252,7 @@ export class AnimationScan extends AnimationBase<Options> {
       isSvgCntr(this.maskNode) && this.maskNode.remove()
     } else if (isCanvasCntr(this.maskNode)) {
       this.maskNode.group?.remove(this.maskNode)
+      targets?.forEach((target) => (target.clipPath = undefined))
     }
 
     this.defs = null
