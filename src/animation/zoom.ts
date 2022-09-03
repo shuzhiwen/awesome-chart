@@ -10,7 +10,7 @@ export class AnimationZoom extends AnimationBase<Options> {
   }
 
   init() {
-    const {targets, initialScale = 0} = this.options
+    const {targets, initialScale = 5e-6} = this.options
 
     if (isSvgCntr(targets)) {
       anime({

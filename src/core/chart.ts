@@ -159,7 +159,6 @@ export class Chart {
 
     if (isNil(options.id)) {
       options.id = uuid()
-      this.log.debug.warn(`Create id "${options.id}" for layer`)
     } else if (this.layers.find((layer) => layer.options.id === options.id)) {
       this.log.error(`Duplicate layer id "${options.id}"`)
     }
