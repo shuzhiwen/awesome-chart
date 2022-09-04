@@ -5,6 +5,11 @@ export default () => [
       layout: 'container',
     },
     data: '栅格文本',
+    style: {
+      text: {
+        fontSize: 16,
+      },
+    },
   },
   {
     type: 'text',

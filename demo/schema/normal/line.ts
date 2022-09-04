@@ -101,6 +101,7 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
         },
         text: {
           fontSize: 10,
+          offset: hasMark ? [0, -5] : [0, 5],
         },
         point: {},
       },

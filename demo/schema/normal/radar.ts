@@ -78,7 +78,7 @@ export default ({mode}) => [
           direction: 'outer',
         },
       },
-      circle: {
+      point: {
         enter: {
           type: 'fade',
           delay: 2000,

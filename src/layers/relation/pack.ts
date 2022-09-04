@@ -160,7 +160,7 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
     const {zoom, circle, text} = this.style
     const circleData = this.circleData.map((group) => ({
       data: group,
-      source: group,
+      source: group.map(({value}) => ({category: value})),
       ...circle,
       fill: group.map(({color}) => color!),
       fillOpacity: variant === 'wordCloud' ? 0 : circle?.fillOpacity,

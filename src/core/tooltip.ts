@@ -48,7 +48,7 @@ export class Tooltip {
       .style('top', 0)
 
     this.getListData = errorCatcher(this.getListData.bind(this), (error) => {
-      this.log.warn(`The layer does not support ${mode} mode`, error)
+      this.log.error(`The layer does not support ${mode} mode`, error)
     })
   }
 
@@ -158,7 +158,7 @@ export class Tooltip {
       container.selectAll('div').remove()
       const rows = container
         .selectAll('div')
-        .data(tooltipData.list.filter(({label}) => label))
+        .data(tooltipData.list.filter(({label, value}) => label || value))
         .join('div')
         .style('display', 'flex')
         .style('flex-direction', 'row')

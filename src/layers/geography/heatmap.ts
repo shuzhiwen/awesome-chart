@@ -11,10 +11,10 @@ import {
 import {select} from 'd3'
 
 const defaultStyle: LayerHeatmapStyleShape = {
+  blur: 1,
   radius: 10,
-  maxOpacity: 1,
+  maxOpacity: 0.5,
   minOpacity: 0,
-  blur: 0.75,
   gradient: {
     0.3: 'green',
     0.6: 'yellow',
