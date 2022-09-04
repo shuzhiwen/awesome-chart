@@ -1,7 +1,7 @@
-import {AnimationBase} from './base'
-import {isSvgCntr} from '../utils'
-import {AnimationBreatheOptions as Options, AnimationProps as Props, D3Selection} from '../types'
 import anime from 'animejs'
+import {isSvgCntr} from '../utils'
+import {AnimationBase} from './base'
+import {AnimationBreatheOptions, AnimationProps, D3Selection} from '../types'
 
 const createSvgFilter = (props: {parentNode: D3Selection; id: string}) => {
   const {parentNode, id} = props
@@ -32,12 +32,12 @@ const createSvgFilter = (props: {parentNode: D3Selection; id: string}) => {
   return targets
 }
 
-export class AnimationBreathe extends AnimationBase<Options> {
+export class AnimationBreathe extends AnimationBase<AnimationBreatheOptions> {
   private defs: Maybe<D3Selection>
 
   private filterNode: Maybe<D3Selection>
 
-  constructor(props: Props<Options>) {
+  constructor(props: AnimationProps<AnimationBreatheOptions>) {
     super(props)
   }
 
@@ -49,23 +49,38 @@ export class AnimationBreathe extends AnimationBase<Options> {
       this.filterNode = createSvgFilter({parentNode: this.defs, id: this.id})
       targets.attr('filter', `url(#breathe-filter-${this.id})`)
     }
-
-    if (!isSvgCntr(targets)) {
-      this.log.warn('Animation not support for canvas mode.')
-    }
   }
 
   play() {
-    const {targets, delay, duration, easing, minOpacity = 0.3, stdDeviation = 10} = this.options
+    const {targets, delay, duration, easing, minOpacity = 0, blur = 2} = this.options
 
     if (isSvgCntr(targets)) {
+      anime({
+        targets: targets.nodes(),
+        duration,
+        delay,
+        opacity: [1, minOpacity, 1],
+        update: this.process,
+        loopBegin: this.start,
+        loopComplete: this.end,
+        easing,
+      })
       anime({
         targets: this.filterNode?.node(),
         duration,
         delay,
+        stdDeviation: [0, blur, 0],
+        easing,
+      })
+    }
+
+    if (!isSvgCntr(targets)) {
+      anime({
+        targets,
+        duration,
+        delay,
         opacity: [1, minOpacity, 1],
-        stdDeviation: [0, stdDeviation, 0],
-        update: this.process,
+        update: (...args) => (this.process(...args), this.renderCanvas()),
         loopBegin: this.start,
         loopComplete: this.end,
         easing,

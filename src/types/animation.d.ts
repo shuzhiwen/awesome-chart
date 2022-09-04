@@ -108,7 +108,7 @@ export type AnimationScanOptions = BasicAnimationOptions<
 export type AnimationBreatheOptions = BasicAnimationOptions<
   'breathe',
   {
-    stdDeviation: number
+    blur: number
     minOpacity: number
   }
 >
