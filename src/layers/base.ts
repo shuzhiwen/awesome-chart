@@ -196,16 +196,16 @@ export abstract class LayerBase<T extends LayerOptions> {
   }
 
   private createAnimation = (sublayer: string) => {
-    const {options} = this.backupAnimation,
-      {animation: theme} = this.options.theme,
-      targets = selector.getChildren(this.root, generateClass(sublayer, false)),
-      prefix = `${sublayer}-animation-`
-    let isFirstPlay = true
-
     if (this.backupAnimation[sublayer]) {
       this.backupAnimation[sublayer]?.destroy()
-      isFirstPlay = false
     }
+
+    const {options} = this.backupAnimation,
+      {animation} = this.options.theme,
+      // must await animation to be destroyed
+      targets = selector.getChildren(this.root, generateClass(sublayer, false)),
+      isFirstPlay = !this.backupAnimation[sublayer],
+      prefix = `${sublayer}-animation-`
 
     if (
       !options ||
@@ -220,16 +220,16 @@ export abstract class LayerBase<T extends LayerOptions> {
     const animationQueue = new AnimationQueue({options: {loop: false}}),
       enterQueue = new AnimationQueue({options: {loop: false}}),
       loopQueue = new AnimationQueue({options: {loop: true}}),
-      {enter, loop, update} = options[sublayer],
+      {enter, loop, update} = merge(animation, options[sublayer]),
       event = animationQueue.event
 
     if (isFirstPlay && enter?.type) {
-      enterQueue.pushAnimation(enter.type, {...theme.enter, ...enter, targets}, this.root)
+      enterQueue.pushAnimation(enter.type, {...enter, targets}, this.root)
       animationQueue.pushQueue(enterQueue)
     }
 
     if (loop?.type) {
-      loopQueue.pushAnimation(loop.type, {...theme.loop, ...loop, targets}, this.root)
+      loopQueue.pushAnimation(loop.type, {...loop, targets}, this.root)
       animationQueue.pushQueue(loopQueue)
     }
 
@@ -240,7 +240,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
     if (!isFirstPlay) {
       clearTimeout(this.backupAnimation.timer[sublayer])
-      const {duration, delay} = {...theme.update, ...update}
+      const {duration, delay} = {...update}
       this.backupAnimation.timer[sublayer] = setTimeout(
         () => this.backupAnimation[sublayer]?.play(),
         duration + delay

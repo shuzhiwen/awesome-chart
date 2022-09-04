@@ -157,6 +157,7 @@ export class AnimationScan extends AnimationBase<Options> {
         mask?.appendChild(
           select(item)
             .clone(false)
+            .attr('className', 'scan-animation-cloned')
             .attr('fill', scope === 'stroke' ? 'black' : 'white')
             .attr('stroke', scope === 'fill' ? 'black' : 'white')
             .node()
