@@ -58,7 +58,7 @@ export default ({mode}) => [
     style: {
       pointSize: 5,
       text: {
-        fontSize: 10,
+        hidden: true,
       },
     },
     animation: {

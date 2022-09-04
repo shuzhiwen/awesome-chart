@@ -173,6 +173,7 @@ export class AnimationScan extends AnimationBase<Options> {
         height: context.canvas?.height,
         fill: this.gradientNode,
         absolutePositioned: true,
+        evented: false,
       })
 
       context.addWithUpdate(this.maskNode)

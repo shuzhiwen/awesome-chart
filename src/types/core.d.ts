@@ -34,6 +34,7 @@ export type ChartTheme = Readonly<
       strokeWidth: number
       fill: string
       stroke: string
+      evented: boolean
     }
   > & {
     palette: {

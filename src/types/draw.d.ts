@@ -50,6 +50,7 @@ export type BasicDrawerProps<T> = {
   className: string
   container: DrawerTarget
   theme: ChartTheme
+  evented?: boolean
 }
 
 export type ElConfigShape = Partial<{

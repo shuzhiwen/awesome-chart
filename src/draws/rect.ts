@@ -1,6 +1,6 @@
-import {isArray, merge} from 'lodash'
 import {fabric} from 'fabric'
-import {DrawerDataShape, ElConfigShape, RectDrawerProps} from '../types'
+import {isArray, merge} from 'lodash'
+import {DrawerDataShape, RectDrawerProps} from '../types'
 import {IRectOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, isSvgCntr, isCanvasCntr, noChange} from '../utils'
@@ -20,6 +20,7 @@ export function drawRect({
   container,
   className,
   theme,
+  evented,
 }: RectDrawerProps) {
   const {
     graph,
@@ -35,10 +36,11 @@ export function drawRect({
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     transformOrigin: getAttr(transformOrigin, i, ''),
+    evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
+    return merge(datum, mapping({...datum, container, theme}))
   })
 
   if (isSvgCntr(container)) {
@@ -64,6 +66,7 @@ export function drawRect({
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('opacity', (d) => d.opacity)
       .attr('transform-origin', (d) => getTransformOrigin(d, d.transformOrigin))
+      .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 
   if (isCanvasCntr(container)) {
@@ -82,6 +85,7 @@ export function drawRect({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
+        evented: config.evented,
         ...getTransformFabricAttr(config, config.transformOrigin),
       } as IRectOptions)
       container.addWithUpdate(rect)

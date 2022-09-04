@@ -1,7 +1,7 @@
 import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
-import {ElConfigShape, TextDrawerProps} from '../types'
+import {TextDrawerProps} from '../types'
 import {merge} from 'lodash'
 import {
   mergeAlpha,
@@ -33,6 +33,7 @@ export function drawText({
   container,
   className,
   theme,
+  evented,
 }: TextDrawerProps) {
   const {
     text,
@@ -54,10 +55,11 @@ export function drawText({
     writingMode: getAttr(writingMode, i, 'horizontal-tb'),
     textDecoration: getAttr(textDecoration, i, 'none'),
     transformOrigin: getAttr(transformOrigin, i, ''),
+    evented: getAttr(evented, i, text.evented),
     rotation: getAttr(rotation, i, 0),
   }))
   const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
+    return merge(datum, mapping({...datum, container, theme}))
   })
 
   if (isSvgCntr(container)) {
@@ -86,7 +88,7 @@ export function drawText({
       .attr('transform-origin', (d) => d.transformOrigin)
       .attr('text-decoration', (d) => d.textDecoration)
       .attr('dominant-baseline', 'central')
-      .attr('pointer-events', 'none')
+      .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
       .style('text-shadow', (d) => d.shadow)
       .style('transform', (d) => `rotate(${d.rotation}deg)`)
   }
@@ -109,6 +111,7 @@ export function drawText({
         linethrough: config.textDecoration === 'line-through',
         overline: config.textDecoration === 'overline',
         underline: config.textDecoration === 'underline',
+        evented: config.evented,
       } as TextOptions)
       text.rotate(config.rotation)
       container.addWithUpdate(text)

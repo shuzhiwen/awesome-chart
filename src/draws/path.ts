@@ -1,5 +1,5 @@
 import {fabric} from 'fabric'
-import {ElConfigShape, PathDrawerProps} from '../types'
+import {PathDrawerProps} from '../types'
 import {IPathOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, noChange, isCanvasCntr, isSvgCntr} from '../utils'
@@ -20,6 +20,7 @@ export function drawPath({
   container,
   className,
   theme,
+  evented,
 }: PathDrawerProps) {
   const {
     graph,
@@ -37,10 +38,11 @@ export function drawPath({
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     transformOrigin: getAttr(transformOrigin, i, ''),
+    evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
+    return merge(datum, mapping({...datum, container, theme}))
   })
 
   if (isSvgCntr(container)) {
@@ -61,6 +63,7 @@ export function drawPath({
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('transform-origin', (d) => d.transformOrigin)
+      .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
       // transition occur attribute attach delay
       // css transform will override attr transform
       .style('transform', (d) => `translate(${d.centerX}px,${d.centerY}px)`)
@@ -76,6 +79,7 @@ export function drawPath({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
+        evented: config.evented,
         originX: 'center',
         originY: 'center',
       } as IPathOptions)

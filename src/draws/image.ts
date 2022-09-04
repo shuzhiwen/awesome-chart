@@ -1,7 +1,7 @@
 import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {IImageOptions} from 'fabric/fabric-impl'
-import {ElConfigShape, ImageDrawerProps} from '../types'
+import {ImageDrawerProps} from '../types'
 import {getAttr, isCanvasCntr, isSvgCntr, noChange} from '../utils'
 import {merge} from 'lodash'
 
@@ -14,6 +14,7 @@ export function drawImage({
   container,
   className,
   theme,
+  evented,
 }: ImageDrawerProps) {
   const {
     graph,
@@ -23,10 +24,11 @@ export function drawImage({
     ...item,
     className,
     opacity: getAttr(opacity, i, graph.opacity),
+    evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
+    return merge(datum, mapping({...datum, container, theme}))
   })
 
   if (isSvgCntr(container)) {
@@ -45,6 +47,7 @@ export function drawImage({
       .attr('width', (d) => d.width)
       .attr('height', (d) => d.height)
       .attr('xlink:href', (d) => d.url)
+      .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 
   if (isCanvasCntr(container)) {
@@ -68,6 +71,7 @@ export function drawImage({
           top: config.y + config.height / 2,
           opacity: config.opacity,
           source: config.source,
+          evented: config.evented,
           originX: 'center',
           originY: 'center',
         } as IImageOptions

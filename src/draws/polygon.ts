@@ -1,5 +1,5 @@
 import {fabric} from 'fabric'
-import {ElConfigShape, PolyDrawerProps} from '../types'
+import {PolyDrawerProps} from '../types'
 import {IPolylineOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, noChange, isSvgCntr, isCanvasCntr} from '../utils'
@@ -19,6 +19,7 @@ export function drawPolygon({
   container,
   className,
   theme,
+  evented,
 }: PolyDrawerProps) {
   const {
     graph,
@@ -35,10 +36,11 @@ export function drawPolygon({
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     pointString: item.points.reduce((prev, cur) => `${prev} ${cur.x},${cur.y}`, ''),
     transformOrigin: `${item.centerX}px ${item.centerY}px`,
+    evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
+    return merge(datum, mapping({...datum, container, theme}))
   })
 
   if (isSvgCntr(container)) {
@@ -59,6 +61,7 @@ export function drawPolygon({
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('transform-origin', (d) => d.transformOrigin)
+      .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 
   if (isCanvasCntr(container)) {
@@ -71,6 +74,7 @@ export function drawPolygon({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
+        evented: config.evented,
         originX: 'center',
         originY: 'center',
       } as IPolylineOptions)

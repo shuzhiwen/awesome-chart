@@ -1,7 +1,7 @@
 import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {ILineOptions} from 'fabric/fabric-impl'
-import {ElConfigShape, LineDrawerProps} from '../types'
+import {LineDrawerProps} from '../types'
 import {isCanvasCntr, isSvgCntr, noChange, mergeAlpha, getAttr} from '../utils'
 import {merge} from 'lodash'
 
@@ -18,6 +18,7 @@ export function drawLine({
   container,
   className,
   theme,
+  evented,
 }: LineDrawerProps) {
   const {
     graph,
@@ -31,10 +32,11 @@ export function drawLine({
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     strokeDasharray: getAttr(strokeDasharray, i, ''),
+    evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
+    return merge(datum, mapping({...datum, container, theme}))
   })
 
   if (isSvgCntr(container)) {
@@ -56,7 +58,7 @@ export function drawLine({
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('stroke-width', (d) => d.strokeWidth)
       .attr('stroke-dasharray', (d) => d.strokeDasharray)
-      .attr('pointer-events', 'none')
+      .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 
   if (isCanvasCntr(container)) {
@@ -71,6 +73,8 @@ export function drawLine({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
+        evented: config.evented,
+        originX: 'center',
       } as ILineOptions)
       container.addWithUpdate(line)
     })

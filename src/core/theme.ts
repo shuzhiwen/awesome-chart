@@ -23,6 +23,7 @@ export const defaultTheme: ChartTheme = {
     strokeWidth: 0,
     fill: 'white',
     stroke: 'white',
+    evented: true,
   },
   text: {
     fontFamily: '',
@@ -35,6 +36,7 @@ export const defaultTheme: ChartTheme = {
     fill: 'white',
     stroke: 'white',
     shadow: '0 0 4px black',
+    evented: false,
   },
   animation: {
     enter: {

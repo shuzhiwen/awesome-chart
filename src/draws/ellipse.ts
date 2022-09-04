@@ -1,7 +1,7 @@
 import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {IEllipseOptions} from 'fabric/fabric-impl'
-import {ElConfigShape, EllipseDrawerProps} from '../types'
+import {EllipseDrawerProps} from '../types'
 import {mergeAlpha, getAttr, noChange, isSvgCntr, isCanvasCntr} from '../utils'
 import {merge} from 'lodash'
 
@@ -20,6 +20,7 @@ export function drawEllipse({
   container,
   className,
   theme,
+  evented,
 }: EllipseDrawerProps) {
   const {
     graph,
@@ -35,10 +36,11 @@ export function drawEllipse({
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     transformOrigin: getAttr(transformOrigin, i, `${item.cx} ${item.cy}`),
+    evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...(datum as ElConfigShape), container, theme}))
+    return merge(datum, mapping({...datum, container, theme}))
   })
 
   if (isSvgCntr(container)) {
@@ -62,6 +64,7 @@ export function drawEllipse({
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('transform-origin', (d) => d.transformOrigin)
+      .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 
   if (isCanvasCntr(container)) {
@@ -78,6 +81,7 @@ export function drawEllipse({
         strokeWidth: config.strokeWidth,
         opacity: config.opacity,
         source: config.source,
+        evented: config.evented,
         originX: 'center',
         originY: 'center',
       } as IEllipseOptions)
