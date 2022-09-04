@@ -272,7 +272,6 @@ export type LayerCarouselStyleShape = Partial<{
   direction: Position4
   padding: number
   zoom: number
-  interval: number
   dot: GraphStyleShape
   maxDotSize: number
 }>

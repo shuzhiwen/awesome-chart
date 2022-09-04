@@ -1,5 +1,5 @@
 import {range} from 'd3'
-import {isNil, max, min} from 'lodash'
+import {isNil, max, merge, min} from 'lodash'
 import {LayerBase} from '../base'
 import {createStyle, validateAndCreateData} from '../helpers'
 import {DataTableList} from '../../data'
@@ -21,7 +21,6 @@ const defaultStyle: LayerCarouselStyleShape = {
   direction: 'left',
   padding: 10,
   zoom: 0.7,
-  interval: 2000,
   maxDotSize: 10,
 }
 
@@ -208,6 +207,11 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
   }
 
   draw() {
+    const animation = merge(
+      {},
+      this.options.theme.animation.loop,
+      this.backupAnimation.options?.['carousel']?.update
+    )
     const carouselData = {
       data: this.carouselData,
       opacity: this.carouselData.map(({opacity}) => opacity),
@@ -222,6 +226,6 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
     this.drawBasic({type: 'rect', data: [dotData], sublayer: 'dot'})
 
     !isNil(this.timer) && clearTimeout(this.timer)
-    this.timer = setTimeout(this.next.bind(this), this.style.interval)
+    this.timer = setTimeout(this.next.bind(this), animation.duration + animation.delay)
   }
 }
