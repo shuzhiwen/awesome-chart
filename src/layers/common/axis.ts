@@ -26,12 +26,14 @@ const defaultSplitLine = {
   strokeWidth: 1,
   strokeOpacity: 0.5,
   fillOpacity: 0,
+  evented: false,
 }
 
 const defaultAxisLine = {
   stroke: 'white',
   strokeWidth: 1,
   fillOpacity: 0,
+  evented: false,
 }
 
 const defaultText = {
