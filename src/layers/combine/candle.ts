@@ -2,6 +2,8 @@ import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {createScale, createStyle, validateAndCreateData} from '../helpers'
 import {LayerRect} from '../normal'
+import {uuid} from '../../utils'
+import {merge} from 'lodash'
 import {
   ChartContext,
   LayerCandleStyleShape,
@@ -10,8 +12,6 @@ import {
   LayerRectScaleShape,
   BackupAnimationOptions,
 } from '../../types'
-import {uuid} from '../../utils'
-import {merge} from 'lodash'
 
 const defaultStyle: LayerCandleStyleShape = {
   positiveColor: 'red',
@@ -53,7 +53,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
   }
 
   constructor(options: LayerCandleOptions, context: ChartContext) {
-    super({context, options, sublayers: ['rect']})
+    super({context, options, sublayers: ['rect', 'text']})
     const {layout, createSublayer} = this.options
 
     this.event.on('destroy', () => {
@@ -122,6 +122,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
 
     this.rectLayer.update()
     this.lineLayer.update()
+
     this._scale = merge({}, this.lineLayer.scale)
   }
 

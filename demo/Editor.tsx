@@ -1,7 +1,7 @@
 import * as monaco from 'monaco-editor'
 import {useEffect, useMemo, useRef, useState} from 'react'
 import styles from './Editor.module.css'
-import {download} from '../src'
+import {download, errorCatcher} from '../src'
 import {noop, throttle} from 'lodash'
 import chroma from 'chroma-js'
 import React from 'react'
@@ -9,9 +9,9 @@ import React from 'react'
 const throttleDownload = throttle(download, 500)
 const pack = (value: string) => `(() => (${value}))()`
 
-const stringify = (value: any, space = 2) => {
-  try {
-    return pack(
+const stringify = errorCatcher(
+  (value: any, space = 2) =>
+    pack(
       JSON.stringify(
         value,
         (_, key) => {
@@ -23,20 +23,21 @@ const stringify = (value: any, space = 2) => {
         space
       )
     ).replace(/"fn\{[\d\D]+?\}fn"/g, (match) => {
-      console.warn(match, match.slice(4, -4))
       return match.slice(4, -4)
-    })
-  } catch (error) {
+    }),
+  (error) => {
     console.error(error.message)
   }
-}
-const parse = (value: string) => {
-  try {
-    return eval(value)
-  } catch (error) {
+)
+
+const parse = errorCatcher(
+  (value: string, callback: (value: object) => void) => {
+    callback(eval(value))
+  },
+  (error) => {
     console.error(error.message)
   }
-}
+)
 
 export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
   const {schema: _schema, onChange = noop} = props,
@@ -55,7 +56,7 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
       })
 
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
-      onChange(parse(editor.getValue()))
+      parse(editor.getValue(), (value) => onChange(value))
       editor.trigger('source', 'editor.action.formatDocument', null)
       localStorage.setItem('editorContent', editor.getValue())
     })
@@ -71,7 +72,7 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
     })
 
     setEditor(editor)
-    onChange(parse(editor.getValue()))
+    parse(editor.getValue(), (value) => onChange(value))
 
     return () => {
       editor.dispose()

@@ -15,6 +15,14 @@ export function createEvent<T extends string = string, F extends string = string
   const cache: Record<string, Callback[]> = {}
 
   return {
+    get cache() {
+      return cache
+    },
+
+    has(name: T) {
+      return !!cache[rename(name)]
+    },
+
     onWithOff(name: T, category: F, fn: Callback) {
       this.off(name, fn, category)
       this.on(name, fn, category)
@@ -75,10 +83,6 @@ export function createEvent<T extends string = string, F extends string = string
           }
         }
       }
-    },
-
-    has(name: T) {
-      return !!cache[rename(name)]
     },
   }
 }

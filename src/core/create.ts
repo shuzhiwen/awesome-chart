@@ -44,7 +44,7 @@ export const createLayer = errorCatcher(
     layer.setAnimation({...animation})
     isLayerAxis(layer) && layer.setScale({nice: scale})
     !isLayerLegend(layer) && layer.setData(dataSet)
-    event && Object.keys(event).forEach((name) => layer.event.on(name, event[name]))
+    Object.entries(event ?? {}).forEach(([name, fn]) => layer.event.on(name, fn))
 
     return layer
   },
