@@ -20,6 +20,7 @@ import wordCloud from './relation/word-cloud'
 import radial from './normal/radial'
 import rectLine from './normal/rect-line'
 import rich from './normal/rich'
+import mapping from './normal/mapping'
 
 export interface MenuItemShape {
   name: string
@@ -38,11 +39,15 @@ export const schemaMenu: MenuShape = {
   name: 'root',
   children: [
     {
-      name: '基础',
+      name: '自定义',
       children: [
         {
           name: '栅格文本',
           schema: base(rich()),
+        },
+        {
+          name: '高级绘制函数',
+          schema: base(mapping()),
         },
       ],
     },

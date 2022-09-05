@@ -22,9 +22,12 @@ const stringify = errorCatcher(
         },
         space
       )
-    ).replace(/"fn\{[\d\D]+?\}fn"/g, (match) => {
-      return match.slice(4, -4)
-    }),
+    ).replace(/"fn\{[\d\D]+?\}fn"/g, (match) =>
+      match
+        .replace(/\\[ntvrf]{1}/g, '')
+        .replace(/\\[\^$+?=!.()\\/()[\]{}"']{1}/g, (match) => match.slice(-1))
+        .slice(4, -4)
+    ),
   (error) => {
     console.error(error.message)
   }
