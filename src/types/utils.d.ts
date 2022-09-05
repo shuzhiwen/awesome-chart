@@ -61,6 +61,7 @@ export type CreateDefsSchema = Partial<{
 
 export type RandomOptions = {
   mode: 'normal' | 'poisson'
+  sort?: 'desc' | 'asc'
   row: number
   column: number
   decimals?: number
