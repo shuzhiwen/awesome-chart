@@ -7,16 +7,32 @@ import chroma from 'chroma-js'
 import React from 'react'
 
 const throttleDownload = throttle(download, 500)
-const stringify = (value: any, space: number) => {
+const pack = (value: string) => `(() => (${value}))()`
+
+const stringify = (value: any, space = 2) => {
   try {
-    return JSON.stringify(value, null, space)
+    return pack(
+      JSON.stringify(
+        value,
+        (_, key) => {
+          if (typeof key === 'function') {
+            return `fn{${key.toString()}}fn`
+          }
+          return key
+        },
+        space
+      )
+    ).replace(/"fn\{[\d\D]+?\}fn"/g, (match) => {
+      console.warn(match, match.slice(4, -4))
+      return match.slice(4, -4)
+    })
   } catch (error) {
     console.error(error.message)
   }
 }
-const parse = (value: any) => {
+const parse = (value: string) => {
   try {
-    return JSON.parse(value)
+    return eval(value)
   } catch (error) {
     console.error(error.message)
   }
@@ -34,7 +50,7 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
     const container = editorRef.current,
       editor = monaco.editor.create(container, {
         value: localStorage.getItem('editorContent') ?? '',
-        language: 'json',
+        language: 'typescript',
         fontSize: 14,
       })
 
