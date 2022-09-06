@@ -74,14 +74,13 @@ export class LayerMark extends LayerBase<LayerMarkOptions> {
     }
 
     const {scaleX, scaleY} = this.scale,
-      {rawTableList, headers} = this.data,
       {size = 10, text} = this.style,
       {left, top} = this.options.layout,
+      data = tableListToObjects<DataKey>(this.data.source),
       offsetX = isScaleBand(scaleX) ? scaleX.bandwidth() / 2 : 0,
-      offsetY = isScaleBand(scaleY) ? scaleY.bandwidth() / 2 : 0,
-      tableList = [headers].concat(rawTableList)
+      offsetY = isScaleBand(scaleY) ? scaleY.bandwidth() / 2 : 0
 
-    this.markData = tableListToObjects<DataKey>(tableList).map((item) => ({
+    this.markData = data.map((item) => ({
       value: item.value ?? '',
       path: createDroplet(-size / 2, -size / 2, size, size),
       centerX: left + scaleX(item.x) + offsetX,

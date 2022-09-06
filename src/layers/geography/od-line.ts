@@ -98,12 +98,11 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
     }
 
     const {left, top} = this.options.layout,
-      {rawTableList, headers} = this.data,
-      {flyingObject} = this.style,
       {scaleX, scaleY} = this.scale,
-      tableList = [headers].concat(rawTableList)
+      {flyingObject} = this.style,
+      data = tableListToObjects<DataKey>(this.data.source)
 
-    this.odLineData = tableListToObjects<DataKey>(tableList).map((d) => {
+    this.odLineData = data.map((d) => {
       const position = {
         fromX: left + scaleX(d.fromX),
         fromY: top + scaleY(d.fromY),

@@ -30,7 +30,7 @@ export type GradientCreatorProps<T> = {
 
 export type EasyGradientCreatorProps = {
   type: 'linear' | 'radial'
-  direction: 'horizontal' | 'vertical'
+  direction?: 'horizontal' | 'vertical'
   colors: string[]
 }
 

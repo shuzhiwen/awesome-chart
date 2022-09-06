@@ -57,7 +57,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   readonly options: T & ChartContext
 
-  readonly backupData: BackupDataShape<AnyObject> = {}
+  readonly backupData: BackupDataShape<unknown> = {}
 
   protected readonly backupAnimation: BackupAnimationShape = {timer: {}}
 

@@ -89,13 +89,12 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
       throw new Error('Invalid data or scale')
     }
 
-    const {layout} = this.options,
-      {top, left} = layout,
+    const {top, left} = this.options.layout,
+      {source, headers, rawTableList} = this.data,
       {scaleX, scaleY, scalePointSize} = this.scale,
       {text, point, pointSize} = this.style,
-      {headers, rawTableList} = this.data,
-      tableList = [headers].concat(rawTableList),
-      pointData = tableListToObjects<DataKey>(tableList).map((item, i) => ({
+      data = tableListToObjects<DataKey>(source),
+      pointData = data.map((item, i) => ({
         value: item.value,
         category: item.category,
         x: left + scaleX(item.x as number) ?? NaN,

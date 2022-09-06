@@ -1,37 +1,35 @@
 import {LayerBase} from '../base'
-import {create, DataPoint, HeatmapConfiguration} from '@mars3d/heatmap.js'
-import {createScale, createStyle, validateAndCreateData} from '../helpers'
 import {DataTableList} from '../../data'
+import {createScale, createStyle, validateAndCreateData} from '../helpers'
+import {group, isRealNumber, tableListToObjects} from '../../utils'
 import {
   ChartContext,
   LayerHeatmapStyleShape,
   LayerHeatmapOptions,
   LayerHeatmapScaleShape,
+  DrawerDataShape,
+  CircleDrawerProps,
 } from '../../types'
-import {select} from 'd3'
+
+type DataKey = 'x' | 'y' | 'value'
 
 const defaultStyle: LayerHeatmapStyleShape = {
-  blur: 1,
-  radius: 10,
-  maxOpacity: 0.5,
-  minOpacity: 0,
-  gradient: {
-    0.3: 'green',
-    0.6: 'yellow',
-    0.9: 'red',
+  radiusFactor: 1,
+  heatZone: {
+    fill: ['#ff0000DD', '#ffff99AA', '#00ff0000'],
   },
 }
 
 export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
-  private instance: h337.Heatmap<'value', 'x', 'y'>
-
   private _data: Maybe<DataTableList>
 
   private _scale: LayerHeatmapScaleShape
 
   private _style = defaultStyle
 
-  private pointData: DataPoint<'value', 'x', 'y'>[] = []
+  private heatZoneData: (DrawerDataShape<CircleDrawerProps> & {
+    color?: string
+  })[] = []
 
   get data() {
     return this._data
@@ -46,11 +44,7 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
   }
 
   constructor(options: LayerHeatmapOptions, context: ChartContext) {
-    super({options, context, sublayers: ['text']})
-    const container = select(this.options.container)
-    this.instance = create({container: container.node()!})
-    this.event.on('destroy', () => container.selectAll('.heatmap-canvas').remove())
-    container.selectAll('.heatmap-canvas').style('pointer-events', 'none')
+    super({options, context, sublayers: ['heatZone']})
   }
 
   setData(data: LayerHeatmap['data']) {
@@ -63,7 +57,6 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
 
   setStyle(style: LayerHeatmapStyleShape) {
     this._style = createStyle(defaultStyle, this.style, style)
-    this.instance.configure(this.style as HeatmapConfiguration)
   }
 
   update() {
@@ -71,19 +64,31 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
       throw new Error('Invalid data or scale')
     }
 
-    const {left, top} = this.options.layout,
+    const {layout, createGradient} = this.options,
       {scaleX, scaleY} = this.scale,
-      {rawTableList} = this.data
+      {heatZone, radiusFactor = 1} = this.style,
+      data = tableListToObjects<DataKey>(this.data.source),
+      color = createGradient({type: 'radial', colors: group(heatZone?.fill)})
 
-    this.pointData = rawTableList.map(([x, y, value]) => ({
-      value: Number(value),
-      // why?
-      x: left + Number(scaleX(x).toFixed(0)),
-      y: top + scaleY(y),
-    }))
+    this.heatZoneData = data
+      .map((item) => ({
+        x: layout.left + scaleX(item.x),
+        y: layout.top + scaleY(item.y),
+        r: radiusFactor * Number(item.value),
+        color: color as string,
+      }))
+      .filter(({x, y}) => {
+        return isRealNumber(x) && isRealNumber(y)
+      })
   }
 
   draw() {
-    this.instance.setData({data: this.pointData, max: Infinity, min: -Infinity})
+    const heatZoneData = {
+      data: this.heatZoneData,
+      ...this.style.heatZone,
+      fill: this.heatZoneData.map(({color}) => color!),
+    }
+
+    this.drawBasic({type: 'circle', data: [heatZoneData], sublayer: 'heatZone'})
   }
 }

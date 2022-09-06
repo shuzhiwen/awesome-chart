@@ -51,7 +51,7 @@ export const createRadialGradients = ({
   container,
   schema,
 }: GradientCreatorProps<RadialGradientSchema[]>) => {
-  schema.forEach(({id, r = 0, r2 = 0, x1 = 1, x2 = 1, y1 = 0, y2 = 0, stops}) => {
+  schema.forEach(({id, r = 0, r2 = 0, x1 = 0.5, x2 = 0.5, y1 = 0.5, y2 = 0.5, stops}) => {
     if (isSvgCntr(container)) {
       const radialGradient = container
         .append('radialGradient')
@@ -105,7 +105,7 @@ export const getEasyGradientCreator =
       }
 
     if (type === 'radial') {
-      schema.radialGradient = {r2: 1, ...baseSchema, ...other}
+      schema.radialGradient = {r2: 0.5, ...baseSchema, ...other}
     } else {
       schema.linearGradient = {
         x2: direction === 'horizontal' ? 1 : 0,

@@ -215,7 +215,11 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
         })),
       ]
     } else if (fallback === 'continue') {
-      return [position.filter((item) => isRealNumber(item.y) || isRealNumber(item.y1))]
+      return [
+        position.filter((item) => {
+          return isRealNumber(item.y) || isRealNumber(item.y1)
+        }),
+      ]
     }
 
     return []

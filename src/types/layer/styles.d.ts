@@ -1,4 +1,3 @@
-import {HeatmapConfiguration} from '@mars3d/heatmap.js'
 import {BasicAnimationOptions} from '../animation'
 import {BasicDrawerProps, CurveType, ElConfigShape} from '../draw'
 import {FormatNumberConfig} from '../utils'
@@ -81,7 +80,10 @@ export type LayerBasemapStyleShape = Partial<{
   text: TextStyleShape
 }>
 
-export type LayerHeatmapStyleShape = Partial<HeatmapConfiguration>
+export type LayerHeatmapStyleShape = Partial<{
+  radiusFactor: number
+  heatZone: GraphStyleShape
+}>
 
 export type LayerODLineStyleShape = Partial<{
   odLine: GraphStyleShape
