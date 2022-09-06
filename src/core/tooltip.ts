@@ -1,6 +1,6 @@
 import {select} from 'd3'
 import {isEqual, merge, isNil} from 'lodash'
-import {errorCatcher, createLog, getAttr, group, ungroup} from '../utils'
+import {errorCatcher, createLog, getAttr, group, ungroup, noChange} from '../utils'
 import {ElConfigShape, D3Selection, TooltipOptions, TooltipDataShape} from '../types'
 
 const defaultOptions = {
@@ -105,9 +105,9 @@ export class Tooltip {
     }
 
     if (this.options.mode === 'category' && category) {
-      const groups = backups.flatMap(({source}) => {
-        return source?.filter((item) => ungroup(item)?.category === category) ?? []
-      })
+      const groups = backups.flatMap(
+        ({source}) => source?.filter((item) => ungroup(item)?.category === category) ?? []
+      )
 
       return {
         title: ungroup(groups)?.category ?? '',
@@ -126,12 +126,8 @@ export class Tooltip {
       return
     }
 
-    const {titleSize, pointSize, labelSize, valueSize, textColor, setTooltipData} = this.options
-    let tooltipData = this.getListData(data)
-
-    if (setTooltipData) {
-      tooltipData = setTooltipData(tooltipData, this.options)
-    }
+    const {setTooltipData = noChange, ...style} = this.options
+    const tooltipData = setTooltipData(this.getListData(data), this.options)
 
     if (tooltipData && !isEqual(this.data, tooltipData)) {
       this.data = tooltipData
@@ -141,8 +137,8 @@ export class Tooltip {
         .join('div')
         .attr('class', 'tooltip-title')
         .style('display', (d) => (d ? 'block' : 'none'))
-        .style('font-size', `${titleSize}px`)
-        .style('color', textColor)
+        .style('font-size', `${style.titleSize}px`)
+        .style('color', style.textColor)
         .style('position', 'relative')
         .text((d) => d!)
       const container = this.instance
@@ -174,23 +170,23 @@ export class Tooltip {
         .style('margin-right', '20px')
       pointWidthLabel
         .append('div')
-        .style('width', `${pointSize}px`)
-        .style('height', `${pointSize}px`)
+        .style('width', `${style.pointSize}px`)
+        .style('height', `${style.pointSize}px`)
         .style('border-radius', '100%')
         .style('margin-right', '5px')
         .style('background-color', (d) => d.color ?? '')
       pointWidthLabel
         .append('span')
         .style('white-space', 'nowrap')
-        .style('font-size', `${labelSize}px`)
-        .style('color', textColor)
+        .style('font-size', `${style.labelSize}px`)
+        .style('color', style.textColor)
         .text((d) => d.label ?? '')
       rows
         .append('span')
         .style('white-space', 'nowrap')
         .style('font-weight', 'bold')
-        .style('font-size', `${valueSize}px`)
-        .style('color', textColor)
+        .style('font-size', `${style.valueSize}px`)
+        .style('color', style.textColor)
         .text((d) => d.value ?? '')
     }
   }
