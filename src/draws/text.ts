@@ -2,6 +2,7 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
 import {TextDrawerProps} from '../types'
+import {drawImage} from './image'
 import {merge} from 'lodash'
 import {
   mergeAlpha,
@@ -59,7 +60,7 @@ export function drawText({
     rotation: getAttr(rotation, i, 0),
   }))
   const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...datum, container, theme}))
+    return merge(datum, mapping({...datum, drawImage, container, theme}))
   })
 
   if (isSvgCntr(container)) {

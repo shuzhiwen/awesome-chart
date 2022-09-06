@@ -3,6 +3,7 @@ import {PolyDrawerProps} from '../types'
 import {IPolylineOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, noChange, isSvgCntr, isCanvasCntr} from '../utils'
+import {drawImage} from './image'
 import {merge} from 'lodash'
 
 export function drawPolygon({
@@ -40,7 +41,7 @@ export function drawPolygon({
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...datum, container, theme}))
+    return merge(datum, mapping({...datum, drawImage, container, theme}))
   })
 
   if (isSvgCntr(container)) {
