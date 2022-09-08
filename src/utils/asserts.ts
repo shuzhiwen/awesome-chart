@@ -5,7 +5,7 @@ import {LayerAxis, LayerBasemap, LayerBrush, LayerInteractive, LayerLegend} from
 import {
   D3Selection,
   FabricGroup,
-  Layer,
+  LayerInstance,
   RawRelation,
   RawTable,
   RawTableList,
@@ -29,23 +29,23 @@ export function isCanvasCntr(selector: any): selector is FabricGroup {
   return selector?.constructor.name === fabric.Group.name && selector?.getObjects
 }
 
-export function isLayerAxis(instance: Maybe<Layer>): instance is LayerAxis {
+export function isLayerAxis(instance: Maybe<LayerInstance>): instance is LayerAxis {
   return instance instanceof LayerAxis
 }
 
-export function isLayerBrush(instance: Maybe<Layer>): instance is LayerBrush {
+export function isLayerBrush(instance: Maybe<LayerInstance>): instance is LayerBrush {
   return instance instanceof LayerBrush
 }
 
-export function isLayerLegend(instance: Maybe<Layer>): instance is LayerLegend {
+export function isLayerLegend(instance: Maybe<LayerInstance>): instance is LayerLegend {
   return instance instanceof LayerLegend
 }
 
-export function isLayerInteractive(instance: Maybe<Layer>): instance is LayerInteractive {
+export function isLayerInteractive(instance: Maybe<LayerInstance>): instance is LayerInteractive {
   return instance instanceof LayerInteractive
 }
 
-export function isLayerBasemap(instance: Maybe<Layer>) {
+export function isLayerBasemap(instance: Maybe<LayerInstance>) {
   return instance instanceof LayerBasemap
 }
 

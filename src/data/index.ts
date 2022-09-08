@@ -1,12 +1,13 @@
-import * as data from '.'
+import * as Data from '.'
 export * from './base'
 export * from './relation'
 export * from './table-list'
 export * from './table'
 
+export default Data
 export const dataMapping = {
-  base: data.DataBase,
-  table: data.DataTable,
-  tableList: data.DataTableList,
-  relation: data.DataRelation,
+  base: Data.DataBase,
+  table: Data.DataTable,
+  tableList: Data.DataTableList,
+  relation: Data.DataRelation,
 }

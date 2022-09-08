@@ -7,7 +7,7 @@ import {
   ChartContext,
   CircleDrawerProps,
   DrawerDataShape,
-  Layer,
+  LayerInstance,
   LayerLegendOptions,
   LayerLegendStyleShape,
   LegendDataShape,
@@ -102,7 +102,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 
-  bindLayers(originLayers: Layer[]) {
+  bindLayers(originLayers: LayerInstance[]) {
     const data = this.data.source,
       layers = originLayers.filter((layer) => layer.legendData)
 
@@ -118,7 +118,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     this.filter(layers)
   }
 
-  private filter = (layers: Layer[]) => {
+  private filter = (layers: LayerInstance[]) => {
     const data = this.data.source,
       {bindCoordinate} = this.options,
       colors = cloneDeep(data.shapeColors),

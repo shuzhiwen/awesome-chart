@@ -21,7 +21,7 @@ import {
   chartLifeCycles,
 } from '../utils'
 import {
-  Layer,
+  LayerInstance,
   LayoutShape,
   LayoutCreator,
   ChartProps,
@@ -39,7 +39,7 @@ fabric.Object.prototype.objectCaching = false
 export class Chart {
   private _layout: LayoutShape
 
-  private _layers: Layer[] = []
+  private _layers: LayerInstance[] = []
 
   private padding: Padding
 
@@ -177,7 +177,7 @@ export class Chart {
     return this.layers.filter(({options}) => options.type === type)
   }
 
-  bindCoordinate(props: {trigger?: Layer; redraw?: boolean}) {
+  bindCoordinate(props: {trigger?: LayerInstance; redraw?: boolean}) {
     const {trigger, redraw} = props,
       axisLayer = this.layers.find((layer) => isLayerAxis(layer)) as Maybe<LayerAxis>,
       brushLayer = this.layers.find((layer) => isLayerBrush(layer)),
@@ -191,7 +191,7 @@ export class Chart {
     layers.concat(brushLayer ? [brushLayer] : []).forEach((layer) => {
       const {scale, options} = layer,
         {scaleX, scaleY, scaleAngle, scaleRadius, ...rest} = scale ?? {},
-        mergedScales: Layer['scale'] = {...rest}
+        mergedScales: LayerInstance['scale'] = {...rest}
 
       if (coordinate === 'cartesian') {
         mergedScales.scaleX = scaleX

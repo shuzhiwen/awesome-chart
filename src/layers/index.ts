@@ -1,4 +1,4 @@
-import * as layer from '.'
+import * as Layer from '.'
 import {BasicLayerOptions, ChartContext} from '../types'
 import {LayerBase} from './base'
 
@@ -11,34 +11,35 @@ export * from './display'
 export * from './normal'
 export * from './relation'
 
+export default Layer
 export const layerMapping = {
-  arc: layer.LayerArc,
-  auxiliary: layer.LayerAuxiliary,
-  axis: layer.LayerAxis,
-  basemap: layer.LayerBasemap,
-  brush: layer.LayerBrush,
-  candle: layer.LayerCandle,
-  carousel: layer.LayerCarousel,
-  dashboard: layer.LayerDashboard,
-  flopper: layer.LayerFlopper,
-  force: layer.LayerForce,
-  heatmap: layer.LayerHeatmap,
-  interactive: layer.LayerInteractive,
-  legend: layer.LayerLegend,
-  line: layer.LayerLine,
-  mark: layer.LayerMark,
-  matrix: layer.LayerMatrix,
-  odLine: layer.LayerODLine,
-  pack: layer.LayerPack,
-  radar: layer.LayerRadar,
-  radial: layer.LayerRadial,
-  rect: layer.LayerRect,
-  sankey: layer.LayerSankey,
-  scatter: layer.LayerScatter,
-  text: layer.LayerText,
-  treemap: layer.LayerTreemap,
-  tree: layer.LayerTree,
-  wave: layer.LayerWave,
+  arc: Layer.LayerArc,
+  auxiliary: Layer.LayerAuxiliary,
+  axis: Layer.LayerAxis,
+  basemap: Layer.LayerBasemap,
+  brush: Layer.LayerBrush,
+  candle: Layer.LayerCandle,
+  carousel: Layer.LayerCarousel,
+  dashboard: Layer.LayerDashboard,
+  flopper: Layer.LayerFlopper,
+  force: Layer.LayerForce,
+  heatmap: Layer.LayerHeatmap,
+  interactive: Layer.LayerInteractive,
+  legend: Layer.LayerLegend,
+  line: Layer.LayerLine,
+  mark: Layer.LayerMark,
+  matrix: Layer.LayerMatrix,
+  odLine: Layer.LayerODLine,
+  pack: Layer.LayerPack,
+  radar: Layer.LayerRadar,
+  radial: Layer.LayerRadial,
+  rect: Layer.LayerRect,
+  sankey: Layer.LayerSankey,
+  scatter: Layer.LayerScatter,
+  text: Layer.LayerText,
+  treemap: Layer.LayerTreemap,
+  tree: Layer.LayerTree,
+  wave: Layer.LayerWave,
 }
 
 export function registerCustomLayer<T extends LayerBase<BasicLayerOptions<any>>>(

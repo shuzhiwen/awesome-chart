@@ -1,4 +1,4 @@
-import {Layer} from './base'
+import {LayerInstance} from './base'
 import {TextStyleShape} from './styles'
 
 export type CreateTextProps = {
@@ -15,7 +15,7 @@ export type CreateLimitTextProps = CreateTextProps & {
 }
 
 export type CreateColorMatrixProps = {
-  layer: Layer
+  layer: LayerInstance
   row: number
   column: number
   theme: MaybeGroup<string>

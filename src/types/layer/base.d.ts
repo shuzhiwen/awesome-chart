@@ -1,8 +1,8 @@
 import {LayerBase, layerMapping} from '../../layers'
 import {LayerOptions} from './options'
 import {ColorMatrix} from '../../utils'
-import {DrawerTarget, DrawerType, GraphDrawerProps} from '../draw'
-import {AnimationType, BasicAnimationOptions} from '../animation'
+import {DrawerType, GraphDrawerProps} from '../draw'
+import {BasicAnimationOptions} from '../animation'
 import {RawScale, ScaleNiceShape} from '../scale'
 import {ChartContext} from '../core'
 
@@ -10,18 +10,14 @@ export type LayerType = keyof typeof layerMapping
 
 export type LegendShape = 'rect' | 'circle' | 'brokenLine' | 'dottedLine' | 'star'
 
-export type BackupDataItemShape<T> = Omit<
-  GraphDrawerProps<T>,
-  'className' | 'container' | 'theme'
->[] & {
+export type BackupDataItemShape<T> = {
   renderOrderCache?: Map<Meta, number>
-}
+} & Omit<GraphDrawerProps<T>, 'className' | 'container' | 'theme'>[]
 
 export type BackupDataShape<T> = Record<string, BackupDataItemShape<T>>
 
-export type BackupAnimationOptions<T = BasicAnimationOptions> = Record<
-  string,
-  Partial<Record<'enter' | 'loop' | 'update', T>>
+export type BackupAnimationOptions<T = BasicAnimationOptions> = Partial<
+  Record<string, Partial<Record<'enter' | 'loop' | 'update', T>>>
 >
 
 export type BackupAnimationShape = Record<string, Maybe<AnyObject>> & {
@@ -41,27 +37,6 @@ export type LayerBaseProps<T extends LayerOptions> = {
   tooltipTargets?: string[]
 }
 
-export type CreateAnimationConfigItemShape = {
-  type: AnimationType
-  duration?: number
-  delay?: number
-  loop?: boolean
-}
-
-export type CreateAnimationProps = {
-  event: Event
-  sublayer: string
-  context: DrawerTarget
-  config: Record<
-    string,
-    {
-      enter: CreateAnimationConfigItemShape
-      loop: CreateAnimationConfigItemShape
-      update: CreateAnimationConfigItemShape
-    }
-  >
-}
-
 export type DrawBasicProps<T> = {
   type: DrawerType
   data: BackupDataItemShape<T>
@@ -79,7 +54,7 @@ export type LayerScalesShape = Partial<{
   nice: ScaleNiceShape
 }>
 
-export type Layer = LayerBase<LayerOptions> & {
+export type LayerInstance = LayerBase<LayerOptions> & {
   scale?: Maybe<LayerScalesShape>
   legendData?: Maybe<LegendDataShape>
 }

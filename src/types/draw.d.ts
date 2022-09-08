@@ -17,8 +17,6 @@ export type CurveType =
 
 export type DrawerTarget = D3Selection | FabricGroup
 
-export type DrawerDataParameter<T> = T[]
-
 export type DrawerType = keyof typeof drawerMapping
 
 export type DrawerDataShape<T> = T extends BasicDrawerProps<infer U> ? U : T
@@ -45,8 +43,8 @@ export type ElSourceShape = AnyObject &
   }>
 
 export type BasicDrawerProps<T> = {
-  data: DrawerDataParameter<T>
-  source?: DrawerDataParameter<MaybeGroup<ElSourceShape>>
+  data: T[]
+  source?: MaybeGroup<ElSourceShape>[]
   className: string
   container: DrawerTarget
   theme: ChartTheme
