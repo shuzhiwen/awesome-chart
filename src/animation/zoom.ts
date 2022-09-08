@@ -1,11 +1,10 @@
 import {AnimationBase} from './base'
-import {isSvgCntr} from '../utils'
-import {AnimationZoomOptions as Options, AnimationProps as Props} from '../types'
-import {canvasEasing} from './easing'
+import {isCanvasCntr, isSvgCntr} from '../utils'
+import {AnimationZoomOptions, AnimationProps} from '../types'
 import anime from 'animejs'
 
-export class AnimationZoom extends AnimationBase<Options> {
-  constructor(props: Props<Options>) {
+export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
+  constructor(props: AnimationProps<AnimationZoomOptions>) {
     super(props)
   }
 
@@ -34,6 +33,7 @@ export class AnimationZoom extends AnimationBase<Options> {
         delay,
         duration,
         easing,
+        context,
         stagger = null,
         startScale = 0,
         endScale = 1,
@@ -41,39 +41,22 @@ export class AnimationZoom extends AnimationBase<Options> {
       start = Math.max(startScale, 5e-6),
       end = Math.max(endScale, 5e-6)
 
-    if (isSvgCntr(targets)) {
-      anime({
-        targets: targets.nodes(),
-        easing,
-        duration,
-        delay: stagger ? anime.stagger(stagger) : delay,
-        loopBegin: this.start,
-        loopComplete: this.end,
-        scale: [start, end],
-      })
-    }
-
-    if (targets && !isSvgCntr(targets)) {
-      setTimeout(() => {
-        setTimeout(this.end, duration)
-        this.start()
-
-        targets.forEach((target) => {
-          target.scaleX = start
-          target.scaleY = start
-          target.animate(
-            {
-              scaleX: end,
-              scaleY: end,
-            },
-            {
-              duration,
-              easing: canvasEasing.get(easing),
-              onChange: this.renderCanvas,
-            }
-          )
-        })
-      }, delay)
-    }
+    anime({
+      targets: isSvgCntr(targets) ? targets.nodes() : targets,
+      easing,
+      duration,
+      delay: stagger ? anime.stagger(stagger) : delay,
+      scale: [start, end],
+      scaleX: [start, end],
+      scaleY: [start, end],
+      loopBegin: this.start,
+      loopComplete: this.end,
+      update: (...args) => {
+        this.process(...args)
+        if (isCanvasCntr(context)) {
+          this.renderCanvas()
+        }
+      },
+    })
   }
 }

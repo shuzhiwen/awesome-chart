@@ -1,11 +1,10 @@
 import {AnimationBase} from './base'
-import {isSvgCntr} from '../utils'
-import {AnimationFadeOptions as Options, AnimationProps as Props} from '../types'
-import {canvasEasing} from './easing'
+import {isCanvasCntr, isSvgCntr} from '../utils'
+import {AnimationFadeOptions, AnimationProps} from '../types'
 import anime from 'animejs'
 
-export class AnimationFade extends AnimationBase<Options> {
-  constructor(props: Props<Options>) {
+export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
+  constructor(props: AnimationProps<AnimationFadeOptions>) {
     super(props)
   }
 
@@ -21,34 +20,30 @@ export class AnimationFade extends AnimationBase<Options> {
   }
 
   play() {
-    const {targets, delay, duration, easing, startOpacity = 0, endOpacity = 1} = this.options
+    const {
+      targets,
+      delay,
+      duration,
+      easing,
+      context,
+      startOpacity = 0,
+      endOpacity = 1,
+    } = this.options
 
-    if (isSvgCntr(targets)) {
-      anime({
-        targets: targets.nodes(),
-        duration,
-        delay,
-        easing,
-        loopBegin: this.start,
-        loopComplete: this.end,
-        opacity: [startOpacity, endOpacity],
-      })
-    }
-
-    if (targets && !isSvgCntr(targets)) {
-      setTimeout(() => {
-        setTimeout(this.end, duration)
-        this.start()
-
-        targets.forEach((target) => {
-          target.opacity = startOpacity
-          target.animate('opacity', endOpacity, {
-            duration,
-            easing: canvasEasing.get(easing),
-            onChange: this.renderCanvas,
-          })
-        })
-      }, delay)
-    }
+    anime({
+      targets: isSvgCntr(targets) ? targets.nodes() : targets,
+      easing,
+      duration,
+      delay,
+      opacity: [startOpacity, endOpacity],
+      loopBegin: this.start,
+      loopComplete: this.end,
+      update: (...args) => {
+        this.process(...args)
+        if (isCanvasCntr(context)) {
+          this.renderCanvas()
+        }
+      },
+    })
   }
 }

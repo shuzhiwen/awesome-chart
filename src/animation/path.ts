@@ -1,12 +1,12 @@
 import {AnimationBase} from './base'
 import {isCanvasCntr, isSvgCntr} from '../utils'
-import {AnimationPathOptions as Options, AnimationProps as Props} from '../types'
+import {AnimationPathOptions, AnimationProps} from '../types'
 import anime from 'animejs'
 
-export class AnimationPath extends AnimationBase<Options> {
+export class AnimationPath extends AnimationBase<AnimationPathOptions> {
   private instances: anime.AnimeInstance[] = []
 
-  constructor(props: Props<Options>) {
+  constructor(props: AnimationProps<AnimationPathOptions>) {
     super(props)
     this.createTargets('path')
   }

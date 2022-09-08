@@ -5,14 +5,9 @@ import {cloneDeep, merge} from 'lodash'
 import {Rect} from 'fabric/fabric-impl'
 import anime, {AnimeParams} from 'animejs'
 import {isCanvasCntr, isSvgCntr, mergeAlpha} from '../utils'
-import {
-  AnimationScanOptions as Options,
-  AnimationProps as Props,
-  D3Selection,
-  GradientWithId,
-} from '../types'
+import {AnimationScanOptions, AnimationProps, D3Selection, GradientWithId} from '../types'
 
-const getAttributes = (direction: Options['direction']) => {
+const getAttributes = (direction: AnimationScanOptions['direction']) => {
   if (direction === 'left' || direction === 'right') {
     return ['x1', 'x2'] as const
   } else if (direction === 'top' || direction === 'bottom') {
@@ -38,7 +33,7 @@ const insertOffsets = (props: {parentNode: D3Selection; color: string; opacity: 
 const createSvgGradient = (props: {
   id?: string
   parentNode: D3Selection
-  direction: Options['direction']
+  direction: AnimationScanOptions['direction']
   color: string
   opacity: number
 }) => {
@@ -73,7 +68,7 @@ const createSvgGradient = (props: {
 }
 
 const createCanvasGradient = (props: {
-  direction: Options['direction']
+  direction: AnimationScanOptions['direction']
   color: string
   opacity: number
 }) => {
@@ -110,14 +105,14 @@ const createCanvasGradient = (props: {
   })
 }
 
-export class AnimationScan extends AnimationBase<Options> {
+export class AnimationScan extends AnimationBase<AnimationScanOptions> {
   private defs: Maybe<D3Selection>
 
   private gradientNode: Maybe<D3Selection | GradientWithId>
 
   private maskNode: Maybe<D3Selection | Rect>
 
-  constructor(props: Props<Options>) {
+  constructor(props: AnimationProps<AnimationScanOptions>) {
     super(props)
   }
 

@@ -1,17 +1,17 @@
 import {AnimationBase} from './base'
 import {isCanvasCntr, isSvgCntr} from '../utils'
-import {AnimationEraseOptions as Options, AnimationProps as Props, D3Selection} from '../types'
+import {AnimationEraseOptions, AnimationProps, D3Selection} from '../types'
 import {canvasEasing} from './easing'
 import {transition} from 'd3-transition'
 import {fabric} from 'fabric'
 import anime from 'animejs'
 
-export class AnimationErase extends AnimationBase<Options> {
+export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
   private defs: Maybe<D3Selection>
 
   private maskNode: Maybe<fabric.Rect>
 
-  constructor(props: Props<Options>) {
+  constructor(props: AnimationProps<AnimationEraseOptions>) {
     super(props)
   }
 
