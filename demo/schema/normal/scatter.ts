@@ -118,9 +118,12 @@ export default ({pointSize}) => [
           direction: 'both',
         },
         loop: {
-          type: 'breathe',
+          type: 'fade',
+          delay: 1000,
           duration: 2000,
-          delay: 0,
+          startOpacity: 1,
+          endOpacity: 0,
+          alternate: true,
         },
       },
       text: {

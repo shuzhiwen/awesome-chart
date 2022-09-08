@@ -53,6 +53,8 @@ export type AnimationEmptyOptions = BasicAnimationOptions<'empty'>
 export type AnimationFadeOptions = BasicAnimationOptions<
   'fade',
   {
+    alternate: boolean
+    stagger: number
     initialOpacity: number
     startOpacity: number
     endOpacity: number
@@ -102,13 +104,5 @@ export type AnimationScanOptions = BasicAnimationOptions<
     direction: Position4 | Position2
     color: string
     opacity: number
-  }
->
-
-export type AnimationBreatheOptions = BasicAnimationOptions<
-  'breathe',
-  {
-    blur: number
-    minOpacity: number
   }
 >

@@ -45,9 +45,9 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
     const nodes = isSvgCntr(targets) ? targets.nodes() : targets!
     const attrs = isSvgCntr(targets) ? ['translateX', 'translateY'] : ['left', 'top']
 
-    nodes.forEach((node, i, array) => {
+    nodes.forEach((targets, i, array) => {
       anime({
-        targets: node,
+        targets,
         easing,
         duration,
         loopBegin: i === 0 ? this.start : noop,

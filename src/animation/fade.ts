@@ -26,6 +26,8 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
       duration,
       easing,
       context,
+      alternate,
+      stagger = null,
       startOpacity = 0,
       endOpacity = 1,
     } = this.options
@@ -34,8 +36,6 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
       targets: isSvgCntr(targets) ? targets.nodes() : targets,
       easing,
       duration,
-      delay,
-      opacity: [startOpacity, endOpacity],
       loopBegin: this.start,
       loopComplete: this.end,
       update: (...args) => {
@@ -44,6 +44,26 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
           this.renderCanvas()
         }
       },
+      keyframes: [
+        {
+          opacity: startOpacity,
+          duration: 0,
+          delay: 0,
+        },
+        {
+          opacity: endOpacity,
+          delay: stagger ? anime.stagger(stagger) : delay,
+        },
+        alternate
+          ? {
+              opacity: startOpacity,
+              delay: 0,
+            }
+          : {
+              duration: 0,
+              delay: 0,
+            },
+      ],
     })
   }
 }

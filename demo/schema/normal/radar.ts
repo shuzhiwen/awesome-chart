@@ -86,9 +86,12 @@ export default ({mode}) => [
           mode: 'fadeIn',
         },
         loop: {
-          type: 'breathe',
+          type: 'fade',
           delay: 1000,
           duration: 2000,
+          startOpacity: 1,
+          endOpacity: 0,
+          alternate: true,
         },
       },
       text: {
