@@ -48,22 +48,34 @@ export default () =>
         },
         rect: {
           fill: 'seagreen',
-          mapping: ({source: {value}}) => {
-            if (value > 4000) {
-              return {
-                fill: 'red',
-              }
-            }
+          opacity: 0,
+          mapping: ({source: {value}, x, y, width, height, fill, container, theme, className}) => {
+            const {drawLine} = (window as any).AWESOME_CHART.__awesome
+            // replace label with image
+            drawLine({
+              data: [
+                {
+                  x1: x + width / 2,
+                  y1: y,
+                  x2: x + width / 2,
+                  y2: y + height,
+                },
+              ],
+              stroke: value > 4000 ? 'red' : fill,
+              strokeWidth: width,
+              strokeDasharray: '5 5',
+              container,
+              theme,
+              className: `${className}-mapping-line`,
+            })
           },
         },
         text: {
           fontSize: 10,
-          format: {
-            decimals: 2,
-          },
           opacity: 0,
           mapping: ({x, y, container, theme, className}) => {
             const {drawImage} = (window as any).AWESOME_CHART.__awesome
+            // replace label with image
             drawImage({
               data: [
                 {
