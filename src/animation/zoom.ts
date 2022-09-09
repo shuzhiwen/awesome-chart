@@ -27,13 +27,23 @@ export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
     }
   }
 
+  process(...args: any) {
+    super.process(...args)
+    const {context} = this.options
+
+    if (isCanvasCntr(context)) {
+      this.renderCanvas()
+    }
+
+    return args
+  }
+
   play() {
     const {
         targets,
         delay,
         duration,
         easing,
-        context,
         stagger = null,
         startScale = 0,
         endScale = 1,
@@ -49,14 +59,9 @@ export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
       scale: [start, end],
       scaleX: [start, end],
       scaleY: [start, end],
+      update: this.process,
       loopBegin: this.start,
       loopComplete: this.end,
-      update: (...args) => {
-        this.process(...args)
-        if (isCanvasCntr(context)) {
-          this.renderCanvas()
-        }
-      },
     })
   }
 }

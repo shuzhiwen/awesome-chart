@@ -19,13 +19,23 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
     }
   }
 
+  process(...args: any) {
+    super.process(...args)
+    const {context} = this.options
+
+    if (isCanvasCntr(context)) {
+      this.renderCanvas()
+    }
+
+    return args
+  }
+
   play() {
     const {
       targets,
       delay,
       duration,
       easing,
-      context,
       alternate,
       stagger = null,
       startOpacity = 0,
@@ -36,14 +46,9 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
       targets: isSvgCntr(targets) ? targets.nodes() : targets,
       easing,
       duration,
+      update: this.process,
       loopBegin: this.start,
       loopComplete: this.end,
-      update: (...args) => {
-        this.process(...args)
-        if (isCanvasCntr(context)) {
-          this.renderCanvas()
-        }
-      },
       keyframes: [
         {
           opacity: startOpacity,

@@ -29,9 +29,19 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
     }
   }
 
+  process(...args: any) {
+    super.process(...args)
+    const {context} = this.options
+
+    if (isCanvasCntr(context)) {
+      this.renderCanvas()
+    }
+
+    return args
+  }
+
   play() {
     const {
-      context,
       targets,
       delay,
       duration,
@@ -50,14 +60,9 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
         targets,
         easing,
         duration,
+        update: this.process,
         loopBegin: i === 0 ? this.start : noop,
         loopComplete: i === array.length - 1 ? this.end : noop,
-        update: (...args) => {
-          this.process(...args)
-          if (isCanvasCntr(context)) {
-            this.renderCanvas()
-          }
-        },
         keyframes: [
           {
             [attrs[0]]: startOffset[0],

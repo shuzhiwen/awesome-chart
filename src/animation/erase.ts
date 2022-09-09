@@ -1,10 +1,8 @@
 import {AnimationBase} from './base'
 import {isCanvasCntr, isSvgCntr} from '../utils'
 import {AnimationEraseOptions, AnimationProps, D3Selection} from '../types'
-import {canvasEasing} from './easing'
-import {transition} from 'd3-transition'
+import anime, {AnimeParams} from 'animejs'
 import {fabric} from 'fabric'
-import anime from 'animejs'
 
 export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
   private defs: Maybe<D3Selection>
@@ -35,30 +33,46 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
       const {width = 0, height = 0} = context
 
       this.maskNode = new fabric.Rect({
-        left: -width / 2 + (direction === 'left' ? width : 0),
-        top: -height / 2 + (direction === 'top' ? height : 0),
+        left: direction === 'left' ? width : 0,
+        top: direction === 'top' ? height : 0,
         width: direction === 'left' || direction === 'right' ? 0 : width,
         height: direction === 'top' || direction === 'bottom' ? 0 : height,
+        absolutePositioned: true,
       })
 
       targets?.forEach((target) => (target.clipPath = this.maskNode!))
-
       this.renderCanvas()
     }
   }
 
+  process(...args: any) {
+    super.process(...args)
+    const {targets} = this.options
+
+    if (!isSvgCntr(targets)) {
+      targets?.forEach((item) => {
+        item.clipPath && item.drawClipPathOnCache(this.getCanvasContext()!)
+      })
+      this.renderCanvas()
+    }
+
+    return args
+  }
+
   play() {
-    const {targets, context, delay, duration, easing, direction = 'right'} = this.options
+    const {context, delay, duration, easing, direction = 'right'} = this.options
+    const configs: AnimeParams = {
+      duration,
+      delay,
+      easing,
+      loopBegin: this.start,
+      loopComplete: this.end,
+      update: this.process,
+    }
 
     if (isSvgCntr(context)) {
-      anime({
+      Object.assign(configs, {
         targets: context.selectAll(`#erase-${this.id} rect`).nodes(),
-        duration,
-        delay,
-        easing,
-        update: this.process,
-        loopBegin: this.start,
-        loopComplete: this.end,
         x: [direction === 'left' ? '100%' : '0%', '0%'],
         y: [direction === 'top' ? '100%' : '0%', '0%'],
         width: [direction === 'left' || direction === 'right' ? '0%' : '100%', '100%'],
@@ -66,41 +80,19 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
       })
     }
 
-    if (isCanvasCntr(context) && targets && !isSvgCntr(targets)) {
-      transition()
-        .delay(delay)
-        .duration(duration)
-        .on('end', this.end)
-        .on('start', () => {
-          const {width = 0, height = 0} = context
+    if (isCanvasCntr(context)) {
+      const {width = 0, height = 0} = context
 
-          this.start()
-          this.maskNode = Object.assign(this.maskNode!, {
-            left: -width / 2 + (direction === 'left' ? width : 0),
-            top: -height / 2 + (direction === 'top' ? height : 0),
-            width: direction === 'left' || direction === 'right' ? 0 : width,
-            height: direction === 'top' || direction === 'bottom' ? 0 : height,
-          })
-          this.maskNode.animate(
-            {
-              left: -width / 2,
-              top: -height / 2,
-              width,
-              height,
-            },
-            {
-              duration,
-              easing: canvasEasing.get(easing),
-              onChange: () => {
-                targets.forEach((item) => {
-                  item.clipPath && item.drawClipPathOnCache(this.getCanvasContext()!)
-                })
-                this.renderCanvas()
-              },
-            }
-          )
-        })
+      Object.assign(configs, {
+        targets: this.maskNode,
+        left: [direction === 'left' ? width : 0, 0],
+        top: [direction === 'top' ? height : 0, 0],
+        width: [direction === 'left' || direction === 'right' ? 0 : width, width],
+        height: [direction === 'top' || direction === 'bottom' ? 0 : height, height],
+      })
     }
+
+    anime(configs)
   }
 
   destroy() {
