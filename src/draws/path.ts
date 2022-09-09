@@ -3,7 +3,6 @@ import {PathDrawerProps} from '../types'
 import {IPathOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, noChange, isCanvasCntr, isSvgCntr} from '../utils'
-import {drawImage} from './image'
 import {merge} from 'lodash'
 
 export function drawPath({
@@ -43,7 +42,7 @@ export function drawPath({
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...datum, drawImage, container, theme}))
+    return merge(datum, mapping({...datum, container, theme}))
   })
 
   if (isSvgCntr(container)) {

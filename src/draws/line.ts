@@ -3,7 +3,6 @@ import {fabric} from 'fabric'
 import {ILineOptions} from 'fabric/fabric-impl'
 import {LineDrawerProps} from '../types'
 import {isCanvasCntr, isSvgCntr, noChange, mergeAlpha, getAttr} from '../utils'
-import {drawImage} from './image'
 import {merge} from 'lodash'
 
 export function drawLine({
@@ -37,7 +36,7 @@ export function drawLine({
     source: getAttr(source, i, null),
   }))
   const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...datum, drawImage, container, theme}))
+    return merge(datum, mapping({...datum, container, theme}))
   })
 
   if (isSvgCntr(container)) {

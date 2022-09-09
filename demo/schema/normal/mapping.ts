@@ -62,7 +62,8 @@ export default () =>
             decimals: 2,
           },
           opacity: 0,
-          mapping: ({x, y, drawImage, container, theme, className}) => {
+          mapping: ({x, y, container, theme, className}) => {
+            const {drawImage} = (window as any).AWESOME_CHART.__awesome
             drawImage({
               data: [
                 {

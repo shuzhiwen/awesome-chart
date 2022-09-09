@@ -6,12 +6,18 @@ import {Chart} from './Chart'
 import {tip} from './schema/base'
 import {Menu} from './TabMenu'
 import * as debugs from './debug'
+import * as draws from '../src/draws'
+import * as utils from '../src/utils'
 
 window.AWESOME_CHART = {
   __env: {
     mode: 'development',
   },
-}
+  __awesome: {
+    ...draws,
+    ...utils,
+  },
+} as any
 
 export function Root() {
   const {schema} = schemaMenu.children[0].children[0],

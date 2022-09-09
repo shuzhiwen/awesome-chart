@@ -1,4 +1,3 @@
-import {drawImage} from '../../draws'
 import {BasicAnimationOptions} from '../animation'
 import {BasicDrawerProps, CurveType, ElConfigShape} from '../draw'
 import {FormatNumberConfig} from '../utils'
@@ -16,8 +15,7 @@ export type GraphStyleShape = Partial<{
   transition: Maybe<Partial<BasicAnimationOptions>>
   hidden: boolean
   mapping: (
-    config: {drawImage: typeof drawImage} & ElConfigShape &
-      Pick<BasicDrawerProps<unknown>, 'container' | 'theme'>
+    config: ElConfigShape & Pick<BasicDrawerProps<unknown>, 'container' | 'theme'>
   ) => void | Partial<ElConfigShape>
 }>
 
