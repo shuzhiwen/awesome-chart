@@ -100,7 +100,6 @@ export type AnimationEraseOptions = BasicAnimationOptions<
 export type AnimationScanOptions = BasicAnimationOptions<
   'scan',
   {
-    scope: 'stroke' | 'fill' | 'all'
     direction: Position4 | Position2
     color: string
     opacity: number

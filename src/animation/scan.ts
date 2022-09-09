@@ -17,8 +17,7 @@ const getAttributes = (direction: AnimationScanOptions['direction']) => {
   }
 }
 
-const insertOffsets = (props: {parentNode: D3Selection; color: string; opacity: number}) => {
-  const {parentNode, color, opacity} = props
+const insertOffsets = (parentNode: D3Selection, color: string, opacity: number) => {
   const minColor = mergeAlpha(color, 0)
   const maxColor = mergeAlpha(color, opacity)
 
@@ -37,16 +36,10 @@ const createSvgGradient = (props: {
   color: string
   opacity: number
 }) => {
-  let targets
   const {parentNode, id, direction, color, opacity} = props
   const attributes = getAttributes(direction)
+  let targets
 
-  parentNode
-    .append('filter')
-    .attr('id', `scan-filter-${id}`)
-    .append('feGaussianBlur')
-    .attr('in', 'SourceGraphic')
-    .attr('stdDeviation', 0)
   if (attributes?.[0] === 'r') {
     targets = parentNode
       .append('radialGradient')
@@ -64,7 +57,7 @@ const createSvgGradient = (props: {
       .attr(attributes[1], direction === 'left' || direction === 'top' ? '200%' : '0%')
   }
 
-  return insertOffsets({parentNode: targets as D3Selection, color, opacity})
+  return insertOffsets(targets as D3Selection, color, opacity)
 }
 
 const createCanvasGradient = (props: {
@@ -108,23 +101,16 @@ const createCanvasGradient = (props: {
 export class AnimationScan extends AnimationBase<AnimationScanOptions> {
   private defs: Maybe<D3Selection>
 
-  private gradientNode: Maybe<D3Selection | GradientWithId>
-
   private maskNode: Maybe<D3Selection | Rect>
+
+  private gradientNode: Maybe<D3Selection | GradientWithId>
 
   constructor(props: AnimationProps<AnimationScanOptions>) {
     super(props)
   }
 
   init() {
-    const {
-      targets,
-      context,
-      scope = 'all',
-      direction = 'top',
-      color = 'white',
-      opacity = 1,
-    } = this.options
+    const {targets, context, direction, color = 'white', opacity = 1} = this.options
 
     if (isSvgCntr(targets) && isSvgCntr(context)) {
       this.defs = context.append('defs')
@@ -141,23 +127,17 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
         .attr('y', 0)
         .attr('width', '100%')
         .attr('height', '100%')
-        .attr('mask', `url(#scan-mask-${this.id})`)
-        .attr('filter', `url(#scan-filter-${this.id})`)
+        .attr('clip-path', `url(#scan-clip-path-${this.id})`)
         .attr('fill', `url(#scan-gradient-${this.id})`)
         .style('pointer-events', 'none')
-
-      const mask = this.defs.append('mask').attr('id', `scan-mask-${this.id}`).node()
-
-      targets.nodes().forEach((item) => {
-        mask?.appendChild(
-          select(item)
-            .clone(false)
-            .attr('className', 'scan-animation-cloned')
-            .attr('fill', scope === 'stroke' ? 'black' : 'white')
-            .attr('stroke', scope === 'fill' ? 'black' : 'white')
-            .node()
-        )
-      })
+      this.defs
+        .append('clipPath')
+        .attr('id', `scan-clip-path-${this.id}`)
+        .call((selector) => {
+          targets.nodes().forEach((item) => {
+            selector.node()?.appendChild(select(item).clone(false).node())
+          })
+        })
     }
 
     if (!isSvgCntr(targets) && isCanvasCntr(context)) {
@@ -171,7 +151,6 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
         absolutePositioned: true,
         evented: false,
       })
-
       context.addWithUpdate(this.maskNode)
       targets?.at(0)?.group?.group?.clone((cloned: fabric.Group) => {
         ;(this.maskNode as Rect).clipPath = cloned
@@ -180,12 +159,10 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
   }
 
   play() {
-    const {context, delay, duration, easing, direction = 'top'} = this.options
-    const attributes = getAttributes(direction)
-
-    if (isSvgCntr(context) && isSvgCntr(this.gradientNode)) {
-      const configs: AnimeParams = {
-        targets: this.gradientNode.node(),
+    const {context, delay, duration, easing, direction = 'top'} = this.options,
+      isLeftOrTop = direction === 'left' || direction === 'top',
+      attributes = getAttributes(direction),
+      configs: AnimeParams = {
         duration,
         delay,
         update: this.process,
@@ -194,51 +171,43 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
         easing,
       }
 
+    if (isSvgCntr(context) && isSvgCntr(this.gradientNode)) {
+      configs.targets = this.gradientNode.node()
       if (attributes?.length === 2) {
-        configs[attributes[0]] =
-          direction === 'left' || direction === 'top' ? ['100%', '-100%'] : ['-100%', '100%']
-        configs[attributes[1]] =
-          direction === 'left' || direction === 'top' ? ['200%', '0%'] : ['0%', '200%']
+        configs[attributes[0]] = isLeftOrTop ? ['100%', '-100%'] : ['-100%', '100%']
+        configs[attributes[1]] = isLeftOrTop ? ['200%', '0%'] : ['0%', '200%']
       } else if (attributes?.[0] === 'r') {
         configs[attributes[0]] = direction === 'inner' ? ['300%', '0%'] : ['0%', '300%']
       }
-
-      anime(configs)
     }
 
     if (isCanvasCntr(context) && !isSvgCntr(this.gradientNode)) {
       const coords = cloneDeep(this.gradientNode?.coords ?? {})
-      const configs: AnimeParams = {
-        targets: coords,
-        duration,
-        delay,
-        easing,
-        loopBegin: this.start,
-        loopComplete: this.end,
-        update: (...args) => {
-          this.process(...args)
-          if (
-            this.gradientNode &&
-            !isSvgCntr(this.gradientNode) &&
-            !isSvgCntr(this.maskNode) &&
-            this.maskNode?.clipPath
-          ) {
-            this.gradientNode.coords = coords
-            this.maskNode?.drawClipPathOnCache(this.getCanvasContext()!)
-            this.renderCanvas()
-          }
-        },
+
+      configs.targets = coords
+      configs.update = (...args) => {
+        this.process(...args)
+        if (
+          this.gradientNode &&
+          !isSvgCntr(this.gradientNode) &&
+          !isSvgCntr(this.maskNode) &&
+          this.maskNode?.clipPath
+        ) {
+          this.gradientNode.coords = coords
+          this.maskNode?.drawClipPathOnCache(this.getCanvasContext()!)
+          this.renderCanvas()
+        }
       }
 
       if (attributes?.length === 2) {
-        configs[attributes[0]] = direction === 'left' || direction === 'top' ? [1, -1] : [-1, 1]
-        configs[attributes[1]] = direction === 'left' || direction === 'top' ? [2, 0] : [0, 2]
+        configs[attributes[0]] = isLeftOrTop ? [1, -1] : [-1, 1]
+        configs[attributes[1]] = isLeftOrTop ? [2, 0] : [0, 2]
       } else if (attributes?.[0] === 'r') {
         configs[attributes[0]] = direction === 'inner' ? [3, 0] : [0, 3]
       }
-
-      anime(configs)
     }
+
+    anime(configs)
   }
 
   destroy() {
