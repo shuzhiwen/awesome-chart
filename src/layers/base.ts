@@ -187,7 +187,6 @@ export abstract class LayerBase<T extends LayerOptions> {
       if (this.tooltipTargets.includes(sublayer)) {
         tooltipEvents.forEach((type) =>
           els.forEach((el) => {
-            el.off(type)
             el.on(type, this.backupEvent.tooltip[type])
           })
         )

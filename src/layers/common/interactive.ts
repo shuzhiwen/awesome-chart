@@ -226,11 +226,13 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     const darkRectData = [...this.rectDataY, ...this.rectDataX].map(([head, , tail]) => ({
       data: [head, tail],
       source: [head.source, tail.source],
+      evented: false,
       ...this.style.interactive,
     }))
     const lightRectData = [...this.rectDataY, ...this.rectDataX].map(([, body]) => ({
       data: [body],
       source: [body.source],
+      evented: true,
       ...this.style.interactive,
     }))
 
