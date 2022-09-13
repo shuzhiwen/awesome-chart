@@ -58,7 +58,7 @@ export type ChartTheme = Readonly<
 >
 
 export type TooltipDataShape = Maybe<{
-  title: Meta
+  title?: Meta
   list: Partial<{
     label: Meta
     value: Meta

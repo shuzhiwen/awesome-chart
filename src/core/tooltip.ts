@@ -36,7 +36,6 @@ export class Tooltip {
       .append('div')
       .attr('class', 'tooltip')
       .style('border-radius', '4px')
-      .style('padding', '8px')
       .style('row-gap', '4px')
       .style('flex-direction', 'column')
       .style('background-color', backgroundColor)
@@ -69,54 +68,70 @@ export class Tooltip {
 
   private getListData(data: Partial<ElConfigShape>): TooltipDataShape {
     const {mode} = this.options,
-      {dimension, category} = getAttr(data.source, 0, {}),
-      backups = this.options.getLayersBackupData()
+      {dimension, category} = getAttr(data.source, 0, {})
 
     if (this.options.mode === 'single') {
-      return {
-        title: ungroup(data.source)?.dimension ?? '',
-        list: group(data.source).map(({value, category}) => ({
-          color: data.fill || data.stroke || '#000',
-          label: category,
-          value,
-        })),
-      }
+      return this.getSingleListData(data)
     }
 
     if ((mode === 'dimension' && !dimension) || (mode === 'category' && !category))
       throw new Error()
 
     if (this.options.mode === 'dimension') {
-      const groups = backups.filter(({source}) => ungroup(source)?.dimension === dimension)
+      return this.getDimensionListData(data)
+    }
 
-      return {
-        title: dimension!,
-        list: groups.flatMap(
+    if (this.options.mode === 'category') {
+      return this.getCategoryListData(data)
+    }
+  }
+
+  private getSingleListData(data: Partial<ElConfigShape>): TooltipDataShape {
+    return {
+      title: ungroup(data.source)?.dimension,
+      list: group(data.source).map(({value, category}) => ({
+        color: data.fill || data.stroke,
+        label: category,
+        value,
+      })),
+    }
+  }
+
+  private getDimensionListData(data: Partial<ElConfigShape>): TooltipDataShape {
+    const {dimension} = getAttr(data.source, 0, {}),
+      backups = this.options.getLayersBackupData()
+
+    return {
+      title: dimension,
+      list: backups
+        .filter(({source}) => ungroup(source)?.dimension === dimension)
+        .flatMap(
           ({source, fill, stroke}) =>
             source?.flatMap((item, i) =>
               group(item).map(({category, value}) => ({
-                color: getAttr(fill, i, null) || getAttr(stroke, i, null) || '#000',
+                color: getAttr(fill, i, '') || getAttr(stroke, i, ''),
                 label: category,
                 value,
               }))
             ) ?? []
         ),
-      }
     }
+  }
 
-    if (this.options.mode === 'category' && category) {
-      const groups = backups.flatMap(
-        ({source}) => source?.filter((item) => ungroup(item)?.category === category) ?? []
+  private getCategoryListData(data: Partial<ElConfigShape>): TooltipDataShape {
+    const {category} = getAttr(data.source, 0, {}),
+      backups = this.options.getLayersBackupData(),
+      groups = backups.flatMap(({source}) =>
+        source?.filter((item) => ungroup(item)?.category === category)
       )
 
-      return {
-        title: ungroup(groups)?.category ?? '',
-        list: groups.map((item, i) => ({
-          color: getAttr(data.fill, i, null) || getAttr(data.stroke, i, null) || '#000',
-          label: ungroup(item)?.dimension,
-          value: ungroup(item)?.value,
-        })),
-      }
+    return {
+      title: ungroup(groups)?.category,
+      list: groups.map((item, i) => ({
+        color: getAttr(data.fill, i, '') || getAttr(data.stroke, i, ''),
+        label: ungroup(item)?.dimension,
+        value: ungroup(item)?.value,
+      })),
     }
   }
 
@@ -132,6 +147,7 @@ export class Tooltip {
     if (tooltipData && !isEqual(this.data, tooltipData)) {
       this.data = tooltipData
       this.instance
+        .style('padding', '8px')
         .selectAll('.tooltip-title')
         .data([tooltipData.title])
         .join('div')
