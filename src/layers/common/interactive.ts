@@ -189,7 +189,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
           x: left + (scaleX(domain) ?? 0) + scaleX.bandwidth(),
           y: top,
           height,
-          width: width - (scaleX(domain) ?? 0) - scaleX.bandwidth(),
+          width: Math.abs(width - (scaleX(domain) ?? 0) - scaleX.bandwidth()),
           source: {key: `x-${i}-secondary`},
         },
       ])
