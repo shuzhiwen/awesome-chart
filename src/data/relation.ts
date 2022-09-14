@@ -1,6 +1,6 @@
 import {DataBase} from './base'
 import {merge, max, sum} from 'lodash'
-import {isRelation, formatNumber, tableListToObjects} from '../utils'
+import {isRawRelation, formatNumber, tableListToObjects} from '../utils'
 import {RelationDataShape, RawRelation, Node, Edge} from '../types'
 
 export class DataRelation extends DataBase<RawRelation> {
@@ -24,7 +24,7 @@ export class DataRelation extends DataBase<RawRelation> {
   }
 
   update(relation: RawRelation) {
-    if (!isRelation(relation)) {
+    if (!isRawRelation(relation)) {
       this.log.error('Illegal data', relation)
       return
     }

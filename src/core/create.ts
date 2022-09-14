@@ -3,9 +3,9 @@ import {CreateChartSchema, LayerOptions} from '../types'
 import {Chart} from './chart'
 import {
   createLog,
-  isTable,
-  isTableList,
-  isRelation,
+  isRawTable,
+  isRawTableList,
+  isRawRelation,
   tableListToTable,
   randomTableList,
   randomTable,
@@ -26,15 +26,15 @@ export const createLayer = errorCatcher(
 
     if (type === 'legend' && isLayerLegend(layer)) {
       layer.bindLayers(chart.layers)
-    } else if (isTable(data) || data?.type === 'table') {
-      dataSet = new DataTable(isTable(data) ? data : randomTable(data))
-    } else if (isRelation(data)) {
+    } else if (isRawTable(data) || data?.type === 'table') {
+      dataSet = new DataTable(isRawTable(data) ? data : randomTable(data))
+    } else if (isRawRelation(data)) {
       dataSet = new DataRelation(data)
-    } else if (isTableList(data) || data?.type === 'tableList') {
+    } else if (isRawTableList(data) || data?.type === 'tableList') {
       if (type === 'matrix') {
         dataSet = new DataTable(tableListToTable(data)!)
       } else {
-        dataSet = new DataTableList(isTableList(data) ? data : randomTableList(data))
+        dataSet = new DataTableList(isRawTableList(data) ? data : randomTableList(data))
       }
     } else {
       dataSet = new DataBase(data ?? {})

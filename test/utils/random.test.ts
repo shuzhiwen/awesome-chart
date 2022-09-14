@@ -1,4 +1,4 @@
-import {uuid, randomTable, randomTableList, isTable, isTableList} from '../../src'
+import {uuid, randomTable, randomTableList, isRawTable, isRawTableList} from '../../src'
 
 test('uuid', () => {
   expect(typeof uuid()).toBe('string')
@@ -7,7 +7,7 @@ test('uuid', () => {
 
 test('randomTable', () => {
   expect(
-    isTable(
+    isRawTable(
       randomTable({
         mode: 'normal',
         column: 10,
@@ -18,7 +18,7 @@ test('randomTable', () => {
     )
   ).toBe(true)
   expect(
-    isTable(
+    isRawTable(
       randomTable({
         mode: 'poisson',
         column: 10,
@@ -31,7 +31,7 @@ test('randomTable', () => {
 
 test('randomTable', () => {
   expect(
-    isTableList(
+    isRawTableList(
       randomTableList({
         mode: 'normal',
         column: 10,
@@ -42,7 +42,7 @@ test('randomTable', () => {
     )
   ).toBe(true)
   expect(
-    isTableList(
+    isRawTableList(
       randomTableList({
         mode: 'poisson',
         column: 10,

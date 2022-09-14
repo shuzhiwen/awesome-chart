@@ -1,8 +1,8 @@
 import {RawRelation, RawTable, RawTableList} from '../types'
-import {isTableList} from './asserts'
+import {isRawTableList} from './asserts'
 
 export function tableListToObjects<T extends Meta, P = Meta>(tableList: RawTableList) {
-  if (!isTableList(tableList)) {
+  if (!isRawTableList(tableList)) {
     throw new Error('invalid input')
   }
 
@@ -13,7 +13,7 @@ export function tableListToObjects<T extends Meta, P = Meta>(tableList: RawTable
 }
 
 export function tableListToTable(tableList: RawTableList): Maybe<RawTable> {
-  if (!isTableList(tableList) || tableList[0].length !== 3) {
+  if (!isRawTableList(tableList) || tableList[0].length !== 3) {
     throw new Error('invalid input')
   }
 
@@ -33,7 +33,7 @@ export function tableListToTable(tableList: RawTableList): Maybe<RawTable> {
 }
 
 export function relationToTable([nodeTableList, linkTableList]: RawRelation): Maybe<RawTable> {
-  if (!isTableList(nodeTableList) || !isTableList(linkTableList)) {
+  if (!isRawTableList(nodeTableList) || !isRawTableList(linkTableList)) {
     throw new Error('invalid input')
   }
 
@@ -62,7 +62,7 @@ export function relationToTable([nodeTableList, linkTableList]: RawRelation): Ma
 }
 
 export function transpose(tableList: RawTableList): RawTableList {
-  if (!isTableList(tableList)) {
+  if (!isRawTableList(tableList)) {
     throw new Error('invalid input')
   }
 

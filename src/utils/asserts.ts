@@ -57,7 +57,7 @@ export function isScaleLinear(scale: any): scale is ScaleLinear {
   return typeof scale?.ticks === 'function'
 }
 
-export function isTableList(tableList: any): tableList is RawTableList {
+export function isRawTableList(tableList: any): tableList is RawTableList {
   return (
     isArray(tableList) &&
     tableList.length !== 0 &&
@@ -66,22 +66,22 @@ export function isTableList(tableList: any): tableList is RawTableList {
   )
 }
 
-export function isTable(table: any): table is RawTable {
+export function isRawTable(table: any): table is RawTable {
   return (
     isArray(table) &&
     table.length === 3 &&
     table.findIndex((item) => !isArray(item)) === -1 &&
-    isTableList(table[2]) &&
+    isRawTableList(table[2]) &&
     table[2].length === table[0].length &&
     table[2][0].length === table[1].length
   )
 }
 
-export function isRelation(relation: any): relation is RawRelation {
+export function isRawRelation(relation: any): relation is RawRelation {
   return (
     isArray(relation) &&
     relation.length === 2 &&
-    isTableList(relation[0]) &&
-    isTableList(relation[1])
+    isRawTableList(relation[0]) &&
+    isRawTableList(relation[1])
   )
 }

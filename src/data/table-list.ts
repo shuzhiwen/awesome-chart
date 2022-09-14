@@ -1,5 +1,5 @@
 import {cloneDeep, sum, min, max} from 'lodash'
-import {group, isTableList, transpose} from '../utils'
+import {group, isRawTableList, transpose} from '../utils'
 import {DataBase} from './base'
 import {DataBaseOptions, RawTableList, TableListDataShape, TableListOptions} from '../types'
 
@@ -80,7 +80,7 @@ export class DataTableList extends DataBase<RawTableList> {
   }
 
   update(tableList: RawTableList, options: AnyObject = {}) {
-    if (!isTableList(tableList)) {
+    if (!isRawTableList(tableList)) {
       this.log.error('Illegal data', tableList)
       return
     }

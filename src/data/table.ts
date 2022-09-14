@@ -1,6 +1,6 @@
 import {RawTable, TableDataShape, TableOptions} from '../types'
 import {cloneDeep, min, max, isArray} from 'lodash'
-import {isTable} from '../utils'
+import {isRawTable} from '../utils'
 import {DataBase} from './base'
 
 export class DataTable extends DataBase<RawTable> {
@@ -44,7 +44,7 @@ export class DataTable extends DataBase<RawTable> {
   }
 
   update(table: RawTable) {
-    if (!isTable(table)) {
+    if (!isRawTable(table)) {
       this.log.error('Illegal data', table)
       return
     }
