@@ -3,6 +3,7 @@ import {fabric} from 'fabric'
 import {IImageOptions} from 'fabric/fabric-impl'
 import {ImageDrawerProps} from '../types'
 import {getAttr, isCanvasCntr, isSvgCntr, noChange, uuid} from '../utils'
+import {selector} from '../layers'
 import {merge} from 'lodash'
 
 export function drawImage({
@@ -69,13 +70,13 @@ export function drawImage({
   }
 
   if (isCanvasCntr(container)) {
-    container.remove(...container.getObjects())
+    container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       fabric.Image.fromURL(
         config.url,
         (image) => {
-          const scaleX = config.width / (image.width || 1),
-            scaleY = config.height / (image.height || 1),
+          const scaleX = config.width / (config.viewBox?.width ?? image.width!),
+            scaleY = config.height / (config.viewBox?.height ?? image.height!),
             minScale = Math.min(scaleX, scaleY)
 
           image.scaleX = minScale
@@ -90,6 +91,14 @@ export function drawImage({
           opacity: config.opacity,
           source: config.source,
           evented: config.evented,
+          ...(config.viewBox
+            ? {
+                cropX: config.viewBox?.x,
+                cropY: config.viewBox?.y,
+                width: config.viewBox?.width,
+                height: config.viewBox?.height,
+              }
+            : undefined),
           originX: 'center',
           originY: 'center',
         } as IImageOptions

@@ -3,6 +3,7 @@ import {PolyDrawerProps} from '../types'
 import {IPolylineOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, noChange, isSvgCntr, isCanvasCntr} from '../utils'
+import {selector} from '../layers'
 import {merge} from 'lodash'
 
 export function drawPolygon({
@@ -65,7 +66,7 @@ export function drawPolygon({
   }
 
   if (isCanvasCntr(container)) {
-    container.remove(...container.getObjects())
+    container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       const polygon = new fabric.Polygon(config.points, {
         className: config.className,

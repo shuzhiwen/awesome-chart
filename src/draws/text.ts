@@ -2,6 +2,7 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
 import {TextDrawerProps} from '../types'
+import {selector} from '../layers'
 import {merge} from 'lodash'
 import {
   mergeAlpha,
@@ -94,7 +95,7 @@ export function drawText({
   }
 
   if (isCanvasCntr(container)) {
-    container.remove(...container.getObjects())
+    container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       const text = new fabric.Text(config.value, {
         className: config.className,

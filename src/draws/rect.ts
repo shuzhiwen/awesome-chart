@@ -4,6 +4,7 @@ import {DrawerDataShape, RectDrawerProps} from '../types'
 import {mergeAlpha, getAttr, isSvgCntr, isCanvasCntr, noChange} from '../utils'
 import {IRectOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
+import {selector} from '../layers'
 
 export function drawRect({
   fill,
@@ -70,7 +71,7 @@ export function drawRect({
   }
 
   if (isCanvasCntr(container)) {
-    container.remove(...container.getObjects())
+    container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       const rect = new fabric.Rect({
         className: config.className,

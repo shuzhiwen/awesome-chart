@@ -3,6 +3,7 @@ import {fabric} from 'fabric'
 import {IEllipseOptions} from 'fabric/fabric-impl'
 import {EllipseDrawerProps} from '../types'
 import {mergeAlpha, getAttr, noChange, isSvgCntr, isCanvasCntr} from '../utils'
+import {selector} from '../layers'
 import {merge} from 'lodash'
 
 export function drawEllipse({
@@ -68,7 +69,7 @@ export function drawEllipse({
   }
 
   if (isCanvasCntr(container)) {
-    container.remove(...container.getObjects())
+    container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       const ellipse = new fabric.Ellipse({
         className: config.className,

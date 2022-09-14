@@ -21,7 +21,6 @@ import {
   DrawBasicProps,
   DrawerTarget,
   ElEvent,
-  FabricObject,
   GraphDrawerProps,
   LayerBaseProps,
   BackupAnimationShape,
@@ -74,7 +73,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     this.sublayers = sublayers || []
     this.tooltipTargets = tooltipTargets || []
     this.sublayers.forEach((name) => (this.backupData[name] = []))
-    this.root = selector.createSubcontainer(this.options.root, this.className)!
+    this.root = selector.createSubcontainer(this.options.root as DrawerTarget, this.className)
     this.backupData = Object.fromEntries(this.sublayers.map((name) => [name, []]))
     this.createLifeCycles()
     this.createEvent()
@@ -175,7 +174,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     }
 
     if (isCanvasCntr(this.root)) {
-      const els = selector.getChildren(this.root, generateClass(sublayer, false)) as FabricObject[]
+      const els = selector.getChildren(this.root, generateClass(sublayer, false))
 
       commonEvents.forEach((type) => {
         els.forEach((el) => {
@@ -317,7 +316,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       const options: GraphDrawerProps<any> = {
         ...(groupData.hidden ? {data: []} : groupData),
         className: generateClass(sublayer, false),
-        container: groupContainer!,
+        container: groupContainer,
         theme,
       }
 

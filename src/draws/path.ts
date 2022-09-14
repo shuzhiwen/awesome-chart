@@ -3,6 +3,7 @@ import {PathDrawerProps} from '../types'
 import {IPathOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, noChange, isCanvasCntr, isSvgCntr} from '../utils'
+import {selector} from '../layers'
 import {merge} from 'lodash'
 
 export function drawPath({
@@ -70,7 +71,7 @@ export function drawPath({
   }
 
   if (isCanvasCntr(container)) {
-    container.remove(...container.getObjects())
+    container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       const path = new fabric.Path(config.path, {
         className: config.className,

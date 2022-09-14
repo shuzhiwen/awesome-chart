@@ -255,9 +255,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
         })
         select(event.target).attr('opacity', 0)
       } else {
-        ;(
-          selector.getChildren(this.root, generateClass('interactive', false)) as FabricObject[]
-        ).forEach((child) => {
+        selector.getChildren(this.root, generateClass('interactive', false)).forEach((child) => {
           if ((child as any).source?.key.match(data.source.key)) {
             child.opacity = shadowOpacity
           }
@@ -269,9 +267,9 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       if (isSvgCntr(this.root)) {
         this.root.selectAll(generateClass('interactive', true)).attr('opacity', 0)
       } else {
-        ;(
-          selector.getChildren(this.root, generateClass('interactive', false)) as FabricObject[]
-        ).forEach((child) => (child.opacity = 0))
+        selector
+          .getChildren(this.root, generateClass('interactive', false))
+          .forEach((child) => (child.opacity = 0))
       }
     })
   }

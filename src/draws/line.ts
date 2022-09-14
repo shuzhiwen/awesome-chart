@@ -3,6 +3,7 @@ import {fabric} from 'fabric'
 import {ILineOptions} from 'fabric/fabric-impl'
 import {LineDrawerProps} from '../types'
 import {isCanvasCntr, isSvgCntr, noChange, mergeAlpha, getAttr} from '../utils'
+import {selector} from '../layers'
 import {merge} from 'lodash'
 
 export function drawLine({
@@ -62,11 +63,9 @@ export function drawLine({
   }
 
   if (isCanvasCntr(container)) {
-    container.remove(...container.getObjects())
+    container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
-      const y1 = config.y1 - config.strokeWidth / 2
-      const y2 = config.y2 - config.strokeWidth / 2
-      const line = new fabric.Line([config.x1, y1, config.x2, y2], {
+      const line = new fabric.Line([config.x1, config.y1, config.x2, config.y2], {
         className: config.className,
         stroke: mergeAlpha(config.stroke, config.strokeOpacity),
         strokeDashArray: config.strokeDasharray.split(' ').map(Number),
