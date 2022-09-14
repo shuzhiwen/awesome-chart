@@ -1,11 +1,14 @@
-export default (layers: any[], tooltipMode?: string) => ({
+import {TooltipOptions} from '../../src/types'
+
+export default (layers: any[], tooltipOptions?: Omit<TooltipOptions, 'container'>) => ({
   adjust: true,
   width: 100,
   height: 100,
   padding: [50, 50, 50, 50],
   engine: 'svg',
   tooltipOptions: {
-    mode: tooltipMode ?? 'single',
+    mode: 'single',
+    ...tooltipOptions,
   },
   layers,
 })

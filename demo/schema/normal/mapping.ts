@@ -50,7 +50,7 @@ export default () =>
           fill: 'seagreen',
           opacity: 0,
           mapping: ({source: {value}, x, y, width, height, fill, container, theme, className}) => {
-            const {drawLine} = (window as any).AWESOME_CHART.__awesome
+            const {drawLine} = (window as any).awesome
             // replace label with image
             drawLine({
               data: [
@@ -74,7 +74,7 @@ export default () =>
           fontSize: 10,
           opacity: 0,
           mapping: ({x, y, container, theme, className}) => {
-            const {drawImage} = (window as any).AWESOME_CHART.__awesome
+            const {drawImage} = (window as any).awesome
             const xIndex = Math.floor(Math.random() * 2)
             const yIndex = Math.floor(Math.random() * 2)
             const originImageSize = 200

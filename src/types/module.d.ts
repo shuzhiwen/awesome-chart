@@ -9,6 +9,7 @@ declare module '*.png' {
 }
 
 interface Window {
+  awesome: AnyObject
   AWESOME_CHART?: {
     __env: {
       mode: 'development' | 'production'

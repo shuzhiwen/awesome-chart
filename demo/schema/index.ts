@@ -47,7 +47,16 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '高级绘制函数',
-          schema: base(mapping()),
+          schema: base(mapping(), {
+            render: (container) => {
+              const image = document.createElement('img')
+              image.src = window.location.origin + '/assets/fruits.png'
+              image.width = 100
+              image.height = 100
+              container.innerHTML = ''
+              container.appendChild(image)
+            },
+          }),
         },
       ],
     },
@@ -107,7 +116,9 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '带轴交互的柱状图',
-          schema: base(rect({variant: 'column', mode: 'group', hasInteractive: true}), 'dimension'),
+          schema: base(rect({variant: 'column', mode: 'group', hasInteractive: true}), {
+            mode: 'dimension',
+          }),
         },
       ],
     },
