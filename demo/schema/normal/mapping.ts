@@ -75,15 +75,27 @@ export default () =>
           opacity: 0,
           mapping: ({x, y, container, theme, className}) => {
             const {drawImage} = (window as any).AWESOME_CHART.__awesome
+            const xIndex = Math.floor(Math.random() * 2)
+            const yIndex = Math.floor(Math.random() * 2)
+            const originImageSize = 200
+            const imageItemSize = originImageSize / 2
+            const labelIconSize = 30
+
             // replace label with image
             drawImage({
               data: [
                 {
                   x,
-                  y: y - 30,
-                  width: 20,
-                  height: 20,
-                  url: 'https://gd-hbimg.huaban.com/e5d9c7bef5b12c17e5abc1d7d5bca561edc40e7e10b75-uDcLGk_fw658',
+                  y: y - labelIconSize,
+                  width: labelIconSize,
+                  height: labelIconSize,
+                  url: window.location.origin + '/assets/fruits.png',
+                  viewBox: {
+                    x: xIndex * imageItemSize,
+                    y: yIndex * imageItemSize,
+                    width: imageItemSize,
+                    height: imageItemSize,
+                  },
                 },
               ],
               container,

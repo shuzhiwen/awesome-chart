@@ -212,17 +212,17 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
       this.options.theme.animation.loop,
       this.backupAnimation.options?.['carousel']?.update
     )
-    const carouselData = {
-      data: this.carouselData,
-      opacity: this.carouselData.map(({opacity}) => opacity),
-    }
+    const carouselData = this.carouselData.map((item) => ({
+      data: [item],
+      opacity: item.opacity,
+    }))
     const dotData = {
       data: this.dotData,
       ...this.style.dot,
       opacity: this.dotData.map(({opacity}, i) => opacity * getAttr(this.style.dot?.opacity, i, 1)),
     }
 
-    this.drawBasic({type: 'image', data: [carouselData], sublayer: 'carousel'})
+    this.drawBasic({type: 'image', data: carouselData, sublayer: 'carousel'})
     this.drawBasic({type: 'rect', data: [dotData], sublayer: 'dot'})
 
     !isNil(this.timer) && clearTimeout(this.timer)

@@ -119,6 +119,12 @@ export type ImageDrawerProps = GraphDrawerProps<{
   height: number
   x: number
   y: number
+  viewBox?: {
+    width: number
+    height: number
+    x: number
+    y: number
+  }
 }>
 
 export type LineDrawerProps = GraphDrawerProps<{
