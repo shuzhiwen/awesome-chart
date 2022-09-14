@@ -48,7 +48,7 @@ class Selector {
   createSubcontainer(target: FabricGroup, className: string, evented?: boolean): FabricGroup
   createSubcontainer(target: Canvas, className: string, evented?: boolean): FabricGroup
   createSubcontainer(target: DrawerTarget, className: string, evented?: boolean): DrawerTarget
-  createSubcontainer(target: Maybe<DrawerTarget | Canvas>, className: string, evented?: boolean) {
+  createSubcontainer(target: Maybe<DrawerTarget | Canvas>, className: string, evented = true) {
     if (isSvgCntr(target)) {
       return target.append('g').attr('class', className)
     } else if (isCanvasCntr(target)) {
