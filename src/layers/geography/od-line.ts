@@ -30,7 +30,7 @@ const defaultStyle: LayerODLineStyleShape = {
 const defaultAnimation: BackupAnimationOptions<AnimationPathOptions> = {
   flyingObject: {
     loop: {
-      path: generateClass('odLine', true),
+      path: generateClass('odLine', false),
       ...defaultTheme.animation.loop,
     },
   },
@@ -128,7 +128,6 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
         centerX: -1000,
         centerY: -1000,
       }))
-
       this.event.on('flyingObject-animation-start', () => {
         if (isSvgCntr(this.root) && this.odLineData.some(({path}) => path)) {
           this.root.selectAll(generateClass('flyingObject', true)).style('transform', null)

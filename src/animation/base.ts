@@ -1,14 +1,7 @@
 import {throttle, merge} from 'lodash'
+import {selector} from '../layers'
 import {AnimationProps, BasicAnimationOptions} from '../types'
-import {
-  animationLifeCycles,
-  createEvent,
-  createLog,
-  isCanvasCntr,
-  isSvgCntr,
-  noChange,
-  uuid,
-} from '../utils'
+import {animationLifeCycles, createEvent, createLog, isCanvasCntr, noChange, uuid} from '../utils'
 
 export abstract class AnimationBase<T extends BasicAnimationOptions> {
   readonly log = createLog(this.constructor.name)
@@ -129,12 +122,8 @@ export abstract class AnimationBase<T extends BasicAnimationOptions> {
     const targets = this.options[key as 'targets'],
       {context} = this.options
 
-    if (typeof targets === 'string') {
-      if (isSvgCntr(context)) {
-        merge(this.options, {className: targets, [key]: context.selectAll(targets)})
-      } else if (isCanvasCntr(context)) {
-        merge(this.options, {className: targets, [key]: context.getObjects()})
-      }
+    if (typeof targets === 'string' && context) {
+      merge(this.options, {className: targets, [key]: selector.getChildren(context, targets)})
     } else {
       merge(this.options, {[key]: targets})
     }
