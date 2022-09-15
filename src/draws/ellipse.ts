@@ -75,6 +75,8 @@ export function drawEllipse({
         className: config.className,
         rx: config.rx,
         ry: config.ry,
+        cx: config.cx,
+        cy: config.cy,
         left: config.cx,
         top: config.cy,
         fill: mergeAlpha(config.fill, config.fillOpacity),

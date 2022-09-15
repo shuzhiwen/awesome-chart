@@ -1,7 +1,7 @@
 import {hierarchy, HierarchyNode, max, pack, range} from 'd3'
 import {LayerBase} from '../base'
 import {DataRelation} from '../../data'
-import {isSvgCntr, uuid} from '../../utils'
+import {uuid} from '../../utils'
 import {
   createColorMatrix,
   createLimitText,
@@ -174,10 +174,8 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
     this.drawBasic({type: 'circle', data: circleData})
     this.drawBasic({type: 'text', data: textData.slice(textData.length - 1)})
 
-    if (zoom && isSvgCntr(this.root)) {
-      this.event.onWithOff('click-circle', animationKey, this.zoom)
-    } else {
-      this.log.warn('Zoom pack not support for canvas')
+    if (zoom) {
+      this.event.onWithOff('mousedown-circle', animationKey, this.zoom)
     }
   }
 
