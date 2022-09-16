@@ -1,7 +1,7 @@
 import {select} from 'd3'
 import {fabric} from 'fabric'
 import {isArray, isNumber} from 'lodash'
-import {LayerAxis, LayerBasemap, LayerBrush, LayerInteractive, LayerLegend} from '../layers'
+import {LayerAxis, LayerBasemap, LayerBrush, LayerLegend} from '../layers'
 import {
   D3Selection,
   FabricGroup,
@@ -39,10 +39,6 @@ export function isLayerBrush(instance: Maybe<LayerInstance>): instance is LayerB
 
 export function isLayerLegend(instance: Maybe<LayerInstance>): instance is LayerLegend {
   return instance instanceof LayerLegend
-}
-
-export function isLayerInteractive(instance: Maybe<LayerInstance>): instance is LayerInteractive {
-  return instance instanceof LayerInteractive
 }
 
 export function isLayerBasemap(instance: Maybe<LayerInstance>) {

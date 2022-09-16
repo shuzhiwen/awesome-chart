@@ -5,7 +5,6 @@ export type DataType = keyof typeof dataMapping
 export type DataShape = DataBase<any> | DataTableList | DataTable | DataRelation
 
 export type DataBaseOptions = Partial<{
-  skip: Meta[]
   order: AnyObject
 }>
 
