@@ -110,7 +110,14 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
   }
 
   init() {
-    const {targets, context, direction, color = 'white', opacity = 1} = this.options
+    const {
+      targets,
+      context,
+      scope = 'all',
+      direction = 'right',
+      color = 'white',
+      opacity = 1,
+    } = this.options
 
     if (isSvgCntr(targets) && isSvgCntr(context)) {
       this.defs = context.append('defs')
@@ -127,15 +134,21 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
         .attr('y', 0)
         .attr('width', '100%')
         .attr('height', '100%')
-        .attr('clip-path', `url(#scan-clip-path-${this.id})`)
+        .attr('mask', `url(#scan-mask-${this.id})`)
         .attr('fill', `url(#scan-gradient-${this.id})`)
         .style('pointer-events', 'none')
       this.defs
-        .append('clipPath')
-        .attr('id', `scan-clip-path-${this.id}`)
+        .append('mask')
+        .attr('id', `scan-mask-${this.id}`)
         .call((selector) => {
           targets.nodes().forEach((item) => {
-            selector.node()?.appendChild(select(item).clone(false).node())
+            selector.node()?.appendChild(
+              select(item)
+                .clone(false)
+                .attr('fill', scope === 'stroke' ? 'black' : 'white')
+                .attr('stroke', scope === 'fill' ? 'black' : 'white')
+                .node()
+            )
           })
         })
     }

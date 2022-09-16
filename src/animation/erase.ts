@@ -30,7 +30,7 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
     }
 
     if (!isSvgCntr(targets) && isCanvasCntr(context)) {
-      const {width = 0, height = 0} = context
+      const {width = 0, height = 0} = context.canvas!
 
       this.maskNode = new fabric.Rect({
         left: direction === 'left' ? width : 0,
@@ -81,7 +81,7 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
     }
 
     if (isCanvasCntr(context)) {
-      const {width = 0, height = 0} = context
+      const {width = 0, height = 0} = context.canvas!
 
       Object.assign(configs, {
         targets: this.maskNode,
