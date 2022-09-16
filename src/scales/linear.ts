@@ -1,17 +1,23 @@
 import {scaleLinear as d3ScaleLinear, ScaleLinear} from 'd3-scale'
-import {ScaleLinearProps} from '../types'
+import {ScaleLinearNice, ScaleLinearProps} from '../types'
 import {getMagnitude} from '../utils'
 
-export function scaleLinear({domain, range, nice = {}}: ScaleLinearProps) {
+type Scale = ScaleLinear<number, number>
+
+export function scaleLinear({domain, range, nice}: ScaleLinearProps) {
   const scale = d3ScaleLinear().domain(domain).range(range)
 
-  nice.zero && extendZeroForScale(scale)
-  nice.count && niceScale(scale, nice.count)
+  if (nice) {
+    niceZero(scale, nice)
+    niceDomain(scale, nice)
+  }
 
   return scale
 }
 
-export function extendZeroForScale(scale: ScaleLinear<number, number>) {
+export function niceZero(scale: Scale, nice: ScaleLinearNice) {
+  if (!nice.zero) return
+
   let [start, end] = scale.domain()
 
   if (start <= end) {
@@ -31,46 +37,56 @@ export function extendZeroForScale(scale: ScaleLinear<number, number>) {
   scale.domain([start, end])
 }
 
-export function niceScale(scale: d3.ScaleLinear<number, number>, tick: number) {
-  let [start, end] = scale.domain(),
-    reverse = false
+export function niceDomain(scale: Scale, nice: ScaleLinearNice) {
+  const {count, fixedStart, fixedStep} = nice
+  let [start, end] = scale.domain()
+  let reverse = false
 
   if (start === end) {
     if (start === 0) {
-      end += tick
+      end += 1
     } else {
-      start -= tick
-      end += tick
+      start -= 1
+      end += 1
     }
-  } else if (start >= end) {
+  } else if (start > end) {
     ;[start, end] = [end, start]
     reverse = true
   }
 
-  if (tick > 1) {
+  if (count && count > 1) {
     const distance = end - start,
-      magnitude = getMagnitude(distance, tick),
-      spaceThreshold = 0.1
+      magnitude = getMagnitude(distance, count),
+      maxBlank = 0.1
 
     // step to ensure that the chart will not overflow
-    let step = Math.ceil(distance / tick / magnitude) * magnitude
-    const niceStart = Math.floor(start / step) * step
-    let niceEnd = niceStart + tick * step
+    let step = fixedStep ?? Math.ceil(distance / count / magnitude) * magnitude
+    const niceStart = fixedStart ?? Math.floor(start / step) * step
+    let niceEnd = niceStart + count * step
 
-    if (niceEnd > end) {
-      const isOverflow = () => end + (magnitude / 2) * tick >= niceEnd,
-        isExceedThreshold = () => (niceEnd - end) / (niceEnd - niceStart) > spaceThreshold
+    if (!fixedStep) {
+      if (niceEnd > end) {
+        const overflow = () => end + (magnitude / 2) * count >= niceEnd,
+          currentBlank = () => (niceEnd - end) / (niceEnd - niceStart)
 
-      while (!isOverflow() && isExceedThreshold()) {
-        step -= magnitude / 2
-        niceEnd = niceStart + tick * step
+        while (!overflow() && currentBlank() > maxBlank) {
+          step -= magnitude / 2
+          niceEnd = niceStart + count * step
+        }
+      }
+
+      while (niceEnd < end) {
+        step += magnitude / 2
+        niceEnd = niceStart + count * step
       }
     }
 
-    while (niceEnd < end) {
-      step += magnitude / 2
-      niceEnd = niceStart + tick * step
-    }
+    scale.domain(reverse ? [niceEnd, niceStart] : [niceStart, niceEnd])
+  }
+
+  if (!count && fixedStep) {
+    const niceStart = fixedStart || Math.floor(start / fixedStep) * fixedStep
+    const niceEnd = niceStart + Math.ceil((end - niceStart) / fixedStep) * fixedStep
 
     scale.domain(reverse ? [niceEnd, niceStart] : [niceStart, niceEnd])
   }
