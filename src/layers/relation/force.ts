@@ -84,7 +84,7 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
         theme: node?.fill,
       }),
       scaleNodeSize = scaleLinear({
-        domain: this.data.select(headers.at(1)).range(),
+        domain: this.data.select(headers[1]).range(),
         range: nodeSize ?? [0, 0],
       })
 

@@ -99,7 +99,7 @@ export class LayerRadial extends LayerBase<LayerRadialOptions> {
       centerY,
       innerRadius: scaleRadius(dimension) ?? 0,
       outerRadius: (scaleRadius(dimension) ?? 0) + scaleRadius.bandwidth(),
-      source: {value, dimension, category: headers.at(1)},
+      source: {value, dimension, category: headers[1]},
       startAngle: 0,
       endAngle: scaleAngle((value as number) / (maxValue as number)),
       cornerRadius,
@@ -123,7 +123,7 @@ export class LayerRadial extends LayerBase<LayerRadialOptions> {
           range: [0, Math.PI * 2],
         }),
         scaleRadius: scaleBand({
-          domain: lists.at(0) ?? [],
+          domain: lists[0],
           range: [innerRadius ?? 0, maxRadius],
         }),
       },

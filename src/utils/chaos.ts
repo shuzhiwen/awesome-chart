@@ -51,7 +51,7 @@ export function swap(a: any, b: any, key1: Meta, key2: Meta = key1) {
 }
 
 export function errorCatcher<T extends AnyFunction>(fn: T, onError: (error: Error) => void) {
-  return (...args: any) => {
+  return (...args: Parameters<T>) => {
     try {
       return fn.call(null, ...args) as ReturnType<T>
     } catch (error) {
@@ -61,12 +61,9 @@ export function errorCatcher<T extends AnyFunction>(fn: T, onError: (error: Erro
 }
 
 export function svgShadowToFabricShadow(shadows: string) {
-  return shadows
-    .split(',')
-    .map((shadow) => {
-      const shadowAttrs = shadow.split(' ')
-      shadowAttrs.unshift(shadowAttrs.pop()!)
-      return shadowAttrs.reduce((prev, cur) => `${prev} ${cur}`)
-    })
-    .at(0)
+  return shadows.split(',').map((shadow) => {
+    const shadowAttrs = shadow.split(' ')
+    shadowAttrs.unshift(shadowAttrs.pop()!)
+    return shadowAttrs.reduce((prev, cur) => `${prev} ${cur}`)
+  })[0]
 }

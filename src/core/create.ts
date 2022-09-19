@@ -65,7 +65,7 @@ export const createChart = errorCatcher(
       chart.getLayersByType(type).forEach((layer) => layer.update())
     )
 
-    const legendLayer = chart.getLayersByType('legend').at(0)
+    const legendLayer = chart.getLayersByType('legend')[0]
     isLayerLegend(legendLayer) && legendLayer.bindLayers(chart.layers)
 
     axisLayerConfig && chart.bindCoordinate({redraw: false})

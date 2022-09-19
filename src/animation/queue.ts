@@ -119,7 +119,7 @@ export class AnimationQueue extends AnimationBase<BasicAnimationOptions> {
     if (!this.isConnected && this.queue.length > 1) {
       this.connect()
     }
-    this.queue.at(0)?.play()
+    this.queue[0].play()
     this.event.fire('start')
   }
 

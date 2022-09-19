@@ -134,7 +134,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
       filter: 'row',
       legends: this.pointData.map((group, i) => ({
         shape: 'circle',
-        label: group.at(0)?.category ?? '',
+        label: group[0]?.category,
         color: colorMatrix.get(0, i),
       })),
     }

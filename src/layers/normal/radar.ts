@@ -98,7 +98,7 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
     this._scale = createScale(
       {
         scaleAngle: scaleBand({
-          domain: lists.at(0) ?? [],
+          domain: lists[0],
           range: [0, Math.PI * 2],
         }),
         scaleRadius: scaleLinear({
@@ -155,7 +155,7 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
 
     this.polygonData = this.pointData[0].map((_, i) => ({
       points: this.pointData.map((group) => ({x: group[i].x, y: group[i].y})),
-      color: this.pointData.at(0)?.at(i)?.color ?? 'white',
+      color: this.pointData[0]?.[i]?.color ?? 'white',
       centerX,
       centerY,
     }))

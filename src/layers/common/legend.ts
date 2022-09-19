@@ -230,7 +230,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       )
     }
 
-    const {x, y, value} = this.textData.at(-1)!
+    const {x, y, value} = this.textData[this.textData.length - 1]
 
     if (direction === 'horizontal') {
       totalWidth = x - left + getTextWidth(value, fontSize)

@@ -336,7 +336,8 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   }
 
   private transformWaterfall() {
-    const {variant} = this.options
+    const {variant} = this.options,
+      lastGroup = this.rectData[this.rectData.length - 1]
 
     if (variant === 'column') {
       this.rectData.forEach((group, i) => {
@@ -350,8 +351,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
           }
         })
       })
-      const {y, height} = this.rectData.at(-1)![0]
-      this.rectData.at(-1)![0].y = y + height
+      lastGroup[0].y += lastGroup[0].height
     }
 
     if (variant === 'bar') {
@@ -366,8 +366,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
           }
         })
       })
-      const {x, width} = this.rectData.at(-1)![0]
-      this.rectData.at(-1)![0].x = x - width
+      lastGroup[0].x -= lastGroup[0].width
     }
   }
 

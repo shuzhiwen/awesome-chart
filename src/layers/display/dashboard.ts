@@ -106,8 +106,8 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
       })
       this.fragmentData = {
         ...this.data!.source,
-        minValue: fragments.at(0)?.start ?? 0,
-        maxValue: fragments.at(-1)?.end ?? 0,
+        minValue: fragments[0].start ?? 0,
+        maxValue: fragments[fragments.length - 1].end ?? 0,
       }
     } catch (error) {
       this.log.warn((error as Error).message, data)

@@ -84,7 +84,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       getMouseEvent = (event: ElEvent): MouseEvent =>
         event instanceof MouseEvent ? event : event.e,
       getData = (event: ElEvent, data?: ElConfigShape): ElConfigShape =>
-        event instanceof MouseEvent ? data : ((event.subTargets?.at(0) || event.target) as any)
+        event instanceof MouseEvent ? data : ((event.subTargets?.[0] || event.target) as any)
 
     this.backupEvent.tooltip = {
       mouseout: () => tooltip.hide(),
@@ -119,7 +119,7 @@ export abstract class LayerBase<T extends LayerOptions> {
           if (name === 'draw') {
             this.update()
           } else if (name === 'update' && !this.needRecalculated) {
-            this.log.debug.warn(`Skip lifeCycle(${name}) call`)
+            this.log.debug.info(`Skip lifeCycle(${name}) call`)
             return
           }
 
@@ -276,13 +276,13 @@ export abstract class LayerBase<T extends LayerOptions> {
     if (!backupTarget.renderOrderCache) {
       backupTarget.renderOrderCache = new Map(
         data
-          .filter((item) => ungroup(item.source?.at(0))?.dimension)
-          .map((item, i) => [ungroup(item.source?.at(0))?.dimension as Meta, i])
+          .filter((item) => ungroup(item.source?.[0])?.dimension)
+          .map((item, i) => [ungroup(item.source?.[0])?.dimension as Meta, i])
       )
     } else {
       const {renderOrderCache} = backupTarget,
         orderedGroupData = new Array(data.length),
-        curRenderOrder = data.map((item) => ungroup(item.source?.at(0))?.dimension ?? '')
+        curRenderOrder = data.map((item) => ungroup(item.source?.[0])?.dimension ?? '')
 
       curRenderOrder.forEach((dimension, i) => {
         if (renderOrderCache?.has(dimension)) {
@@ -295,8 +295,8 @@ export abstract class LayerBase<T extends LayerOptions> {
       renderOrderCache.clear()
       data = orderedGroupData.filter(Boolean)
       data.forEach((item, i) => {
-        if (ungroup(item.source?.at(0))?.dimension) {
-          renderOrderCache.set(ungroup(item.source?.at(0))?.dimension as Meta, i)
+        if (ungroup(item.source?.[0])?.dimension) {
+          renderOrderCache.set(ungroup(item.source?.[0])?.dimension as Meta, i)
         }
       })
     }

@@ -99,7 +99,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
 
     this.maxOrder = -1
     this.groups = levels.map((value) => nodes.filter(({level}) => level === value))
-    this.groups.at(0)?.forEach(dfs)
+    this.groups[0]?.forEach(dfs)
   }
 
   setScale(scale: LayerTreeScaleShape) {

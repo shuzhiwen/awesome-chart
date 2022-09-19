@@ -168,7 +168,7 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
         evented: false,
       })
       context.addWithUpdate(this.maskNode)
-      targets?.at(0)?.group?.group?.clone((cloned: fabric.Group) => {
+      targets?.[0]?.group?.group?.clone((cloned: fabric.Group) => {
         ;(this.maskNode as Rect).clipPath = cloned
       })
     }
