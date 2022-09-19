@@ -2,7 +2,7 @@ import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {path as d3Path} from 'd3-path'
 import {isRealNumber, isSvgCntr, tableListToObjects} from '../../utils'
-import {createScale, createStyle, generateClass, validateAndCreateData} from '../helpers'
+import {createScale, createStyle, elClass, validateAndCreateData} from '../helpers'
 import {defaultTheme} from '../../core/theme'
 import {
   ChartContext,
@@ -30,7 +30,7 @@ const defaultStyle: LayerODLineStyleShape = {
 const defaultAnimation: BackupAnimationOptions<AnimationPathOptions> = {
   flyingObject: {
     loop: {
-      path: generateClass('odLine', false),
+      path: elClass('odLine', false),
       ...defaultTheme.animation.loop,
     },
   },
@@ -130,7 +130,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
       }))
       this.event.on('flyingObject-animation-start', () => {
         if (isSvgCntr(this.root) && this.odLineData.some(({path}) => path)) {
-          this.root.selectAll(generateClass('flyingObject', true)).style('transform', null)
+          this.root.selectAll(elClass('flyingObject', true)).style('transform', null)
         }
       })
     }

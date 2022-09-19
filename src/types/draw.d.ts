@@ -1,5 +1,5 @@
-import {Selection, Transition} from 'd3'
-import {Group, IEvent, Object as _Object} from 'fabric/fabric-impl'
+import {Selection} from 'd3'
+import {IEvent} from 'fabric/fabric-impl'
 import {GraphStyleShape, TextStyleShape} from './layer'
 import {drawerMapping} from '../draws'
 import {ChartTheme} from './core'
@@ -15,7 +15,7 @@ export type CurveType =
   | 'curveStepAfter'
   | 'curveStepBefore'
 
-export type DrawerTarget = D3Selection | FabricGroup
+export type DrawerTarget = D3Selection | fabric.Group
 
 export type DrawerType = keyof typeof drawerMapping
 
@@ -24,16 +24,6 @@ export type DrawerDataShape<T> = T extends BasicDrawerProps<infer U> ? U : T
 export type ElEvent = MouseEvent | IEvent<MouseEvent>
 
 export type D3Selection = Selection<any, unknown, any, unknown>
-
-export type D3Transition = Transition<any, unknown, any, unknown>
-
-export type FabricObject = _Object & {
-  className?: string
-}
-
-export type FabricGroup = Group & {
-  className?: string
-}
 
 export type ElSourceShape = AnyObject &
   Partial<{

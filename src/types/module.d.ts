@@ -1,3 +1,14 @@
+import 'fabric/fabric-impl'
+
+declare module 'fabric/fabric-impl' {
+  interface Object {
+    className?: string
+  }
+  interface Group {
+    className?: string
+  }
+}
+
 declare module '*.css' {
   const classes: {readonly [key: string]: string}
   export default classes

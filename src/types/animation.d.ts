@@ -1,5 +1,5 @@
 import {animationMapping} from '../animation'
-import {D3Selection, DrawerTarget, FabricObject} from './draw'
+import {D3Selection, DrawerTarget} from './draw'
 
 // see https://easings.net/
 export type AnimationEasing =
@@ -41,7 +41,7 @@ export type BasicAnimationOptions<
 > = Partial<P> & {
   id?: string
   type?: T
-  targets?: Maybe<D3Selection | FabricObject[]>
+  targets?: Maybe<D3Selection | fabric.Object[]>
   loop?: boolean
   easing: AnimationEasing
   duration: number

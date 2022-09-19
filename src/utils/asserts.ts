@@ -4,7 +4,6 @@ import {isArray, isNumber} from 'lodash'
 import {LayerAxis, LayerBasemap, LayerBrush, LayerLegend} from '../layers'
 import {
   D3Selection,
-  FabricGroup,
   LayerInstance,
   RawRelation,
   RawTable,
@@ -25,7 +24,7 @@ export function isSvgCntr(selector: any): selector is D3Selection {
   return selector?.constructor.name === select(null).constructor.name
 }
 
-export function isCanvasCntr(selector: any): selector is FabricGroup {
+export function isCanvasCntr(selector: any): selector is fabric.Group {
   return selector?.constructor.name === fabric.Group.name && selector?.getObjects
 }
 

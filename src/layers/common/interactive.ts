@@ -4,7 +4,7 @@ import {DataTableList} from '../../data'
 import {LayerAuxiliary} from './auxiliary'
 import {stickyBandScale} from '../helpers/sticky-scale'
 import {isScaleBand, isScaleLinear, isSvgCntr, uuid} from '../../utils'
-import {createScale, createStyle, generateClass, selector, validateAndCreateData} from '../helpers'
+import {createScale, createStyle, elClass, selector, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
   LayerInteractiveStyleShape,
@@ -14,7 +14,6 @@ import {
   RectDrawerProps,
   DrawerDataShape,
   ElSourceShape,
-  FabricObject,
 } from '../../types'
 
 const shadowOpacity = 0.5
@@ -248,27 +247,27 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       }
 
       if (isSvgCntr(this.root)) {
-        this.root.selectAll(generateClass('interactive', true)).each((d, i, els) => {
+        this.root.selectAll(elClass('interactive', true)).each((d, i, els) => {
           if ((d as any).source?.key.match(data.source.key)) {
             select(els[i]).attr('opacity', shadowOpacity)
           }
         })
         select(event.target).attr('opacity', 0)
       } else {
-        selector.getChildren(this.root, generateClass('interactive', false)).forEach((child) => {
+        selector.getChildren(this.root, elClass('interactive', false)).forEach((child) => {
           if ((child as any).source?.key.match(data.source.key)) {
             child.opacity = shadowOpacity
           }
         })
-        ;(data as FabricObject).opacity = 0
+        ;(data as fabric.Object).opacity = 0
       }
     })
     this.event.onWithOff('mouseout-interactive', this.options.id, () => {
       if (isSvgCntr(this.root)) {
-        this.root.selectAll(generateClass('interactive', true)).attr('opacity', 0)
+        this.root.selectAll(elClass('interactive', true)).attr('opacity', 0)
       } else {
         selector
-          .getChildren(this.root, generateClass('interactive', false))
+          .getChildren(this.root, elClass('interactive', false))
           .forEach((child) => (child.opacity = 0))
       }
     })

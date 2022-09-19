@@ -2,7 +2,7 @@ import {range} from 'd3'
 import {cloneDeep, isEqual, merge, noop} from 'lodash'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
-import {generateClass, selector} from './helpers'
+import {elClass, selector} from './helpers'
 import {
   commonEvents,
   layerLifeCycles,
@@ -158,7 +158,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   private bindEvent = (sublayer: string) => {
     if (isSvgCntr(this.root)) {
-      const els = this.root.selectAll(generateClass(sublayer, true)).style('cursor', 'pointer')
+      const els = this.root.selectAll(elClass(sublayer, true)).style('cursor', 'pointer')
 
       commonEvents.forEach((type) => {
         els.on(`${type}.common`, null)
@@ -174,7 +174,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     }
 
     if (isCanvasCntr(this.root)) {
-      const els = selector.getChildren(this.root, generateClass(sublayer, false))
+      const els = selector.getChildren(this.root, elClass(sublayer, false))
 
       commonEvents.forEach((type) => {
         els.forEach((el) => {
@@ -201,7 +201,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     const {options} = this.backupAnimation,
       {animation} = this.options.theme,
       // must await animation to be destroyed
-      targets = selector.getChildren(this.root, generateClass(sublayer, false)),
+      targets = selector.getChildren(this.root, elClass(sublayer, false)),
       isFirstPlay = !this.backupAnimation[sublayer],
       prefix = `${sublayer}-animation-`
 
@@ -311,7 +311,7 @@ export abstract class LayerBase<T extends LayerOptions> {
         transition: isFirstDraw
           ? {duration: 0, delay: 0}
           : this.backupAnimation.options?.[sublayer]?.update,
-        className: generateClass(sublayer, false),
+        className: elClass(sublayer, false),
         container: groupContainer,
         theme,
       }
