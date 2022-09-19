@@ -246,13 +246,13 @@ export abstract class LayerBase<T extends LayerOptions> {
     }
   }
 
-  protected drawBasic<T>({type, data, sublayer = type, priority}: DrawBasicProps<T>) {
+  protected drawBasic<T>({type, data, sublayer = type}: DrawBasicProps<T>) {
     if (!this.sublayers.includes(sublayer)) {
       this.log.debug.error('Invalid sublayer type for drawBasic')
       return
     }
 
-    const {drawerScheduler, theme} = this.options,
+    const {theme} = this.options,
       backupTarget = this.backupData[sublayer],
       evented = !disableEventDrawerType.has(type),
       sublayerClassName = `${this.className}-${sublayer}`,
@@ -260,14 +260,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       isFirstDraw = backupTarget.length === 0,
       sublayerContainer =
         selector.getSubcontainer(this.root, sublayerClassName) ||
-        selector.createSubcontainer(this.root, sublayerClassName, evented),
-      afterDraw = () => {
-        this.bindEvent(sublayer)
-        this.createAnimation(sublayer)
-        if (isCanvasCntr(this.root)) {
-          this.root.canvas?.requestRenderAll()
-        }
-      }
+        selector.createSubcontainer(this.root, sublayerClassName, evented)
 
     range(0, maxGroupIndex).map((groupIndex) => {
       const groupClassName = `${sublayerClassName}-${groupIndex}`
@@ -315,26 +308,22 @@ export abstract class LayerBase<T extends LayerOptions> {
       const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
       const options: GraphDrawerProps<any> = {
         ...(groupData.hidden ? {data: []} : groupData),
+        transition: isFirstDraw
+          ? {duration: 0, delay: 0}
+          : this.backupAnimation.options?.[sublayer]?.update,
         className: generateClass(sublayer, false),
         container: groupContainer,
         theme,
       }
 
-      if (isFirstDraw) {
-        options.transition = {duration: 0, delay: 0}
-        drawerScheduler.registerListener(priority ?? 'other', () => drawerMapping[type](options))
-      } else {
-        options.transition = this.backupAnimation.options?.[sublayer]?.update
-        drawerMapping[type](options)
-      }
-
+      drawerMapping[type](options)
       backupTarget[i] = cloneDeep(groupData)
     })
 
-    if (isFirstDraw) {
-      drawerScheduler.event.onWithOff('run', this.options.id + sublayer, afterDraw)
-    } else {
-      afterDraw()
+    this.bindEvent(sublayer)
+    this.createAnimation(sublayer)
+    if (isCanvasCntr(this.root)) {
+      this.root.canvas?.requestRenderAll()
     }
   }
 

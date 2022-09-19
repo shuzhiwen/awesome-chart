@@ -4,7 +4,6 @@ import {Canvas} from 'fabric/fabric-impl'
 import {defaultLayoutCreator} from '../layout'
 import {LayerAxis, layerMapping} from '../layers'
 import {defaultTheme} from './theme'
-import {Scheduler} from './scheduler'
 import {Tooltip} from './tooltip'
 import {isNil} from 'lodash'
 import {
@@ -48,8 +47,6 @@ export class Chart {
   private defs: GradientCreatorProps<unknown>['container']
 
   readonly event = createEvent<'MouseEvent' | SetKeys<typeof chartLifeCycles>>(Chart.name)
-
-  readonly drawerScheduler: Scheduler = new Scheduler()
 
   readonly engine: Engine
 
@@ -225,10 +222,6 @@ export class Chart {
 
   draw() {
     this.layers.forEach((layer) => layer.draw())
-    if (this.drawerScheduler.taskSize) {
-      this.drawerScheduler.run()
-      this.drawerScheduler.clear()
-    }
   }
 
   destroy() {
