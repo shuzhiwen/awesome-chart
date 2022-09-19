@@ -1,7 +1,7 @@
 import {LayerBase} from '../base'
+import {cloneDeep, sum} from 'lodash'
 import {createStyle, createText} from '../helpers'
 import {DataBase, DataTableList} from '../../data'
-import {cloneDeep, sum} from 'lodash'
 import {ColorMatrix, createStar, formatNumber, getTextWidth, range, ungroup} from '../../utils'
 import {
   ChartContext,

@@ -1,6 +1,6 @@
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
-import {isScaleBand, isScaleLinear, range, scaleTypes, ungroup} from '../../utils'
+import {isRealNumber, isScaleBand, isScaleLinear, range, scaleTypes, ungroup} from '../../utils'
 import {scaleBand, scaleLinear} from '../../scales'
 import {sum} from 'd3'
 import {
@@ -172,6 +172,11 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
 
     if (current[0] > current[1] !== incoming[0] > incoming[1]) {
       this.log.debug.warn('Layers scale does not match', {current, incoming, target})
+      return
+    }
+
+    if (incoming.some((item) => !isRealNumber(item))) {
+      this.log.debug.warn('Invalid layer scale', {current, incoming, target})
       return
     }
 

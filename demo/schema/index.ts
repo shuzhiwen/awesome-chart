@@ -21,6 +21,7 @@ import radial from './normal/radial'
 import rectLine from './normal/rect-line'
 import rich from './normal/rich'
 import mapping from './normal/mapping'
+import histogram from './normal/histogram'
 
 export interface MenuItemShape {
   name: string
@@ -44,6 +45,10 @@ export const schemaMenu: MenuShape = {
         {
           name: '栅格文本',
           schema: base(rich()),
+        },
+        {
+          name: '直方图',
+          schema: base(histogram({variant: 'column'})),
         },
         {
           name: '高级绘制函数',

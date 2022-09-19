@@ -183,8 +183,6 @@ export class Chart {
 
     if (!axisLayer) throw new Error('There is no axis layer')
 
-    axisLayer.clearScale()
-
     layers.concat(brushLayer ? [brushLayer] : []).forEach((layer) => {
       const {scale, options} = layer,
         {scaleX, scaleY, scaleAngle, scaleRadius, ...rest} = scale ?? {},

@@ -256,13 +256,13 @@ export abstract class LayerBase<T extends LayerOptions> {
       backupTarget = this.backupData[sublayer],
       evented = !disableEventDrawerType.has(type),
       sublayerClassName = `${this.className}-${sublayer}`,
-      maxGroupIndex = Math.max(backupTarget.length, data.length),
+      maxGroupLength = Math.max(backupTarget.length, data.length),
       isFirstDraw = backupTarget.length === 0,
       sublayerContainer =
         selector.getSubcontainer(this.root, sublayerClassName) ||
         selector.createSubcontainer(this.root, sublayerClassName, evented)
 
-    range(0, maxGroupIndex).map((groupIndex) => {
+    range(0, maxGroupLength).map((groupIndex) => {
       const groupClassName = `${sublayerClassName}-${groupIndex}`
       const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
 
@@ -301,6 +301,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       })
     }
 
+    backupTarget.length = data.length
     data.forEach((groupData, i) => {
       if (isEqual(backupTarget[i], groupData)) return
 

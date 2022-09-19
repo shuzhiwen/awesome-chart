@@ -24,9 +24,7 @@ export const createLayer = errorCatcher(
       layer = chart.createLayer(layerOptions)
     let dataSet = data
 
-    if (type === 'legend' && isLayerLegend(layer)) {
-      layer.bindLayers(chart.layers)
-    } else if (isRawTable(data) || data?.type === 'table') {
+    if (isRawTable(data) || data?.type === 'table') {
       dataSet = new DataTable(isRawTable(data) ? data : randomTable(data))
     } else if (isRawRelation(data)) {
       dataSet = new DataRelation(data)
@@ -66,6 +64,9 @@ export const createChart = errorCatcher(
     normalLayerConfigs.forEach(({type}) =>
       chart.getLayersByType(type).forEach((layer) => layer.update())
     )
+
+    const legendLayer = chart.getLayersByType('legend').at(0)
+    isLayerLegend(legendLayer) && legendLayer.bindLayers(chart.layers)
 
     axisLayerConfig && chart.bindCoordinate({redraw: false})
     chart.draw()
