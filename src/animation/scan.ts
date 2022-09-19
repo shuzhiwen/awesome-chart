@@ -15,6 +15,7 @@ const getAttributes = (direction: AnimationScanOptions['direction']) => {
   } else if (direction === 'outer' || direction === 'inner') {
     return ['r'] as const
   }
+  return []
 }
 
 const insertOffsets = (parentNode: D3Selection, color: string, opacity: number) => {
@@ -40,12 +41,12 @@ const createSvgGradient = (props: {
   const attributes = getAttributes(direction)
   let targets
 
-  if (attributes?.[0] === 'r') {
+  if (attributes[0] === 'r') {
     targets = parentNode
       .append('radialGradient')
       .attr('id', `scan-gradient-${id}`)
       .attr('r', direction === 'inner' ? '300%' : '0%')
-  } else if (attributes?.length === 2) {
+  } else if (attributes.length === 2) {
     targets = parentNode
       .append('linearGradient')
       .attr('id', `scan-gradient-${id}`)
@@ -71,12 +72,12 @@ const createCanvasGradient = (props: {
     maxColor = mergeAlpha(color, opacity),
     config = {type: '', coords: {x1: 0, x2: 0, y1: 0, y2: 0, r1: 0, r2: 0}}
 
-  if (attributes?.[0] === 'r') {
+  if (attributes.length === 1) {
     merge(config, {
       type: 'radial',
-      coords: {r2: direction === 'inner' ? 3 : 0},
+      coords: {r1: 0, r2: direction === 'inner' ? 3 : 0},
     })
-  } else if (attributes?.length === 2) {
+  } else if (attributes.length === 2) {
     merge(config, {
       type: 'linear',
       coords: {
@@ -186,11 +187,11 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
 
     if (isSvgCntr(context) && isSvgCntr(this.gradientNode)) {
       configs.targets = this.gradientNode.node()
-      if (attributes?.length === 2) {
+      if (attributes.length === 2) {
         configs[attributes[0]] = isLeftOrTop ? ['100%', '-100%'] : ['-100%', '100%']
         configs[attributes[1]] = isLeftOrTop ? ['200%', '0%'] : ['0%', '200%']
-      } else if (attributes?.[0] === 'r') {
-        configs[attributes[0]] = direction === 'inner' ? ['300%', '0%'] : ['0%', '300%']
+      } else if (attributes.length === 1) {
+        configs['r'] = direction === 'inner' ? ['300%', '0%'] : ['0%', '300%']
       }
     }
 
@@ -212,11 +213,12 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
         }
       }
 
-      if (attributes?.length === 2) {
+      if (attributes.length === 2) {
         configs[attributes[0]] = isLeftOrTop ? [1, -1] : [-1, 1]
         configs[attributes[1]] = isLeftOrTop ? [2, 0] : [0, 2]
-      } else if (attributes?.[0] === 'r') {
-        configs[attributes[0]] = direction === 'inner' ? [3, 0] : [0, 3]
+      } else if (attributes.length === 1) {
+        configs['r1'] = 0
+        configs['r2'] = direction === 'inner' ? [3, 0] : [0, 3]
       }
     }
 
