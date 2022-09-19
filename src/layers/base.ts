@@ -218,7 +218,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     const animationQueue = new AnimationQueue({options: {loop: false}}),
       enterQueue = new AnimationQueue({options: {loop: false}}),
       loopQueue = new AnimationQueue({options: {loop: true}}),
-      {enter, loop, update} = merge(animation, options[sublayer]),
+      {enter, loop, update} = merge({}, animation, options[sublayer]),
       event = animationQueue.event
 
     if (isFirstPlay && enter?.type) {

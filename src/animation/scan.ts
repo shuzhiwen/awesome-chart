@@ -37,8 +37,9 @@ const createSvgGradient = (props: {
   color: string
   opacity: number
 }) => {
-  const {parentNode, id, direction, color, opacity} = props
-  const attributes = getAttributes(direction)
+  const {parentNode, id, direction, color, opacity} = props,
+    isLeftOrTop = direction === 'left' || direction === 'top',
+    attributes = getAttributes(direction)
   let targets
 
   if (attributes[0] === 'r') {
@@ -54,8 +55,8 @@ const createSvgGradient = (props: {
       .attr('x2', '0%')
       .attr('y1', '0%')
       .attr('y2', '0%')
-      .attr(attributes[0], direction === 'left' || direction === 'top' ? '100%' : '-100%')
-      .attr(attributes[1], direction === 'left' || direction === 'top' ? '200%' : '0%')
+      .attr(attributes[0], isLeftOrTop ? '100%' : '-100%')
+      .attr(attributes[1], isLeftOrTop ? '200%' : '0%')
   }
 
   return insertOffsets(targets as D3Selection, color, opacity)
@@ -67,10 +68,11 @@ const createCanvasGradient = (props: {
   opacity: number
 }) => {
   const {direction, color, opacity} = props,
+    config = {type: '', coords: {x1: 0, x2: 0, y1: 0, y2: 0, r1: 0, r2: 0}},
+    isLeftOrTop = direction === 'left' || direction === 'top',
     attributes = getAttributes(direction),
-    minColor = mergeAlpha(color, 0),
     maxColor = mergeAlpha(color, opacity),
-    config = {type: '', coords: {x1: 0, x2: 0, y1: 0, y2: 0, r1: 0, r2: 0}}
+    minColor = mergeAlpha(color, 0)
 
   if (attributes.length === 1) {
     merge(config, {
@@ -81,8 +83,8 @@ const createCanvasGradient = (props: {
     merge(config, {
       type: 'linear',
       coords: {
-        [attributes[0]]: direction === 'left' || direction === 'top' ? 1 : -1,
-        [attributes[1]]: direction === 'left' || direction === 'top' ? 2 : 0,
+        [attributes[0]]: isLeftOrTop ? 1 : -1,
+        [attributes[1]]: isLeftOrTop ? 2 : 0,
       },
     })
   }

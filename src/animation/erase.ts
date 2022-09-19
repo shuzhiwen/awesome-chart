@@ -49,10 +49,8 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
     super.process(...args)
     const {targets} = this.options
 
-    if (!isSvgCntr(targets)) {
-      targets?.forEach((item) => {
-        item.clipPath && item.drawClipPathOnCache(this.getCanvasContext()!)
-      })
+    if (!isSvgCntr(targets) && targets?.[0].clipPath) {
+      targets[0].drawClipPathOnCache(this.getCanvasContext()!)
       this.renderCanvas()
     }
 

@@ -53,7 +53,7 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
 
   setAnimation(options: BackupAnimationOptions) {
     super.setAnimation(
-      merge(options, {
+      merge({}, options, {
         node: {update: {duration: 0, delay: 0}},
         text: {update: {duration: 0, delay: 0}},
       })
