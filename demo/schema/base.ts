@@ -4,10 +4,10 @@ export default (layers: any[], tooltipOptions?: Omit<TooltipOptions, 'container'
   adjust: true,
   width: 100,
   height: 100,
-  padding: [50, 50, 50, 50],
+  padding: [50, 50, 50, 50] as Padding,
   engine: 'svg',
   tooltipOptions: {
-    mode: 'single',
+    mode: 'single' as const,
     ...tooltipOptions,
   },
   layers,

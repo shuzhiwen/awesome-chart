@@ -88,7 +88,7 @@ export type ChartProps = {
   theme?: ChartTheme
   padding?: Padding
   defineSchema?: AnyObject
-  tooltipOptions?: TooltipOptions
+  tooltipOptions?: Partial<TooltipOptions>
   layoutCreator?: LayoutCreator
 }
 
