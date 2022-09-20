@@ -29,6 +29,7 @@ export function drawText({
   writingMode,
   textDecoration,
   mapping = noChange,
+  source = [],
   data = [],
   transition,
   container,
@@ -58,6 +59,7 @@ export function drawText({
     transformOrigin: getAttr(transformOrigin, i, ''),
     evented: getAttr(evented, i, text.evented),
     rotation: getAttr(rotation, i, 0),
+    source: getAttr(source, i, []),
   }))
   const mappedData = configuredData.map((datum) => {
     return merge(datum, mapping({...datum, container, theme}))

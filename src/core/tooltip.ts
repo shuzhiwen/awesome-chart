@@ -66,7 +66,7 @@ export class Tooltip {
     this.instance?.style('display', 'none')
   }
 
-  private getListData(data: Partial<ElConfigShape>): TooltipDataShape {
+  private getListData(data: ElConfigShape): TooltipDataShape {
     const {mode} = this.options,
       {dimension, category} = getAttr(data.source, 0, {})
 
@@ -86,9 +86,9 @@ export class Tooltip {
     }
   }
 
-  private getSingleListData(data: Partial<ElConfigShape>): TooltipDataShape {
+  private getSingleListData(data: ElConfigShape): TooltipDataShape {
     return {
-      title: ungroup(data.source)?.dimension,
+      title: ungroup(data.source).dimension,
       list: group(data.source).map(({value, category}) => ({
         color: data.fill || data.stroke,
         label: category,
@@ -104,10 +104,10 @@ export class Tooltip {
     return {
       title: dimension,
       list: backups
-        .filter(({source}) => ungroup(source)?.dimension === dimension)
+        .filter(({source}) => ungroup(source).dimension === dimension)
         .flatMap(
           ({source, fill, stroke}) =>
-            source?.flatMap((item, i) =>
+            source.flatMap((item, i) =>
               group(item).map(({category, value}) => ({
                 color: getAttr(fill, i, '') || getAttr(stroke, i, ''),
                 label: category,
@@ -122,7 +122,7 @@ export class Tooltip {
     const {category} = getAttr(data.source, 0, {}),
       backups = this.options.getLayersBackupData(),
       groups = backups.flatMap(({source}) =>
-        source?.filter((item) => ungroup(item)?.category === category)
+        source.filter((item) => ungroup(item)?.category === category)
       )
 
     return {
@@ -135,7 +135,7 @@ export class Tooltip {
     }
   }
 
-  update({data}: {data: Partial<ElConfigShape>}) {
+  update({data}: {data: ElConfigShape}) {
     if (!isNil(this.options.render)) {
       this.options.render(this.instance.node(), data)
       return

@@ -34,32 +34,31 @@ export type ElSourceShape = AnyObject &
 
 export type BasicDrawerProps<T> = {
   data: T[]
-  source?: MaybeGroup<ElSourceShape>[]
+  source: (ElSourceShape | ElSourceShape[])[]
   className: string
   container: DrawerTarget
   theme: ChartTheme
   evented?: boolean
 }
 
-export type ElConfigShape = Partial<{
+export type ElConfigShape = {
   className: string
-  fill: string
-  stroke: string
-  opacity: number
-  fillOpacity: number
-  strokeOpacity: number
-  strokeWidth: number
-  source: MaybeGroup<ElSourceShape>
-}> &
-  DrawerDataShape<
-    | EllipseDrawerProps
-    | ImageDrawerProps
-    | LineDrawerProps
-    | PathDrawerProps
-    | PolyDrawerProps
-    | RectDrawerProps
-    | TextDrawerProps
-  >
+  source: ElSourceShape | ElSourceShape[]
+  fill?: string
+  stroke?: string
+  opacity?: number
+  fillOpacity?: number
+  strokeOpacity?: number
+  strokeWidth?: number
+} & DrawerDataShape<
+  | EllipseDrawerProps
+  | ImageDrawerProps
+  | LineDrawerProps
+  | PathDrawerProps
+  | PolyDrawerProps
+  | RectDrawerProps
+  | TextDrawerProps
+>
 
 export type TextDrawerProps = TextStyleShape &
   BasicDrawerProps<{

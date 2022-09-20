@@ -1,10 +1,10 @@
 import {LayerBase, layerMapping} from '../../layers'
-import {LayerOptions} from './options'
-import {ColorMatrix} from '../../utils'
 import {DrawerType, GraphDrawerProps} from '../draw'
 import {BasicAnimationOptions} from '../animation'
 import {RawScale, ScaleNiceShape} from '../scale'
 import {ChartContext} from '../core'
+import {LayerOptions} from './options'
+import {ColorMatrix} from '../../utils'
 
 export type LayerType = keyof typeof layerMapping
 
@@ -39,7 +39,8 @@ export type LayerBaseProps<T extends LayerOptions> = {
 
 export type DrawBasicProps<T> = {
   type: DrawerType
-  data: BackupDataItemShape<T>
+  data: (Omit<GraphDrawerProps<T>, 'className' | 'container' | 'theme' | 'source'> &
+    Partial<Pick<GraphDrawerProps<T>, 'source'>>)[]
   sublayer?: string
 }
 

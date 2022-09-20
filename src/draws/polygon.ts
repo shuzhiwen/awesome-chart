@@ -38,7 +38,7 @@ export function drawPolygon({
     pointString: item.points.reduce((prev, cur) => `${prev} ${cur.x},${cur.y}`, ''),
     transformOrigin: `${item.centerX} ${item.centerY}`,
     evented: getAttr(evented, i, graph.evented),
-    source: getAttr(source, i, null),
+    source: getAttr(source, i, []),
   }))
   const mappedData = configuredData.map((datum) => {
     return merge(datum, mapping({...datum, container, theme}))

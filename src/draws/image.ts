@@ -27,7 +27,7 @@ export function drawImage({
     id: `${className}-${uuid()}`,
     opacity: getAttr(opacity, i, graph.opacity),
     evented: getAttr(evented, i, graph.evented),
-    source: getAttr(source, i, null),
+    source: getAttr(source, i, []),
   }))
   const mappedData = configuredData.map((datum) => {
     return merge(datum, mapping({...datum, container, theme}))

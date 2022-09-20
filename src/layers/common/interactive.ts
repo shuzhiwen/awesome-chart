@@ -39,11 +39,11 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
   private _style = defaultStyle
 
   private rectDataX: (DrawerDataShape<RectDrawerProps> & {
-    source?: ElSourceShape
+    source: ElSourceShape
   })[][] = []
 
   private rectDataY: (DrawerDataShape<RectDrawerProps> & {
-    source?: ElSourceShape
+    source: ElSourceShape
   })[][] = []
 
   private helperAuxiliary: [LayerAuxiliary, LayerAuxiliary]
@@ -248,14 +248,14 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
 
       if (isSvgCntr(this.root)) {
         this.root.selectAll(elClass('interactive', true)).each((d, i, els) => {
-          if ((d as any).source?.key.match(data.source.key)) {
+          if ((d as any).source.key.match(data.source.key)) {
             select(els[i]).attr('opacity', shadowOpacity)
           }
         })
         select(event.target).attr('opacity', 0)
       } else {
         selector.getChildren(this.root, elClass('interactive', false)).forEach((child) => {
-          if ((child as any).source?.key.match(data.source.key)) {
+          if ((child as any).source.key.match(data.source.key)) {
             child.opacity = shadowOpacity
           }
         })

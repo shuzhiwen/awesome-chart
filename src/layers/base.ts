@@ -21,7 +21,6 @@ import {
   DrawBasicProps,
   DrawerTarget,
   ElEvent,
-  GraphDrawerProps,
   LayerBaseProps,
   BackupAnimationShape,
   BackupAnimationOptions,
@@ -273,16 +272,25 @@ export abstract class LayerBase<T extends LayerOptions> {
       }
     })
 
+    backupTarget.length = data.length
+    data.forEach((groupData, groupIndex) => {
+      groupData.source = groupData.data.map((_, itemIndex) => ({
+        ...groupData.source?.[itemIndex],
+        groupIndex,
+        itemIndex,
+      }))
+    })
+
     if (!backupTarget.renderOrderCache) {
       backupTarget.renderOrderCache = new Map(
         data
-          .filter((item) => ungroup(item.source?.[0])?.dimension)
-          .map((item, i) => [ungroup(item.source?.[0])?.dimension as Meta, i])
+          .filter((item) => ungroup(item.source![0])?.dimension)
+          .map((item, i) => [ungroup(item.source![0])?.dimension as Meta, i])
       )
     } else {
       const {renderOrderCache} = backupTarget,
         orderedGroupData = new Array(data.length),
-        curRenderOrder = data.map((item) => ungroup(item.source?.[0])?.dimension ?? '')
+        curRenderOrder = data.map((item) => ungroup(item.source![0])?.dimension ?? '')
 
       curRenderOrder.forEach((dimension, i) => {
         if (renderOrderCache?.has(dimension)) {
@@ -295,20 +303,19 @@ export abstract class LayerBase<T extends LayerOptions> {
       renderOrderCache.clear()
       data = orderedGroupData.filter(Boolean)
       data.forEach((item, i) => {
-        if (ungroup(item.source?.[0])?.dimension) {
-          renderOrderCache.set(ungroup(item.source?.[0])?.dimension as Meta, i)
+        if (ungroup(item.source![0])?.dimension) {
+          renderOrderCache.set(ungroup(item.source![0])?.dimension as Meta, i)
         }
       })
     }
 
-    backupTarget.length = data.length
     data.forEach((groupData, i) => {
-      if (isEqual(backupTarget[i], groupData)) return
+      if (groupData.hidden || isEqual(backupTarget[i], groupData)) return
 
       const groupClassName = `${sublayerClassName}-${i}`
       const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
-      const options: GraphDrawerProps<any> = {
-        ...(groupData.hidden ? {data: []} : groupData),
+      const options = {
+        ...groupData,
         transition: isFirstDraw
           ? {duration: 0, delay: 0}
           : this.backupAnimation.options?.[sublayer]?.update,
@@ -317,8 +324,8 @@ export abstract class LayerBase<T extends LayerOptions> {
         theme,
       }
 
-      drawerMapping[type](options)
-      backupTarget[i] = cloneDeep(groupData)
+      drawerMapping[type](options as any)
+      backupTarget[i] = cloneDeep(groupData as any)
     })
 
     this.bindEvent(sublayer)
