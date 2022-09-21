@@ -6,10 +6,10 @@ import {DataTableList} from '../../data'
 import {getAttr} from '../../utils'
 import {
   ChartContext,
-  DrawerDataShape,
+  DrawerData,
   ImageDrawerProps,
   LayerCarouselOptions,
-  LayerCarouselStyleShape,
+  LayerCarouselStyle,
   RectDrawerProps,
 } from '../../types'
 
@@ -17,7 +17,7 @@ const defaultOptions: Partial<LayerCarouselOptions> = {
   mode: 'slide',
 }
 
-const defaultStyle: LayerCarouselStyleShape = {
+const defaultStyle: LayerCarouselStyle = {
   direction: 'left',
   padding: 10,
   zoom: 0.7,
@@ -29,12 +29,12 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
 
   private _style = defaultStyle
 
-  private carouselData: (DrawerDataShape<ImageDrawerProps> & {
+  private carouselData: (DrawerData<ImageDrawerProps> & {
     carouselIndex: number
     opacity: number
   })[] = []
 
-  private dotData: (DrawerDataShape<RectDrawerProps> & {
+  private dotData: (DrawerData<RectDrawerProps> & {
     opacity: number
   })[] = []
 
@@ -94,7 +94,7 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerCarouselStyleShape) {
+  setStyle(style: LayerCarouselStyle) {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 
@@ -210,7 +210,7 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
     const animation = merge(
       {},
       this.options.theme.animation.loop,
-      this.backupAnimation.options?.['carousel']?.update
+      this.cacheAnimation.options['carousel']?.update
     )
     const carouselData = this.carouselData.map((item) => ({
       data: [item],

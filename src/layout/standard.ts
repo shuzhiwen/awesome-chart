@@ -1,8 +1,8 @@
-import {GetStandardLayoutCreatorProps, LayoutShape, LayoutProps} from '../types'
+import {GetStandardLayoutCreatorProps, Layout, LayoutProps} from '../types'
 
 export const getStandardLayoutCreator =
   ({brush}: GetStandardLayoutCreatorProps) =>
-  ({containerWidth, containerHeight, padding}: LayoutProps): LayoutShape => {
+  ({containerWidth, containerHeight, padding}: LayoutProps): Layout => {
     const brushHeight = brush ? containerHeight / 10 : 0
     const heightWithoutBrush = containerHeight - brushHeight
 

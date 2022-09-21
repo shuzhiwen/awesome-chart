@@ -7,18 +7,18 @@ import {isScaleBand, isScaleLinear, isSvgCntr, uuid} from '../../utils'
 import {createScale, createStyle, elClass, selector, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
-  LayerInteractiveStyleShape,
-  LegendDataShape,
-  LayerAxisScaleShape,
+  LayerInteractiveStyle,
+  LegendData,
+  LayerAxisScale,
   LayerInteractiveOptions,
   RectDrawerProps,
-  DrawerDataShape,
-  ElSourceShape,
+  DrawerData,
+  ElSource,
 } from '../../types'
 
 const shadowOpacity = 0.5
 
-const defaultStyle: LayerInteractiveStyleShape = {
+const defaultStyle: LayerInteractiveStyle = {
   line: {
     stroke: 'yellow',
     strokeWidth: 1,
@@ -30,20 +30,20 @@ const defaultStyle: LayerInteractiveStyleShape = {
 }
 
 export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
-  public legendData: Maybe<LegendDataShape>
+  public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerAxisScaleShape = {}
+  private _scale: LayerAxisScale = {}
 
   private _style = defaultStyle
 
-  private rectDataX: (DrawerDataShape<RectDrawerProps> & {
-    source: ElSourceShape
+  private rectDataX: (DrawerData<RectDrawerProps> & {
+    source: ElSource
   })[][] = []
 
-  private rectDataY: (DrawerDataShape<RectDrawerProps> & {
-    source: ElSourceShape
+  private rectDataY: (DrawerData<RectDrawerProps> & {
+    source: ElSource
   })[][] = []
 
   private helperAuxiliary: [LayerAuxiliary, LayerAuxiliary]
@@ -150,12 +150,12 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     this._data = validateAndCreateData('base', this.data, data)
   }
 
-  setScale(scale: LayerAxisScaleShape) {
+  setScale(scale: LayerAxisScale) {
     this._scale = createScale(undefined, this.scale, scale)
     this.helperAuxiliary.map((layer) => layer.setScale(this.scale))
   }
 
-  setStyle(style: LayerInteractiveStyleShape) {
+  setStyle(style: LayerInteractiveStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
     this.helperAuxiliary.map((layer) => layer.setStyle(this.style))
   }

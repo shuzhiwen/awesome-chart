@@ -6,14 +6,14 @@ import {uuid} from '../../utils'
 import {merge} from 'lodash'
 import {
   ChartContext,
-  LayerCandleStyleShape,
-  LegendDataShape,
+  LayerCandleStyle,
+  LegendData,
   LayerCandleOptions,
-  LayerRectScaleShape,
-  BackupAnimationOptions,
+  LayerRectScale,
+  CacheAnimationOptions,
 } from '../../types'
 
-const defaultStyle: LayerCandleStyleShape = {
+const defaultStyle: LayerCandleStyle = {
   positiveColor: 'red',
   negativeColor: 'green',
   rect: {
@@ -28,11 +28,11 @@ const defaultStyle: LayerCandleStyleShape = {
 }
 
 export class LayerCandle extends LayerBase<LayerCandleOptions> {
-  public legendData: Maybe<LegendDataShape>
+  public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerRectScaleShape
+  private _scale: LayerRectScale
 
   private _style = defaultStyle
 
@@ -100,13 +100,13 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
     )
   }
 
-  setScale(scale: LayerRectScaleShape) {
+  setScale(scale: LayerRectScale) {
     this._scale = createScale(undefined, this.scale, scale)
     this.rectLayer.setScale(this.scale)
     this.lineLayer.setScale(this.scale)
   }
 
-  setStyle(style: LayerCandleStyleShape) {
+  setStyle(style: LayerCandleStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 
@@ -141,7 +141,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
     this.lineLayer.playAnimation()
   }
 
-  setAnimation(options: BackupAnimationOptions) {
+  setAnimation(options: CacheAnimationOptions) {
     this.rectLayer.setAnimation(options)
     this.lineLayer.setAnimation(options)
   }

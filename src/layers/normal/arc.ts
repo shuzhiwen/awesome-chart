@@ -12,42 +12,42 @@ import {
 } from '../helpers'
 import {
   ChartContext,
-  LayerArcStyleShape,
-  DrawerDataShape,
+  LayerArcStyle,
+  DrawerData,
   TextDrawerProps,
   LayerArcOptions,
-  LegendDataShape,
-  LayerArcScaleShape,
+  LegendData,
+  LayerArcScale,
   ArcDrawerProps,
-  ElSourceShape,
+  ElSource,
 } from '../../types'
 
 const defaultOptions: Partial<LayerArcOptions> = {
   variant: 'pie',
 }
 
-const defaultStyle: LayerArcStyleShape = {
+const defaultStyle: LayerArcStyle = {
   innerRadius: 0,
   labelOffset: 5,
   labelPosition: 'inner',
 }
 
 export class LayerArc extends LayerBase<LayerArcOptions> {
-  public legendData: Maybe<LegendDataShape>
+  public legendData: Maybe<LegendData>
 
   private needRescale = false
 
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerArcScaleShape
+  private _scale: LayerArcScale
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[][] = []
+  private textData: DrawerData<TextDrawerProps>[][] = []
 
-  private arcData: (DrawerDataShape<ArcDrawerProps> & {
+  private arcData: (DrawerData<ArcDrawerProps> & {
     value: Meta
-    source: ElSourceShape
+    source: ElSource
     color?: string
   })[][] = []
 
@@ -84,12 +84,12 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
     })
   }
 
-  setScale(scale: LayerArcScaleShape) {
+  setScale(scale: LayerArcScale) {
     this._scale = createScale(undefined, this.scale, scale)
     this.needRescale = false
   }
 
-  setStyle(style: LayerArcStyleShape) {
+  setStyle(style: LayerArcStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
     this.needRescale = true
   }

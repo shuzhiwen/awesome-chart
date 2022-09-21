@@ -5,11 +5,11 @@ import {AnimationEmpty} from './empty'
 import {animationMapping} from '.'
 import {AnimationType, DrawerTarget, BasicAnimationOptions} from '../types'
 
-type Shape = AnimationBase<BasicAnimationOptions>
+type Animation = AnimationBase<BasicAnimationOptions>
 
 const animationKey = `animationKey-${new Date().getTime()}`
 
-const bind = (animations: Shape[], callback: AnyFunction) => {
+const bind = (animations: Animation[], callback: AnyFunction) => {
   Promise.all(
     animations.map(
       (instance) =>
@@ -26,7 +26,7 @@ const bind = (animations: Shape[], callback: AnyFunction) => {
 export class AnimationQueue extends AnimationBase<BasicAnimationOptions> {
   private isConnected = false
 
-  private queue: Shape[]
+  private queue: Animation[]
 
   constructor({options}: {options: {loop: boolean}}) {
     super({options: options as BasicAnimationOptions})
@@ -37,7 +37,7 @@ export class AnimationQueue extends AnimationBase<BasicAnimationOptions> {
     this.queue = [animationHead]
   }
 
-  connect(priorityConfig?: number[] | ((queues: Shape[]) => number[])) {
+  connect(priorityConfig?: number[] | ((queues: Animation[]) => number[])) {
     this.queue.forEach((instance) => {
       instance.event.off('start')
       instance.event.off('end')
@@ -53,7 +53,7 @@ export class AnimationQueue extends AnimationBase<BasicAnimationOptions> {
     }
 
     // group animations by priority config
-    const groupedQueue: Shape[][] = range(0, max(finalPriority)!).map(() => [])
+    const groupedQueue: Animation[][] = range(0, max(finalPriority)!).map(() => [])
 
     finalPriority.forEach((priority, animationIndex) => {
       groupedQueue[priority].push(this.queue[animationIndex])

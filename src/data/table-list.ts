@@ -1,10 +1,10 @@
 import {cloneDeep, sum, min, max} from 'lodash'
 import {group, isRawTableList, transpose} from '../utils'
 import {DataBase} from './base'
-import {DataBaseOptions, RawTableList, TableListDataShape, TableListOptions} from '../types'
+import {DataBaseOptions, RawTableList, TableListData, TableListOptions} from '../types'
 
 export class DataTableList extends DataBase<RawTableList> {
-  private _data: TableListDataShape = []
+  private _data: TableListData = []
 
   get headers() {
     return this._data.map(({header}) => header)
@@ -112,7 +112,7 @@ export class DataTableList extends DataBase<RawTableList> {
   }
 
   remove(headers: MaybeGroup<string>) {
-    const removedList: TableListDataShape[] = []
+    const removedList: TableListData[] = []
 
     group(headers).forEach((header) => {
       const index = this.headers.findIndex((_header) => _header === header)

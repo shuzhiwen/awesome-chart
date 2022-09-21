@@ -2,14 +2,9 @@ import {LayerBase} from '../base'
 import {createScale, createStyle} from '../helpers'
 import {addStyle, isSvgCntr, transformAttr} from '../../utils'
 import {BrushBehavior, D3BrushEvent, brushX, brushY} from 'd3'
-import {
-  ChartContext,
-  LayerAxisScaleShape,
-  LayerBrushOptions,
-  LayerBrushStyleShape,
-} from '../../types'
+import {ChartContext, LayerAxisScale, LayerBrushOptions, LayerBrushStyle} from '../../types'
 
-const defaultStyle: LayerBrushStyleShape = {
+const defaultStyle: LayerBrushStyle = {
   targets: [],
   handleZoom: 0.5,
   direction: 'horizontal',
@@ -39,7 +34,7 @@ const defaultStyle: LayerBrushStyleShape = {
 }
 
 export class LayerBrush extends LayerBase<LayerBrushOptions> {
-  private _scale: Omit<LayerAxisScaleShape, 'nice'> = {}
+  private _scale: Omit<LayerAxisScale, 'nice'> = {}
 
   private originScaleRangeMap: Map<string, any[]> = new Map()
 
@@ -65,11 +60,11 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
 
   setData() {}
 
-  setScale(scale: LayerAxisScaleShape) {
+  setScale(scale: LayerAxisScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerBrushStyleShape) {
+  setStyle(style: LayerBrushStyle) {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 

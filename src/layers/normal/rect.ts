@@ -12,12 +12,12 @@ import {
 } from '../helpers'
 import {
   ChartContext,
-  DrawerDataShape,
-  ElSourceShape,
+  DrawerData,
+  ElSource,
   LayerRectOptions,
-  LayerRectScaleShape,
-  LayerRectStyleShape,
-  LegendDataShape,
+  LayerRectScale,
+  LayerRectStyle,
+  LegendData,
   RectDrawerProps,
   ScaleBand,
   ScaleLinear,
@@ -29,7 +29,7 @@ const defaultOptions: Partial<LayerRectOptions> = {
   mode: 'group',
 }
 
-const defaultStyle: LayerRectStyleShape = {
+const defaultStyle: LayerRectStyle = {
   fixedWidth: null,
   fixedHeight: null,
   labelPosition: 'center',
@@ -43,23 +43,23 @@ const defaultStyle: LayerRectStyleShape = {
 }
 
 export class LayerRect extends LayerBase<LayerRectOptions> {
-  public legendData: Maybe<LegendDataShape>
+  public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerRectScaleShape
+  private _scale: LayerRectScale
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[][] = []
+  private textData: DrawerData<TextDrawerProps>[][] = []
 
-  private rectData: (DrawerDataShape<RectDrawerProps> & {
+  private rectData: (DrawerData<RectDrawerProps> & {
     value: number
-    source: ElSourceShape
+    source: ElSource
     color?: string
   })[][] = []
 
-  private backgroundData: DrawerDataShape<RectDrawerProps>[] = []
+  private backgroundData: DrawerData<RectDrawerProps>[] = []
 
   get scale() {
     return this._scale
@@ -102,11 +102,11 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
     this.createScale()
   }
 
-  setScale(scale: LayerRectScaleShape) {
+  setScale(scale: LayerRectScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerRectStyleShape) {
+  setStyle(style: LayerRectStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

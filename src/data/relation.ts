@@ -1,10 +1,10 @@
 import {DataBase} from './base'
 import {merge, max, sum} from 'lodash'
 import {isRawRelation, formatNumber, tableListToObjects} from '../utils'
-import {RelationDataShape, RawRelation, Node, Edge} from '../types'
+import {RelationData, RawRelation, Node, Edge} from '../types'
 
 export class DataRelation extends DataBase<RawRelation> {
-  private _data: RelationDataShape = {nodes: [], edges: [], roots: []}
+  private _data: RelationData = {nodes: [], edges: [], roots: []}
 
   get nodes() {
     return this._data.nodes

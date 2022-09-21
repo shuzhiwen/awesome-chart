@@ -1,6 +1,6 @@
 import {fabric} from 'fabric'
 import {isArray, merge} from 'lodash'
-import {DrawerDataShape, RectDrawerProps} from '../types'
+import {DrawerData, RectDrawerProps} from '../types'
 import {mergeAlpha, getAttr, isSvgCntr, isCanvasCntr, noChange} from '../utils'
 import {IRectOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
@@ -95,7 +95,7 @@ export function drawRect({
 }
 
 const getTransformOrigin = (
-  data: DrawerDataShape<RectDrawerProps>,
+  data: DrawerData<RectDrawerProps>,
   origin: ArrayItem<RectDrawerProps['transformOrigin']>
 ) => {
   const {x, y, width, height} = data
@@ -117,7 +117,7 @@ const getTransformOrigin = (
 }
 
 const getTransformFabricAttr = (
-  data: DrawerDataShape<RectDrawerProps>,
+  data: DrawerData<RectDrawerProps>,
   origin: ArrayItem<RectDrawerProps['transformOrigin']>
 ) => {
   const {x, y, width, height} = data

@@ -1,31 +1,20 @@
 import {Selection} from 'd3'
 import {IEvent} from 'fabric/fabric-impl'
-import {GraphStyleShape, TextStyleShape} from './layer'
+import {GraphStyle, TextStyle} from './styles'
 import {drawerMapping} from '../draws'
 import {ChartTheme} from './core'
-
-export type CurveType =
-  | 'curveLinear'
-  | 'curveNatural'
-  | 'curveBumpX'
-  | 'curveBumpY'
-  | 'curveMonotoneX'
-  | 'curveMonotoneY'
-  | 'curveStep'
-  | 'curveStepAfter'
-  | 'curveStepBefore'
 
 export type DrawerTarget = D3Selection | fabric.Group
 
 export type DrawerType = keyof typeof drawerMapping
 
-export type DrawerDataShape<T> = T extends BasicDrawerProps<infer U> ? U : T
+export type DrawerData<T> = T extends BasicDrawerProps<infer U> ? U : T
 
 export type ElEvent = MouseEvent | IEvent<MouseEvent>
 
 export type D3Selection = Selection<any, unknown, any, unknown>
 
-export type ElSourceShape = AnyObject &
+export type ElSource = AnyObject &
   Partial<{
     dimension: Meta
     category: Meta
@@ -34,23 +23,23 @@ export type ElSourceShape = AnyObject &
 
 export type BasicDrawerProps<T> = {
   data: T[]
-  source: (ElSourceShape | ElSourceShape[])[]
+  source: (ElSource | ElSource[])[]
   className: string
   container: DrawerTarget
   theme: ChartTheme
   evented?: boolean
 }
 
-export type ElConfigShape = {
+export type ElConfig = {
   className: string
-  source: ElSourceShape | ElSourceShape[]
+  source: ElSource | ElSource[]
   fill?: string
   stroke?: string
   opacity?: number
   fillOpacity?: number
   strokeOpacity?: number
   strokeWidth?: number
-} & DrawerDataShape<
+} & DrawerData<
   | EllipseDrawerProps
   | ImageDrawerProps
   | LineDrawerProps
@@ -60,14 +49,14 @@ export type ElConfigShape = {
   | TextDrawerProps
 >
 
-export type TextDrawerProps = TextStyleShape &
+export type TextDrawerProps = TextStyle &
   BasicDrawerProps<{
     value: string
     x: number
     y: number
   }>
 
-export type GraphDrawerProps<T> = GraphStyleShape & BasicDrawerProps<T>
+export type GraphDrawerProps<T> = GraphStyle & BasicDrawerProps<T>
 
 export type ArcDrawerProps = GraphDrawerProps<{
   startAngle: number

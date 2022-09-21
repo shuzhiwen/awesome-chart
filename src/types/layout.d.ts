@@ -1,5 +1,5 @@
 export interface LayoutCreator {
-  (props: LayoutProps): LayoutShape
+  (props: LayoutProps): Layout
 }
 
 export type LayoutArea = Readonly<{
@@ -11,7 +11,7 @@ export type LayoutArea = Readonly<{
   height: number
 }>
 
-export type LayoutShape = Record<string, LayoutArea> & {
+export type Layout = Record<string, LayoutArea> & {
   readonly main: LayoutArea
   readonly container: LayoutArea
 }

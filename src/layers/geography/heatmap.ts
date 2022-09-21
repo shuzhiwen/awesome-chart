@@ -4,16 +4,16 @@ import {createScale, createStyle, validateAndCreateData} from '../helpers'
 import {group, isRealNumber, tableListToObjects} from '../../utils'
 import {
   ChartContext,
-  LayerHeatmapStyleShape,
+  LayerHeatmapStyle,
   LayerHeatmapOptions,
-  LayerHeatmapScaleShape,
-  DrawerDataShape,
+  LayerHeatmapScale,
+  DrawerData,
   CircleDrawerProps,
 } from '../../types'
 
 type DataKey = 'x' | 'y' | 'value'
 
-const defaultStyle: LayerHeatmapStyleShape = {
+const defaultStyle: LayerHeatmapStyle = {
   radiusFactor: 1,
   heatZone: {
     fill: ['#ff0000DD', '#ffff99AA', '#00ff0000'],
@@ -23,11 +23,11 @@ const defaultStyle: LayerHeatmapStyleShape = {
 export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerHeatmapScaleShape
+  private _scale: LayerHeatmapScale
 
   private _style = defaultStyle
 
-  private heatZoneData: (DrawerDataShape<CircleDrawerProps> & {
+  private heatZoneData: (DrawerData<CircleDrawerProps> & {
     color?: string
   })[] = []
 
@@ -51,11 +51,11 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
     this._data = validateAndCreateData('tableList', this.data, data)
   }
 
-  setScale(scale: LayerHeatmapScaleShape) {
+  setScale(scale: LayerHeatmapScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerHeatmapStyleShape) {
+  setStyle(style: LayerHeatmapStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

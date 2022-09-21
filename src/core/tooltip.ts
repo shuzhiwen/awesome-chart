@@ -1,7 +1,7 @@
 import {select} from 'd3'
 import {isEqual, merge, isNil} from 'lodash'
 import {errorCatcher, createLog, getAttr, group, ungroup, noChange} from '../utils'
-import {ElConfigShape, D3Selection, TooltipOptions, TooltipDataShape} from '../types'
+import {ElConfig, D3Selection, TooltipOptions, TooltipData} from '../types'
 
 const defaultOptions = {
   container: null,
@@ -25,7 +25,7 @@ export class Tooltip {
 
   private options = defaultOptions
 
-  private data: Maybe<TooltipDataShape> = null
+  private data: Maybe<TooltipData> = null
 
   constructor(options: TooltipOptions) {
     this.setOptions(options)
@@ -66,7 +66,7 @@ export class Tooltip {
     this.instance?.style('display', 'none')
   }
 
-  private getListData(data: ElConfigShape): TooltipDataShape {
+  private getListData(data: ElConfig): TooltipData {
     const {mode} = this.options,
       {dimension, category} = getAttr(data.source, 0, {})
 
@@ -86,7 +86,7 @@ export class Tooltip {
     }
   }
 
-  private getSingleListData(data: ElConfigShape): TooltipDataShape {
+  private getSingleListData(data: ElConfig): TooltipData {
     return {
       title: ungroup(data.source).dimension,
       list: group(data.source).map(({value, category}) => ({
@@ -97,7 +97,7 @@ export class Tooltip {
     }
   }
 
-  private getDimensionListData(data: Partial<ElConfigShape>): TooltipDataShape {
+  private getDimensionListData(data: Partial<ElConfig>): TooltipData {
     const {dimension} = getAttr(data.source, 0, {}),
       backups = this.options.getLayersBackupData()
 
@@ -118,7 +118,7 @@ export class Tooltip {
     }
   }
 
-  private getCategoryListData(data: Partial<ElConfigShape>): TooltipDataShape {
+  private getCategoryListData(data: Partial<ElConfig>): TooltipData {
     const {category} = getAttr(data.source, 0, {}),
       backups = this.options.getLayersBackupData(),
       groups = backups.flatMap(({source}) =>
@@ -135,7 +135,7 @@ export class Tooltip {
     }
   }
 
-  update({data}: {data: ElConfigShape}) {
+  update({data}: {data: ElConfig}) {
     if (!isNil(this.options.render)) {
       this.options.render(this.instance.node(), data)
       return

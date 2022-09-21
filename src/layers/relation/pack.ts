@@ -11,8 +11,8 @@ import {
 } from '../helpers'
 import {
   ChartContext,
-  DrawerDataShape,
-  LayerPackStyleShape,
+  DrawerData,
+  LayerPackStyle,
   LayerPackOptions,
   TextDrawerProps,
   CircleDrawerProps,
@@ -26,7 +26,7 @@ const defaultOptions: Partial<LayerPackOptions> = {
   variant: 'pack',
 }
 
-const defaultStyle: LayerPackStyleShape = {
+const defaultStyle: LayerPackStyle = {
   zoom: true,
   padding: 0,
 }
@@ -36,13 +36,13 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
 
   private _style = defaultStyle
 
-  private textData: (DrawerDataShape<TextDrawerProps> & {
+  private textData: (DrawerData<TextDrawerProps> & {
     fontSize?: number
   })[][] = []
 
   private treeData: Maybe<HierarchyNode<Node>>
 
-  private circleData: (DrawerDataShape<CircleDrawerProps> & {
+  private circleData: (DrawerData<CircleDrawerProps> & {
     value: Meta
     color?: string
   })[][] = []
@@ -98,7 +98,7 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerPackStyleShape) {
+  setStyle(style: LayerPackStyle) {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 
@@ -179,7 +179,7 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
     }
   }
 
-  private zoom = ({data}: {data: DrawerDataShape<EllipseDrawerProps>}) => {
+  private zoom = ({data}: {data: DrawerData<EllipseDrawerProps>}) => {
     const {cx, cy, rx, ry} = data,
       {left, top, width, height} = this.options.layout,
       {k: prevK = -1, offset: [prevX, prevY] = [0, 0], maxHeight = -1} = this.zoomConfig!,

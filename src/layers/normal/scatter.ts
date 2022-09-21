@@ -11,38 +11,38 @@ import {scaleLinear} from '../../scales'
 import {isRealNumber, tableListToObjects, ungroup} from '../../utils'
 import {
   ChartContext,
-  DrawerDataShape,
+  DrawerData,
   LayerScatterOptions,
-  LayerScatterStyleShape,
-  LayerScatterScaleShape,
+  LayerScatterStyle,
+  LayerScatterScale,
   TextDrawerProps,
-  LegendDataShape,
+  LegendData,
   CircleDrawerProps,
-  ElSourceShape,
+  ElSource,
 } from '../../types'
 
 type DataKey = 'x' | 'y' | 'value' | 'category'
 
-const defaultStyle: LayerScatterStyleShape = {
+const defaultStyle: LayerScatterStyle = {
   pointSize: [5, 5],
 }
 
 export class LayerScatter extends LayerBase<LayerScatterOptions> {
-  public legendData: Maybe<LegendDataShape>
+  public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerScatterScaleShape
+  private _scale: LayerScatterScale
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[][] = []
+  private textData: DrawerData<TextDrawerProps>[][] = []
 
-  private pointData: (DrawerDataShape<CircleDrawerProps> & {
+  private pointData: (DrawerData<CircleDrawerProps> & {
     value: Meta
     color: string
     category: Meta
-    source: ElSourceShape[]
+    source: ElSource[]
   })[][] = []
 
   get scale() {
@@ -76,11 +76,11 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
     })
   }
 
-  setScale(scale: LayerScatterScaleShape) {
+  setScale(scale: LayerScatterScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerScatterStyleShape) {
+  setStyle(style: LayerScatterStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

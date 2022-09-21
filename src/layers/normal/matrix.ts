@@ -13,44 +13,44 @@ import {
 import {
   ChartContext,
   CircleDrawerProps,
-  DrawerDataShape,
-  ElSourceShape,
+  DrawerData,
+  ElSource,
   LayerMatrixOptions,
-  LayerMatrixScaleShape,
-  LayerMatrixStyleShape,
-  LegendDataShape,
+  LayerMatrixScale,
+  LayerMatrixStyle,
+  LegendData,
   RectDrawerProps,
   TextDrawerProps,
 } from '../../types'
 
-const defaultStyle: LayerMatrixStyleShape = {
+const defaultStyle: LayerMatrixStyle = {
   shape: 'rect',
   circleSize: ['auto', 'auto'],
   colorDomain: 'auto',
 }
 
 export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
-  public legendData: Maybe<LegendDataShape>
+  public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTable>
 
-  private _scale: LayerMatrixScaleShape
+  private _scale: LayerMatrixScale
 
   private _style = defaultStyle
 
-  private rectData: (DrawerDataShape<RectDrawerProps> & {
+  private rectData: (DrawerData<RectDrawerProps> & {
     value: Meta
-    source: ElSourceShape
+    source: ElSource
     color: string
   })[][] = []
 
-  private circleData: (DrawerDataShape<CircleDrawerProps> & {
+  private circleData: (DrawerData<CircleDrawerProps> & {
     value: Meta
-    source: ElSourceShape
+    source: ElSource
     color: string
   })[][] = []
 
-  private textData: DrawerDataShape<TextDrawerProps>[][] = []
+  private textData: DrawerData<TextDrawerProps>[][] = []
 
   get scale() {
     return this._scale
@@ -78,11 +78,11 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
     this.createScale()
   }
 
-  setScale(scale: LayerMatrixScaleShape) {
+  setScale(scale: LayerMatrixScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerMatrixStyleShape) {
+  setStyle(style: LayerMatrixStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

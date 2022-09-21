@@ -6,15 +6,15 @@ import {createColorMatrix, createStyle, createText, validateAndCreateData} from 
 import {getAttr, noChange} from '../../utils'
 import {
   ChartContext,
-  DrawerDataShape,
-  LayerSankeyStyleShape,
+  DrawerData,
+  LayerSankeyStyle,
   LayerSankeyOptions,
   TextDrawerProps,
   Node,
   RectDrawerProps,
 } from '../../types'
 
-const defaultStyle: LayerSankeyStyleShape = {
+const defaultStyle: LayerSankeyStyle = {
   edgeVariant: 'curve',
   direction: 'horizontal',
   nodeWidth: 10,
@@ -36,9 +36,9 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[][] = []
+  private textData: DrawerData<TextDrawerProps>[][] = []
 
-  private nodeData: (DrawerDataShape<RectDrawerProps> & {
+  private nodeData: (DrawerData<RectDrawerProps> & {
     stackedEdgeLength: [0, 0]
     color: string
   } & Node)[][] = []
@@ -66,7 +66,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerSankeyStyleShape) {
+  setStyle(style: LayerSankeyStyle) {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 

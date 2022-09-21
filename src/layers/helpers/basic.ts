@@ -1,15 +1,15 @@
 import {merge} from 'lodash'
 import {dataMapping} from '../../data'
 import {scaleTypes} from '../../utils'
-import {DataType, LayerScalesShape} from '../../types'
+import {DataType, LayerScale} from '../../types'
 
-export function createScale<T extends Maybe<LayerScalesShape>>(
+export function createScale<T extends Maybe<LayerScale>>(
   defaultScale?: T,
   currentScale?: T,
   incomingScale?: T
 ) {
   const nice = merge({}, defaultScale?.nice, currentScale?.nice, incomingScale?.nice),
-    scales: LayerScalesShape = {...currentScale, ...defaultScale, nice}
+    scales: LayerScale = {...currentScale, ...defaultScale, nice}
 
   scaleTypes.forEach((type) => {
     scales[type] = incomingScale?.[type] || defaultScale?.[type] || currentScale?.[type]

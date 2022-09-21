@@ -1,14 +1,17 @@
 import 'fabric/fabric-impl'
+import './constant'
 import './global'
 import './module'
 
 export * from './animation'
+export * from './common'
 export * from './core'
 export * from './data'
 export * from './draw'
-export * from './layer'
 export * from './layout'
+export * from './options'
 export * from './scale'
+export * from './styles'
 export * from './utils'
 
 declare module 'fabric/fabric-impl' {

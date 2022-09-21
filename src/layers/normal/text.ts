@@ -5,13 +5,13 @@ import {createStyle, createText, validateAndCreateData} from '../helpers'
 import {DataBase} from '../../data'
 import {
   ChartContext,
-  DrawerDataShape,
+  DrawerData,
   LayerTextOptions,
-  LayerTextStyleShape,
+  LayerTextStyle,
   TextDrawerProps,
 } from '../../types'
 
-const defaultStyle: LayerTextStyleShape = {
+const defaultStyle: LayerTextStyle = {
   sanger: [1, 1],
   text: {
     fontSize: 12,
@@ -34,7 +34,7 @@ export class LayerText extends LayerBase<LayerTextOptions> {
 
   private _style = defaultStyle
 
-  private textData: (DrawerDataShape<TextDrawerProps> & {
+  private textData: (DrawerData<TextDrawerProps> & {
     xIndex: number
     yIndex: number
   })[] = []
@@ -57,7 +57,7 @@ export class LayerText extends LayerBase<LayerTextOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerTextStyleShape) {
+  setStyle(style: LayerTextStyle) {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 

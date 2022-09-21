@@ -11,17 +11,17 @@ import {
 } from '../helpers'
 import {
   ChartContext,
-  DrawerDataShape,
-  LayerTreeStyleShape,
+  DrawerData,
+  LayerTreeStyle,
   LayerTreeOptions,
   TextDrawerProps,
   CircleDrawerProps,
-  LayerTreeScaleShape,
+  LayerTreeScale,
   Node,
   LineDrawerProps,
 } from '../../types'
 
-const defaultStyle: LayerTreeStyleShape = {
+const defaultStyle: LayerTreeStyle = {
   direction: 'horizontal',
   curveType: 'curveBumpX',
   labelOffset: 5,
@@ -38,13 +38,13 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
 
   private _data: Maybe<DataRelation>
 
-  private _scale: LayerTreeScaleShape
+  private _scale: LayerTreeScale
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[][] = []
+  private textData: DrawerData<TextDrawerProps>[][] = []
 
-  private nodeData: (DrawerDataShape<CircleDrawerProps> &
+  private nodeData: (DrawerData<CircleDrawerProps> &
     Pick<Node, 'id' | 'name' | 'value'> & {
       color: string
       parents: (Node & {
@@ -56,7 +56,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
       })[]
     })[][] = []
 
-  private edgeData: (DrawerDataShape<LineDrawerProps> & {
+  private edgeData: (DrawerData<LineDrawerProps> & {
     color: string
   })[][] = []
 
@@ -102,12 +102,12 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
     this.groups[0]?.forEach(dfs)
   }
 
-  setScale(scale: LayerTreeScaleShape) {
+  setScale(scale: LayerTreeScale) {
     this._scale = createScale(undefined, this.scale, scale)
     this.needRescale = false
   }
 
-  setStyle(style: LayerTreeStyleShape) {
+  setStyle(style: LayerTreeStyle) {
     this._style = createStyle(defaultStyle, this._style, style)
     this.needRescale = true
   }

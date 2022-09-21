@@ -5,37 +5,37 @@ import {createColorMatrix, createScale, createStyle, validateAndCreateData} from
 import {scaleBand, scaleLinear} from '../../scales'
 import {
   ChartContext,
-  LayerRadialStyleShape,
-  DrawerDataShape,
+  LayerRadialStyle,
+  DrawerData,
   TextDrawerProps,
   LayerRadialOptions,
-  LegendDataShape,
-  LayerRadialScaleShape,
-  ElSourceShape,
+  LegendData,
+  LayerRadialScale,
+  ElSource,
   ArcDrawerProps,
 } from '../../types'
 
-const defaultStyle: LayerRadialStyleShape = {
+const defaultStyle: LayerRadialStyle = {
   innerRadius: 10,
   cornerRadius: Infinity,
 }
 
 export class LayerRadial extends LayerBase<LayerRadialOptions> {
-  public legendData: Maybe<LegendDataShape>
+  public legendData: Maybe<LegendData>
 
   private needRescale = false
 
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerRadialScaleShape
+  private _scale: LayerRadialScale
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[][] = []
+  private textData: DrawerData<TextDrawerProps>[][] = []
 
-  private arcData: (DrawerDataShape<ArcDrawerProps> & {
+  private arcData: (DrawerData<ArcDrawerProps> & {
     value: Meta
-    source: ElSourceShape
+    source: ElSource
     color?: string
   })[] = []
 
@@ -62,12 +62,12 @@ export class LayerRadial extends LayerBase<LayerRadialOptions> {
     })
   }
 
-  setScale(scale: LayerRadialScaleShape) {
+  setScale(scale: LayerRadialScale) {
     this._scale = createScale(undefined, this.scale, scale)
     this.needRescale = false
   }
 
-  setStyle(style: LayerRadialStyleShape) {
+  setStyle(style: LayerRadialStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
     this.needRescale = true
   }

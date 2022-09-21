@@ -15,29 +15,29 @@ import {
   ungroup,
 } from '../utils'
 import {
-  BackupDataShape,
-  ElConfigShape,
-  DataShape,
+  LayerData,
+  CacheData,
+  ElConfig,
   DrawBasicProps,
   DrawerTarget,
   ElEvent,
   LayerBaseProps,
-  BackupAnimationShape,
-  BackupAnimationOptions,
+  CacheAnimation,
+  CacheAnimationOptions,
   LayerOptions,
   ChartContext,
-  LayerScalesShape,
-  BackupEventShape,
+  LayerScale,
+  CacheEvent,
 } from '../types'
 
 export abstract class LayerBase<T extends LayerOptions> {
-  abstract data: Maybe<DataShape>
+  abstract data: Maybe<LayerData>
 
   abstract style: Maybe<UnknownObject>
 
-  abstract setData(data?: Maybe<DataShape>): void
+  abstract setData(data?: Maybe<LayerData>): void
 
-  abstract setScale(scale?: Maybe<LayerScalesShape>): void
+  abstract setScale(scale?: Maybe<LayerScale>): void
 
   abstract setStyle(style?: Maybe<AnyObject>): void
 
@@ -55,11 +55,11 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   readonly options: T & ChartContext
 
-  readonly backupData: BackupDataShape<unknown> = {}
+  readonly cacheData = {} as CacheData<unknown>
 
-  protected readonly backupAnimation: BackupAnimationShape = {timer: {}}
+  protected readonly cacheEvent = {} as CacheEvent
 
-  protected readonly backupEvent = {} as BackupEventShape
+  protected readonly cacheAnimation: CacheAnimation
 
   protected readonly log = createLog(this.className)
 
@@ -71,9 +71,9 @@ export abstract class LayerBase<T extends LayerOptions> {
     this.options = merge(options, context)
     this.sublayers = sublayers || []
     this.tooltipTargets = tooltipTargets || []
-    this.sublayers.forEach((name) => (this.backupData[name] = []))
+    this.cacheAnimation = {animations: {}, timer: {}, options: {}}
+    this.sublayers.forEach((name) => (this.cacheData[name] = {data: []}))
     this.root = selector.createSubcontainer(this.options.root as DrawerTarget, this.className)
-    this.backupData = Object.fromEntries(this.sublayers.map((name) => [name, []]))
     this.createLifeCycles()
     this.createEvent()
   }
@@ -82,24 +82,24 @@ export abstract class LayerBase<T extends LayerOptions> {
     const {tooltip} = this.options,
       getMouseEvent = (event: ElEvent): MouseEvent =>
         event instanceof MouseEvent ? event : event.e,
-      getData = (event: ElEvent, data?: ElConfigShape): ElConfigShape =>
+      getData = (event: ElEvent, data?: ElConfig): ElConfig =>
         event instanceof MouseEvent ? data : ((event.subTargets?.[0] || event.target) as any)
 
-    merge(this.backupEvent, {
+    merge(this.cacheEvent, {
       'tooltip.mouseout': () => tooltip.hide(),
       'tooltip.mousemove': (event: ElEvent) => tooltip.move(getMouseEvent(event)),
-      'tooltip.mouseover': (event: ElEvent, data?: ElConfigShape) => {
+      'tooltip.mouseover': (event: ElEvent, data?: ElConfig) => {
         tooltip.update({data: getData(event, data)})
         tooltip.show(getMouseEvent(event))
       },
     })
 
     commonEvents.forEach((type) => {
-      merge(this.backupEvent, {
+      merge(this.cacheEvent, {
         [`common.${type}`]: Object.fromEntries(
           this.sublayers.map((sublayer) => [
             sublayer,
-            (event: ElEvent, data: ElConfigShape) => {
+            (event: ElEvent, data: ElConfig) => {
               this.event.fire(`${type}-${sublayer}`, {
                 data: getData(event, data),
                 event: getMouseEvent(event),
@@ -140,14 +140,14 @@ export abstract class LayerBase<T extends LayerOptions> {
     })
   }
 
-  setAnimation(options: BackupAnimationOptions) {
-    merge(this.backupAnimation, {options})
+  setAnimation(options: CacheAnimationOptions) {
+    merge(this.cacheAnimation, {options})
     this.sublayers.forEach((sublayer) => this.createAnimation(sublayer))
   }
 
   playAnimation() {
     setTimeout(() => {
-      this.sublayers.forEach((type) => this.backupAnimation[type]?.play())
+      this.sublayers.forEach((type) => this.cacheAnimation.animations[type]?.play())
     })
   }
 
@@ -163,13 +163,13 @@ export abstract class LayerBase<T extends LayerOptions> {
 
       commonEvents.forEach((type) => {
         els.on(`${type}.common`, null)
-        els.on(`${type}.common`, this.backupEvent[`common.${type}`][sublayer])
+        els.on(`${type}.common`, this.cacheEvent[`common.${type}`][sublayer])
       })
 
       if (this.tooltipTargets.includes(sublayer)) {
         tooltipEvents.forEach((type) => {
           els.on(`${type}.tooltip`, null)
-          els.on(`${type}.tooltip`, this.backupEvent[`tooltip.${type}`])
+          els.on(`${type}.tooltip`, this.cacheEvent[`tooltip.${type}`])
         })
       }
     }
@@ -180,14 +180,14 @@ export abstract class LayerBase<T extends LayerOptions> {
       commonEvents.forEach((type) => {
         els.forEach((el) => {
           el.off(type)
-          el.on(type, this.backupEvent[`common.${type}`][sublayer])
+          el.on(type, this.cacheEvent[`common.${type}`][sublayer])
         })
       })
 
       if (this.tooltipTargets.includes(sublayer)) {
         tooltipEvents.forEach((type) =>
           els.forEach((el) => {
-            el.on(type, this.backupEvent[`tooltip.${type}`])
+            el.on(type, this.cacheEvent[`tooltip.${type}`])
           })
         )
       }
@@ -195,24 +195,23 @@ export abstract class LayerBase<T extends LayerOptions> {
   }
 
   private createAnimation = (sublayer: string) => {
-    if (this.backupAnimation[sublayer]) {
-      this.backupAnimation[sublayer]?.destroy()
+    if (this.cacheAnimation.animations[sublayer]) {
+      this.cacheAnimation.animations[sublayer]?.destroy()
     }
 
-    const {options} = this.backupAnimation,
+    const {options} = this.cacheAnimation,
       {animation} = this.options.theme,
       // must await animation to be destroyed
       targets = selector.getChildren(this.root, elClass(sublayer, false)),
-      isFirstPlay = !this.backupAnimation[sublayer],
+      isFirstPlay = !this.cacheAnimation.animations[sublayer],
       prefix = `${sublayer}-animation-`
 
     if (
-      !options ||
       !options[sublayer] ||
-      this.backupData[sublayer].length === 0 ||
+      this.cacheData[sublayer].data.length === 0 ||
       (isSvgCntr(targets) ? targets.size() === 0 : targets?.length === 0)
     ) {
-      this.backupAnimation[sublayer] = null
+      this.cacheAnimation.animations[sublayer] = null
       return
     }
 
@@ -235,13 +234,13 @@ export abstract class LayerBase<T extends LayerOptions> {
     event.on('start', (d: unknown) => this.event.fire(`${prefix}start`, d))
     event.on('process', (d: unknown) => this.event.fire(`${prefix}process`, d))
     event.on('end', (d: unknown) => this.event.fire(`${prefix}end`, d))
-    this.backupAnimation[sublayer] = animationQueue
+    this.cacheAnimation.animations[sublayer] = animationQueue
 
     if (!isFirstPlay) {
-      clearTimeout(this.backupAnimation.timer[sublayer])
+      clearTimeout(this.cacheAnimation.timer[sublayer])
       const {duration, delay} = {...update}
-      this.backupAnimation.timer[sublayer] = setTimeout(
-        () => this.backupAnimation[sublayer]?.play(),
+      this.cacheAnimation.timer[sublayer] = setTimeout(
+        () => this.cacheAnimation.animations[sublayer]?.play(),
         duration + delay
       )
     }
@@ -254,11 +253,11 @@ export abstract class LayerBase<T extends LayerOptions> {
     }
 
     const {theme} = this.options,
-      backupTarget = this.backupData[sublayer],
+      cacheData = this.cacheData[sublayer],
       evented = !disableEventDrawerType.has(type),
       sublayerClassName = `${this.className}-${sublayer}`,
-      maxGroupLength = Math.max(backupTarget.length, data.length),
-      isFirstDraw = backupTarget.length === 0,
+      maxGroupLength = Math.max(cacheData.data.length, data.length),
+      isFirstDraw = cacheData.data.length === 0,
       sublayerContainer =
         selector.getSubcontainer(this.root, sublayerClassName) ||
         selector.createSubcontainer(this.root, sublayerClassName, evented)
@@ -274,7 +273,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       }
     })
 
-    backupTarget.length = data.length
+    cacheData.data.length = data.length
     data.forEach((groupData, groupIndex) => {
       groupData.source = groupData.data.map((_, itemIndex) => ({
         ...groupData.source?.[itemIndex],
@@ -283,36 +282,36 @@ export abstract class LayerBase<T extends LayerOptions> {
       }))
     })
 
-    if (!backupTarget.renderOrderCache) {
-      backupTarget.renderOrderCache = new Map(
+    if (!cacheData.order) {
+      cacheData.order = new Map(
         data
           .filter((item) => ungroup(item.source![0])?.dimension)
           .map((item, i) => [ungroup(item.source![0])?.dimension as Meta, i])
       )
     } else {
-      const {renderOrderCache} = backupTarget,
+      const {order: prevOrder} = cacheData,
         orderedGroupData = new Array(data.length),
-        curRenderOrder = data.map((item) => ungroup(item.source![0])?.dimension ?? '')
+        curOrder = data.map((item) => ungroup(item.source![0])?.dimension ?? '')
 
-      curRenderOrder.forEach((dimension, i) => {
-        if (renderOrderCache?.has(dimension)) {
-          orderedGroupData[renderOrderCache.get(dimension)!] = data[i]
+      curOrder.forEach((dimension, i) => {
+        if (prevOrder?.has(dimension)) {
+          orderedGroupData[prevOrder.get(dimension)!] = data[i]
         } else {
           orderedGroupData.push(data[i])
         }
       })
 
-      renderOrderCache.clear()
+      prevOrder.clear()
       data = orderedGroupData.filter(Boolean)
       data.forEach((item, i) => {
         if (ungroup(item.source![0])?.dimension) {
-          renderOrderCache.set(ungroup(item.source![0])?.dimension as Meta, i)
+          prevOrder.set(ungroup(item.source![0])?.dimension as Meta, i)
         }
       })
     }
 
     data.forEach((groupData, i) => {
-      if (groupData.hidden || isEqual(backupTarget[i], groupData)) return
+      if (groupData.hidden || isEqual(cacheData.data[i], groupData)) return
 
       const groupClassName = `${sublayerClassName}-${i}`
       const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
@@ -320,14 +319,14 @@ export abstract class LayerBase<T extends LayerOptions> {
         ...groupData,
         transition: isFirstDraw
           ? {duration: 0, delay: 0}
-          : this.backupAnimation.options?.[sublayer]?.update,
+          : this.cacheAnimation.options[sublayer]?.update,
         className: elClass(sublayer, false),
         container: groupContainer,
         theme,
       }
 
       drawerMapping[type](options as any)
-      backupTarget[i] = cloneDeep(groupData as any)
+      cacheData.data[i] = cloneDeep(groupData as any)
     })
 
     this.bindEvent(sublayer)
@@ -338,7 +337,7 @@ export abstract class LayerBase<T extends LayerOptions> {
   }
 
   destroy() {
-    this.sublayers.forEach((name) => this.backupAnimation[name]?.destroy())
+    this.sublayers.forEach((name) => this.cacheAnimation.animations[name]?.destroy())
     this.root && selector.remove(this.root)
   }
 }

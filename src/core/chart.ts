@@ -21,7 +21,7 @@ import {
 } from '../utils'
 import {
   LayerInstance,
-  LayoutShape,
+  Layout,
   LayoutCreator,
   ChartProps,
   ChartContext,
@@ -29,14 +29,14 @@ import {
   LayerOptions,
   D3Selection,
   LayerType,
-  LayerAxisScaleShape,
+  LayerAxisScale,
   ChartTheme,
 } from '../types'
 
 fabric.Object.prototype.objectCaching = false
 
 export class Chart {
-  private _layout: LayoutShape
+  private _layout: Layout
 
   private _layers: LayerInstance[] = []
 
@@ -128,8 +128,8 @@ export class Chart {
       ...tooltipOptions,
       container: tooltipOptions?.container ?? this.container,
       getLayersBackupData: () =>
-        this._layers.flatMap(({tooltipTargets, backupData}) =>
-          tooltipTargets.map((sublayer) => backupData[sublayer]).flatMap(noChange)
+        this._layers.flatMap(({tooltipTargets, cacheData}) =>
+          tooltipTargets.map((sublayer) => cacheData[sublayer].data).flatMap(noChange)
         ),
     })
 
@@ -203,7 +203,7 @@ export class Chart {
         mergedScales.scaleY = scaleY
       }
 
-      axisLayer.setScale(mergedScales as LayerAxisScaleShape)
+      axisLayer.setScale(mergedScales as LayerAxisScale)
     })
 
     axisLayer.niceScale()
@@ -220,6 +220,7 @@ export class Chart {
 
   draw() {
     this.layers.forEach((layer) => layer.draw())
+    this.event.fire('draw')
   }
 
   destroy() {

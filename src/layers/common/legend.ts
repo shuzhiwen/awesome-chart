@@ -6,12 +6,11 @@ import {ColorMatrix, createStar, formatNumber, getTextWidth, range, ungroup} fro
 import {
   ChartContext,
   CircleDrawerProps,
-  DrawerDataShape,
+  DrawerData,
   LayerInstance,
   LayerLegendOptions,
-  LayerLegendStyleShape,
-  LegendDataShape,
-  LegendShape,
+  LayerLegendStyle,
+  LegendData,
   LineDrawerProps,
   PolyDrawerProps,
   RectDrawerProps,
@@ -22,7 +21,7 @@ const disableColor = '#E2E3E588'
 
 const animationKey = `animationKey-${new Date().getTime()}`
 
-const defaultStyle: LayerLegendStyleShape = {
+const defaultStyle: LayerLegendStyle = {
   align: 'end',
   verticalAlign: 'start',
   direction: 'horizontal',
@@ -50,33 +49,33 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[] = []
+  private textData: DrawerData<TextDrawerProps>[] = []
 
-  private lineData: (DrawerDataShape<LineDrawerProps> & {
+  private lineData: (DrawerData<LineDrawerProps> & {
     stroke?: string
     strokeWidth?: number
     strokeDasharray?: string
   })[] = []
 
-  private rectData: (DrawerDataShape<RectDrawerProps> & {
+  private rectData: (DrawerData<RectDrawerProps> & {
     fill?: string
   })[] = []
 
-  private circleData: (DrawerDataShape<CircleDrawerProps> & {
+  private circleData: (DrawerData<CircleDrawerProps> & {
     fill?: string
     stroke?: string
     strokeWidth?: number
   })[] = []
 
-  private polygonData: (DrawerDataShape<PolyDrawerProps> & {
+  private polygonData: (DrawerData<PolyDrawerProps> & {
     fill?: string
   })[] = []
 
-  private interactiveData: (DrawerDataShape<RectDrawerProps> & {
+  private interactiveData: (DrawerData<RectDrawerProps> & {
     source: {index: number}
   })[] = []
 
-  private legendDataGroup: LegendDataShape[] = []
+  private legendDataGroup: LegendData[] = []
 
   get data() {
     return this._data
@@ -98,7 +97,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerLegendStyleShape) {
+  setStyle(style: LayerLegendStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

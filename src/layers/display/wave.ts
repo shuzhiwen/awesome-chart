@@ -8,13 +8,13 @@ import {
   AreaDrawerProps,
   ChartContext,
   CircleDrawerProps,
-  DrawerDataShape,
+  DrawerData,
   LayerWaveOptions,
-  LayerWaveStyleShape,
+  LayerWaveStyle,
   TextDrawerProps,
 } from '../../types'
 
-const defaultStyle: LayerWaveStyleShape = {
+const defaultStyle: LayerWaveStyle = {
   wavelength: 50,
   amplitude: 20,
   areaNumber: 2,
@@ -44,15 +44,15 @@ export class LayerWave extends LayerBase<LayerWaveOptions> {
   >
 
   private areaData: Required<
-    DrawerDataShape<AreaDrawerProps> & {
+    DrawerData<AreaDrawerProps> & {
       value: Meta
       color: string
     }
   >[] = []
 
-  private backgroundData: DrawerDataShape<CircleDrawerProps>[] = []
+  private backgroundData: DrawerData<CircleDrawerProps>[] = []
 
-  private textData: DrawerDataShape<TextDrawerProps>[] = []
+  private textData: DrawerData<TextDrawerProps>[] = []
 
   get data() {
     return this._data
@@ -95,7 +95,7 @@ export class LayerWave extends LayerBase<LayerWaveOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerWaveStyleShape) {
+  setStyle(style: LayerWaveStyle) {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 

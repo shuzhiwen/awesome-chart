@@ -6,15 +6,15 @@ import {getAttr, overflowControl, uuid} from '../../utils'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
-  DrawerDataShape,
-  LayerTreemapStyleShape,
+  DrawerData,
+  LayerTreemapStyle,
   LayerTreemapOptions,
   TextDrawerProps,
   Node,
   RectDrawerProps,
 } from '../../types'
 
-const defaultStyle: LayerTreemapStyleShape = {
+const defaultStyle: LayerTreemapStyle = {
   align: 'middle',
   verticalAlign: 'middle',
   labelGap: 5,
@@ -25,9 +25,9 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[][] = []
+  private textData: DrawerData<TextDrawerProps>[][] = []
 
-  private rectData: (DrawerDataShape<RectDrawerProps> & {
+  private rectData: (DrawerData<RectDrawerProps> & {
     data: Node
     color: string
   })[] = []
@@ -50,7 +50,7 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerTreemapStyleShape) {
+  setStyle(style: LayerTreemapStyle) {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 

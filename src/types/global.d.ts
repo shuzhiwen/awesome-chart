@@ -1,20 +1,20 @@
 type Meta = number | string
 
+type Maybe<T> = T | null | undefined
+
 type AnyObject = Record<string, any>
 
 type UnknownObject = Record<string, unknown>
+
+type Padding = [number, number, number, number]
 
 type AnyFunction<T = unknown> = (...args: any) => T
 
 type AnyEventObject = Record<string, AnyFunction>
 
-type Maybe<T> = T | null | undefined
-
 type MaybeGroup<T> = T | T[] | null | undefined
 
 type Ungroup<T> = T extends Array<infer F> ? Ungroup<F> : T
-
-type Padding = [number, number, number, number]
 
 type SetKeys<T> = T extends Set<infer P> ? P : T
 
@@ -31,21 +31,3 @@ type FlatObject<T> = T extends Partial<Record<infer F, unknown>> ? {[Q in F]?: U
 type FlatName<T> = T extends [infer P extends string, ...infer R extends string[]]
   ? `${P}${FlatNameItem<FlatName<R>>}`
   : null
-
-type Engine = 'svg' | 'canvas'
-
-type Direction = 'horizontal' | 'vertical'
-
-type Alignment = 'start' | 'middle' | 'end'
-
-type Coordinate = 'geographic' | 'cartesian' | 'polar'
-
-type Position2 = 'inner' | 'outer'
-
-type Position4 = 'top' | 'right' | 'bottom' | 'left'
-
-type Position5 = Position4 | 'center'
-
-type Position9 = Position5 | 'leftTop' | 'leftBottom' | 'rightTop' | 'rightBottom'
-
-type Priority = 'topHigh' | 'topLow' | 'bottomHigh' | 'bottomLow' | 'other'

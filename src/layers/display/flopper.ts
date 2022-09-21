@@ -4,7 +4,7 @@ import {cloneDeep, merge} from 'lodash'
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {defaultTheme} from '../../core/theme'
-import {ChartContext, LayerFlopperOptions, LayerFlopperStyleShape} from '../../types'
+import {ChartContext, LayerFlopperOptions, LayerFlopperStyle} from '../../types'
 import {addStyle, isCanvasCntr, isSvgCntr, mergeAlpha, range} from '../../utils'
 import {createStyle, validateAndCreateData} from '../helpers'
 
@@ -12,7 +12,7 @@ const defaultOptions: Partial<LayerFlopperOptions> = {
   variant: 'vertical',
 }
 
-const defaultStyle: LayerFlopperStyleShape = {
+const defaultStyle: LayerFlopperStyle = {
   scale: 0.5,
   integerPlace: 8,
   decimalPlace: 2,
@@ -86,7 +86,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerFlopperStyleShape) {
+  setStyle(style: LayerFlopperStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

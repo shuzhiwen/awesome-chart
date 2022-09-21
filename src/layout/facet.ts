@@ -1,9 +1,9 @@
-import {GetFacetLayoutCreatorProps, LayoutShape, LayoutProps} from '../types'
+import {GetFacetLayoutCreatorProps, Layout, LayoutProps} from '../types'
 
 export const getFacetLayoutCreator =
   ({row, column}: GetFacetLayoutCreatorProps) =>
-  ({containerWidth, containerHeight, padding}: LayoutProps): LayoutShape => {
-    const layout: LayoutShape = {
+  ({containerWidth, containerHeight, padding}: LayoutProps): Layout => {
+    const layout: Layout = {
       container: {
         top: 0,
         bottom: containerHeight,

@@ -1,12 +1,12 @@
 import {Chart} from '../core'
-import {ElConfigShape} from './draw'
+import {ElConfig} from './draw'
 import {LayoutCreator} from './layout'
-import {DataShape} from './data'
 import {RandomOptions} from './utils'
-import {ScaleNiceShape} from './scale'
+import {ScaleNice} from './scale'
 import {getEasyGradientCreator} from '../utils'
-import {BackupDataItemShape, LayerOptions, LayerScalesShape, LayerType} from './layer'
-import {AnimationEasing} from './animation'
+import {CacheDataItem, LayerScale, LayerType} from './common'
+import {LayerOptions} from './options'
+import {LayerData} from './data'
 
 export type ChartContext = Pick<
   Chart,
@@ -50,13 +50,13 @@ export type ChartTheme = Readonly<
       {
         duration: number
         delay: number
-        easing: AnimationEasing
+        easing: Easing
       }
     >
   }
 >
 
-export type TooltipDataShape = Maybe<{
+export type TooltipData = Maybe<{
   title?: Meta
   list: Partial<{
     label: Meta
@@ -74,9 +74,9 @@ export type TooltipOptions = {
   valueSize?: number
   textColor?: string
   backgroundColor?: string
-  render?: (container: HTMLElement, data: Partial<ElConfigShape>) => void
-  setTooltipData?: (data: TooltipDataShape, options: TooltipOptions) => TooltipDataShape
-  getLayersBackupData?: () => BackupDataItemShape<unknown>
+  render?: (container: HTMLElement, data: Partial<ElConfig>) => void
+  setTooltipData?: (data: TooltipData, options: TooltipOptions) => TooltipData
+  getLayersBackupData?: () => CacheDataItem<unknown>['data']
 }
 
 export type ChartProps = {
@@ -94,21 +94,21 @@ export type ChartProps = {
 
 export type LayerSchema = Partial<{
   options: LayerOptions
-  data: Maybe<DataShape>
-  scale: LayerScalesShape
+  data: Maybe<LayerData>
+  scale: LayerScale
   style: AnyObject
   animation: AnyObject
 }>
 
-export type RandomDataSchema = RandomOptions & {
+export type RandomDataProps = RandomOptions & {
   type: 'table' | 'tableList'
 }
 
-export type CreateChartSchema = ChartProps & {
+export type CreateChartProps = ChartProps & {
   layers?: {
     type: LayerType
     data: any
-    scale?: ScaleNiceShape
+    scale?: ScaleNice
     style?: LayerSchema['style']
     animation?: LayerSchema['animation']
     event?: AnyEventObject

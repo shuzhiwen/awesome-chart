@@ -2,7 +2,7 @@ import {DataBase, dataMapping, DataRelation, DataTable, DataTableList} from '../
 
 export type DataType = keyof typeof dataMapping
 
-export type DataShape = DataBase<any> | DataTableList | DataTable | DataRelation
+export type LayerData = DataBase<any> | DataTableList | DataTable | DataRelation
 
 export type DataBaseOptions = Partial<{
   order: AnyObject
@@ -23,9 +23,9 @@ export type RawTable = [Meta[], Meta[], RawTableList]
 
 export type RawRelation = [RawTableList, RawTableList]
 
-export type TableDataShape = RawTable
+export type TableData = RawTable
 
-export type TableListDataShape = {
+export type TableListData = {
   header: Meta
   list: Meta[]
   min?: Meta
@@ -48,7 +48,7 @@ export type Node = {
   children?: Node[]
 }
 
-export type RelationDataShape = {
+export type RelationData = {
   roots: Meta[]
   nodes: Node[]
   edges: Edge[]

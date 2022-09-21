@@ -10,17 +10,17 @@ import {
 } from '../helpers'
 import {
   ChartContext,
-  LayerAuxiliaryStyleShape,
-  DrawerDataShape,
+  LayerAuxiliaryStyle,
+  DrawerData,
   TextDrawerProps,
-  LegendDataShape,
-  LayerAuxiliaryScaleShape,
+  LegendData,
+  LayerAuxiliaryScale,
   LayerAuxiliaryOptions,
   LineDrawerProps,
   RectDrawerProps,
 } from '../../types'
 
-const defaultStyle: LayerAuxiliaryStyleShape = {
+const defaultStyle: LayerAuxiliaryStyle = {
   direction: 'horizontal',
   enableLegend: true,
   labelPosition: 'right',
@@ -34,21 +34,21 @@ const defaultStyle: LayerAuxiliaryStyleShape = {
 }
 
 export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
-  public legendData: Maybe<LegendDataShape>
+  public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerAuxiliaryScaleShape
+  private _scale: LayerAuxiliaryScale
 
   private _style = defaultStyle
 
-  private textData: (DrawerDataShape<TextDrawerProps> & {
+  private textData: (DrawerData<TextDrawerProps> & {
     textWidth: number
   })[] = []
 
-  private backgroundData: DrawerDataShape<RectDrawerProps>[] = []
+  private backgroundData: DrawerData<RectDrawerProps>[] = []
 
-  private lineData: (DrawerDataShape<LineDrawerProps> & {
+  private lineData: (DrawerData<LineDrawerProps> & {
     value: Meta
     color: string
   })[] = []
@@ -77,11 +77,11 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
     this._data = validateAndCreateData('tableList', this.data, data)
   }
 
-  setScale(scale: LayerAuxiliaryScaleShape) {
+  setScale(scale: LayerAuxiliaryScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerAuxiliaryStyleShape) {
+  setStyle(style: LayerAuxiliaryStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

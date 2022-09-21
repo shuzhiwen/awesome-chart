@@ -11,22 +11,22 @@ import {
 } from '../helpers'
 import {
   ChartContext,
-  LayerLineStyleShape,
-  DrawerDataShape,
+  LayerLineStyle,
+  DrawerData,
   TextDrawerProps,
   LayerLineOptions,
-  LegendDataShape,
-  LayerLineScaleShape,
+  LegendData,
+  LayerLineScale,
   CircleDrawerProps,
   AreaDrawerProps,
-  ElSourceShape,
+  ElSource,
 } from '../../types'
 
 const defaultOptions: Partial<LayerLineOptions> = {
   mode: 'cover',
 }
 
-const defaultStyle: LayerLineStyleShape = {
+const defaultStyle: LayerLineStyle = {
   fallback: 'break',
   labelPosition: 'top',
   curveType: 'curveMonotoneX',
@@ -44,23 +44,23 @@ const defaultStyle: LayerLineStyleShape = {
 }
 
 export class LayerLine extends LayerBase<LayerLineOptions> {
-  public legendData: Maybe<LegendDataShape>
+  public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerLineScaleShape
+  private _scale: LayerLineScale
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[][] = []
+  private textData: DrawerData<TextDrawerProps>[][] = []
 
-  private pointData: (DrawerDataShape<CircleDrawerProps> & {
+  private pointData: (DrawerData<CircleDrawerProps> & {
     value: Meta
-    source: ElSourceShape
+    source: ElSource
     color: string
   })[][] = []
 
-  private areaData: (ArrayItem<DrawerDataShape<AreaDrawerProps>['lines']> & {
+  private areaData: (ArrayItem<DrawerData<AreaDrawerProps>['lines']> & {
     fill: string
   })[][] = []
 
@@ -90,11 +90,11 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
     this.createScale()
   }
 
-  setScale(scale: LayerLineScaleShape) {
+  setScale(scale: LayerLineScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerLineStyleShape) {
+  setStyle(style: LayerLineStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

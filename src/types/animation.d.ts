@@ -1,33 +1,6 @@
 import {animationMapping} from '../animation'
 import {D3Selection, DrawerTarget} from './draw'
 
-// see https://easings.net/
-export type AnimationEasing =
-  | 'easeInBack'
-  | 'easeInBounce'
-  | 'easeInCirc'
-  | 'easeInCubic'
-  | 'easeInElastic'
-  | 'easeInExpo'
-  | 'easeInOutBack'
-  | 'easeInOutBounce'
-  | 'easeInOutCirc'
-  | 'easeInOutCubic'
-  | 'easeInOutElastic'
-  | 'easeInOutExpo'
-  | 'easeInOutQuad'
-  | 'easeInOutSine'
-  | 'easeInQuad'
-  | 'easeInSine'
-  | 'easeOutBack'
-  | 'easeOutBounce'
-  | 'easeOutCirc'
-  | 'easeOutCubic'
-  | 'easeOutElastic'
-  | 'easeOutExpo'
-  | 'easeOutQuad'
-  | 'easeOutSine'
-
 export type AnimationType = keyof typeof animationMapping
 
 export type AnimationProps<T extends BasicAnimationOptions> = Partial<{
@@ -43,7 +16,7 @@ export type BasicAnimationOptions<
   type?: T
   targets?: Maybe<D3Selection | fabric.Object[]>
   loop?: boolean
-  easing: AnimationEasing
+  easing: Easing
   duration: number
   delay: number
 }

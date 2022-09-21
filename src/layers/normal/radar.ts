@@ -10,22 +10,22 @@ import {
 } from '../helpers'
 import {
   ChartContext,
-  LayerRadarStyleShape,
-  DrawerDataShape,
+  LayerRadarStyle,
+  DrawerData,
   TextDrawerProps,
   LayerRadarOptions,
-  LegendDataShape,
-  LayerRadarScaleShape,
+  LegendData,
+  LayerRadarScale,
   CircleDrawerProps,
   PolyDrawerProps,
-  ElSourceShape,
+  ElSource,
 } from '../../types'
 
 const defaultOptions: Partial<LayerRadarOptions> = {
   mode: 'cover',
 }
 
-const defaultStyle: LayerRadarStyleShape = {
+const defaultStyle: LayerRadarStyle = {
   pointSize: 6,
   point: {},
   polygon: {
@@ -35,23 +35,23 @@ const defaultStyle: LayerRadarStyleShape = {
 }
 
 export class LayerRadar extends LayerBase<LayerRadarOptions> {
-  public legendData: Maybe<LegendDataShape>
+  public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerRadarScaleShape
+  private _scale: LayerRadarScale
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[][] = []
+  private textData: DrawerData<TextDrawerProps>[][] = []
 
-  private pointData: (DrawerDataShape<CircleDrawerProps> & {
+  private pointData: (DrawerData<CircleDrawerProps> & {
     angle: number
-    source: ElSourceShape
+    source: ElSource
     color: string
   })[][] = []
 
-  private polygonData: (DrawerDataShape<PolyDrawerProps> & {
+  private polygonData: (DrawerData<PolyDrawerProps> & {
     color: string
   })[] = []
 
@@ -81,11 +81,11 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
     this.createScale()
   }
 
-  setScale(scale: LayerRadarScaleShape) {
+  setScale(scale: LayerRadarScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerRadarStyleShape) {
+  setStyle(style: LayerRadarStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

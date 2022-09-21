@@ -6,15 +6,15 @@ import {scaleLinear} from '../../scales'
 import {merge} from 'lodash'
 import {
   ChartContext,
-  DrawerDataShape,
+  DrawerData,
   TextDrawerProps,
   CircleDrawerProps,
-  LayerForceStyleShape,
+  LayerForceStyle,
   LayerForceOptions,
-  BackupAnimationOptions,
+  CacheAnimationOptions,
 } from '../../types'
 
-const defaultStyle: LayerForceStyleShape = {
+const defaultStyle: LayerForceStyle = {
   nodeSize: [5, 20],
 }
 
@@ -25,9 +25,9 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
 
   private simulation: Maybe<Simulation<ArrayItem<LayerForce['nodeData']>, undefined>>
 
-  private textData: DrawerDataShape<TextDrawerProps>[] = []
+  private textData: DrawerData<TextDrawerProps>[] = []
 
-  private nodeData: (DrawerDataShape<CircleDrawerProps> & {
+  private nodeData: (DrawerData<CircleDrawerProps> & {
     label: Meta
     value: Meta
     color?: string
@@ -51,7 +51,7 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
 
   setScale() {}
 
-  setAnimation(options: BackupAnimationOptions) {
+  setAnimation(options: CacheAnimationOptions) {
     super.setAnimation(
       merge({}, options, {
         node: {update: {duration: 0, delay: 0}},
@@ -64,7 +64,7 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
     this._data = validateAndCreateData('tableList', this.data, data)
   }
 
-  setStyle(style: LayerForceStyleShape) {
+  setStyle(style: LayerForceStyle) {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 

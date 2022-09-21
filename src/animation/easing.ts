@@ -1,8 +1,7 @@
-import {AnimationEasing} from '../types'
 import {fabric} from 'fabric'
 import * as d3 from 'd3-ease'
 
-export const svgEasing = new Map<AnimationEasing | undefined, (normalizedTime: number) => number>([
+export const svgEasing = new Map<Easing | undefined, (normalizedTime: number) => number>([
   [undefined, d3.easeSinInOut],
   ['easeInBack', d3.easeBackIn],
   ['easeInBounce', d3.easeBounceIn],
@@ -31,7 +30,7 @@ export const svgEasing = new Map<AnimationEasing | undefined, (normalizedTime: n
 ])
 
 export const canvasEasing = new Map<
-  AnimationEasing | undefined,
+  Easing | undefined,
   (t: number, b: number, c: number, d: number) => number
 >([
   [undefined, fabric.util.ease.easeInOutSine],

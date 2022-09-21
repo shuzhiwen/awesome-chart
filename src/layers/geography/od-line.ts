@@ -6,18 +6,18 @@ import {createScale, createStyle, elClass, validateAndCreateData} from '../helpe
 import {defaultTheme} from '../../core/theme'
 import {
   ChartContext,
-  BackupAnimationOptions,
+  CacheAnimationOptions,
   LayerODLineOptions,
-  LayerODLineScaleShape,
-  LayerODLineStyleShape,
+  LayerODLineScale,
+  LayerODLineStyle,
   AnimationPathOptions,
   PathDrawerProps,
-  DrawerDataShape,
+  DrawerData,
 } from '../../types'
 
 type DataKey = 'fromX' | 'fromY' | 'toX' | 'toY'
 
-const defaultStyle: LayerODLineStyleShape = {
+const defaultStyle: LayerODLineStyle = {
   odLine: {
     fillOpacity: 0,
     strokeWidth: 1,
@@ -27,7 +27,7 @@ const defaultStyle: LayerODLineStyleShape = {
   },
 }
 
-const defaultAnimation: BackupAnimationOptions<AnimationPathOptions> = {
+const defaultAnimation: CacheAnimationOptions<AnimationPathOptions> = {
   flyingObject: {
     loop: {
       path: elClass('odLine', false),
@@ -39,11 +39,11 @@ const defaultAnimation: BackupAnimationOptions<AnimationPathOptions> = {
 export class LayerODLine extends LayerBase<LayerODLineOptions> {
   private _data: Maybe<DataTableList>
 
-  private _scale: LayerODLineScaleShape
+  private _scale: LayerODLineScale
 
   private _style = defaultStyle
 
-  private flyingObjectData: DrawerDataShape<PathDrawerProps>[] = []
+  private flyingObjectData: DrawerData<PathDrawerProps>[] = []
 
   private odLineData: {
     path: string | null
@@ -84,11 +84,11 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
     })
   }
 
-  setScale(scale: LayerODLineScaleShape) {
+  setScale(scale: LayerODLineScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerODLineStyleShape) {
+  setStyle(style: LayerODLineStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

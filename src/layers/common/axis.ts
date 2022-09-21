@@ -13,10 +13,10 @@ import {
 import {
   Scale,
   ChartContext,
-  LayerAxisStyleShape,
-  LayerAxisScaleShape,
+  LayerAxisStyle,
+  LayerAxisScale,
   LayerAxisOptions,
-  DrawerDataShape,
+  DrawerData,
   LineDrawerProps,
   CircleDrawerProps,
 } from '../../types'
@@ -50,7 +50,7 @@ const defaultOptions: Partial<LayerAxisOptions> = {
   coordinate: 'cartesian',
 }
 
-const defaultStyle: LayerAxisStyleShape = {
+const defaultStyle: LayerAxisStyle = {
   maxScaleXTextNumber: Infinity,
   splitLineAxisX: defaultSplitLine,
   splitLineAxisY: defaultSplitLine,
@@ -77,7 +77,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     }>
   >
 
-  private _scale: LayerAxisScaleShape = {
+  private _scale: LayerAxisScale = {
     nice: {
       count: 5,
       zero: false,
@@ -89,7 +89,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
 
   private lineData: Record<
     'splitLineAxisX' | 'splitLineAxisY' | 'splitLineAngle' | 'splitLineRadius',
-    (Partial<DrawerDataShape<LineDrawerProps> & DrawerDataShape<CircleDrawerProps>> & {
+    (Partial<DrawerData<LineDrawerProps> & DrawerData<CircleDrawerProps>> & {
       value: Meta
       angle?: number
       labelX?: number
@@ -141,7 +141,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     this._data = validateAndCreateData('base', this.data, data)
   }
 
-  setScale(scale: LayerAxisScaleShape) {
+  setScale(scale: LayerAxisScale) {
     const {coordinate} = this.options
     this._scale = createScale(undefined, this.scale, {nice: scale?.nice})
 
@@ -214,7 +214,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     })
   }
 
-  setStyle(style: LayerAxisStyleShape) {
+  setStyle(style: LayerAxisStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

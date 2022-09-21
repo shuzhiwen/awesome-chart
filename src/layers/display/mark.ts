@@ -4,17 +4,17 @@ import {createDroplet, isScaleBand, tableListToObjects} from '../../utils'
 import {DataTableList} from '../../data'
 import {
   ChartContext,
-  DrawerDataShape,
+  DrawerData,
   LayerMarkOptions,
-  LayerMarkScaleShape,
-  LayerMarkStyleShape,
+  LayerMarkScale,
+  LayerMarkStyle,
   PathDrawerProps,
   TextDrawerProps,
 } from '../../types'
 
 type DataKey = 'x' | 'y' | 'value'
 
-const defaultStyle: LayerMarkStyleShape = {
+const defaultStyle: LayerMarkStyle = {
   size: 30,
   mark: {
     fill: 'red',
@@ -25,15 +25,15 @@ const defaultStyle: LayerMarkStyleShape = {
 }
 
 export class LayerMark extends LayerBase<LayerMarkOptions> {
-  private _scale: LayerMarkScaleShape
+  private _scale: LayerMarkScale
 
   private _data: Maybe<DataTableList>
 
   private _style = defaultStyle
 
-  private textData: DrawerDataShape<TextDrawerProps>[] = []
+  private textData: DrawerData<TextDrawerProps>[] = []
 
-  private markData: Required<DrawerDataShape<PathDrawerProps> & {value: Meta}>[] = []
+  private markData: Required<DrawerData<PathDrawerProps> & {value: Meta}>[] = []
 
   get data() {
     return this._data
@@ -60,11 +60,11 @@ export class LayerMark extends LayerBase<LayerMarkOptions> {
     })
   }
 
-  setScale(scale: LayerMarkScaleShape) {
+  setScale(scale: LayerMarkScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerMarkStyleShape) {
+  setStyle(style: LayerMarkStyle) {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 

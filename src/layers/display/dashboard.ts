@@ -11,16 +11,16 @@ import {
 } from '../helpers'
 import {
   ChartContext,
-  LayerDashboardStyleShape,
-  DrawerDataShape,
+  LayerDashboardStyle,
+  DrawerData,
   TextDrawerProps,
   LayerDashboardOptions,
   LineDrawerProps,
   ArcDrawerProps,
-  ElSourceShape,
+  ElSource,
 } from '../../types'
 
-const defaultStyle: LayerDashboardStyleShape = {
+const defaultStyle: LayerDashboardStyle = {
   step: [2, 10],
   startAngle: -120,
   endAngle: 120,
@@ -51,18 +51,18 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
 
   private _style = defaultStyle
 
-  private tickLineData: DrawerDataShape<LineDrawerProps>[] = []
+  private tickLineData: DrawerData<LineDrawerProps>[] = []
 
-  private pointerData: Maybe<DrawerDataShape<LineDrawerProps>>
+  private pointerData: Maybe<DrawerData<LineDrawerProps>>
 
-  private tickTextData: DrawerDataShape<TextDrawerProps>[] = []
+  private tickTextData: DrawerData<TextDrawerProps>[] = []
 
-  private labelTextData: DrawerDataShape<TextDrawerProps>[] = []
+  private labelTextData: DrawerData<TextDrawerProps>[] = []
 
-  private valueTextData: DrawerDataShape<TextDrawerProps>[] = []
+  private valueTextData: DrawerData<TextDrawerProps>[] = []
 
-  private arcData: (DrawerDataShape<ArcDrawerProps> & {
-    source: ElSourceShape
+  private arcData: (DrawerData<ArcDrawerProps> & {
+    source: ElSource
     color: string
   })[] = []
 
@@ -116,7 +116,7 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerDashboardStyleShape) {
+  setStyle(style: LayerDashboardStyle) {
     this._style = createStyle(defaultStyle, this.style, style)
   }
 

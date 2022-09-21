@@ -4,16 +4,16 @@ import {GeoGeometryObjects, geoMercator, geoPath} from 'd3-geo'
 import {createScale, createStyle, createText, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
-  DrawerDataShape,
-  ElSourceShape,
+  DrawerData,
+  ElSource,
   LayerBasemapOptions,
-  LayerBasemapScaleShape,
-  LayerBasemapStyleShape,
+  LayerBasemapScale,
+  LayerBasemapStyle,
   RectDrawerProps,
   TextDrawerProps,
 } from '../../types'
 
-type GeoFeatureShape = {
+type GeoFeature = {
   type: 'Feature'
   properties: AnyObject
   geometry: GeoGeometryObjects
@@ -23,7 +23,7 @@ const animationKey = `animationKey-${new Date().getTime()}`
 
 const getGeoJSON = (adcode: Meta) => `http://cdn.dtwave.com/waveview/geojson/${adcode}.json`
 
-const defaultStyle: LayerBasemapStyleShape = {
+const defaultStyle: LayerBasemapStyle = {
   block: {
     fill: 'lightblue',
   },
@@ -35,27 +35,27 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
       | number
       | {
           type: 'FeatureCollection'
-          features: GeoFeatureShape[]
+          features: GeoFeature[]
         }
     >
   >
 
-  private _scale: LayerBasemapScaleShape
+  private _scale: LayerBasemapScale
 
   private _style = defaultStyle
 
   private fetchTimeout: Maybe<NodeJS.Timeout>
 
-  private textData: DrawerDataShape<TextDrawerProps>[] = []
+  private textData: DrawerData<TextDrawerProps>[] = []
 
   private path: Maybe<d3.GeoPath<any, d3.GeoPermissibleObjects>>
 
-  private backgroundData: DrawerDataShape<RectDrawerProps>[] = []
+  private backgroundData: DrawerData<RectDrawerProps>[] = []
 
   private blockData: {
     properties: AnyObject
     geometry: any
-    source: ElSourceShape
+    source: ElSource
   }[] = []
 
   private parentCode: number[] = []
@@ -99,11 +99,11 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
     this._data = validateAndCreateData('base', this.data, data)
   }
 
-  setScale(scale: LayerBasemapScaleShape) {
+  setScale(scale: LayerBasemapScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerBasemapStyleShape) {
+  setStyle(style: LayerBasemapStyle) {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 
@@ -166,7 +166,7 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
 
     const children = this.chinaBlocks.filter(({parent}) => parent === code)
 
-    Promise.all<{features: GeoFeatureShape[]}>(
+    Promise.all<{features: GeoFeature[]}>(
       children.map(({adcode}) => {
         return new Promise((resolve, reject) => {
           fetch(getGeoJSON(adcode))
@@ -181,10 +181,7 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
           this.setData(
             new DataBase({
               type: 'FeatureCollection',
-              features: list.reduce<GeoFeatureShape[]>(
-                (prev, cur) => [...prev, ...cur.features],
-                []
-              ),
+              features: list.reduce<GeoFeature[]>((prev, cur) => [...prev, ...cur.features], []),
             })
           )
           this.update()
@@ -229,11 +226,9 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
     })
 
     this.event.onWithOff('click-block', animationKey, ({data}) => {
-      const blockCode = data.source.find(
-        ({category}: ElSourceShape) => category === 'adcode'
-      )?.value
+      const blockCode = data.source.find(({category}: ElSource) => category === 'adcode')?.value
       this.parentCode.push(
-        data.source.find(({category}: ElSourceShape) => category === 'parent')?.value?.adcode
+        data.source.find(({category}: ElSource) => category === 'parent')?.value?.adcode
       )
       if (blockCode) {
         this.fetchOnlineData(blockCode)
