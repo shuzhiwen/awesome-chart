@@ -22,15 +22,21 @@ type ArrayItem<T> = T extends Array<infer U> ? U : T
 
 type Values<T> = T extends Record<any, infer U> ? U : T extends Array<infer F> ? F : T
 
+type Newable<T, Q> = Q extends [...infer F] ? {new (...args: F): T} : never
+
+type FlatNameItem<T> = T extends string ? `.${T}` : ''
+
 type FlatObject<T> = T extends Partial<Record<infer F, unknown>> ? {[Q in F]?: Ungroup<T[Q]>} : T
 
-type Newable<T, P = never, F = never, Q = never> = {new (arg0: P, arg1: F, arg2: Q): T}
+type FlatName<T> = T extends [infer P extends string, ...infer R extends string[]]
+  ? `${P}${FlatNameItem<FlatName<R>>}`
+  : null
 
 type Engine = 'svg' | 'canvas'
 
 type Direction = 'horizontal' | 'vertical'
 
-type Align = 'start' | 'middle' | 'end'
+type Alignment = 'start' | 'middle' | 'end'
 
 type Coordinate = 'geographic' | 'cartesian' | 'polar'
 

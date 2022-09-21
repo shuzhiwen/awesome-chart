@@ -59,7 +59,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   protected readonly backupAnimation: BackupAnimationShape = {timer: {}}
 
-  protected readonly backupEvent: BackupEventShape = {common: {}, tooltip: {}}
+  protected readonly backupEvent = {} as BackupEventShape
 
   protected readonly log = createLog(this.className)
 
@@ -85,27 +85,29 @@ export abstract class LayerBase<T extends LayerOptions> {
       getData = (event: ElEvent, data?: ElConfigShape): ElConfigShape =>
         event instanceof MouseEvent ? data : ((event.subTargets?.[0] || event.target) as any)
 
-    this.backupEvent.tooltip = {
-      mouseout: () => tooltip.hide(),
-      mousemove: (event: ElEvent) => tooltip.move(getMouseEvent(event)),
-      mouseover: (event: ElEvent, data?: ElConfigShape) => {
+    merge(this.backupEvent, {
+      'tooltip.mouseout': () => tooltip.hide(),
+      'tooltip.mousemove': (event: ElEvent) => tooltip.move(getMouseEvent(event)),
+      'tooltip.mouseover': (event: ElEvent, data?: ElConfigShape) => {
         tooltip.update({data: getData(event, data)})
         tooltip.show(getMouseEvent(event))
       },
-    }
+    })
 
     commonEvents.forEach((type) => {
-      this.backupEvent.common[type] = Object.fromEntries(
-        this.sublayers.map((sublayer) => [
-          sublayer,
-          (event: ElEvent, data: ElConfigShape) => {
-            this.event.fire(`${type}-${sublayer}`, {
-              data: getData(event, data),
-              event: getMouseEvent(event),
-            })
-          },
-        ])
-      )
+      merge(this.backupEvent, {
+        [`common.${type}`]: Object.fromEntries(
+          this.sublayers.map((sublayer) => [
+            sublayer,
+            (event: ElEvent, data: ElConfigShape) => {
+              this.event.fire(`${type}-${sublayer}`, {
+                data: getData(event, data),
+                event: getMouseEvent(event),
+              })
+            },
+          ])
+        ),
+      })
     })
   }
 
@@ -161,13 +163,13 @@ export abstract class LayerBase<T extends LayerOptions> {
 
       commonEvents.forEach((type) => {
         els.on(`${type}.common`, null)
-        els.on(`${type}.common`, this.backupEvent.common[type][sublayer])
+        els.on(`${type}.common`, this.backupEvent[`common.${type}`][sublayer])
       })
 
       if (this.tooltipTargets.includes(sublayer)) {
         tooltipEvents.forEach((type) => {
           els.on(`${type}.tooltip`, null)
-          els.on(`${type}.tooltip`, this.backupEvent.tooltip[type])
+          els.on(`${type}.tooltip`, this.backupEvent[`tooltip.${type}`])
         })
       }
     }
@@ -178,14 +180,14 @@ export abstract class LayerBase<T extends LayerOptions> {
       commonEvents.forEach((type) => {
         els.forEach((el) => {
           el.off(type)
-          el.on(type, this.backupEvent.common[type][sublayer])
+          el.on(type, this.backupEvent[`common.${type}`][sublayer])
         })
       })
 
       if (this.tooltipTargets.includes(sublayer)) {
         tooltipEvents.forEach((type) =>
           els.forEach((el) => {
-            el.on(type, this.backupEvent.tooltip[type])
+            el.on(type, this.backupEvent[`tooltip.${type}`])
           })
         )
       }

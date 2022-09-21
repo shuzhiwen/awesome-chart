@@ -1,10 +1,10 @@
 import {LayerBase, layerMapping} from '../../layers'
 import {DrawerType, GraphDrawerProps} from '../draw'
+import {ColorMatrix, commonEvents, tooltipEvents} from '../../utils'
 import {BasicAnimationOptions} from '../animation'
 import {RawScale, ScaleNiceShape} from '../scale'
 import {ChartContext} from '../core'
 import {LayerOptions} from './options'
-import {ColorMatrix} from '../../utils'
 
 export type LayerType = keyof typeof layerMapping
 
@@ -25,17 +25,17 @@ export type BackupAnimationShape = Record<string, Maybe<AnyObject>> & {
   options?: BackupAnimationOptions
 }
 
-export type BackupEventShape = {
-  common: Record<string, Record<string, AnyFunction>>
-  tooltip: Record<string, AnyFunction>
-}
+export type BackupEventShape = Readonly<
+  Record<FlatName<['common', SetKeys<typeof commonEvents>]>, Record<string, AnyFunction>> &
+    Record<FlatName<['tooltip', SetKeys<typeof tooltipEvents>]>, AnyFunction>
+>
 
-export type LayerBaseProps<T extends LayerOptions> = {
+export type LayerBaseProps<T extends LayerOptions> = Readonly<{
   context: ChartContext
   options: T
   sublayers?: string[]
   tooltipTargets?: string[]
-}
+}>
 
 export type DrawBasicProps<T> = {
   type: DrawerType

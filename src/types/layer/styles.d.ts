@@ -50,8 +50,8 @@ export type LayerAxisStyleShape = Partial<{
 }>
 
 export type LayerLegendStyleShape = Partial<{
-  align: Align
-  verticalAlign: Align
+  align: Alignment
+  verticalAlign: Alignment
   direction: Direction
   offset: [number, number]
   gap: [number, number]
@@ -96,14 +96,14 @@ export type LayerTextStyleShape = Partial<{
   sanger: [number, number]
   text: Partial<
     TextStyleShape & {
-      align: Align
-      verticalAlign: Align
+      align: Alignment
+      verticalAlign: Alignment
     }
   >
   groupText: Partial<
     TextStyleShape & {
-      align: Align
-      verticalAlign: Align
+      align: Alignment
+      verticalAlign: Alignment
     }
   >[]
 }>
@@ -185,7 +185,7 @@ export type LayerSankeyStyleShape = Partial<{
   nodeGap: number
   edgeGap: number
   labelOffset: number
-  align: Align
+  align: Alignment
   node: GraphStyleShape
   edge: GraphStyleShape
   text: TextStyleShape
@@ -193,8 +193,8 @@ export type LayerSankeyStyleShape = Partial<{
 
 export type LayerTreemapStyleShape = Partial<{
   title: 'treemapBinary' | 'treemapDice' | 'treemapSlice' | 'treemapSliceDice' | 'treemapSquarify'
-  align: Align
-  verticalAlign: Align
+  align: Alignment
+  verticalAlign: Alignment
   labelGap: number
   rect: GraphStyleShape
   text: TextStyleShape
@@ -205,7 +205,7 @@ export type LayerTreeStyleShape = Partial<{
   direction: Direction
   labelOffset: number
   labelPosition: Position2
-  align: Align
+  align: Alignment
   nodeSize: number
   node: GraphStyleShape
   edge: GraphStyleShape
