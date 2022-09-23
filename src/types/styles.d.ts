@@ -121,8 +121,8 @@ export type LayerLineStyle = Partial<{
 }>
 
 export type LayerRectStyle = Partial<{
-  fixedWidth: Maybe<number>
-  fixedHeight: Maybe<number>
+  fixedWidth: Meta
+  fixedHeight: Meta
   labelPosition: Position5 | [Position5, Position5]
   labelPositionOrient: Position2
   rect: GraphStyle

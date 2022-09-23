@@ -16,7 +16,17 @@ export function ungroup<T>(input: T): Ungroup<T> {
   return !isArray(input) ? input : ungroup(input[0])
 }
 
-export function getTextWidth(text: Meta, fontSize: number | string = 12) {
+export function getPercentageNumber(input: Meta, relative: number) {
+  if (typeof input === 'string') {
+    if (input.includes('%')) {
+      return (Number(input.trim().replaceAll('%', '')) / 100) * relative
+    }
+    return Number(input)
+  }
+  return input
+}
+
+export function getTextWidth(text: Meta, fontSize: Meta = 12) {
   ctx.font = `${isNumber(fontSize) ? `${fontSize}px` : fontSize} ${fontFamily}`
   return ctx.measureText(String(text)).width
 }

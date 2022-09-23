@@ -1,7 +1,7 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {scaleBand, scaleLinear} from '../../scales'
-import {ColorMatrix, formatNumber, isRealNumber, swap} from '../../utils'
+import {ColorMatrix, formatNumber, getPercentageNumber, isRealNumber, swap} from '../../utils'
 import {cloneDeep, isArray} from 'lodash'
 import {
   createColorMatrix,
@@ -30,8 +30,6 @@ const defaultOptions: Partial<LayerRectOptions> = {
 }
 
 const defaultStyle: LayerRectStyle = {
-  fixedWidth: null,
-  fixedHeight: null,
   labelPosition: 'center',
   labelPositionOrient: 'outer',
   background: {
@@ -394,25 +392,28 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
   private transformFixed() {
     const {variant} = this.options,
-      {fixedWidth, fixedHeight} = this.style
+      {fixedWidth = '100%', fixedHeight = '100%'} = this.style
 
     this.rectData = this.rectData.map((group) => {
       return group.map(({x, y, width, height, ...rest}) => {
+        const realWith = getPercentageNumber(fixedWidth, width),
+          realHeight = getPercentageNumber(fixedHeight, height)
+
         if (variant === 'column') {
           return {
             ...rest,
-            x: fixedWidth ? x + (width - fixedWidth) / 2 : x,
-            y: fixedHeight && rest.value < 0 ? y + height - fixedHeight : y,
-            width: fixedWidth ?? width,
-            height: fixedHeight ?? height,
+            x: x + (width - realWith) / 2,
+            y: rest.value < 0 ? y + height - realHeight : y,
+            width: realWith,
+            height: realHeight,
           }
         } else {
           return {
             ...rest,
-            x: fixedWidth && rest.value > 0 ? x + width - fixedWidth : x,
-            y: fixedHeight ? y + (height - fixedHeight) / 2 : y,
-            width: fixedWidth ?? width,
-            height: fixedHeight ?? height,
+            x: rest.value > 0 ? x + width - realWith : x,
+            y: y + (height - realHeight) / 2,
+            width: realWith,
+            height: realHeight,
           }
         }
       })

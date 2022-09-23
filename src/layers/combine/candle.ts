@@ -21,7 +21,7 @@ const defaultStyle: LayerCandleStyle = {
     text: {hidden: true},
   },
   line: {
-    fixedWidth: 4,
+    fixedWidth: '20%',
     background: {hidden: true},
     text: {hidden: true},
   },
