@@ -1,34 +1,31 @@
 import {LayerBase, layerMapping} from '../layers'
 import {DrawerType, GraphDrawerProps} from './draw'
-import {ColorMatrix, commonEvents, tooltipEvents} from '../utils'
-import {BasicAnimationOptions} from './animation'
+import {commonEvents, tooltipEvents} from '../utils'
+import {RawScale, ScaleNice} from './scale'
+import {AnimationOptions} from './animation'
 import {AnimationQueue} from '../animation'
-import {RawScale, ScaleNice as ScaleNice} from './scale'
 import {ChartContext} from './core'
 import {LayerOptions} from './options'
 import {TextStyle} from './styles'
+import {LegendData} from './data'
 
 export type LayerType = keyof typeof layerMapping
 
-export type CacheDataItem<T> = {
-  data: Omit<GraphDrawerProps<T>, 'className' | 'container' | 'theme'>[]
-  order?: Map<Meta, number>
-}
-
-export type CacheData<T> = Record<string, CacheDataItem<T>>
-
-export type CacheAnimationOptions<T = BasicAnimationOptions> = Record<
+export type CacheLayerData<T> = Record<
   string,
-  Partial<Record<'enter' | 'loop' | 'update', T>>
+  {
+    data: Omit<GraphDrawerProps<T>, 'className' | 'container' | 'theme'>[]
+    order?: Map<Meta, number>
+  }
 >
 
-export type CacheAnimation = {
+export type CacheLayerAnimation<T = AnimationOptions> = {
   timer: Record<string, NodeJS.Timeout>
   animations: Record<string, Maybe<AnimationQueue>>
-  options: CacheAnimationOptions
+  options: Record<string, Partial<Record<'enter' | 'loop' | 'update', T>>>
 }
 
-export type CacheEvent = Readonly<
+export type CacheLayerEvent = Readonly<
   Record<FlatName<['common', SetKeys<typeof commonEvents>]>, Record<string, AnyFunction>> &
     Record<FlatName<['tooltip', SetKeys<typeof tooltipEvents>]>, AnyFunction>
 >
@@ -60,16 +57,6 @@ export type LayerScale = Partial<{
 export type LayerInstance = LayerBase<LayerOptions> & {
   scale?: Maybe<LayerScale>
   legendData?: Maybe<LegendData>
-}
-
-export type LegendData = {
-  filter: 'column' | 'row'
-  colorMatrix: ColorMatrix
-  legends: {
-    label: Meta
-    color: string
-    shape: LegendShape
-  }[]
 }
 
 export type CreateTextProps = {

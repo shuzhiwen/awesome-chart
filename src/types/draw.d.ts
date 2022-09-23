@@ -4,15 +4,15 @@ import {GraphStyle, TextStyle} from './styles'
 import {drawerMapping} from '../draws'
 import {ChartTheme} from './core'
 
-export type DrawerTarget = D3Selection | fabric.Group
-
 export type DrawerType = keyof typeof drawerMapping
+
+export type DrawerTarget = D3Selection | fabric.Group
 
 export type DrawerData<T> = T extends BasicDrawerProps<infer U> ? U : T
 
-export type ElEvent = MouseEvent | IEvent<MouseEvent>
-
 export type D3Selection = Selection<any, unknown, any, unknown>
+
+export type ElEvent = MouseEvent | IEvent<MouseEvent>
 
 export type ElSource = AnyObject &
   Partial<{

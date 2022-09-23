@@ -1,4 +1,5 @@
 import {DataBase, dataMapping, DataRelation, DataTable, DataTableList} from '../data'
+import {ColorMatrix} from '../utils'
 
 export type DataType = keyof typeof dataMapping
 
@@ -53,3 +54,22 @@ export type RelationData = {
   nodes: Node[]
   edges: Edge[]
 }
+
+export type LegendData = {
+  filter: 'column' | 'row'
+  colorMatrix: ColorMatrix
+  legends: {
+    label: Meta
+    color: string
+    shape: LegendShape
+  }[]
+}
+
+export type TooltipData = Maybe<{
+  title?: Meta
+  list: Partial<{
+    label: Meta
+    value: Meta
+    color: string
+  }>[]
+}>

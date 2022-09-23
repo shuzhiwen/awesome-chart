@@ -3,9 +3,9 @@ import {range, uuid} from '../utils'
 import {AnimationBase} from './base'
 import {AnimationEmpty} from './empty'
 import {animationMapping} from '.'
-import {AnimationType, DrawerTarget, BasicAnimationOptions} from '../types'
+import {AnimationType, DrawerTarget, AnimationOptions} from '../types'
 
-type Animation = AnimationBase<BasicAnimationOptions>
+type Animation = AnimationBase<AnimationOptions>
 
 const animationKey = `animationKey-${new Date().getTime()}`
 
@@ -23,13 +23,13 @@ const bind = (animations: Animation[], callback: AnyFunction) => {
   })
 }
 
-export class AnimationQueue extends AnimationBase<BasicAnimationOptions> {
+export class AnimationQueue extends AnimationBase<AnimationOptions> {
   private isConnected = false
 
   private queue: Animation[]
 
   constructor({options}: {options: {loop: boolean}}) {
-    super({options: options as BasicAnimationOptions})
+    super({options: options as AnimationOptions})
     const animationHead = new AnimationEmpty({})
 
     animationHead.event.on('start', this.start)
@@ -89,7 +89,7 @@ export class AnimationQueue extends AnimationBase<BasicAnimationOptions> {
     this.isConnected = false
   }
 
-  pushAnimation(type: AnimationType, options: BasicAnimationOptions, context: DrawerTarget) {
+  pushAnimation(type: AnimationType, options: AnimationOptions, context: DrawerTarget) {
     if (!animationMapping[type]) {
       this.log.error('Animation type error', type)
       return

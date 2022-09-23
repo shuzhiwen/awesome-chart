@@ -16,18 +16,17 @@ import {
 } from '../utils'
 import {
   LayerData,
-  CacheData,
+  CacheLayerData,
   ElConfig,
   DrawBasicProps,
   DrawerTarget,
   ElEvent,
   LayerBaseProps,
-  CacheAnimation,
-  CacheAnimationOptions,
+  CacheLayerAnimation,
   LayerOptions,
   ChartContext,
   LayerScale,
-  CacheEvent,
+  CacheLayerEvent,
 } from '../types'
 
 export abstract class LayerBase<T extends LayerOptions> {
@@ -55,11 +54,11 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   readonly options: T & ChartContext
 
-  readonly cacheData = {} as CacheData<unknown>
+  readonly cacheData = {} as CacheLayerData<unknown>
 
-  protected readonly cacheEvent = {} as CacheEvent
+  protected readonly cacheEvent = {} as CacheLayerEvent
 
-  protected readonly cacheAnimation: CacheAnimation
+  protected readonly cacheAnimation: CacheLayerAnimation
 
   protected readonly log = createLog(this.className)
 
@@ -140,7 +139,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     })
   }
 
-  setAnimation(options: CacheAnimationOptions) {
+  setAnimation(options: CacheLayerAnimation['options']) {
     merge(this.cacheAnimation, {options})
     this.sublayers.forEach((sublayer) => this.createAnimation(sublayer))
   }

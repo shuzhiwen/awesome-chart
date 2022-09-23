@@ -11,10 +11,11 @@ export type LayoutArea = Readonly<{
   height: number
 }>
 
-export type Layout = Record<string, LayoutArea> & {
-  readonly main: LayoutArea
-  readonly container: LayoutArea
-}
+export type Layout = Record<string, LayoutArea> &
+  Readonly<{
+    main: LayoutArea
+    container: LayoutArea
+  }>
 
 export type LayoutProps = {
   containerWidth: number

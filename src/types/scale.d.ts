@@ -8,7 +8,7 @@ export type ScaleBand = ReturnType<typeof scaleBand>
 
 export type ScaleLinear = ReturnType<typeof scaleLinear>
 
-export interface RawScale<Domain = any> {
+export type RawScale<Domain = any> = {
   (input: Domain): any
 }
 
@@ -72,12 +72,10 @@ export type LayerAxisScale = Partial<{
   nice: ScaleNice
 }>
 
-export type LayerAuxiliaryScale = Maybe<
-  Partial<{
-    scaleX: Scale
-    scaleY: Scale
-  }>
->
+export type LayerAuxiliaryScale = Maybe<{
+  scaleX?: Scale
+  scaleY?: Scale
+}>
 
 export type LayerLineScale = Maybe<{
   scaleX: ScaleBand

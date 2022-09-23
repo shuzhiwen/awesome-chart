@@ -1,10 +1,10 @@
 import {fabric} from 'fabric'
 import {isArray} from 'lodash'
 import {uuid} from './random'
+import {Gradient} from 'fabric/fabric-impl'
 import {group, isSvgCntr, mergeAlpha} from '.'
 import {
   GradientCreatorProps,
-  GradientWithId,
   LinearGradientSchema,
   RadialGradientSchema,
   CreateDefsSchema,
@@ -32,7 +32,7 @@ export const createLinearGradients = ({
           .style('stop-opacity', opacity)
       })
     } else if (isArray(container)) {
-      const gradient: GradientWithId = new fabric.Gradient({
+      const gradient: Gradient = new fabric.Gradient({
         type: 'linear',
         gradientUnits: 'percentage',
         coords: {x1, y1, x2, y2},
@@ -69,7 +69,7 @@ export const createRadialGradients = ({
           .style('stop-opacity', opacity)
       })
     } else if (isArray(container)) {
-      const gradient: GradientWithId = new fabric.Gradient({
+      const gradient: Gradient = new fabric.Gradient({
         type: 'radial',
         gradientUnits: 'percentage',
         coords: {x1, y1, x2, y2, r1: r, r2},

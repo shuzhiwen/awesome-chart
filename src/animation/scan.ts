@@ -2,10 +2,10 @@ import {select} from 'd3'
 import {fabric} from 'fabric'
 import {AnimationBase} from './base'
 import {cloneDeep, merge} from 'lodash'
-import {Rect} from 'fabric/fabric-impl'
+import {Gradient, Rect} from 'fabric/fabric-impl'
 import anime, {AnimeParams} from 'animejs'
 import {isCanvasCntr, isSvgCntr, mergeAlpha} from '../utils'
-import {AnimationScanOptions, AnimationProps, D3Selection, GradientWithId} from '../types'
+import {AnimationScanOptions, AnimationProps, D3Selection} from '../types'
 
 const getAttributes = (direction: AnimationScanOptions['direction']) => {
   if (direction === 'left' || direction === 'right') {
@@ -106,7 +106,7 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
 
   private maskNode: Maybe<D3Selection | Rect>
 
-  private gradientNode: Maybe<D3Selection | GradientWithId>
+  private gradientNode: Maybe<D3Selection | Gradient>
 
   constructor(props: AnimationProps<AnimationScanOptions>) {
     super(props)

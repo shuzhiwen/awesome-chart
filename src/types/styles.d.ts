@@ -1,4 +1,4 @@
-import {BasicAnimationOptions} from './animation'
+import {AnimationOptions} from './animation'
 import {BasicDrawerProps, ElConfig} from './draw'
 import {FormatNumberConfig} from './utils'
 
@@ -12,7 +12,7 @@ export type GraphStyle = Partial<{
   strokeDasharray: MaybeGroup<string>
   transformOrigin: MaybeGroup<string>
   rotation: MaybeGroup<number>
-  transition: Maybe<Partial<BasicAnimationOptions>>
+  transition: Maybe<Partial<AnimationOptions>>
   hidden: boolean
   mapping: (
     config: ElConfig & Pick<BasicDrawerProps<unknown>, 'container' | 'theme'>

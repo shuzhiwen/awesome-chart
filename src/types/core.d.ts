@@ -4,9 +4,9 @@ import {LayoutCreator} from './layout'
 import {RandomOptions} from './utils'
 import {ScaleNice} from './scale'
 import {getEasyGradientCreator} from '../utils'
-import {CacheDataItem, LayerScale, LayerType} from './common'
+import {CacheLayerData, LayerScale, LayerType} from './base'
 import {LayerOptions} from './options'
-import {LayerData} from './data'
+import {LayerData, TooltipData} from './data'
 
 export type ChartContext = Pick<
   Chart,
@@ -56,15 +56,6 @@ export type ChartTheme = Readonly<
   }
 >
 
-export type TooltipData = Maybe<{
-  title?: Meta
-  list: Partial<{
-    label: Meta
-    value: Meta
-    color: string
-  }>[]
-}>
-
 export type TooltipOptions = {
   container: HTMLElement | null
   mode?: 'single' | 'dimension' | 'category'
@@ -76,7 +67,7 @@ export type TooltipOptions = {
   backgroundColor?: string
   render?: (container: HTMLElement, data: Partial<ElConfig>) => void
   setTooltipData?: (data: TooltipData, options: TooltipOptions) => TooltipData
-  getLayersBackupData?: () => CacheDataItem<unknown>['data']
+  getLayersBackupData?: () => CacheLayerData<unknown>['data']['data']
 }
 
 export type ChartProps = {

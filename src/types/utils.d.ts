@@ -1,3 +1,4 @@
+import {Gradient} from 'fabric/fabric-impl'
 import {D3Selection} from './draw'
 
 export type FormatNumberConfig = Partial<{
@@ -19,12 +20,8 @@ export type Stop = Partial<{
   opacity: number
 }>
 
-export type GradientWithId = fabric.Gradient & {
-  id?: string
-}
-
 export type GradientCreatorProps<T> = {
-  container: D3Selection | GradientWithId[]
+  container: D3Selection | Gradient[]
   schema: T
 }
 

@@ -3,12 +3,12 @@ import {D3Selection, DrawerTarget} from './draw'
 
 export type AnimationType = keyof typeof animationMapping
 
-export type AnimationProps<T extends BasicAnimationOptions> = Partial<{
+export type AnimationProps<T extends AnimationOptions> = Partial<{
   context: Maybe<DrawerTarget>
   options: T
 }>
 
-export type BasicAnimationOptions<
+export type AnimationOptions<
   T extends AnimationType = AnimationType,
   P extends AnyObject = Record<never, never>
 > = Partial<P> & {
@@ -21,9 +21,9 @@ export type BasicAnimationOptions<
   delay: number
 }
 
-export type AnimationEmptyOptions = BasicAnimationOptions<'empty'>
+export type AnimationEmptyOptions = AnimationOptions<'empty'>
 
-export type AnimationFadeOptions = BasicAnimationOptions<
+export type AnimationFadeOptions = AnimationOptions<
   'fade',
   {
     alternate: boolean
@@ -34,14 +34,14 @@ export type AnimationFadeOptions = BasicAnimationOptions<
   }
 >
 
-export type AnimationPathOptions = BasicAnimationOptions<
+export type AnimationPathOptions = AnimationOptions<
   'path',
   {
     path: string
   }
 >
 
-export type AnimationZoomOptions = BasicAnimationOptions<
+export type AnimationZoomOptions = AnimationOptions<
   'zoom',
   {
     stagger: number
@@ -51,7 +51,7 @@ export type AnimationZoomOptions = BasicAnimationOptions<
   }
 >
 
-export type AnimationMoveOptions = BasicAnimationOptions<
+export type AnimationMoveOptions = AnimationOptions<
   'move',
   {
     alternate: boolean
@@ -63,14 +63,14 @@ export type AnimationMoveOptions = BasicAnimationOptions<
   }
 >
 
-export type AnimationEraseOptions = BasicAnimationOptions<
+export type AnimationEraseOptions = AnimationOptions<
   'erase',
   {
     direction: Position4
   }
 >
 
-export type AnimationScanOptions = BasicAnimationOptions<
+export type AnimationScanOptions = AnimationOptions<
   'scan',
   {
     scope: 'all' | 'fill' | 'stroke'

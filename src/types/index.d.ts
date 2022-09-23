@@ -4,7 +4,7 @@ import './global'
 import './module'
 
 export * from './animation'
-export * from './common'
+export * from './base'
 export * from './core'
 export * from './data'
 export * from './draw'
@@ -20,5 +20,8 @@ declare module 'fabric/fabric-impl' {
   }
   interface Group {
     className?: string
+  }
+  interface Gradient {
+    id: string
   }
 }

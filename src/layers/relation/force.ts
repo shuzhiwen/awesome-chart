@@ -11,7 +11,7 @@ import {
   CircleDrawerProps,
   LayerForceStyle,
   LayerForceOptions,
-  CacheAnimationOptions,
+  CacheLayerAnimation,
 } from '../../types'
 
 const defaultStyle: LayerForceStyle = {
@@ -51,7 +51,7 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
 
   setScale() {}
 
-  setAnimation(options: CacheAnimationOptions) {
+  setAnimation(options: CacheLayerAnimation['options']) {
     super.setAnimation(
       merge({}, options, {
         node: {update: {duration: 0, delay: 0}},

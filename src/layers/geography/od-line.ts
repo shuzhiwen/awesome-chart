@@ -6,7 +6,7 @@ import {createScale, createStyle, elClass, validateAndCreateData} from '../helpe
 import {defaultTheme} from '../../core/theme'
 import {
   ChartContext,
-  CacheAnimationOptions,
+  CacheLayerAnimation,
   LayerODLineOptions,
   LayerODLineScale,
   LayerODLineStyle,
@@ -27,7 +27,7 @@ const defaultStyle: LayerODLineStyle = {
   },
 }
 
-const defaultAnimation: CacheAnimationOptions<AnimationPathOptions> = {
+const defaultAnimation: CacheLayerAnimation<AnimationPathOptions>['options'] = {
   flyingObject: {
     loop: {
       path: elClass('odLine', false),

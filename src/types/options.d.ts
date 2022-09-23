@@ -1,6 +1,6 @@
 import {DrawerTarget} from './draw'
 import {LayoutArea} from './layout'
-import {LayerType} from './common'
+import {LayerType} from './base'
 
 type BasicLayerOptions<
   T extends LayerType,
