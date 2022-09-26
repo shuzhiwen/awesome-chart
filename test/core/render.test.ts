@@ -3,6 +3,21 @@ import base from '../../demo/schema/base'
 import rect from '../../demo/schema/normal/rect'
 import {createChart} from '../../src'
 
+// disable log message
+jest.mock('../../src/utils/create-log', () => ({
+  __esModule: true,
+  createLog: jest.fn(() => ({
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    debug: {
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+    },
+  })),
+}))
+
 test('defines', () => {
   const svgContainer = document.body.appendChild(document.createElement('div'))
   const canvasContainer = document.body.appendChild(document.createElement('div'))

@@ -211,7 +211,7 @@ export class Chart {
     this.layers.forEach((layer) => {
       const {scaleY, scaleYR, ...rest} = {...layer.scale, ...axisLayer.scale}
 
-      if (layer.options.id !== trigger?.options.id) {
+      if (layer !== axisLayer && layer.options.id !== trigger?.options.id) {
         layer.setScale({...rest, scaleY: layer.options.axis === 'minor' ? scaleYR : scaleY})
         redraw && layer.draw()
       }

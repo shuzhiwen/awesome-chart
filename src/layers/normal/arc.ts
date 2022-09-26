@@ -240,7 +240,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
             range: [0, Math.PI * 2],
           }),
           scaleRadius: scaleLinear({
-            domain: [-Number.MIN_VALUE, Number.MAX_VALUE],
+            domain: this.data.select(headers[1]).range(),
             range: [maxRadius, maxRadius],
           }),
         },

@@ -181,6 +181,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
           }
 
           layer.setData(filteredData)
+          layer.update()
           bindCoordinate({trigger: this, redraw: true})
           this.needRecalculated = true
           this.draw()

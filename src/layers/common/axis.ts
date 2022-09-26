@@ -219,15 +219,15 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   }
 
   update() {
-    const {scaleY, scaleYR} = this.scale,
-      {containerWidth, layout} = this.options,
+    const {containerWidth, layout} = this.options,
       {left, top, width, height, bottom} = layout,
+      {scaleX, scaleY, scaleYR, scaleAngle, scaleRadius} = this.scale,
       {titleX, titleY, titleYR, textX, textY, textYR, textAngle, textRadius} = this.style,
-      maxRadius = this.scale.scaleRadius?.range()[1] || Math.max(width / 2, height / 2),
-      labelYR = this.getLabelAndPosition(this.scale.scaleYR!),
+      maxRadius = scaleRadius?.range()[1] || Math.max(width / 2, height / 2),
+      labelYR = this.getLabelAndPosition(scaleYR!),
       offset = 5
 
-    this.lineData.splitLineAxisX = this.getLabelAndPosition(this.scale.scaleX!).map(
+    this.lineData.splitLineAxisX = this.getLabelAndPosition(scaleX!).map(
       ({label, position}, i) => ({
         value: label,
         x1: left + position,
@@ -238,18 +238,18 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       })
     )
 
-    this.lineData.splitLineAxisY = this.getLabelAndPosition(
-      this.scale.scaleY! || this.scale.scaleYR
-    ).map(({label, position}, i, array) => ({
-      value: label,
-      x1: left,
-      x2: left + width,
-      y1: top + position,
-      y2: top + position,
-      axisLine: i === 0 ? 'Y' : i === array.length - 1 && scaleYR ? 'YR' : null,
-    }))
+    this.lineData.splitLineAxisY = this.getLabelAndPosition(scaleY! || scaleYR).map(
+      ({label, position}, i, array) => ({
+        value: label,
+        x1: left,
+        x2: left + width,
+        y1: top + position,
+        y2: top + position,
+        axisLine: i === 0 ? 'Y' : i === array.length - 1 && scaleYR ? 'YR' : null,
+      })
+    )
 
-    this.lineData.splitLineAngle = this.getLabelAndPosition(this.scale.scaleAngle!).map(
+    this.lineData.splitLineAngle = this.getLabelAndPosition(scaleAngle!).map(
       ({label, position}) => ({
         value: label,
         angle: position,
@@ -262,7 +262,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       })
     )
 
-    this.lineData.splitLineRadius = this.getLabelAndPosition(this.scale.scaleRadius!).map(
+    this.lineData.splitLineRadius = this.getLabelAndPosition(scaleRadius!).map(
       ({label, position}) => ({
         value: label,
         x: left + width / 2,

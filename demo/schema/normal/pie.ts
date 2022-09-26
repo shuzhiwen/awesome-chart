@@ -37,7 +37,12 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
       count: 5,
       zero: false,
     },
-    style: {},
+    style: {
+      splitLineAngle: {hidden: variant === 'pie'},
+      splitLineRadius: {hidden: variant === 'pie'},
+      textAngle: {hidden: variant === 'pie'},
+      textRadius: {hidden: variant === 'pie'},
+    },
   },
   {
     type: 'arc',

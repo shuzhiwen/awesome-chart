@@ -24,13 +24,12 @@ export class DataTableList extends DataBase<RawTableList> {
   }
 
   filterRows(rows: number[]) {
-    const data = this._data.map(({list, ...rest}) => ({
-      list: list.filter((_, index) => rows.includes(index)),
-      ...rest,
-    }))
+    const data = this._data.map(({list, header}) => [
+      header,
+      ...list.filter((_, index) => rows.includes(index)),
+    ])
 
-    const result = new DataTableList([[]], this.options)
-    result._data = data
+    const result = new DataTableList(transpose(data), this.options)
     return result
   }
 
