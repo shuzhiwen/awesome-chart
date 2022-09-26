@@ -120,8 +120,8 @@ export type PathDrawerProps = GraphDrawerProps<{
 
 export type PolyDrawerProps = GraphDrawerProps<{
   points: {x: number; y: number}[]
-  centerX: number
-  centerY: number
+  centerX?: number
+  centerY?: number
 }>
 
 export type RectDrawerProps = GraphDrawerProps<{

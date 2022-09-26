@@ -1,4 +1,4 @@
-export default ({variant, mode, innerRadius}) => [
+export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => [
   {
     type: 'text',
     options: {
@@ -44,23 +44,26 @@ export default ({variant, mode, innerRadius}) => [
     options: {
       layout: 'main',
       variant,
-      mode,
     },
     data: {
       type: 'tableList',
       mode: 'normal',
       row: 6,
-      column: mode === 'stack' ? 2 : 1,
+      column: stack ? 2 : 1,
       mu: 500,
       sigma: 200,
       decimalPlace: 1,
     },
     style: {
-      labelPosition: 'outer',
+      labelPosition: variant === 'pie' ? 'outer' : 'inner',
+      labelOffset: hasGuideLine ? 15 : 5,
       innerRadius,
+      guideLine: {
+        hidden: !hasGuideLine,
+      },
       text: {
         fontSize: 8,
-        hidden: false,
+        hidden: variant !== 'pie',
       },
     },
     animation: {
@@ -71,6 +74,14 @@ export default ({variant, mode, innerRadius}) => [
           duration: 2000,
           mode: 'enlarge',
           direction: 'both',
+        },
+      },
+      guideLine: {
+        enter: {
+          type: 'fade',
+          delay: 2000,
+          duration: 1000,
+          mode: 'fadeIn',
         },
       },
       text: {

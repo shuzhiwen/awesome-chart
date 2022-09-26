@@ -133,6 +133,7 @@ export type LayerRectStyle = Partial<{
 export type LayerArcStyle = Partial<{
   innerRadius: number
   labelOffset: number
+  guideLine: GraphStyle
   labelPosition: Position2
   arc: GraphStyle
   text: TextStyle

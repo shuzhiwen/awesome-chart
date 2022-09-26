@@ -169,19 +169,19 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础饼图',
-          schema: base(pie({variant: 'pie', mode: 'default', innerRadius: 0})),
+          schema: base(pie({variant: 'pie', innerRadius: 0})),
         },
         {
           name: '基础环图',
-          schema: base(pie({variant: 'pie', mode: 'default', innerRadius: 30})),
+          schema: base(pie({variant: 'pie', innerRadius: 30, hasGuideLine: true})),
         },
         {
           name: '南丁格尔玫瑰',
-          schema: base(pie({variant: 'nightingaleRose', mode: 'default', innerRadius: 30})),
+          schema: base(pie({variant: 'nightingaleRose', innerRadius: 10})),
         },
         {
           name: '堆叠南丁格尔玫瑰',
-          schema: base(pie({variant: 'nightingaleRose', mode: 'stack', innerRadius: 30})),
+          schema: base(pie({variant: 'nightingaleRose', innerRadius: 10, stack: true})),
         },
       ],
     },

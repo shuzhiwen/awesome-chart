@@ -3,7 +3,6 @@ import {isRealNumber} from '../../utils'
 import {scaleAngle, scaleLinear} from '../../scales'
 import {DataTableList} from '../../data'
 import {
-  createArcText,
   createColorMatrix,
   createScale,
   createStyle,
@@ -20,6 +19,7 @@ import {
   LayerArcScale,
   ArcDrawerProps,
   ElSource,
+  CurveDrawerProps,
 } from '../../types'
 
 const defaultOptions: Partial<LayerArcOptions> = {
@@ -30,6 +30,10 @@ const defaultStyle: LayerArcStyle = {
   innerRadius: 0,
   labelOffset: 5,
   labelPosition: 'inner',
+  guideLine: {
+    fillOpacity: 0,
+    strokeWidth: 1,
+  },
 }
 
 export class LayerArc extends LayerBase<LayerArcOptions> {
@@ -44,6 +48,8 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
   private _style = defaultStyle
 
   private textData: DrawerData<TextDrawerProps>[][] = []
+
+  private guideLineData: DrawerData<CurveDrawerProps>['points'][][] = []
 
   private arcData: (DrawerData<ArcDrawerProps> & {
     value: Meta
@@ -67,7 +73,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
     super({
       context,
       options: {...defaultOptions, ...options},
-      sublayers: ['arc', 'text'],
+      sublayers: ['arc', 'guideLine', 'text'],
       tooltipTargets: ['arc'],
     })
   }
@@ -170,26 +176,46 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       }
     }
 
-    this.textData = this.arcData.map((group) => group.map((data) => this.createArcLabel(data)))
+    const labelLine = this.arcData.map((group) =>
+      group.map((data) => this.createArcLabelAndGuideLine(data))
+    )
+    this.textData = labelLine.map((group) => group.map(({text}) => text))
+    this.guideLineData = labelLine.map((group) => group.map(({points}) => points))
   }
 
-  private createArcLabel = (props: ArrayItem<ArrayItem<LayerArc['arcData']>>) => {
-    const {text, labelPosition, labelOffset = 0} = this.style,
+  private createArcLabelAndGuideLine = (props: ArrayItem<ArrayItem<LayerArc['arcData']>>) => {
+    const {text: style, labelPosition, labelOffset = 0} = this.style,
       {value, centerX, centerY, innerRadius, outerRadius, startAngle, endAngle} = props,
+      getX = (r: number) => centerX + Math.sin(angle) * r,
+      getY = (r: number) => centerY - Math.cos(angle) * r,
       angle = (startAngle + endAngle) / 2
 
     if (labelPosition === 'inner') {
-      const r = (innerRadius + outerRadius) / 2,
-        x = centerX + Math.sin(angle) * r,
-        y = centerY - Math.cos(angle) * r
+      const r = (innerRadius + outerRadius) / 2
 
-      return createText({x, y, value, style: text, position: 'center'})
+      return {
+        points: [],
+        text: createText({x: getX(r), y: getY(r), value, style, position: 'center'}),
+      }
     } else {
-      const r = outerRadius + labelOffset,
-        x = centerX + Math.sin(angle) * r,
-        y = centerY - Math.cos(angle) * r
+      const [x1, y1] = [getX(outerRadius), getY(outerRadius)],
+        [x2, y2] = [getX(outerRadius + labelOffset), getY(outerRadius + labelOffset)],
+        factor = -Math.sin(angle) + (angle > Math.PI ? -Math.SQRT2 : Math.SQRT2)
 
-      return createArcText({x, y, value, style: text, angle})
+      return {
+        text: createText({
+          x: x2 + (labelOffset + 2) * factor,
+          y: y2,
+          value,
+          style,
+          position: angle > Math.PI ? 'left' : 'right',
+        }),
+        points: [
+          {x: x1, y: y1},
+          {x: x2, y: y2},
+          {x: x2 + labelOffset * factor, y: y2},
+        ],
+      }
     }
   }
 
@@ -255,12 +281,17 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       ...this.style.arc,
       fill: group.map(({color}) => color!),
     }))
+    const guideLineData = this.guideLineData.map((group) => ({
+      data: group.map((points) => ({points, curve: 'curveLinear'})),
+      ...this.style.guideLine,
+    }))
     const textData = this.textData.map((group) => ({
       data: group.filter(({y}) => isRealNumber(y)),
       ...this.style.text,
     }))
 
     this.drawBasic({type: 'arc', data: arcData})
+    this.drawBasic({type: 'curve', data: guideLineData, sublayer: 'guideLine'})
     this.drawBasic({type: 'text', data: textData})
   }
 }
