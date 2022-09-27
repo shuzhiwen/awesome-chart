@@ -1,5 +1,5 @@
 import {RawTable, TableData, TableOptions} from '../types'
-import {cloneDeep, min, max, isArray} from 'lodash'
+import {min, max, isArray} from 'lodash'
 import {isRawTable} from '../utils'
 import {DataBase} from './base'
 
@@ -38,8 +38,7 @@ export class DataTable extends DataBase<RawTable> {
       data[2].push(row)
     }
 
-    const result = new DataTable([[], [], []])
-    result._data = cloneDeep(data)
+    const result = new DataTable(data)
     return result
   }
 

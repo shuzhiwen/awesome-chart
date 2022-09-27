@@ -73,8 +73,10 @@ export class DataTableList extends DataBase<RawTableList> {
       }
     }
 
-    const result = new DataTableList([[]], this.options)
-    result._data = data
+    const result = new DataTableList(
+      transpose(data.map(({list, header}) => [header, ...list])),
+      this.options
+    )
     return result
   }
 
