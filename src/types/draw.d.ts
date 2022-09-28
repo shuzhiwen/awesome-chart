@@ -16,6 +16,8 @@ export type ElEvent = MouseEvent | IEvent<MouseEvent>
 
 export type ElSource = AnyObject &
   Partial<{
+    groupIndex: number
+    itemIndex: number
     dimension: Meta
     category: Meta
     value: Meta

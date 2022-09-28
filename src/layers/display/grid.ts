@@ -2,8 +2,9 @@ import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {drag, max, range, select} from 'd3'
 import {createStyle, elClass, validateAndCreateData} from '../helpers'
-import {isSvgCntr, tableListToObjects} from '../../utils'
+import {isCanvasCntr, isBoxCollision, swap, tableListToObjects, ungroup} from '../../utils'
 import {
+  Box,
   ChartContext,
   DrawerData,
   ElConfig,
@@ -14,13 +15,16 @@ import {
 } from '../../types'
 
 type DataKey = 'width' | 'height'
+type DragEvent = {x: number; y: number; sourceEvent: {target: SVGRectElement}}
+type ElData = ElConfig & ArrayItem<LayerGrid['boxData']>
 
 const defaultStyle: LayerGridStyle = {
   draggable: true,
   sangerColumn: 12,
   sangerGap: 4,
-  box: {
-    strokeWidth: 1,
+  placeholder: {
+    fill: 'yellow',
+    fillOpacity: 0.3,
   },
   gridLine: {
     stroke: 'gray',
@@ -33,7 +37,13 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
 
   private _style = defaultStyle
 
-  private boxData: DrawerData<RectDrawerProps>[] = []
+  private insertIndex = -1
+
+  private boxData: (DrawerData<RectDrawerProps> & {
+    source: {width: number; height: number}
+  })[] = []
+
+  private placeholderData: DrawerData<RectDrawerProps> = {width: 0, height: 0, x: 0, y: 0}
 
   private gridLineData: DrawerData<LineDrawerProps>[][] = []
 
@@ -46,7 +56,11 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   }
 
   constructor(options: LayerGridOptions, context: ChartContext) {
-    super({options, context, sublayers: ['box', 'gridLine']})
+    super({options, context, sublayers: ['box', 'gridLine', 'placeholder']})
+    this.setAnimation({
+      placeholder: {update: {duration: 0, delay: 0}},
+      box: {update: {duration: 0, delay: 0}},
+    })
   }
 
   setData(data: LayerGrid['data']) {
@@ -69,7 +83,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 
-  update() {
+  update(placeholderBox?: Box & {itemIndex: number; event: DragEvent}) {
     if (!this.data) {
       throw new Error('Invalid data')
     }
@@ -79,9 +93,11 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
       {width, height, left, top, bottom, right} = this.options.layout,
       unitWidth = (width - (sanger - 1) * gap) / sanger,
       unitHeight = (height - (sanger - 1) * gap) / sanger,
+      columnHeight = new Array<number>(sanger).fill(0),
       data = tableListToObjects<DataKey>(source)
 
     this.boxData.length = 0
+    this.insertIndex = data.length - 1
     this.gridLineData = [
       range(1, sanger).map((index) => ({
         x1: left + (unitWidth + gap) * index,
@@ -97,29 +113,48 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
       })),
     ]
 
-    const columnHeight = new Array<number>(sanger).fill(0)
-    const placeBox = (width: number, height: number) => {
-      let [optimalRow, optimalColumn] = [Infinity, Infinity]
-      for (let i = 0; i < sanger - width + 1; i++) {
-        const fitRow = max(columnHeight.slice(i, i + width)) ?? Infinity
-        if (fitRow < optimalRow) {
-          optimalRow = fitRow
-          optimalColumn = i
+    if (placeholderBox) {
+      const columnHeight = new Array<number>(sanger).fill(0),
+        target = data.splice(placeholderBox.itemIndex, 1)
+
+      for (let i = 0; i < data.length; i++) {
+        const [width, height] = [Number(data[i].width), Number(data[i].height)],
+          {x, y} = this.placeBox(width, height, columnHeight)
+
+        if (isBoxCollision(placeholderBox, {x, y, width, height})) {
+          this.insertIndex = i
+          break
         }
       }
-      for (let i = optimalColumn; i < optimalColumn + width; i++) {
-        columnHeight[i] = optimalRow + height
-      }
-      return [optimalRow, optimalColumn]
+
+      data.splice(this.insertIndex, 0, ...target)
     }
 
-    data.forEach(({width, height}, i) => {
-      const [optimalRow, optimalColumn] = placeBox(Number(width), Number(height))
-      this.boxData[i] = {
-        x: left + optimalColumn * (unitWidth + gap),
-        y: top + optimalRow * (unitHeight + gap),
-        width: Number(width) * unitWidth + (Number(width) - 1) * gap,
-        height: Number(height) * unitHeight + (Number(height) - 1) * gap,
+    data.forEach((item, i) => {
+      if (i === this.insertIndex && placeholderBox) {
+        const {x, y, width, height, event} = placeholderBox
+
+        this.boxData[i] = {
+          x: event.x,
+          y: event.y,
+          width: this.placeholderData.width,
+          height: this.placeholderData.height,
+          source: {...placeholderBox},
+        }
+        for (let i = x; i < x + width; i++) {
+          columnHeight[i] = y + height
+        }
+      } else {
+        const [width, height] = [Number(item.width), Number(item.height)],
+          {x, y} = this.placeBox(width, height, columnHeight)
+
+        this.boxData[i] = {
+          x: left + x * (unitWidth + gap),
+          y: top + y * (unitHeight + gap),
+          width: width * unitWidth + (width - 1) * gap,
+          height: height * unitHeight + (height - 1) * gap,
+          source: {width, height},
+        }
       }
     })
   }
@@ -128,35 +163,95 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     const boxData = {
       data: this.boxData,
       transformOrigin: 'center',
+      source: this.boxData.map(({source}) => source),
       ...this.style.box,
+    }
+    const placeholderData = {
+      data: [this.placeholderData],
+      transformOrigin: 'center',
+      ...this.style.placeholder,
+      evented: false,
     }
     const lineData = this.gridLineData.map((group) => ({
       data: group,
       ...this.style.gridLine,
     }))
 
+    this.drawBasic({type: 'rect', data: [placeholderData], sublayer: 'placeholder'})
     this.drawBasic({type: 'rect', data: [boxData], sublayer: 'box'})
     this.drawBasic({type: 'line', data: lineData, sublayer: 'gridLine'})
-    this.style.draggable && this.activeDrag()
+
+    if (this.style.draggable) {
+      if (isCanvasCntr(this.root)) {
+        this.log.warn('Not support canvas drag')
+        return
+      }
+
+      const dragBehavior = drag<Element, ElData>()
+        .on('start', this.dragStarted.bind(this))
+        .on('drag', this.dragged.bind(this))
+        .on('end', this.dragEnded.bind(this))
+
+      this.root.selectAll(elClass('box', true)).call(dragBehavior as any)
+    }
   }
 
-  activeDrag() {
-    if (isSvgCntr(this.root)) {
-      this.root.selectAll<Element, any>(elClass('box', true)).call(
-        drag<Element, ElConfig & DrawerData<RectDrawerProps>>()
-          .on('start', function dragStarted() {
-            select(this).attr('stroke', 'black')
-          })
-          .on('drag', function dragged(event: MouseEvent, d) {
-            select(this)
-              .raise()
-              .attr('x', (d.x = event.x))
-              .attr('y', (d.y = event.y))
-          })
-          .on('end', function dragEnded() {
-            select(this).attr('stroke', null)
-          })
-      )
+  private placeBox = (width: number, height: number, columnHeight: number[]) => {
+    let [optimalRow, optimalColumn] = [Infinity, Infinity]
+
+    for (let i = 0; i < columnHeight.length - width + 1; i++) {
+      const fitRow = max(columnHeight.slice(i, i + width)) ?? Infinity
+      if (fitRow < optimalRow) {
+        optimalRow = fitRow
+        optimalColumn = i
+      }
     }
+    for (let i = optimalColumn; i < optimalColumn + width; i++) {
+      columnHeight[i] = optimalRow + height
+    }
+
+    return {x: optimalColumn, y: optimalRow}
+  }
+
+  private dragStarted(event: DragEvent) {
+    select(event.sourceEvent.target).attr('stroke', 'black')
+  }
+
+  private dragged(event: DragEvent, d: ElData) {
+    const {x, y} = event,
+      {width, height, itemIndex = 0} = ungroup(d.source),
+      {sangerColumn: sanger = 12, sangerGap: gap = 0} = this.style,
+      {width: layoutWidth, height: layoutHeight, left, top} = this.options.layout,
+      unitWidth = (layoutWidth - (sanger - 1) * gap) / sanger,
+      unitHeight = (layoutHeight - (sanger - 1) * gap) / sanger,
+      row = Math.round((y - top) / (unitHeight + gap)),
+      column = Math.round((x - left) / (unitWidth + gap))
+
+    const placeholder = {
+      x: left + column * (unitWidth + gap),
+      y: top + row * (unitHeight + gap),
+      width: width * unitWidth + (width - 1) * gap,
+      height: height * unitHeight + (height - 1) * gap,
+    }
+
+    this.needRecalculated = true
+    this.placeholderData = placeholder
+    this.update({x: column, y: row, width, height, event, itemIndex})
+    this.draw()
+  }
+
+  private dragEnded(event: DragEvent, d: ElData) {
+    const {source} = this.data!
+
+    if (this.boxData[this.insertIndex]) {
+      Object.assign(this.boxData[this.insertIndex], this.placeholderData)
+      swap(source, source, this.insertIndex + 1, ungroup(d.source).itemIndex! + 1)
+    }
+
+    this.placeholderData = {width: 0, height: 0, x: 0, y: 0}
+    this.draw()
+
+    select(event.sourceEvent.target).attr('stroke', null)
+    this.setData(new DataTableList(source))
   }
 }

@@ -1,5 +1,6 @@
 import {range as d3Range} from 'd3'
 import {isArray, isNil, isNumber} from 'lodash'
+import {Box} from '../types'
 
 const ctx = document.createElement('canvas').getContext('2d')!
 const fontFamily = '"PingFang SC", "Helvetica Neue", Helvetica, Tahoma, Helvetica, sans-serif'
@@ -76,4 +77,14 @@ export function svgShadowToFabricShadow(shadows: string) {
     shadowAttrs.unshift(shadowAttrs.pop()!)
     return shadowAttrs.reduce((prev, cur) => `${prev} ${cur}`)
   })[0]
+}
+
+export function isBoxCollision(box1: Box, box2: Box) {
+  const {x: x1, y: y1, width: width1, height: height1} = box1
+  const {x: x2, y: y2, width: width2, height: height2} = box2
+
+  return !(
+    Math.abs(x1 - x2 + (x1 + width1) - (x2 + width2)) >= width1 + width2 ||
+    Math.abs(y1 - y2 + (y1 + height1) - (y2 + height2)) >= height1 + height2
+  )
 }

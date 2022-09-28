@@ -11,15 +11,17 @@ export type AnimationProps<T extends AnimationOptions> = Partial<{
 export type AnimationOptions<
   T extends AnimationType = AnimationType,
   P extends AnyObject = Record<never, never>
-> = Partial<P> & {
-  id?: string
-  type?: T
-  targets?: Maybe<D3Selection | fabric.Object[]>
-  loop?: boolean
-  easing: Easing
-  duration: number
-  delay: number
-}
+> = Partial<
+  P & {
+    id: string
+    type: T
+    targets: Maybe<D3Selection | fabric.Object[]>
+    loop: boolean
+    easing: Easing
+    duration: number
+    delay: number
+  }
+>
 
 export type AnimationEmptyOptions = AnimationOptions<'empty'>
 

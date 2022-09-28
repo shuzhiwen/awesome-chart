@@ -66,3 +66,10 @@ export type RandomOptions = {
   sigma?: number
   mu?: number
 }
+
+export type Box = {
+  x: number
+  y: number
+  width: number
+  height: number
+}

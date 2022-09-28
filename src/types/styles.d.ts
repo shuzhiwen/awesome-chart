@@ -301,5 +301,6 @@ export type LayerGridStyle = Partial<{
   sangerColumn: number
   sangerGap: number
   gridLine: GraphStyle
+  placeholder: GraphStyle
   box: GraphStyle
 }>

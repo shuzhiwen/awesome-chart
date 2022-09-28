@@ -40,7 +40,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   abstract setStyle(style?: Maybe<AnyObject>): void
 
-  abstract update(): void
+  abstract update(...args: unknown[]): void
 
   abstract draw(): void
 
