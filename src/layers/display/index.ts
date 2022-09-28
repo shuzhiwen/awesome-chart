@@ -1,5 +1,6 @@
 export * from './carousel'
 export * from './dashboard'
 export * from './flopper'
+export * from './grid'
 export * from './mark'
 export * from './wave'

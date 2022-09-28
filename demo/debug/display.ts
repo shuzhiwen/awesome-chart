@@ -1,6 +1,6 @@
 import {LayerFlopper} from '../../src'
 import {Chart} from '../../src/core'
-import {DataBase} from '../../src/data'
+import {DataBase, DataTableList} from '../../src/data'
 
 export const debugDashboardLayer = (chart: Chart) => {
   const data = {
@@ -32,5 +32,23 @@ export const debugFlopperLayer = (chart: Chart) => {
     layer.draw()
     layer.playAnimation()
     console.info('Random Data', layer.data?.source.value)
+  })
+}
+
+export const debugGridLayer = (chart: Chart) => {
+  const layers = chart.getLayersByType('grid'),
+    data = [['width', 'height'] as Meta[]].concat(
+      new Array(Math.floor(Math.random() * 5) + 10)
+        .fill(null)
+        .map(() => [Math.floor(Math.random() * 5) + 1, Math.floor(Math.random() * 5) + 1])
+    )
+
+  if (!layers.length) return
+
+  layers.forEach((layer) => {
+    layer.setData(new DataTableList(data))
+    layer.draw()
+    layer.playAnimation()
+    console.info('Random Data', data)
   })
 }

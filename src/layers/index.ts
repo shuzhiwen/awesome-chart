@@ -25,6 +25,7 @@ export const layerMapping = {
   force: Layer.LayerForce,
   heatmap: Layer.LayerHeatmap,
   interactive: Layer.LayerInteractive,
+  grid: Layer.LayerGrid,
   legend: Layer.LayerLegend,
   line: Layer.LayerLine,
   mark: Layer.LayerMark,

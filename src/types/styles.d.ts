@@ -295,3 +295,11 @@ export type LayerWaveStyle = Partial<{
   background: GraphStyle
   text: TextStyle
 }>
+
+export type LayerGridStyle = Partial<{
+  draggable: boolean
+  sangerColumn: number
+  sangerGap: number
+  gridLine: GraphStyle
+  box: GraphStyle
+}>

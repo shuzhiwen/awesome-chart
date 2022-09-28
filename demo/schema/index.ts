@@ -5,11 +5,12 @@ import pie from './normal/pie'
 import radar from './normal/radar'
 import scatter from './normal/scatter'
 import matrix from './normal/matrix'
-import digitalFlop from './indicator/digital-flop'
+import digitalFlop from './display/digital-flop'
+import grid from './display/grid'
 import map from './geography/map'
-import dashboard from './indicator/dashboard'
-import carousel from './indicator/carousel'
-import wave from './indicator/wave'
+import dashboard from './display/dashboard'
+import carousel from './display/carousel'
+import wave from './display/wave'
 import sankey from './relation/sankey'
 import tree from './relation/tree'
 import treemap from './relation/treemap'
@@ -311,6 +312,15 @@ export const schemaMenu: MenuShape = {
         {
           name: '基础轮播',
           schema: base(carousel()),
+        },
+      ],
+    },
+    {
+      name: '网格布局',
+      children: [
+        {
+          name: '基础网格',
+          schema: base(grid()),
         },
       ],
     },
