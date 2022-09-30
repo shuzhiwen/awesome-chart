@@ -2,15 +2,15 @@ import {select} from 'd3'
 import {fabric} from 'fabric'
 import {Canvas, Group, IGroupOptions} from 'fabric/fabric-impl'
 import {D3Selection, DrawerTarget} from '../../types'
-import {isCanvasCntr, isSvgCntr} from '../../utils'
+import {isCC, isSC} from '../../utils'
 
 type FObject = fabric.Object
 
 class Selector {
   setVisible(target: Maybe<DrawerTarget>, visible: boolean) {
-    if (isSvgCntr(target)) {
+    if (isSC(target)) {
       target.attr('display', visible ? 'block' : 'none')
-    } else if (isCanvasCntr(target)) {
+    } else if (isCC(target)) {
       target.visible = visible
       target.canvas?.requestRenderAll()
     }
@@ -20,14 +20,12 @@ class Selector {
   getChildren(target: Group, className: string): FObject[] | Group[]
   getChildren(target: DrawerTarget, className: string): D3Selection | FObject[] | Group[]
   getChildren(target: Maybe<DrawerTarget>, className: string) {
-    if (isSvgCntr(target)) {
+    if (isSC(target)) {
       return target.selectAll(`.${className}`)
-    } else if (isCanvasCntr(target)) {
+    } else if (isCC(target)) {
       return target
         .getObjects()
-        .flatMap((item) =>
-          isCanvasCntr(item) ? this.getChildren(item, className) : (item as FObject)
-        )
+        .flatMap((item) => (isCC(item) ? this.getChildren(item, className) : item))
         .filter((item) => item.className === className)
     }
   }
@@ -36,12 +34,12 @@ class Selector {
   getSubcontainer(target: Group, className: string): Group
   getSubcontainer(target: DrawerTarget, className: string): DrawerTarget
   getSubcontainer(target: Maybe<DrawerTarget>, className: string) {
-    if (isSvgCntr(target)) {
+    if (isSC(target)) {
       const result = target.selectAll(`.${className}`)
       return result.size() !== 0 ? select(result.node()) : null
-    } else if (isCanvasCntr(target)) {
+    } else if (isCC(target)) {
       return target.getObjects().find((item) => {
-        return (item as Group).className === className
+        return item.className === className
       })
     }
   }
@@ -51,9 +49,9 @@ class Selector {
   createSubcontainer(target: Canvas, className: string, evented?: boolean): Group
   createSubcontainer(target: DrawerTarget, className: string, evented?: boolean): DrawerTarget
   createSubcontainer(target: Maybe<DrawerTarget | Canvas>, className: string, evented = true) {
-    if (isSvgCntr(target)) {
+    if (isSC(target)) {
       return target.append('g').attr('class', className)
-    } else if (isCanvasCntr(target)) {
+    } else if (isCC(target)) {
       const group = new fabric.Group([], {
         className,
         selectable: false,
@@ -69,9 +67,9 @@ class Selector {
   remove(target: Group): Group
   remove(target: DrawerTarget): DrawerTarget
   remove(target: Maybe<DrawerTarget>) {
-    if (isSvgCntr(target)) {
+    if (isSC(target)) {
       return target?.remove()
-    } else if (isCanvasCntr(target)) {
+    } else if (isCC(target)) {
       return target.group?.remove(target)
     }
   }

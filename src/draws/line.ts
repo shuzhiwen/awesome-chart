@@ -2,7 +2,7 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {ILineOptions} from 'fabric/fabric-impl'
 import {LineDrawerProps} from '../types'
-import {isCanvasCntr, isSvgCntr, noChange, mergeAlpha, getAttr} from '../utils'
+import {isCC, isSC, noChange, mergeAlpha, getAttr} from '../utils'
 import {selector} from '../layers'
 import {merge} from 'lodash'
 
@@ -40,7 +40,7 @@ export function drawLine({
     return merge(datum, mapping({...datum, container, theme}))
   })
 
-  if (isSvgCntr(container)) {
+  if (isSC(container)) {
     container
       .selectAll(`.${className}`)
       .data(mappedData)
@@ -62,7 +62,7 @@ export function drawLine({
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 
-  if (isCanvasCntr(container)) {
+  if (isCC(container)) {
     container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       const line = new fabric.Line([config.x1, config.y1, config.x2, config.y2], {

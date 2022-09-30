@@ -1,7 +1,7 @@
 import {fabric} from 'fabric'
 import {LayerBase} from '../base'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
-import {createSinusoidal, isSvgCntr} from '../../utils'
+import {createSinusoidal, isSC} from '../../utils'
 import {DataBase} from '../../data'
 import {range} from 'd3'
 import {
@@ -69,7 +69,7 @@ export class LayerWave extends LayerBase<LayerWaveOptions> {
       {width, height, left, top} = layout,
       radius = Math.min(width, height) / 2
 
-    if (isSvgCntr(this.root)) {
+    if (isSC(this.root)) {
       this.root
         .append('defs')
         .append('clipPath')

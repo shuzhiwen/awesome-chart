@@ -7,8 +7,8 @@ import {
   commonEvents,
   layerLifeCycles,
   tooltipEvents,
-  isSvgCntr,
-  isCanvasCntr,
+  isSC,
+  isCC,
   createLog,
   createEvent,
   disableEventDrawerType,
@@ -157,7 +157,7 @@ export abstract class LayerBase<T extends LayerOptions> {
   }
 
   private bindEvent = (sublayer: string) => {
-    if (isSvgCntr(this.root)) {
+    if (isSC(this.root)) {
       const els = this.root.selectAll(elClass(sublayer, true)).style('cursor', 'pointer')
 
       commonEvents.forEach((type) => {
@@ -173,7 +173,7 @@ export abstract class LayerBase<T extends LayerOptions> {
       }
     }
 
-    if (isCanvasCntr(this.root)) {
+    if (isCC(this.root)) {
       const els = selector.getChildren(this.root, elClass(sublayer, false))
 
       commonEvents.forEach((type) => {
@@ -208,7 +208,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     if (
       !options[sublayer] ||
       this.cacheData[sublayer].data.length === 0 ||
-      (isSvgCntr(targets) ? targets.size() === 0 : targets?.length === 0)
+      (isSC(targets) ? targets.size() === 0 : targets?.length === 0)
     ) {
       this.cacheAnimation.animations[sublayer] = null
       return
@@ -330,7 +330,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
     this.bindEvent(sublayer)
     this.createAnimation(sublayer)
-    if (isCanvasCntr(this.root)) {
+    if (isCC(this.root)) {
       this.root.canvas?.requestRenderAll()
     }
   }

@@ -1,7 +1,7 @@
-import {AnimationBase} from './base'
-import {isCanvasCntr, isSvgCntr} from '../utils'
-import {AnimationEraseOptions, AnimationProps, D3Selection} from '../types'
 import anime, {AnimeParams} from 'animejs'
+import {AnimationEraseOptions, AnimationProps, D3Selection} from '../types'
+import {AnimationBase} from './base'
+import {isCC, isSC} from '../utils'
 import {fabric} from 'fabric'
 
 export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
@@ -16,7 +16,7 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
   init() {
     const {targets, context, direction} = this.options
 
-    if (isSvgCntr(targets) && isSvgCntr(context)) {
+    if (isSC(targets) && isSC(context)) {
       this.defs = context.append('defs')
       this.defs
         .append('clipPath')
@@ -29,7 +29,7 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
       targets.attr('clip-path', `url(#erase-${this.id})`)
     }
 
-    if (!isSvgCntr(targets) && isCanvasCntr(context)) {
+    if (!isSC(targets) && isCC(context)) {
       const {width = 0, height = 0} = context.canvas!
 
       this.maskNode = new fabric.Rect({
@@ -49,7 +49,7 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
     super.process(...args)
     const {targets} = this.options
 
-    if (!isSvgCntr(targets) && targets?.[0].clipPath) {
+    if (!isSC(targets) && targets?.[0].clipPath) {
       targets[0].drawClipPathOnCache(this.getCanvasContext()!)
       this.renderCanvas()
     }
@@ -68,7 +68,7 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
       update: this.process,
     }
 
-    if (isSvgCntr(context)) {
+    if (isSC(context)) {
       Object.assign(configs, {
         targets: context.selectAll(`#erase-${this.id} rect`).nodes(),
         x: [direction === 'left' ? '100%' : '0%', '0%'],
@@ -78,7 +78,7 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
       })
     }
 
-    if (isCanvasCntr(context)) {
+    if (isCC(context)) {
       const {width = 0, height = 0} = context.canvas!
 
       Object.assign(configs, {
@@ -96,10 +96,10 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
   destroy() {
     const {targets} = this.options
 
-    if (isSvgCntr(targets)) {
+    if (isSC(targets)) {
       this.defs?.remove()
       targets.attr('clip-path', null)
-    } else if (isCanvasCntr(targets)) {
+    } else if (isCC(targets)) {
       targets.forEach((target) => (target.clipPath = undefined))
     }
 

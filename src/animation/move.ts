@@ -1,6 +1,6 @@
 import {AnimationBase} from './base'
-import {isCanvasCntr, isSvgCntr} from '../utils'
 import {AnimationMoveOptions, AnimationProps} from '../types'
+import {isCC, isSC} from '../utils'
 import anime from 'animejs'
 import {noop} from 'lodash'
 
@@ -12,7 +12,7 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
   init() {
     const {targets, initialOffset = [0, 0]} = this.options
 
-    if (isSvgCntr(targets)) {
+    if (isSC(targets)) {
       anime({
         targets: targets.nodes(),
         translateX: initialOffset[0],
@@ -33,7 +33,7 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
     super.process(...args)
     const {context} = this.options
 
-    if (isCanvasCntr(context)) {
+    if (isCC(context)) {
       this.renderCanvas()
     }
 
@@ -52,8 +52,8 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
       startOffset = [0, 0],
       endOffset = [0, 0],
     } = this.options
-    const nodes = isSvgCntr(targets) ? targets.nodes() : targets!
-    const attrs = isSvgCntr(targets) ? ['translateX', 'translateY'] : ['left', 'top']
+    const nodes = isSC(targets) ? targets.nodes() : targets!
+    const attrs = isSC(targets) ? ['translateX', 'translateY'] : ['left', 'top']
 
     nodes.forEach((targets, i, array) => {
       anime({

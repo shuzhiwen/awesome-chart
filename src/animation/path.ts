@@ -1,6 +1,6 @@
 import {AnimationBase} from './base'
-import {isCanvasCntr, isSvgCntr} from '../utils'
 import {AnimationPathOptions, AnimationProps} from '../types'
+import {isCC, isSC} from '../utils'
 import anime from 'animejs'
 
 export class AnimationPath extends AnimationBase<AnimationPathOptions> {
@@ -12,7 +12,7 @@ export class AnimationPath extends AnimationBase<AnimationPathOptions> {
   }
 
   init() {
-    if (isCanvasCntr(this.options.context)) {
+    if (isCC(this.options.context)) {
       this.log.warn('Animation not support for canvas mode.')
     }
   }
@@ -20,7 +20,7 @@ export class AnimationPath extends AnimationBase<AnimationPathOptions> {
   play() {
     const {targets, path, delay, duration, easing} = this.options
 
-    if (isSvgCntr(targets) && isSvgCntr(path)) {
+    if (isSC(targets) && isSC(path)) {
       const animePaths = path.nodes().map((node) => anime.path(node)),
         animationTargets = targets.nodes()
 
@@ -45,7 +45,7 @@ export class AnimationPath extends AnimationBase<AnimationPathOptions> {
   }
 
   destroy() {
-    if (isSvgCntr(this.options.targets)) {
+    if (isSC(this.options.targets)) {
       this.instances.forEach((item) => item.seek(0))
       anime.remove(this.options.targets.nodes())
     }

@@ -1,17 +1,10 @@
 import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
+import {mergeAlpha, getAttr, isSC, isCC, noChange, svgShadowToFabricShadow} from '../utils'
 import {TextDrawerProps} from '../types'
 import {selector} from '../layers'
 import {merge} from 'lodash'
-import {
-  mergeAlpha,
-  getAttr,
-  isSvgCntr,
-  isCanvasCntr,
-  noChange,
-  svgShadowToFabricShadow,
-} from '../utils'
 
 export function drawText({
   fontFamily,
@@ -65,7 +58,7 @@ export function drawText({
     return merge(datum, mapping({...datum, container, theme}))
   })
 
-  if (isSvgCntr(container)) {
+  if (isSC(container)) {
     container
       .selectAll(`.${className}`)
       .data(mappedData)
@@ -96,7 +89,7 @@ export function drawText({
       .style('transform', (d) => `rotate(${d.rotation}deg)`)
   }
 
-  if (isCanvasCntr(container)) {
+  if (isCC(container)) {
     container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       const text = new fabric.Text(config.value, {

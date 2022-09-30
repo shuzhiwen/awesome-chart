@@ -2,7 +2,7 @@ import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {drag, max, range} from 'd3'
 import {createStyle, elClass, validateAndCreateData} from '../helpers'
-import {isCanvasCntr, isBoxCollision, tableListToObjects, ungroup, uuid} from '../../utils'
+import {isCC, isBoxCollision, tableListToObjects, ungroup, uuid} from '../../utils'
 import {
   Box,
   ChartContext,
@@ -211,7 +211,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     this.drawBasic({type: 'line', data: lineData, sublayer: 'gridLine'})
 
     if (this.style.draggable) {
-      if (isCanvasCntr(this.root)) {
+      if (isCC(this.root)) {
         this.log.warn('Not support canvas drag')
         return
       }

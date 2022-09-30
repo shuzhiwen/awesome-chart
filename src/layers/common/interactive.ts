@@ -3,7 +3,7 @@ import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {LayerAuxiliary} from './auxiliary'
 import {stickyBandScale} from '../helpers/sticky-scale'
-import {isScaleBand, isScaleLinear, isSvgCntr, uuid} from '../../utils'
+import {isScaleBand, isScaleLinear, isSC, uuid} from '../../utils'
 import {createScale, createStyle, elClass, selector, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
@@ -246,7 +246,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
         return
       }
 
-      if (isSvgCntr(this.root)) {
+      if (isSC(this.root)) {
         this.root.selectAll(elClass('interactive', true)).each((d, i, els) => {
           if ((d as any).source.key.match(data.source.key)) {
             select(els[i]).attr('opacity', shadowOpacity)
@@ -263,7 +263,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       }
     })
     this.event.onWithOff('mouseout-interactive', this.options.id, () => {
-      if (isSvgCntr(this.root)) {
+      if (isSC(this.root)) {
         this.root.selectAll(elClass('interactive', true)).attr('opacity', 0)
       } else {
         selector

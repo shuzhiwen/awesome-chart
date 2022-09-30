@@ -1,6 +1,6 @@
 import {AnimationBase} from './base'
-import {isCanvasCntr, isSvgCntr} from '../utils'
 import {AnimationFadeOptions, AnimationProps} from '../types'
+import {isCC, isSC} from '../utils'
 import anime from 'animejs'
 
 export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
@@ -11,7 +11,7 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
   init() {
     const {targets, initialOpacity = 0} = this.options
 
-    if (isSvgCntr(targets)) {
+    if (isSC(targets)) {
       targets.attr('opacity', initialOpacity)
     } else if (targets) {
       targets.forEach((target) => (target.opacity = initialOpacity))
@@ -23,7 +23,7 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
     super.process(...args)
     const {context} = this.options
 
-    if (isCanvasCntr(context)) {
+    if (isCC(context)) {
       this.renderCanvas()
     }
 
@@ -43,7 +43,7 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
     } = this.options
 
     anime({
-      targets: isSvgCntr(targets) ? targets.nodes() : targets,
+      targets: isSC(targets) ? targets.nodes() : targets,
       easing,
       duration,
       update: this.process,

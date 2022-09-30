@@ -5,7 +5,7 @@ import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {defaultTheme} from '../../core/theme'
 import {ChartContext, LayerFlopperOptions, LayerFlopperStyle} from '../../types'
-import {addStyle, isCanvasCntr, isSvgCntr, mergeAlpha, range} from '../../utils'
+import {addStyle, isCC, isSC, mergeAlpha, range} from '../../utils'
 import {createStyle, validateAndCreateData} from '../helpers'
 
 const defaultOptions: Partial<LayerFlopperOptions> = {
@@ -52,7 +52,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
     const {containerWidth, containerHeight, layout, root} = this.options,
       {left, top, width, height} = layout
 
-    if (isSvgCntr(root)) {
+    if (isSC(root)) {
       this.root = root
         .append('foreignObject')
         .style('width', containerWidth)
@@ -123,7 +123,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
   }
 
   draw() {
-    if (isCanvasCntr(this.root)) {
+    if (isCC(this.root)) {
       this.log.error('Not support canvas flopper')
       return
     }
@@ -237,7 +237,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
   }
 
   playAnimation() {
-    if (isCanvasCntr(this.root)) {
+    if (isCC(this.root)) {
       this.log.error('Not support canvas flopper')
       return
     }

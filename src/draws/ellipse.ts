@@ -2,7 +2,7 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {IEllipseOptions} from 'fabric/fabric-impl'
 import {EllipseDrawerProps} from '../types'
-import {mergeAlpha, getAttr, noChange, isSvgCntr, isCanvasCntr} from '../utils'
+import {mergeAlpha, getAttr, noChange, isSC, isCC} from '../utils'
 import {selector} from '../layers'
 import {merge} from 'lodash'
 
@@ -44,7 +44,7 @@ export function drawEllipse({
     return merge(datum, mapping({...datum, container, theme}))
   })
 
-  if (isSvgCntr(container)) {
+  if (isSC(container)) {
     container
       .selectAll(`.${className}`)
       .data(mappedData)
@@ -68,7 +68,7 @@ export function drawEllipse({
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 
-  if (isCanvasCntr(container)) {
+  if (isCC(container)) {
     container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       const ellipse = new fabric.Ellipse({

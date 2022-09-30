@@ -1,6 +1,6 @@
 import {AnimationBase} from './base'
-import {isCanvasCntr, isSvgCntr} from '../utils'
 import {AnimationZoomOptions, AnimationProps} from '../types'
+import {isCC, isSC} from '../utils'
 import anime from 'animejs'
 
 export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
@@ -11,7 +11,7 @@ export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
   init() {
     const {targets, initialScale = 5e-6} = this.options
 
-    if (isSvgCntr(targets)) {
+    if (isSC(targets)) {
       anime({
         targets: targets.nodes(),
         scale: initialScale,
@@ -31,7 +31,7 @@ export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
     super.process(...args)
     const {context} = this.options
 
-    if (isCanvasCntr(context)) {
+    if (isCC(context)) {
       this.renderCanvas()
     }
 
@@ -52,7 +52,7 @@ export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
       end = Math.max(endScale, 5e-6)
 
     anime({
-      targets: isSvgCntr(targets) ? targets.nodes() : targets,
+      targets: isSC(targets) ? targets.nodes() : targets,
       easing,
       duration,
       delay: stagger ? anime.stagger(stagger) : delay,

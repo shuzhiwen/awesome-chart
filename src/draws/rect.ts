@@ -1,7 +1,7 @@
 import {fabric} from 'fabric'
 import {isArray, merge} from 'lodash'
 import {DrawerData, RectDrawerProps} from '../types'
-import {mergeAlpha, getAttr, isSvgCntr, isCanvasCntr, noChange} from '../utils'
+import {mergeAlpha, getAttr, isSC, isCC, noChange} from '../utils'
 import {IRectOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
@@ -44,7 +44,7 @@ export function drawRect({
     return merge(datum, mapping({...datum, container, theme}))
   })
 
-  if (isSvgCntr(container)) {
+  if (isSC(container)) {
     container
       .selectAll(`.${className}`)
       .data(mappedData)
@@ -70,7 +70,7 @@ export function drawRect({
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 
-  if (isCanvasCntr(container)) {
+  if (isCC(container)) {
     container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       const rect = new fabric.Rect({

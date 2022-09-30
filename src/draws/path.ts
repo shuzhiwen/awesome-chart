@@ -2,7 +2,7 @@ import {fabric} from 'fabric'
 import {PathDrawerProps} from '../types'
 import {IPathOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
-import {mergeAlpha, getAttr, noChange, isCanvasCntr, isSvgCntr} from '../utils'
+import {mergeAlpha, getAttr, noChange, isCC, isSC} from '../utils'
 import {selector} from '../layers'
 import {merge} from 'lodash'
 
@@ -46,7 +46,7 @@ export function drawPath({
     return merge(datum, mapping({...datum, container, theme}))
   })
 
-  if (isSvgCntr(container)) {
+  if (isSC(container)) {
     container
       .selectAll(`.${className}`)
       .data(mappedData)
@@ -70,7 +70,7 @@ export function drawPath({
       .style('transform', (d) => `translate(${d.centerX}px,${d.centerY}px)`)
   }
 
-  if (isCanvasCntr(container)) {
+  if (isCC(container)) {
     container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       const path = new fabric.Path(config.path, {

@@ -2,7 +2,7 @@ import {fabric} from 'fabric'
 import {PolyDrawerProps} from '../types'
 import {IPolylineOptions} from 'fabric/fabric-impl'
 import {svgEasing} from '../animation'
-import {mergeAlpha, getAttr, noChange, isSvgCntr, isCanvasCntr} from '../utils'
+import {mergeAlpha, getAttr, noChange, isSC, isCC} from '../utils'
 import {selector} from '../layers'
 import {merge} from 'lodash'
 
@@ -44,7 +44,7 @@ export function drawPolygon({
     return merge(datum, mapping({...datum, container, theme}))
   })
 
-  if (isSvgCntr(container)) {
+  if (isSC(container)) {
     container
       .selectAll(`.${className}`)
       .data(mappedData)
@@ -65,7 +65,7 @@ export function drawPolygon({
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 
-  if (isCanvasCntr(container)) {
+  if (isCC(container)) {
     container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       const polygon = new fabric.Polygon(config.points, {

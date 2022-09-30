@@ -1,7 +1,7 @@
 import {throttle, merge} from 'lodash'
 import {selector} from '../layers'
 import {AnimationProps, AnimationOptions} from '../types'
-import {animationLifeCycles, createEvent, createLog, isCanvasCntr, noChange, uuid} from '../utils'
+import {animationLifeCycles, createEvent, createLog, isCC, noChange, uuid} from '../utils'
 
 export abstract class AnimationBase<T extends AnimationOptions> {
   readonly log = createLog(this.constructor.name)
@@ -56,13 +56,13 @@ export abstract class AnimationBase<T extends AnimationOptions> {
   }
 
   protected getCanvasContext = () => {
-    if (isCanvasCntr(this.options.context)) {
+    if (isCC(this.options.context)) {
       return this.options.context.toCanvasElement().getContext('2d')!
     }
   }
 
   protected renderCanvas = () => {
-    if (isCanvasCntr(this.options.context)) {
+    if (isCC(this.options.context)) {
       this.options.context.canvas?.requestRenderAll()
     }
   }

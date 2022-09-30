@@ -2,7 +2,7 @@ import {fabric} from 'fabric'
 import {isArray} from 'lodash'
 import {uuid} from './random'
 import {Gradient} from 'fabric/fabric-impl'
-import {group, isSvgCntr, mergeAlpha} from '.'
+import {group, isSC, mergeAlpha} from '.'
 import {
   GradientCreatorProps,
   LinearGradientSchema,
@@ -16,7 +16,7 @@ export const createLinearGradients = ({
   schema,
 }: GradientCreatorProps<LinearGradientSchema[]>) => {
   schema.forEach(({id, x1 = 0, x2 = 0, y1 = 0, y2 = 0, stops}) => {
-    if (isSvgCntr(container)) {
+    if (isSC(container)) {
       const linearGradient = container
         .append('linearGradient')
         .attr('id', id)
@@ -52,7 +52,7 @@ export const createRadialGradients = ({
   schema,
 }: GradientCreatorProps<RadialGradientSchema[]>) => {
   schema.forEach(({id, r = 0, r2 = 0, x1 = 0.5, x2 = 0.5, y1 = 0.5, y2 = 0.5, stops}) => {
-    if (isSvgCntr(container)) {
+    if (isSC(container)) {
       const radialGradient = container
         .append('radialGradient')
         .attr('id', id)
@@ -116,7 +116,7 @@ export const getEasyGradientCreator =
     }
 
     createDefs({container, schema})
-    if (isSvgCntr(container)) {
+    if (isSC(container)) {
       return `url(#${baseSchema.id})`
     } else if (isArray(container)) {
       return container.find((gradient) => gradient.id === baseSchema.id, false)

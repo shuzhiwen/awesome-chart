@@ -2,7 +2,7 @@ import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {IImageOptions} from 'fabric/fabric-impl'
 import {ImageDrawerProps} from '../types'
-import {getAttr, isCanvasCntr, isSvgCntr, noChange, uuid} from '../utils'
+import {getAttr, isCC, isSC, noChange, uuid} from '../utils'
 import {selector} from '../layers'
 import {merge} from 'lodash'
 
@@ -33,7 +33,7 @@ export function drawImage({
     return merge(datum, mapping({...datum, container, theme}))
   })
 
-  if (isSvgCntr(container)) {
+  if (isSC(container)) {
     container
       .selectAll('symbol')
       .data(mappedData)
@@ -69,7 +69,7 @@ export function drawImage({
       .attr('height', (d) => (d.viewBox ? d.height : null))
   }
 
-  if (isCanvasCntr(container)) {
+  if (isCC(container)) {
     container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
       fabric.Image.fromURL(
