@@ -1,8 +1,8 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {drag, max, range, select} from 'd3'
+import {drag, max, range} from 'd3'
 import {createStyle, elClass, validateAndCreateData} from '../helpers'
-import {isCanvasCntr, isBoxCollision, swap, tableListToObjects, ungroup} from '../../utils'
+import {isCanvasCntr, isBoxCollision, tableListToObjects, ungroup, uuid} from '../../utils'
 import {
   Box,
   ChartContext,
@@ -14,7 +14,7 @@ import {
   RectDrawerProps,
 } from '../../types'
 
-type DataKey = 'width' | 'height'
+type DataKey = 'width' | 'height' | 'key'
 type DragEvent = {x: number; y: number; sourceEvent: {target: SVGRectElement}}
 type ElData = ElConfig & ArrayItem<LayerGrid['boxData']>
 
@@ -32,6 +32,14 @@ const defaultStyle: LayerGridStyle = {
   },
 }
 
+function getLengthFromIndex(index: number, unit: number, gap: number) {
+  return index * unit + (index - 1) * gap
+}
+
+function getIndexFromLength(length: number, unit: number, gap: number) {
+  return Math.round((gap + length) / (unit + gap))
+}
+
 export class LayerGrid extends LayerBase<LayerGridOptions> {
   private _data: Maybe<DataTableList>
 
@@ -40,12 +48,12 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   private insertIndex = -1
 
   private boxData: (DrawerData<RectDrawerProps> & {
-    source: {width: number; height: number}
+    source: Box & {dimension: Meta}
   })[] = []
 
-  private placeholderData: DrawerData<RectDrawerProps> = {width: 0, height: 0, x: 0, y: 0}
-
   private gridLineData: DrawerData<LineDrawerProps>[][] = []
+
+  private placeholderData: DrawerData<RectDrawerProps>
 
   get data() {
     return this._data
@@ -57,6 +65,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
 
   constructor(options: LayerGridOptions, context: ChartContext) {
     super({options, context, sublayers: ['box', 'gridLine', 'placeholder']})
+    this.placeholderData = {width: 0, height: 0, x: 0, y: 0}
     this.setAnimation({
       placeholder: {update: {duration: 0, delay: 0}},
       box: {update: {duration: 0, delay: 0}},
@@ -64,16 +73,20 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   }
 
   setData(data: LayerGrid['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data)
-
-    if (!this.data) {
-      throw new Error('Invalid data')
-    }
-
-    ;['width', 'height'].map((key) => {
-      if (!this.data?.headers.includes(key)) {
-        throw new Error(`DataTableList lost specific column "${key}"`)
+    this._data = validateAndCreateData('tableList', this.data, data, (data) => {
+      if (!data) {
+        throw new Error('Invalid data')
       }
+
+      ;['width', 'height'].map((key) => {
+        if (!data?.headers.includes(key)) {
+          throw new Error(`DataTableList lost specific column "${key}"`)
+        }
+      })
+
+      return new DataTableList(
+        data.source.map((item, i) => item.concat([i === 0 ? 'key' : uuid()]))
+      )
     })
   }
 
@@ -83,7 +96,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 
-  update(placeholderBox?: Box & {itemIndex: number; event: DragEvent}) {
+  update(box?: Box & {itemIndex: number; event: DragEvent}) {
     if (!this.data) {
       throw new Error('Invalid data')
     }
@@ -113,47 +126,63 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
       })),
     ]
 
-    if (placeholderBox) {
+    if (box) {
       const columnHeight = new Array<number>(sanger).fill(0),
-        target = data.splice(placeholderBox.itemIndex, 1)
+        target = data.splice(box.itemIndex, 1)
+      let [insertX, insertY] = [-1, -1]
 
       for (let i = 0; i < data.length; i++) {
         const [width, height] = [Number(data[i].width), Number(data[i].height)],
-          {x, y} = this.placeBox(width, height, columnHeight)
+          {x, y, apply} = this.placeBox(width, height, columnHeight)
 
-        if (isBoxCollision(placeholderBox, {x, y, width, height})) {
+        if (isBoxCollision(box, {x, y, width, height})) {
           this.insertIndex = i
           break
+        } else {
+          apply()
         }
       }
 
+      const {x, y} = this.placeBox(box.width, box.height, columnHeight)
+
+      ;[insertX, insertY] = [x, y]
       data.splice(this.insertIndex, 0, ...target)
+
+      this.placeholderData = {
+        x: left + insertX * (unitWidth + gap),
+        y: top + insertY * (unitHeight + gap),
+        width: getLengthFromIndex(box.width, unitWidth, gap),
+        height: getLengthFromIndex(box.height, unitHeight, gap),
+      }
     }
 
     data.forEach((item, i) => {
-      if (i === this.insertIndex && placeholderBox) {
-        const {x, y, width, height, event} = placeholderBox
+      if (i === this.insertIndex && box) {
+        const {width, height, event} = box,
+          x = getIndexFromLength(this.placeholderData.x - left, unitWidth, gap),
+          y = getIndexFromLength(this.placeholderData.y - top, unitHeight, gap)
 
         this.boxData[i] = {
           x: event.x,
           y: event.y,
           width: this.placeholderData.width,
           height: this.placeholderData.height,
-          source: {...placeholderBox},
+          source: {...box, dimension: item.key},
         }
         for (let i = x; i < x + width; i++) {
           columnHeight[i] = y + height
         }
       } else {
         const [width, height] = [Number(item.width), Number(item.height)],
-          {x, y} = this.placeBox(width, height, columnHeight)
+          {x, y, apply} = this.placeBox(width, height, columnHeight)
 
+        apply()
         this.boxData[i] = {
           x: left + x * (unitWidth + gap),
           y: top + y * (unitHeight + gap),
-          width: width * unitWidth + (width - 1) * gap,
-          height: height * unitHeight + (height - 1) * gap,
-          source: {width, height},
+          width: getLengthFromIndex(width, unitWidth, gap),
+          height: getLengthFromIndex(height, unitHeight, gap),
+          source: {x, y, width, height, dimension: item.key},
         }
       }
     })
@@ -188,7 +217,6 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
       }
 
       const dragBehavior = drag<Element, ElData>()
-        .on('start', this.dragStarted.bind(this))
         .on('drag', this.dragged.bind(this))
         .on('end', this.dragEnded.bind(this))
 
@@ -206,15 +234,16 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
         optimalColumn = i
       }
     }
-    for (let i = optimalColumn; i < optimalColumn + width; i++) {
-      columnHeight[i] = optimalRow + height
+
+    return {
+      x: optimalColumn,
+      y: optimalRow,
+      apply: () => {
+        for (let i = optimalColumn; i < optimalColumn + width; i++) {
+          columnHeight[i] = optimalRow + height
+        }
+      },
     }
-
-    return {x: optimalColumn, y: optimalRow}
-  }
-
-  private dragStarted(event: DragEvent) {
-    select(event.sourceEvent.target).attr('stroke', 'black')
   }
 
   private dragged(event: DragEvent, d: ElData) {
@@ -227,31 +256,21 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
       row = Math.round((y - top) / (unitHeight + gap)),
       column = Math.round((x - left) / (unitWidth + gap))
 
-    const placeholder = {
-      x: left + column * (unitWidth + gap),
-      y: top + row * (unitHeight + gap),
-      width: width * unitWidth + (width - 1) * gap,
-      height: height * unitHeight + (height - 1) * gap,
-    }
-
     this.needRecalculated = true
-    this.placeholderData = placeholder
     this.update({x: column, y: row, width, height, event, itemIndex})
     this.draw()
   }
 
-  private dragEnded(event: DragEvent, d: ElData) {
-    const {source} = this.data!
+  private dragEnded(_: DragEvent, d: ElData) {
+    const {source} = this.data!,
+      target = source.splice(ungroup(d.source).itemIndex! + 1, 1)[0]
 
     if (this.boxData[this.insertIndex]) {
       Object.assign(this.boxData[this.insertIndex], this.placeholderData)
-      swap(source, source, this.insertIndex + 1, ungroup(d.source).itemIndex! + 1)
+      source.splice(this.insertIndex + 1, 0, target)
     }
 
-    this.placeholderData = {width: 0, height: 0, x: 0, y: 0}
-    this.draw()
-
-    select(event.sourceEvent.target).attr('stroke', null)
     this.setData(new DataTableList(source))
+    this.draw()
   }
 }
