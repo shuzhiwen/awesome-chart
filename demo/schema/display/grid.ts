@@ -29,6 +29,16 @@ export default () => [
         enter: {
           type: 'zoom',
         },
+        update: {
+          duration: 200,
+          delay: 0,
+        },
+      },
+      placeholder: {
+        update: {
+          duration: 200,
+          delay: 0,
+        },
       },
     },
   },

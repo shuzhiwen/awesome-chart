@@ -40,7 +40,7 @@ export type LayerBaseProps<T extends LayerOptions> = Readonly<{
 export type DrawBasicProps<T> = {
   type: DrawerType
   data: (Omit<GraphDrawerProps<T>, 'className' | 'container' | 'theme' | 'source'> &
-    Partial<Pick<GraphDrawerProps<T>, 'source'>>)[]
+    Partial<Pick<GraphDrawerProps<T>, 'source'> & {disableUpdateAnimation?: boolean}>)[]
   sublayer?: string
 }
 

@@ -66,10 +66,6 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   constructor(options: LayerGridOptions, context: ChartContext) {
     super({options, context, sublayers: ['box', 'gridLine', 'placeholder']})
     this.placeholderData = {width: 0, height: 0, x: 0, y: 0}
-    this.setAnimation({
-      placeholder: {update: {duration: 0, delay: 0}},
-      box: {update: {duration: 0, delay: 0}},
-    })
   }
 
   setData(data: LayerGrid['data']) {
@@ -84,9 +80,11 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
         }
       })
 
-      return new DataTableList(
-        data.source.map((item, i) => item.concat([i === 0 ? 'key' : uuid()]))
-      )
+      if (!data.headers.includes('key')) {
+        return new DataTableList(
+          data.source.map((item, i) => item.concat([i === 0 ? 'key' : uuid()]))
+        )
+      }
     })
   }
 
@@ -96,7 +94,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 
-  update(box?: Box & {itemIndex: number; event: DragEvent}) {
+  update(box?: Box & {groupIndex: number; event: DragEvent}) {
     if (!this.data) {
       throw new Error('Invalid data')
     }
@@ -128,7 +126,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
 
     if (box) {
       const columnHeight = new Array<number>(sanger).fill(0),
-        target = data.splice(box.itemIndex, 1)
+        target = data.splice(box.groupIndex, 1)
       let [insertX, insertY] = [-1, -1]
 
       for (let i = 0; i < data.length; i++) {
@@ -189,12 +187,13 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   }
 
   draw() {
-    const boxData = {
-      data: this.boxData,
+    const boxData = this.boxData.map((box, i) => ({
+      data: [box],
       transformOrigin: 'center',
-      source: this.boxData.map(({source}) => source),
+      source: [box.source],
       ...this.style.box,
-    }
+      disableUpdateAnimation: i === this.insertIndex,
+    }))
     const placeholderData = {
       data: [this.placeholderData],
       transformOrigin: 'center',
@@ -207,7 +206,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     }))
 
     this.drawBasic({type: 'rect', data: [placeholderData], sublayer: 'placeholder'})
-    this.drawBasic({type: 'rect', data: [boxData], sublayer: 'box'})
+    this.drawBasic({type: 'rect', data: boxData, sublayer: 'box'})
     this.drawBasic({type: 'line', data: lineData, sublayer: 'gridLine'})
 
     if (this.style.draggable) {
@@ -248,7 +247,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
 
   private dragged(event: DragEvent, d: ElData) {
     const {x, y} = event,
-      {width, height, itemIndex = 0} = ungroup(d.source),
+      {width, height, groupIndex = 0} = ungroup(d.source),
       {sangerColumn: sanger = 12, sangerGap: gap = 0} = this.style,
       {width: layoutWidth, height: layoutHeight, left, top} = this.options.layout,
       unitWidth = (layoutWidth - (sanger - 1) * gap) / sanger,
@@ -257,20 +256,21 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
       column = Math.round((x - left) / (unitWidth + gap))
 
     this.needRecalculated = true
-    this.update({x: column, y: row, width, height, event, itemIndex})
+    this.update({x: column, y: row, width, height, event, groupIndex})
     this.draw()
   }
 
   private dragEnded(_: DragEvent, d: ElData) {
-    const {source} = this.data!,
-      target = source.splice(ungroup(d.source).itemIndex! + 1, 1)[0]
+    const rawTableList = [this.data!.headers].concat(this.data!.rawTableList),
+      target = rawTableList.splice(ungroup(d.source).groupIndex! + 1, 1)[0]
 
     if (this.boxData[this.insertIndex]) {
       Object.assign(this.boxData[this.insertIndex], this.placeholderData)
-      source.splice(this.insertIndex + 1, 0, target)
+      rawTableList.splice(this.insertIndex + 1, 0, target)
     }
 
-    this.setData(new DataTableList(source))
+    this.insertIndex = -1
+    this.setData(new DataTableList(rawTableList))
     this.draw()
   }
 }

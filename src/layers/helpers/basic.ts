@@ -22,7 +22,7 @@ export function validateAndCreateData<T>(
   dataType: DataType,
   currentData?: T,
   incomingData?: T,
-  filter?: (data: T) => T
+  filter?: (data: T) => Maybe<T>
 ) {
   if (!incomingData) {
     return currentData
@@ -30,7 +30,7 @@ export function validateAndCreateData<T>(
     throw new Error('require the right data processor')
   }
 
-  return filter ? filter(incomingData) : incomingData
+  return filter ? filter(incomingData) || incomingData : incomingData
 }
 
 export function createStyle<T>(defaultStyle: T, currentStyle: T, incomingStyle: T) {

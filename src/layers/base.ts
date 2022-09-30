@@ -316,9 +316,10 @@ export abstract class LayerBase<T extends LayerOptions> {
       const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
       const options = {
         ...groupData,
-        transition: isFirstDraw
-          ? {duration: 0, delay: 0}
-          : this.cacheAnimation.options[sublayer]?.update,
+        transition:
+          isFirstDraw || groupData.disableUpdateAnimation
+            ? {duration: 0, delay: 0}
+            : this.cacheAnimation.options[sublayer]?.update,
         className: elClass(sublayer, false),
         container: groupContainer,
         theme,
