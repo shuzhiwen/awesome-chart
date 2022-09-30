@@ -80,24 +80,16 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
   }
 
   setData(data: LayerCandle['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data, (tableList) => {
-      tableList?.sort({mode: 'asc', targets: 'dimension', variant: 'date'})
-      return tableList
+    this._data = validateAndCreateData('tableList', this.data, data, (data) => {
+      if (!data) return
+
+      const {headers} = data
+
+      data.sort({mode: 'asc', targets: 'dimension', variant: 'date'})
+
+      this.rectLayer.setData(data.select(headers.slice(0, 3)))
+      this.lineLayer.setData(data.select([headers[0], headers[3], headers[4]]))
     })
-
-    if (!this.data) return
-
-    const {rawTableList, headers} = this.data
-
-    this.rectLayer.setData(
-      new DataTableList([headers.slice(0, 3), ...rawTableList.map((row) => row.slice(0, 3))])
-    )
-    this.lineLayer.setData(
-      new DataTableList([
-        headers.slice(0, 1).concat(headers.slice(3, 5)),
-        ...rawTableList.map((row) => row.slice(0, 1).concat(row.slice(3, 5))),
-      ])
-    )
   }
 
   setScale(scale: LayerRectScale) {
@@ -115,7 +107,9 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
 
     const {rawTableList} = this.data,
       {rect, line, negativeColor, positiveColor} = this.style,
-      colors = rawTableList.map(([, start, end]) => (end >= start ? positiveColor : negativeColor))
+      colors = rawTableList.map(([, start, end]) => {
+        return end >= start ? positiveColor : negativeColor
+      })
 
     this.rectLayer.setStyle(merge({rect: {fill: colors}}, rect))
     this.lineLayer.setStyle(merge({rect: {fill: colors}}, line))

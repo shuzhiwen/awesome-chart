@@ -1,7 +1,7 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {drag, max, range} from 'd3'
-import {createStyle, makeClass, validateAndCreateData} from '../helpers'
+import {checkColumns, createStyle, makeClass, validateAndCreateData} from '../helpers'
 import {isCC, isBoxCollision, tableListToObjects, ungroup, uuid} from '../../utils'
 import {
   ChartContext,
@@ -71,15 +71,9 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
 
   setData(data: LayerGrid['data']) {
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
-      if (!data) {
-        throw new Error('Invalid data')
-      }
+      if (!data) return
 
-      ;['width', 'height'].map((key) => {
-        if (!data?.headers.includes(key)) {
-          throw new Error(`DataTableList lost specific column "${key}"`)
-        }
-      })
+      checkColumns(data, ['width', 'height'])
 
       if (!data.headers.includes('key')) {
         return new DataTableList(
@@ -262,7 +256,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   }
 
   private dragEnded(_: DragEvent, d: ElData) {
-    const rawTableList = [this.data!.headers].concat(this.data!.rawTableList),
+    const rawTableList = this.data!.rawTableListWithHeaders,
       target = rawTableList.splice(ungroup(d.source).groupIndex! + 1, 1)[0]
 
     if (this.boxData[this.insertIndex]) {

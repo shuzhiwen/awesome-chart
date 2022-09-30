@@ -58,7 +58,7 @@ export class LayerRadial extends LayerBase<LayerRadialOptions> {
   setData(data: LayerRadial['data']) {
     this.needRescale = true
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
-      return data?.select(data.headers.slice(0, 3)) ?? null
+      return data?.select(data.headers.slice(0, 3))
     })
   }
 

@@ -1,7 +1,7 @@
 import {cloneDeep, sum, min, max} from 'lodash'
 import {group, isRawTableList, transpose} from '../utils'
-import {DataBase} from './base'
 import {DataBaseOptions, RawTableList, TableListData, TableListOptions} from '../types'
+import {DataBase} from './base'
 
 export class DataTableList extends DataBase<RawTableList> {
   private _data: TableListData = []
@@ -16,6 +16,10 @@ export class DataTableList extends DataBase<RawTableList> {
 
   get rawTableList() {
     return transpose(this.lists)
+  }
+
+  get rawTableListWithHeaders() {
+    return [this.headers].concat(this.rawTableList)
   }
 
   constructor(data: RawTableList, options?: DataBaseOptions) {

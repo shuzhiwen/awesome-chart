@@ -86,7 +86,6 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       if (variant === 'pie') {
         return data?.select(data.headers.slice(0, 2)) ?? null
       }
-      return data
     })
   }
 
@@ -151,7 +150,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       this.legendData = {
         colorMatrix,
         filter: 'column',
-        legends: this.data.headers.slice(1).map((header, i) => ({
+        legends: headers.slice(1).map((header, i) => ({
           shape: 'rect',
           label: header,
           color: colorMatrix.get(0, i),

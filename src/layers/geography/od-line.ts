@@ -2,7 +2,7 @@ import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {path as d3Path} from 'd3-path'
 import {isRealNumber, isSC, tableListToObjects} from '../../utils'
-import {createScale, createStyle, makeClass, validateAndCreateData} from '../helpers'
+import {checkColumns, createScale, createStyle, makeClass, validateAndCreateData} from '../helpers'
 import {defaultTheme} from '../../core/theme'
 import {
   ChartContext,
@@ -77,11 +77,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
 
   setData(data: LayerODLine['data']) {
     this._data = validateAndCreateData('tableList', this.data, data)
-    ;['fromX', 'fromY', 'toX', 'toY'].map((key) => {
-      if (!this.data?.headers.includes(key)) {
-        throw new Error(`DataTableList lost specific column "${key}"`)
-      }
-    })
+    checkColumns(this.data, ['fromX', 'fromY', 'toX', 'toY'])
   }
 
   setScale(scale: LayerODLineScale) {

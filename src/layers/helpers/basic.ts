@@ -1,5 +1,5 @@
 import {merge} from 'lodash'
-import {dataMapping} from '../../data'
+import {dataMapping, DataTableList} from '../../data'
 import {scaleTypes} from '../../utils'
 import {DataType, LayerScale} from '../../types'
 
@@ -22,7 +22,7 @@ export function validateAndCreateData<T>(
   dataType: DataType,
   currentData?: T,
   incomingData?: T,
-  filter?: (data: T) => Maybe<T>
+  filter?: (data: T) => T | void
 ) {
   if (!incomingData) {
     return currentData
@@ -31,6 +31,14 @@ export function validateAndCreateData<T>(
   }
 
   return filter ? filter(incomingData) || incomingData : incomingData
+}
+
+export function checkColumns(data: Maybe<DataTableList>, keys: Meta[]) {
+  keys.map((key) => {
+    if (!data?.headers.includes(key)) {
+      throw new Error(`DataTableList lost specific column "${key}"`)
+    }
+  })
 }
 
 export function createStyle<T>(defaultStyle: T, currentStyle: T, incomingStyle: T) {

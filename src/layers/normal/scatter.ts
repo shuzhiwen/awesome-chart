@@ -1,14 +1,15 @@
 import {LayerBase} from '../base'
+import {DataTableList} from '../../data'
+import {scaleLinear} from '../../scales'
+import {isRealNumber, tableListToObjects, ungroup} from '../../utils'
 import {
+  checkColumns,
   createColorMatrix,
   createScale,
   createStyle,
   createText,
   validateAndCreateData,
 } from '../helpers'
-import {DataTableList} from '../../data'
-import {scaleLinear} from '../../scales'
-import {isRealNumber, tableListToObjects, ungroup} from '../../utils'
 import {
   ChartContext,
   DrawerData,
@@ -63,17 +64,9 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
 
   setData(data: LayerScatter['data']) {
     this._data = validateAndCreateData('tableList', this.data, data)
-
-    if (!this.data) {
-      throw new Error('Invalid data')
-    }
-
     this.createScale()
-    ;['x', 'y'].map((key) => {
-      if (!this.data?.headers.includes(key)) {
-        throw new Error(`DataTableList lost specific column "${key}"`)
-      }
-    })
+
+    checkColumns(this.data, ['x', 'y'])
   }
 
   setScale(scale: LayerScatterScale) {

@@ -84,17 +84,15 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
     const {mode, sort} = this.options
 
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
-      if (!data) return null
+      if (!data) return
 
       if (mode === 'interval') {
-        return data.select(data.headers.slice(0, 3)) ?? null
+        return data.select(data.headers.slice(0, 3))
       } else if (mode === 'waterfall') {
-        return data.select(data.headers.slice(0, 2)) ?? null
+        return data.select(data.headers.slice(0, 2))
       }
 
       sort && data.sort({mode: sort, targets: 'groupWeight'})
-
-      return data
     })
 
     this.createScale()
@@ -206,7 +204,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       this.legendData = {
         colorMatrix,
         filter: 'column',
-        legends: this.data.headers.slice(1).map((header, i) => ({
+        legends: headers.slice(1).map((header, i) => ({
           shape: 'rect',
           label: header,
           color: colorMatrix.get(0, i),

@@ -274,11 +274,9 @@ export abstract class LayerBase<T extends LayerOptions> {
 
     cacheData.data.length = data.length
     data.forEach((groupData, groupIndex) => {
-      groupData.source = groupData.data.map((_, itemIndex) => ({
-        ...groupData.source?.[itemIndex],
-        groupIndex,
-        itemIndex,
-      }))
+      groupData.source = groupData.data.map((_, itemIndex) =>
+        merge(groupData.source?.[itemIndex], groupIndex, itemIndex)
+      )
     })
 
     if (!cacheData.order) {

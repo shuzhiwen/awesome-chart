@@ -1,5 +1,5 @@
 import {LayerBase} from '../base'
-import {createScale, createStyle, createText, validateAndCreateData} from '../helpers'
+import {checkColumns, createScale, createStyle, createText, validateAndCreateData} from '../helpers'
 import {createDroplet, isScaleBand, tableListToObjects} from '../../utils'
 import {DataTableList} from '../../data'
 import {
@@ -53,11 +53,7 @@ export class LayerMark extends LayerBase<LayerMarkOptions> {
 
   setData(data: LayerMark['data']) {
     this._data = validateAndCreateData('tableList', this.data, data)
-    ;['x', 'y'].map((key) => {
-      if (!this.data?.headers.includes(key)) {
-        throw new Error(`DataTableList lost specific column "${key}"`)
-      }
-    })
+    checkColumns(this.data, ['x', 'y'])
   }
 
   setScale(scale: LayerMarkScale) {

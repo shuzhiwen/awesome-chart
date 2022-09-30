@@ -59,7 +59,7 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
       },
       scale: {
         count: 5,
-        zero: false,
+        zero: mode === 'stack',
       },
       style: {},
     },
