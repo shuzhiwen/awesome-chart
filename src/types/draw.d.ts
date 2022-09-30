@@ -16,6 +16,8 @@ export type ElEvent = MouseEvent | IEvent<MouseEvent>
 
 export type ElSource = AnyObject &
   Partial<{
+    groupIndex: number
+    itemIndex: number
     dimension: Meta
     category: Meta
     value: Meta
@@ -23,10 +25,7 @@ export type ElSource = AnyObject &
 
 export type BasicDrawerProps<T> = {
   data: T[]
-  source: ((ElSource | ElSource[]) & {
-    groupIndex?: number
-    itemIndex?: number
-  })[]
+  source: (ElSource | ElSource[])[]
   className: string
   container: DrawerTarget
   theme: ChartTheme

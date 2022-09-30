@@ -2,17 +2,17 @@ import {range} from 'd3'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
 import {makeClass, selector} from './helpers'
-import {cloneDeep, isEqual, merge, noop} from 'lodash'
+import {cloneDeep, isArray, isEqual, merge, noop} from 'lodash'
 import {
   commonEvents,
   layerLifeCycles,
+  disableEventDrawerType,
   tooltipEvents,
-  isSC,
-  isCC,
   createLog,
   createEvent,
-  disableEventDrawerType,
   ungroup,
+  isSC,
+  isCC,
 } from '../utils'
 import {
   LayerData,
@@ -274,9 +274,11 @@ export abstract class LayerBase<T extends LayerOptions> {
 
     cacheData.data.length = data.length
     data.forEach((groupData, groupIndex) => {
-      groupData.source = groupData.data.map((_, itemIndex) =>
-        merge(groupData.source?.[itemIndex], groupIndex, itemIndex)
-      )
+      groupData.source = groupData.data.map((_, itemIndex) => {
+        const target = groupData.source?.[itemIndex]
+        if (!isArray(target)) return {...target, groupIndex, itemIndex}
+        else return target.map((item) => ({...item, groupIndex, itemIndex}))
+      })
     })
 
     if (!cacheData.order) {

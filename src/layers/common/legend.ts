@@ -7,6 +7,7 @@ import {
   ChartContext,
   CircleDrawerProps,
   DrawerData,
+  ElConfig,
   LayerInstance,
   LayerLegendOptions,
   LayerLegendStyle,
@@ -71,9 +72,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     fill?: string
   })[] = []
 
-  private interactiveData: (DrawerData<RectDrawerProps> & {
-    source: {index: number}
-  })[] = []
+  private interactiveData: DrawerData<RectDrawerProps>[] = []
 
   private legendDataGroup: LegendData[] = []
 
@@ -127,69 +126,62 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       colorMatrix = this.legendDataGroup.map(({colorMatrix}) => colorMatrix),
       active = new Array<boolean>(colors.length).fill(true)
 
-    this.event.onWithOff(
-      'mousedown-interactive',
-      animationKey,
-      (object: {data: {source: {index: number}}}) => {
-        const {index} = object.data.source,
-          layerIndex = counts.findIndex((_, i) => sum(counts.slice(0, i + 1)) > index),
-          start = counts.slice(0, layerIndex).reduce((prev, cur) => prev + cur, 0),
-          layerData = originData[layerIndex],
-          layer = layers[layerIndex],
-          order: {
-            type: ArrayItem<typeof filterTypes>
-            mapping: Record<Meta, number>
-            colorMatrix: ColorMatrix
-          } = {
-            type: filterTypes[layerIndex],
-            colorMatrix: colorMatrix[layerIndex],
-            mapping: {},
-          }
-        let filteredData = layerData
-
-        if (!(layerData instanceof DataTableList)) {
-          return
+    this.event.onWithOff('mousedown-interactive', animationKey, (d: {data: ElConfig}) => {
+      const itemIndex = ungroup(d.data.source).itemIndex ?? -1,
+        index = counts.findIndex((_, i) => sum(counts.slice(0, i + 1)) > itemIndex),
+        start = counts.slice(0, index).reduce((prev, cur) => prev + cur, 0),
+        layerData = originData[index],
+        layer = layers[index],
+        order: {
+          type: ArrayItem<typeof filterTypes>
+          mapping: Record<Meta, number>
+          colorMatrix: ColorMatrix
+        } = {
+          type: filterTypes[index],
+          colorMatrix: colorMatrix[index],
+          mapping: {},
         }
+      let filteredData = layerData
 
-        if (!active[index]) {
-          active[index] = true
-          data.shapeColors[index] = colors[index]
-          data.textColors[index] = ungroup(this.style.text?.fill) || 'white'
-        } else {
-          active[index] = false
-          data.shapeColors[index] = disableColor
-          data.textColors[index] = disableColor
-        }
-
-        try {
-          if (filterTypes[layerIndex] === 'row') {
-            const mapping = range(start, start + counts[layerIndex] - 1).map((i) => active[i])
-
-            filteredData = layerData.filterRows(
-              mapping.map((v, i) => (v === true ? i : -1)).filter((v) => v !== -1)
-            )
-            layerData.lists[0].forEach((category, i) => (order.mapping[category] = i))
-            filteredData.options.order = order
-          }
-
-          if (filterTypes[layerIndex] === 'column') {
-            filteredData = layerData.select(
-              layerData.headers.filter((_, i) => !i || active[start + i - 1])
-            )
-            layerData.headers.slice(1).forEach((header, i) => (order.mapping[header] = i))
-            filteredData.options.order = order
-          }
-
-          layer.setData(filteredData)
-          layer.update()
-          bindCoordinate({trigger: this, redraw: true})
-          this.needRecalculated = true
-          this.draw()
-        } catch (error) {
-          this.log.warn('Legend Data filtering error', error)
-        }
+      if (!(layerData instanceof DataTableList)) return
+      if (!active[itemIndex]) {
+        active[itemIndex] = true
+        data.shapeColors[itemIndex] = colors[itemIndex]
+        data.textColors[itemIndex] = ungroup(this.style.text?.fill) || 'white'
+      } else {
+        active[itemIndex] = false
+        data.shapeColors[itemIndex] = disableColor
+        data.textColors[itemIndex] = disableColor
       }
-    )
+
+      try {
+        if (filterTypes[index] === 'row') {
+          const mapping = range(start, start + counts[index] - 1).map((i) => active[i])
+
+          filteredData = layerData.filterRows(
+            mapping.map((v, i) => (v === true ? i : -1)).filter((v) => v !== -1)
+          )
+          layerData.lists[0].forEach((category, i) => (order.mapping[category] = i))
+          filteredData.options.order = order
+        }
+
+        if (filterTypes[index] === 'column') {
+          filteredData = layerData.select(
+            layerData.headers.filter((_, i) => !i || active[start + i - 1])
+          )
+          layerData.headers.slice(1).forEach((header, i) => (order.mapping[header] = i))
+          filteredData.options.order = order
+        }
+
+        layer.setData(filteredData)
+        layer.update()
+        bindCoordinate({trigger: this, redraw: true})
+        this.needRecalculated = true
+        this.draw()
+      } catch (error) {
+        this.log.warn('Legend Data filtering error', error)
+      }
+    })
   }
 
   update() {
@@ -266,12 +258,11 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       })
     )
 
-    this.interactiveData = this.textData.map(({x, y, value}, i) => ({
+    this.interactiveData = this.textData.map(({x, y}, i) => ({
       x: x - shapeWidth - inner,
       y: y - fontSize / 2 - maxHeight / 2,
       width: shapeWidth + inner + textWidths[i],
       height: maxHeight,
-      source: {value, index: i},
     }))
   }
 
@@ -353,7 +344,6 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     }
     const interactiveData = {
       data: this.interactiveData,
-      source: this.interactiveData.map(({source}) => source),
       fillOpacity: 0,
     }
     const circleData = {
