@@ -1,8 +1,8 @@
 import {range} from 'd3'
-import {cloneDeep, isEqual, merge, noop} from 'lodash'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
-import {elClass, selector} from './helpers'
+import {makeClass, selector} from './helpers'
+import {cloneDeep, isEqual, merge, noop} from 'lodash'
 import {
   commonEvents,
   layerLifeCycles,
@@ -158,7 +158,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   private bindEvent = (sublayer: string) => {
     if (isSC(this.root)) {
-      const els = this.root.selectAll(elClass(sublayer, true)).style('cursor', 'pointer')
+      const els = this.root.selectAll(makeClass(sublayer, true)).style('cursor', 'pointer')
 
       commonEvents.forEach((type) => {
         els.on(`${type}.common`, null)
@@ -174,7 +174,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     }
 
     if (isCC(this.root)) {
-      const els = selector.getChildren(this.root, elClass(sublayer, false))
+      const els = selector.getChildren(this.root, makeClass(sublayer, false))
 
       commonEvents.forEach((type) => {
         els.forEach((el) => {
@@ -201,7 +201,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     const {options} = this.cacheAnimation,
       {animation} = this.options.theme,
       // must await animation to be destroyed
-      targets = selector.getChildren(this.root, elClass(sublayer, false)),
+      targets = selector.getChildren(this.root, makeClass(sublayer, false)),
       isFirstPlay = !this.cacheAnimation.animations[sublayer],
       prefix = `${sublayer}-animation-`
 
@@ -320,7 +320,7 @@ export abstract class LayerBase<T extends LayerOptions> {
           isFirstDraw || groupData.disableUpdateAnimation
             ? {duration: 0, delay: 0}
             : this.cacheAnimation.options[sublayer]?.update,
-        className: elClass(sublayer, false),
+        className: makeClass(sublayer, false),
         container: groupContainer,
         theme,
       }

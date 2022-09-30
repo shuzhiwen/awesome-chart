@@ -1,10 +1,9 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {drag, max, range} from 'd3'
-import {createStyle, elClass, validateAndCreateData} from '../helpers'
+import {createStyle, makeClass, validateAndCreateData} from '../helpers'
 import {isCC, isBoxCollision, tableListToObjects, ungroup, uuid} from '../../utils'
 import {
-  Box,
   ChartContext,
   DrawerData,
   ElConfig,
@@ -15,7 +14,9 @@ import {
 } from '../../types'
 
 type DataKey = 'width' | 'height' | 'key'
+
 type DragEvent = {x: number; y: number; sourceEvent: {target: SVGRectElement}}
+
 type ElData = ElConfig & ArrayItem<LayerGrid['boxData']>
 
 const defaultStyle: LayerGridStyle = {
@@ -32,11 +33,11 @@ const defaultStyle: LayerGridStyle = {
   },
 }
 
-function getLengthFromIndex(index: number, unit: number, gap: number) {
+const getLengthFromIndex = (index: number, unit: number, gap: number) => {
   return index * unit + (index - 1) * gap
 }
 
-function getIndexFromLength(length: number, unit: number, gap: number) {
+const getIndexFromLength = (length: number, unit: number, gap: number) => {
   return Math.round((gap + length) / (unit + gap))
 }
 
@@ -48,7 +49,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   private insertIndex = -1
 
   private boxData: (DrawerData<RectDrawerProps> & {
-    source: Box & {dimension: Meta}
+    source: DrawerData<RectDrawerProps> & {dimension: Meta}
   })[] = []
 
   private gridLineData: DrawerData<LineDrawerProps>[][] = []
@@ -94,7 +95,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 
-  update(box?: Box & {groupIndex: number; event: DragEvent}) {
+  update(box?: DrawerData<RectDrawerProps> & {index: number; event: DragEvent}) {
     if (!this.data) {
       throw new Error('Invalid data')
     }
@@ -126,7 +127,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
 
     if (box) {
       const columnHeight = new Array<number>(sanger).fill(0),
-        target = data.splice(box.groupIndex, 1)
+        target = data.splice(box.index, 1)
       let [insertX, insertY] = [-1, -1]
 
       for (let i = 0; i < data.length; i++) {
@@ -219,11 +220,11 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
         .on('drag', this.dragged.bind(this))
         .on('end', this.dragEnded.bind(this))
 
-      this.root.selectAll(elClass('box', true)).call(dragBehavior as any)
+      this.root.selectAll(makeClass('box', true)).call(dragBehavior as any)
     }
   }
 
-  private placeBox = (width: number, height: number, columnHeight: number[]) => {
+  private placeBox(width: number, height: number, columnHeight: number[]) {
     let [optimalRow, optimalColumn] = [Infinity, Infinity]
 
     for (let i = 0; i < columnHeight.length - width + 1; i++) {
@@ -247,7 +248,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
 
   private dragged(event: DragEvent, d: ElData) {
     const {x, y} = event,
-      {width, height, groupIndex = 0} = ungroup(d.source),
+      {width, height, groupIndex: index = 0} = ungroup(d.source),
       {sangerColumn: sanger = 12, sangerGap: gap = 0} = this.style,
       {width: layoutWidth, height: layoutHeight, left, top} = this.options.layout,
       unitWidth = (layoutWidth - (sanger - 1) * gap) / sanger,
@@ -256,7 +257,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
       column = Math.round((x - left) / (unitWidth + gap))
 
     this.needRecalculated = true
-    this.update({x: column, y: row, width, height, event, groupIndex})
+    this.update({x: column, y: row, width, height, event, index})
     this.draw()
   }
 

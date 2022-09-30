@@ -4,7 +4,7 @@ import {DataTableList} from '../../data'
 import {LayerAuxiliary} from './auxiliary'
 import {stickyBandScale} from '../helpers/sticky-scale'
 import {isScaleBand, isScaleLinear, isSC, uuid} from '../../utils'
-import {createScale, createStyle, elClass, selector, validateAndCreateData} from '../helpers'
+import {createScale, createStyle, makeClass, selector, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
   LayerInteractiveStyle,
@@ -247,27 +247,27 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       }
 
       if (isSC(this.root)) {
-        this.root.selectAll(elClass('interactive', true)).each((d, i, els) => {
+        this.root.selectAll(makeClass('interactive', true)).each((d, i, els) => {
           if ((d as any).source.key.match(data.source.key)) {
             select(els[i]).attr('opacity', shadowOpacity)
           }
         })
         select(event.target).attr('opacity', 0)
       } else {
-        selector.getChildren(this.root, elClass('interactive', false)).forEach((child) => {
+        selector.getChildren(this.root, makeClass('interactive', false)).forEach((child) => {
           if ((child as any).source.key.match(data.source.key)) {
             child.opacity = shadowOpacity
           }
         })
-        ;(data as fabric.Object).opacity = 0
+        data.opacity = 0
       }
     })
     this.event.onWithOff('mouseout-interactive', this.options.id, () => {
       if (isSC(this.root)) {
-        this.root.selectAll(elClass('interactive', true)).attr('opacity', 0)
+        this.root.selectAll(makeClass('interactive', true)).attr('opacity', 0)
       } else {
         selector
-          .getChildren(this.root, elClass('interactive', false))
+          .getChildren(this.root, makeClass('interactive', false))
           .forEach((child) => (child.opacity = 0))
       }
     })

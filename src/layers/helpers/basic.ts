@@ -37,6 +37,6 @@ export function createStyle<T>(defaultStyle: T, currentStyle: T, incomingStyle: 
   return merge({}, defaultStyle, currentStyle, incomingStyle)
 }
 
-export function elClass(sublayer: string, dot: boolean) {
+export function makeClass(sublayer: string, dot: boolean) {
   return `${dot ? '.' : ''}chart-basic-${sublayer}`
 }
