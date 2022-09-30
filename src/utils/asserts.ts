@@ -12,7 +12,7 @@ import {
   ScaleLinear,
 } from '../types'
 
-export function isRealNumber(value: any): value is number {
+export function isRealNumber(value: unknown): value is number {
   return isNumber(value) && !isNaN(value)
 }
 
@@ -52,7 +52,7 @@ export function isScaleLinear(scale: any): scale is ScaleLinear {
   return typeof scale?.ticks === 'function'
 }
 
-export function isRawTableList(tableList: any): tableList is RawTableList {
+export function isRawTableList(tableList: unknown): tableList is RawTableList {
   return (
     isArray(tableList) &&
     tableList.length !== 0 &&
@@ -61,7 +61,7 @@ export function isRawTableList(tableList: any): tableList is RawTableList {
   )
 }
 
-export function isRawTable(table: any): table is RawTable {
+export function isRawTable(table: unknown): table is RawTable {
   return (
     isArray(table) &&
     table.length === 3 &&
@@ -72,7 +72,7 @@ export function isRawTable(table: any): table is RawTable {
   )
 }
 
-export function isRawRelation(relation: any): relation is RawRelation {
+export function isRawRelation(relation: unknown): relation is RawRelation {
   return (
     isArray(relation) &&
     relation.length === 2 &&

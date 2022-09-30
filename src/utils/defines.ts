@@ -93,7 +93,7 @@ export const createDefs = (props: GradientCreatorProps<CreateDefsSchema>) => {
 }
 
 export const getEasyGradientCreator =
-  ({container}: Pick<GradientCreatorProps<any>, 'container'>) =>
+  ({container}: Pick<GradientCreatorProps<unknown>, 'container'>) =>
   ({type, colors, direction, ...other}: EasyGradientCreatorProps) => {
     const schema: CreateDefsSchema = {},
       baseSchema = {

@@ -66,7 +66,7 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
         )
 
         animation.event.on('start', () => this.process(startState))
-        animation.event.on('process', (data: any) => this.process({...processState, data}))
+        animation.event.on('process', (data: unknown) => this.process({...processState, data}))
         animation.event.on('end', () => this.process(endState))
       })
 

@@ -29,7 +29,7 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
     }
   }
 
-  process(...args: any) {
+  process(...args: unknown[]) {
     super.process(...args)
     const {context} = this.options
 

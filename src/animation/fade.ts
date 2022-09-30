@@ -19,7 +19,7 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
     }
   }
 
-  process(...args: any) {
+  process(...args: unknown[]) {
     super.process(...args)
     const {context} = this.options
 

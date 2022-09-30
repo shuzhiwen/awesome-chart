@@ -45,7 +45,7 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
     }
   }
 
-  process(...args: any) {
+  process(...args: unknown[]) {
     super.process(...args)
     const {targets} = this.options
 

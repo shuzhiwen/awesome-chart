@@ -146,15 +146,10 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
         offset = offsetFactor * (relativeEnd - start)
 
       if (name === 'scaleColor') {
-        const relativeColorEnd = start + (end - start) / zoomFactor - Number.MIN_VALUE
-        const colorOffset = offsetFactor * (end - start)
-
-        // boundary
-        scale.range(
-          colors.map((color: string, i: number) =>
-            i >= start + colorOffset && i <= relativeColorEnd + colorOffset ? color : '#00000000'
-          )
-        )
+        const offset = offsetFactor * (end - start),
+          relativeColorEnd = start + (end - start) / zoomFactor - Number.MIN_VALUE,
+          hasColor = (i: number) => i >= start + offset && i <= relativeColorEnd + offset
+        scale.range(colors.map((color: string, i: number) => (hasColor(i) ? color : '#ffffff00')))
       } else {
         scale.range([start - offset, relativeEnd - offset])
       }

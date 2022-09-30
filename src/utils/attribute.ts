@@ -7,7 +7,7 @@ export function addStyle(target: D3Selection, style: AnyObject = {}, index = 0) 
   return target
 }
 
-export function addEvent(target: D3Selection, event: AnyEventObject = {}, data?: any) {
+export function addEvent(target: D3Selection, event: AnyEventObject = {}, data?: unknown) {
   Object.entries(event).forEach(([key, handler]) => target.on(key, handler.bind(null, data)))
   target.style('cursor', 'pointer')
   return target

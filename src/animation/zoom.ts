@@ -27,7 +27,7 @@ export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
     }
   }
 
-  process(...args: any) {
+  process(...args: unknown[]) {
     super.process(...args)
     const {context} = this.options
 

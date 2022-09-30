@@ -43,17 +43,11 @@ export abstract class AnimationBase<T extends AnimationOptions> {
     return args
   }
 
-  init(...args: any) {
-    return args
-  }
+  init(): void {}
 
-  play(...args: any) {
-    return args
-  }
+  play(): void {}
 
-  destroy(...args: any) {
-    return args
-  }
+  destroy(): void {}
 
   protected getCanvasContext = () => {
     if (isCC(this.options.context)) {
