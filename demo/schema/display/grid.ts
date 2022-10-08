@@ -1,4 +1,6 @@
-export default () => [
+import {LayerGridStyle} from '../../../src/types'
+
+export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
   {
     type: 'text',
     options: {
@@ -16,14 +18,17 @@ export default () => [
     options: {
       layout: 'main',
     },
-    data: [
-      ['width', 'height'],
-      [1, 1],
-      [2, 2],
-      [3, 3],
-      [8, 8],
-    ],
-    style: {},
+    data:
+      style.placeMode === 'position'
+        ? [
+            ['width', 'height'],
+            [1, 1],
+            [2, 2],
+            [3, 3],
+            [8, 8],
+          ]
+        : [['width', 'height']].concat(new Array(20).fill([2, 2])),
+    style: style,
     animation: {
       box: {
         enter: {

@@ -320,7 +320,11 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础网格',
-          schema: base(grid()),
+          schema: base(grid({placeMode: 'collision'})),
+        },
+        {
+          name: '随机网格',
+          schema: base(grid({placeMode: 'position'})),
         },
       ],
     },
