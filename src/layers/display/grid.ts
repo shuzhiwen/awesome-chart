@@ -4,6 +4,7 @@ import {drag, max, range} from 'd3'
 import {checkColumns, createStyle, makeClass, validateAndCreateData} from '../helpers'
 import {isCC, isBoxCollision, tableListToObjects, ungroup, uuid} from '../../utils'
 import {
+  Box,
   ChartContext,
   DrawerData,
   ElConfig,
@@ -15,11 +16,14 @@ import {
 
 type DataKey = 'width' | 'height' | 'key'
 
-type DragEvent = {x: number; y: number; sourceEvent: {target: SVGRectElement}}
-
 type ElData = ElConfig & ArrayItem<LayerGrid['boxData']>
 
+type GridBox = Box & {index: number; event: DragEvent; source: ElData['source']}
+
+type DragEvent = {x: number; y: number; sourceEvent: {target: SVGRectElement}}
+
 const defaultStyle: LayerGridStyle = {
+  placeMode: 'position',
   draggable: true,
   sangerColumn: 12,
   sangerGap: 4,
@@ -39,6 +43,31 @@ const getLengthFromIndex = (index: number, unit: number, gap: number) => {
 
 const getIndexFromLength = (length: number, unit: number, gap: number) => {
   return Math.round((gap + length) / (unit + gap))
+}
+
+const placeBoxDelay = (width: number, height: number, columnHeight: number[]) => {
+  let [optimalRow, optimalColumn] = [Infinity, Infinity]
+  const apply = () => {
+    for (let i = optimalColumn; i < optimalColumn + width; i++) {
+      columnHeight[i] = optimalRow + height
+    }
+  }
+
+  for (let i = 0; i < columnHeight.length - width + 1; i++) {
+    const fitRow = max(columnHeight.slice(i, i + width)) ?? Infinity
+    if (fitRow < optimalRow) {
+      optimalRow = fitRow
+      optimalColumn = i
+    }
+  }
+
+  return {x: optimalColumn, y: optimalRow, apply}
+}
+
+const placeBox = (width: number, height: number, columnHeight: number[]) => {
+  const {apply, ...rest} = placeBoxDelay(width, height, columnHeight)
+  apply()
+  return rest
 }
 
 export class LayerGrid extends LayerBase<LayerGridOptions> {
@@ -89,29 +118,26 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     this._style = createStyle(defaultStyle, this._style, style)
   }
 
-  update(box?: DrawerData<RectDrawerProps> & {index: number; event: DragEvent}) {
-    if (!this.data) {
-      throw new Error('Invalid data')
-    }
+  update(box: Maybe<GridBox>) {
+    if (!this.data) throw new Error('Invalid data')
 
-    const {source} = this.data,
-      {sangerColumn: sanger = 12, sangerGap: gap = 0} = this.style,
+    const {sangerColumn = 12, sangerGap: gap = 0, placeMode} = this.style,
       {width, height, left, top, bottom, right} = this.options.layout,
-      unitWidth = (width - (sanger - 1) * gap) / sanger,
-      unitHeight = (height - (sanger - 1) * gap) / sanger,
-      columnHeight = new Array<number>(sanger).fill(0),
-      data = tableListToObjects<DataKey>(source)
+      unitWidth = (width - (sangerColumn - 1) * gap) / sangerColumn,
+      unitHeight = (height - (sangerColumn - 1) * gap) / sangerColumn,
+      columnHeight = new Array<number>(sangerColumn).fill(0),
+      data = tableListToObjects<DataKey>(this.data.source)
 
     this.boxData.length = 0
     this.insertIndex = data.length - 1
     this.gridLineData = [
-      range(1, sanger).map((index) => ({
+      range(1, sangerColumn).map((index) => ({
         x1: left + (unitWidth + gap) * index,
         x2: left + (unitWidth + gap) * index,
         y1: top,
         y2: bottom,
       })),
-      range(1, sanger).map((index) => ({
+      range(1, sangerColumn).map((index) => ({
         x1: left,
         x2: right,
         y1: top + (unitHeight + gap) * index,
@@ -120,33 +146,17 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     ]
 
     if (box) {
-      const columnHeight = new Array<number>(sanger).fill(0),
-        target = data.splice(box.index, 1)
-      let [insertX, insertY] = [-1, -1]
+      const rearrange =
+        placeMode === 'collision' ? this.rearrangeByCollision : this.rearrangeByPosition
 
-      for (let i = 0; i < data.length; i++) {
-        const [width, height] = [Number(data[i].width), Number(data[i].height)],
-          {x, y, apply} = this.placeBox(width, height, columnHeight)
-
-        if (isBoxCollision(box, {x, y, width, height})) {
-          this.insertIndex = i
-          break
-        } else {
-          apply()
+      rearrange.call(this, data, box, ({x, y}) => {
+        this.placeholderData = {
+          x: left + x * (unitWidth + gap),
+          y: top + y * (unitHeight + gap),
+          width: getLengthFromIndex(box.width, unitWidth, gap),
+          height: getLengthFromIndex(box.height, unitHeight, gap),
         }
-      }
-
-      const {x, y} = this.placeBox(box.width, box.height, columnHeight)
-
-      ;[insertX, insertY] = [x, y]
-      data.splice(this.insertIndex, 0, ...target)
-
-      this.placeholderData = {
-        x: left + insertX * (unitWidth + gap),
-        y: top + insertY * (unitHeight + gap),
-        width: getLengthFromIndex(box.width, unitWidth, gap),
-        height: getLengthFromIndex(box.height, unitHeight, gap),
-      }
+      })
     }
 
     data.forEach((item, i) => {
@@ -167,9 +177,8 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
         }
       } else {
         const [width, height] = [Number(item.width), Number(item.height)],
-          {x, y, apply} = this.placeBox(width, height, columnHeight)
+          {x, y} = placeBox(width, height, columnHeight)
 
-        apply()
         this.boxData[i] = {
           x: left + x * (unitWidth + gap),
           y: top + y * (unitHeight + gap),
@@ -218,40 +227,71 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     }
   }
 
-  private placeBox(width: number, height: number, columnHeight: number[]) {
-    let [optimalRow, optimalColumn] = [Infinity, Infinity]
+  private rearrangeByCollision(
+    data: Record<DataKey, Meta>[],
+    box: GridBox,
+    generatePlaceHolder: (props: {x: number; y: number}) => void
+  ) {
+    const {sangerColumn = 12} = this.style,
+      columnHeight = new Array<number>(sangerColumn).fill(0),
+      target = data.splice(box.index, 1)
 
-    for (let i = 0; i < columnHeight.length - width + 1; i++) {
-      const fitRow = max(columnHeight.slice(i, i + width)) ?? Infinity
-      if (fitRow < optimalRow) {
-        optimalRow = fitRow
-        optimalColumn = i
+    for (let i = 0; i < data.length; i++) {
+      const [width, height] = [Number(data[i].width), Number(data[i].height)],
+        {x, y, apply} = placeBoxDelay(width, height, columnHeight)
+
+      if (isBoxCollision(box, {x, y, width, height})) {
+        this.insertIndex = i
+        break
       }
+
+      apply()
     }
 
-    return {
-      x: optimalColumn,
-      y: optimalRow,
-      apply: () => {
-        for (let i = optimalColumn; i < optimalColumn + width; i++) {
-          columnHeight[i] = optimalRow + height
-        }
-      },
+    data.splice(this.insertIndex, 0, ...target)
+    generatePlaceHolder(placeBoxDelay(box.width, box.height, columnHeight))
+  }
+
+  private rearrangeByPosition(
+    data: Record<DataKey, Meta>[],
+    box: GridBox,
+    generatePlaceHolder: (props: {x: number; y: number}) => void
+  ) {
+    const {sangerColumn = 12} = this.style,
+      columnHeight1 = new Array<number>(sangerColumn).fill(0),
+      columnHeight2 = new Array<number>(sangerColumn).fill(0),
+      target = data.splice(box.index, 1)
+
+    this.insertIndex = data
+      .map((item) => {
+        const [width, height] = [Number(item.width), Number(item.height)],
+          {x, y} = placeBox(width, height, columnHeight1)
+        return {x, y, width, height, key: item.key}
+      })
+      .concat({...box, x: box.x - 1, y: box.y - 1, key: box.source.dimension})
+      .sort((a, b) => a.x - b.x + a.y - b.y)
+      .findIndex(({key}) => key === box.source.dimension)
+
+    for (let i = 0; i < this.insertIndex; i++) {
+      placeBox(Number(data[i].width), Number(data[i].height), columnHeight2)
     }
+
+    data.splice(this.insertIndex, 0, ...target)
+    generatePlaceHolder(placeBoxDelay(box.width, box.height, columnHeight2))
+    return
   }
 
   private dragged(event: DragEvent, d: ElData) {
-    const {x, y} = event,
-      {width, height, groupIndex: index = 0} = ungroup(d.source),
+    const {width, height, groupIndex: index = 0} = ungroup(d.source),
       {sangerColumn: sanger = 12, sangerGap: gap = 0} = this.style,
       {width: layoutWidth, height: layoutHeight, left, top} = this.options.layout,
       unitWidth = (layoutWidth - (sanger - 1) * gap) / sanger,
       unitHeight = (layoutHeight - (sanger - 1) * gap) / sanger,
-      row = Math.round((y - top) / (unitHeight + gap)),
-      column = Math.round((x - left) / (unitWidth + gap))
+      x = Math.round((event.x - left) / (unitWidth + gap)),
+      y = Math.round((event.y - top) / (unitHeight + gap))
 
     this.needRecalculated = true
-    this.update({x: column, y: row, width, height, event, index})
+    this.update({x, y, width, height, event, index, source: d.source})
     this.draw()
   }
 

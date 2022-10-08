@@ -297,6 +297,7 @@ export type LayerWaveStyle = Partial<{
 }>
 
 export type LayerGridStyle = Partial<{
+  placeMode: 'collision' | 'position'
   draggable: boolean
   sangerColumn: number
   sangerGap: number
