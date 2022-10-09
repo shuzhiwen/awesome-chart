@@ -37,11 +37,11 @@ export function relationToTable([nodeTableList, linkTableList]: RawRelation): Ma
     throw new Error('invalid input')
   }
 
-  const idIndex = nodeTableList[0].findIndex((key) => key === 'id')
-  const nameIndex = nodeTableList[0].findIndex((key) => key === 'name')
-  const fromIndex = linkTableList[0].findIndex((key) => key === 'from')
-  const toIndex = linkTableList[0].findIndex((key) => key === 'to')
-  const valueIndex = linkTableList[0].findIndex((key) => key === 'value')
+  const idIndex = nodeTableList[0].indexOf('id')
+  const nameIndex = nodeTableList[0].indexOf('name')
+  const fromIndex = linkTableList[0].indexOf('from')
+  const toIndex = linkTableList[0].indexOf('to')
+  const valueIndex = linkTableList[0].indexOf('value')
   const nodeIds = Array.from(new Set(nodeTableList.slice(1).map((item) => item[idIndex])))
   const nodeNames = nodeIds.map(
     (id) => nodeTableList.find((item) => item[idIndex] === id)?.[nameIndex] || ''

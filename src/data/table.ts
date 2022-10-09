@@ -27,8 +27,8 @@ export class DataTable extends DataBase<RawTable> {
     const _rows = isArray(rows) ? rows : [rows],
       _columns = isArray(columns) ? columns : [columns],
       data: RawTable = [_rows, _columns, []],
-      rowsIndex = _rows.map((row) => this.rows.findIndex((value) => value === row)),
-      columnsIndex = _columns.map((column) => this.columns.findIndex((value) => value === column))
+      rowsIndex = _rows.map((row) => this.rows.indexOf(row)),
+      columnsIndex = _columns.map((column) => this.columns.indexOf(column))
 
     for (let i = 0; i < rowsIndex.length; i++) {
       const row: Meta[] = []
@@ -43,11 +43,7 @@ export class DataTable extends DataBase<RawTable> {
   }
 
   update(table: RawTable) {
-    if (!isRawTable(table)) {
-      this.log.error('Illegal data', table)
-      return
-    }
-
+    if (!isRawTable(table)) throw new Error('Illegal data')
     this._data = table
   }
 
@@ -57,7 +53,7 @@ export class DataTable extends DataBase<RawTable> {
         (target === 'row' && item.length !== this.rows.length) ||
         (target === 'column' && item.length !== this.columns.length)
       ) {
-        this.log.error('Illegal data')
+        throw new Error('Illegal data')
       } else {
         data.forEach(([dimension, ...values]) => {
           if (target === 'row') {
@@ -76,10 +72,10 @@ export class DataTable extends DataBase<RawTable> {
     const removedList: Meta[][] = []
     data.forEach((dimension) => {
       if (target === 'row') {
-        const index = this.rows.findIndex((value) => value === dimension)
+        const index = this.rows.indexOf(dimension)
         index !== -1 && removedList.concat(this.body.splice(index, 1))
       } else if (target === 'column') {
-        const index = this.columns.findIndex((value) => value === dimension)
+        const index = this.columns.indexOf(dimension)
         index !== -1 && removedList.concat(this.body.map((item) => item.splice(index, 1)[0]))
       }
     })

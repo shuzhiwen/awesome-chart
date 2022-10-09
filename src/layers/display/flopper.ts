@@ -250,8 +250,8 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
     } = this.animation
 
     this.root.selectAll(`.${this.className}-group`).each((d, i, els) => {
-      let prevIndex = characterSet.findIndex((value) => value === (d as any).prevText),
-        index = characterSet.findIndex((value) => value === (d as any).text)
+      let prevIndex = characterSet.indexOf((d as any).prevText),
+        index = characterSet.indexOf((d as any).text)
 
       prevIndex = prevIndex === -1 ? 0 : prevIndex
       index = index === -1 ? 0 : index

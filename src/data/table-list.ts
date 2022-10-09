@@ -85,10 +85,7 @@ export class DataTableList extends DataBase<RawTableList> {
   }
 
   update(tableList: RawTableList, options: AnyObject = {}) {
-    if (!isRawTableList(tableList)) {
-      this.log.error('Illegal data', tableList)
-      return
-    }
+    if (!isRawTableList(tableList)) throw new Error('Illegal data')
 
     const updateData = tableList[0].map((header, index) => ({
       ...options[header],
@@ -97,7 +94,7 @@ export class DataTableList extends DataBase<RawTableList> {
     }))
 
     updateData.forEach((item) => {
-      const index = this.headers.findIndex((header) => item.header === header)
+      const index = this.headers.indexOf(item.header)
       if (index !== -1) {
         this._data[index] = item
       } else {
@@ -109,7 +106,7 @@ export class DataTableList extends DataBase<RawTableList> {
   push(...rows: Meta[][]) {
     rows.forEach((row) => {
       if (row.length !== this._data.length) {
-        this.log.error('Illegal data', row)
+        throw new Error('Illegal data')
       } else {
         row.forEach((value, i) => this.lists[i].push(value))
       }
@@ -120,7 +117,7 @@ export class DataTableList extends DataBase<RawTableList> {
     const removedList: TableListData[] = []
 
     group(headers).forEach((header) => {
-      const index = this.headers.findIndex((_header) => _header === header)
+      const index = this.headers.indexOf(header)
       if (index !== -1) {
         removedList.concat(this._data.splice(index, 1))
       }
@@ -134,7 +131,7 @@ export class DataTableList extends DataBase<RawTableList> {
 
     tableLists.forEach((tableList) => {
       cloneDeep(tableList)._data.forEach((item) => {
-        const index = newTableList.headers.findIndex((header) => item.header === header)
+        const index = newTableList.headers.indexOf(item.header)
         if (index !== -1) {
           newTableList._data[index] = item
         } else {

@@ -1,10 +1,7 @@
 import {merge} from 'lodash'
 import {DataBaseOptions} from '../types'
-import {createLog} from '../utils'
 
 export class DataBase<T, P extends DataBaseOptions = DataBaseOptions> {
-  readonly log = createLog(this.constructor.name)
-
   private readonly _storage: UnknownObject
 
   private readonly _source: T

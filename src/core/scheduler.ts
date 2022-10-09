@@ -21,12 +21,7 @@ export class Scheduler {
   }
 
   unregisterListener(priority: Priority, ...fns: AnyFunction[]) {
-    fns.map((fn) => {
-      this.queue[priority].splice(
-        this.queue[priority].findIndex((_fn) => _fn === fn),
-        1
-      )
-    })
+    fns.map((fn) => this.queue[priority].splice(this.queue[priority].indexOf(fn), 1))
   }
 
   run() {
