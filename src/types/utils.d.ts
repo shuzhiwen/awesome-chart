@@ -1,6 +1,11 @@
 import {Gradient} from 'fabric/fabric-impl'
 import {D3Selection} from './draw'
 
+export type EventCallback = AnyFunction & {
+  category?: string
+  isOnceDone?: boolean
+}
+
 export type FormatNumberConfig = Partial<{
   percentage: boolean // 0.1234 => 12.34%
   thousandth: boolean // 1234 => 1,234
@@ -20,9 +25,9 @@ export type Stop = Partial<{
   opacity: number
 }>
 
-export type GradientCreatorProps<T> = {
+export type GradientCreatorProps<Schema> = {
   container: D3Selection | Gradient[]
-  schema: T
+  schema: Schema
 }
 
 export type EasyGradientCreatorProps = {

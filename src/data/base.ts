@@ -1,12 +1,12 @@
 import {merge} from 'lodash'
 import {DataBaseOptions} from '../types'
 
-export class DataBase<T, P extends DataBaseOptions = DataBaseOptions> {
+export class DataBase<Source, Options extends DataBaseOptions = DataBaseOptions> {
   private readonly _storage: UnknownObject
 
-  private readonly _source: T
+  private readonly _source: Source
 
-  private readonly _options: P
+  private readonly _options: Options
 
   get source() {
     return this._source
@@ -24,7 +24,7 @@ export class DataBase<T, P extends DataBaseOptions = DataBaseOptions> {
     this._storage[key] = value
   }
 
-  constructor(source: T, options?: P) {
+  constructor(source: Source, options?: Options) {
     this._options = merge({}, this.options, options)
     this._source = source
     this._storage = {}

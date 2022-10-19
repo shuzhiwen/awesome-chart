@@ -29,7 +29,7 @@ import {
   CacheLayerEvent,
 } from '../types'
 
-export abstract class LayerBase<T extends LayerOptions> {
+export abstract class LayerBase<Options extends LayerOptions> {
   abstract data: Maybe<LayerData>
 
   abstract style: Maybe<UnknownObject>
@@ -52,7 +52,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   readonly event = createEvent(this.className)
 
-  readonly options: T & ChartContext
+  readonly options: Options & ChartContext
 
   readonly cacheData = {} as CacheLayerData<unknown>
 
@@ -66,7 +66,7 @@ export abstract class LayerBase<T extends LayerOptions> {
 
   protected root: DrawerTarget
 
-  constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<T>) {
+  constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<Options>) {
     this.options = merge(options, context)
     this.sublayers = sublayers || []
     this.tooltipTargets = tooltipTargets || []
@@ -245,7 +245,7 @@ export abstract class LayerBase<T extends LayerOptions> {
     }
   }
 
-  protected drawBasic<T>({type, data, sublayer = type}: DrawBasicProps<T>) {
+  protected drawBasic({type, data, sublayer = type}: DrawBasicProps<AnyObject>) {
     if (!this.sublayers.includes(sublayer)) {
       this.log.debug.error('Invalid sublayer type for drawBasic')
       return

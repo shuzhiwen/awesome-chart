@@ -3,11 +3,11 @@ import {LayoutArea} from './layout'
 import {LayerType} from './base'
 
 type BasicLayerOptions<
-  T extends LayerType,
-  P extends AnyObject = Record<never, never>
-> = Partial<P> & {
+  Type extends LayerType,
+  Options extends AnyObject = Record<never, never>
+> = Partial<Options> & {
   id: string
-  type: T
+  type: Type
   layout: LayoutArea
   axis?: 'main' | 'minor'
   coordinate?: Coordinate

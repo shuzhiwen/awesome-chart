@@ -46,7 +46,7 @@ export class Chart {
 
   private defs: GradientCreatorProps<unknown>['container']
 
-  readonly event = createEvent<'MouseEvent' | SetKeys<typeof chartLifeCycles>>(Chart.name)
+  readonly event = createEvent<'MouseEvent' | Keys<typeof chartLifeCycles>>(Chart.name)
 
   readonly engine: Engine
 

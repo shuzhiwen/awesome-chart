@@ -8,9 +8,9 @@ export type DrawerType = keyof typeof drawerMapping
 
 export type DrawerTarget = D3Selection | fabric.Group
 
-export type DrawerData<T> = T extends BasicDrawerProps<infer U> ? U : T
+export type DrawerData<Props> = Props extends BasicDrawerProps<infer V> ? V : never
 
-export type D3Selection = Selection<any, unknown, any, unknown>
+export type D3Selection<GDatum = unknown> = Selection<any, GDatum, any, unknown>
 
 export type ElEvent = MouseEvent | IEvent<MouseEvent>
 
@@ -23,8 +23,8 @@ export type ElSource = AnyObject &
     value: Meta
   }>
 
-export type BasicDrawerProps<T> = {
-  data: T[]
+export type BasicDrawerProps<Datum> = {
+  data: Datum[]
   source: (ElSource | ElSource[])[]
   className: string
   container: DrawerTarget
@@ -58,7 +58,7 @@ export type TextDrawerProps = TextStyle &
     y: number
   }>
 
-export type GraphDrawerProps<T> = GraphStyle & BasicDrawerProps<T>
+export type GraphDrawerProps<Datum> = GraphStyle & BasicDrawerProps<Datum>
 
 export type ArcDrawerProps = GraphDrawerProps<{
   startAngle: number
@@ -72,7 +72,7 @@ export type ArcDrawerProps = GraphDrawerProps<{
 
 export type AreaDrawerProps = GraphDrawerProps<{
   lines: {x: number; y1: number; y2: number}[]
-  curve: CurveType
+  curve: Curve
 }>
 
 export type CircleDrawerProps = GraphDrawerProps<{
@@ -83,7 +83,7 @@ export type CircleDrawerProps = GraphDrawerProps<{
 
 export type CurveDrawerProps = GraphDrawerProps<{
   points: {x: number; y: number}[]
-  curve: CurveType
+  curve: Curve
 }>
 
 export type EllipseDrawerProps = GraphDrawerProps<{

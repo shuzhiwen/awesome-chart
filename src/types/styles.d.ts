@@ -113,7 +113,7 @@ export type LayerLineStyle = Partial<{
   areaGradient: boolean
   pointSize: number
   labelPosition: Position5
-  curveType: CurveType
+  curveType: Curve
   text: TextStyle
   curve: GraphStyle
   point: GraphStyle
@@ -202,7 +202,7 @@ export type LayerTreemapStyle = Partial<{
 }>
 
 export type LayerTreeStyle = Partial<{
-  curveType: CurveType
+  curveType: Curve
   direction: Direction
   labelOffset: number
   labelPosition: Position2

@@ -3,10 +3,10 @@ import {selector} from '../layers'
 import {AnimationProps, AnimationOptions} from '../types'
 import {animationLifeCycles, createEvent, createLog, isCC, noChange, uuid} from '../utils'
 
-export abstract class AnimationBase<T extends AnimationOptions> {
+export abstract class AnimationBase<Options extends AnimationOptions> {
   readonly log = createLog(this.constructor.name)
 
-  readonly event = createEvent<SetKeys<typeof animationLifeCycles>>(this.constructor.name)
+  readonly event = createEvent<Keys<typeof animationLifeCycles>>(this.constructor.name)
 
   readonly options
 
@@ -61,7 +61,7 @@ export abstract class AnimationBase<T extends AnimationOptions> {
     }
   }
 
-  constructor({options, context}: AnimationProps<T>) {
+  constructor({options, context}: AnimationProps<Options>) {
     this.options = merge({}, options, {context})
     this.createTargets('targets')
 

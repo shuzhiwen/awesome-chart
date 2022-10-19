@@ -45,7 +45,7 @@ type Easing =
   | 'easeOutQuad'
   | 'easeOutSine'
 
-type CurveType =
+type Curve =
   | 'curveLinear'
   | 'curveNatural'
   | 'curveBumpX'

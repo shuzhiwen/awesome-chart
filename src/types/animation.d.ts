@@ -3,18 +3,18 @@ import {D3Selection, DrawerTarget} from './draw'
 
 export type AnimationType = keyof typeof animationMapping
 
-export type AnimationProps<T extends AnimationOptions> = Partial<{
+export type AnimationProps<Options extends AnimationOptions> = Partial<{
   context: Maybe<DrawerTarget>
-  options: T
+  options: Options
 }>
 
 export type AnimationOptions<
-  T extends AnimationType = AnimationType,
-  P extends AnyObject = Record<never, never>
+  Type extends AnimationType = AnimationType,
+  Options extends AnyObject = Record<never, never>
 > = Partial<
-  P & {
+  Options & {
     id: string
-    type: T
+    type: Type
     targets: Maybe<D3Selection | fabric.Object[]>
     loop: boolean
     easing: Easing

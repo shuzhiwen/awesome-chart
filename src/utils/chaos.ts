@@ -61,10 +61,10 @@ export function swap(a: any, b: any, key1: Meta, key2: Meta = key1) {
   }
 }
 
-export function errorCatcher<T extends AnyFunction>(fn: T, onError: (error: Error) => void) {
-  return (...args: Parameters<T>) => {
+export function errorCatcher<Fn extends AnyFunction>(fn: Fn, onError: (error: Error) => void) {
+  return (...args: Parameters<Fn>) => {
     try {
-      return fn.call(null, ...args) as ReturnType<T>
+      return fn.call(null, ...args) as ReturnType<Fn>
     } catch (error) {
       onError(error as Error)
     }

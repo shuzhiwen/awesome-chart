@@ -11,36 +11,36 @@ import {LegendData} from './data'
 
 export type LayerType = keyof typeof layerMapping
 
-export type CacheLayerData<T> = Record<
+export type CacheLayerData<Datum> = Record<
   string,
   {
-    data: Omit<GraphDrawerProps<T>, 'className' | 'container' | 'theme'>[]
+    data: Omit<GraphDrawerProps<Datum>, 'className' | 'container' | 'theme'>[]
     order?: Map<Meta, number>
   }
 >
 
-export type CacheLayerAnimation<T = AnimationOptions> = {
+export type CacheLayerAnimation<Options = AnimationOptions> = {
   timer: Record<string, NodeJS.Timeout>
   animations: Record<string, Maybe<AnimationQueue>>
-  options: Record<string, Partial<Record<'enter' | 'loop' | 'update', T>>>
+  options: Record<string, Partial<Record<'enter' | 'loop' | 'update', Options>>>
 }
 
 export type CacheLayerEvent = Readonly<
-  Record<FlatName<['common', SetKeys<typeof commonEvents>]>, Record<string, AnyFunction>> &
-    Record<FlatName<['tooltip', SetKeys<typeof tooltipEvents>]>, AnyFunction>
+  Record<`common.${Keys<typeof commonEvents>}`, Record<string, AnyFunction>> &
+    Record<`tooltip.${Keys<typeof tooltipEvents>}`, AnyFunction>
 >
 
-export type LayerBaseProps<T extends LayerOptions> = Readonly<{
+export type LayerBaseProps<Options extends LayerOptions> = Readonly<{
   context: ChartContext
-  options: T
+  options: Options
   sublayers?: string[]
   tooltipTargets?: string[]
 }>
 
-export type DrawBasicProps<T> = {
+export type DrawBasicProps<Datum> = {
   type: DrawerType
-  data: (Omit<GraphDrawerProps<T>, 'className' | 'container' | 'theme' | 'source'> &
-    Partial<Pick<GraphDrawerProps<T>, 'source'> & {disableUpdateAnimation?: boolean}>)[]
+  data: (Omit<GraphDrawerProps<Datum>, 'className' | 'container' | 'theme' | 'source'> &
+    Partial<Pick<GraphDrawerProps<Datum>, 'source'> & {disableUpdateAnimation?: boolean}>)[]
   sublayer?: string
 }
 

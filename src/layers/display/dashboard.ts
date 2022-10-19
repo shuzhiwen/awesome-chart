@@ -37,23 +37,23 @@ const defaultStyle: LayerDashboardStyle = {
   },
 }
 
+type DataShape = {
+  value: number
+  fragments: {
+    label: Meta
+    start: number
+    end: number
+  }[]
+}
+
 export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
-  private _data: Maybe<
-    DataBase<{
-      value: number
-      fragments: {
-        label: Meta
-        start: number
-        end: number
-      }[]
-    }>
-  >
+  private _data: Maybe<DataBase<DataShape>>
 
   private _style = defaultStyle
 
-  private tickLineData: DrawerData<LineDrawerProps>[] = []
+  private pointerData: DrawerData<LineDrawerProps>[] = []
 
-  private pointerData: Maybe<DrawerData<LineDrawerProps>>
+  private tickLineData: DrawerData<LineDrawerProps>[] = []
 
   private tickTextData: DrawerData<TextDrawerProps>[] = []
 
@@ -66,11 +66,12 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
     color: string
   })[] = []
 
-  private fragmentData: NonNullable<Partial<LayerDashboard['data']>>['source'] &
-    Maybe<{
+  private fragmentData: Maybe<
+    DataShape & {
       minValue: number
       maxValue: number
-    }>
+    }
+  >
 
   get data() {
     return this._data
@@ -92,25 +93,23 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
   setData(data: LayerDashboard['data']) {
     this._data = validateAndCreateData('base', this.data, data)
 
-    try {
-      const {fragments} = this.data!.source
+    const {fragments} = this.data!.source
 
-      fragments.forEach(({start, end}) => {
-        if (!isRealNumber(start) || !isRealNumber(end) || start > end) {
-          throw new Error('Data structure wrong')
-        }
-      })
-      fragments.reduce((prev, cur) => {
-        if (prev.end > cur.start) throw new Error('Data structure wrong')
-        return cur
-      })
-      this.fragmentData = {
-        ...this.data!.source,
-        minValue: fragments[0].start ?? 0,
-        maxValue: fragments[fragments.length - 1].end ?? 0,
+    fragments.forEach(({start, end}) => {
+      if (!isRealNumber(start) || !isRealNumber(end) || start > end) {
+        throw new Error('Data structure wrong')
       }
-    } catch (error) {
-      this.log.warn((error as Error).message, data)
+    })
+
+    fragments.reduce((prev, cur) => {
+      if (prev.end > cur.start) throw new Error('Data structure wrong')
+      return cur
+    })
+
+    this.fragmentData = {
+      ...this.data!.source,
+      minValue: fragments[0].start ?? 0,
+      maxValue: fragments[fragments.length - 1].end ?? 0,
     }
   }
 
@@ -144,13 +143,6 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
       pointerLength = maxRadius - arcWidth - tickSize / 0.618 - tickFontSize,
       [centerX, centerY] = [left + width / 2, top + height / 2]
 
-    this.pointerData = {
-      x1: centerX,
-      y1: centerY,
-      x2: centerX + pointerLength * Math.sin(scaleAngle(value)),
-      y2: centerY - pointerLength * Math.cos(scaleAngle(value)),
-    }
-
     this.arcData = fragments.map(({start, end, label}, i) => ({
       centerX,
       centerY,
@@ -162,10 +154,30 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
       source: {category: label, value: `${start}-${end}`},
     }))
 
+    this.pointerData = [
+      {
+        x1: centerX,
+        y1: centerY,
+        x2: centerX + pointerLength * Math.sin(scaleAngle(value)),
+        y2: centerY - pointerLength * Math.cos(scaleAngle(value)),
+      },
+    ]
+
+    this.valueTextData = [
+      createText({
+        value,
+        position: 'center',
+        style: valueText,
+        x: centerX,
+        y: centerY,
+      }),
+    ]
+
     this.tickTextData = []
     this.tickLineData = []
-    this.valueTextData = []
-    this.tickLineData = range(minValue, maxValue, step[0]).map((number, i) => {
+    this.labelTextData = []
+
+    range(minValue, maxValue, step[0]).map((number, i) => {
       const isBigTick = (i * step[0]) % step[1] === 0 && step[0] !== step[1],
         angle = scaleAngle(number),
         innerRadius = maxRadius - arcWidth - (isBigTick ? tickSize / 0.618 : tickSize),
@@ -177,6 +189,13 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
           const offsetNumber = (start + end) / 2 - number
           return offsetNumber < step[0] && offsetNumber >= 0
         })
+
+      this.tickLineData.push({
+        x1: computeX(innerRadius),
+        y1: computeY(innerRadius),
+        x2: computeX(outerRadius),
+        y2: computeY(outerRadius),
+      })
 
       if (isBigTick) {
         this.tickTextData.push(
@@ -201,24 +220,7 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
           })
         )
       }
-
-      return {
-        x1: computeX(innerRadius),
-        y1: computeY(innerRadius),
-        x2: computeX(outerRadius),
-        y2: computeY(outerRadius),
-      }
     })
-
-    this.valueTextData = [
-      createText({
-        value,
-        position: 'center',
-        style: valueText,
-        x: centerX,
-        y: centerY,
-      }),
-    ]
   }
 
   draw() {
@@ -233,7 +235,7 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
       ...this.style.tickLine,
     }
     const pointerData = {
-      data: [this.pointerData],
+      data: this.pointerData,
       ...this.style.pointer,
     }
     const tickTextData = {

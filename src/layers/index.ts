@@ -43,9 +43,9 @@ export const layerMapping = {
   wave: Layer.LayerWave,
 }
 
-export function registerCustomLayer<T extends LayerBase<BasicLayerOptions<any>>>(
+export function registerCustomLayer<Instance extends LayerBase<BasicLayerOptions<any>>>(
   key: string,
-  Klass: Newable<T, [BasicLayerOptions<any>, ChartContext]>
+  Klass: Newable<Instance, [BasicLayerOptions<any>, ChartContext]>
 ) {
   if (Object.keys(layerMapping).includes(key)) {
     console.error('Duplicate key for registerCustomLayer!')

@@ -3,10 +3,10 @@ import {dataMapping, DataTableList} from '../../data'
 import {scaleTypes} from '../../utils'
 import {DataType, LayerScale} from '../../types'
 
-export function createScale<T extends Maybe<LayerScale>>(
-  defaultScale?: T,
-  currentScale?: T,
-  incomingScale?: T
+export function createScale<Scale extends Maybe<LayerScale>>(
+  defaultScale?: Scale,
+  currentScale?: Scale,
+  incomingScale?: Scale
 ) {
   const nice = merge({}, defaultScale?.nice, currentScale?.nice, incomingScale?.nice),
     scales: LayerScale = {...currentScale, ...defaultScale, nice}
@@ -15,14 +15,14 @@ export function createScale<T extends Maybe<LayerScale>>(
     scales[type] = incomingScale?.[type] || defaultScale?.[type] || currentScale?.[type]
   })
 
-  return scales as Required<T>
+  return scales as Required<Scale>
 }
 
-export function validateAndCreateData<T>(
+export function validateAndCreateData<LayerData>(
   dataType: DataType,
-  currentData?: T,
-  incomingData?: T,
-  filter?: (data: T) => T | void
+  currentData?: LayerData,
+  incomingData?: LayerData,
+  filter?: (data: LayerData) => LayerData | void
 ) {
   if (!incomingData) {
     return currentData
@@ -33,16 +33,20 @@ export function validateAndCreateData<T>(
   return filter ? filter(incomingData) || incomingData : incomingData
 }
 
+export function createStyle<LayerStyle>(
+  defaultStyle: LayerStyle,
+  currentStyle: LayerStyle,
+  incomingStyle: LayerStyle
+) {
+  return merge({}, defaultStyle, currentStyle, incomingStyle)
+}
+
 export function checkColumns(data: Maybe<DataTableList>, keys: Meta[]) {
   keys.map((key) => {
     if (!data?.headers.includes(key)) {
       throw new Error(`DataTableList lost specific column "${key}"`)
     }
   })
-}
-
-export function createStyle<T>(defaultStyle: T, currentStyle: T, incomingStyle: T) {
-  return merge({}, defaultStyle, currentStyle, incomingStyle)
 }
 
 export function makeClass(sublayer: string, dot: boolean) {
