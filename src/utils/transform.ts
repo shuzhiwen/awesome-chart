@@ -12,27 +12,23 @@ export function tableListToObjects<K extends Meta, V = Meta>(tableList: RawTable
   })
 }
 
-export function tableListToTable(tableList: RawTableList): Maybe<RawTable> {
+export function tableListToTable(tableList: RawTableList): RawTable {
   if (!isRawTableList(tableList) || tableList[0].length !== 3) {
     throw new Error('invalid input')
   }
 
   const rows = Array.from(new Set(tableList.slice(1).map((item) => item[0])))
   const columns = Array.from(new Set(tableList.slice(1).map((item) => item[1])))
+  const map = new Map(tableList.map(([row, column, value]) => [`${row}-${column}`, value]))
 
   return [
     rows,
     columns,
-    rows.map((row) =>
-      columns.map((column) => {
-        const target = tableList.find((item) => item[0] === row && item[1] === column)
-        return target?.[2] || NaN
-      })
-    ),
+    rows.map((row) => columns.map((column) => map.get(`${row}-${column}`) || NaN)),
   ]
 }
 
-export function relationToTable([nodeTableList, linkTableList]: RawRelation): Maybe<RawTable> {
+export function relationToTable([nodeTableList, linkTableList]: RawRelation): RawTable {
   if (!isRawTableList(nodeTableList) || !isRawTableList(linkTableList)) {
     throw new Error('invalid input')
   }
@@ -46,18 +42,14 @@ export function relationToTable([nodeTableList, linkTableList]: RawRelation): Ma
   const nodeNames = nodeIds.map(
     (id) => nodeTableList.find((item) => item[idIndex] === id)?.[nameIndex] || ''
   )
+  const map = new Map(
+    linkTableList.map((link) => [`${link[fromIndex]}-${link[toIndex]}`, link[valueIndex]])
+  )
 
   return [
     nodeNames,
     nodeNames,
-    nodeIds.map((row) =>
-      nodeIds.map((column) => {
-        const target = linkTableList.find(
-          (item) => item[fromIndex] === row && item[toIndex] === column
-        )
-        return target ? target[valueIndex] : NaN
-      })
-    ),
+    nodeIds.map((row) => nodeIds.map((column) => map.get(`${row}-${column}`) || NaN)),
   ]
 }
 
