@@ -33,8 +33,7 @@ export class DataTableList extends DataBase<RawTableList> {
       ...list.filter((_, index) => rows.includes(index)),
     ])
 
-    const result = new DataTableList(transpose(data), this.options)
-    return result
+    return new DataTableList(transpose(data), this.options)
   }
 
   select(headers: MaybeGroup<Meta>, options?: TableListOptions): DataTableList {
@@ -81,6 +80,7 @@ export class DataTableList extends DataBase<RawTableList> {
       transpose(data.map(({list, header}) => [header, ...list])),
       this.options
     )
+
     return result
   }
 

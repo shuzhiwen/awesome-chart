@@ -151,7 +151,9 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
           range: [height, 0],
         }),
         scalePointSize: scaleLinear({
-          domain: this.data.select('value').range(),
+          domain: this.data.headers.includes('value')
+            ? this.data.select('value').range()
+            : [Infinity, Infinity],
           range: pointSize!,
         }),
       },

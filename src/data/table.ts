@@ -39,6 +39,7 @@ export class DataTable extends DataBase<RawTable> {
     }
 
     const result = new DataTable(data)
+
     return result
   }
 
@@ -70,6 +71,7 @@ export class DataTable extends DataBase<RawTable> {
 
   remove(target: TableOptions['target'] = 'row', ...data: Meta[]) {
     const removedList: Meta[][] = []
+
     data.forEach((dimension) => {
       if (target === 'row') {
         const index = this.rows.indexOf(dimension)
