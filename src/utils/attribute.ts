@@ -13,7 +13,7 @@ export function addEvent(target: D3Selection, event: AnyEventObject = {}, data?:
   return target
 }
 
-export function mergeAlpha(color: string, opacity: number) {
+export function mergeAlpha<T>(color: T, opacity: number) {
   try {
     if (typeof color !== 'string' && typeof color !== 'number') {
       throw new Error('Invalid Color')

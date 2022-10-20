@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useRef, useState} from 'react'
 import {Chart as ChartShape, createChart, download, getStandardLayoutCreator} from '../src'
-import {CreateChartSchema} from '../src/types'
+import {CreateChartProps} from '../src/types'
 import {MenuItemShape} from './schema'
 import styles from './Chart.module.css'
 import {cloneDeep} from 'lodash'
@@ -33,7 +33,7 @@ export const Chart = (props: {
         layoutCreator: getStandardLayoutCreator({brush: true}),
         container,
         engine,
-      } as CreateChartSchema)
+      } as CreateChartProps)
 
       setChart(newChart)
 

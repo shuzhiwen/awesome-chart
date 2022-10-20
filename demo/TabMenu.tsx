@@ -4,7 +4,7 @@ import {hierarchy, select} from 'd3'
 import {cloneDeep, max, merge} from 'lodash'
 import {useEffect, useRef} from 'react'
 import {schemaMenu} from './schema'
-import {BasicLayerOptions, ChartContext, D3Selection, LayerArcOptions} from '../src/types'
+import {BasicLayerOptions, ChartContext, D3Selection} from '../src/types'
 import {
   addStyle,
   getAttr,
@@ -16,6 +16,8 @@ import {
   Chart,
   uuid,
   LayerBase,
+  layerMapping,
+  isSC,
 } from '../src'
 
 type MenuItem = {
@@ -52,6 +54,7 @@ const defaultStyle: TabMenuStyleShape = {
     backgroundColor: 'whitesmoke',
     boxSizing: 'border-box',
     border: 'solid lightgray 1px',
+    pointerEvents: 'auto',
   },
 }
 
@@ -74,7 +77,11 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
     return this._style
   }
 
-  constructor(options: LayerArcOptions, context: ChartContext) {
+  setScale() {}
+
+  setStyle() {}
+
+  constructor(options: BasicLayerOptions<any>, context: ChartContext) {
     super({context, options})
 
     const {left, top, width, height} = options.layout
@@ -99,10 +106,6 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
     this.draw()
   }
 
-  setScale() {}
-
-  setStyle() {}
-
   setData(data: LayerTabMenu['data']) {
     this._data = validateAndCreateData('base', this.data, data)
 
@@ -121,6 +124,7 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
     const {text, active, inactive} = this.style
 
     this.activeTabData = this.originTabData.slice(0, 1)
+
     for (let i = 0; i < this.originTabData.length - 1; i++) {
       // current level has active node
       if (this.activeNodes.length > i) {
@@ -147,7 +151,9 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
   }
 
   draw() {
-    ;(this.root as D3Selection)
+    if (!isSC(this.root)) return
+
+    this.root
       .selectAll('.group')
       .data(this.activeTabData)
       .join('xhtml:div')
@@ -212,7 +218,9 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
   }
 }
 
-registerCustomLayer('tabMenu', LayerTabMenu)
+if (!layerMapping['tabMenu']) {
+  registerCustomLayer('tabMenu', LayerTabMenu)
+}
 
 export const Menu = (props: {onChange: (data: any) => void}) => {
   const ref = useRef<HTMLDivElement>(null)
@@ -232,7 +240,6 @@ export const Menu = (props: {onChange: (data: any) => void}) => {
     }) as unknown as LayerTabMenu
 
     layer.setData(new DataBase(schemaMenu))
-    layer.update()
     layer.draw()
     layer.event.onWithOff('click-tab', 'menu', ({data}) => {
       if (data.node.data.schema) {
