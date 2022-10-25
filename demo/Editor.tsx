@@ -24,7 +24,8 @@ const stringify = errorCatcher(
       )
     ).replace(/"fn\{[\d\D]+?\}fn"/g, (match) =>
       match
-        .replace(/\\[ntvrf]{1}/g, '')
+        .replace(/\\n/g, '\n')
+        .replace(/\\[vrf]{1}/g, '')
         .replace(/\\[\^$+?=!.()\\/()[\]{}"']{1}/g, (match) => match.slice(-1))
         .slice(4, -4)
     ),
@@ -84,7 +85,9 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
   }, [onChange])
 
   useEffect(() => {
-    editor?.setValue(schema ?? '')
+    if (editor && editor.getValue() !== schema) {
+      editor.setValue(schema ?? '')
+    }
   }, [editor, schema])
 
   return <div className={styles.editor} ref={editorRef} />
