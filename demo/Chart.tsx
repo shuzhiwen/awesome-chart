@@ -6,6 +6,8 @@ import styles from './Chart.module.css'
 import {cloneDeep} from 'lodash'
 import React from 'react'
 
+const isDebug = (import.meta as any).env?.MODE === 'development'
+
 export const Chart = (props: {
   debuggers: AnyFunction[]
   schema: MenuItemShape['schema'] & AnyObject
@@ -44,7 +46,7 @@ export const Chart = (props: {
   }, [_schema, engine])
 
   return (
-    <div className={styles.chartContainer}>
+    <div className={styles.chartContainer} style={{opacity: isDebug ? 0.2 : 1}}>
       <div className={styles.title}>
         <div className={styles.button} onClick={toggleDebug}>
           DEBUG

@@ -8,13 +8,7 @@ import {Menu} from './TabMenu'
 import * as debugs from './debug'
 import * as awesome from '../src'
 import {debounce} from 'lodash'
-
-window.awesome = awesome
-window.AWESOME_CHART = {
-  __env: {
-    mode: 'development',
-  },
-}
+;(window as any).awesome = awesome
 
 export function Root() {
   const {schema} = schemaMenu.children[0].children[0],

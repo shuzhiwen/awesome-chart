@@ -1,5 +1,5 @@
 export function createLog(key: string) {
-  const isDebug = window.AWESOME_CHART?.__env.mode === 'development'
+  const isDebug = (import.meta as any).env?.MODE === 'development'
 
   return {
     info(message: string, ...data: unknown[]) {
