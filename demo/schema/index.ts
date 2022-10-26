@@ -23,6 +23,7 @@ import rectLine from './normal/rect-line'
 import rich from './normal/rich'
 import mapping from './normal/mapping'
 import histogram from './normal/histogram'
+import fruits from '../../../assets/fruits.png'
 
 export interface MenuItemShape {
   name: string
@@ -56,7 +57,7 @@ export const schemaMenu: MenuShape = {
           schema: base(mapping(), {
             render: (container) => {
               const image = document.createElement('img')
-              image.src = window.location.origin + '/assets/fruits.png'
+              image.src = fruits
               image.width = 100
               image.height = 100
               container.innerHTML = ''

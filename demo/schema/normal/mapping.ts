@@ -1,3 +1,5 @@
+import image from '../../../assets/fruits.png'
+
 export default () =>
   [
     {
@@ -80,7 +82,6 @@ export default () =>
             const originImageSize = 200
             const imageItemSize = originImageSize / 2
             const labelIconSize = 30
-
             // replace label with image
             drawImage({
               data: [
@@ -89,7 +90,7 @@ export default () =>
                   y: y - labelIconSize,
                   width: labelIconSize,
                   height: labelIconSize,
-                  url: window.location.origin + '/assets/fruits.png',
+                  url: image,
                   viewBox: {
                     x: xIndex * imageItemSize,
                     y: yIndex * imageItemSize,
