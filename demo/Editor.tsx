@@ -57,6 +57,7 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
         value: localStorage.getItem('editorContent') ?? '',
         language: 'typescript',
         fontSize: 14,
+        tabSize: 2,
       })
 
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {

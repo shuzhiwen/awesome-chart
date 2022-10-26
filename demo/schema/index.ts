@@ -23,7 +23,7 @@ import rectLine from './normal/rect-line'
 import rich from './normal/rich'
 import mapping from './normal/mapping'
 import histogram from './normal/histogram'
-import fruits from '../../../assets/fruits.png'
+import fruits from '../../assets/fruits.png'
 
 export interface MenuItemShape {
   name: string

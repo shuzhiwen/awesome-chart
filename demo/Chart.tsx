@@ -41,7 +41,6 @@ export const Chart = (props: {
     } catch (error) {
       console.error(error)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_schema, engine])
 
   return (

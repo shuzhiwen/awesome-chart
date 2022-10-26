@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import styles from './Root.module.css'
 import {schemaMenu} from './schema'
 import {Editor} from './Editor'
@@ -7,6 +7,7 @@ import {tip} from './schema/base'
 import {Menu} from './TabMenu'
 import * as debugs from './debug'
 import * as awesome from '../src'
+import {debounce} from 'lodash'
 
 window.awesome = awesome
 window.AWESOME_CHART = {
@@ -20,6 +21,12 @@ export function Root() {
     [newSchema, setNewSchema] = useState(schema),
     onChange = useCallback((value) => setNewSchema(value), []),
     debuggers = Object.values(debugs)
+
+  useEffect(() => {
+    const listener = () => window.location.reload()
+    window.addEventListener('resize', debounce(listener, 500))
+    return () => window.removeEventListener('resize', listener)
+  }, [newSchema])
 
   return (
     <div className={styles.container}>
