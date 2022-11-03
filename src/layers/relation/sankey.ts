@@ -93,7 +93,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
       ),
       scaleNode = scaleLinear({
         domain: [0, maxNumber ?? 0],
-        range: direction === 'horizontal' ? [0, layout.width] : [0, layout.height],
+        range: direction === 'horizontal' ? [0, layout.height] : [0, layout.width],
       }),
       totalLength = direction === 'horizontal' ? layout.width : layout.height,
       groupNodeWidths = range(0, groups.length).map((i) => getAttr(nodeWidth, i, 5)),
