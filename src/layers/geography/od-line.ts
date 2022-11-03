@@ -3,7 +3,7 @@ import {DataTableList} from '../../data'
 import {path as d3Path} from 'd3-path'
 import {isRealNumber, isSC, tableListToObjects} from '../../utils'
 import {checkColumns, createScale, createStyle, makeClass, validateAndCreateData} from '../helpers'
-import {defaultTheme} from '../../core/theme'
+import {lightTheme} from '../../core/theme'
 import {
   ChartContext,
   CacheLayerAnimation,
@@ -31,7 +31,7 @@ const defaultAnimation: CacheLayerAnimation<AnimationPathOptions>['options'] = {
   flyingObject: {
     loop: {
       path: makeClass('odLine', false),
-      ...defaultTheme.animation.loop,
+      ...lightTheme.animation.loop,
     },
   },
 }

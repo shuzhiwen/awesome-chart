@@ -20,7 +20,7 @@ const shadowOpacity = 0.5
 
 const defaultStyle: LayerInteractiveStyle = {
   line: {
-    stroke: 'yellow',
+    stroke: 'orange',
     strokeWidth: 1,
   },
   interactive: {

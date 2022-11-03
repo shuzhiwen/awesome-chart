@@ -1,8 +1,8 @@
 .chartContainer {
-  flex: 1;
-  color: whitesmoke;
-  padding: 2vh;
-  background-color: seagreen;
+  color: #f1f2f3;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
@@ -20,8 +20,6 @@
 
 .chart {
   flex: 1;
-  padding: 10px;
-  height: 38vh;
-  border: dotted whitesmoke 2px;
-  background-color: #1d1f1c;
+  padding: 12px;
+  border-radius: 8px;
 }

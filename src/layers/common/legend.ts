@@ -2,7 +2,15 @@ import {LayerBase} from '../base'
 import {cloneDeep, sum} from 'lodash'
 import {createStyle, createText} from '../helpers'
 import {DataBase, DataTableList} from '../../data'
-import {ColorMatrix, createStar, formatNumber, getTextWidth, range, ungroup} from '../../utils'
+import {
+  ColorMatrix,
+  createStar,
+  formatNumber,
+  getTextWidth,
+  mergeAlpha,
+  range,
+  ungroup,
+} from '../../utils'
 import {
   ChartContext,
   CircleDrawerProps,
@@ -17,8 +25,6 @@ import {
   RectDrawerProps,
   TextDrawerProps,
 } from '../../types'
-
-const disableColor = '#E2E3E588'
 
 const animationKey = `animationKey-${new Date().getTime()}`
 
@@ -36,6 +42,8 @@ const defaultStyle: LayerLegendStyle = {
 }
 
 export class LayerLegend extends LayerBase<LayerLegendOptions> {
+  private disabledColor: string
+
   private _data = new DataBase<{
     text: Meta[]
     shape: LegendShape[]
@@ -85,11 +93,9 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
   }
 
   constructor(options: LayerLegendOptions, context: ChartContext) {
-    super({
-      context,
-      options,
-      sublayers: ['interactive', 'circle', 'rect', 'polygon', 'line', 'text'],
-    })
+    const sublayers = ['interactive', 'circle', 'rect', 'polygon', 'line', 'text']
+    super({context, options, sublayers})
+    this.disabledColor = mergeAlpha(this.options.theme.text.fill, 0.3)
   }
 
   setData() {}
@@ -102,6 +108,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
 
   bindLayers(originLayers: LayerInstance[]) {
     const data = this.data.source,
+      {text} = this.options.theme,
       layers = originLayers.filter((layer) => layer.legendData)
 
     Object.values(data).map((item) => item.length === 0)
@@ -111,7 +118,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       data.text.push(...(legends?.map(({label}) => label) ?? []))
       data.shape.push(...(legends?.map(({shape}) => shape) ?? []))
       data.shapeColors.push(...(legends?.map(({color}) => color) ?? []))
-      data.textColors.push(...new Array(legends?.length).fill('white'))
+      data.textColors.push(...new Array(legends?.length).fill(text.fill))
     })
     this.filter(layers)
   }
@@ -147,11 +154,11 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       if (!active[itemIndex]) {
         active[itemIndex] = true
         data.shapeColors[itemIndex] = colors[itemIndex]
-        data.textColors[itemIndex] = ungroup(this.style.text?.fill) || 'white'
+        data.textColors[itemIndex] = ungroup(this.style.text?.fill)!
       } else {
         active[itemIndex] = false
-        data.shapeColors[itemIndex] = disableColor
-        data.textColors[itemIndex] = disableColor
+        data.shapeColors[itemIndex] = this.disabledColor
+        data.textColors[itemIndex] = this.disabledColor
       }
 
       try {
@@ -349,7 +356,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     const circleData = {
       data: this.circleData,
       ...this.style.shape,
-      fill: this.circleData.map(({fill}) => fill!),
+      fill: this.circleData.map(({fill}) => fill || 'white'),
       stroke: this.circleData.map(({stroke}) => stroke!),
       strokeWidth: this.circleData.map(({strokeWidth}) => strokeWidth!),
     }
@@ -370,7 +377,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       ...this.style.text,
       fill: this.data.source.textColors,
       textDecoration: this.data.source.textColors.map((color) =>
-        color === disableColor ? 'line-through' : 'none'
+        color === this.disabledColor ? 'line-through' : 'none'
       ),
     }
 

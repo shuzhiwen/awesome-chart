@@ -41,12 +41,12 @@ export default ({pointSize}) => [
     style: {
       labelPosition: 'right',
       line: {
-        stroke: 'yellow',
+        stroke: 'orange',
         strokeWidth: 2,
         dasharray: '10 5',
       },
       text: {
-        fill: 'yellow',
+        fill: 'orange',
         fontSize: 8,
       },
     },
@@ -64,12 +64,12 @@ export default ({pointSize}) => [
     style: {
       labelPosition: 'top',
       line: {
-        stroke: 'yellow',
+        stroke: 'orange',
         strokeWidth: 2,
         dasharray: '10 5',
       },
       text: {
-        fill: 'yellow',
+        fill: 'orange',
         fontSize: 8,
       },
     },

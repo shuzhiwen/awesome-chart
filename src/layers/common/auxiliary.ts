@@ -29,7 +29,7 @@ const defaultStyle: LayerAuxiliaryStyle = {
     strokeDasharray: '5 5',
   },
   labelBackground: {
-    fill: '#ffffff3f',
+    hidden: true,
   },
 }
 

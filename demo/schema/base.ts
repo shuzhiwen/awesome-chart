@@ -1,14 +1,19 @@
 import {TooltipOptions} from '../../src/types'
 
-export default (layers: any[], tooltipOptions?: Omit<TooltipOptions, 'container'>) => ({
+export default (
+  layers: any[],
+  config?: Partial<{
+    tooltipOptions: Omit<TooltipOptions, 'container'>
+    hasBrush: boolean
+  }>
+) => ({
   adjust: true,
-  width: 100,
-  height: 100,
-  padding: [50, 50, 50, 50] as Padding,
   engine: 'svg',
+  padding: [50, 50, 50, 50] as Padding,
+  hasBrush: config?.hasBrush,
   tooltipOptions: {
     mode: 'single' as const,
-    ...tooltipOptions,
+    ...config?.tooltipOptions,
   },
   layers,
 })
@@ -47,7 +52,7 @@ export const tip = `备注
   '#42408C',
   '#4E207C',
   '#B23C33',
-  '#67050C'
+  '#67040C'
 ]
 黄昏宇宙[
   '#EDFB00',

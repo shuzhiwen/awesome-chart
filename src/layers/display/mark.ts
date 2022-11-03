@@ -21,6 +21,7 @@ const defaultStyle: LayerMarkStyle = {
   },
   text: {
     fontSize: 8,
+    fill: 'white',
   },
 }
 

@@ -78,7 +78,7 @@ export default () => [
         },
         {},
         {
-          fill: 'yellow',
+          fill: 'orange',
         },
         {},
         {

@@ -1,18 +1,18 @@
 import {useCallback, useEffect, useRef, useState} from 'react'
 import {Chart as ChartShape, createChart, download, getStandardLayoutCreator} from '../src'
+import {darkTheme, lightTheme} from '../src/core/theme'
 import {CreateChartProps} from '../src/types'
 import {MenuItemShape} from './schema'
 import styles from './Chart.module.css'
 import {cloneDeep} from 'lodash'
 import React from 'react'
 
-const isDebug = (import.meta as any).env?.MODE === 'development'
-
 export const Chart = (props: {
+  variant: 'light' | 'dark'
   debuggers: AnyFunction[]
   schema: MenuItemShape['schema'] & AnyObject
 }) => {
-  const {debuggers, schema: _schema} = props,
+  const {debuggers, variant, schema} = props,
     chartRef = useRef<any>(null),
     [chart, setChart] = useState<ChartShape>(),
     [engine, setEngine] = useState<'svg' | 'canvas'>('svg'),
@@ -31,8 +31,9 @@ export const Chart = (props: {
     try {
       const container = chartRef.current
       const newChart = createChart({
-        ...cloneDeep(_schema),
-        layoutCreator: getStandardLayoutCreator({brush: true}),
+        ...cloneDeep(schema),
+        layoutCreator: getStandardLayoutCreator({brush: !!schema.hasBrush}),
+        theme: variant === 'light' ? lightTheme : darkTheme,
         container,
         engine,
       } as CreateChartProps)
@@ -43,10 +44,10 @@ export const Chart = (props: {
     } catch (error) {
       console.error(error)
     }
-  }, [_schema, engine])
+  }, [schema, engine, variant])
 
   return (
-    <div className={styles.chartContainer} style={{opacity: isDebug ? 0.2 : 1}}>
+    <div className={styles.chartContainer}>
       <div className={styles.title}>
         <div className={styles.button} onClick={toggleDebug}>
           DEBUG
@@ -58,7 +59,14 @@ export const Chart = (props: {
           DOWNLOAD
         </div>
       </div>
-      <div ref={chartRef} className={styles.chart} />
+      <div
+        ref={chartRef}
+        className={styles.chart}
+        style={{
+          border: `dotted ${variant === 'dark' ? '#eeeeee' : '#101010'} 2px`,
+          backgroundColor: variant === 'dark' ? '#eeeeee' : '#101010',
+        }}
+      />
     </div>
   )
 }

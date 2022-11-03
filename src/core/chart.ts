@@ -3,7 +3,7 @@ import {fabric} from 'fabric'
 import {Canvas} from 'fabric/fabric-impl'
 import {defaultLayoutCreator} from '../layout'
 import {LayerAxis, layerMapping} from '../layers'
-import {defaultTheme} from './theme'
+import {lightTheme} from './theme'
 import {Tooltip} from './tooltip'
 import {isNil} from 'lodash'
 import {
@@ -77,7 +77,7 @@ export class Chart {
     adjust = true,
     engine = 'svg',
     padding = [0, 0, 0, 0],
-    theme = defaultTheme,
+    theme = lightTheme,
     layoutCreator = defaultLayoutCreator,
     defineSchema = {},
     tooltipOptions,

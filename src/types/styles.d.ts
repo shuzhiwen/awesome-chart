@@ -160,10 +160,10 @@ export type LayerFlopperStyle = Partial<{
       height: number
     }
   >
-  cell: {
+  cell: Partial<{
     fontSize: string
     backgroundColor: string
-  }
+  }>
 }>
 
 export type LayerPackStyle = Partial<{

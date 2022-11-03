@@ -42,12 +42,12 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
       style: {
         labelPosition: 'right',
         line: {
-          stroke: 'yellow',
+          stroke: 'orange',
           strokeWidth: 2,
           dasharray: '10 5',
         },
         text: {
-          fill: 'yellow',
+          fill: 'orange',
           fontSize: 8,
         },
       },

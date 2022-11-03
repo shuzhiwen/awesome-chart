@@ -3,7 +3,7 @@ import {select} from 'd3'
 import {cloneDeep, merge} from 'lodash'
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
-import {defaultTheme} from '../../core/theme'
+import {lightTheme} from '../../core/theme'
 import {ChartContext, LayerFlopperOptions, LayerFlopperStyle} from '../../types'
 import {addStyle, isCC, isSC, mergeAlpha, range} from '../../utils'
 import {createStyle, validateAndCreateData} from '../helpers'
@@ -19,7 +19,6 @@ const defaultStyle: LayerFlopperStyle = {
   thousandth: true,
   cell: {
     fontSize: '48px',
-    backgroundColor: 'black',
   },
 }
 
@@ -36,7 +35,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
 
   private cellData: {text: string; prevText?: string}[] = []
 
-  private animation = {...defaultTheme.animation.update}
+  private animation = {...lightTheme.animation.update}
 
   get data() {
     return this._data

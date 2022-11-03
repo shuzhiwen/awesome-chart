@@ -50,12 +50,12 @@ export default ({
         direction: variant === 'column' ? 'horizontal' : 'vertical',
         labelPosition: variant === 'column' ? 'right' : 'top',
         line: {
-          stroke: 'yellow',
+          stroke: 'orange',
           strokeWidth: 2,
           dasharray: '10 5',
         },
         text: {
-          fill: 'yellow',
+          fill: 'orange',
           fontSize: 8,
         },
       },

@@ -28,7 +28,7 @@ const defaultStyle: LayerGridStyle = {
   sangerColumn: 12,
   sangerGap: 4,
   placeholder: {
-    fill: 'yellow',
+    fill: 'orange',
     fillOpacity: 0.3,
   },
   gridLine: {

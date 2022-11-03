@@ -55,13 +55,15 @@ export const schemaMenu: MenuShape = {
         {
           name: '高级绘制函数',
           schema: base(mapping(), {
-            render: (container) => {
-              const image = document.createElement('img')
-              image.src = fruits
-              image.width = 100
-              image.height = 100
-              container.innerHTML = ''
-              container.appendChild(image)
+            tooltipOptions: {
+              render: (container) => {
+                const image = document.createElement('img')
+                image.src = fruits
+                image.width = 100
+                image.height = 100
+                container.innerHTML = ''
+                container.appendChild(image)
+              },
             },
           }),
         },
@@ -124,7 +126,9 @@ export const schemaMenu: MenuShape = {
         {
           name: '带轴交互的柱状图',
           schema: base(rect({variant: 'column', mode: 'group', hasInteractive: true}), {
-            mode: 'dimension',
+            tooltipOptions: {
+              mode: 'dimension',
+            },
           }),
         },
       ],
@@ -205,7 +209,7 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础K线',
-          schema: base(candle({})),
+          schema: base(candle({}), {hasBrush: true}),
         },
       ],
     },
@@ -235,7 +239,7 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '带笔刷的矩阵',
-          schema: base(matrix({shape: 'rect', brush: true})),
+          schema: base(matrix({shape: 'rect', brush: true}), {hasBrush: true}),
         },
       ],
     },

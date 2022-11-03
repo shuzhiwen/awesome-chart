@@ -22,7 +22,6 @@ import {
 } from '../../types'
 
 const defaultSplitLine = {
-  stroke: 'white',
   strokeWidth: 1,
   strokeOpacity: 0.5,
   fillOpacity: 0,
@@ -30,7 +29,6 @@ const defaultSplitLine = {
 }
 
 const defaultAxisLine = {
-  stroke: 'white',
   strokeWidth: 1,
   fillOpacity: 0,
   evented: false,
@@ -51,7 +49,7 @@ const defaultOptions: Partial<LayerAxisOptions> = {
 }
 
 const defaultStyle: LayerAxisStyle = {
-  maxScaleXTextNumber: Infinity,
+  maxScaleXTextNumber: 'auto',
   splitLineAxisX: defaultSplitLine,
   splitLineAxisY: defaultSplitLine,
   splitLineAngle: defaultSplitLine,
