@@ -1,4 +1,4 @@
-import data from '../../../assets/stock.json'
+import data from '../../../public/stock.json'
 
 export default ({updateDuration = 0}: {updateDuration?: number}) => [
   {

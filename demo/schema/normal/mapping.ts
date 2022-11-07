@@ -1,5 +1,3 @@
-import image from '../../../assets/fruits.png'
-
 export default () =>
   [
     {
@@ -90,7 +88,7 @@ export default () =>
                   y: y - labelIconSize,
                   width: labelIconSize,
                   height: labelIconSize,
-                  url: image,
+                  url: 'fruits.png',
                   viewBox: {
                     x: xIndex * imageItemSize,
                     y: yIndex * imageItemSize,

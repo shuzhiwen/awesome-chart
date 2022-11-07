@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import data from '../../assets/covid19.json'
+import data from '../../public/covid19.json'
 import {Chart} from '../../src/core'
 import {DataTableList} from '../../src/data'
 import {LayerRect} from '../../src/layers'

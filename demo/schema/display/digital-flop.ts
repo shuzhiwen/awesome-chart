@@ -1,5 +1,3 @@
-import character from '../../../assets/character.png'
-
 export default ({variant}) => [
   {
     type: 'flopper',
@@ -11,7 +9,7 @@ export default ({variant}) => [
       value: 12034.456,
     },
     style: {
-      url: character,
+      url: 'character.png',
       characters: {
         0: {
           left: 0,
