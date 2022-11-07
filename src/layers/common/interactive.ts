@@ -169,55 +169,71 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       {width, height, left, top} = this.options.layout
 
     if (isScaleBand(scaleX)) {
-      this.rectDataX = scaleX.domain().map((domain, i) => [
-        {
-          x: left,
-          y: top,
-          height,
-          width: scaleX(domain) ?? 0,
-          source: {key: `x-${i}-secondary`},
-        },
-        {
-          x: left + (scaleX(domain) ?? 0),
-          y: top,
-          height,
-          width: scaleX.bandwidth(),
-          source: {key: `x-${i}`, dimension: domain},
-        },
-        {
-          x: left + (scaleX(domain) ?? 0) + scaleX.bandwidth(),
-          y: top,
-          height,
-          width: Math.abs(width - (scaleX(domain) ?? 0) - scaleX.bandwidth()),
-          source: {key: `x-${i}-secondary`},
-        },
-      ])
+      this.rectDataX = scaleX.domain().map((domain, i, array) => {
+        const rectX = scaleX(domain) ?? 0,
+          rectWidth = scaleX.bandwidth(),
+          paddingWidth = width - scaleX.bandwidth() * array.length,
+          halfGap = paddingWidth / (array.length - 1) / 2,
+          [isHead, isTail] = [i === 0, i === array.length - 1]
+
+        return [
+          {
+            x: left,
+            y: top,
+            height,
+            width: rectX - (isHead ? 0 : halfGap),
+            source: {key: `x-${i}-secondary`},
+          },
+          {
+            x: left + rectX - (isHead ? 0 : halfGap),
+            y: top,
+            height,
+            width: rectWidth + halfGap * (isHead || isTail ? 1 : 2),
+            source: {key: `x-${i}`, dimension: domain},
+          },
+          {
+            x: left + rectX + rectWidth + halfGap * (isTail ? 0 : 1),
+            y: top,
+            height,
+            width: Math.abs(width - rectX - rectWidth - halfGap * (isTail ? 0 : 1)),
+            source: {key: `x-${i}-secondary`},
+          },
+        ]
+      })
     }
 
     if (isScaleBand(scaleY)) {
-      this.rectDataY = scaleY.domain().map((domain, i) => [
-        {
-          x: left,
-          y: top,
-          width,
-          height: scaleY(domain) ?? 0,
-          source: {key: `y-${i}-secondary`},
-        },
-        {
-          x: left,
-          y: top + (scaleY(domain) ?? 0),
-          width,
-          height: scaleY.bandwidth(),
-          source: {key: `y-${i}`, dimension: domain},
-        },
-        {
-          x: left,
-          y: top + (scaleY(domain) ?? 0) + scaleY.bandwidth(),
-          width,
-          height: height - (scaleY(domain) ?? 0) - scaleY.bandwidth(),
-          source: {key: `y-${i}-secondary`},
-        },
-      ])
+      this.rectDataY = scaleY.domain().map((domain, i, array) => {
+        const rectY = scaleY(domain) ?? 0,
+          rectHeight = scaleY.bandwidth(),
+          paddingHeight = height - scaleY.bandwidth() * array.length,
+          halfGap = paddingHeight / (array.length - 1) / 2,
+          [isHead, isTail] = [i === 0, i === array.length - 1]
+
+        return [
+          {
+            x: left,
+            y: top,
+            width,
+            height: rectY - (isHead ? 0 : halfGap),
+            source: {key: `y-${i}-secondary`},
+          },
+          {
+            x: left,
+            y: top + rectY - (isHead ? 0 : halfGap),
+            width,
+            height: rectHeight + halfGap * (isHead || isTail ? 1 : 2),
+            source: {key: `y-${i}`, dimension: domain},
+          },
+          {
+            x: left,
+            y: top + rectY + rectHeight + halfGap * (isTail ? 0 : 1),
+            width,
+            height: Math.abs(height - rectY - rectHeight - halfGap * (isTail ? 0 : 1)),
+            source: {key: `y-${i}-secondary`},
+          },
+        ]
+      })
     }
   }
 

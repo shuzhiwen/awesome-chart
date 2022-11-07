@@ -27,6 +27,8 @@ export class Tooltip {
 
   private data: Maybe<TooltipData> = null
 
+  private hideTimeout: NodeJS.Timeout | undefined
+
   constructor(options: TooltipOptions) {
     this.setOptions(options)
 
@@ -58,12 +60,15 @@ export class Tooltip {
   show(event: MouseEvent) {
     this.isVisible = true
     this.instance?.style('display', 'flex')
+    clearTimeout(this.hideTimeout)
     event && this.move(event)
   }
 
   hide() {
-    this.isVisible = false
-    this.instance?.style('display', 'none')
+    this.hideTimeout = setTimeout(() => {
+      this.isVisible = false
+      this.instance?.style('display', 'none')
+    }, 100)
   }
 
   private getListData(data: ElConfig): TooltipData {
