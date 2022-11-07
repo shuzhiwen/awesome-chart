@@ -78,6 +78,7 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
 
     setEditor(editor)
     parse(editor.getValue(), (value) => onChange(value))
+    editor.trigger('source', 'editor.action.formatDocument', null)
 
     return () => {
       editor.dispose()
