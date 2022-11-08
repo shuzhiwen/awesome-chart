@@ -17,16 +17,6 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
       options: {
         layout: 'container',
       },
-      style: {
-        align: 'end',
-        verticalAlign: 'start',
-        direction: 'horizontal',
-        pointSize: 8,
-        gap: [5, 10],
-        text: {
-          fontSize: 12,
-        },
-      },
     },
     {
       type: 'auxiliary',

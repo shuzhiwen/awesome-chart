@@ -67,14 +67,12 @@ export default () => [
       sanger: [3, 5],
       text: {
         fontSize: 16,
-        align: 'middle',
-        verticalAlign: 'middle',
+        align: ['middle', 'middle'],
       },
       groupText: [
         {
           fill: 'gray',
-          align: 'start',
-          verticalAlign: 'middle',
+          align: ['start', 'middle'],
         },
         {},
         {
@@ -84,8 +82,7 @@ export default () => [
         {
           fill: 'green',
           fontSize: 20,
-          align: 'end',
-          verticalAlign: 'middle',
+          align: ['end', 'middle'],
         },
       ],
     },
