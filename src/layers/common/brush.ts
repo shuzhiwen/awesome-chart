@@ -2,7 +2,13 @@ import {LayerBase} from '../base'
 import {createScale, createStyle} from '../helpers'
 import {addStyle, isSC, transformAttr} from '../../utils'
 import {BrushBehavior, D3BrushEvent, brushX, brushY} from 'd3'
-import {ChartContext, LayerAxisScale, LayerBrushOptions, LayerBrushStyle} from '../../types'
+import {
+  ChartContext,
+  LayerAxisScale,
+  LayerBrushOptions,
+  LayerBrushStyle,
+  LayerStyle,
+} from '../../types'
 
 const defaultStyle: LayerBrushStyle = {
   targets: [],
@@ -64,8 +70,8 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerBrushStyle) {
-    this._style = createStyle(defaultStyle, this._style, style)
+  setStyle(style: LayerStyle<LayerBrushStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this._style, style)
   }
 
   update() {

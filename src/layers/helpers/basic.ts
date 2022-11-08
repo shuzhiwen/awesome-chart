@@ -1,7 +1,7 @@
-import {merge} from 'lodash'
-import {dataMapping, DataTableList} from '../../data'
+import {isFunction, merge} from 'lodash'
+import {DataBase, dataMapping, DataTableList} from '../../data'
+import {ChartContext, DataType, LayerScale, LayerStyle} from '../../types'
 import {scaleTypes} from '../../utils'
-import {DataType, LayerScale} from '../../types'
 
 export function createScale<Scale extends Maybe<LayerScale>>(
   defaultScale?: Scale,
@@ -18,11 +18,11 @@ export function createScale<Scale extends Maybe<LayerScale>>(
   return scales as Required<Scale>
 }
 
-export function validateAndCreateData<LayerData>(
+export function validateAndCreateData<Data extends Maybe<DataBase<unknown>>>(
   dataType: DataType,
-  currentData?: LayerData,
-  incomingData?: LayerData,
-  filter?: (data: LayerData) => LayerData | void
+  currentData?: Data,
+  incomingData?: Data,
+  filter?: (data: Data) => Data | void
 ) {
   if (!incomingData) {
     return currentData
@@ -33,12 +33,18 @@ export function validateAndCreateData<LayerData>(
   return filter ? filter(incomingData) || incomingData : incomingData
 }
 
-export function createStyle<LayerStyle>(
-  defaultStyle: LayerStyle,
-  currentStyle: LayerStyle,
-  incomingStyle: LayerStyle
+export function createStyle<Style extends UnknownObject>(
+  options: ChartContext,
+  defaultStyle: LayerStyle<Style>,
+  currentStyle: LayerStyle<Style>,
+  incomingStyle: LayerStyle<Style>
 ) {
-  return merge({}, defaultStyle, currentStyle, incomingStyle)
+  const {theme} = options,
+    _default = isFunction(defaultStyle) ? defaultStyle(theme) : defaultStyle,
+    _current = isFunction(currentStyle) ? currentStyle(theme) : currentStyle,
+    _incoming = isFunction(incomingStyle) ? incomingStyle(theme) : incomingStyle
+
+  return merge({}, _default, _current, _incoming)
 }
 
 export function checkColumns(data: Maybe<DataTableList>, keys: Meta[]) {

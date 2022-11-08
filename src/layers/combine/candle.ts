@@ -11,6 +11,7 @@ import {
   LayerCandleOptions,
   LayerRectScale,
   CacheLayerAnimation,
+  LayerStyle,
 } from '../../types'
 
 const defaultStyle: LayerCandleStyle = {
@@ -98,8 +99,8 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
     this.lineLayer.setScale(this.scale)
   }
 
-  setStyle(style: LayerCandleStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerCandleStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

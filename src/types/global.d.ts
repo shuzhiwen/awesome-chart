@@ -20,6 +20,8 @@ type ArrayItem<T> = T extends Array<infer V> ? V : T
 
 type Newable<T, P> = P extends [...infer V] ? {new (...args: V): T} : never
 
+type Computable<T, P = never> = T | ((props: P) => T)
+
 type Keys<T> = T extends Set<infer K>
   ? K
   : T extends Map<infer K, unknown>

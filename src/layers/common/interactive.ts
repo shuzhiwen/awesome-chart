@@ -14,6 +14,7 @@ import {
   RectDrawerProps,
   DrawerData,
   ElSource,
+  LayerStyle,
 } from '../../types'
 
 const shadowOpacity = 0.5
@@ -155,8 +156,8 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     this.helperAuxiliary.map((layer) => layer.setScale(this.scale))
   }
 
-  setStyle(style: LayerInteractiveStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerInteractiveStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
     this.helperAuxiliary.map((layer) => layer.setStyle(this.style))
   }
 

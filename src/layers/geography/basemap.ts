@@ -9,6 +9,7 @@ import {
   LayerBasemapOptions,
   LayerBasemapScale,
   LayerBasemapStyle,
+  LayerStyle,
   RectDrawerProps,
   TextDrawerProps,
 } from '../../types'
@@ -103,8 +104,8 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerBasemapStyle) {
-    this._style = createStyle(defaultStyle, this._style, style)
+  setStyle(style: LayerStyle<LayerBasemapStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this._style, style)
   }
 
   update() {

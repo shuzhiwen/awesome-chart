@@ -1,6 +1,9 @@
 import {AnimationOptions} from './animation'
 import {BasicDrawerProps, ElConfig} from './draw'
 import {FormatNumberConfig} from './utils'
+import {ChartTheme} from './core'
+
+export type LayerStyle<T> = Computable<Partial<T>, ChartTheme>
 
 export type GraphStyle = Partial<{
   fill: MaybeGroup<string>
@@ -193,7 +196,7 @@ export type LayerSankeyStyle = Partial<{
 }>
 
 export type LayerTreemapStyle = Partial<{
-  title: 'treemapBinary' | 'treemapDice' | 'treemapSlice' | 'treemapSliceDice' | 'treemapSquarify'
+  tile: Tile
   align: Alignment
   verticalAlign: Alignment
   labelGap: number

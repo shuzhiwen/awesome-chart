@@ -19,6 +19,7 @@ import {
   DrawerData,
   LineDrawerProps,
   CircleDrawerProps,
+  LayerStyle,
 } from '../../types'
 
 const defaultSplitLine = {
@@ -212,8 +213,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     })
   }
 
-  setStyle(style: LayerAxisStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerAxisStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

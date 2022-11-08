@@ -6,6 +6,7 @@ import {DataBase} from '../../data'
 import {
   ChartContext,
   DrawerData,
+  LayerStyle,
   LayerTextOptions,
   LayerTextStyle,
   TextDrawerProps,
@@ -57,8 +58,8 @@ export class LayerText extends LayerBase<LayerTextOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerTextStyle) {
-    this._style = createStyle(defaultStyle, this._style, style)
+  setStyle(style: LayerStyle<LayerTextStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this._style, style)
   }
 
   update() {

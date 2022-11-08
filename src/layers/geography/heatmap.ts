@@ -9,6 +9,7 @@ import {
   LayerHeatmapScale,
   DrawerData,
   CircleDrawerProps,
+  LayerStyle,
 } from '../../types'
 
 type DataKey = 'x' | 'y' | 'value'
@@ -55,8 +56,8 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerHeatmapStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerHeatmapStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

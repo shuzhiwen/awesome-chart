@@ -12,6 +12,7 @@ import {
   TextDrawerProps,
   Node,
   RectDrawerProps,
+  LayerStyle,
 } from '../../types'
 
 const defaultStyle: LayerTreemapStyle = {
@@ -50,8 +51,8 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerTreemapStyle) {
-    this._style = createStyle(defaultStyle, this._style, style)
+  setStyle(style: LayerStyle<LayerTreemapStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this._style, style)
   }
 
   update() {
@@ -62,13 +63,13 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
     const {nodes} = this.data,
       {layout} = this.options,
       {left, top, width, height} = layout,
-      {title = 'treemapSquarify', rect, align, verticalAlign, labelGap = 0, text} = this.style,
+      {tile = 'treemapSquarify', rect, align, verticalAlign, labelGap = 0, text} = this.style,
       root = {id: uuid(), name: 'root', value: 0, children: nodes.filter(({level}) => level === 0)},
       hierarchyNode = hierarchy(root)
         .sum((d) => d.value)
         .sort((a, b) => b.data.value - a.data.value),
       leaves = treemap<Node>()
-        .tile(d3[title])
+        .tile(d3[tile])
         .size([width, height])
         .round(true)
         .paddingInner(1)(hierarchyNode)

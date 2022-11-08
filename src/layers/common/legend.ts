@@ -19,6 +19,7 @@ import {
   LayerInstance,
   LayerLegendOptions,
   LayerLegendStyle,
+  LayerStyle,
   LegendData,
   LineDrawerProps,
   PolyDrawerProps,
@@ -102,8 +103,8 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerLegendStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerLegendStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   bindLayers(originLayers: LayerInstance[]) {

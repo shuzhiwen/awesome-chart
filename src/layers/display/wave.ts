@@ -9,6 +9,7 @@ import {
   ChartContext,
   CircleDrawerProps,
   DrawerData,
+  LayerStyle,
   LayerWaveOptions,
   LayerWaveStyle,
   TextDrawerProps,
@@ -95,8 +96,8 @@ export class LayerWave extends LayerBase<LayerWaveOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerWaveStyle) {
-    this._style = createStyle(defaultStyle, this._style, style)
+  setStyle(style: LayerStyle<LayerWaveStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this._style, style)
   }
 
   update() {

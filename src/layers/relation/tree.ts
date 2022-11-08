@@ -19,6 +19,7 @@ import {
   LayerTreeScale,
   Node,
   LineDrawerProps,
+  LayerStyle,
 } from '../../types'
 
 const defaultStyle: LayerTreeStyle = {
@@ -107,8 +108,8 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
     this.needRescale = false
   }
 
-  setStyle(style: LayerTreeStyle) {
-    this._style = createStyle(defaultStyle, this._style, style)
+  setStyle(style: LayerStyle<LayerTreeStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this._style, style)
     this.needRescale = true
   }
 

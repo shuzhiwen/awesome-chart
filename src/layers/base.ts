@@ -27,6 +27,7 @@ import {
   ChartContext,
   LayerScale,
   CacheLayerEvent,
+  LayerStyle,
 } from '../types'
 
 export abstract class LayerBase<Options extends LayerOptions> {
@@ -34,11 +35,11 @@ export abstract class LayerBase<Options extends LayerOptions> {
 
   abstract style: Maybe<UnknownObject>
 
-  abstract setData(data?: Maybe<LayerData>): void
+  abstract setData(data: Maybe<LayerData>): void
 
-  abstract setScale(scale?: Maybe<LayerScale>): void
+  abstract setScale(scale: Maybe<LayerScale>): void
 
-  abstract setStyle(style?: Maybe<AnyObject>): void
+  abstract setStyle(style: Maybe<LayerStyle<UnknownObject>>): void
 
   abstract update(...args: unknown[]): void
 

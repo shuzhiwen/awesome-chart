@@ -13,6 +13,7 @@ import {
   LayerRadialScale,
   ElSource,
   ArcDrawerProps,
+  LayerStyle,
 } from '../../types'
 
 const defaultStyle: LayerRadialStyle = {
@@ -67,8 +68,8 @@ export class LayerRadial extends LayerBase<LayerRadialOptions> {
     this.needRescale = false
   }
 
-  setStyle(style: LayerRadialStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerRadialStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
     this.needRescale = true
   }
 

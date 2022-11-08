@@ -1,5 +1,6 @@
 import {DataTableList, DataTable, DataRelation, DataBase} from '../data'
 import {CreateChartProps, LayerOptions} from '../types'
+import {LayerBase} from '../layers'
 import {Chart} from './chart'
 import {
   createLog,
@@ -21,7 +22,7 @@ export const createLayer = errorCatcher(
   (chart: Chart, schema: ArrayItem<CreateChartProps['layers']>) => {
     const {type, options, data, scale, style, animation, event} = schema!,
       layerOptions = {type, ...options, layout: chart.layout[options.layout]} as LayerOptions,
-      layer = chart.createLayer(layerOptions)
+      layer = chart.createLayer(layerOptions) as LayerBase<LayerOptions>
     let dataSet = data
 
     if (isRawTable(data) || data?.type === 'table') {
@@ -38,7 +39,7 @@ export const createLayer = errorCatcher(
       dataSet = new DataBase(data ?? {})
     }
 
-    layer.setStyle({...style})
+    layer.setStyle(style)
     layer.setAnimation({...animation})
     isLayerAxis(layer) && layer.setScale({nice: scale})
     !isLayerLegend(layer) && layer.setData(dataSet)

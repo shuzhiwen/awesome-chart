@@ -18,6 +18,7 @@ import {
   LineDrawerProps,
   ArcDrawerProps,
   ElSource,
+  LayerStyle,
 } from '../../types'
 
 const defaultStyle: LayerDashboardStyle = {
@@ -115,8 +116,8 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerDashboardStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerDashboardStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

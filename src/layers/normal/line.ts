@@ -20,6 +20,7 @@ import {
   CircleDrawerProps,
   AreaDrawerProps,
   ElSource,
+  LayerStyle,
 } from '../../types'
 
 const defaultOptions: Partial<LayerLineOptions> = {
@@ -94,8 +95,8 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerLineStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerLineStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

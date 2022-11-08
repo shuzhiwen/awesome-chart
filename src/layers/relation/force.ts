@@ -12,6 +12,7 @@ import {
   LayerForceStyle,
   LayerForceOptions,
   CacheLayerAnimation,
+  LayerStyle,
 } from '../../types'
 
 const defaultStyle: LayerForceStyle = {
@@ -64,8 +65,8 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
     this._data = validateAndCreateData('tableList', this.data, data)
   }
 
-  setStyle(style: LayerForceStyle) {
-    this._style = createStyle(defaultStyle, this._style, style)
+  setStyle(style: LayerStyle<LayerForceStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this._style, style)
   }
 
   update() {

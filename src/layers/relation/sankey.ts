@@ -12,6 +12,7 @@ import {
   TextDrawerProps,
   Node,
   RectDrawerProps,
+  LayerStyle,
 } from '../../types'
 
 const defaultStyle: LayerSankeyStyle = {
@@ -66,8 +67,8 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerSankeyStyle) {
-    this._style = createStyle(defaultStyle, this._style, style)
+  setStyle(style: LayerStyle<LayerSankeyStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this._style, style)
   }
 
   update() {

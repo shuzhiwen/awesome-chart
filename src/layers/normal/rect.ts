@@ -17,6 +17,7 @@ import {
   LayerRectOptions,
   LayerRectScale,
   LayerRectStyle,
+  LayerStyle,
   LegendData,
   RectDrawerProps,
   ScaleBand,
@@ -102,8 +103,8 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerRectStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerRectStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

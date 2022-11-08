@@ -19,6 +19,7 @@ import {
   CircleDrawerProps,
   PolyDrawerProps,
   ElSource,
+  LayerStyle,
 } from '../../types'
 
 const defaultOptions: Partial<LayerRadarOptions> = {
@@ -85,8 +86,8 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerRadarStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerRadarStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   private createScale() {

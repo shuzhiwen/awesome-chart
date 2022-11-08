@@ -18,6 +18,7 @@ import {
   LayerAuxiliaryOptions,
   LineDrawerProps,
   RectDrawerProps,
+  LayerStyle,
 } from '../../types'
 
 const defaultStyle: LayerAuxiliaryStyle = {
@@ -81,8 +82,8 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerAuxiliaryStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerAuxiliaryStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

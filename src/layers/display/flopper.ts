@@ -4,7 +4,7 @@ import {cloneDeep, merge} from 'lodash'
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {lightTheme} from '../../core/theme'
-import {ChartContext, LayerFlopperOptions, LayerFlopperStyle} from '../../types'
+import {ChartContext, LayerFlopperOptions, LayerFlopperStyle, LayerStyle} from '../../types'
 import {addStyle, isCC, isSC, mergeAlpha, range} from '../../utils'
 import {createStyle, validateAndCreateData} from '../helpers'
 
@@ -85,8 +85,8 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerFlopperStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerFlopperStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

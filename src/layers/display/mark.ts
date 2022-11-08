@@ -8,6 +8,7 @@ import {
   LayerMarkOptions,
   LayerMarkScale,
   LayerMarkStyle,
+  LayerStyle,
   PathDrawerProps,
   TextDrawerProps,
 } from '../../types'
@@ -61,8 +62,8 @@ export class LayerMark extends LayerBase<LayerMarkOptions> {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerMarkStyle) {
-    this._style = createStyle(defaultStyle, this._style, style)
+  setStyle(style: LayerStyle<LayerMarkStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this._style, style)
   }
 
   update() {

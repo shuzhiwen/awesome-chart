@@ -18,6 +18,7 @@ import {
   LayerMatrixOptions,
   LayerMatrixScale,
   LayerMatrixStyle,
+  LayerStyle,
   LegendData,
   RectDrawerProps,
   TextDrawerProps,
@@ -82,8 +83,8 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerMatrixStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerMatrixStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   private createScale() {

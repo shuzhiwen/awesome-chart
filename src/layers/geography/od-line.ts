@@ -13,6 +13,7 @@ import {
   AnimationPathOptions,
   PathDrawerProps,
   DrawerData,
+  LayerStyle,
 } from '../../types'
 
 type DataKey = 'fromX' | 'fromY' | 'toX' | 'toY'
@@ -84,8 +85,8 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerODLineStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerODLineStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

@@ -55,3 +55,10 @@ type Curve =
   | 'curveStep'
   | 'curveStepAfter'
   | 'curveStepBefore'
+
+type Tile =
+  | 'treemapBinary'
+  | 'treemapDice'
+  | 'treemapSlice'
+  | 'treemapSliceDice'
+  | 'treemapSquarify'

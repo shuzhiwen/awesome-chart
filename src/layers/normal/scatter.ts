@@ -20,6 +20,7 @@ import {
   LegendData,
   CircleDrawerProps,
   ElSource,
+  LayerStyle,
 } from '../../types'
 
 type DataKey = 'x' | 'y' | 'value' | 'category'
@@ -73,8 +74,8 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
     this._scale = createScale(undefined, this.scale, scale)
   }
 
-  setStyle(style: LayerScatterStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerScatterStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

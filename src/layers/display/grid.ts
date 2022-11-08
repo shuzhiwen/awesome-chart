@@ -10,6 +10,7 @@ import {
   ElConfig,
   LayerGridOptions,
   LayerGridStyle,
+  LayerStyle,
   LineDrawerProps,
   RectDrawerProps,
 } from '../../types'
@@ -114,8 +115,8 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
 
   setScale() {}
 
-  setStyle(style: LayerGridStyle) {
-    this._style = createStyle(defaultStyle, this._style, style)
+  setStyle(style: LayerStyle<LayerGridStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this._style, style)
   }
 
   update(box: Maybe<GridBox>) {

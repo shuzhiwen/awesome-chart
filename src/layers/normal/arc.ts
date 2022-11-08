@@ -20,6 +20,7 @@ import {
   ArcDrawerProps,
   ElSource,
   CurveDrawerProps,
+  LayerStyle,
 } from '../../types'
 
 const defaultOptions: Partial<LayerArcOptions> = {
@@ -94,8 +95,8 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
     this.needRescale = false
   }
 
-  setStyle(style: LayerArcStyle) {
-    this._style = createStyle(defaultStyle, this.style, style)
+  setStyle(style: LayerStyle<LayerArcStyle>) {
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
     this.needRescale = true
   }
 
