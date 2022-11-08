@@ -78,24 +78,24 @@ export class LayerText extends LayerBase<LayerTextOptions> {
         yIndex = typeof item === 'string' ? 0 : item.y,
         style = merge({}, text, groupText?.[yIndex]),
         fontSize = getAttr(style.fontSize, i, 12),
-        _align = getAttr(style.align, i, 'start'),
-        _verticalAlign = getAttr(style.verticalAlign, i, 'start')
+        align = getAttr(style.align, 0, 'start'),
+        verticalAlign = getAttr(style.align, 1, 'start')
       let x = left + unitWidth * yIndex,
         y = top + unitHeight * xIndex
 
-      if (_align === 'start') {
+      if (align === 'start') {
         x += 0
-      } else if (_align === 'middle') {
+      } else if (align === 'middle') {
         x += (unitWidth - getTextWidth(value, fontSize)) / 2
-      } else if (_align === 'end') {
+      } else if (align === 'end') {
         x += unitWidth - getTextWidth(value, fontSize)
       }
 
-      if (_verticalAlign === 'start') {
+      if (verticalAlign === 'start') {
         y += fontSize
-      } else if (_verticalAlign === 'middle') {
+      } else if (verticalAlign === 'middle') {
         y += (unitHeight + fontSize) / 2
-      } else if (_verticalAlign === 'end') {
+      } else if (verticalAlign === 'end') {
         y += unitHeight
       }
 

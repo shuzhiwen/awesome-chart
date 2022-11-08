@@ -16,8 +16,7 @@ import {
 } from '../../types'
 
 const defaultStyle: LayerTreemapStyle = {
-  align: 'middle',
-  verticalAlign: 'middle',
+  align: ['middle', 'middle'],
   labelGap: 5,
 }
 
@@ -63,7 +62,8 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
     const {nodes} = this.data,
       {layout} = this.options,
       {left, top, width, height} = layout,
-      {tile = 'treemapSquarify', rect, align, verticalAlign, labelGap = 0, text} = this.style,
+      {tile = 'treemapSquarify', rect, labelGap = 0, text} = this.style,
+      [align, verticalAlign] = this.style.align ?? ['start', 'start'],
       root = {id: uuid(), name: 'root', value: 0, children: nodes.filter(({level}) => level === 0)},
       hierarchyNode = hierarchy(root)
         .sum((d) => d.value)

@@ -30,8 +30,7 @@ import {
 const animationKey = `animationKey-${new Date().getTime()}`
 
 const defaultStyle: LayerLegendStyle = {
-  align: 'end',
-  verticalAlign: 'start',
+  align: ['end', 'start'],
   direction: 'horizontal',
   offset: [0, 0],
   gap: [5, 10],
@@ -198,8 +197,9 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     }
 
     const {left, top, width, height} = this.options.layout,
-      {align, verticalAlign, direction, shapeSize = 5, offset = [0, 0], gap, text} = this.style,
-      [inner, outer] = gap!,
+      {direction, shapeSize = 5, offset = [0, 0], text} = this.style,
+      [align, verticalAlign] = this.style.align ?? ['start', 'start'],
+      [inner, outer] = this.style.gap ?? [0, 0],
       data = this.data.source,
       shapeWidth = shapeSize * 2,
       fontSize = ungroup(text?.fontSize) ?? 12,

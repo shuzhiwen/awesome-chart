@@ -53,9 +53,8 @@ export type LayerAxisStyle = Partial<{
 }>
 
 export type LayerLegendStyle = Partial<{
-  align: Alignment
-  verticalAlign: Alignment
-  direction: Direction
+  direction: Direction | 'auto'
+  align: [Alignment, Alignment]
   offset: [number, number]
   gap: [number, number]
   shapeSize: number
@@ -97,18 +96,8 @@ export type LayerODLineStyle = Partial<{
 
 export type LayerTextStyle = Partial<{
   sanger: [number, number]
-  text: Partial<
-    TextStyle & {
-      align: Alignment
-      verticalAlign: Alignment
-    }
-  >
-  groupText: Partial<
-    TextStyle & {
-      align: Alignment
-      verticalAlign: Alignment
-    }
-  >[]
+  text: Partial<TextStyle & {align: [Alignment, Alignment]}>
+  groupText: Partial<TextStyle & {align: [Alignment, Alignment]}>[]
 }>
 
 export type LayerLineStyle = Partial<{
@@ -197,8 +186,7 @@ export type LayerSankeyStyle = Partial<{
 
 export type LayerTreemapStyle = Partial<{
   tile: Tile
-  align: Alignment
-  verticalAlign: Alignment
+  align: [Alignment, Alignment]
   labelGap: number
   rect: GraphStyle
   text: TextStyle
