@@ -1,5 +1,5 @@
 import {LayerBase} from '../base'
-import {cloneDeep, sum} from 'lodash'
+import {cloneDeep, max, sum} from 'lodash'
 import {createStyle, createText} from '../helpers'
 import {DataBase, DataTableList} from '../../data'
 import {
@@ -30,8 +30,8 @@ import {
 const animationKey = `animationKey-${new Date().getTime()}`
 
 const defaultStyle: LayerLegendStyle = {
+  maxColumn: 2,
   align: ['end', 'start'],
-  direction: 'horizontal',
   offset: [0, 0],
   gap: [5, 10],
   shapeSize: 12,
@@ -58,7 +58,9 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
 
   private _style = defaultStyle
 
-  private textData: DrawerData<TextDrawerProps>[] = []
+  private textData: (DrawerData<TextDrawerProps> & {
+    textWidth?: number
+  })[] = []
 
   private lineData: (DrawerData<LineDrawerProps> & {
     stroke?: string
@@ -197,50 +199,37 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     }
 
     const {left, top, width, height} = this.options.layout,
-      {direction, shapeSize = 5, offset = [0, 0], text} = this.style,
+      {maxColumn = 1, shapeSize = 5, offset = [0, 0], text} = this.style,
       [align, verticalAlign] = this.style.align ?? ['start', 'start'],
       [inner, outer] = this.style.gap ?? [0, 0],
       data = this.data.source,
       shapeWidth = shapeSize * 2,
       fontSize = ungroup(text?.fontSize) ?? 12,
-      maxHeight = Math.max(shapeSize, ungroup(fontSize)!),
+      maxHeight = Math.max(shapeSize, ungroup(fontSize)),
       textData = data.text.map((value) => formatNumber(value, text?.format)),
-      textWidths = textData.map((value) => getTextWidth(value, fontSize))
-    let [totalWidth, totalHeight] = [0, 0]
-
-    if (direction === 'horizontal') {
-      this.textData = textData.map((value, i) =>
-        createText({
-          x: left + (shapeWidth + inner) * (i + 1) + outer * i + sum(textWidths.slice(0, i)),
-          y: top + maxHeight / 2,
-          style: this.style.text,
-          position: 'right',
-          value,
-        })
+      textWidths = textData.map((value) => getTextWidth(value, fontSize)),
+      groupTextWidths = range(0, maxColumn - 1).map(
+        (column) => max(textWidths.filter((_, i) => i % maxColumn === column)) ?? 0
       )
-    } else if (direction === 'vertical') {
-      this.textData = textData.map((value, i) =>
-        createText({
-          x: left + shapeWidth + inner,
-          y: top + maxHeight / 2 + maxHeight * i + outer * i,
-          style: this.style.text,
-          position: 'right',
-          value,
-        })
-      )
-    }
 
-    const {x, y, value} = this.textData[this.textData.length - 1]
+    this.textData = textData.map((value, i) => {
+      const [row, column] = [Math.floor(i / maxColumn), i % maxColumn]
+      return createText({
+        x:
+          left +
+          outer * column +
+          (shapeWidth + inner) * (column + 1) +
+          sum(groupTextWidths.slice(0, column)),
+        y: top + maxHeight / 2 + maxHeight * row + outer * row,
+        style: this.style.text,
+        position: 'right',
+        value,
+      })
+    })
 
-    if (direction === 'horizontal') {
-      totalWidth = x - left + getTextWidth(value, fontSize)
-      totalHeight = maxHeight
-    } else if (direction === 'vertical') {
-      totalWidth = shapeWidth + inner + Math.max(...textWidths)
-      totalHeight = y - fontSize / 2 + maxHeight / 2 - top
-    }
-
-    const leftX = width - totalWidth,
+    const totalWidth = max(this.textData.map(({x, textWidth}) => x + textWidth!))!,
+      totalHeight = max(this.textData.map(({y}) => y - (maxHeight - fontSize) / 2))!,
+      leftX = width - totalWidth,
       leftY = height - totalHeight,
       offsetX = align === 'middle' ? leftX / 2 : align === 'end' ? leftX : 0,
       offsetY = verticalAlign === 'middle' ? leftY / 2 : verticalAlign === 'end' ? leftY : 0
@@ -269,7 +258,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     this.interactiveData = this.textData.map(({x, y}, i) => ({
       x: x - shapeWidth - inner,
       y: y - fontSize / 2 - maxHeight / 2,
-      width: shapeWidth + inner + textWidths[i],
+      width: shapeWidth + inner + groupTextWidths[i % maxColumn],
       height: maxHeight,
     }))
   }

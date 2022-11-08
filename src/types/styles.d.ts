@@ -53,7 +53,7 @@ export type LayerAxisStyle = Partial<{
 }>
 
 export type LayerLegendStyle = Partial<{
-  direction: Direction | 'auto'
+  maxColumn: number
   align: [Alignment, Alignment]
   offset: [number, number]
   gap: [number, number]
