@@ -11,7 +11,6 @@ import {
 } from '../../types'
 
 const defaultStyle: LayerBrushStyle = {
-  targets: [],
   handleZoom: 0.5,
   direction: 'horizontal',
   selection: {

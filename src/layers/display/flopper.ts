@@ -13,7 +13,7 @@ const defaultOptions: Partial<LayerFlopperOptions> = {
 }
 
 const defaultStyle: LayerFlopperStyle = {
-  scale: 0.5,
+  scale: 0.4,
   integerPlace: 8,
   decimalPlace: 2,
   thousandth: true,

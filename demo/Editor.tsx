@@ -62,7 +62,6 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
 
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
       parse(editor.getValue(), (value) => onChange(value))
-      editor.trigger('source', 'editor.action.formatDocument', null)
       localStorage.setItem('editorContent', editor.getValue())
     })
 
@@ -78,7 +77,6 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
 
     setEditor(editor)
     parse(editor.getValue(), (value) => onChange(value))
-    editor.trigger('source', 'editor.action.formatDocument', null)
 
     return () => {
       editor.dispose()
@@ -87,6 +85,7 @@ export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
   }, [onChange])
 
   useEffect(() => {
+    editor?.trigger('source', 'editor.action.formatDocument', null)
     if (editor && editor.getValue() !== schema) {
       editor.setValue(schema ?? '')
     }

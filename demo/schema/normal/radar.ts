@@ -49,8 +49,8 @@ export default ({mode}) => [
     data: {
       type: 'tableList',
       mode: 'normal',
-      row: 6,
-      column: 3,
+      row: 5,
+      column: 2,
       mu: 500,
       sigma: 200,
       decimalPlace: 1,

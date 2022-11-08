@@ -28,7 +28,6 @@ const defaultOptions: Partial<LayerRadarOptions> = {
 
 const defaultStyle: LayerRadarStyle = {
   pointSize: 6,
-  point: {},
   polygon: {
     strokeWidth: 2,
     fillOpacity: 0.4,

@@ -17,7 +17,7 @@ type DataKey = 'x' | 'y' | 'value'
 const defaultStyle: LayerHeatmapStyle = {
   radiusFactor: 1,
   heatZone: {
-    fill: ['#ff0000DD', '#ffff99AA', '#00ff0000'],
+    fill: ['#ff0000dd', '#ffff99aa', '#00ff0000'],
   },
 }
 

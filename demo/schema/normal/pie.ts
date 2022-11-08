@@ -53,7 +53,7 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
     data: {
       type: 'tableList',
       mode: 'normal',
-      row: 6,
+      row: 5,
       column: stack ? 2 : 1,
       mu: 500,
       sigma: 200,
@@ -65,6 +65,9 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
       innerRadius,
       guideLine: {
         hidden: !hasGuideLine,
+      },
+      arc: {
+        opacity: variant === 'pie' ? 1 : 0.7,
       },
       text: {
         fontSize: 8,

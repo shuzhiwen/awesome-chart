@@ -89,12 +89,12 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '阶梯折线',
-          schema: base(line({mode: 'default', hasArea: false, curveType: 'curveStep'})),
+          schema: base(line({mode: 'stack', hasArea: false, curveType: 'curveStep'})),
         },
         {
           name: '带标记的折线图',
           schema: base(
-            line({mode: 'default', hasArea: false, curveType: 'curveLinear', hasMark: true})
+            line({mode: 'default', hasArea: false, curveType: 'curveMonotoneX', hasMark: true})
           ),
         },
       ],
@@ -292,11 +292,11 @@ export const schemaMenu: MenuShape = {
       name: '翻牌器',
       children: [
         {
-          name: '翻牌器1',
+          name: '滚动翻牌器',
           schema: base(digitalFlop({variant: 'vertical'})),
         },
         {
-          name: '翻牌器2',
+          name: '折叠翻牌器',
           schema: base(digitalFlop({variant: 'flop'})),
         },
       ],
