@@ -16,6 +16,9 @@ export default ({pointSize}) => [
     options: {
       layout: 'container',
     },
+    style: {
+      maxColumn: 4,
+    },
   },
   {
     type: 'auxiliary',

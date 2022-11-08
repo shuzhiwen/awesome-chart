@@ -9,7 +9,7 @@ export default (
 ) => ({
   adjust: true,
   engine: 'svg',
-  padding: [50, 50, 50, 50] as Padding,
+  padding: [60, 60, 60, 60] as Padding,
   hasBrush: config?.hasBrush,
   tooltipOptions: {
     mode: 'single' as const,

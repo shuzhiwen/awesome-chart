@@ -16,6 +16,9 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
     options: {
       layout: 'container',
     },
+    style: {
+      maxColumn: 3,
+    },
   },
   {
     type: 'axis',

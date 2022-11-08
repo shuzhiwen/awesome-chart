@@ -8,7 +8,7 @@ import {BasicLayerOptions, ChartContext, D3Selection} from '../src/types'
 import {
   addStyle,
   getAttr,
-  range,
+  robustRange,
   transformAttr,
   DataBase,
   validateAndCreateData,
@@ -114,7 +114,7 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
     const maxDepth = max(nodes.map(({depth}) => depth)) ?? 0
 
     // the root is not visible
-    this.originTabData = range(1, maxDepth, 1).map((depth) =>
+    this.originTabData = robustRange(1, maxDepth, 1).map((depth) =>
       nodes.filter((node) => node.depth === depth)
     )
   }

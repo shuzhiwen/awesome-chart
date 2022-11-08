@@ -17,6 +17,9 @@ export default () =>
       options: {
         layout: 'container',
       },
+      style: {
+        maxColumn: 2,
+      },
     },
     {
       type: 'axis',

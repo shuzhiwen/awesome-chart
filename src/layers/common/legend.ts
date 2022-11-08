@@ -30,7 +30,7 @@ import {
 const animationKey = `animationKey-${new Date().getTime()}`
 
 const defaultStyle: LayerLegendStyle = {
-  maxColumn: 2,
+  maxColumn: 10,
   align: ['end', 'start'],
   offset: [0, 0],
   gap: [5, 10],

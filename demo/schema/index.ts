@@ -130,6 +130,10 @@ export const schemaMenu: MenuShape = {
             },
           }),
         },
+        {
+          name: '折线柱状图',
+          schema: base(rectLine()),
+        },
       ],
     },
     {
@@ -162,10 +166,6 @@ export const schemaMenu: MenuShape = {
         {
           name: '玉玦图',
           schema: base(radial()),
-        },
-        {
-          name: '折线柱状图',
-          schema: base(rectLine()),
         },
       ],
     },
