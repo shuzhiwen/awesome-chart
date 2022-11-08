@@ -1,8 +1,15 @@
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
-import {isRealNumber, isScaleBand, isScaleLinear, range, scaleTypes, ungroup} from '../../utils'
 import {scaleBand, scaleLinear} from '../../scales'
 import {sum} from 'd3'
+import {
+  isRealNumber,
+  isScaleBand,
+  isScaleLinear,
+  robustRange,
+  scaleTypes,
+  ungroup,
+} from '../../utils'
 import {
   createArcText,
   createScale,
@@ -358,7 +365,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     } else if (isScaleLinear(scale)) {
       const [min, max] = scale.domain()
 
-      return range(min, max, (max - min) / (this.scale.nice?.count ?? 1)).map((label) => ({
+      return robustRange(min, max, (max - min) / (this.scale.nice?.count ?? 1)).map((label) => ({
         label,
         position: scale(label),
       }))

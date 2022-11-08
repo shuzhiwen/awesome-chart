@@ -8,7 +8,7 @@ import {
   formatNumber,
   getTextWidth,
   mergeAlpha,
-  range,
+  robustRange,
   ungroup,
 } from '../../utils'
 import {
@@ -165,7 +165,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
 
       try {
         if (filterTypes[index] === 'row') {
-          const mapping = range(start, start + counts[index] - 1).map((i) => active[i])
+          const mapping = robustRange(start, start + counts[index] - 1).map((i) => active[i])
 
           filteredData = layerData.filterRows(
             mapping.map((v, i) => (v === true ? i : -1)).filter((v) => v !== -1)
@@ -208,7 +208,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       maxHeight = Math.max(shapeSize, ungroup(fontSize)),
       textData = data.text.map((value) => formatNumber(value, text?.format)),
       textWidths = textData.map((value) => getTextWidth(value, fontSize)),
-      groupTextWidths = range(0, maxColumn - 1).map(
+      groupTextWidths = robustRange(0, maxColumn - 1).map(
         (column) => max(textWidths.filter((_, i) => i % maxColumn === column)) ?? 0
       )
 

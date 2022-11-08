@@ -1,5 +1,5 @@
 import {max} from 'lodash'
-import {range, uuid} from '../utils'
+import {robustRange, uuid} from '../utils'
 import {AnimationBase} from './base'
 import {AnimationEmpty} from './empty'
 import {animationMapping} from '.'
@@ -53,7 +53,7 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
     }
 
     // group animations by priority config
-    const groupedQueue: Animation[][] = range(0, max(finalPriority)!).map(() => [])
+    const groupedQueue: Animation[][] = robustRange(0, max(finalPriority)!).map(() => [])
 
     finalPriority.forEach((priority, animationIndex) => {
       groupedQueue[priority].push(this.queue[animationIndex])

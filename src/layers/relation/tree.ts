@@ -1,7 +1,7 @@
 import {LayerBase} from '../base'
 import {DataRelation} from '../../data'
 import {max, scalePoint} from 'd3'
-import {range} from '../../utils'
+import {robustRange} from '../../utils'
 import {
   createColorMatrix,
   createScale,
@@ -88,7 +88,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
     if (!this.data) return
 
     const {nodes} = this.data,
-      levels = range(0, max(nodes.map(({level}) => level ?? 0)) ?? 0),
+      levels = robustRange(0, max(nodes.map(({level}) => level ?? 0)) ?? 0),
       // dfs inserts the order of leaf nodes
       dfs = (node: Node & {order?: number}) => {
         if (node.children?.length === 0) {
@@ -251,7 +251,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
     const {nodes} = this.data,
       {width, height} = this.options.layout,
       {nodeSize = 5, direction} = this.style,
-      levels = range(0, max(nodes.map(({level}) => level ?? 0)) ?? 0)
+      levels = robustRange(0, max(nodes.map(({level}) => level ?? 0)) ?? 0)
 
     if (direction === 'horizontal') {
       this._scale = createScale(
@@ -260,7 +260,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
             .domain(levels)
             .range([nodeSize / 2, width - nodeSize / 2]),
           scaleY: scalePoint<number>()
-            .domain(range(0, this.maxOrder))
+            .domain(robustRange(0, this.maxOrder))
             .range([nodeSize / 2, height - nodeSize / 2]),
         },
         this.scale
@@ -269,7 +269,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
       this._scale = createScale(
         {
           scaleX: scalePoint<number>()
-            .domain(range(0, this.maxOrder))
+            .domain(robustRange(0, this.maxOrder))
             .range([nodeSize / 2, width - nodeSize / 2]),
           scaleY: scalePoint<number>()
             .domain(levels)

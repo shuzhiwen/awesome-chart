@@ -1,7 +1,7 @@
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {scaleLinear} from '../../scales'
-import {getAttr, isRealNumber, range} from '../../utils'
+import {getAttr, isRealNumber, robustRange} from '../../utils'
 import {
   createArcText,
   createColorMatrix,
@@ -178,7 +178,7 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
     this.tickLineData = []
     this.labelTextData = []
 
-    range(minValue, maxValue, step[0]).map((number, i) => {
+    robustRange(minValue, maxValue, step[0]).map((number, i) => {
       const isBigTick = (i * step[0]) % step[1] === 0 && step[0] !== step[1],
         angle = scaleAngle(number),
         innerRadius = maxRadius - arcWidth - (isBigTick ? tickSize / 0.618 : tickSize),

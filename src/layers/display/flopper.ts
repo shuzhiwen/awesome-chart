@@ -5,7 +5,7 @@ import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {lightTheme} from '../../core/theme'
 import {ChartContext, LayerFlopperOptions, LayerFlopperStyle, LayerStyle} from '../../types'
-import {addStyle, isCC, isSC, mergeAlpha, range} from '../../utils'
+import {addStyle, isCC, isSC, mergeAlpha, robustRange} from '../../utils'
 import {createStyle, validateAndCreateData} from '../helpers'
 
 const defaultOptions: Partial<LayerFlopperOptions> = {
@@ -99,7 +99,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
     this.cellSize = {width: width / places, height}
     this.cellData = []
 
-    range(integerPlace + commaPlace - 1, -decimalPlace, -1).forEach((index) => {
+    robustRange(integerPlace + commaPlace - 1, -decimalPlace, -1).forEach((index) => {
       const text =
         thousandth && index >= 0
           ? (index + 1) % 4 !== 0

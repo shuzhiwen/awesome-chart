@@ -1,4 +1,4 @@
-import {range as d3Range} from 'd3'
+import {range} from 'd3'
 import {isArray, isNil, isNumber} from 'lodash'
 import {Box} from '../types'
 
@@ -44,8 +44,8 @@ export function download(data: string, fileName: string) {
   a.click()
 }
 
-export function range(start: number, end: number, step = 1, toFixed = 8) {
-  return d3Range(start, end + (step > 0 ? 1 : -1) * 10 ** -(toFixed + 2), step).map((v) =>
+export function robustRange(start: number, end: number, step = 1, toFixed = 8) {
+  return range(start, end + (step > 0 ? 1 : -1) * 10 ** -(toFixed + 2), step).map((v) =>
     Number(Number(v).toFixed(toFixed))
   )
 }
