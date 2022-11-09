@@ -29,8 +29,8 @@ export function Root() {
       <div className={styles.mainSection}>
         <Editor schema={newSchema} onChange={onChange} />
         <div className={styles.chartSection} style={{opacity: isDebug ? 0.2 : 1}}>
-          <Chart debuggers={debuggers} schema={newSchema} variant="light" />
           <Chart debuggers={debuggers} schema={newSchema} variant="dark" />
+          <Chart debuggers={debuggers} schema={newSchema} variant="light" />
         </div>
       </div>
     </div>

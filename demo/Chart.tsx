@@ -63,8 +63,8 @@ export const Chart = (props: {
         ref={chartRef}
         className={styles.chart}
         style={{
-          border: `dotted ${variant === 'dark' ? '#eeeeee' : '#101010'} 2px`,
-          backgroundColor: variant === 'dark' ? '#eeeeee' : '#101010',
+          border: `dotted ${variant === 'light' ? '#eeeeee' : '#101010'} 2px`,
+          backgroundColor: variant === 'light' ? '#eeeeee' : '#101010',
         }}
       />
     </div>
