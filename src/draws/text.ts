@@ -85,8 +85,8 @@ export function drawText({
       .attr('text-decoration', (d) => d.textDecoration)
       .attr('dominant-baseline', 'central')
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
+      .attr('transform', (d) => `rotate(${d.rotation})`)
       .style('text-shadow', (d) => d.shadow)
-      .style('transform', (d) => `rotate(${d.rotation}deg)`)
   }
 
   if (isCC(container)) {

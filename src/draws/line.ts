@@ -7,11 +7,13 @@ import {selector} from '../layers'
 import {merge} from 'lodash'
 
 export function drawLine({
+  rotation,
   stroke,
   strokeWidth,
   opacity,
   strokeOpacity,
   strokeDasharray,
+  transformOrigin,
   mapping = noChange,
   source = [],
   data = [],
@@ -28,11 +30,13 @@ export function drawLine({
   const configuredData = data.map((item, i) => ({
     ...item,
     className,
+    rotation: getAttr(rotation, i, 0),
     stroke: getAttr(stroke, i, graph.stroke),
     opacity: getAttr(opacity, i, graph.opacity),
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     strokeDasharray: getAttr(strokeDasharray, i, ''),
+    transformOrigin: getAttr(transformOrigin, i, `${item.x1} ${item.y1}`),
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, []),
   }))
@@ -59,6 +63,8 @@ export function drawLine({
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('stroke-width', (d) => d.strokeWidth)
       .attr('stroke-dasharray', (d) => d.strokeDasharray)
+      .attr('transform-origin', (d) => d.transformOrigin)
+      .attr('transform', (d) => `rotate(${d.rotation})`)
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 

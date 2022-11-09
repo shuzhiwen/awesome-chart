@@ -52,8 +52,6 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
 
   private _style = defaultStyle
 
-  private pointerData: DrawerData<LineDrawerProps>[] = []
-
   private tickLineData: DrawerData<LineDrawerProps>[] = []
 
   private tickTextData: DrawerData<TextDrawerProps>[] = []
@@ -61,6 +59,10 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
   private labelTextData: DrawerData<TextDrawerProps>[] = []
 
   private valueTextData: DrawerData<TextDrawerProps>[] = []
+
+  private pointerData: (DrawerData<LineDrawerProps> & {
+    rotation: number
+  })[] = []
 
   private arcData: (DrawerData<ArcDrawerProps> & {
     source: ElSource
@@ -157,8 +159,9 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
       {
         x1: centerX,
         y1: centerY,
-        x2: centerX + pointerLength * Math.sin(scaleAngle(value)),
-        y2: centerY - pointerLength * Math.cos(scaleAngle(value)),
+        x2: centerX + pointerLength * Math.sin(scaleAngle(minValue)),
+        y2: centerY - pointerLength * Math.cos(scaleAngle(minValue)),
+        rotation: ((scaleAngle(value) - scaleAngle.range()[0]) / Math.PI) * 180,
       },
     ]
 
@@ -235,6 +238,7 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
     }
     const pointerData = {
       data: this.pointerData,
+      rotation: this.pointerData.map(({rotation}) => rotation),
       ...this.style.pointer,
     }
     const tickTextData = {
