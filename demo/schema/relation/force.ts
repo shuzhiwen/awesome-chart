@@ -5,11 +5,6 @@ export default () => [
       layout: 'container',
     },
     data: '重力气泡图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'force',

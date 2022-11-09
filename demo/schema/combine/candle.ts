@@ -1,17 +1,12 @@
 import data from '../../../public/stock.json'
 
-export default ({updateDuration = 0}: {updateDuration?: number}) => [
+export default () => [
   {
     type: 'text',
     options: {
       layout: 'container',
     },
     data: 'K线图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'legend',
@@ -31,14 +26,6 @@ export default ({updateDuration = 0}: {updateDuration?: number}) => [
     style: {
       maxScaleXTextNumber: 'auto',
     },
-    animation: {
-      textY: {
-        update: {
-          delay: 0,
-          duration: updateDuration,
-        },
-      },
-    },
   },
   {
     type: 'candle',
@@ -47,30 +34,11 @@ export default ({updateDuration = 0}: {updateDuration?: number}) => [
       axis: 'main',
     },
     data,
-    animation: {
+    animation: (theme) => ({
       rect: {
-        enter: {
-          type: 'zoom',
-          delay: 0,
-          duration: 2000,
-          mode: 'enlarge',
-          direction: 'both',
-        },
-        update: {
-          delay: 0,
-          duration: updateDuration,
-        },
+        enter: theme.animation.presets.zoomIn,
       },
-      text: {
-        update: {
-          delay: 0,
-          duration: updateDuration,
-        },
-      },
-    },
-    event: {
-      'click-rect': (d) => console.log(d),
-    },
+    }),
   },
   {
     type: 'brush',

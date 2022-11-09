@@ -5,11 +5,6 @@ export default () => [
       layout: 'container',
     },
     data: '打包图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'pack',
@@ -18,12 +13,6 @@ export default () => [
       zoom: true,
     },
     data: [nodes, links],
-    style: {},
-    animation: {
-      circle: {
-        updateAnimation: {},
-      },
-    },
   },
 ]
 

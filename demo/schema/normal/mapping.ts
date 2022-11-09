@@ -6,11 +6,6 @@ export default () =>
         layout: 'container',
       },
       data: '柱状图',
-      style: {
-        text: {
-          fontSize: 16,
-        },
-      },
     },
     {
       type: 'axis',
@@ -25,7 +20,6 @@ export default () =>
       data: {
         titleX: '支出项目',
       },
-      style: {},
     },
     {
       type: 'rect',

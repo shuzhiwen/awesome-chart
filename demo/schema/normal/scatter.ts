@@ -5,11 +5,6 @@ export default ({pointSize}) => [
       layout: 'container',
     },
     data: '散点气泡图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'legend',
@@ -40,7 +35,6 @@ export default ({pointSize}) => [
       },
       text: {
         fill: 'orange',
-        fontSize: 8,
       },
     },
   },
@@ -63,7 +57,6 @@ export default ({pointSize}) => [
       },
       text: {
         fill: 'orange',
-        fontSize: 8,
       },
     },
   },
@@ -73,7 +66,6 @@ export default ({pointSize}) => [
       layout: 'main',
       coordinate: 'cartesian',
     },
-    style: {},
   },
   {
     type: 'scatter',
@@ -98,35 +90,15 @@ export default ({pointSize}) => [
       pointSize,
       text: {
         hidden: true,
-        fontSize: 10,
       },
     },
-    animation: {
+    animation: (theme) => ({
       point: {
-        enter: {
-          type: 'zoom',
-          delay: 0,
-          duration: 2000,
-          mode: 'enlarge',
-          direction: 'both',
-        },
-        loop: {
-          type: 'fade',
-          delay: 1000,
-          duration: 2000,
-          startOpacity: 1,
-          endOpacity: 0,
-          alternate: true,
-        },
+        loop: theme.animation.presets.breath,
       },
       text: {
-        enter: {
-          type: 'fade',
-          delay: 2000,
-          duration: 1000,
-          mode: 'fadeIn',
-        },
+        enter: theme.animation.presets.fadeIn,
       },
-    },
+    }),
   },
 ]

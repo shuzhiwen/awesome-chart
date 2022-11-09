@@ -5,11 +5,6 @@ export default () => [
       layout: 'container',
     },
     data: '矩形树图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'treemap',
@@ -17,7 +12,6 @@ export default () => [
       layout: 'main',
     },
     data: [nodes, links],
-    style: {},
   },
 ]
 

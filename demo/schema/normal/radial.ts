@@ -5,11 +5,6 @@ export default () => [
       layout: 'container',
     },
     data: '玉玦图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'radial',
@@ -23,25 +18,14 @@ export default () => [
       ['运动时长', 18, 30],
       ['运动次数', 5, 10],
     ],
-    animation: {
+    animation: (theme) => ({
       arc: {
-        enter: {
-          type: 'zoom',
-          delay: 0,
-          duration: 2000,
-          mode: 'enlarge',
-          direction: 'both',
-        },
+        enter: theme.animation.presets.zoomIn,
       },
       text: {
-        enter: {
-          type: 'fade',
-          delay: 2000,
-          duration: 1000,
-          mode: 'fadeIn',
-        },
+        enter: theme.animation.presets.fadeIn,
       },
-    },
+    }),
   },
   {
     type: 'axis',
@@ -53,6 +37,5 @@ export default () => [
       count: 0,
       fixedPaddingInner: 4,
     },
-    style: {},
   },
 ]

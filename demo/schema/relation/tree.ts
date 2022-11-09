@@ -5,11 +5,6 @@ export default () => [
       layout: 'container',
     },
     data: '树形图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'tree',

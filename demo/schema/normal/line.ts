@@ -6,11 +6,6 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
         layout: 'container',
       },
       data: '折线图',
-      style: {
-        text: {
-          fontSize: 16,
-        },
-      },
     },
     {
       type: 'legend',
@@ -38,7 +33,6 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
         },
         text: {
           fill: 'orange',
-          fontSize: 8,
         },
       },
     },
@@ -51,7 +45,6 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
         count: 5,
         zero: mode === 'stack' || hasMark,
       },
-      style: {},
     },
     {
       type: 'line',
@@ -93,48 +86,20 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
           fontSize: 10,
           offset: hasMark ? [0, -5] : [0, 5],
         },
-        point: {},
       },
-      animation: {
+      animation: (theme) => ({
         curve: {
-          enter: {
-            type: 'erase',
-            delay: 0,
-            duration: 2000,
-          },
-          loop: {
-            type: 'scan',
-            delay: 0,
-            duration: 5000,
-            direction: 'right',
-            opacity: 0.5,
-            color: 'white',
-          },
+          enter: theme.animation.presets.eraseRight,
+          loop: theme.animation.presets.scanRight,
         },
         area: {
-          enter: {
-            type: 'erase',
-            delay: 0,
-            duration: 2000,
-          },
-          loop: {
-            type: 'scan',
-            delay: 0,
-            duration: 5000,
-            direction: 'right',
-            opacity: 0.5,
-            color: 'white',
-          },
+          enter: theme.animation.presets.eraseRight,
+          loop: theme.animation.presets.scanRight,
         },
         text: {
-          enter: {
-            type: 'fade',
-            delay: 2000,
-            duration: 1000,
-            mode: 'fadeIn',
-          },
+          enter: theme.animation.presets.fadeIn,
         },
-      },
+      }),
     },
     hasMark && {
       type: 'mark',

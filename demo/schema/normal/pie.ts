@@ -5,11 +5,6 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
       layout: 'container',
     },
     data: '饼图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'legend',
@@ -63,36 +58,19 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
         opacity: variant === 'pie' ? 1 : 0.7,
       },
       text: {
-        fontSize: 8,
         hidden: variant !== 'pie',
       },
     },
-    animation: {
+    animation: (theme) => ({
       arc: {
-        enter: {
-          type: 'zoom',
-          delay: 0,
-          duration: 2000,
-          mode: 'enlarge',
-          direction: 'both',
-        },
+        enter: theme.animation.presets.zoomIn,
       },
       guideLine: {
-        enter: {
-          type: 'fade',
-          delay: 2000,
-          duration: 1000,
-          mode: 'fadeIn',
-        },
+        enter: theme.animation.presets.fadeIn,
       },
       text: {
-        enter: {
-          type: 'fade',
-          delay: 2000,
-          duration: 1000,
-          mode: 'fadeIn',
-        },
+        enter: theme.animation.presets.fadeIn,
       },
-    },
+    }),
   },
 ]

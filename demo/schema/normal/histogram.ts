@@ -18,16 +18,44 @@ export default ({variant}: Partial<LayerRectOptions>) => [
       layout: 'container',
     },
     data: '直方图模拟',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'legend',
     options: {
       layout: 'container',
+    },
+  },
+  {
+    type: 'axis',
+    options: {
+      layout: 'main',
+    },
+    scale: {
+      count: 5,
+      zero: true,
+      paddingInner: 0,
+    },
+  },
+  {
+    type: 'rect',
+    options: {
+      layout: 'main',
+      axis: 'main',
+      variant,
+    },
+    data: transformedData,
+    style: {
+      labelPosition: variant === 'column' ? 'top' : 'right',
+      background: {
+        fill: 'gray',
+        fillOpacity: 0.3,
+      },
+      text: {
+        fontSize: 10,
+        format: {
+          decimals: 2,
+        },
+      },
     },
   },
   {
@@ -50,41 +78,6 @@ export default ({variant}: Partial<LayerRectOptions>) => [
       },
       text: {
         fill: 'orange',
-        fontSize: 8,
-      },
-    },
-  },
-  {
-    type: 'axis',
-    options: {
-      layout: 'main',
-    },
-    scale: {
-      count: 5,
-      zero: true,
-      paddingInner: 0,
-    },
-    style: {},
-  },
-  {
-    type: 'rect',
-    options: {
-      layout: 'main',
-      axis: 'main',
-      variant,
-    },
-    data: transformedData,
-    style: {
-      labelPosition: variant === 'column' ? 'top' : 'right',
-      background: {
-        fill: 'gray',
-        fillOpacity: 0.3,
-      },
-      text: {
-        fontSize: 10,
-        format: {
-          decimals: 2,
-        },
       },
     },
   },

@@ -15,7 +15,7 @@ import {
 const defaultStyle: LayerTextStyle = {
   sanger: [1, 1],
   text: {
-    fontSize: 12,
+    fontSize: 16,
   },
 }
 

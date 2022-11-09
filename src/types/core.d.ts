@@ -5,8 +5,10 @@ import {RandomOptions} from './utils'
 import {ScaleNice} from './scale'
 import {getEasyGradientCreator} from '../utils'
 import {CacheLayerData, LayerScale, LayerType} from './base'
+import {AnimationOptions, LayerAnimation} from './animation'
 import {LayerOptions} from './options'
 import {LayerData, TooltipData} from './data'
+import {LayerStyle} from './styles'
 
 export type ChartContext = Pick<
   Chart,
@@ -45,14 +47,15 @@ export type ChartTheme = Readonly<
       fontWeight: number
       shadow: string
     }
-    animation: Record<
-      'enter' | 'loop' | 'update',
-      {
-        duration: number
-        delay: number
-        easing: Easing
-      }
-    >
+    animation: Record<'presets', Record<string, AnimationOptions>> &
+      Record<
+        'enter' | 'loop' | 'update',
+        {
+          duration: number
+          delay: number
+          easing: Easing
+        }
+      >
   }
 >
 
@@ -87,8 +90,8 @@ export type LayerSchema = Partial<{
   options: LayerOptions
   data: Maybe<LayerData>
   scale: LayerScale
-  style: Computable<AnyObject, ChartTheme>
-  animation: AnyObject
+  style: LayerStyle<AnyObject>
+  animation: LayerAnimation<AnyObject>
 }>
 
 export type RandomDataProps = RandomOptions & {

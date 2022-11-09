@@ -6,12 +6,21 @@ export type AnimationType = keyof typeof animationMapping
 
 export type LayerAnimation<T> = Computable<Partial<T>, ChartTheme>
 
+export type AnimationOptions =
+  | AnimationEmptyOptions
+  | AnimationFadeOptions
+  | AnimationPathOptions
+  | AnimationZoomOptions
+  | AnimationMoveOptions
+  | AnimationEraseOptions
+  | AnimationScanOptions
+
 export type AnimationProps<Options extends AnimationOptions> = Partial<{
   context: Maybe<DrawerTarget>
   options: Options
 }>
 
-export type AnimationOptions<
+type BasicAnimationOptions<
   Type extends AnimationType = AnimationType,
   Options extends AnyObject = Record<never, never>
 > = Partial<
@@ -26,9 +35,9 @@ export type AnimationOptions<
   }
 >
 
-export type AnimationEmptyOptions = AnimationOptions<'empty'>
+export type AnimationEmptyOptions = BasicAnimationOptions<'empty'>
 
-export type AnimationFadeOptions = AnimationOptions<
+export type AnimationFadeOptions = BasicAnimationOptions<
   'fade',
   {
     alternate: boolean
@@ -39,14 +48,14 @@ export type AnimationFadeOptions = AnimationOptions<
   }
 >
 
-export type AnimationPathOptions = AnimationOptions<
+export type AnimationPathOptions = BasicAnimationOptions<
   'path',
   {
     path: string
   }
 >
 
-export type AnimationZoomOptions = AnimationOptions<
+export type AnimationZoomOptions = BasicAnimationOptions<
   'zoom',
   {
     stagger: number
@@ -56,7 +65,7 @@ export type AnimationZoomOptions = AnimationOptions<
   }
 >
 
-export type AnimationMoveOptions = AnimationOptions<
+export type AnimationMoveOptions = BasicAnimationOptions<
   'move',
   {
     alternate: boolean
@@ -68,14 +77,14 @@ export type AnimationMoveOptions = AnimationOptions<
   }
 >
 
-export type AnimationEraseOptions = AnimationOptions<
+export type AnimationEraseOptions = BasicAnimationOptions<
   'erase',
   {
     direction: Position4
   }
 >
 
-export type AnimationScanOptions = AnimationOptions<
+export type AnimationScanOptions = BasicAnimationOptions<
   'scan',
   {
     scope: 'all' | 'fill' | 'stroke'

@@ -5,11 +5,6 @@ export default () => [
       layout: 'container',
     },
     data: '桑基图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'sankey',

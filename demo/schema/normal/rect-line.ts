@@ -6,11 +6,6 @@ export default () =>
         layout: 'container',
       },
       data: '折线柱状图',
-      style: {
-        text: {
-          fontSize: 16,
-        },
-      },
     },
     {
       type: 'legend',
@@ -31,7 +26,6 @@ export default () =>
         zero: true,
         paddingInner: 0.382,
       },
-      style: {},
     },
     {
       type: 'rect',
@@ -61,40 +55,15 @@ export default () =>
           },
         },
       },
-      animation: {
+      animation: (theme) => ({
         rect: {
-          enter: {
-            type: 'zoom',
-            delay: 0,
-            duration: 2000,
-            mode: 'enlarge',
-            direction: 'both',
-          },
-          loop: {
-            type: 'scan',
-            delay: 0,
-            duration: 5000,
-            direction: 'top',
-            opacity: 0.5,
-          },
-          update: {
-            delay: 0,
-            duration: 2000,
-          },
+          enter: theme.animation.presets.zoomIn,
+          loop: theme.animation.presets.scanTop,
         },
         text: {
-          enter: {
-            type: 'fade',
-            delay: 2000,
-            duration: 1000,
-            mode: 'fadeIn',
-          },
-          update: {
-            delay: 0,
-            duration: 2000,
-          },
+          enter: theme.animation.presets.fadeIn,
         },
-      },
+      }),
     },
     {
       type: 'line',
@@ -124,47 +93,19 @@ export default () =>
         text: {
           fontSize: 10,
         },
-        point: {},
       },
-      animation: {
+      animation: (theme) => ({
         curve: {
-          enter: {
-            type: 'erase',
-            delay: 0,
-            duration: 2000,
-          },
-          loop: {
-            type: 'scan',
-            delay: 0,
-            duration: 5000,
-            direction: 'right',
-            opacity: 0.5,
-            color: 'white',
-          },
+          enter: theme.animation.presets.eraseRight,
+          loop: theme.animation.presets.scanRight,
         },
         area: {
-          enter: {
-            type: 'erase',
-            delay: 0,
-            duration: 2000,
-          },
-          loop: {
-            type: 'scan',
-            delay: 0,
-            duration: 5000,
-            direction: 'right',
-            opacity: 0.5,
-            color: 'white',
-          },
+          enter: theme.animation.presets.eraseRight,
+          loop: theme.animation.presets.scanRight,
         },
         text: {
-          enter: {
-            type: 'fade',
-            delay: 2000,
-            duration: 1000,
-            mode: 'fadeIn',
-          },
+          enter: theme.animation.presets.fadeIn,
         },
-      },
+      }),
     },
   ].filter(Boolean)

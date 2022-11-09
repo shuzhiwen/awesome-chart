@@ -6,11 +6,6 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
         layout: 'container',
       },
       data: '矩阵图',
-      style: {
-        text: {
-          fontSize: 16,
-        },
-      },
     },
     {
       type: 'axis',
@@ -22,7 +17,6 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
         count: 5,
         zero: false,
       },
-      style: {},
     },
     {
       type: 'matrix',
@@ -45,40 +39,21 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
       style: {
         shape,
         circleSize: ['auto', 'auto'],
-        rect: {},
         text: {
-          fontSize: 10,
           hidden: true,
         },
       },
-      animation: {
+      animation: (theme) => ({
         rect: {
-          enter: {
-            type: 'zoom',
-            delay: 0,
-            duration: 2000,
-            mode: 'enlarge',
-            direction: 'both',
-          },
+          enter: theme.animation.presets.zoomIn,
         },
         circle: {
-          enter: {
-            type: 'zoom',
-            delay: 0,
-            duration: 2000,
-            mode: 'enlarge',
-            direction: 'both',
-          },
+          enter: theme.animation.presets.zoomIn,
         },
         text: {
-          enter: {
-            type: 'fade',
-            delay: 2000,
-            duration: 1000,
-            mode: 'fadeIn',
-          },
+          enter: theme.animation.presets.fadeIn,
         },
-      },
+      }),
     },
   ].concat(
     brush

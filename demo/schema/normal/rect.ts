@@ -14,11 +14,6 @@ export default ({
         layout: 'container',
       },
       data: '柱状图',
-      style: {
-        text: {
-          fontSize: 16,
-        },
-      },
     },
     {
       type: 'legend',
@@ -46,7 +41,6 @@ export default ({
         },
         text: {
           fill: 'orange',
-          fontSize: 8,
         },
       },
     },
@@ -111,42 +105,36 @@ export default ({
           },
         },
       },
-      animation: {
-        rect: {
-          enter: {
-            type: 'zoom',
-            delay: 0,
-            duration: 1000,
-            mode: 'enlarge',
-            direction: 'both',
-            easing: 'easeOutBack',
-            stagger: 20,
-          },
-          loop: !sort && {
-            type: 'scan',
-            delay: 0,
-            duration: 5000,
-            direction: variant === 'bar' ? 'right' : 'top',
-            opacity: 0.5,
-          },
-          update: {
-            delay: 0,
-            duration: updateDuration,
-          },
-        },
-        text: {
-          enter: {
-            type: 'fade',
-            delay: 2000,
-            duration: 1000,
-            mode: 'fadeIn',
-          },
-          update: {
-            delay: 0,
-            duration: updateDuration,
-          },
-        },
-      },
+      animation: sort
+        ? (theme) => ({
+            rect: {
+              enter: theme.animation.presets.zoomIn,
+              update: {duration: updateDuration},
+            },
+            text: {
+              enter: theme.animation.presets.fadeIn,
+              update: {duration: updateDuration},
+            },
+          })
+        : variant === 'bar'
+        ? (theme) => ({
+            rect: {
+              enter: theme.animation.presets.zoomIn,
+              loop: theme.animation.presets.scanRight,
+            },
+            text: {
+              enter: theme.animation.presets.fadeIn,
+            },
+          })
+        : (theme) => ({
+            rect: {
+              enter: theme.animation.presets.zoomIn,
+              loop: theme.animation.presets.scanTop,
+            },
+            text: {
+              enter: theme.animation.presets.fadeIn,
+            },
+          }),
     },
     hasInteractive && {
       type: 'interactive',

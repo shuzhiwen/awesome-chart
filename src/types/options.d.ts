@@ -2,20 +2,6 @@ import {DrawerTarget} from './draw'
 import {LayoutArea} from './layout'
 import {LayerType} from './base'
 
-type BasicLayerOptions<
-  Type extends LayerType,
-  Options extends AnyObject = Record<never, never>
-> = Partial<Options> & {
-  id: string
-  type: Type
-  layout: LayoutArea
-  axis?: 'main' | 'minor'
-  coordinate?: Coordinate
-  sublayerConfig?: {
-    root: DrawerTarget
-  }
-}
-
 export type LayerOptions =
   | LayerAxisOptions
   | LayerAuxiliaryOptions
@@ -45,6 +31,20 @@ export type LayerOptions =
   | LayerRadialOptions
   | LayerWaveOptions
   | LayerGridOptions
+
+type BasicLayerOptions<
+  Type extends LayerType,
+  Options extends AnyObject = Record<never, never>
+> = Partial<Options> & {
+  id: string
+  type: Type
+  layout: LayoutArea
+  axis?: 'main' | 'minor'
+  coordinate?: Coordinate
+  sublayerConfig?: {
+    root: DrawerTarget
+  }
+}
 
 export type LayerInteractiveOptions = BasicLayerOptions<'interactive'>
 

@@ -59,11 +59,6 @@ export default ({type}) => [
       layout: 'container',
     },
     data: '仪表盘',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'dashboard',

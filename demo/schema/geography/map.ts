@@ -5,11 +5,6 @@ export default () => [
       layout: 'container',
     },
     data: '二维地图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'axis',
@@ -17,7 +12,6 @@ export default () => [
       layout: 'container',
       coordinate: 'geographic',
     },
-    style: {},
   },
   {
     type: 'basemap',
@@ -44,7 +38,6 @@ export default () => [
       [110, 35, 40],
       [110, 25, 50],
     ],
-    style: {},
   },
   {
     type: 'odLine',
@@ -89,27 +82,12 @@ export default () => [
       circleSize: [10, 10],
       text: {
         hidden: true,
-        fontSize: 10,
       },
     },
-    animation: {
+    animation: (theme) => ({
       circle: {
-        enter: {
-          type: 'zoom',
-          delay: 0,
-          duration: 2000,
-          mode: 'enlarge',
-          direction: 'both',
-        },
+        enter: theme.animation.presets.zoomIn,
       },
-      text: {
-        enter: {
-          type: 'fade',
-          delay: 2000,
-          duration: 1000,
-          mode: 'fadeIn',
-        },
-      },
-    },
+    }),
   },
 ]

@@ -27,11 +27,6 @@ export default () => [
       layout: 'container',
     },
     data: '轮播图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'carousel',
@@ -39,6 +34,5 @@ export default () => [
       layout: 'main',
     },
     data: images,
-    style: {},
   },
 ]

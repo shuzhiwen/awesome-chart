@@ -208,7 +208,7 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础K线',
-          schema: base(candle({}), {hasBrush: true}),
+          schema: base(candle(), {hasBrush: true}),
         },
       ],
     },

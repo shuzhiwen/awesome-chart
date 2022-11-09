@@ -5,11 +5,6 @@ export default ({mode}) => [
       layout: 'container',
     },
     data: '饼图',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'legend',
@@ -27,7 +22,6 @@ export default ({mode}) => [
       count: 5,
       zero: false,
     },
-    style: {},
   },
   {
     type: 'radar',
@@ -51,47 +45,18 @@ export default ({mode}) => [
         hidden: true,
       },
     },
-    animation: {
+    animation: (theme) => ({
       polygon: {
-        enter: {
-          type: 'zoom',
-          delay: 0,
-          duration: 2000,
-          mode: 'enlarge',
-          direction: 'both',
-        },
-        loop: {
-          type: 'scan',
-          delay: 1000,
-          duration: 3000,
-          color: 'rgba(255,255,255,0.5)',
-          direction: 'outer',
-        },
+        enter: theme.animation.presets.zoomIn,
+        loop: theme.animation.presets.scanOut,
       },
       point: {
-        enter: {
-          type: 'fade',
-          delay: 2000,
-          duration: 1000,
-          mode: 'fadeIn',
-        },
-        loop: {
-          type: 'fade',
-          delay: 1000,
-          duration: 2000,
-          startOpacity: 1,
-          endOpacity: 0,
-          alternate: true,
-        },
+        enter: theme.animation.presets.fadeIn,
+        loop: theme.animation.presets.breath,
       },
       text: {
-        enter: {
-          type: 'fade',
-          delay: 2000,
-          duration: 1000,
-          mode: 'fadeIn',
-        },
+        enter: theme.animation.presets.fadeIn,
       },
-    },
+    }),
   },
 ]

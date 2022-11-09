@@ -7,11 +7,6 @@ export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
       layout: 'container',
     },
     data: '堆叠网格布局',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'grid',
@@ -29,11 +24,9 @@ export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
           ]
         : [['width', 'height']].concat(new Array(20).fill([2, 2])),
     style: style,
-    animation: {
+    animation: (theme) => ({
       box: {
-        enter: {
-          type: 'zoom',
-        },
+        enter: theme.animation.presets.zoomIn,
         update: {
           duration: 200,
           delay: 0,
@@ -45,6 +38,6 @@ export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
           delay: 0,
         },
       },
-    },
+    }),
   },
 ]

@@ -5,11 +5,6 @@ export default () => [
       layout: 'container',
     },
     data: '水波球',
-    style: {
-      text: {
-        fontSize: 16,
-      },
-    },
   },
   {
     type: 'wave',
