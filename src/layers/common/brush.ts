@@ -68,7 +68,7 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
   }
 
   setStyle(style: LayerStyle<LayerBrushStyle>) {
-    this._style = createStyle(this.options, defaultStyle, this._style, style)
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

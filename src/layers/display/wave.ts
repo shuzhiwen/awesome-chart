@@ -95,7 +95,7 @@ export class LayerWave extends LayerBase<LayerWaveOptions> {
   }
 
   setStyle(style: LayerStyle<LayerWaveStyle>) {
-    this._style = createStyle(this.options, defaultStyle, this._style, style)
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

@@ -66,7 +66,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
   }
 
   setStyle(style: LayerStyle<LayerSankeyStyle>) {
-    this._style = createStyle(this.options, defaultStyle, this._style, style)
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

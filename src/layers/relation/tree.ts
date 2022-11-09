@@ -109,7 +109,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
   }
 
   setStyle(style: LayerStyle<LayerTreeStyle>) {
-    this._style = createStyle(this.options, defaultStyle, this._style, style)
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
     this.needRescale = true
   }
 

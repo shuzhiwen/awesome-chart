@@ -114,7 +114,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   }
 
   setStyle(style: LayerStyle<LayerGridStyle>) {
-    this._style = createStyle(this.options, defaultStyle, this._style, style)
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update(box: Maybe<GridBox>) {

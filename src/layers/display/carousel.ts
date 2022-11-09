@@ -94,7 +94,7 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
   }
 
   setStyle(style: LayerStyle<LayerCarouselStyle>) {
-    this._style = createStyle(this.options, defaultStyle, this._style, style)
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

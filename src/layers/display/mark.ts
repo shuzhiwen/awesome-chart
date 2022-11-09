@@ -63,7 +63,7 @@ export class LayerMark extends LayerBase<LayerMarkOptions> {
   }
 
   setStyle(style: LayerStyle<LayerMarkStyle>) {
-    this._style = createStyle(this.options, defaultStyle, this._style, style)
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

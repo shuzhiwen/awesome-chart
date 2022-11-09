@@ -49,7 +49,7 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
   }
 
   setStyle(style: LayerStyle<LayerTreemapStyle>) {
-    this._style = createStyle(this.options, defaultStyle, this._style, style)
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

@@ -105,7 +105,7 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
   }
 
   setStyle(style: LayerStyle<LayerBasemapStyle>) {
-    this._style = createStyle(this.options, defaultStyle, this._style, style)
+    this._style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   update() {

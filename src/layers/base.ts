@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {range} from 'd3'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
-import {createStyle, makeClass, selector} from './helpers'
+import {makeClass, selector} from './helpers'
 import {cloneDeep, isArray, isEqual, merge, noop} from 'lodash'
 import {
   commonEvents,
@@ -134,17 +135,11 @@ export abstract class LayerBase<Options extends LayerOptions> {
     })
   }
 
-  setData(data: Maybe<LayerData>) {
-    this.data = data
-  }
+  setData(_: Maybe<LayerData>) {}
 
-  setScale(scale: Maybe<LayerScale>) {
-    this.log.warn('CurrentLayer Not support scale', {scale})
-  }
+  setScale(_: Maybe<LayerScale>) {}
 
-  setStyle(style: LayerStyle<Maybe<AnyObject>>, defaultStyle?: AnyObject) {
-    this.style = createStyle(this.options, defaultStyle, this.style, style)
-  }
+  setStyle(_: Maybe<LayerStyle<AnyObject>>) {}
 
   setAnimation(options: CacheLayerAnimation['options']) {
     merge(this.cacheAnimation, {options})
