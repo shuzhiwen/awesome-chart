@@ -63,8 +63,6 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
     super({options, context, sublayers: ['text']})
   }
 
-  setData() {}
-
   setScale(scale: LayerAxisScale) {
     this._scale = createScale(undefined, this.scale, scale)
   }

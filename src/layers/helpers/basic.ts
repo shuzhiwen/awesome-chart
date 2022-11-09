@@ -33,7 +33,7 @@ export function validateAndCreateData<Data extends Maybe<DataBase<unknown>>>(
   return filter ? filter(incomingData) || incomingData : incomingData
 }
 
-export function createStyle<Style extends UnknownObject>(
+export function createStyle<Style extends Maybe<AnyObject>>(
   options: ChartContext,
   defaultStyle: LayerStyle<Style>,
   currentStyle: LayerStyle<Style>,

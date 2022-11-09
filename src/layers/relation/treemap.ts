@@ -48,8 +48,6 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
     this._data = validateAndCreateData('relation', this.data, data)
   }
 
-  setScale() {}
-
   setStyle(style: LayerStyle<LayerTreemapStyle>) {
     this._style = createStyle(this.options, defaultStyle, this._style, style)
   }

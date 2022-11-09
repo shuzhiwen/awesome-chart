@@ -83,8 +83,6 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
     }
   }
 
-  setScale() {}
-
   setStyle(style: LayerStyle<LayerFlopperStyle>) {
     this._style = createStyle(this.options, defaultStyle, this.style, style)
   }

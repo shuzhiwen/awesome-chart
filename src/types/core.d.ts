@@ -87,7 +87,7 @@ export type LayerSchema = Partial<{
   options: LayerOptions
   data: Maybe<LayerData>
   scale: LayerScale
-  style: Computable<UnknownObject, ChartTheme>
+  style: Computable<AnyObject, ChartTheme>
   animation: AnyObject
 }>
 

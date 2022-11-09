@@ -65,8 +65,6 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
     this._data = validateAndCreateData('relation', this.data, data)
   }
 
-  setScale() {}
-
   setStyle(style: LayerStyle<LayerSankeyStyle>) {
     this._style = createStyle(this.options, defaultStyle, this._style, style)
   }

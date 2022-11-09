@@ -1,7 +1,7 @@
 import {range} from 'd3'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
-import {makeClass, selector} from './helpers'
+import {createStyle, makeClass, selector} from './helpers'
 import {cloneDeep, isArray, isEqual, merge, noop} from 'lodash'
 import {
   commonEvents,
@@ -33,13 +33,7 @@ import {
 export abstract class LayerBase<Options extends LayerOptions> {
   abstract data: Maybe<LayerData>
 
-  abstract style: Maybe<UnknownObject>
-
-  abstract setData(data: Maybe<LayerData>): void
-
-  abstract setScale(scale: Maybe<LayerScale>): void
-
-  abstract setStyle(style: Maybe<LayerStyle<UnknownObject>>): void
+  abstract style: Maybe<AnyObject>
 
   abstract update(...args: unknown[]): void
 
@@ -73,7 +67,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
     this.tooltipTargets = tooltipTargets || []
     this.cacheAnimation = {animations: {}, timer: {}, options: {}}
     this.sublayers.forEach((name) => (this.cacheData[name] = {data: []}))
-    this.root = selector.createSubcontainer(this.options.root as DrawerTarget, this.className)
+    this.root = selector.createGroup(this.options.root as DrawerTarget, this.className)
     this.createLifeCycles()
     this.createEvent()
   }
@@ -138,6 +132,18 @@ export abstract class LayerBase<Options extends LayerOptions> {
         }
       }
     })
+  }
+
+  setData(data: Maybe<LayerData>) {
+    this.data = data
+  }
+
+  setScale(scale: Maybe<LayerScale>) {
+    this.log.warn('CurrentLayer Not support scale', {scale})
+  }
+
+  setStyle(style: LayerStyle<Maybe<AnyObject>>, defaultStyle?: AnyObject) {
+    this.style = createStyle(this.options, defaultStyle, this.style, style)
   }
 
   setAnimation(options: CacheLayerAnimation['options']) {
@@ -260,14 +266,14 @@ export abstract class LayerBase<Options extends LayerOptions> {
       isFirstDraw = cacheData.data.length === 0,
       sublayerContainer =
         selector.getSubcontainer(this.root, sublayerClassName) ||
-        selector.createSubcontainer(this.root, sublayerClassName, evented)
+        selector.createGroup(this.root, sublayerClassName, evented)
 
     range(0, maxGroupLength).map((groupIndex) => {
       const groupClassName = `${sublayerClassName}-${groupIndex}`
       const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
 
       if (groupIndex < data.length && !groupContainer) {
-        selector.createSubcontainer(sublayerContainer, groupClassName, evented)
+        selector.createGroup(sublayerContainer, groupClassName, evented)
       } else if (groupIndex >= data.length) {
         selector.remove(groupContainer)
       }

@@ -50,8 +50,6 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
     })
   }
 
-  setScale() {}
-
   setAnimation(options: CacheLayerAnimation['options']) {
     super.setAnimation(
       merge({}, options, {

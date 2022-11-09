@@ -17,7 +17,7 @@ export default ({pointSize}) => [
       layout: 'container',
     },
     style: {
-      maxColumn: 4,
+      maxColumn: 5,
     },
   },
   {

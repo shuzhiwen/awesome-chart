@@ -44,11 +44,11 @@ class Selector {
     }
   }
 
-  createSubcontainer(target: D3Selection, className: string, evented?: boolean): D3Selection
-  createSubcontainer(target: Group, className: string, evented?: boolean): Group
-  createSubcontainer(target: Canvas, className: string, evented?: boolean): Group
-  createSubcontainer(target: DrawerTarget, className: string, evented?: boolean): DrawerTarget
-  createSubcontainer(target: Maybe<DrawerTarget | Canvas>, className: string, evented = true) {
+  createGroup(target: D3Selection, className: string, evented?: boolean): D3Selection
+  createGroup(target: Group, className: string, evented?: boolean): Group
+  createGroup(target: Canvas, className: string, evented?: boolean): Group
+  createGroup(target: DrawerTarget, className: string, evented?: boolean): DrawerTarget
+  createGroup(target: Maybe<DrawerTarget | Canvas>, className: string, evented = true) {
     if (isSC(target)) {
       return target.append('g').attr('class', className)
     } else if (isCC(target)) {

@@ -56,8 +56,6 @@ export class LayerText extends LayerBase<LayerTextOptions> {
     this._data = validateAndCreateData('base', this.data, data)
   }
 
-  setScale() {}
-
   setStyle(style: LayerStyle<LayerTextStyle>) {
     this._style = createStyle(this.options, defaultStyle, this._style, style)
   }

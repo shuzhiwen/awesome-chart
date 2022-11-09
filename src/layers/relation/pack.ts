@@ -97,8 +97,6 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
     }
   }
 
-  setScale() {}
-
   setStyle(style: LayerStyle<LayerPackStyle>) {
     this._style = createStyle(this.options, defaultStyle, this._style, style)
   }

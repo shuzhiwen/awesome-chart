@@ -100,10 +100,6 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
     this.disabledColor = mergeAlpha(this.options.theme.text.fill, 0.3)
   }
 
-  setData() {}
-
-  setScale() {}
-
   setStyle(style: LayerStyle<LayerLegendStyle>) {
     this._style = createStyle(this.options, defaultStyle, this.style, style)
   }

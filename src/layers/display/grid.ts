@@ -113,8 +113,6 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     })
   }
 
-  setScale() {}
-
   setStyle(style: LayerStyle<LayerGridStyle>) {
     this._style = createStyle(this.options, defaultStyle, this._style, style)
   }
