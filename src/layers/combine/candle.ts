@@ -12,6 +12,7 @@ import {
   LayerRectScale,
   CacheLayerAnimation,
   LayerStyle,
+  LayerAnimation,
 } from '../../types'
 
 const defaultStyle: LayerCandleStyle = {
@@ -136,7 +137,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
     this.lineLayer.playAnimation()
   }
 
-  setAnimation(options: CacheLayerAnimation['options']) {
+  setAnimation(options: Maybe<LayerAnimation<CacheLayerAnimation['options']>>) {
     this.rectLayer.setAnimation(options)
     this.lineLayer.setAnimation(options)
   }

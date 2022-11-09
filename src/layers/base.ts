@@ -3,7 +3,7 @@ import {range} from 'd3'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
 import {makeClass, selector} from './helpers'
-import {cloneDeep, isArray, isEqual, merge, noop} from 'lodash'
+import {cloneDeep, isArray, isEqual, isFunction, merge, noop} from 'lodash'
 import {
   commonEvents,
   layerLifeCycles,
@@ -29,6 +29,7 @@ import {
   LayerScale,
   CacheLayerEvent,
   LayerStyle,
+  LayerAnimation,
 } from '../types'
 
 export abstract class LayerBase<Options extends LayerOptions> {
@@ -141,9 +142,13 @@ export abstract class LayerBase<Options extends LayerOptions> {
 
   setStyle(_: Maybe<LayerStyle<AnyObject>>) {}
 
-  setAnimation(options: CacheLayerAnimation['options']) {
-    merge(this.cacheAnimation, {options})
-    this.sublayers.forEach((sublayer) => this.createAnimation(sublayer))
+  setAnimation(config: Maybe<LayerAnimation<CacheLayerAnimation['options']>>) {
+    merge(this.cacheAnimation, {
+      options: isFunction(config) ? config(this.options.theme) : config,
+    })
+    this.sublayers.forEach((sublayer) => {
+      this.createAnimation(sublayer)
+    })
   }
 
   playAnimation() {

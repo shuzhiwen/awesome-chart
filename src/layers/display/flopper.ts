@@ -4,9 +4,15 @@ import {cloneDeep, merge} from 'lodash'
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {lightTheme} from '../../core/theme'
-import {ChartContext, LayerFlopperOptions, LayerFlopperStyle, LayerStyle} from '../../types'
 import {addStyle, isCC, isSC, mergeAlpha, robustRange} from '../../utils'
 import {createStyle, validateAndCreateData} from '../helpers'
+import {
+  ChartContext,
+  LayerAnimation,
+  LayerFlopperOptions,
+  LayerFlopperStyle,
+  LayerStyle,
+} from '../../types'
 
 const defaultOptions: Partial<LayerFlopperOptions> = {
   variant: 'vertical',
@@ -229,7 +235,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       })
   }
 
-  setAnimation(options: Partial<LayerFlopper['animation']>) {
+  setAnimation(options: Maybe<LayerAnimation<Partial<LayerFlopper['animation']>>>) {
     this.animation = merge({}, this.options.theme.animation.update, this.animation, options)
   }
 

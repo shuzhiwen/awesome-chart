@@ -13,6 +13,7 @@ import {
   LayerForceOptions,
   CacheLayerAnimation,
   LayerStyle,
+  LayerAnimation,
 } from '../../types'
 
 const defaultStyle: LayerForceStyle = {
@@ -50,7 +51,7 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
     })
   }
 
-  setAnimation(options: CacheLayerAnimation['options']) {
+  setAnimation(options: Maybe<LayerAnimation<CacheLayerAnimation['options']>>) {
     super.setAnimation(
       merge({}, options, {
         node: {update: {duration: 0, delay: 0}},

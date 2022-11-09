@@ -40,7 +40,7 @@ export const createLayer = errorCatcher(
     }
 
     layer.setStyle(style)
-    layer.setAnimation({...animation})
+    layer.setAnimation(animation)
     isLayerAxis(layer) && layer.setScale({nice: scale})
     !isLayerLegend(layer) && layer.setData(dataSet)
     Object.entries(event ?? {}).forEach(([name, fn]) => layer.event.on(name, fn))
