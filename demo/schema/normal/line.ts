@@ -21,8 +21,8 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
       },
       data: [
         ['标签', '数值'],
-        ['最大值', 300],
-        ['最小值', 600],
+        ['最小值', 300],
+        ['最大值', 600],
       ],
       style: {
         labelPosition: 'right',

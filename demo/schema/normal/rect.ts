@@ -28,8 +28,8 @@ export default ({
       },
       data: [
         ['标签', '数值'],
-        ['最大值', 300],
-        ['最小值', 600],
+        ['最小值', 300],
+        ['最大值', 600],
       ],
       style: {
         direction: variant === 'column' ? 'horizontal' : 'vertical',
