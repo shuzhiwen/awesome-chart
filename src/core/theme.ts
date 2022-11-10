@@ -120,6 +120,7 @@ function createDefaultTheme({
           type: 'fade',
           delay: 1000,
           duration: 2000,
+          initialOpacity: 1,
           startOpacity: 1,
           endOpacity: 0.2,
           alternate: true,
