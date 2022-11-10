@@ -14,8 +14,7 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
         coordinate: 'cartesian',
       },
       scale: {
-        count: 5,
-        zero: false,
+        paddingInner: 0,
       },
     },
     {

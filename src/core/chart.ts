@@ -174,13 +174,13 @@ export class Chart {
 
     if (isNil(options.id)) {
       options.id = uuid()
-    } else if (this.layers.find((layer) => layer.options.id === options.id)) {
+    } else if (this.getLayerById(options.id)) {
       this.log.error(`Duplicate layer id "${options.id}"`)
       return
-    } else if (this.getLayerByType('axis')) {
+    } else if (options.type === 'axis' && this.getLayerByType('axis')) {
       this.log.error('A chart can only have one axis layer')
       return
-    } else if (this.getLayerByType('legend')) {
+    } else if (options.type === 'legend' && this.getLayerByType('legend')) {
       this.log.error('A chart can only have one legend layer')
       return
     }
@@ -207,7 +207,7 @@ export class Chart {
     return this.layers.filter(({options: {type}}) => dependantLayers.has(type))
   }
 
-  getInDependentLayers() {
+  getIndependentLayers() {
     return this.layers.filter(({options: {type}}) => !dependantLayers.has(type))
   }
 
@@ -222,7 +222,7 @@ export class Chart {
 
     if (!axisLayer) throw new Error('There is no axis layer')
 
-    this.getInDependentLayers()
+    this.getIndependentLayers()
       .concat(this.getLayersByType('brush'))
       .forEach((layer) => {
         const {scale, options} = layer,
@@ -271,7 +271,7 @@ export class Chart {
     const axisLayer = this.getLayerByType('axis')
     const legendLayer = this.getLayerByType('legend')
 
-    this.getInDependentLayers().forEach((layer) => layer.update())
+    this.getIndependentLayers().forEach((layer) => layer.update())
     axisLayer && this.rebuildScale({redraw: false, trigger: legendLayer})
     this.getNonUniqueLayers().forEach((layer) => layer.draw())
 

@@ -12,52 +12,7 @@ export default ({pointSize}) => [
       layout: 'container',
     },
     style: {
-      maxColumn: 5,
-    },
-  },
-  {
-    type: 'auxiliary',
-    options: {
-      layout: 'main',
-      direction: 'horizontal',
-    },
-    data: [
-      ['标签', '数值'],
-      ['最大值', 150],
-      ['最小值', 100],
-    ],
-    style: {
-      labelPosition: 'right',
-      line: {
-        stroke: 'orange',
-        strokeWidth: 2,
-        dasharray: '10 5',
-      },
-      text: {
-        fill: 'orange',
-      },
-    },
-  },
-  {
-    type: 'auxiliary',
-    options: {
-      layout: 'main',
-      direction: 'vertical',
-    },
-    data: [
-      ['标签', '数值'],
-      ['阈值', 400],
-    ],
-    style: {
-      labelPosition: 'top',
-      line: {
-        stroke: 'orange',
-        strokeWidth: 2,
-        dasharray: '10 5',
-      },
-      text: {
-        fill: 'orange',
-      },
+      maxColumn: 6,
     },
   },
   {
@@ -100,5 +55,28 @@ export default ({pointSize}) => [
         enter: theme.animation.presets.fadeIn,
       },
     }),
+  },
+  {
+    type: 'auxiliary',
+    options: {
+      layout: 'main',
+      direction: 'horizontal',
+    },
+    data: [
+      ['标签', '数值'],
+      ['最大值', 150],
+      ['最小值', 100],
+    ],
+    style: {
+      labelPosition: 'right',
+      line: {
+        stroke: 'orange',
+        strokeWidth: 2,
+        dasharray: '10 5',
+      },
+      text: {
+        fill: 'orange',
+      },
+    },
   },
 ]
