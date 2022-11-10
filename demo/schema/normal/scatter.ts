@@ -64,18 +64,18 @@ export default ({pointSize}) => [
     },
     data: [
       ['标签', '数值'],
-      ['最大值', 150],
-      ['最小值', 100],
+      ['安全上界', 150],
+      ['安全下界', 100],
     ],
     style: {
       labelPosition: 'right',
       line: {
-        stroke: 'orange',
+        stroke: ['orange', 'orange'],
         strokeWidth: 2,
         dasharray: '10 5',
       },
       text: {
-        fill: 'orange',
+        fill: ['orange', 'orange'],
       },
     },
   },

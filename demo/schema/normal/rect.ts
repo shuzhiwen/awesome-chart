@@ -22,29 +22,6 @@ export default ({
       },
     },
     {
-      type: 'auxiliary',
-      options: {
-        layout: 'main',
-      },
-      data: [
-        ['标签', '数值'],
-        ['最小值', 300],
-        ['最大值', 600],
-      ],
-      style: {
-        direction: variant === 'column' ? 'horizontal' : 'vertical',
-        labelPosition: variant === 'column' ? 'right' : 'top',
-        line: {
-          stroke: 'orange',
-          strokeWidth: 2,
-          dasharray: '10 5',
-        },
-        text: {
-          fill: 'orange',
-        },
-      },
-    },
-    {
       type: 'axis',
       options: {
         layout: 'main',
@@ -135,6 +112,29 @@ export default ({
               enter: theme.animation.presets.fadeIn,
             },
           }),
+    },
+    {
+      type: 'auxiliary',
+      options: {
+        layout: 'main',
+      },
+      data: [
+        ['标签', '数值'],
+        ['标准', 600],
+        ['警戒', 300],
+      ],
+      style: {
+        direction: variant === 'column' ? 'horizontal' : 'vertical',
+        labelPosition: variant === 'column' ? 'right' : 'top',
+        line: {
+          stroke: ['orange', 'red'],
+          strokeWidth: 2,
+          dasharray: '10 5',
+        },
+        text: {
+          fill: ['orange', 'red'],
+        },
+      },
     },
     hasInteractive && {
       type: 'interactive',

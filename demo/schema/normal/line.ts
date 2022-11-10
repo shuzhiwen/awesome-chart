@@ -14,29 +14,6 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
       },
     },
     {
-      type: 'auxiliary',
-      options: {
-        layout: 'main',
-        direction: 'horizontal',
-      },
-      data: [
-        ['标签', '数值'],
-        ['最小值', 300],
-        ['最大值', 600],
-      ],
-      style: {
-        labelPosition: 'right',
-        line: {
-          stroke: 'orange',
-          strokeWidth: 2,
-          dasharray: '10 5',
-        },
-        text: {
-          fill: 'orange',
-        },
-      },
-    },
-    {
       type: 'axis',
       options: {
         layout: 'main',
@@ -100,6 +77,29 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
           enter: theme.animation.presets.fadeIn,
         },
       }),
+    },
+    {
+      type: 'auxiliary',
+      options: {
+        layout: 'main',
+        direction: 'horizontal',
+      },
+      data: [
+        ['标签', '数值'],
+        ['标准', 600],
+        ['警戒', 300],
+      ],
+      style: {
+        labelPosition: 'right',
+        line: {
+          stroke: ['orange', 'red'],
+          strokeWidth: 2,
+          dasharray: '10 5',
+        },
+        text: {
+          fill: ['orange', 'red'],
+        },
+      },
     },
     hasMark && {
       type: 'mark',

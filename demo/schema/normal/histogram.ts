@@ -65,19 +65,19 @@ export default ({variant}: Partial<LayerRectOptions>) => [
     },
     data: [
       ['标签', '数值'],
-      ['优秀', 6],
-      ['及格', 2],
+      ['达标', 6],
+      ['未达标', 2],
     ],
     style: {
       direction: variant === 'column' ? 'horizontal' : 'vertical',
       labelPosition: variant === 'column' ? 'right' : 'top',
       line: {
-        stroke: 'orange',
+        stroke: ['orange', 'red'],
         strokeWidth: 2,
         dasharray: '10 5',
       },
       text: {
-        fill: 'orange',
+        fill: ['orange', 'red'],
       },
     },
   },
