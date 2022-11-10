@@ -102,15 +102,17 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
       categories = Array.from(new Set(pointData.map(({category}) => category))),
       colorMatrix = createColorMatrix({
         layer: this,
-        row: 1,
-        column: categories.length,
+        row: categories.length,
+        column: 1,
         theme: point?.fill,
       })
 
     this.pointData = categories.map((_category, i) =>
       pointData
-        .filter(({category, x, y}) => category === _category && isRealNumber(x) && isRealNumber(y))
-        .map((item) => ({...item, color: colorMatrix.get(0, i)}))
+        .map((item) => ({...item, color: colorMatrix.get(i, 0)}))
+        .filter(({category, x, y}) => {
+          return category === _category && isRealNumber(x) && isRealNumber(y)
+        })
     )
 
     this.textData = this.pointData.map((group) =>
@@ -129,7 +131,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
       legends: this.pointData.map((group, i) => ({
         shape: 'circle',
         label: group[0]?.category,
-        color: colorMatrix.get(0, i),
+        color: colorMatrix.get(i, 1),
       })),
     }
   }

@@ -6,7 +6,11 @@ export type DataType = keyof typeof dataMapping
 export type LayerData = DataBase<any> | DataTableList | DataTable | DataRelation
 
 export type DataBaseOptions = Partial<{
-  order: AnyObject
+  order: AnyObject & {
+    type: 'row' | 'column'
+    mapping: Record<Meta, number>
+    colorMatrix: ColorMatrix
+  }
 }>
 
 export type TableListOptions = Partial<{
