@@ -9,7 +9,7 @@ type FObject = fabric.Object
 class Selector {
   setVisible(target: Maybe<DrawerTarget>, visible: boolean) {
     if (isSC(target)) {
-      target.attr('display', visible ? 'block' : 'none')
+      target.attr('opacity', visible ? 1 : 0)
     } else if (isCC(target)) {
       target.visible = visible
       target.canvas?.requestRenderAll()

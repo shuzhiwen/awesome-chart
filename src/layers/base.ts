@@ -51,11 +51,11 @@ export abstract class LayerBase<Options extends LayerOptions> {
 
   readonly options: Options & ChartContext
 
-  readonly cacheData = {} as CacheLayerData<unknown>
+  readonly cacheData: CacheLayerData<unknown> = {}
+
+  readonly cacheAnimation: CacheLayerAnimation
 
   protected readonly cacheEvent = {} as CacheLayerEvent
-
-  protected readonly cacheAnimation: CacheLayerAnimation
 
   protected readonly log = createLog(this.className)
 

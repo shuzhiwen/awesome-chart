@@ -50,7 +50,26 @@ export const createChart = errorCatcher(
 
     // define order is draw order
     layers.forEach((layer) => createLayer(chart, layer))
+    chart.layers.forEach((layer) => layer.setVisible(false))
     chart.draw()
+
+    // not visible until animation initialized
+    chart.layers.forEach((layer) => {
+      const enterAnimations = Object.values(layer.cacheAnimation.animations)
+        .filter((animation) => animation?.queue[1])
+        .map((animation) => animation?.queue[1])
+      if (enterAnimations.length === 0) {
+        layer.setVisible(true)
+      } else {
+        Promise.all(
+          enterAnimations.map((animation) => {
+            return new Promise<void>((resolve) => {
+              animation?.event.on('init', () => resolve())
+            })
+          })
+        ).then(() => layer.setVisible(true))
+      }
+    })
 
     // TODO: control throw
     chart.layers.map((instance) => instance?.playAnimation())

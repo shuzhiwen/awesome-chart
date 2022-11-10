@@ -24,9 +24,9 @@ const bind = (animations: Animation[], callback: AnyFunction) => {
 }
 
 export class AnimationQueue extends AnimationBase<AnimationOptions> {
-  private isConnected = false
+  readonly queue: Animation[]
 
-  private queue: Animation[]
+  private isConnected = false
 
   constructor({options}: {options: {loop: boolean}}) {
     super({options: options as AnimationOptions})
@@ -112,6 +112,12 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
       return this.queue.splice(index, 1)
     } else {
       this.log.error('The animation does not exist', id)
+    }
+  }
+
+  init() {
+    if (this.queue.length > 1) {
+      this.queue[1].init()
     }
   }
 
