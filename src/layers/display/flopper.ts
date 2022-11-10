@@ -19,7 +19,7 @@ const defaultOptions: Partial<LayerFlopperOptions> = {
 }
 
 const defaultStyle: LayerFlopperStyle = {
-  scale: 0.4,
+  scale: 1,
   integerPlace: 8,
   decimalPlace: 2,
   thousandth: true,
@@ -118,11 +118,13 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
     })
 
     const findNumber = (data: LayerFlopper['cellData']) =>
-        data.findIndex(({text}) => text >= '0' && text <= '9'),
-      firstNumber = findNumber(this.cellData),
-      lastNumber = this.cellData.length - findNumber(cloneDeep(this.cellData).reverse()) - 1
+      data.findIndex(({text}) => text >= '0' && text <= '9')
+    const first = findNumber(this.cellData)
+    const last = this.cellData.length - findNumber(cloneDeep(this.cellData).reverse()) - 1
 
-    this.cellData.forEach((item, i) => (i < firstNumber || i > lastNumber) && (item.text = ''))
+    this.cellData.forEach((item, i) => {
+      if (i < first || i > last) item.text = ''
+    })
   }
 
   draw() {
@@ -135,12 +137,11 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       {url, characters, scale, cell} = this.style,
       {backgroundColor} = cell || {},
       {width, height} = this.cellSize,
-      characterData = variant === 'flop' ? cloneDeep(characterSet).reverse() : characterSet,
-      position = variant === 'flop' ? 'absolute' : 'relative',
-      background = mergeAlpha(backgroundColor || 'black', 1)
+      data = variant === 'flop' ? cloneDeep(characterSet).reverse() : characterSet,
+      position = variant === 'flop' ? 'absolute' : 'relative'
 
     this.root
-      .style('background', background)
+      .style('background', mergeAlpha(backgroundColor || 'green', 1))
       .selectAll(`.${this.className}-group`)
       .data(this.cellData)
       .join('xhtml:div')
@@ -148,7 +149,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
       .style('width', `${width}px`)
       .style('height', `${height}px`)
       .selectAll(`.${this.className}-cell`)
-      .data(characterData)
+      .data(data)
       .join('xhtml:div')
       .attr('class', `${this.className}-cell`)
       .style('width', `${width}px`)
@@ -226,17 +227,17 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
               .style('backface-visibility', 'hidden')
               .style('clip', `rect(${top}px,${left + width}px,${top + height}px,${left}px)`)
               .style('transform', `translate(${offsetX}px,${offsetY}px)`)
-              .style('background', background)
             container.selectAll('.top img').style('top', '100%')
           } else {
-            container.selectAll('.digital').text(d).style('background', background)
+            container.selectAll('.digital').text(d)
           }
         }
       })
   }
 
   setAnimation(options: Maybe<LayerAnimation<Partial<LayerFlopper['animation']>>>) {
-    this.animation = merge({}, this.options.theme.animation.update, this.animation, options)
+    const {update} = this.options.theme.animation
+    this.animation = merge({}, update, this.animation, options)
   }
 
   playAnimation() {

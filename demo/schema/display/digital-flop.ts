@@ -9,6 +9,7 @@ export default ({variant}) => [
       value: 12034.456,
     },
     style: {
+      scale: 0.5,
       url: 'character.png',
       characters: {
         0: {
