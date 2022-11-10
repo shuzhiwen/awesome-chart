@@ -2,22 +2,22 @@ import {select} from 'd3'
 import {fabric} from 'fabric'
 import {Canvas} from 'fabric/fabric-impl'
 import {defaultLayoutCreator} from '../layout'
-import {LayerAxis, layerMapping} from '../layers'
+import {LayerAxis, LayerLegend, layerMapping} from '../layers'
 import {lightTheme} from './theme'
 import {Tooltip} from './tooltip'
-import {isNil} from 'lodash'
+import {isNil, noop} from 'lodash'
 import {
   createLog,
   createEvent,
-  isLayerAxis,
   createDefs,
   getEasyGradientCreator,
   isLayerBasemap,
-  isLayerBrush,
   dependantLayers,
   noChange,
-  uuid,
   chartLifeCycles,
+  isLayerLegend,
+  isLayerAxis,
+  uuid,
 } from '../utils'
 import {
   LayerInstance,
@@ -42,11 +42,13 @@ export class Chart {
 
   private padding: Padding
 
-  private log = createLog(Chart.name)
-
   private defs: GradientCreatorProps<unknown>['container']
 
-  readonly event = createEvent<'MouseEvent' | Keys<typeof chartLifeCycles>>(Chart.name)
+  private readonly log = createLog(Chart.name)
+
+  readonly event = createEvent<
+    'MouseEvent' | 'initialized' | 'error' | Keys<typeof chartLifeCycles>
+  >(Chart.name)
 
   readonly engine: Engine
 
@@ -132,8 +134,24 @@ export class Chart {
           tooltipTargets.map((sublayer) => cacheData[sublayer].data).flatMap(noChange)
         ),
     })
-
     this.event.fire('initialized')
+    this.createLifeCycles()
+  }
+
+  private createLifeCycles() {
+    chartLifeCycles.forEach((name) => {
+      const fn: AnyFunction = this[name] || noop
+
+      this[name] = (...parameters: unknown[]) => {
+        try {
+          fn.call(this, ...parameters)
+          this.event.fire(name, {...parameters})
+        } catch (error) {
+          this.log.error(`Chart lifeCycle(${name}) call exception`, error)
+          this.event.fire('error', {error})
+        }
+      }
+    })
   }
 
   setPadding(padding?: Padding, creator: LayoutCreator = defaultLayoutCreator) {
@@ -150,7 +168,7 @@ export class Chart {
       ...this,
       root: options.sublayerConfig?.root || this.root,
       createSublayer: this.createLayer.bind(this),
-      bindCoordinate: this.bindCoordinate.bind(this),
+      rebuildScale: this.rebuildScale.bind(this),
       createGradient: getEasyGradientCreator({container: this.defs}),
     }
 
@@ -158,6 +176,13 @@ export class Chart {
       options.id = uuid()
     } else if (this.layers.find((layer) => layer.options.id === options.id)) {
       this.log.error(`Duplicate layer id "${options.id}"`)
+      return
+    } else if (this.getLayerByType('axis')) {
+      this.log.error('A chart can only have one axis layer')
+      return
+    } else if (this.getLayerByType('legend')) {
+      this.log.error('A chart can only have one legend layer')
+      return
     }
 
     const layer = new layerMapping[options.type](options as never, context)
@@ -170,65 +195,96 @@ export class Chart {
     return this.layers.find(({options}) => options.id === id)
   }
 
+  getLayerByType(type: LayerType) {
+    return this.layers.find(({options}) => options.type === type)
+  }
+
   getLayersByType(type: LayerType) {
     return this.layers.filter(({options}) => options.type === type)
   }
 
-  bindCoordinate(props: {trigger?: LayerInstance; redraw?: boolean}) {
+  getDependantLayers() {
+    return this.layers.filter(({options: {type}}) => dependantLayers.has(type))
+  }
+
+  getInDependentLayers() {
+    return this.layers.filter(({options: {type}}) => !dependantLayers.has(type))
+  }
+
+  getNonUniqueLayers() {
+    return this.layers.filter((layer) => !isLayerLegend(layer) && !isLayerAxis(layer))
+  }
+
+  rebuildScale(props: {trigger?: LayerInstance; redraw?: boolean}) {
     const {trigger, redraw} = props,
-      axisLayer = this.layers.find((layer) => isLayerAxis(layer)) as Maybe<LayerAxis>,
-      brushLayer = this.layers.find((layer) => isLayerBrush(layer)),
-      layers = this.layers.filter(({options: {type}}) => !dependantLayers.has(type)),
-      coordinate = axisLayer?.options.coordinate
+      axisLayer = this.getLayerByType('axis') as Maybe<LayerAxis>,
+      legendLayer = this.getLayerByType('legend') as Maybe<LayerLegend>
 
     if (!axisLayer) throw new Error('There is no axis layer')
 
-    layers.concat(brushLayer ? [brushLayer] : []).forEach((layer) => {
-      const {scale, options} = layer,
-        {scaleX, scaleY, scaleAngle, scaleRadius, ...rest} = scale ?? {},
-        mergedScales: LayerInstance['scale'] = {...rest}
+    this.getInDependentLayers()
+      .concat(this.getLayersByType('brush'))
+      .forEach((layer) => {
+        const {scale, options} = layer,
+          coordinate = axisLayer.options.coordinate,
+          {scaleX, scaleY, scaleAngle, scaleRadius, ...rest} = scale ?? {},
+          mergedScales: LayerInstance['scale'] = {...rest}
 
-      if (coordinate === 'cartesian') {
-        mergedScales.scaleX = scaleX
-        if (options.axis === 'minor') {
-          mergedScales.scaleYR = scaleY
-        } else {
+        if (coordinate === 'cartesian') {
+          mergedScales.scaleX = scaleX
+          if (options.axis === 'minor') {
+            mergedScales.scaleYR = scaleY
+          } else {
+            mergedScales.scaleY = scaleY
+          }
+        } else if (coordinate === 'polar') {
+          mergedScales.scaleAngle = scaleAngle
+          mergedScales.scaleRadius = scaleRadius
+        } else if (coordinate === 'geographic' && isLayerBasemap(layer)) {
+          mergedScales.scaleX = scaleX
           mergedScales.scaleY = scaleY
         }
-      } else if (coordinate === 'polar') {
-        mergedScales.scaleAngle = scaleAngle
-        mergedScales.scaleRadius = scaleRadius
-      } else if (coordinate === 'geographic' && isLayerBasemap(layer)) {
-        mergedScales.scaleX = scaleX
-        mergedScales.scaleY = scaleY
-      }
 
-      axisLayer.setScale(mergedScales as LayerAxisScale)
-    })
+        axisLayer.setScale(mergedScales as LayerAxisScale)
+      })
 
     axisLayer.niceScale()
 
     this.layers.forEach((layer) => {
       const {axis} = layer.options,
-        {scaleY, scaleYR, ...rest} = {...layer.scale, ...axisLayer.scale}
+        {scaleY, scaleYR, ...rest} = {...layer.scale, ...axisLayer.scale},
+        finalScaleY = axis === 'minor' ? scaleYR : scaleY
 
       if (layer.options.id !== trigger?.options.id) {
-        if (layer !== axisLayer)
-          layer.setScale({...rest, scaleY: axis === 'minor' ? scaleYR : scaleY})
+        if (layer !== axisLayer) layer.setScale({...rest, scaleY: finalScaleY})
         redraw && layer.draw()
       }
     })
+
+    if (!isLayerLegend(trigger)) {
+      legendLayer?.bindLayers(this.layers)
+      legendLayer?.draw()
+    }
   }
 
   draw() {
-    this.layers.forEach((layer) => layer.draw())
-    this.event.fire('draw')
+    const axisLayer = this.getLayerByType('axis')
+    const legendLayer = this.getLayerByType('legend')
+
+    this.getInDependentLayers().forEach((layer) => layer.update())
+    axisLayer && this.rebuildScale({redraw: false, trigger: legendLayer})
+    this.getNonUniqueLayers().forEach((layer) => layer.draw())
+
+    axisLayer?.draw()
+    if (isLayerLegend(legendLayer)) {
+      legendLayer.bindLayers(this.layers)
+      legendLayer.draw()
+    }
   }
 
   destroy() {
     this.layers.forEach((layer) => layer.destroy())
     this._layers.length = 0
     this.tooltip.destroy()
-    this.event.fire('destroy')
   }
 }

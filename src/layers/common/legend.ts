@@ -109,7 +109,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       {text} = this.options.theme,
       layers = originLayers.filter((layer) => layer.legendData)
 
-    Object.values(data).map((item) => item.length === 0)
+    Object.keys(data).map((key) => (data[key as Keys<typeof data>].length = 0))
 
     this.legendDataGroup = layers.map((layer) => cloneDeep(layer.legendData)!)
     this.legendDataGroup.forEach(({legends}) => {
@@ -119,11 +119,11 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       data.textColors.push(...new Array(legends?.length).fill(text.fill))
     })
     this.filter(layers)
+    this.needRecalculated = true
   }
 
   private filter = (layers: LayerInstance[]) => {
     const data = this.data.source,
-      {bindCoordinate} = this.options,
       colors = cloneDeep(data.shapeColors),
       originData = cloneDeep(layers.map((layer) => layer.data)),
       counts = this.legendDataGroup.map(({legends}) => legends?.length),
@@ -179,8 +179,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
         }
 
         layer.setData(filteredData)
-        layer.update()
-        bindCoordinate({trigger: this, redraw: true})
+        this.options.rebuildScale({trigger: this, redraw: true})
         this.needRecalculated = true
         this.draw()
       } catch (error) {

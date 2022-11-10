@@ -126,7 +126,7 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
   }
 
   private brushed(event: D3BrushEvent<unknown>) {
-    const {layout, bindCoordinate} = this.options,
+    const {layout, rebuildScale} = this.options,
       {width, height, left, top} = layout,
       {direction, targets, handleZoom = 1} = this.style,
       total = direction === 'horizontal' ? width : height,
@@ -158,7 +158,7 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
       }
     })
 
-    bindCoordinate({trigger: this, redraw: true})
+    rebuildScale({trigger: this, redraw: true})
 
     if (isSC(this.root)) {
       addStyle(this.root.selectAll('.overlay'), transformAttr(this.style.background ?? {}))

@@ -12,10 +12,10 @@ import {LayerStyle} from './styles'
 
 export type ChartContext = Pick<
   Chart,
-  | 'bindCoordinate'
   | 'container'
   | 'containerWidth'
   | 'containerHeight'
+  | 'rebuildScale'
   | 'event'
   | 'root'
   | 'theme'

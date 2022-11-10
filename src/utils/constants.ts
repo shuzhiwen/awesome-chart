@@ -1,4 +1,4 @@
-export const chartLifeCycles = new Set(['initialized', 'draw', 'destroy'] as const)
+export const chartLifeCycles = new Set(['draw', 'destroy', 'rebuildScale'] as const)
 
 export const tooltipEvents = new Set(['mouseover', 'mouseout', 'mousemove'] as const)
 

@@ -3,7 +3,6 @@ import {CreateChartProps, LayerOptions} from '../types'
 import {LayerBase} from '../layers'
 import {Chart} from './chart'
 import {
-  createLog,
   isRawTable,
   isRawTableList,
   isRawRelation,
@@ -13,70 +12,52 @@ import {
   isLayerLegend,
   isLayerAxis,
   errorCatcher,
-  dependantLayers,
 } from '../utils'
 
-const log = createLog('CreateChart')
+export const createLayer = (chart: Chart, schema: ArrayItem<CreateChartProps['layers']>) => {
+  const {type, options, data, scale, style, animation, event} = schema!,
+    layerOptions = {type, ...options, layout: chart.layout[options.layout]},
+    layer = chart.createLayer(layerOptions as LayerOptions) as LayerBase<LayerOptions>
+  let dataSet = data
 
-export const createLayer = errorCatcher(
-  (chart: Chart, schema: ArrayItem<CreateChartProps['layers']>) => {
-    const {type, options, data, scale, style, animation, event} = schema!,
-      layerOptions = {type, ...options, layout: chart.layout[options.layout]} as LayerOptions,
-      layer = chart.createLayer(layerOptions) as LayerBase<LayerOptions>
-    let dataSet = data
-
-    if (isRawTable(data) || data?.type === 'table') {
-      dataSet = new DataTable(isRawTable(data) ? data : randomTable(data))
-    } else if (isRawRelation(data)) {
-      dataSet = new DataRelation(data)
-    } else if (isRawTableList(data) || data?.type === 'tableList') {
-      if (type === 'matrix') {
-        dataSet = new DataTable(tableListToTable(data)!)
-      } else {
-        dataSet = new DataTableList(isRawTableList(data) ? data : randomTableList(data))
-      }
+  if (isRawTable(data) || data?.type === 'table') {
+    dataSet = new DataTable(isRawTable(data) ? data : randomTable(data))
+  } else if (isRawRelation(data)) {
+    dataSet = new DataRelation(data)
+  } else if (isRawTableList(data) || data?.type === 'tableList') {
+    if (type === 'matrix') {
+      dataSet = new DataTable(tableListToTable(data)!)
     } else {
-      dataSet = new DataBase(data ?? {})
+      dataSet = new DataTableList(isRawTableList(data) ? data : randomTableList(data))
     }
-
-    layer.setStyle(style)
-    layer.setAnimation(animation)
-    isLayerAxis(layer) && layer.setScale({nice: scale})
-    !isLayerLegend(layer) && layer.setData(dataSet)
-    Object.entries(event ?? {}).forEach(([name, fn]) => layer.event.on(name, fn))
-
-    return layer
-  },
-  (error) => {
-    log.error('CreateLayer failed', error)
+  } else {
+    dataSet = new DataBase(data ?? {})
   }
-)
+
+  layer.setStyle(style)
+  layer.setAnimation(animation)
+  isLayerAxis(layer) && layer.setScale({nice: scale})
+  !isLayerLegend(layer) && layer.setData(dataSet)
+  Object.entries(event ?? {}).forEach(([name, fn]) => layer.event.on(name, fn))
+
+  return layer
+}
 
 export const createChart = errorCatcher(
   (schema: CreateChartProps, existedChart?: Chart) => {
-    const {layers = [], ...initialConfig} = schema,
-      chart = existedChart ?? new Chart(initialConfig),
-      axisLayerConfig = layers.find(({type}) => type === 'axis'),
-      normalLayerConfigs = layers.filter(({type}) => !dependantLayers.has(type))
+    const {layers = [], ...initialConfig} = schema
+    const chart = existedChart ?? new Chart(initialConfig)
 
     // define order is draw order
     layers.forEach((layer) => createLayer(chart, layer))
-
-    normalLayerConfigs.forEach(({type}) =>
-      chart.getLayersByType(type).forEach((layer) => layer.update())
-    )
-
-    const legendLayer = chart.getLayersByType('legend')[0]
-    isLayerLegend(legendLayer) && legendLayer.bindLayers(chart.layers)
-
-    axisLayerConfig && chart.bindCoordinate({redraw: false})
     chart.draw()
 
+    // TODO: control throw
     chart.layers.map((instance) => instance?.playAnimation())
 
     return chart
   },
   (error) => {
-    log.error('Chart initialization failed', error)
+    console.error('Chart initialization failed', error)
   }
 )

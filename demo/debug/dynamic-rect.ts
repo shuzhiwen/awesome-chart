@@ -44,7 +44,7 @@ export const debugDynamicRectLayer = (chart: Chart) => {
         layer.setData(new DataTableList(data))
         layer.update()
       })
-      chart.bindCoordinate({redraw: true})
+      chart.rebuildScale({redraw: true})
       layers.length && console.info('Random TableList Data', data)
     }, i * 200)
   })
