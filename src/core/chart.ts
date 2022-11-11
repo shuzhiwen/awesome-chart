@@ -11,6 +11,7 @@ import {
   createEvent,
   createDefs,
   getEasyGradientCreator,
+  getPercentageNumber,
   isLayerBasemap,
   dependantLayers,
   noChange,
@@ -22,7 +23,6 @@ import {
 import {
   LayerInstance,
   Layout,
-  LayoutCreator,
   ChartProps,
   ChartContext,
   GradientCreatorProps,
@@ -86,7 +86,6 @@ export class Chart {
   }: ChartProps) {
     this.theme = theme
     this.engine = engine
-    this.padding = padding
     this.container = container
 
     const domContainer = select(this.container).html('')
@@ -98,6 +97,13 @@ export class Chart {
       this.containerWidth = width
       this.containerHeight = height
     }
+
+    this.padding = [
+      getPercentageNumber(padding[0], this.containerHeight),
+      getPercentageNumber(padding[1], this.containerWidth),
+      getPercentageNumber(padding[2], this.containerHeight),
+      getPercentageNumber(padding[3], this.containerWidth),
+    ]
 
     if (engine === 'canvas') {
       const canvas = domContainer
@@ -127,6 +133,7 @@ export class Chart {
       containerHeight: this.containerHeight,
       padding: this.padding,
     })
+
     this.tooltip = new Tooltip({
       ...tooltipOptions,
       container: tooltipOptions?.container ?? this.container,
@@ -135,8 +142,9 @@ export class Chart {
           tooltipTargets.map((sublayer) => cacheData[sublayer].data).flatMap(noChange)
         ),
     })
-    this.event.fire('initialized')
+
     this.createLifeCycles()
+    this.event.fire('initialized')
   }
 
   private createLifeCycles() {
@@ -152,15 +160,6 @@ export class Chart {
           this.event.fire('error', {error})
         }
       }
-    })
-  }
-
-  setPadding(padding?: Padding, creator: LayoutCreator = defaultLayoutCreator) {
-    this.padding = padding || this.padding
-    this._layout = creator({
-      containerWidth: this.containerWidth,
-      containerHeight: this.containerHeight,
-      padding: this.padding,
     })
   }
 

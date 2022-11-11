@@ -80,7 +80,7 @@ export type ChartProps = {
   adjust?: boolean
   engine?: Engine
   theme?: ChartTheme
-  padding?: Padding
+  padding?: Padding<Meta>
   defineSchema?: AnyObject
   tooltipOptions?: Partial<TooltipOptions>
   layoutCreator?: LayoutCreator
