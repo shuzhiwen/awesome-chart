@@ -157,12 +157,13 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
     }
 
     if (!isSC(targets) && isCC(context)) {
+      const [top, right, bottom, left] = context.canvas?.padding ?? [0, 0, 0, 0]
       this.gradientNode = createCanvasGradient({direction, color, opacity})
       this.maskNode = new fabric.Rect({
-        top: 0,
-        left: 0,
-        width: context.canvas?.width,
-        height: context.canvas?.height,
+        top,
+        left,
+        width: context.canvas!.width! - left - right,
+        height: context.canvas!.height! - top - bottom,
         fill: this.gradientNode,
         absolutePositioned: true,
         evented: false,

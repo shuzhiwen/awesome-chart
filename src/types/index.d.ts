@@ -15,6 +15,9 @@ export * from './styles'
 export * from './utils'
 
 declare module 'fabric/fabric-impl' {
+  interface Canvas {
+    padding: Padding
+  }
   interface Object {
     className?: string
   }

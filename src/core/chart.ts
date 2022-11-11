@@ -108,6 +108,7 @@ export class Chart {
       this.defs = []
       this.root = new fabric.Canvas(canvas.node(), {selection: false, hoverCursor: 'pointer'})
       this.root.on('mouse:move', ({e: event}) => this.event.fire('MouseEvent', {event}))
+      this.root.padding = this.padding
     } else {
       this.root = domContainer
         .append('svg')
