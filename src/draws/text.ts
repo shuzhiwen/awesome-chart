@@ -1,10 +1,19 @@
-import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
 import {TextOptions} from 'fabric/fabric-impl'
-import {mergeAlpha, getAttr, isSC, isCC, noChange, svgShadowToFabricShadow} from '../utils'
+import {interpolateNumber} from 'd3'
 import {TextDrawerProps} from '../types'
+import {svgEasing} from '../animation'
 import {selector} from '../layers'
 import {merge} from 'lodash'
+import {
+  mergeAlpha,
+  getAttr,
+  isSC,
+  isCC,
+  noChange,
+  svgShadowToFabricShadow,
+  isRealNumber,
+} from '../utils'
 
 export function drawText({
   fontFamily,
@@ -59,16 +68,27 @@ export function drawText({
   })
 
   if (isSC(container)) {
+    const prevTexts = container
+      .selectAll(`.${className}`)
+      .data()
+      .map((d) => (d as typeof mappedData[number]).value)
     container
       .selectAll(`.${className}`)
       .data(mappedData)
       .join('text')
-      .text((d) => d.value)
       .attr('class', (d) => d.className)
       .transition()
       .ease(svgEasing.get(getAttr(transition?.easing, 0, update.easing))!)
       .duration(getAttr(transition?.duration, 0, update.duration))
       .delay(getAttr(transition?.delay, 0, update.delay))
+      .textTween((d, i) => {
+        const prevText = Number(prevTexts[i]),
+          decimals = d.value.toString().split('.')[1]?.length || 0
+        if (isRealNumber(Number(d.value)) && isRealNumber(prevText)) {
+          return (t) => interpolateNumber(prevText, Number(d.value))(t).toFixed(decimals)
+        }
+        return () => d.value
+      })
       .attr('x', (d) => d.x)
       .attr('y', (d) => d.y - d.fontSize / 2)
       .attr('fill', (d) => d.fill)

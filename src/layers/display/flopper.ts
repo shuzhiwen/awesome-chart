@@ -20,12 +20,9 @@ const defaultOptions: Partial<LayerFlopperOptions> = {
 
 const defaultStyle: LayerFlopperStyle = {
   scale: 1,
-  integerPlace: 8,
-  decimalPlace: 2,
+  integers: 8,
+  decimals: 2,
   thousandth: true,
-  cell: {
-    fontSize: '48px',
-  },
 }
 
 const characterSet = ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.']
@@ -95,15 +92,15 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
 
   update() {
     const {width, height} = this.options.layout,
-      {integerPlace = 8, decimalPlace = 2, thousandth} = this.style,
-      commaPlace = thousandth ? Math.floor(Math.abs(integerPlace - 1) / 3) : 0,
-      places = integerPlace + decimalPlace + commaPlace + (decimalPlace > 0 ? 1 : 0),
+      {integers = 8, decimals = 2, thousandth} = this.style,
+      commas = thousandth ? Math.floor(Math.abs(integers - 1) / 3) : 0,
+      places = integers + decimals + commas + (decimals > 0 ? 1 : 0),
       prevData = this.cellData.map(({text}) => text)
 
     this.cellSize = {width: width / places, height}
     this.cellData = []
 
-    robustRange(integerPlace + commaPlace - 1, -decimalPlace, -1).forEach((index) => {
+    robustRange(integers + commas - 1, -decimals, -1).forEach((index) => {
       const text =
         thousandth && index >= 0
           ? (index + 1) % 4 !== 0
@@ -112,7 +109,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
           : this.magnitudes[index]
 
       this.cellData.push({text, prevText: prevData.shift()})
-      if (index === 0 && decimalPlace > 0) {
+      if (index === 0 && decimals > 0) {
         this.cellData.push({text: '.', prevText: prevData.shift()})
       }
     })
@@ -134,14 +131,14 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
     }
 
     const {variant} = this.options,
-      {url, characters, scale, cell} = this.style,
-      {backgroundColor} = cell || {},
       {width, height} = this.cellSize,
+      {url, characters, scale, cell} = this.style,
+      background = cell?.backgroundColor || 'green',
       data = variant === 'flop' ? cloneDeep(characterSet).reverse() : characterSet,
       position = variant === 'flop' ? 'absolute' : 'relative'
 
     this.root
-      .style('background', mergeAlpha(backgroundColor || 'green', 1))
+      .style('background', mergeAlpha(background, 1))
       .selectAll(`.${this.className}-group`)
       .data(this.cellData)
       .join('xhtml:div')
@@ -227,9 +224,10 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
               .style('backface-visibility', 'hidden')
               .style('clip', `rect(${top}px,${left + width}px,${top + height}px,${left}px)`)
               .style('transform', `translate(${offsetX}px,${offsetY}px)`)
+              .style('background', background)
             container.selectAll('.top img').style('top', '100%')
           } else {
-            container.selectAll('.digital').text(d)
+            container.selectAll('.digital').text(d).style('background', background)
           }
         }
       })

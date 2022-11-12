@@ -7,8 +7,8 @@ export const debugDashboardLayer = (chart: Chart) => {
       value: Math.round(Math.random() * 100),
       fragments: [
         {start: 0, end: 30, label: '低'},
-        {start: 30, end: 60, label: '低'},
-        {start: 60, end: 100, label: '低'},
+        {start: 30, end: 60, label: '中'},
+        {start: 60, end: 100, label: '高'},
       ],
     },
     layers = chart.getLayersByType('dashboard')
@@ -26,9 +26,9 @@ export const debugFlopperLayer = (chart: Chart) => {
   if (!layers.length) return
 
   layers.forEach((layer) => {
-    const {integerPlace} = (layer as LayerFlopper).style
+    const {integers} = (layer as LayerFlopper).style
 
-    layer.setData(new DataBase({value: Math.random() * 10 ** (integerPlace ?? 8)}))
+    layer.setData(new DataBase({value: Math.random() * 10 ** (integers ?? 8)}))
     layer.draw()
     layer.playAnimation()
     console.info('Random Data', layer.data?.source.value)

@@ -40,7 +40,6 @@ export default () =>
         column: 2,
         mu: 500,
         sigma: 200,
-        decimalPlace: 1,
       },
       style: {
         labelPosition: 'top',
@@ -50,9 +49,6 @@ export default () =>
         },
         text: {
           fontSize: 10,
-          format: {
-            decimals: 2,
-          },
         },
       },
       animation: (theme) => ({
@@ -70,6 +66,7 @@ export default () =>
       options: {
         layout: 'main',
         axis: 'minor',
+        mode: 'stack',
       },
       data: {
         type: 'tableList',
@@ -78,7 +75,6 @@ export default () =>
         column: 2,
         mu: -500,
         sigma: 200,
-        decimalPlace: 1,
       },
       style: {
         fallback: 'break',

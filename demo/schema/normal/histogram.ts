@@ -52,9 +52,6 @@ export default ({variant}: Partial<LayerRectOptions>) => [
       },
       text: {
         fontSize: 10,
-        format: {
-          decimals: 2,
-        },
       },
     },
   },
@@ -75,9 +72,6 @@ export default ({variant}: Partial<LayerRectOptions>) => [
         stroke: ['orange', 'red'],
         strokeWidth: 2,
         dasharray: '10 5',
-      },
-      text: {
-        fill: ['orange', 'red'],
       },
     },
   },

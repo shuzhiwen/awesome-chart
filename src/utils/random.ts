@@ -25,7 +25,7 @@ export const randomTableList = (options: RandomOptions): RawTableList => {
 }
 
 export const randomTable = (options: RandomOptions): RawTable => {
-  const {mode, row, column, decimals = 8} = options
+  const {mode, row, column, decimals = 0} = options
   const getNumber = mapping[mode](options)
   const numbers = range(row).map(() => range(column).map(() => toFixed(getNumber(), decimals)))
   const rows = range(row).map((_, i) => `Row ${i + 1}`)

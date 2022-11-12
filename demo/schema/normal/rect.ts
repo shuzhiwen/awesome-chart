@@ -66,7 +66,6 @@ export default ({
               column: 2,
               mu: 500,
               sigma: 200,
-              decimalPlace: 1,
             },
       style: {
         labelPosition: mode === 'group' ? (variant === 'column' ? 'top' : 'right') : 'center',
@@ -77,7 +76,6 @@ export default ({
         text: {
           fontSize: 10,
           format: {
-            decimals: 2,
             percentage: mode === 'percentage',
           },
         },
@@ -130,9 +128,6 @@ export default ({
           stroke: ['orange', 'red'],
           strokeWidth: 2,
           dasharray: '10 5',
-        },
-        text: {
-          fill: ['orange', 'red'],
         },
       },
     },

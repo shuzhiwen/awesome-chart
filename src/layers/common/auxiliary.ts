@@ -158,6 +158,7 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
   draw() {
     const textData = {
       data: this.textData,
+      fill: this.lineData.map(({color}) => color),
       ...this.style.text,
     }
     const lineData = {

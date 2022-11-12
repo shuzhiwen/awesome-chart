@@ -45,7 +45,6 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
       column: stack ? 2 : 1,
       mu: 500,
       sigma: 200,
-      decimalPlace: 1,
     },
     style: {
       labelPosition: variant === 'pie' ? 'outer' : 'inner',

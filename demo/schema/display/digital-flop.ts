@@ -11,6 +11,9 @@ export default ({variant}) => [
     style: {
       scale: 0.5,
       url: 'character.png',
+      cell: {
+        fontSize: '48px',
+      },
       characters: {
         0: {
           left: 0,

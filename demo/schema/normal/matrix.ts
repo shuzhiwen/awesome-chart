@@ -30,7 +30,6 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
         column: 8,
         mu: 1000,
         sigma: 400,
-        decimalPlace: 1,
       },
       scale: {
         paddingInner: 0,

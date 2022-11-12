@@ -37,7 +37,6 @@ export default ({mode}) => [
       column: 2,
       mu: 500,
       sigma: 200,
-      decimalPlace: 1,
     },
     style: {
       pointSize: 5,

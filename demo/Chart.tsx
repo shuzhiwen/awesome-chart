@@ -50,7 +50,7 @@ export const Chart = (props: {
     <div className={styles.chartContainer}>
       <div className={styles.title}>
         <div className={styles.button} onClick={toggleDebug}>
-          DEBUG
+          UPDATE
         </div>
         <div className={styles.button} onClick={toggleEngine}>
           {engine.toUpperCase()}

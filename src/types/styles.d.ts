@@ -139,8 +139,8 @@ export type LayerScatterStyle = Partial<{
 
 export type LayerFlopperStyle = Partial<{
   scale: number
-  integerPlace: number
-  decimalPlace: number
+  integers: number
+  decimals: number
   thousandth: boolean
   url: string
   characters: Record<
