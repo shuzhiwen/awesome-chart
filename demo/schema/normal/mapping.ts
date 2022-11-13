@@ -13,9 +13,7 @@ export default () =>
         layout: 'main',
       },
       scale: {
-        count: 5,
         zero: true,
-        paddingInner: 0.382,
       },
       data: {
         titleX: '支出项目',

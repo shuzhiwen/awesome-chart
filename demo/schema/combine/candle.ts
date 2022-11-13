@@ -20,11 +20,7 @@ export default () => [
       layout: 'main',
     },
     scale: {
-      count: 5,
-      paddingInner: 0.382,
-    },
-    style: {
-      maxScaleXTextNumber: 'auto',
+      paddingInner: 0.1,
     },
   },
   {

@@ -3,13 +3,14 @@ import {TooltipOptions} from '../../src/types'
 export default (
   layers: any[],
   config?: Partial<{
+    padding: Padding
     tooltipOptions: Omit<TooltipOptions, 'container'>
     hasBrush: boolean
   }>
 ) => ({
   adjust: true,
   engine: 'svg',
-  padding: [60, 60, 60, 60] as Padding,
+  padding: config?.padding || ([60, 60, 60, 60] as Padding),
   hasBrush: config?.hasBrush,
   tooltipOptions: {
     mode: 'single' as const,

@@ -7,7 +7,7 @@ const images = [
   ['http://www.shuzhiwen.com:8001/picture/5.jpeg'],
 ]
 
-export default () => [
+export default ({mode}: {mode: 'slide' | 'fade'}) => [
   {
     type: 'text',
     options: {
@@ -19,7 +19,13 @@ export default () => [
     type: 'carousel',
     options: {
       layout: 'main',
+      mode,
     },
     data: images,
+    style: {
+      dot: {
+        fill: 'orange',
+      },
+    },
   },
 ]

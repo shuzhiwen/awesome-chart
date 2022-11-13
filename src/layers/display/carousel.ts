@@ -20,9 +20,9 @@ const defaultOptions: Partial<LayerCarouselOptions> = {
 
 const defaultStyle: LayerCarouselStyle = {
   direction: 'left',
+  maxDotSize: 10,
   padding: 10,
   zoom: 0.7,
-  maxDotSize: 10,
 }
 
 export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
@@ -117,7 +117,7 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
       relativeIndex = (this.currentIndex - this.startIndex) % imageCount
 
     this.dotData = range(0, imageCount).map((index) => ({
-      opacity: relativeIndex % imageCount === index ? 1 : 0.5,
+      opacity: relativeIndex % imageCount === index ? 1 : 0.3,
       width: relativeIndex % imageCount === index ? dotWidth * 2 : dotWidth,
       height: dotHeight,
       y: top + height - dotHeight,

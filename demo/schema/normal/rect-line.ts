@@ -22,9 +22,7 @@ export default () =>
         layout: 'main',
       },
       scale: {
-        count: 5,
         zero: true,
-        paddingInner: 0.382,
       },
     },
     {

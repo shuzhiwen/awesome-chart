@@ -31,7 +31,6 @@ export default ({variant}: Partial<LayerRectOptions>) => [
       layout: 'main',
     },
     scale: {
-      count: 5,
       zero: true,
       paddingInner: 0,
     },

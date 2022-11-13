@@ -18,10 +18,6 @@ export default ({mode}) => [
       layout: 'main',
       coordinate: 'polar',
     },
-    scale: {
-      count: 5,
-      zero: false,
-    },
   },
   {
     type: 'radar',

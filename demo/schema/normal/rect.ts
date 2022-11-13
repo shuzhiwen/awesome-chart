@@ -27,11 +27,22 @@ export default ({
         layout: 'main',
       },
       scale: {
-        count: 5,
         zero: true,
-        paddingInner: 0.382,
       },
-      style: {},
+      style: {
+        textY: {
+          format: variant === 'column' &&
+            mode === 'percentage' && {
+              percentage: true,
+            },
+        },
+        textX: {
+          format: variant === 'bar' &&
+            mode === 'percentage' && {
+              percentage: true,
+            },
+        },
+      },
       animation: {
         textY: {
           update: {
@@ -54,10 +65,10 @@ export default ({
         mode === 'waterfall'
           ? [
               ['支出项', '数量'],
-              ['房租', 2000],
-              ['饮食', 2500],
-              ['服装', 500],
-              ['总计', 5000],
+              ['房租', 1000],
+              ['饮食', 1000],
+              ['服装', 300],
+              ['总计', 2300],
             ]
           : {
               type: 'tableList',
@@ -111,26 +122,27 @@ export default ({
             },
           }),
     },
-    {
-      type: 'auxiliary',
-      options: {
-        layout: 'main',
-      },
-      data: [
-        ['标签', '数值'],
-        ['标准', 600],
-        ['警戒', 300],
-      ],
-      style: {
-        direction: variant === 'column' ? 'horizontal' : 'vertical',
-        labelPosition: variant === 'column' ? 'right' : 'top',
-        line: {
-          stroke: ['orange', 'red'],
-          strokeWidth: 2,
-          dasharray: '10 5',
+    mode !== 'percentage' &&
+      mode !== 'waterfall' && {
+        type: 'auxiliary',
+        options: {
+          layout: 'main',
+        },
+        data: [
+          ['标签', '数值'],
+          ['标准', 600],
+          ['警戒', 300],
+        ],
+        style: {
+          direction: variant === 'column' ? 'horizontal' : 'vertical',
+          labelPosition: variant === 'column' ? 'right' : 'top',
+          line: {
+            stroke: ['orange', 'red'],
+            strokeWidth: 2,
+            dasharray: '10 5',
+          },
         },
       },
-    },
     hasInteractive && {
       type: 'interactive',
       options: {

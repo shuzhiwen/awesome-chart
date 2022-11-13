@@ -293,11 +293,11 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '滚动翻牌器',
-          schema: base(digitalFlop({variant: 'vertical'})),
+          schema: base(digitalFlop({variant: 'vertical'}), {padding: [0, 0, 0, 0]}),
         },
         {
           name: '折叠翻牌器',
-          schema: base(digitalFlop({variant: 'flop'})),
+          schema: base(digitalFlop({variant: 'flop'}), {padding: [0, 0, 0, 0]}),
         },
       ],
     },
@@ -314,8 +314,12 @@ export const schemaMenu: MenuShape = {
       name: '轮播图',
       children: [
         {
-          name: '基础轮播',
-          schema: base(carousel()),
+          name: '滑动轮播',
+          schema: base(carousel({mode: 'slide'}), {padding: [0, 0, 0, 0]}),
+        },
+        {
+          name: '淡入淡出轮播',
+          schema: base(carousel({mode: 'fade'}), {padding: [0, 0, 0, 0]}),
         },
       ],
     },
