@@ -9,7 +9,7 @@ import * as awesome from '../src'
 import {debounce} from 'lodash'
 ;(window as any).awesome = awesome
 
-const isDebug = (import.meta as any).env?.MODE === 'development'
+const isDebug = localStorage.getItem('AWESOME_MODE') === 'development'
 
 export function Root() {
   const {schema} = schemaMenu.children[0].children[0],

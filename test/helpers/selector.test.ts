@@ -21,10 +21,10 @@ test('Selector', () => {
   const svgContainer = select(document.createElement('svg'))
   const canvasContainer = new fabric.Group()
 
-  expect(selector.createSubcontainer(svgContainer, 'sub')).not.toBeNull()
-  expect(selector.createSubcontainer(svgContainer, 'sub')).not.toBeUndefined()
-  expect(selector.createSubcontainer(canvasContainer, 'sub')).not.toBeNull()
-  expect(selector.createSubcontainer(canvasContainer, 'sub')).not.toBeUndefined()
+  expect(selector.createGroup(svgContainer, 'sub')).not.toBeNull()
+  expect(selector.createGroup(svgContainer, 'sub')).not.toBeUndefined()
+  expect(selector.createGroup(canvasContainer, 'sub')).not.toBeNull()
+  expect(selector.createGroup(canvasContainer, 'sub')).not.toBeUndefined()
 
   expect(selector.setVisible(svgContainer, true))
   expect(selector.setVisible(svgContainer, false))

@@ -1,4 +1,12 @@
-import {range, getTextWidth, group, ungroup, getMagnitude, swap, errorCatcher} from '../../src'
+import {
+  robustRange,
+  getTextWidth,
+  group,
+  ungroup,
+  getMagnitude,
+  swap,
+  errorCatcher,
+} from '../../src'
 
 test('group', () => {
   expect(group(1)).toEqual([1])
@@ -33,13 +41,13 @@ test('getMagnitude', () => {
 })
 
 test('range', () => {
-  expect(range(0, 4)).toEqual([0, 1, 2, 3, 4])
-  expect(range(4, 0, -1)).toEqual([0, 1, 2, 3, 4].reverse())
-  expect(range(-2, 2)).toEqual([-2, -1, 0, 1, 2])
-  expect(range(0, 1, 0.2)).toEqual([0, 0.2, 0.4, 0.6, 0.8, 1])
-  expect(range(1, 0, -0.2)).toEqual([0, 0.2, 0.4, 0.6, 0.8, 1].reverse())
-  expect(range(-0.1, 0.1, 0.05)).toEqual([-0.1, -0.05, 0, 0.05, 0.1])
-  expect(range(4, 0, 1)).toEqual([])
+  expect(robustRange(0, 4)).toEqual([0, 1, 2, 3, 4])
+  expect(robustRange(4, 0, -1)).toEqual([0, 1, 2, 3, 4].reverse())
+  expect(robustRange(-2, 2)).toEqual([-2, -1, 0, 1, 2])
+  expect(robustRange(0, 1, 0.2)).toEqual([0, 0.2, 0.4, 0.6, 0.8, 1])
+  expect(robustRange(1, 0, -0.2)).toEqual([0, 0.2, 0.4, 0.6, 0.8, 1].reverse())
+  expect(robustRange(-0.1, 0.1, 0.05)).toEqual([-0.1, -0.05, 0, 0.05, 0.1])
+  expect(robustRange(4, 0, 1)).toEqual([])
 })
 
 test('swap', () => {
