@@ -72,6 +72,10 @@ export abstract class LayerBase<Options extends LayerOptions> {
     this.root = selector.createGroup(this.options.root as DrawerTarget, this.className)
     this.createLifeCycles()
     this.createEvent()
+    if (isCC(this.root)) {
+      this.root.left = this.options.layout.left
+      this.root.top = this.options.layout.top
+    }
   }
 
   private createEvent() {
