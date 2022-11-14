@@ -13,7 +13,6 @@ export function drawLine({
   opacity,
   strokeOpacity,
   strokeDasharray,
-  transformOrigin,
   mapping = noChange,
   source = [],
   data = [],
@@ -36,7 +35,7 @@ export function drawLine({
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     strokeDasharray: getAttr(strokeDasharray, i, ''),
-    transformOrigin: getAttr(transformOrigin, i, `${item.x1} ${item.y1}`),
+    transformOrigin: `${item.x1} ${item.y1}`,
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, []),
   }))
@@ -71,7 +70,17 @@ export function drawLine({
   if (isCC(container)) {
     container.remove(...selector.getChildren(container, className))
     mappedData.forEach((config) => {
-      const line = new fabric.Line([config.x1, config.y1, config.x2, config.y2], {
+      const {x1, x2, y1, y2, rotation} = config,
+        // relative to svg rotation origin
+        theta =
+          (rotation / 180) * Math.PI -
+          Math.atan((y1 - y2) / (x2 - x1)) +
+          (Math.PI / 2) * (x2 > x1 ? 1 : -1),
+        length = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2),
+        _x2 = rotation === 0 ? x2 : x1 + Math.sin(theta) * length,
+        _y2 = rotation === 0 ? y2 : y1 - Math.cos(theta) * length
+
+      const line = new fabric.Line([config.x1, config.y1, _x2, _y2], {
         className: config.className,
         stroke: mergeAlpha(config.stroke, config.strokeOpacity),
         strokeDashArray: config.strokeDasharray.split(' ').map(Number),

@@ -13,7 +13,6 @@ export function drawEllipse({
   opacity,
   fillOpacity,
   strokeOpacity,
-  transformOrigin,
   mapping = noChange,
   source = [],
   data = [],
@@ -36,7 +35,7 @@ export function drawEllipse({
     fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
-    transformOrigin: getAttr(transformOrigin, i, `${item.cx} ${item.cy}`),
+    transformOrigin: `${item.cx} ${item.cy}`,
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, []),
   }))

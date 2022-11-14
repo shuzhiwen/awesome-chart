@@ -276,15 +276,15 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '仪表盘',
-          schema: base(dashboard({type: 'dashboard'})),
+          schema: base(dashboard({type: 'dashboard'}), {padding: [30, 30, 30, 30]}),
         },
         {
           name: '环形指标卡',
-          schema: base(dashboard({type: 'indicator'})),
+          schema: base(dashboard({type: 'indicator'}), {padding: [30, 30, 30, 30]}),
         },
         {
           name: '水波球',
-          schema: base(wave()),
+          schema: base(wave(), {padding: [30, 30, 30, 30]}),
         },
       ],
     },
