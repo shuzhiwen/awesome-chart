@@ -1,6 +1,6 @@
 import {DataTableList, DataTable, DataRelation, DataBase} from '../data'
 import {CreateChartProps, LayerOptions} from '../types'
-import {LayerBase} from '../layers'
+import {LayerBase, LayerText} from '../layers'
 import {Chart} from './chart'
 import {
   isRawTable,
@@ -45,7 +45,7 @@ export const createLayer = (chart: Chart, schema: ArrayItem<CreateChartProps['la
 
 export const createChart = errorCatcher(
   (schema: CreateChartProps, existedChart?: Chart) => {
-    const {layers = [], ...initialConfig} = schema
+    const {layers = [], onError, ...initialConfig} = schema
     const chart = existedChart ?? new Chart(initialConfig)
 
     // define order is draw order
@@ -71,12 +71,34 @@ export const createChart = errorCatcher(
       }
     })
 
-    // TODO: control throw
+    // catch error and info user
+    chart.event.on('error', (data: any) => {
+      if (!onError) {
+        chart.destroy()
+        throw {...data, fbChart: new Chart(initialConfig)}
+      } else {
+        onError(data)
+      }
+    })
+
+    // start animation (consider transfer control)
     chart.layers.map((instance) => instance?.playAnimation())
 
     return chart
   },
-  (error) => {
-    console.error('Chart initialization failed', error)
+  (error: Error | {error?: Error; fbChart: Chart}) => {
+    if (error instanceof Error) {
+      console.error('Chart initialization failed', error)
+    } else {
+      const fallbackLayer = error.fbChart.createLayer({
+        type: 'text',
+        id: 'fallback',
+        layout: error.fbChart.layout.container,
+      }) as LayerText
+
+      fallbackLayer.setData(new DataBase([error?.error?.message ?? '']))
+      fallbackLayer.setStyle({text: {align: ['middle', 'middle']}})
+      fallbackLayer.draw()
+    }
   }
 )

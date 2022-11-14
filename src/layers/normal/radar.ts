@@ -1,5 +1,6 @@
 import {LayerBase} from '../base'
 import {scaleBand, scaleLinear} from '../../scales'
+import {errorCatcher} from '../../utils'
 import {DataTableList} from '../../data'
 import {
   createArcText,
@@ -73,6 +74,9 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
       options: {...defaultOptions, ...options},
       sublayers: ['text', 'polygon', 'point'],
       tooltipTargets: ['point'],
+    })
+    this.createScale = errorCatcher(this.createScale.bind(this), () => {
+      this.log.warn('Create scale failed')
     })
   }
 

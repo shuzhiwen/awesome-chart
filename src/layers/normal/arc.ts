@@ -1,5 +1,5 @@
 import {LayerBase} from '../base'
-import {isRealNumber} from '../../utils'
+import {errorCatcher, isRealNumber} from '../../utils'
 import {scaleAngle, scaleLinear} from '../../scales'
 import {DataTableList} from '../../data'
 import {
@@ -77,6 +77,9 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       sublayers: ['arc', 'guideLine', 'text'],
       tooltipTargets: ['arc'],
     })
+    this.createScale = errorCatcher(this.createScale.bind(this), () => {
+      this.log.warn('Create scale failed')
+    })
   }
 
   setData(data: LayerArc['data']) {
@@ -103,7 +106,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
   update() {
     this.needRescale && this.createScale()
 
-    if (!this.data || this.data.lists.length <= 1 || !this.scale) {
+    if (!this.data || !this.scale) {
       throw new Error('Invalid data or scale')
     }
 

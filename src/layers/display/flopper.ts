@@ -126,8 +126,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
 
   draw() {
     if (isCC(this.root)) {
-      this.log.error('Not support canvas flopper')
-      return
+      throw new Error('Not support canvas flopper')
     }
 
     const {variant} = this.options,
@@ -240,8 +239,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
 
   playAnimation() {
     if (isCC(this.root)) {
-      this.log.error('Not support canvas flopper')
-      return
+      throw new Error('Not support canvas flopper')
     }
 
     const {variant, theme} = this.options

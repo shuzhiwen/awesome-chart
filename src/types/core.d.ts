@@ -99,6 +99,7 @@ export type RandomDataProps = RandomOptions & {
 }
 
 export type CreateChartProps = ChartProps & {
+  onError?: (data?: {error?: Error}) => void
   layers?: {
     type: LayerType
     data: any

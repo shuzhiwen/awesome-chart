@@ -220,7 +220,9 @@ export class Chart {
       axisLayer = this.getLayerByType('axis') as Maybe<LayerAxis>,
       legendLayer = this.getLayerByType('legend') as Maybe<LayerLegend>
 
-    if (!axisLayer) throw new Error('There is no axis layer')
+    if (!axisLayer) {
+      throw new Error('There is no axis layer available')
+    }
 
     this.getIndependentLayers()
       .concat(this.getLayersByType('brush'))

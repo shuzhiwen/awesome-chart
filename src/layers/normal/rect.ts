@@ -1,8 +1,15 @@
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {scaleBand, scaleLinear} from '../../scales'
-import {ColorMatrix, formatNumber, getPercentageNumber, isRealNumber, swap} from '../../utils'
 import {cloneDeep, isArray} from 'lodash'
+import {
+  ColorMatrix,
+  errorCatcher,
+  formatNumber,
+  getPercentageNumber,
+  isRealNumber,
+  swap,
+} from '../../utils'
 import {
   createColorMatrix,
   createScale,
@@ -78,6 +85,9 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       options: {...defaultOptions, ...options},
       sublayers: ['text', 'rect', 'background'],
       tooltipTargets: ['rect'],
+    })
+    this.createScale = errorCatcher(this.createScale.bind(this), () => {
+      this.log.warn('Create scale failed')
     })
   }
 

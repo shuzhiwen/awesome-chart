@@ -1,5 +1,5 @@
 import {LayerBase} from '../base'
-import {isRealNumber, mergeAlpha} from '../../utils'
+import {errorCatcher, isRealNumber, mergeAlpha} from '../../utils'
 import {scaleBand, scaleLinear} from '../../scales'
 import {DataTableList} from '../../data'
 import {
@@ -83,6 +83,9 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
       options: {...defaultOptions, ...options},
       sublayers: ['text', 'curve', 'point', 'area'],
       tooltipTargets: ['point'],
+    })
+    this.createScale = errorCatcher(this.createScale.bind(this), () => {
+      this.log.warn('Create scale failed')
     })
   }
 

@@ -85,7 +85,9 @@ export class DataTableList extends DataBase<RawTableList> {
   }
 
   update(tableList: RawTableList, options: AnyObject = {}) {
-    if (!isRawTableList(tableList)) throw new Error('Illegal data')
+    if (!isRawTableList(tableList)) {
+      throw new Error('Illegal data')
+    }
 
     const updateData = tableList[0].map((header, index) => ({
       ...options[header],

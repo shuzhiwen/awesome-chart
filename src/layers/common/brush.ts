@@ -72,14 +72,8 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
   }
 
   update() {
-    if (!this.scale) {
-      throw new Error('Invalid scale')
-    }
-
-    if (!isSC(this.root)) {
-      this.log.warn('The brush only supports svg')
-      return
-    }
+    if (!this.scale) throw new Error('Invalid scale')
+    if (!isSC(this.root)) throw new Error('The brush only supports svg')
 
     const {layout, createGradient} = this.options,
       {width, height, left, top} = layout,

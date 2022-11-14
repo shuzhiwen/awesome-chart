@@ -118,7 +118,9 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   }
 
   update(box: Maybe<GridBox>) {
-    if (!this.data) throw new Error('Invalid data')
+    if (!this.data) {
+      throw new Error('Invalid data')
+    }
 
     const {sangerColumn = 12, sangerGap: gap = 0, placeMode} = this.style,
       {width, height, left, top, bottom, right} = this.options.layout,

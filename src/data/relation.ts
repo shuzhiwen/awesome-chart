@@ -36,7 +36,9 @@ export class DataRelation extends DataBase<RawRelation> {
   }
 
   update(relation: RawRelation) {
-    if (!isRawRelation(relation)) throw new Error('Illegal data')
+    if (!isRawRelation(relation)) {
+      throw new Error('Illegal data')
+    }
 
     const [nodeData, edgeData] = relation
 
