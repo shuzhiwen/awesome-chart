@@ -102,7 +102,7 @@ export abstract class AnimationBase<Options extends AnimationOptions> {
             this._isInitialized = false
           }
         } catch (error) {
-          this.log.error('Animation life cycle call exception', error)
+          this.log.error(`🎃 ${name} 🎃 call exception`, error)
         }
       }
 

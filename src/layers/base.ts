@@ -134,7 +134,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
             this.needRecalculated = false
           }
         } catch (error) {
-          this.log.error(`Layer lifeCycle(${name}) call exception`, error)
+          this.log.error(`🎃 ${name} 🎃 call exception`, error)
           this.options.event.fire('error', {error})
         }
       }

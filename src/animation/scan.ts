@@ -234,9 +234,9 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
     if (isSC(targets)) {
       this.defs?.remove()
       isSC(this.maskNode) && this.maskNode.remove()
-    } else if (isCC(this.maskNode)) {
+    } else if (this.maskNode && !isSC(this.maskNode)) {
+      this.maskNode.clipPath = undefined
       this.maskNode.group?.remove(this.maskNode)
-      targets?.forEach((target) => (target.clipPath = undefined))
     }
 
     this.defs = null

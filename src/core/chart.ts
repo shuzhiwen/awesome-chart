@@ -156,7 +156,7 @@ export class Chart {
           fn.call(this, ...parameters)
           this.event.fire(name, {...parameters})
         } catch (error) {
-          this.log.error(`Chart lifeCycle(${name}) call exception`, error)
+          this.log.error(`🎃 ${name} 🎃 call exception`, error)
           this.event.fire('error', {error})
         }
       }
