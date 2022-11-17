@@ -19,6 +19,7 @@
     "bundle": "yarn webpack -c webpack.js && cp -r src/types dist/types",
     "package": "rm -rf dist tsconfig.tsbuildinfo && yarn tsc && yarn bundle && yarn clear",
     "clear": "find dist/*/* -name '*.js' | xargs rm -f && rm dist/index.js",
+    "docs": "sudo yarn typedoc src/index.ts",
     "push": "yarn test && git push origin",
     "test": "yarn jest"
   },
@@ -57,6 +58,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "5",
+    "typedoc": "^0.23.21",
     "typescript": "^4.5.4",
     "vite": "^2.8.0",
     "vite-plugin-monaco-editor": "^1.0.10",
