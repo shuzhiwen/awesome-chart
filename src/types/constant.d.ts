@@ -18,7 +18,9 @@ type Priority = 'topHigh' | 'topLow' | 'bottomHigh' | 'bottomLow' | 'other'
 
 type LegendShape = 'rect' | 'circle' | 'brokenLine' | 'dottedLine' | 'star'
 
-// see https://easings.net/
+/**
+ * @see https://easings.net/
+ */
 type Easing =
   | 'easeInBack'
   | 'easeInBounce'

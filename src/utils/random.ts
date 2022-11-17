@@ -13,16 +13,7 @@ const toFixed = (number: number, decimals: number) => {
 
 /**
  * Create a `RawTableList`.
- * @param options
- * The following parameters are supported
- * - `row`: tableList rows
- * - `column`: tableList columns
- * - `decimals`: exact number of decimal places
- * - `sort`: whether numbers have `asc` order or `desc` order
- * - `mode`: create a number in `normal` way or `poisson` way
- * - `mu`: available when mode is `normal`, defaults to 0
- * - `sigma`: available when mode is `normal`, defaults to 1
- * - `lambda`: available when mode is `poisson`
+ * @see RandomOptions
  */
 export const randomTableList = (options: RandomOptions): RawTableList => {
   const {mode, row, column, sort, decimals = 0} = options
@@ -39,16 +30,7 @@ export const randomTableList = (options: RandomOptions): RawTableList => {
 
 /**
  * Create a `RawTable`.
- * @param options
- * The following parameters are supported
- * - `row`: table rows
- * - `column`: table columns
- * - `decimals`: exact number of decimal places
- * - `sort`: whether numbers have `asc` order or `desc` order
- * - `mode`: create a number in `normal` way or `poisson` way
- * - `mu`: available when mode is `normal`, defaults to 0
- * - `sigma`: available when mode is `normal`, defaults to 1
- * - `lambda`: available when mode is `poisson`
+ * @see RandomOptions
  */
 export const randomTable = (options: RandomOptions): RawTable => {
   const {mode, row, column, sort, decimals = 0} = options

@@ -1,40 +1,18 @@
 import {Gradient} from 'fabric/fabric-impl'
 import {D3Selection} from './draw'
 
-export type EventCallback = AnyFunction & {
-  category?: string
-  isOnceDone?: boolean
+export type Box = {
+  x: number
+  y: number
+  width: number
+  height: number
 }
-
-export type FormatNumberConfig = Partial<{
-  percentage: boolean // 0.1234 => 12.34%
-  thousandth: boolean // 1234 => 1,234
-  decimals: number // 12.3412312 => 12.34
-}>
-
-export type OverflowControlConfig = Partial<{
-  omit: boolean // add '...' or not
-  width: number // max display width
-  height: number // max display height
-  fontSize: number
-}>
 
 export type Stop = Partial<{
   color: string
   offset: number
   opacity: number
 }>
-
-export type GradientCreatorProps<Schema> = {
-  container: D3Selection | Gradient[]
-  schema: Schema
-}
-
-export type EasyGradientCreatorProps = {
-  type: 'linear' | 'radial'
-  direction?: 'horizontal' | 'vertical'
-  colors: string[]
-}
 
 export type LinearGradientSchema = {
   id: string
@@ -61,20 +39,106 @@ export type CreateDefsSchema = Partial<{
   radialGradient?: MaybeGroup<RadialGradientSchema>
 }>
 
-export type RandomOptions = {
-  mode: 'normal' | 'poisson'
-  sort?: 'desc' | 'asc'
-  row: number
-  column: number
-  decimals?: number
-  lambda?: number
-  sigma?: number
-  mu?: number
+export type GradientCreatorProps<Schema> = {
+  container: D3Selection | Gradient[]
+  schema: Schema
 }
 
-export type Box = {
-  x: number
-  y: number
+export type EventCallback = AnyFunction & {
+  /**
+   * The event category that used to distinguish event sources.
+   * @internal
+   */
+  category?: string
+  /**
+   * Is event handler first fired or not.
+   * @remarks
+   * When set undefined, event handler won't be destroy after first fired.
+   * @internal
+   */
+  isOnceDone?: boolean
+}
+
+export type FormatNumberConfig = Partial<{
+  /**
+   * Is value transform to percentage string.
+   */
+  percentage: boolean // 0.1234 => 12.34%
+  /**
+   * Is value contain quantiles.
+   */
+  thousandth: boolean // 1234 => 1,234
+  /**
+   * The exact number of decimal places.
+   */
+  decimals: number // 12.3412312 => 12.34
+}>
+
+export type OverflowControlConfig = Partial<{
+  /**
+   * When value exceed width, `...` as suffix or not.
+   */
+  omit: boolean
+  /**
+   * The max string width available.
+   */
   width: number
+  /**
+   * The max string height available.
+   */
   height: number
+  /**
+   * The fontSize used to calculate text width and height.
+   */
+  fontSize: number
+}>
+
+export type EasyGradientCreatorProps = {
+  /**
+   * Gradient type.
+   */
+  type: 'linear' | 'radial'
+  /**
+   * Direction of linear gradient.
+   */
+  direction?: 'horizontal' | 'vertical'
+  /**
+   * Gradient colors.
+   */
+  colors: string[]
+}
+
+export type RandomOptions = {
+  /**
+   * Create a number in `normal` way or `poisson` way.
+   */
+  mode: 'normal' | 'poisson'
+  /**
+   * Whether numbers have `asc` order or `desc` order.
+   */
+  sort?: 'desc' | 'asc'
+  /**
+   * The row number of table or tableList.
+   */
+  row: number
+  /**
+   * The column number of table or tableList.
+   */
+  column: number
+  /**
+   * The exact number of decimal places.
+   */
+  decimals?: number
+  /**
+   * Is available when mode is `poisson`.
+   */
+  lambda?: number
+  /**
+   * Is available when mode is `normal`, defaults to 1.
+   */
+  sigma?: number
+  /**
+   * Is available when mode is `normal`, defaults to 0.
+   */
+  mu?: number
 }

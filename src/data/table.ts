@@ -1,10 +1,10 @@
-import {RawTable, TableData, TableOptions} from '../types'
+import {RawTable, TableOptions} from '../types'
 import {min, max, isArray} from 'lodash'
 import {isRawTable} from '../utils'
 import {DataBase} from './base'
 
 export class DataTable extends DataBase<RawTable> {
-  private _data: TableData = [[], [], []]
+  private _data: RawTable = [[], [], []]
 
   get rows() {
     return this._data[0]

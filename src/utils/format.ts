@@ -6,14 +6,10 @@ import {getTextWidth} from './chaos'
 /**
  * Format number or string to a specific format string.
  * @remarks
- * Anonymous handle when config is undefined.
+ * Anonymous formatting occurs when the config is undefined.
  * @param data
  * The origin value to format.
- * @param config
- * The following parameters are supported
- * - `percentage`: is value transform to percentage string
- * - `thousandth`: is value contain quantiles
- * - `decimals`: exact number of decimal places
+ * @see FormatNumberConfig
  * @returns
  * Return formatted string.
  */
@@ -37,14 +33,9 @@ export const formatNumber = (data: Maybe<Meta>, config?: FormatNumberConfig) => 
  * Limit the display space of strings.
  * @param data
  * The origin value to control.
- * @param config
- * The following parameters are supported
- * - `width`: max string width available
- * - `height`: max string height available
- * - `omit`: when value exceed width, `...` as suffix or not
- * - `fontSize`: string fontSize to calculate real width and height
+ * @see OverflowControlConfig
  * @return
- * Return controlled string
+ * Return controlled string.
  */
 export const overflowControl = (data: Maybe<Meta>, config: OverflowControlConfig) => {
   const text = String(data ?? '')

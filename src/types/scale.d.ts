@@ -20,20 +20,61 @@ export interface Scale<Domain = any> extends RawScale<Domain> {
 }
 
 export type ScaleLinearNice = Partial<{
+  /**
+   * The number of coordinate dividing lines.
+   */
   count: number
+  /**
+   * When set true, `0` will be included in linear domain.
+   */
   zero: boolean
+  /**
+   * Sets the length between dividing lines to the specified value.
+   */
   fixedStep: number
+  /**
+   * Sets the first value of linear domain.
+   * Usually used with `fixedStep`.
+   */
   fixedStart: number
 }>
 
 export type ScaleBandNice = Partial<{
+  /**
+   * Sets the inner padding to the specified percentage value
+   * which must be in the range [0, 1].
+   * The inner padding determines the ratio of the range
+   * that is reserved for blank space between bands.
+   *
+   * The default setting is 0.
+   */
   paddingInner: number
+  /**
+   * Sets the inner padding to the specified value
+   * while `paddingInner` will be ignored.
+   */
   fixedPaddingInner: number
+  /**
+   * Sets the width of each band to the specified value
+   * while `paddingInner` will be ignored.
+   */
   fixedBandwidth: number
+  /**
+   * Determines how the domain is attach to the range
+   * when both `fixedBandwidth` and `fixedPaddingInner` are set.
+   */
   fixedBoundary: 'start' | 'end'
 }>
 
 export type ScaleArcNice = Partial<{
+  /**
+   * Sets the inner padding to the specified percentage value
+   * which must be in the range [0, 1].
+   * The inner padding determines the ratio of the range
+   * that is reserved for blank space between bands.
+   *
+   * The default setting is 0.
+   */
   paddingInner: number
 }>
 
