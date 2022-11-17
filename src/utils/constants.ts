@@ -2,8 +2,14 @@ export const chartLifeCycles = new Set(['draw', 'destroy', 'rebuildScale'] as co
 
 export const tooltipEvents = new Set(['mouseover', 'mouseout', 'mousemove'] as const)
 
-export const disableEventDrawerType = new Set(['text', 'line', 'area'])
+/**
+ * Disabled event drawer means the drawer that has no interactive.
+ */
+export const disableEventDrawers = new Set(['text', 'line', 'area'])
 
+/**
+ * Dependant layer means the layer that create scale itself.
+ */
 export const dependantLayers = new Set([
   'axis',
   'heatmap',
@@ -15,15 +21,6 @@ export const dependantLayers = new Set([
   'interactive',
 ])
 
-export const animationLifeCycles = new Set([
-  'init',
-  'play',
-  'start',
-  'process',
-  'end',
-  'destroy',
-] as const)
-
 export const scaleTypes = new Set([
   'scaleX',
   'scaleY',
@@ -31,6 +28,15 @@ export const scaleTypes = new Set([
   'scaleAngle',
   'scaleRadius',
   'scaleColor',
+] as const)
+
+export const animationLifeCycles = new Set([
+  'init',
+  'play',
+  'start',
+  'process',
+  'end',
+  'destroy',
 ] as const)
 
 export const layerLifeCycles = new Set([

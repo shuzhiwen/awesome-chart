@@ -56,7 +56,7 @@ export function niceDomain(scale: Scale, nice: ScaleLinearNice) {
 
   if (count && count > 1) {
     const distance = end - start,
-      magnitude = getMagnitude(distance, count),
+      magnitude = getMagnitude(distance / count),
       maxBlank = 0.1
 
     // step to ensure that the chart will not overflow

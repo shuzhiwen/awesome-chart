@@ -1,5 +1,12 @@
 import {range} from 'd3'
 
+/**
+ * Create data of parallelogram.
+ * @param angle
+ * The angle of inclination of the parallelogram.
+ * @returns
+ * Return polygon points of shape.
+ */
 export const createParallelogram = (
   left: number,
   top: number,
@@ -13,6 +20,11 @@ export const createParallelogram = (
   [left + Math.sin(angle) * height, top + height],
 ]
 
+/**
+ * Create data of hexagon.
+ * @returns
+ * Return polygon points of shape.
+ */
 export const createHexagon = (left: number, top: number, width: number, height: number) => [
   [left + width * 0.5, top],
   [left + width, top + height * 0.25],
@@ -22,6 +34,11 @@ export const createHexagon = (left: number, top: number, width: number, height: 
   [left, top + height * 0.25],
 ]
 
+/**
+ * Create data of star.
+ * @returns
+ * Return polygon points of shape.
+ */
 export const createStar = (left: number, top: number, width: number, height: number) => [
   [
     left + width * 0.5 * (1 - Math.sin(Math.PI * 0.4)),
@@ -42,6 +59,13 @@ export const createStar = (left: number, top: number, width: number, height: num
   ],
 ]
 
+/**
+ * Create data of arrow.
+ * @param direction
+ * The direction of the arrow.
+ * @returns
+ * Return line points of shape.
+ */
 export const createArrow = (
   left: number,
   top: number,
@@ -67,6 +91,13 @@ export const createArrow = (
   }
 }
 
+/**
+ * Create data of knuckle.
+ * @param direction
+ * The direction of the knuckle.
+ * @returns
+ * Return line points of shape.
+ */
 export const createKnuckle = (
   left: number,
   top: number,
@@ -104,6 +135,11 @@ export const createKnuckle = (
   }
 }
 
+/**
+ * Create data of droplet.
+ * @returns
+ * Return path string of shape.
+ */
 export const createDroplet = (left: number, top: number, width: number, height: number) => {
   const r = height / 3,
     centerX = left + width / 2
@@ -115,6 +151,13 @@ export const createDroplet = (left: number, top: number, width: number, height: 
   ].join(' ')
 }
 
+/**
+ * Create data of sinusoidal
+ * @param lengthen
+ * The number of extend copies of curve points.
+ * @returns
+ * Return line points of shape.
+ */
 export const createSinusoidal = (
   left: number,
   top: number,

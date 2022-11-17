@@ -5,18 +5,43 @@ import {Box} from '../types'
 const ctx = document.createElement('canvas').getContext('2d')!
 const fontFamily = '"PingFang SC", "Helvetica Neue", Helvetica, Tahoma, Helvetica, sans-serif'
 
+/**
+ * The method won't do anything.
+ * @returns
+ * Return input itself.
+ */
 export function noChange<T = unknown>(input: T) {
   return input
 }
 
+/**
+ * If input is not an array, change it to an array.
+ * @returns
+ * Return `[]` if input is null or undefined.
+ * @returns
+ * Return an array if input is valid value.
+ */
 export function group<T>(input: MaybeGroup<T>) {
   return isNil(input) ? [] : isArray(input) ? input : [input]
 }
 
+/**
+ * Find the first value recursively that is not an array.
+ * @example
+ * ungroup([[[1], 2], 3]) // 1
+ * ungroup([null, [1]]) // null
+ */
 export function ungroup<T>(input: T): Ungroup<T> {
   return !isArray(input) ? input : ungroup(input[0])
 }
 
+/**
+ * Convert percentage string to number.
+ * @param input
+ * The percentage string or number to transform.
+ * @param relative
+ * The meta number of percentage input.
+ */
 export function getPercentageNumber(input: Meta, relative: number) {
   if (typeof input === 'string') {
     if (input.includes('%')) {
@@ -32,10 +57,25 @@ export function getTextWidth(text: Meta, fontSize: Meta = 12) {
   return ctx.measureText(String(text)).width
 }
 
-export function getMagnitude(total: number, step: number) {
-  return 10 ** Math.floor(Math.log10(Math.abs(total / step)))
+/**
+ * Judge magnitude of number.
+ * @param number
+ * The value to be estimated.
+ * @example
+ * getMagnitude(300) // 100
+ * getMagnitude(50) // 10
+ */
+export function getMagnitude(number: number) {
+  return 10 ** Math.floor(Math.log10(Math.abs(number)))
 }
 
+/**
+ * Download string as a file.
+ * @param data
+ * The string about to download.
+ * @param fileName
+ * The name with suffix.
+ */
 export function download(data: string, fileName: string) {
   const dataUrl = URL.createObjectURL(new Blob([data]))
   const a = document.createElement('a')
@@ -44,12 +84,30 @@ export function download(data: string, fileName: string) {
   a.click()
 }
 
+/**
+ * Generates a numeric sequence starting from the given start and stop values.
+ * @param step
+ * The step defaults to 1.
+ * @param toFixed
+ * The parameter of Number.toFixed which defaults to 8.
+ * @returns
+ */
 export function robustRange(start: number, end: number, step = 1, toFixed = 8) {
   return range(start, end + (step > 0 ? 1 : -1) * 10 ** -(toFixed + 2), step).map((v) =>
     Number(Number(v).toFixed(toFixed))
   )
 }
 
+/**
+ * Swap two values or a property of two objects.
+ * @param a
+ * Object or array or variable.
+ * @param b
+ * Object or array or variable.
+ * @example
+ * swap([1, 2], [3, 4], 0, 1) // [4, 2] and [3, 1]
+ * swap({a: 1}, {a: 2}, 'a') // {a: 2} and {a: 1}
+ */
 export function swap(a: any, b: any, key1: Meta, key2: Meta = key1) {
   if (
     (isArray(a) && isArray(b) && isNumber(key1) && isNumber(key2)) ||
@@ -61,6 +119,13 @@ export function swap(a: any, b: any, key1: Meta, key2: Meta = key1) {
   }
 }
 
+/**
+ * Syntax sugar for try and catch.
+ * @param fn
+ * The function that may throw error.
+ * @param onError
+ * The error handler.
+ */
 export function errorCatcher<Fn extends AnyFunction>(fn: Fn, onError: (error: Error) => void) {
   return (...args: Parameters<Fn>) => {
     try {
@@ -71,6 +136,14 @@ export function errorCatcher<Fn extends AnyFunction>(fn: Fn, onError: (error: Er
   }
 }
 
+/**
+ * Convert svg shadow string to fabric shadow string.
+ * @remark
+ * Only the first shadow will be converted.
+ * @example
+ * svgShadowToFabricShadow('0 0 4px black') // 'black 0 0 4px'
+ * svgShadowToFabricShadow('0 0 4px black, 0 0 4px black') // 'black 0 0 4px'
+ */
 export function svgShadowToFabricShadow(shadows: string) {
   return shadows.split(',').map((shadow) => {
     const shadowAttrs = shadow.split(' ')
@@ -79,6 +152,11 @@ export function svgShadowToFabricShadow(shadows: string) {
   })[0]
 }
 
+/**
+ * Rectangle Collision Detection.
+ * @returns
+ * Return collision or not.
+ */
 export function isBoxCollision(box1: Box, box2: Box) {
   const {x: x1, y: y1, width: width1, height: height1} = box1
   const {x: x2, y: y2, width: width2, height: height2} = box2

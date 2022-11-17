@@ -19,15 +19,41 @@ export function createEvent<
       return cache
     },
 
+    /**
+     * Has event listener or not.
+     * @param name
+     * The event name.
+     * @eventProperty
+     */
     has(name: Key) {
       return !!cache[rename(name)]
     },
 
+    /**
+     * Syntax sugar for off and on.
+     * @param name
+     * The event name.
+     * @param category
+     * The event category that used to distinguish event sources.
+     * @param fn
+     * The listener instance.
+     * @eventProperty
+     */
     onWithOff(name: Key, category: Category, fn: Callback) {
       this.off(name, fn, category)
       this.on(name, fn, category)
     },
 
+    /**
+     * Register listener for specific event.
+     * @param name
+     * The event name.
+     * @param category
+     * The event category that used to distinguish event sources.
+     * @param fn
+     * The listener instance.
+     * @eventProperty
+     */
     on(name: Key, fn: Callback, category?: Category) {
       if (isString(name) && isCallback(fn)) {
         const prefixedName = rename(name)
@@ -37,6 +63,16 @@ export function createEvent<
       }
     },
 
+    /**
+     * Register listener that will be destroy after fire.
+     * @param name
+     * The event name.
+     * @param category
+     * The event category that used to distinguish event sources.
+     * @param fn
+     * The listener instance.
+     * @eventProperty
+     */
     once(name: Key, fn: Callback, category?: Category) {
       if (isString(name) && isCallback(fn)) {
         const prefixedName = rename(name)
@@ -47,6 +83,16 @@ export function createEvent<
       }
     },
 
+    /**
+     * Unregister listener for specific event.
+     * @param name
+     * The event name.
+     * @param category
+     * The event category that used to distinguish event sources.
+     * @param fn
+     * The listener instance.
+     * @eventProperty
+     */
     off(name: Key, fn?: Callback, category?: Category) {
       const prefixedName = rename(name)
       const fns = cache[prefixedName] || []
@@ -62,6 +108,16 @@ export function createEvent<
       }
     },
 
+    /**
+     * Trigger registered listeners.
+     * @param name
+     * The event name.
+     * @param args
+     * The arguments for listener.
+     * @param context
+     * The context for listener.
+     * @eventProperty
+     */
     fire(name: Key, args?: unknown, context?: unknown) {
       const fns = cache[rename(name)] || []
       fns.forEach((fn) => {

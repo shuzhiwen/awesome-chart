@@ -12,18 +12,46 @@ import {
   ScaleLinear,
 } from '../types'
 
+/**
+ * Check if a number can be calculated.
+ * @example
+ * isRealNumber(1) // true
+ * isRealNumber(NaN) // false
+ * @returns
+ * Is the value a number other than `NaN`.
+ */
 export function isRealNumber(value: unknown): value is number {
   return isNumber(value) && !isNaN(value)
 }
 
+/**
+ * `IsEqual` method that ignore floating-point arithmetic errors.
+ * @remark
+ * The minimum precision is `1E-8`.
+ * @example
+ * isApproximateNumber(1.00000001, 1.00000002) // false
+ * isApproximateNumber(1.000000001, 1.000000002) // true
+ * @returns
+ * If two numbers are equal.
+ */
 export function isApproximateNumber(n1: number, n2: number) {
   return Math.abs(n1 - n2) <= 10 ** -8
 }
 
+/**
+ * Check if input is svg container.
+ * @returns
+ * Is the value a d3 selection.
+ */
 export function isSC(selector: any): selector is D3Selection {
   return selector?.constructor.name === select(null).constructor.name
 }
 
+/**
+ * Check if input is canvas container.
+ * @returns
+ * Is the value a fabric group.
+ */
 export function isCC(selector: any): selector is fabric.Group {
   return selector?.constructor.name === fabric.Group.name && selector?.getObjects
 }
@@ -52,6 +80,13 @@ export function isScaleLinear(scale: any): scale is ScaleLinear {
   return typeof scale?.ticks === 'function'
 }
 
+/**
+ * Check if input matches a specific data structure.
+ * @remark
+ * Empty array `[]` will return `false`.
+ * @returns
+ * Is the input a strictly `RawTableList`.
+ */
 export function isRawTableList(tableList: unknown): tableList is RawTableList {
   return (
     isArray(tableList) &&
@@ -61,6 +96,11 @@ export function isRawTableList(tableList: unknown): tableList is RawTableList {
   )
 }
 
+/**
+ * Check if input matches a specific data structure.
+ * @returns
+ * Is the input a strictly `RawTable`.
+ */
 export function isRawTable(table: unknown): table is RawTable {
   return (
     isArray(table) &&
@@ -72,6 +112,11 @@ export function isRawTable(table: unknown): table is RawTable {
   )
 }
 
+/**
+ * Check if input matches a specific data structure.
+ * @returns
+ * Is the input a strictly `RawRelation`.
+ */
 export function isRawRelation(relation: unknown): relation is RawRelation {
   return (
     isArray(relation) &&

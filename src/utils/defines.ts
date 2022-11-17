@@ -11,6 +11,10 @@ import {
   EasyGradientCreatorProps,
 } from '../types'
 
+/**
+ * Linear gradients creator.
+ * @internal
+ */
 export const createLinearGradients = ({
   container,
   schema,
@@ -47,6 +51,10 @@ export const createLinearGradients = ({
   })
 }
 
+/**
+ * Radial gradients creator.
+ * @internal
+ */
 export const createRadialGradients = ({
   container,
   schema,
@@ -84,6 +92,12 @@ export const createRadialGradients = ({
   })
 }
 
+/**
+ * Linear gradients and radial gradients creator.
+ * @param props
+ * The definition for gradients.
+ * @internal
+ */
 export const createDefs = (props: GradientCreatorProps<CreateDefsSchema>) => {
   const {container, schema} = props,
     {linearGradient, radialGradient} = schema
@@ -92,6 +106,12 @@ export const createDefs = (props: GradientCreatorProps<CreateDefsSchema>) => {
   createRadialGradients({container, schema: group(radialGradient)})
 }
 
+/**
+ * Simple linear gradients and radial gradients creator.
+ * @param props
+ * The definition for easy gradients.
+ * @internal
+ */
 export const getEasyGradientCreator =
   ({container}: Pick<GradientCreatorProps<unknown>, 'container'>) =>
   ({type, colors, direction, ...other}: EasyGradientCreatorProps) => {

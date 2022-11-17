@@ -7,7 +7,7 @@ import {cloneDeep, isArray, isEqual, isFunction, merge, noop} from 'lodash'
 import {
   commonEvents,
   layerLifeCycles,
-  disableEventDrawerType,
+  disableEventDrawers,
   tooltipEvents,
   createLog,
   createEvent,
@@ -265,7 +265,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
 
     const {theme} = this.options,
       cacheData = this.cacheData[sublayer],
-      evented = !disableEventDrawerType.has(type),
+      evented = !disableEventDrawers.has(type),
       sublayerClassName = `${this.className}-${sublayer}`,
       maxGroupLength = Math.max(cacheData.data.length, data.length),
       isFirstDraw = cacheData.data.length === 0,

@@ -1,6 +1,17 @@
 import {RawRelation, RawTable, RawTableList} from '../types'
 import {isRawTableList} from './asserts'
 
+/**
+ * Transform tableList to objects.
+ * @example
+ * tableListToObjects([
+ *   ['dimension', 'category'],
+ *   ['d1', 1]
+ * ])
+ * // [{d1: 1}]
+ * @throw
+ * Throw `Error` when input is not a `RawTableList`.
+ */
 export function tableListToObjects<K extends Meta, V = Meta>(tableList: RawTableList) {
   if (!isRawTableList(tableList)) {
     throw new Error('invalid input')
@@ -12,6 +23,17 @@ export function tableListToObjects<K extends Meta, V = Meta>(tableList: RawTable
   })
 }
 
+/**
+ * Transform tableList to table.
+ * @example
+ * tableListToTable([
+ *   ['row', 'column', 'value'],
+ *   ['r1', 'c1', 1]
+ * ])
+ * // [['r1'], ['c1'], [[1]]]
+ * @throw
+ * Throw `Error` when input is not a `RawTableList`.
+ */
 export function tableListToTable(tableList: RawTableList): RawTable {
   if (!isRawTableList(tableList) || tableList[0].length !== 3) {
     throw new Error('invalid input')
@@ -28,6 +50,17 @@ export function tableListToTable(tableList: RawTableList): RawTable {
   ]
 }
 
+/**
+ * Transform relation to table.
+ * @example
+ * relationToTable([
+ *   ['id', 'name'], [1, 'n1']],
+ *   [['from', 'to', 'value'], [1, 1, 1]
+ * ])
+ * // [[1], [1], [[1]]]
+ * @throw
+ * Throw `Error` when input is not an array of `RawTableList`.
+ */
 export function relationToTable([nodeTableList, linkTableList]: RawRelation): RawTable {
   if (!isRawTableList(nodeTableList) || !isRawTableList(linkTableList)) {
     throw new Error('invalid input')
@@ -53,6 +86,11 @@ export function relationToTable([nodeTableList, linkTableList]: RawRelation): Ra
   ]
 }
 
+/**
+ * Matrix transpose operation.
+ * @return
+ * Return transposed `RawTableList`.
+ */
 export function transpose(tableList: RawTableList): RawTableList {
   if (!isRawTableList(tableList)) {
     throw new Error('invalid input')

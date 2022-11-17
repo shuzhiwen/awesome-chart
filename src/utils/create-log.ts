@@ -11,6 +11,10 @@ export function createLog(key: string) {
     error(message: string, ...data: unknown[]) {
       console.error(`${key}: ${message}\n`, ...data)
     },
+    /**
+     * Only use for debugging.
+     * @internal
+     */
     debug: {
       info(message: string, ...data: unknown[]) {
         if (isDebug) {
