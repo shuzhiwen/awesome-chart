@@ -2,6 +2,9 @@ import {isArray, merge} from 'lodash'
 import {formatNumber, getAttr, getTextWidth, isApproximateNumber} from '../../utils'
 import {CreateLimitTextProps, CreateTextProps} from '../../types'
 
+/**
+ * Easy way to calculate text data
+ */
 export function createText(props: CreateTextProps) {
   const {x, y, value, style = {}, position = 'rightTop', offset = 0} = props,
     {fontSize: _fontSize, writingMode, format} = style,
@@ -83,6 +86,9 @@ export function createArcText(props: Omit<CreateTextProps, 'position'> & {angle:
   })
 }
 
+/**
+ * Control text width by resizing fontSize
+ */
 export function createLimitText(props: CreateLimitTextProps) {
   const {value, style = {}, maxTextWidth} = props,
     {fontSize: _fontSize, format} = style,

@@ -11,10 +11,6 @@ const toFixed = (number: number, decimals: number) => {
   return Math.round(number / 10 ** -decimals) / 10 ** decimals
 }
 
-/**
- * Create a `RawTableList`.
- * @see RandomOptions
- */
 export const randomTableList = (options: RandomOptions): RawTableList => {
   const {mode, row, column, sort, decimals = 0} = options
   const getNumber = mapping[mode](options)
@@ -28,10 +24,6 @@ export const randomTableList = (options: RandomOptions): RawTableList => {
   return [headers, ...lists]
 }
 
-/**
- * Create a `RawTable`.
- * @see RandomOptions
- */
 export const randomTable = (options: RandomOptions): RawTable => {
   const {mode, row, column, sort, decimals = 0} = options
   const getNumber = mapping[mode](options)
@@ -58,5 +50,6 @@ export function uuid(length = 16) {
   for (let i = 0; i < length; i++) {
     string += CHARACTERS.charAt(Math.floor(Math.random() * CHARACTERS.length))
   }
+
   return string
 }

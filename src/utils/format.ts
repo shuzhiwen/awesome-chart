@@ -9,7 +9,6 @@ import {getTextWidth} from './chaos'
  * Anonymous formatting occurs when the config is undefined.
  * @param data
  * The origin value to format.
- * @see FormatNumberConfig
  * @returns
  * Return formatted string.
  */
@@ -33,7 +32,6 @@ export const formatNumber = (data: Maybe<Meta>, config?: FormatNumberConfig) => 
  * Limit the display space of strings.
  * @param data
  * The origin value to control.
- * @see OverflowControlConfig
  * @return
  * Return controlled string.
  */

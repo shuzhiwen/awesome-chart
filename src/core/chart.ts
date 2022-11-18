@@ -9,7 +9,6 @@ import {isNil, noop} from 'lodash'
 import {
   createLog,
   createEvent,
-  createDefs,
   getEasyGradientCreator,
   getPercentageNumber,
   isLayerBasemap,
@@ -81,7 +80,6 @@ export class Chart {
     padding = [0, 0, 0, 0],
     theme = lightTheme,
     layoutCreator = defaultLayoutCreator,
-    defineSchema = {},
     tooltipOptions,
   }: ChartProps) {
     this.theme = theme
@@ -125,8 +123,6 @@ export class Chart {
       this.defs = this.root.append('defs')
       this.root.on('mousemove', (event) => this.event.fire('MouseEvent', {event}))
     }
-
-    createDefs({schema: defineSchema, container: this.defs})
 
     this._layout = layoutCreator({
       containerWidth: this.containerWidth,
