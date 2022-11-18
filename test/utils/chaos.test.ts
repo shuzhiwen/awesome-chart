@@ -31,13 +31,12 @@ test('getTextWidth', () => {
 })
 
 test('getMagnitude', () => {
-  expect(getMagnitude(0.000000005, 1)).toEqual(0.000000001)
-  expect(getMagnitude(0.5, 0.1)).toEqual(1)
-  expect(getMagnitude(50, 0.1)).toEqual(100)
-  expect(getMagnitude(-50, -0.1)).toEqual(100)
-  expect(getMagnitude(-50, 0.1)).toEqual(100)
-  expect(getMagnitude(500, 100)).toEqual(1)
-  expect(getMagnitude(5000, 1)).toEqual(1000)
+  expect(getMagnitude(0.000000005)).toEqual(0.000000001)
+  expect(getMagnitude(0.05)).toEqual(0.01)
+  expect(getMagnitude(0.5)).toEqual(0.1)
+  expect(getMagnitude(5)).toEqual(1)
+  expect(getMagnitude(500)).toEqual(100)
+  expect(getMagnitude(5000)).toEqual(1000)
 })
 
 test('range', () => {
