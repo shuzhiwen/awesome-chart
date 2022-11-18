@@ -60,7 +60,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
   }
 
   constructor(options: LayerScatterOptions, context: ChartContext) {
-    super({options, context, sublayers: ['point', 'text'], tooltipTargets: ['point']})
+    super({options, context, sublayers: ['point', 'text'], interactive: ['point']})
   }
 
   setData(data: LayerScatter['data']) {

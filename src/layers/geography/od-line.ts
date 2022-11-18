@@ -72,7 +72,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
       context,
       options,
       sublayers: ['odLine', 'flyingObject', 'text'],
-      tooltipTargets: ['odLine'],
+      interactive: ['odLine'],
     })
   }
 

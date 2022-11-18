@@ -62,7 +62,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
   }
 
   constructor(options: LayerInteractiveOptions, context: ChartContext) {
-    super({context, options, sublayers: ['rect', 'interactive'], tooltipTargets: ['interactive']})
+    super({context, options, sublayers: ['rect', 'interactive'], interactive: ['interactive']})
     const {layout, createSublayer, event} = this.options
 
     this.event.on('destroy', () => {

@@ -68,7 +68,7 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
       context,
       options: {...defaultOptions, ...options},
       sublayers: ['circle', 'text'],
-      tooltipTargets: ['circle'],
+      interactive: ['circle'],
     })
   }
 

@@ -87,7 +87,7 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
       options,
       context,
       sublayers: ['block', 'background', 'text'],
-      tooltipTargets: ['block'],
+      interactive: ['block'],
     })
 
     fetch(getGeoJSON('all'))

@@ -41,7 +41,7 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
   }
 
   constructor(options: LayerTreemapOptions, context: ChartContext) {
-    super({options, context, sublayers: ['rect', 'text'], tooltipTargets: ['rect']})
+    super({options, context, sublayers: ['rect', 'text'], interactive: ['rect']})
   }
 
   setData(data: LayerTreemap['data']) {

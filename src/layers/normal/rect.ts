@@ -84,7 +84,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       context,
       options: {...defaultOptions, ...options},
       sublayers: ['text', 'rect', 'background'],
-      tooltipTargets: ['rect'],
+      interactive: ['rect'],
     })
     this.createScale = errorCatcher(this.createScale.bind(this), () => {
       this.log.warn('Create scale failed')

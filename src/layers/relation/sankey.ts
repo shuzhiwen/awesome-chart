@@ -58,7 +58,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
   }
 
   constructor(options: LayerSankeyOptions, context: ChartContext) {
-    super({options, context, sublayers: ['node', 'edge', 'text'], tooltipTargets: ['node']})
+    super({options, context, sublayers: ['node', 'edge', 'text'], interactive: ['node']})
   }
 
   setData(data: LayerSankey['data']) {

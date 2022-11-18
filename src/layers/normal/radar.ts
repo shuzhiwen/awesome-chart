@@ -73,7 +73,7 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
       context,
       options: {...defaultOptions, ...options},
       sublayers: ['text', 'polygon', 'point'],
-      tooltipTargets: ['point'],
+      interactive: ['point'],
     })
     this.createScale = errorCatcher(this.createScale.bind(this), () => {
       this.log.warn('Create scale failed')

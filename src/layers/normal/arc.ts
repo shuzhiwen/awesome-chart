@@ -75,7 +75,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       context,
       options: {...defaultOptions, ...options},
       sublayers: ['arc', 'guideLine', 'text'],
-      tooltipTargets: ['arc'],
+      interactive: ['arc'],
     })
     this.createScale = errorCatcher(this.createScale.bind(this), () => {
       this.log.warn('Create scale failed')

@@ -43,7 +43,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
 
   readonly sublayers
 
-  readonly tooltipTargets
+  readonly interactive
 
   readonly className = this.constructor.name
 
@@ -63,10 +63,10 @@ export abstract class LayerBase<Options extends LayerOptions> {
 
   protected root: DrawerTarget
 
-  constructor({options, context, sublayers, tooltipTargets}: LayerBaseProps<Options>) {
+  constructor({options, context, sublayers, interactive}: LayerBaseProps<Options>) {
     this.options = merge(options, context)
     this.sublayers = sublayers || []
-    this.tooltipTargets = tooltipTargets || []
+    this.interactive = interactive || []
     this.cacheAnimation = {animations: {}, timer: {}, options: {}}
     this.sublayers.forEach((name) => (this.cacheData[name] = {data: []}))
     this.root = selector.createGroup(this.options.root as DrawerTarget, this.className)
@@ -177,7 +177,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
         els.on(`${type}.common`, this.cacheEvent[`common.${type}`][sublayer])
       })
 
-      if (this.tooltipTargets.includes(sublayer)) {
+      if (this.interactive.includes(sublayer)) {
         tooltipEvents.forEach((type) => {
           els.on(`${type}.tooltip`, null)
           els.on(`${type}.tooltip`, this.cacheEvent[`tooltip.${type}`])
@@ -195,7 +195,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
         })
       })
 
-      if (this.tooltipTargets.includes(sublayer)) {
+      if (this.interactive.includes(sublayer)) {
         tooltipEvents.forEach((type) =>
           els.forEach((el) => {
             el.on(type, this.cacheEvent[`tooltip.${type}`])

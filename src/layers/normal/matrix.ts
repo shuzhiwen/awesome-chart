@@ -70,7 +70,7 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
       context,
       options,
       sublayers: ['rect', 'circle', 'text'],
-      tooltipTargets: ['rect', 'circle'],
+      interactive: ['rect', 'circle'],
     })
   }
 

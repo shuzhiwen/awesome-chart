@@ -89,7 +89,7 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
       context,
       options,
       sublayers: ['arc', 'pointer', 'tickLine', 'tickText', 'valueText', 'labelText'],
-      tooltipTargets: ['arc'],
+      interactive: ['arc'],
     })
   }
 

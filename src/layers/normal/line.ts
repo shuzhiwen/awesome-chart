@@ -82,7 +82,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
       context,
       options: {...defaultOptions, ...options},
       sublayers: ['text', 'curve', 'point', 'area'],
-      tooltipTargets: ['point'],
+      interactive: ['point'],
     })
     this.createScale = errorCatcher(this.createScale.bind(this), () => {
       this.log.warn('Create scale failed')

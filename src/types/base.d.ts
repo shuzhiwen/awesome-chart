@@ -69,9 +69,9 @@ export type LayerBaseProps<Options extends LayerOptions> = Readonly<{
   sublayers?: string[]
   /**
    * Declare which elements can interact.
-   * The `tooltipTargets` must be a subset of sublayers.
+   * The `interactive` must be a subset of sublayers.
    */
-  tooltipTargets?: string[]
+  interactive?: string[]
 }>
 
 export type DrawBasicProps<Datum> = {

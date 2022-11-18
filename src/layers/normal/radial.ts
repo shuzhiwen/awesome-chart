@@ -53,7 +53,7 @@ export class LayerRadial extends LayerBase<LayerRadialOptions> {
   }
 
   constructor(options: LayerRadialOptions, context: ChartContext) {
-    super({context, options, sublayers: ['text', 'arc'], tooltipTargets: ['arc']})
+    super({context, options, sublayers: ['text', 'arc'], interactive: ['arc']})
   }
 
   setData(data: LayerRadial['data']) {

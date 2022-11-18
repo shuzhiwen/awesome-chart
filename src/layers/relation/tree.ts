@@ -78,7 +78,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
   }
 
   constructor(options: LayerTreeOptions, context: ChartContext) {
-    super({options, context, sublayers: ['node', 'edge', 'text'], tooltipTargets: ['node']})
+    super({options, context, sublayers: ['node', 'edge', 'text'], interactive: ['node']})
   }
 
   setData(data: LayerTree['data']) {
