@@ -100,7 +100,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       angle?: number
       labelX?: number
       labelY?: number
-      axisLine?: Maybe<'X' | 'Y' | 'YR'>
+      axisLine?: Maybe<'X' | 'Y'>
     })[]
   > = {
     splitLineAxisX: [],
@@ -245,13 +245,13 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     )
 
     this.lineData.splitLineAxisY = this.getLabelAndPosition(scaleY! || scaleYR).map(
-      ({label, position}, i, array) => ({
+      ({label, position}, i) => ({
         value: label,
         x1: left,
         x2: left + width,
         y1: top + position,
         y2: top + position,
-        axisLine: i === 0 ? 'Y' : i === array.length - 1 && scaleYR ? 'YR' : null,
+        axisLine: i === 0 ? 'Y' : null,
       })
     )
 
@@ -382,7 +382,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
           data: [item],
           ...(item.axisLine === 'X'
             ? this.style.axisLineAxisX
-            : item.axisLine === 'Y' || item.axisLine === 'YR'
+            : item.axisLine === 'Y'
             ? this.style.axisLineAxisY
             : this.style[key]),
         })),
