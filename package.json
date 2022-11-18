@@ -15,10 +15,11 @@
   },
   "scripts": {
     "dev": "vite  --port 9527",
-    "build": "tsc && vite build",
+    "build": "yarn tsc2 && vite build",
     "bundle": "yarn webpack -c webpack.js && cp -r src/types dist/types",
-    "package": "rm -rf dist && yarn tsc && yarn bundle && yarn clear",
-    "clear": "find dist/*/* -name '*.js' | xargs rm -f && rm *.tsbuildinfo dist/index.js",
+    "package": "rm -rf dist && yarn tsc2 && yarn bundle && yarn clear",
+    "clear": "find dist/*/* -name '*.js' | xargs rm -f && rm dist/index.js",
+    "tsc2": "yarn tsc && rm tsconfig.tsbuildinfo",
     "docs": "sudo yarn typedoc src/index.ts",
     "push": "yarn test && git push origin",
     "test": "yarn jest"
