@@ -17,8 +17,8 @@
     "dev": "vite  --port 9527",
     "build": "tsc && vite build",
     "bundle": "yarn webpack -c webpack.js && cp -r src/types dist/types",
-    "package": "rm -rf dist tsconfig.tsbuildinfo && yarn tsc && yarn bundle && yarn clear",
-    "clear": "find dist/*/* -name '*.js' | xargs rm -f && rm dist/index.js",
+    "package": "rm -rf dist && yarn tsc && yarn bundle && yarn clear",
+    "clear": "find dist/*/* -name '*.js' | xargs rm -f && rm *.tsbuildinfo dist/index.js",
     "docs": "sudo yarn typedoc src/index.ts",
     "push": "yarn test && git push origin",
     "test": "yarn jest"

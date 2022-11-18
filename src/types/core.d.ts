@@ -199,6 +199,16 @@ export type CreateChartProps = ChartProps & {
      */
     type: LayerType
     /**
+     * The options of the layer.
+     * When options changes, chart will redraw.
+     */
+    options: Omit<BasicLayerOptions<LayerType>, 'type'> & {
+      /**
+       * The name of layout that created by layoutCreator.
+       */
+      layout: string
+    }
+    /**
      * Unrecognized data will be converted to `DataBase`.
      */
     data: any
@@ -220,6 +230,5 @@ export type CreateChartProps = ChartProps & {
      * Configuration data for the eventName-handler map.
      */
     event?: AnyEventObject
-    options: BasicLayerOptions<LayerType>
   }[]
 }
