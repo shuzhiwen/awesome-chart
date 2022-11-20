@@ -97,9 +97,9 @@ export type TooltipOptions = {
   container: HTMLElement | null
   /**
    * Display mode of layer tooltip data.
-   * - single: Only display data for a single element.
-   * - dimension: Displays all element data with the same dimension value.
-   * - category: Displays all element data with the same category value.
+   * - `single`: Only display data for a single element.
+   * - `dimension`: Displays all element data with the same dimension value.
+   * - `category`: Displays all element data with the same category value.
    */
   mode?: 'single' | 'dimension' | 'category'
   /**

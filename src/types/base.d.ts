@@ -50,8 +50,8 @@ export type CacheLayerAnimation<Options = AnimationOptions> = {
 
 /**
  * Cache all events to avoid double binding event listeners.
- * - common: Events that include normal interactions.
- * - tooltip: Events for tooltip only.
+ * - `common`: Events that include normal interactions.
+ * - `tooltip`: Events for tooltip only.
  * @internal
  */
 export type CacheLayerEvent = Readonly<

@@ -27,11 +27,18 @@ type BasicAnimationOptions<
   Options & {
     id: string
     type: Type
-    targets: Maybe<D3Selection | fabric.Object[]>
-    loop: boolean
     easing: Easing
     duration: number
     delay: number
+    /**
+     * If set true, the animation will loop infinitely.
+     */
+    loop: boolean
+    /**
+     * Basic elements to be animated.
+     * @internal
+     */
+    targets: Maybe<D3Selection | fabric.Object[]>
   }
 >
 
@@ -40,7 +47,15 @@ export type AnimationEmptyOptions = BasicAnimationOptions<'empty'>
 export type AnimationFadeOptions = BasicAnimationOptions<
   'fade',
   {
+    /**
+     * If set true, after the animation ends,
+     * a corresponding recovery animation will be executed.
+     */
     alternate: boolean
+    /**
+     * If set true, subsequent element's animation are triggered with a delay.
+     * This configuration will cause the delay from the options to fail.
+     */
     stagger: number
     initialOpacity: number
     startOpacity: number
@@ -58,6 +73,10 @@ export type AnimationPathOptions = BasicAnimationOptions<
 export type AnimationZoomOptions = BasicAnimationOptions<
   'zoom',
   {
+    /**
+     * If set true, subsequent element's animation are triggered with a delay.
+     * This configuration will cause the delay from the options to fail.
+     */
     stagger: number
     initialScale: number
     startScale: number
@@ -68,8 +87,21 @@ export type AnimationZoomOptions = BasicAnimationOptions<
 export type AnimationMoveOptions = BasicAnimationOptions<
   'move',
   {
+    /**
+     * If set true, after the animation ends,
+     * a corresponding recovery animation will be executed.
+     */
     alternate: boolean
+    /**
+     * If set true, subsequent element's animation are triggered with a delay.
+     * This configuration will cause the delay from the options to fail.
+     */
     stagger: number
+    /**
+     * If set true, subsequent element's animation are is different speed.
+     * If value > 1, the subsequent elements will be faster and faster.
+     * if value < 1, the subsequent elements will be slower and slower.
+     */
     decayFactor: number
     initialOffset: [number, number]
     startOffset: [number, number]
@@ -80,6 +112,9 @@ export type AnimationMoveOptions = BasicAnimationOptions<
 export type AnimationEraseOptions = BasicAnimationOptions<
   'erase',
   {
+    /**
+     * The direction in which the erase animation proceeds.
+     */
     direction: Position4
   }
 >
@@ -87,7 +122,13 @@ export type AnimationEraseOptions = BasicAnimationOptions<
 export type AnimationScanOptions = BasicAnimationOptions<
   'scan',
   {
+    /**
+     * Only for svg, the range in which the scan animation takes effect.
+     */
     scope: 'all' | 'fill' | 'stroke'
+    /**
+     * The direction in which the scan animation proceeds.
+     */
     direction: Position4 | Position2
     color: string
     opacity: number
