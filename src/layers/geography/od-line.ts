@@ -3,14 +3,11 @@ import {DataTableList} from '../../data'
 import {path as d3Path} from 'd3-path'
 import {isRealNumber, isSC, tableListToObjects} from '../../utils'
 import {checkColumns, createScale, createStyle, makeClass, validateAndCreateData} from '../helpers'
-import {lightTheme} from '../../core/theme'
 import {
   ChartContext,
-  CacheLayerAnimation,
   LayerODLineOptions,
   LayerODLineScale,
   LayerODLineStyle,
-  AnimationPathOptions,
   PathDrawerProps,
   DrawerData,
   LayerStyle,
@@ -25,15 +22,6 @@ const defaultStyle: LayerODLineStyle = {
   },
   flyingObject: {
     path: null,
-  },
-}
-
-const defaultAnimation: CacheLayerAnimation<AnimationPathOptions>['options'] = {
-  flyingObject: {
-    loop: {
-      path: makeClass('odLine', false),
-      ...lightTheme.animation.loop,
-    },
   },
 }
 
@@ -119,17 +107,17 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
     })
 
     if (flyingObject?.path) {
-      this.setAnimation(defaultAnimation)
+      this.setAnimation({
+        flyingObject: {
+          loop: {
+            path: makeClass('odLine', false),
+            ...this.options.theme.animation.loop,
+          },
+        },
+      })
       this.flyingObjectData = this.odLineData.map(() => ({
         path: flyingObject.path!,
-        centerX: -1000,
-        centerY: -1000,
       }))
-      this.event.on('flyingObject-animation-start', () => {
-        if (isSC(this.root) && this.odLineData.some(({path}) => path)) {
-          this.root.selectAll(makeClass('flyingObject', true)).style('transform', null)
-        }
-      })
     }
   }
 
@@ -163,9 +151,20 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
     const flyingObjectData = {
       data: this.flyingObjectData,
       ...this.style.flyingObject,
+      opacity: 0,
     }
 
     this.drawBasic({type: 'path', data: [odLineData], sublayer: 'odLine'})
     this.drawBasic({type: 'path', data: [flyingObjectData], sublayer: 'flyingObject'})
+
+    this.event.once('flyingObject-animation-start', () => {
+      if (isSC(this.root) && this.odLineData.some(({path}) => path)) {
+        this.root
+          .selectAll(makeClass('flyingObject', true))
+          .transition()
+          .duration(this.options.theme.animation.enter.duration)
+          .attr('opacity', 1)
+      }
+    })
   }
 }

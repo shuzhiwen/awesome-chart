@@ -84,8 +84,8 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
     this.isConnected = true
   }
 
-  pushQueue(options: AnimationQueue) {
-    this.queue.push(options)
+  pushQueue(queue: AnimationQueue) {
+    this.queue.push(queue)
     this.isConnected = false
   }
 

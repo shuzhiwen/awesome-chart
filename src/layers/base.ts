@@ -232,14 +232,15 @@ export abstract class LayerBase<Options extends LayerOptions> {
       {enter, loop, update} = merge({}, animation, options[sublayer]),
       event = animationQueue.event
 
+    animationQueue.pushQueue(enterQueue)
+    animationQueue.pushQueue(loopQueue)
+
     if (isFirstPlay && enter?.type) {
       enterQueue.pushAnimation(enter.type, {...enter, targets}, this.root)
-      animationQueue.pushQueue(enterQueue)
     }
 
     if (loop?.type) {
       loopQueue.pushAnimation(loop.type, {...loop, targets}, this.root)
-      animationQueue.pushQueue(loopQueue)
     }
 
     event.on('start', (d: unknown) => this.event.fire(`${prefix}start`, d))
