@@ -3,7 +3,6 @@ import {isArray, isNil, isNumber} from 'lodash'
 import {Box} from '../types'
 
 const ctx = document.createElement('canvas').getContext('2d')!
-const fontFamily = '"PingFang SC", "Helvetica Neue", Helvetica, Tahoma, Helvetica, sans-serif'
 
 /**
  * The method won't do anything.
@@ -52,7 +51,7 @@ export function getPercentageNumber(input: Meta, relative: number) {
   return input
 }
 
-export function getTextWidth(text: Meta, fontSize: Meta = 12) {
+export function getTextWidth(text: Meta, fontSize: Meta = 12, fontFamily = '') {
   ctx.font = `${isNumber(fontSize) ? `${fontSize}px` : fontSize} ${fontFamily}`
   return ctx.measureText(String(text)).width
 }

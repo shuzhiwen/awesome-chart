@@ -1,9 +1,9 @@
 import {isArray, merge} from 'lodash'
-import {formatNumber, getAttr, getTextWidth, isApproximateNumber} from '../../utils'
+import {formatNumber, getAttr, getTextWidth, isApproximateNumber, isBoxCollision} from '../../utils'
 import {CreateLimitTextProps, CreateTextProps} from '../../types'
 
 /**
- * Easy way to calculate text data
+ * Easy way to calculate text data.
  */
 export function createText(props: CreateTextProps) {
   const {x, y, value, style = {}, position = 'rightTop', offset = 0} = props,
@@ -59,6 +59,7 @@ export function createText(props: CreateTextProps) {
     value: formattedText,
     // corresponding to drawer
     transformOrigin: `${positionX + textWidth / 2}px ${y}px`,
+    textHeight: fontSize,
     textWidth,
   }
 }
@@ -87,7 +88,7 @@ export function createArcText(props: Omit<CreateTextProps, 'position'> & {angle:
 }
 
 /**
- * Control text width by resizing fontSize
+ * Control text width by resizing fontSize.
  */
 export function createLimitText(props: CreateLimitTextProps) {
   const {value, style = {}, maxTextWidth} = props,
@@ -100,4 +101,30 @@ export function createLimitText(props: CreateLimitTextProps) {
   }
 
   return {...createText(merge(props, {style: {fontSize}})), fontSize}
+}
+
+/**
+ * TextBox Collision Detection.
+ * @returns
+ * Return collision or not.
+ */
+export function isTextCollision(
+  text1: ReturnType<typeof createText>,
+  text2: ReturnType<typeof createText>,
+  paddingFactor = 0
+) {
+  return isBoxCollision(
+    {
+      x: text1.x,
+      y: text1.y - text1.textHeight,
+      width: text1.textWidth * (1 + paddingFactor),
+      height: text1.textHeight * (1 + paddingFactor),
+    },
+    {
+      x: text2.x,
+      y: text2.y - text2.textHeight,
+      width: text2.textWidth * (1 + paddingFactor),
+      height: text2.textHeight * (1 + paddingFactor),
+    }
+  )
 }

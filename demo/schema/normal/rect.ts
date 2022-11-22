@@ -4,9 +4,8 @@ export default ({
   mode,
   variant,
   sort,
-  updateDuration = 2000,
   hasInteractive = false,
-}: Partial<LayerRectOptions> & {updateDuration?: number; hasInteractive?: boolean}) =>
+}: Partial<LayerRectOptions> & {hasInteractive?: boolean}) =>
   [
     {
       type: 'text',
@@ -30,6 +29,7 @@ export default ({
         zero: true,
       },
       style: {
+        dynamicReserveTextX: Boolean(sort),
         textY: {
           format: variant === 'column' &&
             mode === 'percentage' && {
@@ -43,14 +43,25 @@ export default ({
             },
         },
       },
-      animation: {
-        textY: {
-          update: {
-            delay: 0,
-            duration: updateDuration,
-          },
-        },
-      },
+      animation: sort
+        ? {
+            textY: {
+              update: {
+                duration: 200,
+              },
+            },
+            textX: {
+              update: {
+                duration: 0,
+              },
+            },
+            splitLineAxisX: {
+              update: {
+                duration: 0,
+              },
+            },
+          }
+        : undefined,
     },
     {
       type: 'rect',
@@ -95,11 +106,11 @@ export default ({
         ? (theme) => ({
             rect: {
               enter: theme.animation.presets.zoomIn,
-              update: {duration: updateDuration},
+              update: {duration: 200},
             },
             text: {
               enter: theme.animation.presets.fadeIn,
-              update: {duration: updateDuration},
+              update: {duration: 200},
             },
           })
         : variant === 'bar'

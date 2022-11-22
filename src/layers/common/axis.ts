@@ -15,6 +15,7 @@ import {
   createScale,
   createStyle,
   createText,
+  isTextCollision,
   validateAndCreateData,
 } from '../helpers'
 import {
@@ -58,6 +59,7 @@ const defaultOptions: Partial<LayerAxisOptions> = {
 
 const defaultStyle: LayerAxisStyle = {
   maxScaleXTextNumber: 'auto',
+  dynamicReserveTextX: false,
   splitLineAxisX: defaultSplitLine,
   splitLineAxisY: defaultSplitLine,
   splitLineAngle: defaultSplitLine,
@@ -108,6 +110,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     splitLineAngle: [],
     splitLineRadius: [],
   }
+
+  private cacheTextXData: ReturnType<typeof createText>[] = []
 
   private textData: Record<
     'textX' | 'textY' | 'textYR' | 'textAngle' | 'textRadius' | 'titleX' | 'titleY' | 'titleYR',
@@ -233,7 +237,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       labelYR = this.getLabelAndPosition(scaleYR!),
       offset = 5
 
-    this.lineData.splitLineAxisX = this.getLabelAndPosition(scaleX!).map(
+    this.lineData.splitLineAxisX = this.getLabelAndPosition(scaleX!, 'scaleX').map(
       ({label, position}, i) => ({
         value: label,
         x1: left + position,
@@ -310,7 +314,13 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     this.textData.textX = this.lineData.splitLineAxisX.map(({value, x2, y2}) =>
       createText({x: x2!, y: y2!, value, style: textX, position: 'bottom'})
     )
+
     this.reduceScaleXTextNumber()
+    this.textData.textX.forEach((item) => {
+      if (this.cacheTextXData.every(({value}) => value !== item.value)) {
+        this.cacheTextXData.push(item)
+      }
+    })
 
     if (scaleY) {
       this.textData.textY = this.lineData.splitLineAxisY.map(({value, x1, y1}) =>
@@ -335,26 +345,34 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
 
   private reduceScaleXTextNumber() {
     const {width, left, right} = this.options.layout,
-      {maxScaleXTextNumber = Infinity} = this.style
+      {maxScaleXTextNumber = Infinity, dynamicReserveTextX} = this.style,
+      reduceHalf = (input: any[]) => input.filter((_, i) => i % 2 === 0),
+      reserved = this.textData.textX.map(({x, textWidth}) => x + textWidth > left && x < right)
     let totalTextWidth = sum(this.textData.textX.map(({textWidth}) => textWidth))
 
-    this.textData.textX = this.textData.textX.filter(
-      ({x, textWidth}) => x + textWidth > left && x < right
-    )
+    this.textData.textX = this.textData.textX.filter((_, i) => reserved[i])
+    this.lineData.splitLineAxisX = this.lineData.splitLineAxisX.filter((_, i) => reserved[i])
 
     if (maxScaleXTextNumber === 'auto') {
-      while (totalTextWidth > width && this.textData.textX.length > 1) {
-        this.textData.textX = this.textData.textX.filter((_, i) => i % 2 === 0)
-        totalTextWidth = sum(this.textData.textX.map(({textWidth}) => textWidth))
+      if (dynamicReserveTextX) {
+        this.textData.textX = this.textData.textX.reduce<any[]>((prev, cur) => {
+          if (prev.length === 0) return [cur]
+          return isTextCollision(prev[prev.length - 1], cur, 0.2) ? prev : [...prev, cur]
+        }, [])
+      } else {
+        while (totalTextWidth > width && this.textData.textX.length > 1) {
+          this.textData.textX = reduceHalf(this.textData.textX)
+          totalTextWidth = sum(this.textData.textX.map(({textWidth}) => textWidth))
+        }
       }
     } else {
       while (this.textData.textX.length > maxScaleXTextNumber) {
-        this.textData.textX = this.textData.textX.filter((_, i) => i % 2 === 0)
+        this.textData.textX = reduceHalf(this.textData.textX)
       }
     }
   }
 
-  private getLabelAndPosition(scale: Scale) {
+  private getLabelAndPosition(scale: Scale, key?: 'scaleX') {
     if (isScaleBand(scale)) {
       return scale.domain().map((label) => ({
         label,
@@ -364,11 +382,17 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       }))
     } else if (isScaleLinear(scale)) {
       const [min, max] = scale.domain()
+      let values = robustRange(min, max, (max - min) / (this.scale.nice?.count ?? 1))
 
-      return robustRange(min, max, (max - min) / (this.scale.nice?.count ?? 1)).map((label) => ({
-        label,
-        position: scale(label),
-      }))
+      if (key === 'scaleX' && this.style.dynamicReserveTextX) {
+        const prevValues = this.cacheTextXData
+            .map(({value}) => Number(value))
+            .filter((value) => isRealNumber(value)),
+          maxPrevValue = Math.max(...prevValues) || -Infinity
+        values = prevValues.concat(values.filter((item) => item > maxPrevValue))
+      }
+
+      return values.map((label) => ({label, position: scale(label)}))
     }
 
     return []
@@ -380,6 +404,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       getLineData = (key: Keys<LayerAxis['lineData']>) =>
         this.lineData[key].map((item) => ({
           data: [item],
+          source: [{dimension: item.value}],
           ...(item.axisLine === 'X'
             ? this.style.axisLineAxisX
             : item.axisLine === 'Y'

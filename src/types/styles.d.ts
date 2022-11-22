@@ -36,6 +36,7 @@ export type TextStyle = GraphStyle &
 
 export type LayerAxisStyle = Partial<{
   maxScaleXTextNumber: 'auto' | number
+  dynamicReserveTextX: boolean
   splitLineAxisX: GraphStyle
   splitLineAxisY: GraphStyle
   splitLineAngle: GraphStyle
