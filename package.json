@@ -1,12 +1,13 @@
 {
   "name": "awesome-chart",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A lightweight 2d chart library",
   "typings": "dist/index.d.ts",
   "main": "dist/main.min.js",
   "license": "MIT",
   "files": [
-    "dist"
+    "dist",
+    "!dist/*.html"
   ],
   "author": {
     "name": "shuzhiwen",
@@ -47,6 +48,7 @@
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "@vitejs/plugin-react": "^1.0.7",
+    "awesome-chart": "^0.1.0",
     "babel-loader": "^8.2.5",
     "canvas": "^2.10.2",
     "eslint": ">=5.16.0",
