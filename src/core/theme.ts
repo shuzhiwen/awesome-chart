@@ -78,6 +78,8 @@ function createDefaultTheme({
           duration: 2000,
           startScale: 0,
           endScale: 1,
+          easing: 'easeOutElastic',
+          stagger: 50,
         },
         fadeIn: {
           type: 'fade',
