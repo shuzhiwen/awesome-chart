@@ -5,7 +5,7 @@ export type DataType = Keys<typeof dataMapping>
 
 export type LayerData = DataBase<any> | DataTableList | DataTable | DataRelation
 
-export type LegendOrder = {
+export type LegendCache = {
   /**
    * @see LegendData.filter
    */
@@ -15,12 +15,13 @@ export type LegendOrder = {
    */
   colorMatrix: ColorMatrix
   /**
-   * Legend color mapping, mapping key corresponding to the type.
+   * The key of the map is the key of a column or a row in `TableList`.
+   * The number of cached colors is usually the same as the layer is.
    */
   mapping: Record<Meta, number>
 }
 
-export type DataBaseOptions = Partial<{order: LegendOrder}>
+export type DataBaseOptions = Partial<{order: LegendCache}>
 
 export type TableListOptions = Partial<{
   /**

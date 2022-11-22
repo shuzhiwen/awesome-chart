@@ -164,7 +164,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
 
   setVisible(visible: boolean, sublayer?: string) {
     const className = `${this.className}-${sublayer}`,
-      target = sublayer ? selector.getSubcontainer(this.root, className) : this.root
+      target = sublayer ? selector.getDirectChild(this.root, className) : this.root
     selector.setVisible(target, visible)
   }
 
@@ -271,12 +271,12 @@ export abstract class LayerBase<Options extends LayerOptions> {
       maxGroupLength = Math.max(cacheData.data.length, data.length),
       isFirstDraw = cacheData.data.length === 0,
       sublayerContainer =
-        selector.getSubcontainer(this.root, sublayerClassName) ||
+        selector.getDirectChild(this.root, sublayerClassName) ||
         selector.createGroup(this.root, sublayerClassName, evented)
 
     range(0, maxGroupLength).map((groupIndex) => {
       const groupClassName = `${sublayerClassName}-${groupIndex}`
-      const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
+      const groupContainer = selector.getDirectChild(sublayerContainer, groupClassName)
 
       if (groupIndex < data.length && !groupContainer) {
         selector.createGroup(sublayerContainer, groupClassName, evented)
@@ -326,7 +326,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
       if (groupData.hidden || isEqual(cacheData.data[i], groupData)) return
 
       const groupClassName = `${sublayerClassName}-${i}`
-      const groupContainer = selector.getSubcontainer(sublayerContainer, groupClassName)
+      const groupContainer = selector.getDirectChild(sublayerContainer, groupClassName)
       const options = {
         ...groupData,
         transition:

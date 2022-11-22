@@ -3,6 +3,17 @@ import {DataBase, dataMapping, DataTableList} from '../../data'
 import {ChartContext, DataType, LayerScale, LayerStyle} from '../../types'
 import {scaleTypes} from '../../utils'
 
+/**
+ * Integrate scales from different sources into the final scale.
+ * @param defaultScale
+ * Default scale means "new scale", has medium priority.
+ * @param currentScale
+ * Current scale means "old scale", has lowest priority.
+ * @param incomingScale
+ * Incoming scale means "new scale", has highest priority.
+ * @returns
+ * The final merged scale.
+ */
 export function createScale<Scale extends Maybe<LayerScale>>(
   defaultScale?: Scale,
   currentScale?: Scale,
@@ -18,6 +29,18 @@ export function createScale<Scale extends Maybe<LayerScale>>(
   return scales as Required<Scale>
 }
 
+/**
+ * Check if the data type meets the layer requirements.
+ * @param dataType
+ * Only subclasses that inherit from the `DataBase` class are valid data sources.
+ * @param currentData
+ * Current data means "old data", has lowest priority.
+ * @param incomingData
+ * Incoming data means "new data", has highest priority.
+ * @param filter
+ * Just a callback method.
+ * @returns
+ */
 export function validateAndCreateData<Data extends Maybe<DataBase<unknown>>>(
   dataType: DataType,
   currentData?: Data,
@@ -33,13 +56,26 @@ export function validateAndCreateData<Data extends Maybe<DataBase<unknown>>>(
   return filter ? filter(incomingData) || incomingData : incomingData
 }
 
+/**
+ * Integrate styles from different sources into the final style.
+ * @param context
+ * Theme from chart context will be used to generate style.
+ * @param defaultStyle
+ * Default style means "new style", has medium priority.
+ * @param currentStyle
+ * Current style means "old style", has lowest priority.
+ * @param incomingStyle
+ * Incoming style means "new style", has highest priority.
+ * @returns
+ * The final merged style.
+ */
 export function createStyle<Style extends Maybe<AnyObject>>(
-  options: ChartContext,
+  context: ChartContext,
   defaultStyle: LayerStyle<Style>,
   currentStyle: LayerStyle<Style>,
   incomingStyle: LayerStyle<Style>
 ) {
-  const {theme} = options,
+  const {theme} = context,
     _default = isFunction(defaultStyle) ? defaultStyle(theme) : defaultStyle,
     _current = isFunction(currentStyle) ? currentStyle(theme) : currentStyle,
     _incoming = isFunction(incomingStyle) ? incomingStyle(theme) : incomingStyle
@@ -47,6 +83,15 @@ export function createStyle<Style extends Maybe<AnyObject>>(
   return merge({}, _default, _current, _incoming)
 }
 
+/**
+ * Check if TableList has a specific columns.
+ * @param data
+ * The `TableList` to check.
+ * @param keys
+ * The headers that the tableList must have.
+ * @throw
+ * Throw `Error` when tableList lack of specific header.
+ */
 export function checkColumns(data: Maybe<DataTableList>, keys: Meta[]) {
   keys.map((key) => {
     if (!data?.headers.includes(key)) {
@@ -55,6 +100,15 @@ export function checkColumns(data: Maybe<DataTableList>, keys: Meta[]) {
   })
 }
 
+/**
+ * Generates the class name of the base element.
+ * @param sublayer
+ * The sublayer tags that the elements have.
+ * @param dot
+ * Whether to add a dot before the class string.
+ * @returns
+ * Selectable `className` for basic element.
+ */
 export function makeClass(sublayer: string, dot: boolean) {
   return `${dot ? '.' : ''}chart-basic-${sublayer}`
 }

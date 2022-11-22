@@ -31,10 +31,10 @@ test('Selector', () => {
   expect(selector.setVisible(canvasContainer, true))
   expect(selector.setVisible(canvasContainer, false))
 
-  expect(selector.getSubcontainer(svgContainer, 'sub')).not.toBeNull()
-  expect(selector.getSubcontainer(svgContainer, 'sub')).not.toBeUndefined()
-  expect(selector.getSubcontainer(canvasContainer, 'sub')).not.toBeNull()
-  expect(selector.getSubcontainer(canvasContainer, 'sub')).not.toBeUndefined()
+  expect(selector.getDirectChild(svgContainer, 'sub')).not.toBeNull()
+  expect(selector.getDirectChild(svgContainer, 'sub')).not.toBeUndefined()
+  expect(selector.getDirectChild(canvasContainer, 'sub')).not.toBeNull()
+  expect(selector.getDirectChild(canvasContainer, 'sub')).not.toBeUndefined()
 
   expect(selector.remove(svgContainer)).toBeDefined()
   expect(selector.remove(canvasContainer)).toBeUndefined()

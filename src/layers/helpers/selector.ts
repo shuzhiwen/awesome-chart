@@ -7,6 +7,13 @@ import {isCC, isSC} from '../../utils'
 type FObject = fabric.Object
 
 class Selector {
+  /**
+   * Hide/Show all elements under selector.
+   * @param target
+   * Svg container or canvas container.
+   * @param visible
+   * Set the element to be visible or invisible.
+   */
   setVisible(target: Maybe<DrawerTarget>, visible: boolean) {
     if (isSC(target)) {
       target.attr('opacity', visible ? 1 : 0)
@@ -16,6 +23,13 @@ class Selector {
     }
   }
 
+  /**
+   * Recursively find elements matching `className`.
+   * @param target
+   * Svg container or canvas container.
+   * @param className
+   * The className of the element.
+   */
   getChildren(target: D3Selection, className: string): D3Selection
   getChildren(target: Group, className: string): FObject[] | Group[]
   getChildren(target: DrawerTarget, className: string): D3Selection | FObject[] | Group[]
@@ -30,10 +44,17 @@ class Selector {
     }
   }
 
-  getSubcontainer(target: D3Selection, className: string): D3Selection
-  getSubcontainer(target: Group, className: string): Group
-  getSubcontainer(target: DrawerTarget, className: string): DrawerTarget
-  getSubcontainer(target: Maybe<DrawerTarget>, className: string) {
+  /**
+   * Find whether there is a subcontainer in the direct children.
+   * @param target
+   * Svg container or canvas container.
+   * @param className
+   * The className of the container.
+   */
+  getDirectChild(target: D3Selection, className: string): D3Selection
+  getDirectChild(target: Group, className: string): Group
+  getDirectChild(target: DrawerTarget, className: string): DrawerTarget
+  getDirectChild(target: Maybe<DrawerTarget>, className: string) {
     if (isSC(target)) {
       const result = target.selectAll(`.${className}`)
       return result.size() !== 0 ? select(result.node()) : null
@@ -44,6 +65,15 @@ class Selector {
     }
   }
 
+  /**
+   * Create a subcontainer.
+   * @param target
+   * Svg container or canvas container.
+   * @param className
+   * The className of the container.
+   * @param evented
+   * Whether the container responds to interaction events.
+   */
   createGroup(target: D3Selection, className: string, evented?: boolean): D3Selection
   createGroup(target: Group, className: string, evented?: boolean): Group
   createGroup(target: Canvas, className: string, evented?: boolean): Group
@@ -63,6 +93,11 @@ class Selector {
     }
   }
 
+  /**
+   * Remove the container from the parent.
+   * @param target
+   * Svg container or canvas container.
+   */
   remove(target: D3Selection): D3Selection
   remove(target: Group): Group
   remove(target: DrawerTarget): DrawerTarget
@@ -75,4 +110,7 @@ class Selector {
   }
 }
 
+/**
+ * A collection of methods containing element operations.
+ */
 export const selector = new Selector()

@@ -4,6 +4,12 @@ import {DataTableList} from '../../data'
 import {ColorMatrix} from '../../utils'
 import {CreateColorMatrixProps} from '../../types'
 
+/**
+ * Create `ColorMatrix` for the layer.
+ * Layer should not create `ColorMatrix` by themselves.
+ * @remarks
+ * This method is to ensure correct color matching when legend filtering.
+ */
 export function createColorMatrix(props: CreateColorMatrixProps) {
   const {layer, row, column, theme, nice} = props,
     order = layer.data?.options.order,
