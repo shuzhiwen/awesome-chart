@@ -26,4 +26,4 @@ type Keys<T> = T extends Set<infer K>
   ? K
   : T extends Record<infer K, unknown>
   ? K
-  : never
+  : keyof T

@@ -2,7 +2,7 @@ import {ChartTheme} from './core'
 import {D3Selection, DrawerTarget} from './draw'
 import {animationMapping} from '../animation'
 
-export type AnimationType = keyof typeof animationMapping
+export type AnimationType = Keys<typeof animationMapping>
 
 export type LayerAnimation<T> = Computable<Partial<T>, ChartTheme>
 

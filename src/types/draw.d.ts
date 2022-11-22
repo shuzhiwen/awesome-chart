@@ -4,7 +4,7 @@ import {GraphStyle, TextStyle} from './styles'
 import {drawerMapping} from '../draws'
 import {ChartTheme} from './core'
 
-export type DrawerType = keyof typeof drawerMapping
+export type DrawerType = Keys<typeof drawerMapping>
 
 export type DrawerTarget = D3Selection | fabric.Group
 

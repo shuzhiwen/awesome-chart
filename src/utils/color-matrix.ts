@@ -50,7 +50,7 @@ export class ColorMatrix {
    * @param colorSpace
    * The color represent method such as `rgb` or `hsl`.
    */
-  nice(maxDistance = 85, colorSpace: keyof chroma.ColorSpaces = 'lab') {
+  nice(maxDistance = 85, colorSpace: Keys<chroma.ColorSpaces> = 'lab') {
     this._matrix = this.matrix.map((row) => {
       if (row.length > 1) {
         let averageDistance = Infinity

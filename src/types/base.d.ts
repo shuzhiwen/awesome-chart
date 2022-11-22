@@ -9,7 +9,7 @@ import {LayerOptions} from './options'
 import {TextStyle} from './styles'
 import {LegendData} from './data'
 
-export type LayerType = keyof typeof layerMapping
+export type LayerType = Keys<typeof layerMapping>
 
 /**
  * Drawing data will be cached each time.

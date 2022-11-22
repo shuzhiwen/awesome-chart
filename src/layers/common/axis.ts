@@ -170,7 +170,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
 
   private mergeScale(
     scale: Maybe<Scale>,
-    type: keyof Omit<LayerAxis['scale'], 'nice'>,
+    type: Keys<Omit<LayerAxis['scale'], 'nice'>>,
     target: 'domain' | 'range'
   ) {
     const current = this.scale[type]?.[target]() ?? [],
@@ -377,7 +377,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   draw() {
     const {coordinate} = this.options,
       {scaleX, scaleY} = this.scale,
-      getLineData = (key: keyof LayerAxis['lineData']) =>
+      getLineData = (key: Keys<LayerAxis['lineData']>) =>
         this.lineData[key].map((item) => ({
           data: [item],
           ...(item.axisLine === 'X'
@@ -386,7 +386,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
             ? this.style.axisLineAxisY
             : this.style[key]),
         })),
-      getTextData = (key: keyof LayerAxis['textData'], rotation?: number) =>
+      getTextData = (key: Keys<LayerAxis['textData']>, rotation?: number) =>
         this.textData[key].map((item) => ({
           data: [item],
           source: [{dimension: item.value}],
