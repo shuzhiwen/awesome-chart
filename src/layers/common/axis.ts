@@ -357,7 +357,11 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       if (dynamicReserveTextX) {
         this.textData.textX = this.textData.textX.reduce<any[]>((prev, cur) => {
           if (prev.length === 0) return [cur]
-          return isTextCollision(prev[prev.length - 1], cur, 0.2) ? prev : [...prev, cur]
+          if (isTextCollision(prev[prev.length - 1], cur, 0.2)) {
+            this.lineData.splitLineAxisX.splice(prev.length, 1)
+            return prev
+          }
+          return [...prev, cur]
         }, [])
       } else {
         while (totalTextWidth > width && this.textData.textX.length > 1) {
