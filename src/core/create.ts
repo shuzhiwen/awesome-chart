@@ -6,7 +6,6 @@ import {
   isRawTable,
   isRawTableList,
   isRawRelation,
-  tableListToTable,
   randomTableList,
   randomTable,
   isLayerLegend,
@@ -25,11 +24,7 @@ export const createLayer = (chart: Chart, schema: ArrayItem<CreateChartProps['la
   } else if (isRawRelation(data)) {
     dataSet = new DataRelation(data)
   } else if (isRawTableList(data) || data?.type === 'tableList') {
-    if (type === 'matrix') {
-      dataSet = new DataTable(tableListToTable(data)!)
-    } else {
-      dataSet = new DataTableList(isRawTableList(data) ? data : randomTableList(data))
-    }
+    dataSet = new DataTableList(isRawTableList(data) ? data : randomTableList(data))
   } else {
     dataSet = new DataBase(data ?? {})
   }
@@ -48,6 +43,25 @@ export const createChart = errorCatcher(
     const {layers = [], onError, ...initialConfig} = schema
     const chart = existedChart ?? new Chart(initialConfig)
 
+    // catch error and info user
+    chart.event.on('error', (data: any) => {
+      if (!onError) {
+        chart.destroy()
+        const fbChart = new Chart(initialConfig)
+        const fallbackLayer = fbChart.createLayer({
+          type: 'text',
+          id: 'fallback',
+          layout: fbChart.layout.container,
+        }) as LayerText
+
+        fallbackLayer.setData(new DataBase([data.error?.message ?? '']))
+        fallbackLayer.setStyle({text: {align: ['middle', 'middle']}})
+        fallbackLayer.draw()
+      } else {
+        onError(data)
+      }
+    })
+
     // define order is draw order
     layers.forEach((layer) => createLayer(chart, layer))
     chart.layers.forEach((layer) => layer.setVisible(false))
@@ -58,27 +72,17 @@ export const createChart = errorCatcher(
       const enterAnimations = Object.values(layer.cacheAnimation.animations)
         .map((animation) => animation?.queue.find(({options: {id}}) => id === 'enter'))
         .filter(Boolean)
-      if (enterAnimations.length === 0) {
+      const batchAnimation = enterAnimations.map((animation) => {
+        return new Promise<void>((resolve) => {
+          animation?.event.on('init', () => resolve())
+        })
+      })
+      Promise.all(batchAnimation).then(() => {
         layer.setVisible(true)
-      } else {
-        Promise.all(
-          enterAnimations.map((animation) => {
-            return new Promise<void>((resolve) => {
-              animation?.event.on('init', () => resolve())
-            })
-          })
-        ).then(() => layer.setVisible(true))
-      }
-    })
-
-    // catch error and info user
-    chart.event.on('error', (data: any) => {
-      if (!onError) {
-        chart.destroy()
-        throw {...data, fbChart: new Chart(initialConfig)}
-      } else {
-        onError(data)
-      }
+        if (batchAnimation.length) {
+          console.info('Layer animation Initialized!')
+        }
+      })
     })
 
     // start animation (consider transfer control)
@@ -86,19 +90,7 @@ export const createChart = errorCatcher(
 
     return chart
   },
-  (error: Error | {error?: Error; fbChart: Chart}) => {
-    if (error instanceof Error) {
-      console.error('Chart initialization failed', error)
-    } else {
-      const fallbackLayer = error.fbChart.createLayer({
-        type: 'text',
-        id: 'fallback',
-        layout: error.fbChart.layout.container,
-      }) as LayerText
-
-      fallbackLayer.setData(new DataBase([error?.error?.message ?? '']))
-      fallbackLayer.setStyle({text: {align: ['middle', 'middle']}})
-      fallbackLayer.draw()
-    }
+  (error: Error) => {
+    console.error('Chart initialization failed', error)
   }
 )
