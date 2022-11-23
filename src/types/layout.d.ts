@@ -15,17 +15,20 @@ export type LayoutArea = Readonly<{
   height: number
 }>
 
-export type Layout = Record<string, LayoutArea> &
-  Readonly<{
-    /**
-     * Generally refers to the overall area of the chart.
-     */
-    main: LayoutArea
-    /**
-     * Generally refers to the overall area of the chart minus padding.
-     */
-    container: LayoutArea
-  }>
+/**
+ * The layout is divided into several layer areas,
+ * and each layer is drawn in a specific area.
+ */
+export type Layout = Record<string, LayoutArea> & {
+  /**
+   * Generally refers to the overall area of the chart.
+   */
+  main: LayoutArea
+  /**
+   * Generally refers to the overall area of the chart minus padding.
+   */
+  container: LayoutArea
+}
 
 export type LayoutProps = {
   /**
@@ -36,6 +39,9 @@ export type LayoutProps = {
    * The height of the chart box.
    */
   containerHeight: number
+  /**
+   * The padding of the main drawing area.
+   */
   padding: Padding
 }
 

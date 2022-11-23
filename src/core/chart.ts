@@ -3,9 +3,9 @@ import {fabric} from 'fabric'
 import {Canvas} from 'fabric/fabric-impl'
 import {defaultLayoutCreator} from '../layout'
 import {LayerAxis, LayerLegend, layerMapping} from '../layers'
+import {isNil, noop} from 'lodash'
 import {lightTheme} from './theme'
 import {Tooltip} from './tooltip'
-import {isNil, noop} from 'lodash'
 import {
   createLog,
   createEvent,
@@ -39,34 +39,89 @@ export class Chart {
 
   private _layers: LayerInstance[] = []
 
+  /**
+   * The paddings of the main drawing area.
+   * The four values represent top right bottom left.
+   * @remarks
+   * The padding cannot be updated dynamically,
+   * it can only be specified through the constructor.
+   */
   private padding: Padding
 
+  /**
+   * Global define target that all presets gradients are in here.
+   */
   private defs: GradientCreatorProps<unknown>['container']
 
+  /**
+   * Log for internal messages.
+   */
   private readonly log = createLog(Chart.name)
 
+  /**
+   * Manage lifecycle or error events.
+   */
   readonly event = createEvent<
     'MouseEvent' | 'initialized' | 'error' | Keys<typeof chartLifeCycles>
   >(Chart.name)
 
+  /**
+   * Decide how the graph will be drawn.
+   * In any case, svg should be preferred.
+   * @defaultValue svg
+   */
   readonly engine: Engine
 
+  /**
+   * The tooltip instance of the chart.
+   * All layers share the same tooltip,
+   * which means no two tooltip popups will appear at the same time.
+   */
   readonly tooltip: Tooltip
 
+  /**
+   * Once you specify the engine,
+   * the corresponding graph root element will be created.
+   */
   readonly root: D3Selection | Canvas
 
+  /**
+   * The theme of the chart.
+   * @remarks
+   * The theme cannot be updated dynamically,
+   * it can only be specified through the constructor.
+   */
   readonly theme: ChartTheme
 
+  /**
+   * The container for the outer layer of the chart.
+   */
   readonly container: HTMLElement
 
+  /**
+   * Real width of the chart root.
+   * @see root
+   */
   readonly containerWidth: number
 
+  /**
+   * Real height of the chart root.
+   * @see root
+   */
   readonly containerHeight: number
 
+  /**
+   * The layout is divided into several layer areas,
+   * and each layer is drawn in a specific area.
+   */
   get layout() {
     return this._layout
   }
 
+  /**
+   * Get all layers of the current chart except sublayers,
+   * because sublayers should be completely managed by the parent layer.
+   */
   get layers() {
     return this._layers.filter(({options}) => !options.sublayerConfig)
   }
@@ -89,8 +144,8 @@ export class Chart {
     const domContainer = select(this.container).html('')
 
     if (adjust) {
-      this.containerWidth = +(domContainer.style('width').match(/^\d*/)?.[0] || width)
-      this.containerHeight = +(domContainer.style('height').match(/^\d*/)?.[0] || height)
+      this.containerWidth = parseFloat(domContainer.style('width')) || width
+      this.containerHeight = parseFloat(domContainer.style('height')) || width
     } else {
       this.containerWidth = width
       this.containerHeight = height
@@ -159,6 +214,39 @@ export class Chart {
     })
   }
 
+  getLayerById(id: string) {
+    return this.layers.find(({options}) => options.id === id)
+  }
+
+  getLayerByType(type: LayerType) {
+    return this.layers.find(({options}) => options.type === type)
+  }
+
+  getLayersByType(type: LayerType) {
+    return this.layers.filter(({options}) => options.type === type)
+  }
+
+  getDependantLayers() {
+    return this.layers.filter(({options: {type}}) => dependantLayers.has(type))
+  }
+
+  getIndependentLayers() {
+    return this.layers.filter(({options: {type}}) => !dependantLayers.has(type))
+  }
+
+  getNonUniqueLayers() {
+    return this.layers.filter((layer) => !isLayerLegend(layer) && !isLayerAxis(layer))
+  }
+
+  /**
+   * Create a layer by options.
+   * @remarks
+   * - The layer ID is unique, if not specified, create random one.
+   * - Each chart can only have one axis and legend layer.
+   * - The layer type must be built-in or registered via `registerCustomLayer`.
+   * @returns
+   * Returns the layer instance if successful.
+   */
   createLayer(options: LayerOptions) {
     const context: ChartContext = {
       ...this,
@@ -187,67 +275,58 @@ export class Chart {
     return layer
   }
 
-  getLayerById(id: string) {
-    return this.layers.find(({options}) => options.id === id)
-  }
-
-  getLayerByType(type: LayerType) {
-    return this.layers.find(({options}) => options.type === type)
-  }
-
-  getLayersByType(type: LayerType) {
-    return this.layers.filter(({options}) => options.type === type)
-  }
-
-  getDependantLayers() {
-    return this.layers.filter(({options: {type}}) => dependantLayers.has(type))
-  }
-
-  getIndependentLayers() {
-    return this.layers.filter(({options: {type}}) => !dependantLayers.has(type))
-  }
-
-  getNonUniqueLayers() {
-    return this.layers.filter((layer) => !isLayerLegend(layer) && !isLayerAxis(layer))
-  }
-
-  rebuildScale(props: {trigger?: LayerInstance; redraw?: boolean}) {
+  /**
+   * This function is responsible for integrating the scales of all layers.
+   * @param props.trigger
+   * Trigger layers represent those layers
+   * that do not want to be updated after merged scale.
+   * @param props.redraw
+   * Whether all layers requiring scales are redrawn after merged scale.
+   */
+  rebuildScale(props: Partial<{trigger: LayerInstance; redraw: boolean}>) {
     const {trigger, redraw} = props,
       axisLayer = this.getLayerByType('axis') as Maybe<LayerAxis>,
-      legendLayer = this.getLayerByType('legend') as Maybe<LayerLegend>
+      legendLayer = this.getLayerByType('legend') as Maybe<LayerLegend>,
+      layers = this.getIndependentLayers().concat(this.getLayersByType('brush'))
 
     if (!axisLayer) {
       throw new Error('There is no axis layer available')
     }
 
-    this.getIndependentLayers()
-      .concat(this.getLayersByType('brush'))
-      .forEach((layer) => {
-        const {scale, options} = layer,
-          coordinate = axisLayer.options.coordinate,
-          {scaleX, scaleY, scaleAngle, scaleRadius, ...rest} = scale ?? {},
-          mergedScales: LayerInstance['scale'] = {...rest}
+    layers.forEach((layer) => {
+      const {scale, options} = layer,
+        coordinate = axisLayer.options.coordinate,
+        {scaleX, scaleY, scaleAngle, scaleRadius, ...rest} = scale ?? {},
+        mergedScales: LayerInstance['scale'] = {...rest}
 
-        if (coordinate === 'cartesian') {
-          mergedScales.scaleX = scaleX
-          if (options.axis === 'minor') {
-            mergedScales.scaleYR = scaleY
-          } else {
-            mergedScales.scaleY = scaleY
-          }
-        } else if (coordinate === 'polar') {
-          mergedScales.scaleAngle = scaleAngle
-          mergedScales.scaleRadius = scaleRadius
-        } else if (coordinate === 'geographic' && isLayerBasemap(layer)) {
-          mergedScales.scaleX = scaleX
+      if (coordinate === 'cartesian') {
+        mergedScales.scaleX = scaleX
+        if (options.axis === 'minor') {
+          mergedScales.scaleYR = scaleY
+        } else {
           mergedScales.scaleY = scaleY
         }
+      } else if (coordinate === 'polar') {
+        mergedScales.scaleAngle = scaleAngle
+        mergedScales.scaleRadius = scaleRadius
+      } else if (coordinate === 'geographic' && isLayerBasemap(layer)) {
+        mergedScales.scaleX = scaleX
+        mergedScales.scaleY = scaleY
+      }
 
-        axisLayer.setScale(mergedScales as LayerAxisScale)
-      })
+      axisLayer.setScale(mergedScales as LayerAxisScale)
+    })
 
+    /**
+     * The scale configuration is only for the merged scale.
+     * The nice function is idempotent.
+     */
     axisLayer.niceScale()
 
+    /**
+     * Only layers other than the trigger can be updated,
+     * as updating the trigger may cause an infinite loop
+     */
     this.layers.forEach((layer) => {
       const {axis} = layer.options,
         {scaleY, scaleYR, ...rest} = {...layer.scale, ...axisLayer.scale},
@@ -259,12 +338,20 @@ export class Chart {
       }
     })
 
+    /**
+     * Many layers need to change the legend after updating the data.
+     * Be careful not to update the legend multiple times during initialization.
+     */
     if (!isLayerLegend(trigger)) {
       legendLayer?.bindLayers(this.layers)
       legendLayer?.draw()
     }
   }
 
+  /**
+   * Since layers of different types may depend on each other,
+   * you should use the chart drawing method.
+   */
   draw() {
     const axisLayer = this.getLayerByType('axis')
     const legendLayer = this.getLayerByType('legend')
