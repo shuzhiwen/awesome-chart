@@ -56,8 +56,8 @@ export const createChart = errorCatcher(
     // not visible until animation initialized
     chart.layers.forEach((layer) => {
       const enterAnimations = Object.values(layer.cacheAnimation.animations)
-        .filter((animation) => animation?.queue[1])
-        .map((animation) => animation?.queue[1])
+        .map((animation) => animation?.queue.find(({options: {id}}) => id === 'enter'))
+        .filter(Boolean)
       if (enterAnimations.length === 0) {
         layer.setVisible(true)
       } else {

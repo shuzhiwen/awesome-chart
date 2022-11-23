@@ -1,9 +1,9 @@
 import {max} from 'lodash'
 import {robustRange, uuid} from '../utils'
-import {AnimationBase} from './base'
-import {AnimationEmpty} from './empty'
-import {animationMapping} from '.'
 import {AnimationType, DrawerTarget, AnimationOptions} from '../types'
+import {AnimationEmpty} from './empty'
+import {AnimationBase} from './base'
+import {animationMapping} from '.'
 
 type Animation = AnimationBase<AnimationOptions>
 
@@ -28,8 +28,8 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
 
   private isConnected = false
 
-  constructor({options}: {options: {loop: boolean}}) {
-    super({options: options as AnimationOptions})
+  constructor(options: AnimationOptions) {
+    super({options})
     const animationHead = new AnimationEmpty({})
 
     animationHead.event.on('start', this.start)
