@@ -96,7 +96,7 @@ export function createLimitText(props: CreateLimitTextProps) {
     formattedText = String(formatNumber(value, format))
   let fontSize = getAttr(_fontSize, 0, 12)
 
-  while (getTextWidth(formattedText, fontSize) > maxTextWidth) {
+  while (fontSize > 0 && getTextWidth(formattedText, fontSize) > maxTextWidth) {
     --fontSize
   }
 
