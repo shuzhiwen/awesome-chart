@@ -63,13 +63,11 @@ export type LayerBaseProps<Options extends LayerOptions> = Readonly<{
   context: ChartContext
   options: Options
   /**
-   * Declare what elements the layer contains.
-   * Each sublayer is associated with a base element type.
+   * @see LayerBase.sublayers
    */
   sublayers?: string[]
   /**
-   * Declare which elements can interact.
-   * The `interactive` must be a subset of sublayers.
+   * @see LayerBase.interactive
    */
   interactive?: string[]
 }>
