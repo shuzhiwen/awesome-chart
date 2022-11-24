@@ -197,3 +197,26 @@ export function safeLoop(
   }
   return times
 }
+
+/**
+ * Create a registration function that can extend the built-in class.
+ * @param mapping
+ * Internal map of register functions.
+ * @returns
+ * The register function.
+ * @internal
+ */
+export function createClassRegister<K extends string, V, P>(mapping: Record<K, AnyObject>) {
+  return function <Instance extends V>(key: K, klass: Newable<Instance, P>) {
+    if (Object.keys(mapping).includes(key)) {
+      console.error('Duplicate key for register custom class!')
+      return
+    }
+
+    try {
+      Object.assign(mapping, {[key]: klass})
+    } catch (e) {
+      console.error('Invalid Class Constructor!\n', e)
+    }
+  }
+}

@@ -1,7 +1,8 @@
 import * as Layer from '.'
-import {BasicLayerOptions, ChartContext} from '../types'
-import {LayerBase} from './base'
+import {BasicLayerOptions, LayerBaseProps} from '../types'
+import {createClassRegister} from '../utils'
 
+export default Layer
 export * from './combine'
 export * from './common'
 export * from './base'
@@ -11,7 +12,6 @@ export * from './display'
 export * from './normal'
 export * from './relation'
 
-export default Layer
 export const layerMapping = {
   arc: Layer.LayerArc,
   auxiliary: Layer.LayerAuxiliary,
@@ -43,18 +43,8 @@ export const layerMapping = {
   wave: Layer.LayerWave,
 }
 
-export function registerCustomLayer<Instance extends LayerBase<BasicLayerOptions<any>>>(
-  key: string,
-  Klass: Newable<Instance, [BasicLayerOptions<any>, ChartContext]>
-) {
-  if (Object.keys(layerMapping).includes(key)) {
-    console.error('Duplicate key for registerCustomLayer!')
-    return
-  }
-
-  try {
-    Object.assign(layerMapping, {[key]: Klass})
-  } catch (e) {
-    console.error('Invalid Class Constructor!\n', e)
-  }
-}
+export const registerCustomLayer = createClassRegister<
+  string,
+  Layer.LayerBase<BasicLayerOptions<any>>,
+  LayerBaseProps<BasicLayerOptions<any>>
+>(layerMapping)

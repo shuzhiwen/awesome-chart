@@ -1,4 +1,8 @@
 import * as Animation from '.'
+import {AnimationProps, BasicAnimationOptions} from '../types'
+import {createClassRegister} from '../utils'
+
+export default Animation
 export * from './base'
 export * from './easing'
 export * from './erase'
@@ -10,7 +14,6 @@ export * from './scan'
 export * from './queue'
 export * from './zoom'
 
-export default Animation
 export const animationMapping = {
   erase: Animation.AnimationErase,
   empty: Animation.AnimationEmpty,
@@ -20,3 +23,9 @@ export const animationMapping = {
   scan: Animation.AnimationScan,
   zoom: Animation.AnimationZoom,
 }
+
+export const registerCustomAnimation = createClassRegister<
+  string,
+  Animation.AnimationBase<BasicAnimationOptions<any>>,
+  AnimationProps<BasicAnimationOptions<any>>
+>(animationMapping)

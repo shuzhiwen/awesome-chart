@@ -16,7 +16,7 @@ type Ungroup<T> = T extends Array<infer V> ? Ungroup<V> : T
 
 type ArrayItem<T> = T extends Array<infer V> ? V : T
 
-type Newable<T, P> = P extends [...infer V] ? {new (...args: V): T} : never
+type Newable<T, P> = new (...args: P extends [...infer V] ? V : [P]) => T
 
 type Computable<T, P = never> = T | ((props: P) => T)
 

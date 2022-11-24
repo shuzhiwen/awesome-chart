@@ -1,4 +1,6 @@
 import * as Drawer from '.'
+
+export default Drawer
 export * from './arc'
 export * from './area'
 export * from './circle'
@@ -11,7 +13,6 @@ export * from './polygon'
 export * from './rect'
 export * from './text'
 
-export default Drawer
 export const drawerMapping = {
   arc: Drawer.drawArc,
   area: Drawer.drawArea,
