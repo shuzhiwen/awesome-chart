@@ -1,6 +1,7 @@
 import {mean} from 'd3'
 import chroma from 'chroma-js'
 import {createLog} from './create-log'
+import {safeLoop} from './chaos'
 
 export class ColorMatrix {
   readonly log = createLog(ColorMatrix.name)
@@ -35,8 +36,14 @@ export class ColorMatrix {
       this.log.debug.warn('Get color out of bounds', {row, column, matrix: this.matrix})
     }
 
-    while (row < 0) row += this.matrix.length || 1
-    while (column < 0) column += this.matrix[row]?.length || 1
+    safeLoop(
+      () => row < 0,
+      () => (row += this.matrix.length || 1)
+    )
+    safeLoop(
+      () => column < 0,
+      () => (column += this.matrix[row]?.length || 1)
+    )
 
     return this.matrix[row % this.matrix.length]?.[
       column % this.matrix[row % this.matrix.length]?.length
@@ -57,26 +64,29 @@ export class ColorMatrix {
         const colorQueue = ['', ...chroma.scale(row).mode('lch').colors(100), '']
 
         // Narrow util distance smaller then distance
-        while (averageDistance > maxDistance && colorQueue.length > row.length) {
-          colorQueue.pop()
-          colorQueue.shift()
+        safeLoop(
+          () => averageDistance > maxDistance && colorQueue.length > row.length,
+          () => {
+            colorQueue.pop()
+            colorQueue.shift()
 
-          const colors = chroma.scale(colorQueue).mode('lch').colors(row.length)
-          const distances: number[] = []
+            const colors = chroma.scale(colorQueue).mode('lch').colors(row.length)
+            const distances: number[] = []
 
-          colors.reduce((prev, cur) => {
-            distances.push(chroma.distance(prev, cur, colorSpace))
-            return cur
-          })
+            colors.reduce((prev, cur) => {
+              distances.push(chroma.distance(prev, cur, colorSpace))
+              return cur
+            })
 
-          const newAverageDistance = mean(distances)
+            const newAverageDistance = mean(distances)
 
-          if (newAverageDistance! >= averageDistance) {
-            break
-          } else {
-            averageDistance = newAverageDistance!
+            if (newAverageDistance! >= averageDistance) {
+              return false
+            } else {
+              averageDistance = newAverageDistance!
+            }
           }
-        }
+        )
 
         return chroma.scale(colorQueue).mode('lch').colors(row.length)
       }

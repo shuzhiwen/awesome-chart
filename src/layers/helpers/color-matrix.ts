@@ -1,7 +1,7 @@
 import chroma from 'chroma-js'
 import {isArray} from 'lodash'
 import {DataTableList} from '../../data'
-import {ColorMatrix} from '../../utils'
+import {ColorMatrix, safeLoop} from '../../utils'
 import {CreateColorMatrixProps} from '../../types'
 
 /**
@@ -12,9 +12,9 @@ import {CreateColorMatrixProps} from '../../types'
  */
 export function createColorMatrix(props: CreateColorMatrixProps) {
   const {layer, row, column, theme, nice} = props,
-    order = layer.data?.options.order,
     colors = !theme ? layer.options.theme.palette.main : isArray(theme) ? theme : [theme],
-    chromaScale = chroma.scale(colors).mode('lch')
+    chromaScale = chroma.scale(colors).mode('lch'),
+    order = layer.data?.options.order
   let matrix: string[][] = order?.colorMatrix?.matrix || []
 
   if (order?.colorMatrix && layer.data instanceof DataTableList) {
@@ -32,9 +32,10 @@ export function createColorMatrix(props: CreateColorMatrixProps) {
         .sort()
       matrix = matrix.map((row) => selected.map((index) => row[index]))
       if (selected.length === 1) {
-        while (matrix.length < layer.data.lists[0].length) {
-          matrix.push(matrix[0])
-        }
+        safeLoop(
+          () => matrix.length < (layer.data as DataTableList).lists[0].length,
+          () => matrix.push(matrix[0])
+        )
       }
     }
   } else if (column === 1) {

@@ -169,3 +169,20 @@ export function isBoxCollision(box1: Box, box2: Box) {
     Math.abs(y1 - y2 + (y1 + height1) - (y2 + height2)) >= height1 + height2
   )
 }
+
+/**
+ * A wrapper around the while syntax, limiting the maximum number of loops.
+ */
+export function safeLoop(
+  condition: AnyFunction<boolean>,
+  body: () => false | unknown,
+  maxTimes = 10000
+) {
+  let times = 0
+  while (condition()) {
+    if (body() === false) break
+    if (++times > maxTimes) {
+      throw new Error('The number of cycles exceeds the upper limit')
+    }
+  }
+}

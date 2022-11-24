@@ -7,6 +7,7 @@ import {
   isScaleBand,
   isScaleLinear,
   robustRange,
+  safeLoop,
   scaleTypes,
   ungroup,
 } from '../../utils'
@@ -364,15 +365,19 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
           return [...prev, cur]
         }, [])
       } else {
-        while (totalTextWidth > width && this.textData.textX.length > 1) {
-          this.textData.textX = reduceHalf(this.textData.textX)
-          totalTextWidth = sum(this.textData.textX.map(({textWidth}) => textWidth))
-        }
+        safeLoop(
+          () => totalTextWidth > width && this.textData.textX.length > 1,
+          () => {
+            this.textData.textX = reduceHalf(this.textData.textX)
+            totalTextWidth = sum(this.textData.textX.map(({textWidth}) => textWidth))
+          }
+        )
       }
     } else {
-      while (this.textData.textX.length > maxScaleXTextNumber) {
-        this.textData.textX = reduceHalf(this.textData.textX)
-      }
+      safeLoop(
+        () => this.textData.textX.length > Math.max(1, maxScaleXTextNumber),
+        () => (this.textData.textX = reduceHalf(this.textData.textX))
+      )
     }
   }
 

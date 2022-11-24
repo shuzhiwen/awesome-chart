@@ -1,5 +1,5 @@
 import {max} from 'lodash'
-import {robustRange, uuid} from '../utils'
+import {robustRange, safeLoop, uuid} from '../utils'
 import {AnimationType, DrawerTarget, AnimationOptions} from '../types'
 import {AnimationEmpty} from './empty'
 import {AnimationBase} from './base'
@@ -138,9 +138,12 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
   }
 
   destroy() {
-    while (this.queue.length > 1) {
-      const instance = this.queue.pop()
-      instance?.isAnimationAvailable && instance.destroy()
-    }
+    safeLoop(
+      () => this.queue.length > 1,
+      () => {
+        const instance = this.queue.pop()
+        instance?.isAnimationAvailable && instance.destroy()
+      }
+    )
   }
 }

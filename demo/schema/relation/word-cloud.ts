@@ -4,7 +4,7 @@ export default () => [
     options: {
       layout: 'container',
     },
-    data: '仿词云',
+    data: '丐版词云',
   },
   {
     type: 'pack',

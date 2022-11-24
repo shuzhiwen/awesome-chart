@@ -1,6 +1,6 @@
 import {scaleLinear as d3ScaleLinear, ScaleLinear} from 'd3-scale'
 import {ScaleLinearNice, ScaleLinearProps} from '../types'
-import {getMagnitude} from '../utils'
+import {getMagnitude, safeLoop} from '../utils'
 
 type Scale = ScaleLinear<number, number>
 
@@ -69,16 +69,22 @@ export function niceDomain(scale: Scale, nice: ScaleLinearNice) {
         const overflow = () => end + (magnitude / 2) * count >= niceEnd,
           currentBlank = () => (niceEnd - end) / (niceEnd - niceStart)
 
-        while (!overflow() && currentBlank() > maxBlank) {
-          step -= magnitude / 2
-          niceEnd = niceStart + count * step
-        }
+        safeLoop(
+          () => !overflow() && currentBlank() > maxBlank,
+          () => {
+            step -= magnitude / 2
+            niceEnd = niceStart + count * step
+          }
+        )
       }
 
-      while (niceEnd < end) {
-        step += magnitude / 2
-        niceEnd = niceStart + count * step
-      }
+      safeLoop(
+        () => niceEnd < end,
+        () => {
+          step += magnitude / 2
+          niceEnd = niceStart + count * step
+        }
+      )
     }
 
     scale.domain(reverse ? [niceEnd, niceStart] : [niceStart, niceEnd])

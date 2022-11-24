@@ -1,6 +1,13 @@
 import {isArray, merge} from 'lodash'
-import {formatNumber, getAttr, getTextWidth, isApproximateNumber, isBoxCollision} from '../../utils'
 import {CreateLimitTextProps, CreateTextProps} from '../../types'
+import {
+  formatNumber,
+  getAttr,
+  getTextWidth,
+  isApproximateNumber,
+  isBoxCollision,
+  safeLoop,
+} from '../../utils'
 
 /**
  * Easy way to calculate text data.
@@ -64,10 +71,16 @@ export function createText(props: CreateTextProps) {
   }
 }
 
+/**
+ * Determine the anchor point position of the arc text based on the angle.
+ */
 export function createArcText(props: Omit<CreateTextProps, 'position'> & {angle: number}) {
   let angle = props.angle % (Math.PI * 2)
 
-  while (angle < 0) angle += Math.PI * 2
+  safeLoop(
+    () => angle < 0,
+    () => (angle += Math.PI * 2)
+  )
 
   return createText({
     ...props,
@@ -96,9 +109,10 @@ export function createLimitText(props: CreateLimitTextProps) {
     formattedText = String(formatNumber(value, format))
   let fontSize = getAttr(_fontSize, 0, 12)
 
-  while (fontSize > 0 && getTextWidth(formattedText, fontSize) > maxTextWidth) {
-    --fontSize
-  }
+  safeLoop(
+    () => fontSize > 0 && getTextWidth(formattedText, fontSize) > maxTextWidth,
+    () => --fontSize
+  )
 
   return {...createText(merge(props, {style: {fontSize}})), fontSize}
 }

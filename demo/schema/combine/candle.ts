@@ -6,7 +6,7 @@ export default () => [
     options: {
       layout: 'container',
     },
-    data: 'K线图',
+    data: '丐版K线',
   },
   {
     type: 'legend',
