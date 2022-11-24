@@ -19,6 +19,10 @@ function createDefaultTheme({
 }): ChartTheme {
   return {
     palette: {
+      nice: {
+        maxDistance: 85,
+        colorSpace: 'lab',
+      },
       main: [
         'rgb(52,200,254)',
         'rgb(0,155,255)',

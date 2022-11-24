@@ -62,9 +62,11 @@ export class ColorMatrix {
       if (row.length > 1) {
         let averageDistance = Infinity
         const colorQueue = ['', ...chroma.scale(row).mode('lch').colors(100), '']
-
-        // Narrow util distance smaller then distance
-        safeLoop(
+        /**
+         * Narrow util distance smaller then distance.
+         * Note that this loop may not be used once.
+         */
+        const times = safeLoop(
           () => averageDistance > maxDistance && colorQueue.length > row.length,
           () => {
             colorQueue.pop()
@@ -87,6 +89,11 @@ export class ColorMatrix {
             }
           }
         )
+
+        if (times === 0) {
+          colorQueue.pop()
+          colorQueue.shift()
+        }
 
         return chroma.scale(colorQueue).mode('lch').colors(row.length)
       }

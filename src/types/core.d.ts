@@ -43,6 +43,14 @@ export type ChartTheme = Readonly<{
    */
   palette: {
     main: string[]
+    /**
+     * If sets, nice colors.
+     * @see ColorMatrix.nice
+     */
+    nice?: {
+      maxDistance: number
+      colorSpace: Keys<chroma.ColorSpaces>
+    }
   }
   /**
    * Global default graph style.
@@ -193,6 +201,9 @@ export type CreateChartProps = ChartProps & {
    * The default `onError` handler will display error message in the graph.
    */
   onError?: (data?: {error?: Error}) => void
+  /**
+   * Definition of all layers, including axis and legend.
+   */
   layers?: {
     /**
      * Internal layer type or custom layer type.

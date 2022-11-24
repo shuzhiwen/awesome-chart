@@ -185,4 +185,5 @@ export function safeLoop(
       throw new Error('The number of cycles exceeds the upper limit')
     }
   }
+  return times
 }

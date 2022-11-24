@@ -11,8 +11,9 @@ import {CreateColorMatrixProps} from '../../types'
  * This method is to ensure correct color matching when legend filtering.
  */
 export function createColorMatrix(props: CreateColorMatrixProps) {
-  const {layer, row, column, theme, nice} = props,
-    colors = !theme ? layer.options.theme.palette.main : isArray(theme) ? theme : [theme],
+  const {layer, row, column, theme} = props,
+    {main, nice} = layer.options.theme.palette,
+    colors = !theme ? main : isArray(theme) ? theme : [theme],
     chromaScale = chroma.scale(colors).mode('lch'),
     order = layer.data?.options.order
   let matrix: string[][] = order?.colorMatrix?.matrix || []
@@ -53,6 +54,6 @@ export function createColorMatrix(props: CreateColorMatrixProps) {
   }
 
   const colorMatrix = new ColorMatrix(matrix)
-  nice && !order?.colorMatrix && colorMatrix.nice()
+  nice && !order?.colorMatrix && colorMatrix.nice(nice.maxDistance, nice.colorSpace)
   return colorMatrix
 }

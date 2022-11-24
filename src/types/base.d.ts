@@ -166,9 +166,4 @@ export type CreateColorMatrixProps = {
    * The origin colors for `ColorMatrix`.
    */
   theme: MaybeGroup<string>
-  /**
-   * If set true, nice colors.
-   * @see ColorMatrix.nice
-   */
-  nice?: boolean
 }
