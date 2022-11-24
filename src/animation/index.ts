@@ -24,7 +24,7 @@ export const animationMapping = {
   zoom: Animation.AnimationZoom,
 }
 
-export const registerCustomAnimation = createClassRegister<
+export const registerCustomAnimation = createClassRegister?.<
   string,
   Animation.AnimationBase<BasicAnimationOptions<any>>,
   AnimationProps<BasicAnimationOptions<any>>

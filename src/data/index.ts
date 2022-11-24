@@ -15,7 +15,7 @@ export const dataMapping = {
   relation: Data.DataRelation,
 }
 
-export const registerCustomData = createClassRegister<
+export const registerCustomData = createClassRegister?.<
   string,
   Data.DataBase<AnyObject>,
   [any, DataBaseOptions]

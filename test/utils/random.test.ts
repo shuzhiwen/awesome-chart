@@ -1,4 +1,4 @@
-import {uuid, randomTable, randomTableList, isRawTable, isRawTableList} from '../../src'
+import {uuid, isRawTable, randomTable, isRawTableList, randomTableList} from '../../src'
 
 test('uuid', () => {
   expect(typeof uuid()).toBe('string')

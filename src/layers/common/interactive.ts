@@ -2,9 +2,15 @@ import {select} from 'd3'
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {LayerAuxiliary} from './auxiliary'
-import {stickyBandScale} from '../helpers/sticky-scale'
 import {isScaleBand, isScaleLinear, isSC, uuid} from '../../utils'
-import {createScale, createStyle, makeClass, selector, validateAndCreateData} from '../helpers'
+import {
+  createScale,
+  createStyle,
+  makeClass,
+  selector,
+  stickyBandScale,
+  validateAndCreateData,
+} from '../helpers'
 import {
   ChartContext,
   LayerInteractiveStyle,

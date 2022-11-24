@@ -1,5 +1,5 @@
 import * as Layer from '.'
-import {BasicLayerOptions, LayerBaseProps} from '../types'
+import {BasicLayerOptions, ChartContext} from '../types'
 import {createClassRegister} from '../utils'
 
 export default Layer
@@ -43,8 +43,8 @@ export const layerMapping = {
   wave: Layer.LayerWave,
 }
 
-export const registerCustomLayer = createClassRegister<
+export const registerCustomLayer = createClassRegister?.<
   string,
   Layer.LayerBase<BasicLayerOptions<any>>,
-  LayerBaseProps<BasicLayerOptions<any>>
+  [BasicLayerOptions<any>, ChartContext]
 >(layerMapping)

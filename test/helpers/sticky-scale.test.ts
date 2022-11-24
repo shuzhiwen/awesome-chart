@@ -1,5 +1,5 @@
 import {scaleBand} from 'd3'
-import {stickyBandScale} from '../../src/layers/helpers/sticky-scale'
+import {stickyBandScale} from '../../src'
 
 test('sticky-scale', () => {
   const scale = scaleBand<Meta>().domain(['d1', 'd2', 'd3']).range([0, 100]).paddingInner(0.5)
