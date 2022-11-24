@@ -51,6 +51,15 @@ export function getPercentageNumber(input: Meta, relative: number) {
   return input
 }
 
+/**
+ * Measure the length of a piece of text.
+ * @param text
+ * The text to measure.
+ * @param fontSize
+ * The fontSize of the text.
+ * @param fontFamily
+ * The fontFamily of the text which cannot be empty.
+ */
 export function getTextWidth(
   text: Meta,
   fontSize: Meta = 12,
@@ -172,6 +181,7 @@ export function isBoxCollision(box1: Box, box2: Box) {
 
 /**
  * A wrapper around the while syntax, limiting the maximum number of loops.
+ * Return false in the body function to break out of the loop.
  */
 export function safeLoop(
   condition: AnyFunction<boolean>,
