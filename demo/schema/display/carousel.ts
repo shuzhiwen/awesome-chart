@@ -10,15 +10,11 @@ const images = [
 export default ({mode}: {mode: 'slide' | 'fade'}) => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '轮播图',
   },
   {
     type: 'carousel',
     options: {
-      layout: 'main',
       mode,
     },
     data: images,

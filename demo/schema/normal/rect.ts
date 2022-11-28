@@ -9,22 +9,13 @@ export default ({
   [
     {
       type: 'text',
-      options: {
-        layout: 'container',
-      },
       data: '柱状图',
     },
     {
       type: 'legend',
-      options: {
-        layout: 'container',
-      },
     },
     {
       type: 'axis',
-      options: {
-        layout: 'main',
-      },
       scale: {
         zero: true,
       },
@@ -66,8 +57,6 @@ export default ({
     {
       type: 'rect',
       options: {
-        layout: 'main',
-        axis: 'main',
         mode,
         variant,
         sort,
@@ -136,9 +125,6 @@ export default ({
     mode !== 'percentage' &&
       mode !== 'waterfall' && {
         type: 'auxiliary',
-        options: {
-          layout: 'main',
-        },
         data: [
           ['标签', '数值'],
           ['标准', 600],
@@ -156,8 +142,5 @@ export default ({
       },
     hasInteractive && {
       type: 'interactive',
-      options: {
-        layout: 'main',
-      },
     },
   ].filter(Boolean)

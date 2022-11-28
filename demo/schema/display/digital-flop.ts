@@ -2,7 +2,6 @@ export default ({variant}) => [
   {
     type: 'flopper',
     options: {
-      layout: 'main',
       variant,
     },
     data: {

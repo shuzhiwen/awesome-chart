@@ -45,7 +45,10 @@ export type CacheLayerAnimation<Options = AnimationOptions> = {
    * - `loop`: Always running while chart available.
    * - `update`: Trigger when chart occur data updating.
    */
-  options: Record<string, Record<'enter' | 'loop', MaybeGroup<Options>> & {update: Options}>
+  options: Record<
+    string,
+    Partial<Record<'enter' | 'loop', MaybeGroup<Options>> & {update: Options}>
+  >
 }
 
 /**

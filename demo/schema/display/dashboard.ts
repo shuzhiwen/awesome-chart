@@ -55,16 +55,10 @@ const createDashBoardStyle = (type) => {
 export default ({type}) => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '仪表盘',
   },
   {
     type: 'dashboard',
-    options: {
-      layout: 'main',
-    },
     data: createDashboardData(type),
     style: createDashBoardStyle(type),
   },

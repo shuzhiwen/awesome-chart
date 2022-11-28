@@ -1,15 +1,11 @@
 export default () => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '重力气泡图',
   },
   {
     type: 'force',
     options: {
-      layout: 'main',
       zoom: true,
     },
     data: {

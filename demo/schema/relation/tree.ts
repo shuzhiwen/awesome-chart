@@ -1,16 +1,10 @@
 export default () => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '树形图',
   },
   {
     type: 'tree',
-    options: {
-      layout: 'main',
-    },
     data: [nodes, links],
     style: {
       direction: 'horizontal', // or vertical

@@ -2,22 +2,13 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
   [
     {
       type: 'text',
-      options: {
-        layout: 'container',
-      },
       data: '折线图',
     },
     {
       type: 'legend',
-      options: {
-        layout: 'container',
-      },
     },
     {
       type: 'axis',
-      options: {
-        layout: 'main',
-      },
       scale: {
         count: 5,
         zero: mode === 'stack' || hasMark,
@@ -26,8 +17,6 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
     {
       type: 'line',
       options: {
-        layout: 'main',
-        axis: 'main',
         mode,
       },
       data: hasMark
@@ -80,7 +69,6 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
     {
       type: 'auxiliary',
       options: {
-        layout: 'main',
         direction: 'horizontal',
       },
       data: [
@@ -99,9 +87,6 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
     },
     hasMark && {
       type: 'mark',
-      options: {
-        layout: 'main',
-      },
       data: [
         ['x', 'y', 'value'],
         ['3年级', 600, '峰值'],

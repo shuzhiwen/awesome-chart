@@ -1,15 +1,11 @@
 export default () => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '打包图',
   },
   {
     type: 'pack',
     options: {
-      layout: 'main',
       zoom: true,
     },
     data: [nodes, links],

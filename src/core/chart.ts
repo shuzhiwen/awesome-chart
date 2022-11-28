@@ -269,6 +269,14 @@ export class Chart {
       return
     }
 
+    if (!options.layout) {
+      if (options.type === 'text' || options.type === 'legend') {
+        options.layout = this.layout.container
+      } else {
+        options.layout = this.layout.main
+      }
+    }
+
     const layer = new layerMapping[options.type](options as never, context)
     this._layers.push(layer)
 

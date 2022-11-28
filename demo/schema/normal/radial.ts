@@ -1,16 +1,10 @@
 export default () => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '玉玦图',
   },
   {
     type: 'radial',
-    options: {
-      layout: 'main',
-    },
     data: [
       ['指标', '当前', '目标'],
       ['体重', 69, 80],
@@ -30,7 +24,6 @@ export default () => [
   {
     type: 'axis',
     options: {
-      layout: 'main',
       coordinate: 'polar',
     },
     scale: {

@@ -3,16 +3,10 @@ import {LayerGridStyle} from '../../../src/types'
 export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '堆叠网格布局',
   },
   {
     type: 'grid',
-    options: {
-      layout: 'main',
-    },
     data:
       style.placeMode === 'position'
         ? [
@@ -26,7 +20,10 @@ export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
     style: style,
     animation: (theme) => ({
       box: {
-        enter: theme.animation.presets.zoomIn,
+        enter: {
+          ...theme.animation.presets.zoomIn,
+          stagger: 10,
+        },
         update: {
           duration: 200,
           delay: 0,

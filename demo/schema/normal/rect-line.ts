@@ -2,35 +2,22 @@ export default () =>
   [
     {
       type: 'text',
-      options: {
-        layout: 'container',
-      },
       data: '折线柱状图',
     },
     {
       type: 'legend',
-      options: {
-        layout: 'container',
-      },
       style: {
         maxColumn: 2,
       },
     },
     {
       type: 'axis',
-      options: {
-        layout: 'main',
-      },
       scale: {
         zero: true,
       },
     },
     {
       type: 'rect',
-      options: {
-        layout: 'main',
-        axis: 'main',
-      },
       data: {
         type: 'tableList',
         mode: 'normal',
@@ -62,7 +49,6 @@ export default () =>
     {
       type: 'line',
       options: {
-        layout: 'main',
         axis: 'minor',
         mode: 'stack',
       },
@@ -79,6 +65,7 @@ export default () =>
         labelPosition: 'top',
         curve: {
           strokeWidth: 2,
+          stroke: ['orange', 'red'],
         },
         area: {
           hidden: true,

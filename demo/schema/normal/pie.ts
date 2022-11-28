@@ -1,16 +1,10 @@
 export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '饼图',
   },
   {
     type: 'legend',
-    options: {
-      layout: 'container',
-    },
     style: {
       maxColumn: 3,
     },
@@ -18,7 +12,6 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
   {
     type: 'axis',
     options: {
-      layout: 'main',
       coordinate: 'polar',
     },
     style: {
@@ -31,7 +24,6 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
   {
     type: 'arc',
     options: {
-      layout: 'main',
       variant,
     },
     data: {

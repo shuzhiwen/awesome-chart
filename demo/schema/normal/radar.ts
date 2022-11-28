@@ -1,29 +1,20 @@
 export default ({mode}) => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '饼图',
   },
   {
     type: 'legend',
-    options: {
-      layout: 'container',
-    },
   },
   {
     type: 'axis',
     options: {
-      layout: 'main',
       coordinate: 'polar',
     },
   },
   {
     type: 'radar',
     options: {
-      layout: 'main',
-      axis: 'main',
       mode,
     },
     data: {

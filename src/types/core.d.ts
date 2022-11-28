@@ -184,6 +184,9 @@ export type ChartProps = {
    * The generator function that returns the layout.
    */
   layoutCreator?: LayoutCreator
+  /**
+   * The configuration of the tooltip of chart.
+   */
   tooltipOptions?: Partial<TooltipOptions>
 }
 
@@ -213,11 +216,11 @@ export type CreateChartProps = ChartProps & {
      * The options of the layer.
      * When options changes, chart will redraw.
      */
-    options: Omit<BasicLayerOptions<LayerType>, 'type'> & {
+    options?: Omit<BasicLayerOptions<LayerType>, 'type' | 'layout'> & {
       /**
        * The name of layout that created by layoutCreator.
        */
-      layout: string
+      layout?: string
     }
     /**
      * Unrecognized data will be converted to `DataBase`.

@@ -2,16 +2,10 @@ export default () =>
   [
     {
       type: 'text',
-      options: {
-        layout: 'container',
-      },
       data: '柱状图',
     },
     {
       type: 'axis',
-      options: {
-        layout: 'main',
-      },
       scale: {
         zero: true,
       },
@@ -21,10 +15,6 @@ export default () =>
     },
     {
       type: 'rect',
-      options: {
-        layout: 'main',
-        axis: 'main',
-      },
       data: [
         ['支出项', '数量'],
         ['房租', 2000],

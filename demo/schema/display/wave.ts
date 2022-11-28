@@ -1,16 +1,10 @@
 export default () => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '水波球',
   },
   {
     type: 'wave',
-    options: {
-      layout: 'main',
-    },
     data: {
       value: 70,
       maxValue: 100,

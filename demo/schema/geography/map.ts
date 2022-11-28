@@ -1,23 +1,16 @@
 export default () => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '二维地图',
   },
   {
     type: 'axis',
     options: {
-      layout: 'container',
       coordinate: 'geographic',
     },
   },
   {
     type: 'basemap',
-    options: {
-      layout: 'container',
-    },
     data: 100000,
     style: {
       block: {
@@ -27,9 +20,6 @@ export default () => [
   },
   {
     type: 'heatmap',
-    options: {
-      layout: 'container',
-    },
     data: [
       ['x', 'y', 'value'],
       [100, 30, 10],
@@ -41,9 +31,6 @@ export default () => [
   },
   {
     type: 'odLine',
-    options: {
-      layout: 'container',
-    },
     data: [
       ['fromX', 'fromY', 'toX', 'toY'],
       [120, 30, 90, 45],
@@ -67,10 +54,6 @@ export default () => [
   },
   {
     type: 'scatter',
-    options: {
-      layout: 'container',
-      axis: 'main',
-    },
     data: [
       ['category', 'x', 'y'],
       ['沈阳', 123.429092, 41.796768],

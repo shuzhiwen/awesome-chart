@@ -1,16 +1,10 @@
 export default () => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '桑基图',
   },
   {
     type: 'sankey',
-    options: {
-      layout: 'main',
-    },
     scale: {
       fixedBandwidth: 7,
     },

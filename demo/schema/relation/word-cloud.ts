@@ -1,16 +1,12 @@
 export default () => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '丐版词云',
   },
   {
     type: 'pack',
     options: {
       variant: 'wordCloud',
-      layout: 'main',
       zoom: true,
     },
     data: [nodes, links],

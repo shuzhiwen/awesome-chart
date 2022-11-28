@@ -1,9 +1,6 @@
 export default () => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '栅格文本',
   },
   {

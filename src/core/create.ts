@@ -15,7 +15,8 @@ import {
 
 export const createLayer = (chart: Chart, schema: ArrayItem<CreateChartProps['layers']>) => {
   const {type, options, data, scale, style, animation, event} = schema!,
-    layerOptions = {type, ...options, layout: chart.layout[options.layout]},
+    layout = options?.layout ? chart.layout[options.layout] : undefined,
+    layerOptions = {type, ...options, layout},
     layer = chart.createLayer(layerOptions as LayerOptions) as LayerBase<LayerOptions>
   let dataSet = data
 
@@ -87,7 +88,6 @@ export const createChart = errorCatcher(
 
     // start animation (consider transfer control)
     chart.layers.map((instance) => instance?.playAnimation())
-
     return chart
   },
   (error: Error) => {

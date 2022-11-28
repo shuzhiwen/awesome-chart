@@ -2,27 +2,16 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
   [
     {
       type: 'text',
-      options: {
-        layout: 'container',
-      },
       data: '矩阵图',
     },
     {
       type: 'axis',
-      options: {
-        layout: 'main',
-        coordinate: 'cartesian',
-      },
       scale: {
         paddingInner: 0,
       },
     },
     {
       type: 'matrix',
-      options: {
-        layout: 'main',
-        axis: 'main',
-      },
       data: {
         type: 'table',
         mode: 'normal',
@@ -43,10 +32,16 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
       },
       animation: (theme) => ({
         rect: {
-          enter: theme.animation.presets.zoomIn,
+          enter: {
+            ...theme.animation.presets.zoomIn,
+            stagger: 10,
+          },
         },
         circle: {
-          enter: theme.animation.presets.zoomIn,
+          enter: {
+            ...theme.animation.presets.zoomIn,
+            stagger: 10,
+          },
         },
         text: {
           enter: theme.animation.presets.fadeIn,

@@ -14,22 +14,13 @@ const transformedData = [['区间', '数量'] as Meta[]].concat(
 export default ({variant}: Partial<LayerRectOptions>) => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '直方图模拟',
   },
   {
     type: 'legend',
-    options: {
-      layout: 'container',
-    },
   },
   {
     type: 'axis',
-    options: {
-      layout: 'main',
-    },
     scale: {
       zero: true,
       paddingInner: 0,
@@ -38,8 +29,6 @@ export default ({variant}: Partial<LayerRectOptions>) => [
   {
     type: 'rect',
     options: {
-      layout: 'main',
-      axis: 'main',
       variant,
     },
     data: transformedData,
@@ -56,9 +45,6 @@ export default ({variant}: Partial<LayerRectOptions>) => [
   },
   {
     type: 'auxiliary',
-    options: {
-      layout: 'main',
-    },
     data: [
       ['标签', '数值'],
       ['达标', 6],

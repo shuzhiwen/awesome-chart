@@ -1,33 +1,19 @@
 export default ({pointSize}) => [
   {
     type: 'text',
-    options: {
-      layout: 'container',
-    },
     data: '散点气泡图',
   },
   {
     type: 'legend',
-    options: {
-      layout: 'container',
-    },
     style: {
       maxColumn: 6,
     },
   },
   {
     type: 'axis',
-    options: {
-      layout: 'main',
-      coordinate: 'cartesian',
-    },
   },
   {
     type: 'scatter',
-    options: {
-      layout: 'main',
-      axis: 'main',
-    },
     data: [
       ['category', 'x', 'y', 'value'],
       ['1985', 157.1, 40, 184.3],
@@ -59,7 +45,6 @@ export default ({pointSize}) => [
   {
     type: 'auxiliary',
     options: {
-      layout: 'main',
       direction: 'horizontal',
     },
     data: [
