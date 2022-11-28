@@ -20,9 +20,10 @@ import force from './relation/force'
 import wordCloud from './relation/word-cloud'
 import radial from './normal/radial'
 import rectLine from './normal/rect-line'
-import rich from './normal/rich'
-import mapping from './normal/mapping'
-import histogram from './normal/histogram'
+import rich from './customize/rich'
+import mapping from './customize/mapping'
+import histogram from './customize/histogram'
+import animation from './customize/animation'
 
 export interface MenuItemShape {
   name: string
@@ -65,6 +66,10 @@ export const schemaMenu: MenuShape = {
               },
             },
           }),
+        },
+        {
+          name: '动画队列',
+          schema: base(animation()),
         },
       ],
     },

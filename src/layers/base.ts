@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {range} from 'd3'
 import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
@@ -14,6 +13,7 @@ import {
   ungroup,
   isSC,
   isCC,
+  group,
 } from '../utils'
 import {
   LayerData,
@@ -182,6 +182,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * This method will force the layer to recalculate.
    * @see needRecalculated
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setData(_: Maybe<LayerData>) {}
 
   /**
@@ -189,6 +190,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * This method will force the layer to recalculate.
    * @see needRecalculated
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setScale(_: Maybe<LayerScale>) {}
 
   /**
@@ -196,6 +198,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * This method may force the layer to recalculate.
    * @see needRecalculated
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setStyle(_: Maybe<LayerStyle<AnyObject>>) {}
 
   /**
@@ -229,8 +232,8 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * Specifies the sublayer to show/hide, undefined means the entire layer.
    */
   setVisible(visible: boolean, sublayer?: string) {
-    const className = `${this.className}-${sublayer}`,
-      target = sublayer ? selector.getDirectChild(this.root, className) : this.root
+    const className = `${this.className}-${sublayer}`
+    const target = sublayer ? selector.getDirectChild(this.root, className) : this.root
     selector.setVisible(target, visible)
   }
 
@@ -314,17 +317,25 @@ export abstract class LayerBase<Options extends LayerOptions> {
     const animationQueue = new AnimationQueue({loop: false}),
       enterQueue = new AnimationQueue({loop: false, id: 'enter'}),
       loopQueue = new AnimationQueue({loop: true, id: 'loop'}),
-      {enter, loop, update} = merge({}, animation, options[sublayer]),
+      update = merge({}, animation.update, options[sublayer].update),
+      enter = group(options[sublayer].enter),
+      loop = group(options[sublayer].loop),
       event = animationQueue.event
 
-    if (isFirstPlay && enter?.type) {
-      enterQueue.pushAnimation(enter.type, {...enter, targets}, this.root)
+    if (isFirstPlay && enter.length) {
       animationQueue.pushQueue(enterQueue)
+      enter.forEach((item) => {
+        const config = merge({targets}, animation.enter, item)
+        enterQueue.pushAnimation(config.type!, config, this.root)
+      })
     }
 
-    if (loop?.type) {
-      loopQueue.pushAnimation(loop.type, {...loop, targets}, this.root)
+    if (loop.length) {
       animationQueue.pushQueue(loopQueue)
+      loop.forEach((item) => {
+        const config = merge({targets}, animation.loop, item)
+        loopQueue.pushAnimation(config.type!, config, this.root)
+      })
     }
 
     event.on('start', (d: unknown) => this.event.fire(`${prefix}start`, d))
