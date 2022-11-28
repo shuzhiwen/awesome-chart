@@ -1,7 +1,7 @@
 export default ({mode}) => [
   {
     type: 'text',
-    data: '饼图',
+    data: '雷达图',
   },
   {
     type: 'legend',

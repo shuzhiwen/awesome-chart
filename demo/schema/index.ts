@@ -25,6 +25,9 @@ import mapping from './customize/mapping'
 import histogram from './customize/histogram'
 import animation from './customize/animation'
 
+const noPadding: Padding = [0, 0, 0, 0]
+const smallPadding: Padding = [30, 30, 30, 30]
+
 export interface MenuItemShape {
   name: string
   schema: ReturnType<typeof base>
@@ -170,7 +173,7 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '玉玦图',
-          schema: base(radial()),
+          schema: base(radial(), {padding: smallPadding}),
         },
       ],
     },
@@ -179,19 +182,25 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础饼图',
-          schema: base(pie({variant: 'pie', innerRadius: 0})),
+          schema: base(pie({variant: 'pie', innerRadius: 0}), {padding: [30, 80, 30, 30]}),
         },
         {
           name: '基础环图',
-          schema: base(pie({variant: 'pie', innerRadius: 30, hasGuideLine: true})),
+          schema: base(pie({variant: 'pie', innerRadius: 30, hasGuideLine: true}), {
+            padding: [30, 80, 30, 30],
+          }),
         },
         {
           name: '南丁格尔玫瑰',
-          schema: base(pie({variant: 'nightingaleRose', innerRadius: 10})),
+          schema: base(pie({variant: 'nightingaleRose', innerRadius: 10}), {
+            padding: [30, 80, 30, 30],
+          }),
         },
         {
           name: '堆叠南丁格尔玫瑰',
-          schema: base(pie({variant: 'nightingaleRose', innerRadius: 10, stack: true})),
+          schema: base(pie({variant: 'nightingaleRose', innerRadius: 10, stack: true}), {
+            padding: [30, 80, 30, 30],
+          }),
         },
       ],
     },
@@ -200,11 +209,11 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '分组雷达',
-          schema: base(radar({mode: 'default'})),
+          schema: base(radar({mode: 'default'}), {padding: smallPadding}),
         },
         {
           name: '堆叠雷达',
-          schema: base(radar({mode: 'stack'})),
+          schema: base(radar({mode: 'stack'}), {padding: smallPadding}),
         },
       ],
     },
@@ -252,27 +261,27 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '桑基图',
-          schema: base(sankey()),
+          schema: base(sankey(), {padding: smallPadding}),
         },
         {
           name: '树图',
-          schema: base(tree()),
+          schema: base(tree(), {padding: [30, 60, 30, 60]}),
         },
         {
           name: '矩阵树图',
-          schema: base(treemap()),
+          schema: base(treemap(), {padding: smallPadding}),
         },
         {
           name: '打包图',
-          schema: base(pack()),
+          schema: base(pack(), {padding: smallPadding}),
         },
         {
           name: '重力气泡图',
-          schema: base(force()),
+          schema: base(force(), {padding: smallPadding}),
         },
         {
           name: '词云',
-          schema: base(wordCloud()),
+          schema: base(wordCloud(), {padding: smallPadding}),
         },
       ],
     },
@@ -281,15 +290,15 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '仪表盘',
-          schema: base(dashboard({type: 'dashboard'}), {padding: [30, 30, 30, 30]}),
+          schema: base(dashboard({type: 'dashboard'}), {padding: smallPadding}),
         },
         {
           name: '环形指标卡',
-          schema: base(dashboard({type: 'indicator'}), {padding: [30, 30, 30, 30]}),
+          schema: base(dashboard({type: 'indicator'}), {padding: smallPadding}),
         },
         {
           name: '水波球',
-          schema: base(wave(), {padding: [30, 30, 30, 30]}),
+          schema: base(wave(), {padding: smallPadding}),
         },
       ],
     },
@@ -298,11 +307,11 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '滚动翻牌器',
-          schema: base(digitalFlop({variant: 'vertical'}), {padding: [0, 0, 0, 0]}),
+          schema: base(digitalFlop({variant: 'vertical'}), {padding: noPadding}),
         },
         {
           name: '折叠翻牌器',
-          schema: base(digitalFlop({variant: 'flop'}), {padding: [0, 0, 0, 0]}),
+          schema: base(digitalFlop({variant: 'flop'}), {padding: noPadding}),
         },
       ],
     },
@@ -311,7 +320,7 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础地图',
-          schema: base(map(), {padding: [0, 0, 0, 0]}),
+          schema: base(map(), {padding: noPadding}),
         },
       ],
     },
@@ -320,11 +329,11 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '滑动轮播',
-          schema: base(carousel({mode: 'slide'}), {padding: [0, 0, 0, 0]}),
+          schema: base(carousel({mode: 'slide'}), {padding: noPadding}),
         },
         {
           name: '淡入淡出轮播',
-          schema: base(carousel({mode: 'fade'}), {padding: [0, 0, 0, 0]}),
+          schema: base(carousel({mode: 'fade'}), {padding: noPadding}),
         },
       ],
     },

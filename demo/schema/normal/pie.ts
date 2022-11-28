@@ -6,7 +6,8 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
   {
     type: 'legend',
     style: {
-      maxColumn: 3,
+      maxColumn: 1,
+      align: ['end', 'middle'],
     },
   },
   {
