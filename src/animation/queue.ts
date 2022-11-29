@@ -7,14 +7,15 @@ import {animationMapping} from '.'
 
 type Animation = AnimationBase<AnimationOptions>
 
-const animationKey = `animationKey-${new Date().getTime()}`
+const bindKey = `bindKey-${new Date().getTime()}`
+const eventKey = `eventKey-${new Date().getTime()}`
 
 const bind = (animations: Animation[], callback: AnyFunction) => {
   Promise.all(
     animations.map(
       (instance) =>
         new Promise((resolve) => {
-          instance.event.onWithOff('end', animationKey, resolve)
+          instance.event.onWithOff('end', bindKey, resolve)
         })
     )
   ).then(() => {
@@ -32,15 +33,15 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
     super({options})
     const animationHead = new AnimationEmpty({})
 
-    animationHead.event.on('start', this.start)
-    animationHead.event.on('end', this.end)
+    animationHead.event.onWithOff('start', eventKey, this.start)
+    animationHead.event.onWithOff('end', eventKey, this.end)
     this.queue = [animationHead]
   }
 
   connect(priorityConfig?: number[] | ((queues: Animation[]) => number[])) {
     this.queue.forEach((instance) => {
-      instance.event.off('start')
-      instance.event.off('end')
+      instance.event.off('start', undefined, eventKey)
+      instance.event.off('end', undefined, eventKey)
     })
 
     let finalPriority: number[]
@@ -65,9 +66,11 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
           (state: string) => ({id: animation.options.id, priority, state})
         )
 
-        animation.event.on('start', () => this.process(startState))
-        animation.event.on('process', (data: unknown) => this.process({...processState, data}))
-        animation.event.on('end', () => this.process(endState))
+        animation.event.onWithOff('start', eventKey, () => this.process(startState))
+        animation.event.onWithOff('end', eventKey, () => this.process(endState))
+        animation.event.onWithOff('process', eventKey, (data) =>
+          this.process({...processState, data})
+        )
       })
 
       if (priority === Math.max(...finalPriority)) {
