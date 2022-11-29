@@ -157,7 +157,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
     this.drawBasic({type: 'path', data: [odLineData], sublayer: 'odLine'})
     this.drawBasic({type: 'path', data: [flyingObjectData], sublayer: 'flyingObject'})
 
-    this.event.once('flyingObject-animation-start', () => {
+    this.event.once('flyingObject-animation-start', this.className, () => {
       if (isSC(this.root) && this.odLineData.some(({path}) => path)) {
         this.root
           .selectAll(makeClass('flyingObject', true))

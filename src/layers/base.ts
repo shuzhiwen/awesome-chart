@@ -9,7 +9,7 @@ import {
   disableEventDrawers,
   tooltipEvents,
   createLog,
-  createEvent,
+  EventManager,
   ungroup,
   isSC,
   isCC,
@@ -71,7 +71,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
   /**
    * Manage lifecycle or tooltip events.
    */
-  readonly event = createEvent(this.className)
+  readonly event = new EventManager(this.className)
 
   readonly options: Options & ChartContext
 
@@ -338,9 +338,9 @@ export abstract class LayerBase<Options extends LayerOptions> {
       })
     }
 
-    event.on('start', (d: unknown) => this.event.fire(`${prefix}start`, d))
-    event.on('process', (d: unknown) => this.event.fire(`${prefix}process`, d))
-    event.on('end', (d: unknown) => this.event.fire(`${prefix}end`, d))
+    event.on('start', 'base', (d) => this.event.fire(`${prefix}start`, d))
+    event.on('process', 'base', (d) => this.event.fire(`${prefix}process`, d))
+    event.on('end', 'base', (d) => this.event.fire(`${prefix}end`, d))
     this.cacheAnimation.animations[sublayer] = animationQueue
 
     /**

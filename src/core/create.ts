@@ -34,7 +34,7 @@ export const createLayer = (chart: Chart, schema: ArrayItem<CreateChartProps['la
   layer.setAnimation(animation)
   isLayerAxis(layer) && layer.setScale({nice: scale})
   !isLayerLegend(layer) && layer.setData(dataSet)
-  Object.entries(event ?? {}).forEach(([name, fn]) => layer.event.on(name, fn))
+  Object.entries(event ?? {}).forEach(([name, fn]) => layer.event.on(name, 'custom', fn))
 
   return layer
 }
@@ -45,7 +45,7 @@ export const createChart = errorCatcher(
     const chart = existedChart ?? new Chart(initialConfig)
 
     // catch error and info user
-    chart.event.on('error', (data: any) => {
+    chart.event.on('error', 'system', (data: any) => {
       if (!onError) {
         chart.destroy()
         const fbChart = new Chart(initialConfig)
@@ -75,7 +75,7 @@ export const createChart = errorCatcher(
         .filter(Boolean)
       const batchAnimation = enterAnimations.map((animation) => {
         return new Promise<void>((resolve) => {
-          animation?.event.on('init', () => resolve())
+          animation?.event.on('init', 'system', () => resolve())
         })
       })
       Promise.all(batchAnimation).then(() => {

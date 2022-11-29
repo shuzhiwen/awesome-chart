@@ -58,7 +58,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
     super({context, options, sublayers: ['rect', 'text']})
     const {layout, createSublayer} = this.options
 
-    this.event.on('destroy', () => {
+    this.event.on('destroy', this.className, () => {
       this.rectLayer.destroy()
       this.lineLayer.destroy()
     })

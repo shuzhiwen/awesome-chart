@@ -8,7 +8,7 @@ import {lightTheme} from './theme'
 import {Tooltip} from './tooltip'
 import {
   createLog,
-  createEvent,
+  EventManager,
   getEasyGradientCreator,
   getPercentageNumber,
   isLayerBasemap,
@@ -61,7 +61,7 @@ export class Chart {
   /**
    * Manage lifecycle or error events.
    */
-  readonly event = createEvent<
+  readonly event = new EventManager<
     'MouseEvent' | 'initialized' | 'error' | Keys<typeof chartLifeCycles>
   >(Chart.name)
 

@@ -40,8 +40,8 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
 
   connect(priorityConfig?: number[] | ((queues: Animation[]) => number[])) {
     this.queue.forEach((instance) => {
-      instance.event.off('start', undefined, eventKey)
-      instance.event.off('end', undefined, eventKey)
+      instance.event.off('start', eventKey)
+      instance.event.off('end', eventKey)
     })
 
     let finalPriority: number[]

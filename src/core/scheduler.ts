@@ -1,8 +1,8 @@
 import {sum} from 'lodash'
-import {createEvent} from '../utils'
+import {EventManager} from '../utils'
 
 export class Scheduler {
-  readonly event = createEvent<'run'>(Scheduler.name)
+  readonly event = new EventManager<'run'>(Scheduler.name)
 
   private queue: Record<Priority, AnyFunction[]> = {
     topHigh: [],

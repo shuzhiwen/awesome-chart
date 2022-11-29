@@ -71,7 +71,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     super({context, options, sublayers: ['rect', 'interactive'], interactive: ['interactive']})
     const {layout, createSublayer, event} = this.options
 
-    this.event.on('destroy', () => {
+    this.event.on('destroy', this.className, () => {
       this.helperAuxiliary.forEach((auxiliary) => auxiliary.destroy())
     })
 
@@ -96,7 +96,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       layer.options.theme.animation.update.duration = 100
     })
 
-    event.on('MouseEvent', ({event}: {event: MouseEvent}) => {
+    event.on('MouseEvent', this.className, ({event}: {event: MouseEvent}) => {
       const {offsetX, offsetY} = event,
         {scaleX, scaleY} = this.scale,
         {left, right, top, bottom} = layout,
