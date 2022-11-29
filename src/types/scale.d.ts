@@ -1,4 +1,3 @@
-import {DataTableList} from '../data'
 import {scaleBand, scaleLinear, scaleAngle} from '../scales'
 import {ScalePoint, ScaleQuantize} from 'd3'
 
@@ -93,12 +92,13 @@ export type ScaleLinearProps = {
 }
 
 export type ScaleArcProps = {
-  domain: DataTableList
+  domain: [Meta[], Meta[]]
   range: [number, number]
   nice?: ScaleArcNice
 }
 
 export type ScaleArcRangeItem = {
+  weight: Meta
   startAngle: number
   endAngle: number
 }

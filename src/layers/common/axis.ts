@@ -1,9 +1,10 @@
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
-import {scaleBand, scaleLinear} from '../../scales'
+import {scaleAngle, scaleBand, scaleLinear} from '../../scales'
 import {sum} from 'd3'
 import {
   isRealNumber,
+  isScaleAngle,
   isScaleBand,
   isScaleLinear,
   robustRange,
@@ -209,16 +210,24 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     scaleTypes.forEach((type) => {
       if (type === 'scaleColor') return
 
-      if (isScaleLinear(this.scale[type])) {
+      const scale = this.scale[type]
+
+      if (isScaleLinear(scale)) {
         this.scale[type] = scaleLinear({
-          domain: this.scale[type]?.domain() as [number, number],
-          range: this.scale[type]?.range() as [number, number],
+          domain: scale.domain() as [number, number],
+          range: scale.range() as [number, number],
           nice: this.scale.nice,
         })
-      } else if (isScaleBand(this.scale[type])) {
+      } else if (isScaleBand(scale)) {
         this.scale[type] = scaleBand({
-          domain: this.scale[type]?.domain() as string[],
-          range: this.scale[type]?.range() as [number, number],
+          domain: scale.domain(),
+          range: scale.range(),
+          nice: this.scale.nice,
+        })
+      } else if (isScaleAngle(scale)) {
+        this.scale[type] = scaleAngle({
+          domain: [scale.domain(), scale.range().map(({weight}) => weight)],
+          range: [scale.range()[0].startAngle, scale.range().slice(-1)[0].endAngle],
           nice: this.scale.nice,
         })
       }

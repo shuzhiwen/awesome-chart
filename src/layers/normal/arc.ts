@@ -231,7 +231,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       {width, height} = layout,
       {headers} = this.data,
       {innerRadius} = this.style,
-      labels = this.data.select(headers[0]),
+      labels = this.data.lists[0],
       maxRadius = Math.min(width, height) / 2
 
     if (variant === 'pie') {
@@ -239,7 +239,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       this._scale = createScale(
         {
           scaleAngle: scaleAngle({
-            domain: labels.concat(percentages),
+            domain: [labels, percentages.lists[0]],
             range: [0, Math.PI * 2],
           }),
           scaleRadius: scaleLinear({
@@ -252,16 +252,10 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
     }
 
     if (variant === 'nightingaleRose') {
-      const percentages = this.data.select(headers[1]),
-        tableList = new DataTableList([
-          percentages.headers,
-          ...percentages.lists[0].map(() => [1 / percentages.lists[0].length]),
-        ])
-
       this._scale = createScale(
         {
           scaleAngle: scaleAngle({
-            domain: labels.concat(tableList),
+            domain: [labels, labels.map(() => 1 / labels.length)],
             range: [0, Math.PI * 2],
           }),
           scaleRadius: scaleLinear({

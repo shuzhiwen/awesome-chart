@@ -15,6 +15,9 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
     options: {
       coordinate: 'polar',
     },
+    scale: {
+      paddingInner: variant !== 'pie' && stack ? 0.1 : 0,
+    },
     style: {
       splitLineAngle: {hidden: variant === 'pie'},
       splitLineRadius: {hidden: variant === 'pie'},

@@ -1,6 +1,6 @@
 import {select} from 'd3'
 import {fabric} from 'fabric'
-import {isArray, isNumber} from 'lodash'
+import {isArray, isNil, isNumber} from 'lodash'
 import {LayerAxis, LayerBasemap, LayerBrush, LayerLegend} from '../layers'
 import {
   D3Selection,
@@ -8,6 +8,7 @@ import {
   RawRelation,
   RawTable,
   RawTableList,
+  ScaleAngle,
   ScaleBand,
   ScaleLinear,
 } from '../types'
@@ -78,6 +79,10 @@ export function isScaleBand(scale: any): scale is ScaleBand {
 
 export function isScaleLinear(scale: any): scale is ScaleLinear {
   return typeof scale?.ticks === 'function'
+}
+
+export function isScaleAngle(scale: any): scale is ScaleAngle {
+  return !isNil(scale?.range?.()?.[0]?.weight)
 }
 
 /**
