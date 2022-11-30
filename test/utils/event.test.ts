@@ -1,14 +1,14 @@
-import {createEvent} from '../../src'
+import {EventManager} from '../../src'
 
-test('createEvent', () => {
-  const event = createEvent<any, any>('abc')
+test('EventManager', () => {
+  const event = new EventManager<any, any>('abc')
   let value = 0
 
-  event.on('addOne', () => value++)
-  event.on('addOne', () => value++, 'group1')
-  event.on('addOne', () => value++, 'group2')
-  event.on('addTwo', () => (value += 2))
-  event.once('AddOneOnce', () => value++)
+  event.on('addOne', null, () => value++)
+  event.on('addOne', 'group1', () => value++)
+  event.on('addOne', 'group2', () => value++)
+  event.on('addTwo', null, () => (value += 2))
+  event.once('AddOneOnce', null, () => value++)
 
   expect(event.has('addOne')).toBe(true)
   event.fire('addOne')
@@ -21,7 +21,7 @@ test('createEvent', () => {
   event.fire('AddOneOnce')
   event.fire('AddOneOnce')
   expect(value).toBe(11)
-  event.off('addOne', undefined, 'group1')
+  event.off('addOne', 'group1')
   expect(event.has('addOne')).toBe(true)
   event.fire('addOne')
   expect(value).toBe(13)
