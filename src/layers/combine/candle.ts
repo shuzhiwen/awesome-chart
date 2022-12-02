@@ -1,9 +1,9 @@
+import {merge} from 'lodash'
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {createScale, createStyle, validateAndCreateData} from '../helpers'
+import {bindEventManager, commonEvents, uuid} from '../../utils'
 import {LayerRect} from '../normal'
-import {uuid} from '../../utils'
-import {merge} from 'lodash'
 import {
   ChartContext,
   LayerCandleStyle,
@@ -58,11 +58,6 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
     super({context, options, sublayers: ['rect', 'text']})
     const {layout, createSublayer} = this.options
 
-    this.event.on('destroy', this.className, () => {
-      this.rectLayer.destroy()
-      this.lineLayer.destroy()
-    })
-
     this.lineLayer = createSublayer({
       id: uuid(),
       layout,
@@ -79,6 +74,10 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
       variant: 'column',
       sublayerConfig: {root: this.root},
     }) as LayerRect
+
+    bindEventManager(this.event, [this.lineLayer.event, this.rectLayer.event], (name) =>
+      Array.from(commonEvents.values()).some((item) => name.match(item))
+    )
   }
 
   setData(data: LayerCandle['data']) {

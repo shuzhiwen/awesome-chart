@@ -46,7 +46,7 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
   constructor(options: LayerForceOptions, context: ChartContext) {
     super({options, context, sublayers: ['node', 'text'], interactive: ['node']})
 
-    this.event.onWithOff('destroy', 'default', () => {
+    this.event.onWithOff('destroy', 'internal', () => {
       this.simulation?.on('tick', null).stop()
     })
   }

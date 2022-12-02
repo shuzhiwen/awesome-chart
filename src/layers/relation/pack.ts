@@ -21,8 +21,6 @@ import {
   LayerStyle,
 } from '../../types'
 
-const animationKey = `animationKey-${new Date().getTime()}`
-
 const defaultOptions: Partial<LayerPackOptions> = {
   variant: 'pack',
 }
@@ -174,7 +172,7 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
     this.drawBasic({type: 'text', data: textData.slice(textData.length - 1)})
 
     if (zoom) {
-      this.event.onWithOff('mousedown-circle', animationKey, this.zoom)
+      this.event.onWithOff('mousedown-circle', 'internal', this.zoom)
     }
   }
 

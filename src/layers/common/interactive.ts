@@ -71,7 +71,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     super({context, options, sublayers: ['rect', 'interactive'], interactive: ['interactive']})
     const {layout, createSublayer, event} = this.options
 
-    this.event.on('destroy', this.className, () => {
+    this.event.on('destroy', 'internal', () => {
       this.helperAuxiliary.forEach((auxiliary) => auxiliary.destroy())
     })
 
@@ -264,7 +264,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       sublayer: 'interactive',
     })
 
-    this.event.onWithOff('mouseover-interactive', this.options.id, ({data, event}) => {
+    this.event.onWithOff('mouseover-interactive', 'internal', ({data, event}) => {
       if (data.source.key.match('secondary')) {
         return
       }
@@ -285,7 +285,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
         data.opacity = 0
       }
     })
-    this.event.onWithOff('mouseout-interactive', this.options.id, () => {
+    this.event.onWithOff('mouseout-interactive', 'internal', () => {
       if (isSC(this.root)) {
         this.root.selectAll(makeClass('interactive', true)).attr('opacity', 0)
       } else {

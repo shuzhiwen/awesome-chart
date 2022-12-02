@@ -71,7 +71,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
   /**
    * Manage lifecycle or tooltip events.
    */
-  readonly event = new EventManager(this.className)
+  readonly event = new EventManager<string, 'internal' | 'user'>(this.className)
 
   readonly options: Options & ChartContext
 

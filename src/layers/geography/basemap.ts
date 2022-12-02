@@ -20,8 +20,6 @@ type GeoFeature = {
   geometry: GeoGeometryObjects
 }
 
-const animationKey = `animationKey-${new Date().getTime()}`
-
 const getGeoJSON = (adcode: Meta) => `http://cdn.dtwave.com/waveview/geojson/${adcode}.json`
 
 const defaultStyle: LayerBasemapStyle = {
@@ -219,14 +217,14 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
       this.options.rebuildScale({trigger: this, redraw: true})
     }
 
-    this.event.onWithOff('click-background', animationKey, () => {
+    this.event.onWithOff('click-background', 'internal', () => {
       const parentCode = this.parentCode.pop()
       if (parentCode) {
         this.fetchOnlineData(parentCode)
       }
     })
 
-    this.event.onWithOff('click-block', animationKey, ({data}) => {
+    this.event.onWithOff('click-block', 'internal', ({data}) => {
       const blockCode = data.source.find(({category}: ElSource) => category === 'adcode')?.value
       this.parentCode.push(
         data.source.find(({category}: ElSource) => category === 'parent')?.value?.adcode

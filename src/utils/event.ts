@@ -3,22 +3,30 @@ import {EventCallback} from '../types'
 import {group} from './chaos'
 import {uuid} from './random'
 
+const methods = ['on', 'once', 'off', 'onWithOff', 'fire'] as const
+
 const isCallback = (fn: unknown): fn is EventCallback => isFunction(fn)
 
 export class EventManager<
-  Key extends string = string,
+  Name extends string = string,
   Category extends string = string,
   Callback extends EventCallback = EventCallback
 > {
+  /**
+   * The key of the event, used to generate the ID.
+   */
   private key: string
 
+  /**
+   * All active listener functions.
+   */
   private cache: Record<string, Callback[]> = {}
 
   constructor(key: string) {
     this.key = `__event_${key}_${uuid()}`
   }
 
-  private rename(name: Key) {
+  private rename(name: Name) {
     return `${this.key}_${name}`
   }
 
@@ -28,7 +36,7 @@ export class EventManager<
    * The event name.
    * @eventProperty
    */
-  has(name: Key) {
+  has(name: Name) {
     return !!this.cache[this.rename(name)]
   }
 
@@ -42,22 +50,16 @@ export class EventManager<
    * The listener instance.
    * @eventProperty
    */
-  onWithOff(name: Key, category: Category, fn: Callback) {
+  onWithOff(name: Name, category: Category, fn: Callback) {
     this.off(name, category)
     this.on(name, category, fn)
   }
 
   /**
    * Register listener for specific event.
-   * @param name
-   * The event name.
-   * @param category
-   * The event category that used to distinguish event sources.
-   * @param fn
-   * The listener instance.
-   * @eventProperty
+   * @see onWithOff
    */
-  on(name: Key, category: Category, fn: Callback) {
+  on(name: Name, category: Category, fn: Callback) {
     const prefixedName = this.rename(name)
     this.cache[prefixedName] = this.cache[prefixedName] || []
     this.cache[prefixedName].push(fn)
@@ -66,15 +68,9 @@ export class EventManager<
 
   /**
    * Register listener that will be destroy after fire.
-   * @param name
-   * The event name.
-   * @param category
-   * The event category that used to distinguish event sources.
-   * @param fn
-   * The listener instance.
-   * @eventProperty
+   * @see onWithOff
    */
-  once(name: Key, category: Category, fn: Callback) {
+  once(name: Name, category: Category, fn: Callback) {
     const prefixedName = this.rename(name)
     this.cache[prefixedName] = this.cache[prefixedName] || []
     this.cache[prefixedName].push(fn)
@@ -84,18 +80,12 @@ export class EventManager<
 
   /**
    * Unregister listener for specific event.
-   * @param name
-   * The event name.
-   * @param category
-   * The event category that used to distinguish event sources.
-   * @param fn
-   * The listener instance.
-   * @eventProperty
+   * @see onWithOff
    */
-  off(name: Key): void
-  off(name: Key, fn: Callback): void
-  off(name: Key, category: Category): void
-  off(name: Key, input?: Callback | Category): void {
+  off(name: Name): void
+  off(name: Name, fn: Callback): void
+  off(name: Name, category: Category): void
+  off(name: Name, input?: Callback | Category): void {
     const prefixedName = this.rename(name)
     const fns = this.cache[prefixedName] || []
 
@@ -122,7 +112,7 @@ export class EventManager<
    * The context for listener.
    * @eventProperty
    */
-  fire(name: Key, args?: unknown, context?: unknown) {
+  fire(name: Name, args?: unknown, context?: unknown) {
     group(this.cache[this.rename(name)]).forEach((fn) => {
       if (isNil(fn.isOnceDone)) {
         fn.apply(context || null, group(args))
@@ -132,4 +122,34 @@ export class EventManager<
       }
     })
   }
+}
+
+/**
+ * Replay the events of the source on the target.
+ * @param targets
+ * The target `EventManager`.
+ * @param sources
+ * The group of `EventManager`.
+ * @param filter
+ * Only the name that meet the conditions can be triggered in a chain.
+ * @remarks
+ * Note that source-related events cannot be triggered on the target,
+ * otherwise it will fall into an infinite loop.
+ */
+export function bindEventManager(
+  target: EventManager,
+  sources: EventManager[],
+  filter: (name: string) => boolean
+) {
+  methods.forEach((method) => {
+    sources.forEach((source) => {
+      const origin = source[method]
+      source[method] = (...args: any) => {
+        origin.call(source, ...(args as [any, any, any]))
+        if (filter(args[0])) {
+          target[method].call(target, ...(args as [any, any, any]))
+        }
+      }
+    })
+  })
 }

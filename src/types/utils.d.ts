@@ -1,4 +1,5 @@
 import {Gradient} from 'fabric/fabric-impl'
+import {EventManager} from '../utils'
 import {D3Selection} from './draw'
 
 export type Box = {
@@ -43,6 +44,8 @@ export type GradientCreatorProps<Schema> = {
   container: D3Selection | Gradient[]
   schema: Schema
 }
+
+export type EventCategory<T> = T extends EventManager<string, infer F> ? F : never
 
 export type EventCallback = AnyFunction & {
   /**

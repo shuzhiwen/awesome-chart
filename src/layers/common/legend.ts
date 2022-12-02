@@ -27,8 +27,6 @@ import {
   TextDrawerProps,
 } from '../../types'
 
-const animationKey = `animationKey-${new Date().getTime()}`
-
 const defaultStyle: LayerLegendStyle = {
   maxColumn: 10,
   align: ['end', 'start'],
@@ -131,7 +129,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       colorMatrix = this.legendDataGroup.map(({colorMatrix}) => colorMatrix),
       active = new Array<boolean>(colors.length).fill(true)
 
-    this.event.onWithOff('mousedown-interactive', animationKey, (d: {data: ElConfig}) => {
+    this.event.onWithOff('mousedown-interactive', 'internal', (d: {data: ElConfig}) => {
       const itemIndex = ungroup(d.data.source).itemIndex ?? -1,
         index = counts.findIndex((_, i) => sum(counts.slice(0, i + 1)) > itemIndex),
         start = counts.slice(0, index).reduce((prev, cur) => prev + cur, 0),
