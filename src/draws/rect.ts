@@ -1,8 +1,8 @@
 import {fabric} from 'fabric'
 import {isArray, merge} from 'lodash'
-import {DrawerData, RectDrawerProps} from '../types'
-import {mergeAlpha, getAttr, isSC, isCC, noChange} from '../utils'
 import {IRectOptions} from 'fabric/fabric-impl'
+import {mergeAlpha, getAttr, isSC, isCC, noChange} from '../utils'
+import {DrawerData, RectDrawerProps} from '../types'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
 

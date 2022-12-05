@@ -1,7 +1,7 @@
 import {fabric} from 'fabric'
+import {svgEasing} from '../animation'
 import {PathDrawerProps} from '../types'
 import {IPathOptions} from 'fabric/fabric-impl'
-import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, noChange, isCC, isSC} from '../utils'
 import {selector} from '../layers'
 import {merge} from 'lodash'

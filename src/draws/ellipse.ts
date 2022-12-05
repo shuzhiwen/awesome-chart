@@ -1,8 +1,8 @@
-import {svgEasing} from '../animation'
 import {fabric} from 'fabric'
+import {svgEasing} from '../animation'
 import {IEllipseOptions} from 'fabric/fabric-impl'
-import {EllipseDrawerProps} from '../types'
 import {mergeAlpha, getAttr, noChange, isSC, isCC} from '../utils'
+import {EllipseDrawerProps} from '../types'
 import {selector} from '../layers'
 import {merge} from 'lodash'
 

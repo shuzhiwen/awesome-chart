@@ -1,7 +1,7 @@
 import {fabric} from 'fabric'
+import {svgEasing} from '../animation'
 import {PolyDrawerProps} from '../types'
 import {IPolylineOptions} from 'fabric/fabric-impl'
-import {svgEasing} from '../animation'
 import {mergeAlpha, getAttr, noChange, isSC, isCC} from '../utils'
 import {selector} from '../layers'
 import {merge} from 'lodash'

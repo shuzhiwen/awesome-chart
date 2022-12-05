@@ -227,7 +227,8 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       offsetX = align === 'middle' ? leftX / 2 : align === 'end' ? leftX : 0,
       offsetY = verticalAlign === 'middle' ? leftY / 2 : verticalAlign === 'end' ? leftY : 0
 
-    this.textData = this.textData.map(({x, y, value}) => ({
+    this.textData = this.textData.map(({x, y, value, ...rest}) => ({
+      ...rest,
       x: x + offset[0] + offsetX,
       y: y - offset[1] + offsetY,
       value,

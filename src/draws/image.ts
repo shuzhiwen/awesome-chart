@@ -1,10 +1,19 @@
-import {svgEasing} from '../animation'
+import {merge} from 'lodash'
 import {fabric} from 'fabric'
+import {svgEasing} from '../animation'
 import {IImageOptions} from 'fabric/fabric-impl'
-import {ImageDrawerProps} from '../types'
 import {getAttr, isCC, isSC, noChange, uuid} from '../utils'
 import {selector} from '../layers'
-import {merge} from 'lodash'
+import {
+  DrawerData,
+  DrawerType,
+  ElConfig,
+  EllipseDrawerProps,
+  GraphStyle,
+  ImageDrawerProps,
+  RectDrawerProps,
+  TextDrawerProps,
+} from '../types'
 
 export function drawImage({
   opacity,
@@ -105,4 +114,47 @@ export function drawImage({
       )
     })
   }
+}
+
+export function transformToImage<T extends ElConfig>(
+  data: T & {
+    from: Extract<DrawerType, 'ellipse' | 'rect' | 'text'>
+    viewBox?: DrawerData<ImageDrawerProps>['viewBox']
+    size?: [number, number]
+    offset?: [number, number]
+    url?: string
+  }
+): T {
+  if (!data.size || !data.url) {
+    return data
+  }
+
+  const {from, url, size, viewBox, offset = [0, 0]} = data,
+    {container, theme, source, className} = data as typeof data &
+      Parameters<NonNullable<GraphStyle['mapping']>>[0],
+    position = {x: offset[0], y: offset[1]}
+
+  if (from === 'ellipse') {
+    const {cx, cy} = data as unknown as DrawerData<EllipseDrawerProps>
+    position.x += cx - size[0] / 2
+    position.y += cy - size[1] / 2
+  } else if (from === 'rect') {
+    const {x, y, width, height} = data as unknown as DrawerData<RectDrawerProps>
+    position.x += x + (width - size[0]) / 2
+    position.y += y + (height - size[1]) / 2
+  } else if (from === 'text') {
+    const {x, y, textWidth, textHeight} = data as unknown as DrawerData<TextDrawerProps>
+    position.x += x + (textWidth - size[0]) / 2
+    position.y += y - (textHeight + size[1]) / 2
+  }
+
+  drawImage({
+    theme: theme,
+    source: [source],
+    container: container,
+    className: `transformed-image-from-${className}`,
+    data: [{url, viewBox, width: size[0], height: size[1], ...position}],
+  })
+
+  return data
 }

@@ -53,6 +53,8 @@ export type ElConfig = {
 
 export type TextDrawerProps = TextStyle &
   BasicDrawerProps<{
+    textWidth: number
+    textHeight: number
     value: string
     x: number
     y: number

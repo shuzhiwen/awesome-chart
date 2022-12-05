@@ -1,6 +1,6 @@
 import {fabric} from 'fabric'
-import {TextOptions} from 'fabric/fabric-impl'
 import {interpolateNumber} from 'd3'
+import {TextOptions} from 'fabric/fabric-impl'
 import {TextDrawerProps} from '../types'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'

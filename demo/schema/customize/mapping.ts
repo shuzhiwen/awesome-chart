@@ -9,8 +9,17 @@ export default () =>
       scale: {
         zero: true,
       },
-      data: {
-        titleX: '支出项目',
+      style: {
+        textX: {
+          mapping: (data) =>
+            (window as any).awesome.transformToImage({
+              ...data,
+              from: 'text',
+              url: 'fruits.png',
+              size: [30, 30],
+              offset: [0, 25],
+            }),
+        },
       },
     },
     {
@@ -55,33 +64,25 @@ export default () =>
         text: {
           fontSize: 10,
           opacity: 0,
-          mapping: ({x, y, container, theme, className}) => {
-            const {drawImage} = (window as any).awesome
+          mapping: (data) => {
             const xIndex = Math.floor(Math.random() * 2)
             const yIndex = Math.floor(Math.random() * 2)
             const originImageSize = 200
             const imageItemSize = originImageSize / 2
             const labelIconSize = 30
-            // replace label with image
-            drawImage({
-              data: [
-                {
-                  x,
-                  y: y - labelIconSize,
-                  width: labelIconSize,
-                  height: labelIconSize,
-                  url: 'fruits.png',
-                  viewBox: {
-                    x: xIndex * imageItemSize,
-                    y: yIndex * imageItemSize,
-                    width: imageItemSize,
-                    height: imageItemSize,
-                  },
-                },
-              ],
-              container,
-              theme,
-              className: `${className}-mapping-image`,
+
+            ;(window as any).awesome.transformToImage({
+              ...data,
+              from: 'text',
+              url: 'fruits.png',
+              size: [labelIconSize, labelIconSize],
+              offset: [0, -10],
+              viewBox: {
+                x: xIndex * imageItemSize,
+                y: yIndex * imageItemSize,
+                width: imageItemSize,
+                height: imageItemSize,
+              },
             })
           },
         },
