@@ -1,9 +1,10 @@
 import React from 'react'
-import s from './TabMenu.module.css'
-import {hierarchy, select} from 'd3'
-import {cloneDeep, max, merge} from 'lodash'
-import {useEffect, useRef} from 'react'
 import {schemaMenu} from './schema'
+import {hierarchy, select} from 'd3'
+import {useEffect, useRef} from 'react'
+import {cloneDeep, max, merge} from 'lodash'
+import {parse, stringify} from './Editor'
+import s from './TabMenu.module.css'
 import {BasicLayerOptions, ChartContext, D3Selection} from '../src/types'
 import {
   addStyle,
@@ -241,9 +242,9 @@ export const Menu = (props: {onChange: (data: any) => void}) => {
 
     layer.setData(new DataBase(schemaMenu))
     layer.draw()
-    layer.event.onWithOff('click-tab', 'menu', ({data}) => {
+    layer.event.onWithOff('click-tab', 'user', ({data}) => {
       if (data.node.data.schema) {
-        onChange(data.node.data.schema)
+        parse(stringify(data.node.data.schema)!, (value) => onChange(value))
         layer.blur()
       }
     })

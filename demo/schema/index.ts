@@ -59,14 +59,14 @@ export const schemaMenu: MenuShape = {
           name: '高级绘制函数',
           schema: base(mapping(), {
             tooltipOptions: {
-              render: (container) => {
+              render: `(container) => {
                 const image = document.createElement('img')
                 image.src = 'fruits.png'
                 image.width = 100
                 image.height = 100
                 container.innerHTML = ''
                 container.appendChild(image)
-              },
+              }`,
             },
           }),
         },

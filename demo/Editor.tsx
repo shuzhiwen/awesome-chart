@@ -1,40 +1,37 @@
+import * as awesome from '../src'
 import * as monaco from 'monaco-editor'
-import {useEffect, useMemo, useRef, useState} from 'react'
 import styles from './Editor.module.css'
+import {useEffect, useMemo, useRef, useState} from 'react'
 import {download, errorCatcher} from '../src'
 import {noop, throttle} from 'lodash'
 import chroma from 'chroma-js'
 import React from 'react'
 
 const throttleDownload = throttle(download, 500)
-const pack = (value: string) => `(() => (${value}))()`
 
-const stringify = errorCatcher(
-  (value: any, space = 2) =>
-    pack(
-      JSON.stringify(
-        value,
-        (_, key) => {
-          if (typeof key === 'function') {
-            return `fn{${key.toString()}}fn`
-          }
-          return key
-        },
-        space
-      )
+export const stringify = errorCatcher(
+  (value: any, space = 2, noPack = false) => {
+    const result = JSON.stringify(
+      value,
+      (key, value) => {
+        return key === 'mapping' || key === 'render' ? `fn{${value}}fn` : value
+      },
+      space
     ).replace(/"fn\{[\d\D]+?\}fn"/g, (match) =>
       match
         .replace(/\\n/g, '\n')
         .replace(/\\[vrf]{1}/g, '')
         .replace(/\\[\^$+?=!.()\\/()[\]{}"']{1}/g, (match) => match.slice(-1))
         .slice(4, -4)
-    ),
+    )
+    return noPack ? result : `(() => (${result}))()`
+  },
   (error) => {
     console.error(error.message)
   }
 )
 
-const parse = errorCatcher(
+export const parse = errorCatcher(
   (value: string, callback: (value: object) => void) => {
     callback(eval(value))
   },
@@ -42,6 +39,14 @@ const parse = errorCatcher(
     console.error(error.message)
   }
 )
+
+monaco.languages.typescript.typescriptDefaults.addExtraLib(
+  `${Object.entries(awesome).reduce(
+    (prev, [key]) => `${prev}${key}:any;`,
+    'interface Window {awesome: {'
+  )}}}`
+)
+;(window as any).awesome = awesome
 
 export function Editor(props: {schema: AnyObject; onChange: AnyFunction}) {
   const {schema: _schema, onChange = noop} = props,

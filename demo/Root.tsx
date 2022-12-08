@@ -4,10 +4,8 @@ import {schemaMenu} from './schema'
 import {Editor} from './Editor'
 import {Chart} from './Chart'
 import {Menu} from './TabMenu'
-import * as debugs from './debug'
-import * as awesome from '../src'
 import {debounce} from 'lodash'
-;(window as any).awesome = awesome
+import * as debugs from './debug'
 
 const isDebug = localStorage.getItem('AWESOME_MODE') === 'development'
 

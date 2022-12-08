@@ -11,14 +11,14 @@ export default () =>
       },
       style: {
         textX: {
-          mapping: (data) =>
-            (window as any).awesome.transformToImage({
+          mapping: `(data) =>
+            window.awesome.transformToImage({
               ...data,
               from: 'text',
               url: 'fruits.png',
               size: [30, 30],
               offset: [0, 25],
-            }),
+            })`,
         },
       },
     },
@@ -40,8 +40,8 @@ export default () =>
         rect: {
           fill: 'seagreen',
           opacity: 0,
-          mapping: ({source: {value}, x, y, width, height, fill, container, theme, className}) => {
-            const {drawLine} = (window as any).awesome
+          mapping: `({source: {value}, x, y, width, height, fill, container, theme, className}) => {
+            const {drawLine} = window.awesome
             // replace label with image
             drawLine({
               data: [
@@ -57,21 +57,20 @@ export default () =>
               strokeDasharray: '5 5',
               container,
               theme,
-              className: `${className}-mapping-line`,
+              className: className + '-mapping-line',
             })
-          },
+          }`,
         },
         text: {
           fontSize: 10,
           opacity: 0,
-          mapping: (data) => {
+          mapping: `(data) => {
             const xIndex = Math.floor(Math.random() * 2)
             const yIndex = Math.floor(Math.random() * 2)
             const originImageSize = 200
             const imageItemSize = originImageSize / 2
             const labelIconSize = 30
-
-            ;(window as any).awesome.transformToImage({
+            window.awesome.transformToImage({
               ...data,
               from: 'text',
               url: 'fruits.png',
@@ -84,7 +83,7 @@ export default () =>
                 height: imageItemSize,
               },
             })
-          },
+          }`,
         },
       },
     },
