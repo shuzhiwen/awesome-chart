@@ -52,7 +52,7 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
         hidden: variant !== 'pie',
       },
     },
-    animation: (theme) => ({
+    animation: `(theme) => ({
       arc: {
         enter: theme.animation.presets.zoomIn,
       },
@@ -62,6 +62,6 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
       text: {
         enter: theme.animation.presets.fadeIn,
       },
-    }),
+    })`,
   },
 ]

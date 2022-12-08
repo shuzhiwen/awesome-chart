@@ -18,7 +18,7 @@ export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
           ]
         : [['width', 'height']].concat(new Array(20).fill([2, 2])),
     style: style,
-    animation: (theme) => ({
+    animation: `(theme) => ({
       box: {
         enter: {
           ...theme.animation.presets.zoomIn,
@@ -35,6 +35,6 @@ export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
           delay: 0,
         },
       },
-    }),
+    })`,
   },
 ]

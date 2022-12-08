@@ -92,7 +92,7 @@ export default ({
         },
       },
       animation: sort
-        ? (theme) => ({
+        ? `(theme) => ({
             rect: {
               enter: theme.animation.presets.zoomIn,
               update: {duration: 200},
@@ -101,9 +101,9 @@ export default ({
               enter: theme.animation.presets.fadeIn,
               update: {duration: 200},
             },
-          })
+          })`
         : variant === 'bar'
-        ? (theme) => ({
+        ? `(theme) => ({
             rect: {
               enter: theme.animation.presets.zoomIn,
               loop: theme.animation.presets.scanRight,
@@ -111,8 +111,8 @@ export default ({
             text: {
               enter: theme.animation.presets.fadeIn,
             },
-          })
-        : (theme) => ({
+          })`
+        : `(theme) => ({
             rect: {
               enter: theme.animation.presets.zoomIn,
               loop: theme.animation.presets.scanTop,
@@ -120,7 +120,7 @@ export default ({
             text: {
               enter: theme.animation.presets.fadeIn,
             },
-          }),
+          })`,
     },
     mode !== 'percentage' &&
       mode !== 'waterfall' && {

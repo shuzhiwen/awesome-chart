@@ -31,7 +31,7 @@ export default ({mode}) => [
         hidden: true,
       },
     },
-    animation: (theme) => ({
+    animation: `(theme) => ({
       polygon: {
         enter: theme.animation.presets.zoomIn,
         loop: theme.animation.presets.scanOut,
@@ -43,6 +43,6 @@ export default ({mode}) => [
       text: {
         enter: theme.animation.presets.fadeIn,
       },
-    }),
+    })`,
   },
 ]

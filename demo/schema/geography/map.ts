@@ -67,10 +67,5 @@ export default () => [
         hidden: true,
       },
     },
-    animation: (theme) => ({
-      circle: {
-        enter: theme.animation.presets.zoomIn,
-      },
-    }),
   },
 ]

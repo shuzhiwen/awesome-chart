@@ -10,11 +10,14 @@ import React from 'react'
 const throttleDownload = throttle(download, 500)
 
 export const stringify = errorCatcher(
-  (value: any, space = 2, noPack = false) => {
+  (value: unknown, space = 2, noPack = false) => {
     const result = JSON.stringify(
       value,
       (key, value) => {
-        return key === 'mapping' || key === 'render' ? `fn{${value}}fn` : value
+        return (key === 'mapping' || key === 'render' || key === 'animation') &&
+          typeof value === 'string'
+          ? `fn{${value}}fn`
+          : value
       },
       space
     ).replace(/"fn\{[\d\D]+?\}fn"/g, (match) =>

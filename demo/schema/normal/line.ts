@@ -52,7 +52,7 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
           offset: hasMark ? [0, -5] : [0, 5],
         },
       },
-      animation: (theme) => ({
+      animation: `(theme) => ({
         curve: {
           enter: theme.animation.presets.eraseRight,
           loop: theme.animation.presets.scanRight,
@@ -64,7 +64,7 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
         text: {
           enter: theme.animation.presets.fadeIn,
         },
-      }),
+      })`,
     },
     {
       type: 'auxiliary',

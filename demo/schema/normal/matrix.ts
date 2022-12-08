@@ -30,7 +30,7 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
           hidden: true,
         },
       },
-      animation: (theme) => ({
+      animation: `(theme) => ({
         rect: {
           enter: {
             ...theme.animation.presets.zoomIn,
@@ -46,7 +46,7 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
         text: {
           enter: theme.animation.presets.fadeIn,
         },
-      }),
+      })`,
     },
   ].concat(
     brush

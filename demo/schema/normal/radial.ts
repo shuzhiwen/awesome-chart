@@ -12,14 +12,14 @@ export default () => [
       ['运动时长', 18, 30],
       ['运动次数', 5, 10],
     ],
-    animation: (theme) => ({
+    animation: `(theme) => ({
       arc: {
         enter: theme.animation.presets.zoomIn,
       },
       text: {
         enter: theme.animation.presets.fadeIn,
       },
-    }),
+    })`,
   },
   {
     type: 'axis',

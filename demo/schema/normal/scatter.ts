@@ -33,14 +33,15 @@ export default ({pointSize}) => [
         hidden: true,
       },
     },
-    animation: (theme) => ({
+    animation: `(theme) => ({
       point: {
+        enter: theme.animation.presets.zoomIn,
         loop: theme.animation.presets.breath,
       },
       text: {
         enter: theme.animation.presets.fadeIn,
       },
-    }),
+    })`,
   },
   {
     type: 'auxiliary',

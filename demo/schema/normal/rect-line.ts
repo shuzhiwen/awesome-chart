@@ -36,7 +36,7 @@ export default () =>
           fontSize: 10,
         },
       },
-      animation: (theme) => ({
+      animation: `(theme) => ({
         rect: {
           enter: theme.animation.presets.zoomIn,
           loop: theme.animation.presets.scanTop,
@@ -44,7 +44,7 @@ export default () =>
         text: {
           enter: theme.animation.presets.fadeIn,
         },
-      }),
+      })`,
     },
     {
       type: 'line',
@@ -75,7 +75,7 @@ export default () =>
           fontSize: 10,
         },
       },
-      animation: (theme) => ({
+      animation: `(theme) => ({
         curve: {
           enter: theme.animation.presets.eraseRight,
           loop: theme.animation.presets.scanRight,
@@ -87,6 +87,6 @@ export default () =>
         text: {
           enter: theme.animation.presets.fadeIn,
         },
-      }),
+      })`,
     },
   ].filter(Boolean)

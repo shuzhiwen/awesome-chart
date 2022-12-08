@@ -22,7 +22,7 @@ export default () =>
         ['服装', 300],
         ['总计', 2300],
       ],
-      animation: (theme) => ({
+      animation: `(theme) => ({
         rect: {
           enter: [theme.animation.presets.eraseRight, theme.animation.presets.zoomIn],
           loop: [
@@ -34,6 +34,6 @@ export default () =>
         text: {
           enter: theme.animation.presets.fadeIn,
         },
-      }),
+      })`,
     },
   ].filter(Boolean)
