@@ -1,7 +1,8 @@
 import {GetFacetLayoutCreatorProps, Layout, LayoutProps} from '../types'
+import {getPercentageNumber} from '../utils'
 
 export const getFacetLayoutCreator =
-  ({row, column}: GetFacetLayoutCreatorProps) =>
+  ({row, column, gap}: GetFacetLayoutCreatorProps) =>
   ({containerWidth, containerHeight, padding}: LayoutProps): Layout => {
     const layout: Layout = {
       container: {
@@ -25,8 +26,8 @@ export const getFacetLayoutCreator =
     const {top, bottom, left, right} = layout.main,
       facetWidth = (right - left) / column,
       facetHeight = (bottom - top) / row,
-      rowGap = facetHeight / 20,
-      columnGap = facetWidth / 20
+      rowGap = getPercentageNumber(gap[0], facetHeight),
+      columnGap = getPercentageNumber(gap[1], facetWidth)
 
     for (let i = 0; i < row; i++) {
       for (let j = 0; j < column; j++) {

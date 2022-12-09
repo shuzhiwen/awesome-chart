@@ -24,6 +24,7 @@ import rich from './customize/rich'
 import mapping from './customize/mapping'
 import histogram from './customize/histogram'
 import animation from './customize/animation'
+import facet from './customize/facet'
 
 const noPadding: Padding = [0, 0, 0, 0]
 const smallPadding: Padding = [30, 30, 30, 30]
@@ -73,6 +74,13 @@ export const schemaMenu: MenuShape = {
         {
           name: '动画队列',
           schema: base(animation()),
+        },
+        {
+          name: '分面图',
+          schema: base(facet(), {
+            facet: {row: 2, column: 2, gap: ['5%', '2%']},
+            padding: [15, 120, 15, 15],
+          }),
         },
       ],
     },

@@ -61,4 +61,8 @@ export type GetFacetLayoutCreatorProps = {
    * Facet columns for layout area.
    */
   column: number
+  /**
+   * Row and column spacing between each area.
+   */
+  gap: [Meta, Meta]
 }

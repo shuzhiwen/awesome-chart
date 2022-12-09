@@ -1,34 +1,35 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import styles from './Root.module.css'
-import {schemaMenu} from './schema'
+import base from './schema/base'
+import * as debugs from './debug'
+import {debounce} from 'lodash'
 import {Editor} from './Editor'
 import {Chart} from './Chart'
 import {Menu} from './TabMenu'
-import {debounce} from 'lodash'
-import * as debugs from './debug'
 
 const isDebug = localStorage.getItem('AWESOME_MODE') === 'development'
 
 export function Root() {
-  const {schema} = schemaMenu.children[0].children[0],
-    [newSchema, setNewSchema] = useState(schema),
-    onChange = useCallback((value) => setNewSchema(value), []),
+  const [editorSchema, setEditorSchema] = useState(),
+    [chartSchema, setChartSchema] = useState(base([])),
+    onEditorChange = useCallback((value) => setEditorSchema(value), []),
+    onChartChange = useCallback((value) => setChartSchema(value), []),
     debuggers = Object.values(debugs)
 
   useEffect(() => {
     const listener = () => window.location.reload()
     window.addEventListener('resize', debounce(listener, 500))
     return () => window.removeEventListener('resize', listener)
-  }, [newSchema])
+  }, [])
 
   return (
     <div className={styles.container}>
-      <Menu onChange={onChange} />
+      <Menu onChange={onEditorChange} />
       <div className={styles.mainSection}>
-        <Editor schema={newSchema} onChange={onChange} />
+        <Editor schema={editorSchema} onChange={onChartChange} />
         <div className={styles.chartSection} style={{opacity: isDebug ? 0.2 : 1}}>
-          <Chart debuggers={debuggers} schema={newSchema} variant="dark" />
-          <Chart debuggers={debuggers} schema={newSchema} variant="light" />
+          <Chart debuggers={debuggers} schema={chartSchema} variant="dark" />
+          <Chart debuggers={debuggers} schema={chartSchema} variant="light" />
         </div>
       </div>
     </div>

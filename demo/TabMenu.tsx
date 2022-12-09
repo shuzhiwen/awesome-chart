@@ -3,9 +3,8 @@ import {schemaMenu} from './schema'
 import {hierarchy, select} from 'd3'
 import {useEffect, useRef} from 'react'
 import {cloneDeep, max, merge} from 'lodash'
-import {parse, stringify} from './Editor'
-import s from './TabMenu.module.css'
 import {BasicLayerOptions, ChartContext, D3Selection} from '../src/types'
+import s from './TabMenu.module.css'
 import {
   addStyle,
   getAttr,
@@ -77,10 +76,6 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
   get style() {
     return this._style
   }
-
-  setScale() {}
-
-  setStyle() {}
 
   constructor(options: BasicLayerOptions<any>, context: ChartContext) {
     super({context, options})
@@ -244,7 +239,7 @@ export const Menu = (props: {onChange: (data: any) => void}) => {
     layer.draw()
     layer.event.onWithOff('click-tab', 'user', ({data}) => {
       if (data.node.data.schema) {
-        parse(stringify(data.node.data.schema)!, (value) => onChange(value))
+        onChange(data.node.data.schema)
         layer.blur()
       }
     })
