@@ -20,6 +20,7 @@ export const layerMapping = {
   brush: Layer.LayerBrush,
   candle: Layer.LayerCandle,
   carousel: Layer.LayerCarousel,
+  chord: Layer.LayerChord,
   dashboard: Layer.LayerDashboard,
   flopper: Layer.LayerFlopper,
   force: Layer.LayerForce,

@@ -99,6 +99,29 @@ export function createArcText(props: Omit<CreateTextProps, 'position'> & {angle:
 }
 
 /**
+ * Determine the center point position of the arc text based on the angle.
+ */
+export function createRotatedArcText(
+  props: Omit<CreateTextProps, 'position'> & {angle: number; radius: number}
+) {
+  const originData = createText({...props, position: 'center'})
+  let angle = props.angle % (Math.PI * 2)
+
+  safeLoop(
+    () => angle < 0,
+    () => (angle += Math.PI * 2)
+  )
+
+  originData.x += (originData.textWidth / 2) * Math.sin(angle)
+  originData.y -= (originData.textWidth / 2) * Math.cos(angle)
+
+  return {
+    ...originData,
+    rotation: (angle / Math.PI) * 180 - (angle > Math.PI ? 270 : 90),
+  }
+}
+
+/**
  * Control text width by resizing fontSize.
  */
 export function createLimitText(props: CreateLimitTextProps) {

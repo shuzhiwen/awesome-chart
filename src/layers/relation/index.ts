@@ -1,3 +1,4 @@
+export * from './chord'
 export * from './force'
 export * from './pack'
 export * from './sankey'

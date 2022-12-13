@@ -296,3 +296,11 @@ export type LayerGridStyle = Partial<{
   placeholder: GraphStyle
   box: GraphStyle
 }>
+
+export type LayerChordStyle = Partial<{
+  arcWidth: number
+  labelOffset: number
+  edge: GraphStyle
+  node: GraphStyle
+  text: TextStyle
+}>

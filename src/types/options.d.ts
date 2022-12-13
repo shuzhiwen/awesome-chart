@@ -31,6 +31,7 @@ export type LayerOptions =
   | LayerRadialOptions
   | LayerWaveOptions
   | LayerGridOptions
+  | LayerChordOptions
 
 type BasicLayerOptions<
   Type extends LayerType,
@@ -96,6 +97,8 @@ export type LayerRadialOptions = BasicLayerOptions<'radial'>
 export type LayerWaveOptions = BasicLayerOptions<'wave'>
 
 export type LayerGridOptions = BasicLayerOptions<'grid'>
+
+export type LayerChordOptions = BasicLayerOptions<'chord'>
 
 export type LayerAxisOptions = BasicLayerOptions<
   'axis',

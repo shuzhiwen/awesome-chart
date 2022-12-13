@@ -25,6 +25,7 @@ import mapping from './customize/mapping'
 import histogram from './customize/histogram'
 import animation from './customize/animation'
 import facet from './customize/facet'
+import chord from './relation/chord'
 
 const noPadding: Padding = [0, 0, 0, 0]
 const smallPadding: Padding = [30, 30, 30, 30]
@@ -290,6 +291,10 @@ export const schemaMenu: MenuShape = {
         {
           name: '词云',
           schema: base(wordCloud(), {padding: smallPadding}),
+        },
+        {
+          name: '和弦图',
+          schema: base(chord()),
         },
       ],
     },
