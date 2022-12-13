@@ -64,8 +64,6 @@ export function createText(props: CreateTextProps) {
     x: positionX,
     y: positionY,
     value: formattedText,
-    // corresponding to drawer
-    transformOrigin: `${positionX + textWidth / 2}px ${y}px`,
     textHeight: fontSize,
     textWidth,
   }

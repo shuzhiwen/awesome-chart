@@ -35,7 +35,6 @@ export function drawEllipse({
     fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
-    transformOrigin: `${item.cx} ${item.cy}`,
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, []),
   }))
@@ -63,7 +62,7 @@ export function drawEllipse({
       .attr('opacity', (d) => d.opacity)
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
-      .attr('transform-origin', (d) => d.transformOrigin)
+      .attr('transform-origin', (d) => `${d.cx} ${d.cy}`)
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 

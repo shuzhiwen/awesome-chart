@@ -284,7 +284,6 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
     const nodeData = this.nodeData.map((group) => ({
       data: group.map(({x, y, r}) => ({x, y, r})),
       source: group.map(({name, value}) => ({category: name, value})),
-      transformOrigin: 'center',
       fill: group.map(({color}) => color),
       ...this.style.node,
     }))

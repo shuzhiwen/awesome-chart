@@ -13,7 +13,6 @@ export function drawRect({
   opacity,
   fillOpacity,
   strokeOpacity,
-  transformOrigin,
   mapping = noChange,
   source = [],
   data = [],
@@ -36,7 +35,6 @@ export function drawRect({
     fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
-    transformOrigin: getAttr(transformOrigin, i, ''),
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, []),
   }))
@@ -66,7 +64,7 @@ export function drawRect({
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('opacity', (d) => d.opacity)
-      .attr('transform-origin', (d) => getTransformOrigin(d, d.transformOrigin))
+      .attr('transform-origin', (d) => getTransformOrigin(d))
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 
@@ -87,20 +85,17 @@ export function drawRect({
         opacity: config.opacity,
         source: config.source,
         evented: config.evented,
-        ...getTransformFabricAttr(config, config.transformOrigin),
+        ...getTransformFabricAttr(config),
       } as IRectOptions)
       container.addWithUpdate(rect)
     })
   }
 }
 
-const getTransformOrigin = (
-  data: DrawerData<RectDrawerProps>,
-  origin: ArrayItem<RectDrawerProps['transformOrigin']>
-) => {
-  const {x, y, width, height} = data
+const getTransformOrigin = (data: DrawerData<RectDrawerProps>) => {
+  const {x, y, width, height, transformOrigin = 'center'} = data
 
-  switch (origin) {
+  switch (transformOrigin) {
     case 'center':
       return `${x + width / 2}px ${y + height / 2}px`
     case 'left':
@@ -116,13 +111,10 @@ const getTransformOrigin = (
   }
 }
 
-const getTransformFabricAttr = (
-  data: DrawerData<RectDrawerProps>,
-  origin: ArrayItem<RectDrawerProps['transformOrigin']>
-) => {
-  const {x, y, width, height} = data
+const getTransformFabricAttr = (data: DrawerData<RectDrawerProps>) => {
+  const {x, y, width, height, transformOrigin = 'center'} = data
 
-  switch (origin) {
+  switch (transformOrigin) {
     case 'center':
       return {
         left: x + width / 2,

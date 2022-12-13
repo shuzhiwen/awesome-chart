@@ -196,7 +196,6 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
     const rectData = this.rectData.map((group) => ({
       data: group,
       source: group.map(({source}) => source),
-      transformOrigin: 'center',
       ...this.style.rect,
       fill: group.map(({color}) => color),
     }))

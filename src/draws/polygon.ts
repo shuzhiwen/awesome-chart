@@ -36,7 +36,6 @@ export function drawPolygon({
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     pointString: item.points.reduce((prev, cur) => `${prev} ${cur.x},${cur.y}`, ''),
-    transformOrigin: `${item.centerX ?? 0} ${item.centerY ?? 0}`,
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, []),
   }))
@@ -61,7 +60,7 @@ export function drawPolygon({
       .attr('opacity', (d) => d.opacity)
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
-      .attr('transform-origin', (d) => d.transformOrigin)
+      .attr('transform-origin', (d) => `${d.centerX} ${d.centerY}`)
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 

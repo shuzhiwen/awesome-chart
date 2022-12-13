@@ -139,6 +139,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
           y: layout.top + (value > 0 ? scaleY(value as number) : scaleY(0)),
           width: scaleX.bandwidth(),
           height: Math.abs(scaleY(value as number) - scaleY(0)),
+          transformOrigin: 'bottom',
         }))
       )
       this.backgroundData = rawTableList.map(([dimension]) => ({
@@ -159,6 +160,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
           x: layout.left + (value < 0 ? scaleX(value as number) : scaleX(0)),
           width: Math.abs(scaleX(value as number) - scaleX(0)),
           height: scaleY.bandwidth(),
+          transformOrigin: 'left',
         }))
       )
       this.backgroundData = rawTableList.map(([dimension]) => ({
@@ -520,11 +522,9 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   }
 
   draw() {
-    const {variant} = this.options
     const rectData = this.rectData.map((group) => ({
       data: group,
       source: group.map((item) => item.source),
-      transformOrigin: variant === 'column' ? 'bottom' : 'left',
       ...this.style.rect,
       fill: group.map(({color}) => color ?? 'black'),
     }))

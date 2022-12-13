@@ -13,7 +13,6 @@ export function drawPath({
   opacity,
   fillOpacity,
   strokeOpacity,
-  transformOrigin,
   mapping = noChange,
   source = [],
   data = [],
@@ -38,7 +37,6 @@ export function drawPath({
     fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
-    transformOrigin: getAttr(transformOrigin, i, ''),
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, []),
   }))
@@ -63,7 +61,6 @@ export function drawPath({
       .attr('opacity', (d) => d.opacity)
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
-      .attr('transform-origin', (d) => d.transformOrigin)
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
       // transition occur attribute attach delay
       // css transform will override attr transform

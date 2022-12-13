@@ -433,7 +433,6 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
         this.textData[key].map((item) => ({
           data: [item],
           source: [{dimension: item.value}],
-          transformOrigin: item.transformOrigin,
           rotation,
           ...this.style[key],
         }))

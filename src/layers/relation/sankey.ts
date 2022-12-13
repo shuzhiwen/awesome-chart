@@ -263,7 +263,6 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
     const nodeData = this.nodeData.map((group) => ({
       data: group.map(({width, height, x, y}) => ({x, y, width, height})),
       source: group.map(({value, name}) => ({category: name, value})),
-      transformOrigin: 'center',
       ...this.style.node,
       fill: group.map(({color}) => color ?? 'black'),
     }))

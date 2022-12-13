@@ -53,11 +53,11 @@ export type ElConfig = {
 
 export type TextDrawerProps = TextStyle &
   BasicDrawerProps<{
-    textWidth: number
-    textHeight: number
-    value: string
     x: number
     y: number
+    value: string
+    textWidth: number
+    textHeight: number
   }>
 
 export type GraphDrawerProps<Datum> = GraphStyle & BasicDrawerProps<Datum>
@@ -124,15 +124,16 @@ export type PathDrawerProps = GraphDrawerProps<{
 
 export type PolyDrawerProps = GraphDrawerProps<{
   points: {x: number; y: number}[]
-  centerX?: number
-  centerY?: number
+  centerX: number
+  centerY: number
 }>
 
 export type RectDrawerProps = GraphDrawerProps<{
-  width: number
-  height: number
   x: number
   y: number
+  width: number
+  height: number
   rx?: number
   ry?: number
+  transformOrigin?: Position5
 }>

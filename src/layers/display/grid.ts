@@ -194,14 +194,12 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   draw() {
     const boxData = this.boxData.map((box, i) => ({
       data: [box],
-      transformOrigin: 'center',
       source: [box.source],
       ...this.style.box,
       disableUpdateAnimation: i === this.insertIndex,
     }))
     const placeholderData = {
       data: [this.placeholderData],
-      transformOrigin: 'center',
       ...this.style.placeholder,
       evented: false,
     }

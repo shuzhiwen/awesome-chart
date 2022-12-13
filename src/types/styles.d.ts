@@ -13,7 +13,6 @@ export type GraphStyle = Partial<{
   fillOpacity: MaybeGroup<number>
   strokeOpacity: MaybeGroup<number>
   strokeDasharray: MaybeGroup<string>
-  transformOrigin: MaybeGroup<string>
   rotation: MaybeGroup<number>
   transition: Maybe<Partial<AnimationOptions>>
   hidden: boolean

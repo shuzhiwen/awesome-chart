@@ -35,7 +35,6 @@ export function drawLine({
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     strokeDasharray: getAttr(strokeDasharray, i, ''),
-    transformOrigin: `${item.x1} ${item.y1}`,
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, []),
   }))
@@ -62,7 +61,7 @@ export function drawLine({
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('stroke-width', (d) => d.strokeWidth)
       .attr('stroke-dasharray', (d) => d.strokeDasharray)
-      .attr('transform-origin', (d) => d.transformOrigin)
+      .attr('transform-origin', (d) => `${d.x1} ${d.y1}`)
       .attr('transform', (d) => `rotate(${d.rotation})`)
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }

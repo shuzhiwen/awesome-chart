@@ -27,7 +27,6 @@ export function drawText({
   strokeOpacity,
   shadow,
   rotation,
-  transformOrigin,
   writingMode,
   textDecoration,
   mapping = noChange,
@@ -46,6 +45,8 @@ export function drawText({
   const configuredData = data.map((item, i) => ({
     ...item,
     className,
+    centerX: item.x + item.textWidth / 2,
+    centerY: item.y - item.textHeight / 2,
     fill: getAttr(fill, i, text.fill),
     stroke: getAttr(stroke, i, text.stroke),
     opacity: getAttr(opacity, i, text.opacity),
@@ -58,7 +59,6 @@ export function drawText({
     fontWeight: getAttr(fontWeight, i, text.fontWeight),
     writingMode: getAttr(writingMode, i, 'horizontal-tb'),
     textDecoration: getAttr(textDecoration, i, 'none'),
-    transformOrigin: getAttr(transformOrigin, i, ''),
     evented: getAttr(evented, i, text.evented),
     rotation: getAttr(rotation, i, 0),
     source: getAttr(source, i, []),
@@ -82,8 +82,8 @@ export function drawText({
       .duration(getAttr(transition?.duration, 0, update.duration))
       .delay(getAttr(transition?.delay, 0, update.delay))
       .textTween((d, i) => {
-        const prevText = Number(prevTexts[i]),
-          decimals = d.value.toString().split('.')[1]?.length || 0
+        const prevText = Number(prevTexts[i])
+        const decimals = d.value.toString().split('.')[1]?.length || 0
         if (isRealNumber(Number(d.value)) && isRealNumber(prevText)) {
           return (t) => interpolateNumber(prevText, Number(d.value))(t).toFixed(decimals)
         }
@@ -101,7 +101,7 @@ export function drawText({
       .attr('font-size', (d) => d.fontSize)
       .attr('font-weight', (d) => d.fontWeight)
       .attr('writing-mode', (d) => d.writingMode)
-      .attr('transform-origin', (d) => d.transformOrigin)
+      .attr('transform-origin', (d) => `${d.centerX} ${d.centerY}`)
       .attr('text-decoration', (d) => d.textDecoration)
       .attr('dominant-baseline', 'central')
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
