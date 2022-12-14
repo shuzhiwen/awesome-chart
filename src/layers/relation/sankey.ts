@@ -15,6 +15,8 @@ import {
   LayerStyle,
 } from '../../types'
 
+type RibbonKey = 'x1' | 'y1' | 'x2' | 'y2' | 'x3' | 'y3' | 'x4' | 'y4'
+
 const defaultStyle: LayerSankeyStyle = {
   edgeVariant: 'curve',
   direction: 'horizontal',
@@ -43,7 +45,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
     color: string
   } & Node)[][] = []
 
-  private edgeData: (Record<'x1' | 'y1' | 'x2' | 'y2' | 'x3' | 'y3' | 'x4' | 'y4', number> & {
+  private edgeData: (Record<RibbonKey, number> & {
     color: string
     length: number
   })[] = []
@@ -221,7 +223,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
     })
   }
 
-  private getPath = (data: Omit<ArrayItem<LayerSankey['edgeData']>, 'color' | 'length'>) => {
+  private getPath = (data: Record<RibbonKey, number>) => {
     const {x1, y1, x2, y2, x3, y3, x4, y4} = data,
       {edgeVariant, direction} = this.style
 
