@@ -110,9 +110,8 @@ export type LayerAxisScale = Partial<{
   scaleAngle: Scale
   scaleRadius: Scale
   scaleColor: Scale
-}> & {
   nice: ScaleNice
-}
+}>
 
 export type LayerAuxiliaryScale = Maybe<{
   scaleX?: Scale

@@ -401,7 +401,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       }))
     } else if (isScaleLinear(scale)) {
       const [min, max] = scale.domain(),
-        {fixedStep, count} = this.scale.nice,
+        {fixedStep, count} = this.scale.nice ?? {},
         step = fixedStep || (max - min) / (count ?? 1)
 
       return robustRange(min, max, step).map((label) => ({
