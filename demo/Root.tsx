@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react'
 import styles from './Root.module.css'
 import base from './schema/base'
 import * as debugs from './debug'
-import {debounce} from 'lodash'
+import {debounce, isFunction} from 'lodash'
 import {Editor} from './Editor'
 import {Chart} from './Chart'
 import {Menu} from './TabMenu'
@@ -14,7 +14,7 @@ export function Root() {
     [chartSchema, setChartSchema] = useState(base([])),
     onEditorChange = useCallback((value) => setEditorSchema(value), []),
     onChartChange = useCallback((value) => setChartSchema(value), []),
-    debuggers = Object.values(debugs)
+    debuggers = Object.values(debugs).filter(isFunction)
 
   useEffect(() => {
     const listener = () => window.location.reload()
