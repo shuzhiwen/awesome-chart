@@ -3,7 +3,6 @@ import {LayerRectOptions} from '../../../src/types'
 export default ({
   mode,
   variant,
-  sort,
   hasInteractive = false,
 }: Partial<LayerRectOptions> & {hasInteractive?: boolean}) =>
   [
@@ -20,7 +19,6 @@ export default ({
         zero: true,
       },
       style: {
-        dynamicReserveTextX: Boolean(sort),
         textY: {
           format: variant === 'column' &&
             mode === 'percentage' && {
@@ -34,32 +32,12 @@ export default ({
             },
         },
       },
-      animation: sort
-        ? {
-            textY: {
-              update: {
-                duration: 200,
-              },
-            },
-            textX: {
-              update: {
-                duration: 0,
-              },
-            },
-            splitLineAxisX: {
-              update: {
-                duration: 0,
-              },
-            },
-          }
-        : undefined,
     },
     {
       type: 'rect',
       options: {
         mode,
         variant,
-        sort,
       },
       data:
         mode === 'waterfall'
@@ -91,19 +69,9 @@ export default ({
           },
         },
       },
-      animation: sort
-        ? `(theme) => ({
-            rect: {
-              enter: theme.animation.presets.zoomIn,
-              update: {duration: 200},
-            },
-            text: {
-              enter: theme.animation.presets.fadeIn,
-              update: {duration: 200},
-            },
-          })`
-        : variant === 'bar'
-        ? `(theme) => ({
+      animation:
+        variant === 'bar'
+          ? `(theme) => ({
             rect: {
               enter: theme.animation.presets.zoomIn,
               loop: theme.animation.presets.scanRight,
@@ -112,7 +80,7 @@ export default ({
               enter: theme.animation.presets.fadeIn,
             },
           })`
-        : `(theme) => ({
+          : `(theme) => ({
             rect: {
               enter: theme.animation.presets.zoomIn,
               loop: theme.animation.presets.scanTop,

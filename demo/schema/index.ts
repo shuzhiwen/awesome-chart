@@ -26,6 +26,7 @@ import histogram from './customize/histogram'
 import animation from './customize/animation'
 import facet from './customize/facet'
 import chord from './relation/chord'
+import race from './normal/race'
 
 const noPadding: Padding = [0, 0, 0, 0]
 const smallPadding: Padding = [30, 30, 30, 30]
@@ -177,8 +178,8 @@ export const schemaMenu: MenuShape = {
           schema: base(rect({variant: 'bar', mode: 'percentage'})),
         },
         {
-          name: '有序条形图',
-          schema: base(rect({variant: 'bar', mode: 'group', sort: 'desc'})),
+          name: '动态条形图',
+          schema: base(race()),
         },
         {
           name: '玉玦图',

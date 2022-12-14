@@ -64,7 +64,12 @@ export function niceDomain(scale: Scale, nice: ScaleLinearNice) {
     const niceStart = fixedStart ?? Math.floor(start / step) * step
     let niceEnd = niceStart + count * step
 
-    if (!fixedStep) {
+    if (fixedStep) {
+      safeLoop(
+        () => niceEnd < end,
+        () => (niceEnd += step)
+      )
+    } else {
       if (niceEnd > end) {
         const overflow = () => end + (magnitude / 2) * count >= niceEnd,
           currentBlank = () => (niceEnd - end) / (niceEnd - niceStart)
@@ -77,7 +82,6 @@ export function niceDomain(scale: Scale, nice: ScaleLinearNice) {
           }
         )
       }
-
       safeLoop(
         () => niceEnd < end,
         () => {

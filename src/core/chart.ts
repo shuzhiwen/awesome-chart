@@ -286,8 +286,7 @@ export class Chart {
   /**
    * This function is responsible for integrating the scales of all layers.
    * @param props.trigger
-   * Trigger layers represent those layers
-   * that do not want to be updated after merged scale.
+   * Trigger layer is the layer that do not want to be updated after merged scale.
    * @param props.redraw
    * Whether all layers requiring scales are redrawn after merged scale.
    */

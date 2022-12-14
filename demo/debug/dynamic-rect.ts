@@ -4,7 +4,7 @@ import {Chart} from '../../src/core'
 import {DataTableList} from '../../src/data'
 import {LayerRect} from '../../src/layers'
 
-const rawTableLists = data.map((group) =>
+export const dynamicRawTableLists = data.map((group) =>
   ([['country', 'count']] as Meta[][]).concat(
     Object.entries(group)
       .filter(([key]) => key !== 'date')
@@ -38,7 +38,7 @@ export const debugDynamicRectLayer = (chart: Chart) => {
 
   if (!layers.length) return
 
-  rawTableLists.forEach((data, i) => {
+  dynamicRawTableLists.forEach((data, i) => {
     setTimeout(() => {
       layers.forEach((layer) => {
         layer.setData(new DataTableList(data))
@@ -46,6 +46,6 @@ export const debugDynamicRectLayer = (chart: Chart) => {
       })
       chart.rebuildScale({redraw: true})
       layers.length && console.info('Random TableList Data', data)
-    }, i * 200)
+    }, i * 500)
   })
 }

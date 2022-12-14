@@ -113,7 +113,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     splitLineRadius: [],
   }
 
-  private cacheTextXData: ReturnType<typeof createText>[] = []
+  private disabledAxisX: Set<ReturnType<typeof createText>> = new Set()
 
   private textData: Record<
     'textX' | 'textY' | 'textYR' | 'textAngle' | 'textRadius' | 'titleX' | 'titleY' | 'titleYR',
@@ -247,7 +247,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       labelYR = this.getLabelAndPosition(scaleYR!),
       offset = 5
 
-    this.lineData.splitLineAxisX = this.getLabelAndPosition(scaleX!, 'scaleX').map(
+    this.lineData.splitLineAxisX = this.getLabelAndPosition(scaleX!).map(
       ({label, position}, i) => ({
         value: label,
         x1: left + position,
@@ -326,11 +326,6 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     )
 
     this.reduceScaleXTextNumber()
-    this.textData.textX.forEach((item) => {
-      if (this.cacheTextXData.every(({value}) => value !== item.value)) {
-        this.cacheTextXData.push(item)
-      }
-    })
 
     if (scaleY) {
       this.textData.textY = this.lineData.splitLineAxisY.map(({value, x1, y1}) =>
@@ -356,41 +351,47 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   private reduceScaleXTextNumber() {
     const {width, left, right} = this.options.layout,
       {maxScaleXTextNumber = Infinity, dynamicReserveTextX} = this.style,
-      reduceHalf = (input: any[]) => input.filter((_, i) => i % 2 === 0),
-      reserved = this.textData.textX.map(({x, textWidth}) => x + textWidth > left && x < right)
-    let totalTextWidth = sum(this.textData.textX.map(({textWidth}) => textWidth))
+      getEnabledTextX = () => {
+        return this.textData.textX.filter((item) => !this.disabledAxisX.has(item))
+      },
+      getTextXTotalWidth = () => {
+        return sum(getEnabledTextX().map(({textWidth}) => textWidth))
+      },
+      markHalfTextXDisabled = () => {
+        getEnabledTextX().forEach((item, i) => i % 2 !== 0 && this.disabledAxisX.add(item))
+      }
 
-    this.textData.textX = this.textData.textX.filter((_, i) => reserved[i])
-    this.lineData.splitLineAxisX = this.lineData.splitLineAxisX.filter((_, i) => reserved[i])
+    this.disabledAxisX.clear()
+    this.textData.textX.forEach((item) => {
+      if (item.x + item.textWidth < left && item.x > right) {
+        this.disabledAxisX.add(item)
+      }
+    })
 
     if (maxScaleXTextNumber === 'auto') {
       if (dynamicReserveTextX) {
-        this.textData.textX = this.textData.textX.reduce<any[]>((prev, cur) => {
-          if (prev.length === 0) return [cur]
-          if (isTextCollision(prev[prev.length - 1], cur, 0.2)) {
-            this.lineData.splitLineAxisX.splice(prev.length, 1)
+        this.textData.textX.reduce((prev, cur) => {
+          if (isTextCollision(prev, cur, 0.2)) {
+            this.disabledAxisX.add(cur)
             return prev
           }
-          return [...prev, cur]
-        }, [])
+          return cur
+        })
       } else {
         safeLoop(
-          () => totalTextWidth > width && this.textData.textX.length > 1,
-          () => {
-            this.textData.textX = reduceHalf(this.textData.textX)
-            totalTextWidth = sum(this.textData.textX.map(({textWidth}) => textWidth))
-          }
+          () => getTextXTotalWidth() > width && this.textData.textX.length > 1,
+          () => markHalfTextXDisabled()
         )
       }
     } else {
       safeLoop(
-        () => this.textData.textX.length > Math.max(1, maxScaleXTextNumber),
-        () => (this.textData.textX = reduceHalf(this.textData.textX))
+        () => getEnabledTextX().length > Math.max(1, maxScaleXTextNumber),
+        () => markHalfTextXDisabled()
       )
     }
   }
 
-  private getLabelAndPosition(scale: Scale, key?: 'scaleX') {
+  private getLabelAndPosition(scale: Scale) {
     if (isScaleBand(scale)) {
       return scale.domain().map((label) => ({
         label,
@@ -399,18 +400,14 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
           (this.options.coordinate === 'cartesian' ? scale.bandwidth() / 2 : 0),
       }))
     } else if (isScaleLinear(scale)) {
-      const [min, max] = scale.domain()
-      let values = robustRange(min, max, (max - min) / (this.scale.nice?.count ?? 1))
+      const [min, max] = scale.domain(),
+        {fixedStep, count} = this.scale.nice,
+        step = fixedStep || (max - min) / (count ?? 1)
 
-      if (key === 'scaleX' && this.style.dynamicReserveTextX) {
-        const prevValues = this.cacheTextXData
-            .map(({value}) => Number(value))
-            .filter((value) => isRealNumber(value)),
-          maxPrevValue = Math.max(...prevValues) || -Infinity
-        values = prevValues.concat(values.filter((item) => item > maxPrevValue))
-      }
-
-      return values.map((label) => ({label, position: scale(label)}))
+      return robustRange(min, max, step).map((label) => ({
+        label,
+        position: scale(label),
+      }))
     }
 
     return []
@@ -419,10 +416,13 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   draw() {
     const {coordinate} = this.options,
       {scaleX, scaleY} = this.scale,
+      disabledAxisXIndex = Array.from(this.disabledAxisX).map((item) =>
+        this.textData.textX.findIndex((item2) => item2 === item)
+      ),
       getLineData = (key: Keys<LayerAxis['lineData']>) =>
-        this.lineData[key].map((item) => ({
+        this.lineData[key].map((item, i) => ({
           data: [item],
-          source: [{dimension: item.value}],
+          opacity: key === 'splitLineAxisX' && disabledAxisXIndex.includes(i) ? 0 : 1,
           ...(item.axisLine === 'X'
             ? this.style.axisLineAxisX
             : item.axisLine === 'Y'
@@ -430,8 +430,9 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
             : this.style[key]),
         })),
       getTextData = (key: Keys<LayerAxis['textData']>, rotation?: number) =>
-        this.textData[key].map((item) => ({
+        this.textData[key].map((item, i) => ({
           data: [item],
+          opacity: key === 'textX' && disabledAxisXIndex.includes(i) ? 0 : 1,
           source: [{dimension: item.value}],
           rotation,
           ...this.style[key],

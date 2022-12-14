@@ -16,9 +16,9 @@ export const randomTableList = (options: RandomOptions): RawTableList => {
   const getNumber = mapping[mode](options)
   const numbers = range(row * column).map(() => toFixed(getNumber(), decimals))
   sort && numbers.sort((a, b) => (sort === 'asc' ? a - b : b - a))
-  const headers = ['dimension'].concat(range(column).map((i) => `Class ${i + 1}`))
+  const headers = ['dimension'].concat(range(column).map((i) => `Class${i + 1}`))
   const lists = range(row).map((_, i) => [
-    `Item ${i + 1}`,
+    `Item${i + 1}`,
     ...numbers.slice(i * column, (i + 1) * column),
   ])
   return [headers, ...lists]
@@ -33,8 +33,8 @@ export const randomTable = (options: RandomOptions): RawTable => {
     return groupNumbers
   })
   sort && numbers.sort((a, b) => (sort === 'asc' ? sum(a) - sum(b) : sum(b) - sum(a)))
-  const rows = range(row).map((_, i) => `Row ${i + 1}`)
-  const columns = range(column).map((_, i) => `Column ${i + 1}`)
+  const rows = range(row).map((_, i) => `Row${i + 1}`)
+  const columns = range(column).map((_, i) => `Column${i + 1}`)
   return [rows, columns, numbers]
 }
 
