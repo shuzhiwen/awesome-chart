@@ -24,8 +24,7 @@ const defaultStyle: LayerSankeyStyle = {
   labelOffset: 5,
   align: 'start',
   edge: {
-    fillOpacity: 0.7,
-    strokeOpacity: 0.7,
+    opacity: 0.7,
   },
   text: {
     fontSize: 12,
@@ -80,23 +79,24 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
       {labelOffset = 5, nodeWidth = 5, nodeGap = 0, edgeGap = 0} = this.style,
       levels = range(0, (max(nodes.map(({level}) => level ?? 0)) ?? 0) + 1),
       groups = levels.map((value) => nodes.filter(({level}) => level === value)),
-      // calculate the theoretical maximum value including the gap
-      maxNumber = max(
-        levels.map((level, i) => {
-          const totalNumber = sum(groups[level].map(({value}) => value)),
-            gapLength = (groups[level].length - 1) * getAttr(nodeGap, i, 5),
-            totalLength = direction === 'horizontal' ? layout.height : layout.width,
-            ratio = totalNumber / (totalLength - gapLength)
-          return totalNumber + gapLength * ratio
-        })
-      ),
-      scaleNode = scaleLinear({
-        domain: [0, maxNumber ?? 0],
-        range: direction === 'horizontal' ? [0, layout.height] : [0, layout.width],
-      }),
       totalLength = direction === 'horizontal' ? layout.width : layout.height,
       groupNodeWidths = range(0, groups.length).map((i) => getAttr(nodeWidth, i, 5)),
       groupNodeGap = (totalLength - sum(groupNodeWidths)) / (groups.length - 1)
+
+    const maxStackNodeLength = max(
+      levels.map((level, i) => {
+        const totalNumber = sum(groups[level].map(({value}) => value)),
+          gapLength = (groups[level].length - 1) * getAttr(nodeGap, i, 5),
+          totalLength = direction === 'horizontal' ? layout.height : layout.width,
+          ratio = totalNumber / (totalLength - gapLength)
+        return totalNumber + gapLength * ratio
+      })
+    )
+
+    const scaleNode = scaleLinear({
+      domain: [0, maxStackNodeLength ?? 0],
+      range: direction === 'horizontal' ? [0, layout.height] : [0, layout.width],
+    })
 
     this.nodeData = groups.map((groupedNodes, i) => {
       const colorMatrix = createColorMatrix({
@@ -165,6 +165,8 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
           type: 'linear',
           direction: direction ?? 'horizontal',
           colors: [fromNode.color, toNode.color],
+          x1: fromNode.x + fromNode.width + edgeGap,
+          x2: toNode.x - edgeGap,
         }) as string,
       }
     })
@@ -269,7 +271,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
     const edgeData = this.edgeData.map(({color, length, ...rest}) => ({
       data: [{path: this.getPath(rest)}],
       ...this.style.edge,
-      fill: edgeVariant === 'ribbon' ? color : '#00000000',
+      fill: edgeVariant === 'ribbon' ? color : '#ffffff00',
       stroke: edgeVariant === 'curve' ? color : edge?.stroke,
       strokeWidth: edgeVariant === 'curve' ? length : edge?.strokeWidth,
     }))

@@ -30,29 +30,6 @@ export default () => [
     ],
   },
   {
-    type: 'odLine',
-    data: [
-      ['fromX', 'fromY', 'toX', 'toY'],
-      [120, 30, 90, 45],
-    ],
-    style: {
-      odLine: {
-        stroke: 'orange',
-      },
-      flyingObject: {
-        fill: 'orange',
-        path: 'm-16.113639,0.075168c0,29.080622 37.728806,0 37.224786,-0.075171c0.50402,0.075171 -37.224786,-29.005451 -37.224786,0.075171z',
-      },
-    },
-    animation: {
-      flyingObject: {
-        loop: {
-          type: 'path',
-        },
-      },
-    },
-  },
-  {
     type: 'scatter',
     data: [
       ['category', 'x', 'y'],
@@ -65,6 +42,34 @@ export default () => [
       circleSize: [10, 10],
       text: {
         hidden: true,
+      },
+      point: {
+        fill: 'rgb(238, 52, 161)',
+        fillOpacity: 0.7,
+      },
+    },
+  },
+  {
+    type: 'odLine',
+    data: [
+      ['fromX', 'fromY', 'toX', 'toY'],
+      [120, 30, 90, 45],
+    ],
+    style: {
+      odLine: {
+        stroke: 'orange',
+      },
+      flyingObject: {
+        fill: 'orange',
+        fillOpacity: 0.6,
+        path: 'm-16.113639,0.075168c0,29.080622 37.728806,0 37.224786,-0.075171c0.50402,0.075171 -37.224786,-29.005451 -37.224786,0.075171z',
+      },
+    },
+    animation: {
+      flyingObject: {
+        loop: {
+          type: 'path',
+        },
       },
     },
   },

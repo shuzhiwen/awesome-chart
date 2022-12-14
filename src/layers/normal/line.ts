@@ -1,5 +1,5 @@
 import {LayerBase} from '../base'
-import {errorCatcher, isRealNumber, mergeAlpha} from '../../utils'
+import {errorCatcher, isRealNumber} from '../../utils'
 import {scaleBand, scaleLinear} from '../../scales'
 import {DataTableList} from '../../data'
 import {
@@ -62,7 +62,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
   })[][] = []
 
   private areaData: (ArrayItem<DrawerData<AreaDrawerProps>['lines']> & {
-    fill: string
+    color: string
   })[][] = []
 
   get scale() {
@@ -107,10 +107,10 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
       throw new Error('Invalid data or scale')
     }
 
-    const {layout, mode, createGradient} = this.options,
-      {height, top, left} = layout,
+    const {mode} = this.options,
       {scaleX, scaleY} = this.scale,
-      {labelPosition, pointSize = 5, areaGradient, text, curve} = this.style,
+      {height, top, left} = this.options.layout,
+      {labelPosition, pointSize = 5, text, curve} = this.style,
       {headers, rawTableList} = this.data,
       colorMatrix = createColorMatrix({
         layer: this,
@@ -145,18 +145,10 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
     )
 
     this.areaData = this.pointData.map((group, i) =>
-      group.map(({y, color = 'rgb(255,255,255)', ...item}, j) => ({
-        y1: y,
-        y2: mode === 'stack' && j !== 0 ? this.pointData[i][j - 1].y : height + top,
-        fill:
-          !i && areaGradient
-            ? (createGradient({
-                type: 'linear',
-                direction: 'vertical',
-                colors: [color, mergeAlpha(color, 0)],
-              }) as string)
-            : color,
+      group.map(({y, ...item}, j) => ({
         ...item,
+        y2: mode === 'stack' && j !== 0 ? this.pointData[i][j - 1].y : height + top,
+        y1: y,
       }))
     )
 
@@ -230,13 +222,13 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
   }
 
   draw() {
-    const areaData = this.areaData[0].map(({fill}, index) => ({
+    const areaData = this.areaData[0].map(({color}, index) => ({
       data: this.fallbackFilter(this.areaData.map((item) => item[index])).map((lines) => ({
         curve: this.style.curveType,
         lines,
       })),
       ...this.style.area,
-      fill,
+      fill: color,
     }))
     const curveData = this.pointData[0].map(({color}, index) => ({
       data: this.fallbackFilter(this.pointData.map((item) => item[index])).map((points) => ({

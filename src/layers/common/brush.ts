@@ -96,6 +96,8 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
 
     if (this.scale.scaleColor && targets?.includes('scaleColor')) {
       const backgroundColor = createGradient({
+        x1,
+        x2,
         direction,
         type: 'linear',
         colors: this.scale.scaleColor.range(),

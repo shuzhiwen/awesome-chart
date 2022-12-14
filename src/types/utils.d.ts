@@ -96,7 +96,7 @@ export type OverflowControlConfig = Partial<{
   fontSize: number
 }>
 
-export type EasyGradientCreatorProps = {
+export type EasyGradientCreatorProps = Partial<LinearGradientSchema> & {
   /**
    * Gradient type.
    */

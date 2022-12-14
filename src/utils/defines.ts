@@ -23,6 +23,7 @@ export const createLinearGradients = ({
     if (isSC(container)) {
       const linearGradient = container
         .append('linearGradient')
+        .attr('gradientUnits', 'userSpaceOnUse')
         .attr('id', id)
         .attr('x1', x1)
         .attr('y1', y1)
@@ -38,9 +39,8 @@ export const createLinearGradients = ({
     } else if (isArray(container)) {
       const gradient: Gradient = new fabric.Gradient({
         type: 'linear',
-        gradientUnits: 'percentage',
-        coords: {x1, y1, x2, y2},
-        colorStops: stops.map(({offset = 1, opacity, color = '#fff'}) => ({
+        coords: {x1: 0, y1: 0, x2: x2 - x1, y2: y2 - y1},
+        colorStops: stops.map(({offset = 1, opacity = 1, color = '#fff'}) => ({
           color: opacity ? mergeAlpha(color, opacity) : color,
           offset,
         })),

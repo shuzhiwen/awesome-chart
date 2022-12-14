@@ -89,7 +89,7 @@ export type LayerHeatmapStyle = Partial<{
 
 export type LayerODLineStyle = Partial<{
   odLine: GraphStyle
-  flyingObject: {
+  flyingObject: GraphStyle & {
     path: Maybe<string>
   }
 }>
@@ -102,7 +102,6 @@ export type LayerTextStyle = Partial<{
 
 export type LayerLineStyle = Partial<{
   fallback: 'zero' | 'continue' | 'break'
-  areaGradient: boolean
   pointSize: number
   labelPosition: Position5
   curveType: Curve
