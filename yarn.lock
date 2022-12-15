@@ -2195,10 +2195,10 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
-awesome-chart@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/awesome-chart/-/awesome-chart-0.1.0.tgz#bb1d63877a26b21381973ea3a95fe3615074669e"
-  integrity sha512-4XyQwvTd+GEsQPk5vuhnWgUCPRRRe+L+AqkN+9dbynxa+o5uR5XJgsSDJJuQVxGPBdt9n93Eae8G8GNyRDbSGA==
+awesome-chart@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/awesome-chart/-/awesome-chart-0.2.0.tgz#8e9cee4a8da7656347b858a4d8312dcde22594ad"
+  integrity sha512-ghqssQjvsZc1Cvpib5gysUNtlkzXtTGqSNccg+NINiFFMfMXwBmGIF/SIlmCeaxcmcC69yiGAPj8aIhOg9D3tA==
   dependencies:
     animejs "^3.2.1"
     chroma-js "^2.1.1"
