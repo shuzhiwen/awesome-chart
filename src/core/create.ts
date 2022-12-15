@@ -11,6 +11,7 @@ import {
   isLayerLegend,
   isLayerAxis,
   errorCatcher,
+  randomRelation,
 } from '../utils'
 
 export const createLayer = (chart: Chart, schema: ArrayItem<CreateChartProps['layers']>) => {
@@ -22,8 +23,8 @@ export const createLayer = (chart: Chart, schema: ArrayItem<CreateChartProps['la
 
   if (isRawTable(data) || data?.type === 'table') {
     dataSet = new DataTable(isRawTable(data) ? data : randomTable(data))
-  } else if (isRawRelation(data)) {
-    dataSet = new DataRelation(data)
+  } else if (isRawRelation(data) || data?.type === 'relation') {
+    dataSet = new DataRelation(isRawRelation(data) ? data : randomRelation(data))
   } else if (isRawTableList(data) || data?.type === 'tableList') {
     dataSet = new DataTableList(isRawTableList(data) ? data : randomTableList(data))
   } else {

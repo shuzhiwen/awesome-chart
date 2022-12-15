@@ -57,7 +57,7 @@ export class LayerChord extends LayerBase<LayerChordOptions> {
       options,
       context,
       sublayers: ['node', 'edge', 'text'],
-      interactive: ['node', 'edge'],
+      interactive: ['node'],
     })
   }
 

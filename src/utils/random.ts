@@ -1,20 +1,32 @@
-import {range, sum} from 'd3'
-import {randomNormal, randomPoisson} from 'd3-random'
-import {RawTable, RandomOptions, RawTableList} from '../types'
+import {sample} from 'lodash'
+import {range, sum, randomNormal, randomPoisson, group} from 'd3'
+import {
+  RawTable,
+  RandomTableListOptions,
+  RawTableList,
+  RawRelation,
+  RandomRelationOptions,
+  RandomNumberOptions,
+  Node,
+  Edge,
+} from '../types'
 
 const mapping = {
-  normal: ({mu, sigma}: RandomOptions) => randomNormal(mu, sigma),
-  poisson: ({lambda = 1}: RandomOptions) => randomPoisson(lambda),
+  normal: ({mu, sigma}: RandomNumberOptions) => randomNormal(mu, sigma),
+  poisson: ({lambda = 1}: RandomNumberOptions) => randomPoisson(lambda),
 }
 
 const toFixed = (number: number, decimals: number) => {
   return Math.round(number / 10 ** -decimals) / 10 ** decimals
 }
 
-export const randomTableList = (options: RandomOptions): RawTableList => {
-  const {mode, row, column, sort, decimals = 0} = options
-  const getNumber = mapping[mode](options)
-  const numbers = range(row * column).map(() => toFixed(getNumber(), decimals))
+const createNumberGenerator = (options: RandomNumberOptions) => () =>
+  toFixed(mapping[options.mode](options)(), options.decimals || 0)
+
+export const randomTableList = (options: RandomTableListOptions): RawTableList => {
+  const {row, column, sort} = options
+  const createNumber = createNumberGenerator(options)
+  const numbers = range(row * column).map(createNumber)
   sort && numbers.sort((a, b) => (sort === 'asc' ? a - b : b - a))
   const headers = ['dimension'].concat(range(column).map((i) => `Class${i + 1}`))
   const lists = range(row).map((_, i) => [
@@ -24,11 +36,11 @@ export const randomTableList = (options: RandomOptions): RawTableList => {
   return [headers, ...lists]
 }
 
-export const randomTable = (options: RandomOptions): RawTable => {
-  const {mode, row, column, sort, decimals = 0} = options
-  const getNumber = mapping[mode](options)
+export const randomTable = (options: RandomTableListOptions): RawTable => {
+  const {row, column, sort} = options
+  const createNumber = createNumberGenerator(options)
   const numbers = range(row).map(() => {
-    const groupNumbers = range(column).map(() => toFixed(getNumber(), decimals))
+    const groupNumbers = range(column).map(createNumber)
     sort && groupNumbers.sort((a, b) => (sort === 'asc' ? a - b : b - a))
     return groupNumbers
   })
@@ -38,18 +50,43 @@ export const randomTable = (options: RandomOptions): RawTable => {
   return [rows, columns, numbers]
 }
 
-/**
- * Generates a unique ID.
- * @param length
- * The length of id, defaults to 16.
- */
-export function uuid(length = 16) {
-  const CHARACTERS = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789'
+export const randomRelation = (options: RandomRelationOptions): RawRelation => {
+  const {node, density, level} = options
+  const createNumber = createNumberGenerator(options)
+  const nodeIds = range(0, node).map(() => uuid())
+  const nodes: Node[] = nodeIds
+    .map((id) => ({id, value: createNumber(), level: Math.floor(Math.random() * level)}))
+    .sort((a, b) => a.level! - b.level!)
+    .map((node, i) => ({...node, name: `Node${i + 1}`}))
+  const groupedNodes = group(nodes, ({level}) => level)
+  const edges: Edge[] = []
+  range(0, level).reduce((prev, next) => {
+    const prevNodes = groupedNodes.get(prev) ?? []
+    const nextNodes = groupedNodes.get(next) ?? []
+    prevNodes.forEach(({id: from}) => {
+      nextNodes.forEach(({id: to}) => {
+        if (Math.random() < density) {
+          edges.push({id: uuid(), from, to, value: createNumber() / 5})
+        }
+      })
+    })
+    return next
+  }, -1)
+  return [
+    [['id', 'name', 'value', 'level'] as Meta[]].concat(
+      nodes.map(({id, name, value, level}) => [id, name, value!, level!])
+    ),
+    [['id', 'from', 'to', 'value'] as Meta[]].concat(
+      edges.map(({id, from, to, value}) => [id, from, to, value!])
+    ),
+  ]
+}
+
+export function uuid(
+  length = 16,
+  collection = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789'
+) {
   let string = ''
-
-  for (let i = 0; i < length; i++) {
-    string += CHARACTERS.charAt(Math.floor(Math.random() * CHARACTERS.length))
-  }
-
+  for (let i = 0; i < length; i++) string += sample(collection)
   return string
 }

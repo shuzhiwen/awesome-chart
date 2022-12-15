@@ -1,10 +1,7 @@
-import {Chart} from '../../src/core'
-import {DataTableList} from '../../src/data'
-import {randomTableList} from '../../src/utils'
+import {Chart, DataTableList, randomTableList} from '../../src'
+import {LayerType} from '../../src/types'
 
-type TableListLayerType = 'arc' | 'rect' | 'line' | 'radial'
-
-const debugTableListLayer = (type: TableListLayerType) => (chart: Chart) => {
+const debugTableListLayer = (type: LayerType) => (chart: Chart) => {
   const data = randomTableList({
       mode: 'normal',
       mu: 1000,

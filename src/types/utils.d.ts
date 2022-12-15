@@ -111,23 +111,11 @@ export type EasyGradientCreatorProps = Partial<LinearGradientSchema> & {
   colors: string[]
 }
 
-export type RandomOptions = {
+export type RandomNumberOptions = {
   /**
    * Create a number in `normal` way or `poisson` way.
    */
   mode: 'normal' | 'poisson'
-  /**
-   * Whether numbers have `asc` order or `desc` order.
-   */
-  sort?: 'desc' | 'asc'
-  /**
-   * The row number of table or tableList.
-   */
-  row: number
-  /**
-   * The column number of table or tableList.
-   */
-  column: number
   /**
    * The exact number of decimal places.
    */
@@ -144,4 +132,34 @@ export type RandomOptions = {
    * Is available when mode is `normal`, defaults to 0.
    */
   mu?: number
+}
+
+export type RandomTableListOptions = RandomNumberOptions & {
+  /**
+   * Whether numbers have `asc` order or `desc` order.
+   */
+  sort?: 'desc' | 'asc'
+  /**
+   * The row number of table or tableList.
+   */
+  row: number
+  /**
+   * The column number of table or tableList.
+   */
+  column: number
+}
+
+export type RandomRelationOptions = RandomNumberOptions & {
+  /**
+   * The number of nodes to generate.
+   */
+  node: number
+  /**
+   * Density of edges, between 0 and 1.
+   */
+  density: number
+  /**
+   * The maximum depth of the directed acyclic graph.
+   */
+  level: number
 }

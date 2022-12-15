@@ -1,14 +1,14 @@
 import {Chart} from '../core'
 import {ElConfig} from './draw'
-import {LayoutCreator} from './layout'
-import {RandomOptions} from './utils'
 import {ScaleNice} from './scale'
+import {LayoutCreator} from './layout'
+import {RandomTableListOptions, RandomRelationOptions} from './utils'
+import {AnimationOptions, LayerAnimation} from './animation'
 import {getEasyGradientCreator} from '../utils'
 import {CacheLayerData, LayerType} from './base'
-import {AnimationOptions, LayerAnimation} from './animation'
 import {BasicLayerOptions} from './options'
-import {TooltipData} from './data'
 import {LayerStyle} from './styles'
+import {TooltipData} from './data'
 
 /**
  * The context for layer from chart includes some global data.
@@ -190,11 +190,11 @@ export type ChartProps = {
   tooltipOptions?: Partial<TooltipOptions>
 }
 
-export type RandomDataProps = RandomOptions & {
+export type RandomDataProps = (RandomTableListOptions | RandomRelationOptions) & {
   /**
    * Random data with specific data structure.
    */
-  type: 'table' | 'tableList'
+  type: 'table' | 'tableList' | 'relation'
 }
 
 export type CreateChartProps = ChartProps & {

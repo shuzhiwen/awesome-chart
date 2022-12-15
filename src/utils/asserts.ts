@@ -127,6 +127,8 @@ export function isRawRelation(relation: unknown): relation is RawRelation {
     isArray(relation) &&
     relation.length === 2 &&
     isRawTableList(relation[0]) &&
-    isRawTableList(relation[1])
+    isRawTableList(relation[1]) &&
+    ['id', 'name'].every((key) => relation[0][0].includes(key)) &&
+    ['from', 'to'].every((key) => relation[1][0].includes(key))
   )
 }
