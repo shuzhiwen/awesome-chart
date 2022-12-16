@@ -1,4 +1,4 @@
-import {arc} from 'd3-shape'
+import {arc} from 'd3'
 import {drawPath} from './path'
 import {ArcDrawerProps} from '../types'
 

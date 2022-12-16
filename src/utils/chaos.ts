@@ -1,5 +1,4 @@
-import {range} from 'd3'
-import {isArray, isNil, isNumber} from 'lodash'
+import {isArray, isNil, isNumber, range} from 'lodash'
 import {Box} from '../types'
 
 const ctx = document.createElement('canvas').getContext('2d')!

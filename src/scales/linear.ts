@@ -1,4 +1,4 @@
-import {scaleLinear as d3ScaleLinear, ScaleLinear} from 'd3-scale'
+import {scaleLinear as d3ScaleLinear, ScaleLinear} from 'd3'
 import {ScaleLinearNice, ScaleLinearProps} from '../types'
 import {getMagnitude, safeLoop} from '../utils'
 

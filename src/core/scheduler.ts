@@ -1,4 +1,4 @@
-import {sum} from 'lodash'
+import {sum} from 'd3'
 import {EventManager} from '../utils'
 
 export class Scheduler {

@@ -1,6 +1,6 @@
+import {path} from 'd3'
 import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {path as d3Path} from 'd3-path'
 import {isRealNumber, isSC, tableListToObjects} from '../../utils'
 import {checkColumns, createScale, createStyle, makeClass, validateAndCreateData} from '../helpers'
 import {
@@ -122,7 +122,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
   }
 
   private getPath = (props: ArrayItem<LayerODLine['odLineData']>['position'] & {arc?: number}) => {
-    const path = d3Path(),
+    const instance = path(),
       {fromX, fromY, toX, toY, arc = 0.5} = props,
       [deltaX, deltaY] = [toX - fromX, toY - fromY],
       theta = Math.atan(deltaY / deltaX),
@@ -136,10 +136,10 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
       return null
     }
 
-    path.moveTo(fromX, fromY)
-    path.quadraticCurveTo(controlPoint[0], controlPoint[1], toX, toY)
+    instance.moveTo(fromX, fromY)
+    instance.quadraticCurveTo(controlPoint[0], controlPoint[1], toX, toY)
 
-    return path.toString()
+    return instance.toString()
   }
 
   draw() {

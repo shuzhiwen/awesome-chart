@@ -1,9 +1,8 @@
-import {range} from 'd3'
-import {isNil, max, merge, min} from 'lodash'
-import {LayerBase} from '../base'
+import {isNil, max, merge, min, range} from 'lodash'
 import {createStyle, validateAndCreateData} from '../helpers'
 import {DataTableList} from '../../data'
 import {getAttr} from '../../utils'
+import {LayerBase} from '../base'
 import {
   ChartContext,
   DrawerData,

@@ -1,9 +1,9 @@
-import {max} from 'lodash'
-import {robustRange, safeLoop, uuid} from '../utils'
+import {max, range} from 'd3'
+import {animationMapping} from '.'
+import {safeLoop, uuid} from '../utils'
 import {AnimationType, DrawerTarget, AnimationOptions} from '../types'
 import {AnimationEmpty} from './empty'
 import {AnimationBase} from './base'
-import {animationMapping} from '.'
 
 type Animation = AnimationBase<AnimationOptions>
 
@@ -44,19 +44,20 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
       instance.event.off('end', eventKey)
     })
 
-    let finalPriority: number[]
+    let finalPriorities: number[]
     if (Array.isArray(priorityConfig)) {
-      finalPriority = [0, ...priorityConfig]
+      finalPriorities = [0, ...priorityConfig]
     } else if (typeof priorityConfig === 'function') {
-      finalPriority = [0, ...priorityConfig(this.queue.slice(1))]
+      finalPriorities = [0, ...priorityConfig(this.queue.slice(1))]
     } else {
-      finalPriority = this.queue.map((_, index) => index)
+      finalPriorities = this.queue.map((_, index) => index)
     }
 
+    const maxPriority = max(finalPriorities)!
     // group animations by priority config
-    const groupedQueue: Animation[][] = robustRange(0, max(finalPriority)!).map(() => [])
+    const groupedQueue: Animation[][] = range(0, maxPriority + 1).map(() => [])
 
-    finalPriority.forEach((priority, animationIndex) => {
+    finalPriorities.forEach((priority, animationIndex) => {
       groupedQueue[priority].push(this.queue[animationIndex])
     })
 
@@ -73,7 +74,7 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
         )
       })
 
-      if (priority === Math.max(...finalPriority)) {
+      if (priority === maxPriority) {
         bind(currentAnimations, () => this.end())
       }
 

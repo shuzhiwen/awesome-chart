@@ -1,4 +1,4 @@
-import {format} from 'd3-format'
+import {format} from 'd3'
 import {isNil} from 'lodash'
 import {FormatNumberConfig, OverflowControlConfig} from '../types'
 import {getTextWidth} from './chaos'

@@ -1,7 +1,7 @@
+import {sum} from 'd3'
 import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {scaleAngle, scaleBand, scaleLinear} from '../../scales'
-import {sum} from 'd3'
 import {
   isRealNumber,
   isScaleAngle,

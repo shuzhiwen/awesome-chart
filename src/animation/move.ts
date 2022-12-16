@@ -1,8 +1,8 @@
 import {AnimationBase} from './base'
 import {AnimationMoveOptions, AnimationProps} from '../types'
 import {isCC, isSC} from '../utils'
-import anime from 'animejs'
 import {noop} from 'lodash'
+import anime from 'animejs'
 
 export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
   constructor(props: AnimationProps<AnimationMoveOptions>) {

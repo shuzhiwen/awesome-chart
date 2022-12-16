@@ -1,8 +1,7 @@
-import {range} from 'd3'
-import {AnimationQueue} from '../animation'
 import {drawerMapping} from '../draws'
+import {AnimationQueue} from '../animation'
 import {makeClass, selector} from './helpers'
-import {cloneDeep, isArray, isEqual, isFunction, merge, noop} from 'lodash'
+import {cloneDeep, isArray, isEqual, isFunction, merge, noop, range} from 'lodash'
 import {
   commonEvents,
   layerLifeCycles,
