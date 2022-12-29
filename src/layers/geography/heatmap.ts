@@ -88,6 +88,7 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
       data: this.heatZoneData,
       ...this.style.heatZone,
       fill: this.heatZoneData.map(({color}) => color!),
+      evented: false,
     }
 
     this.drawBasic({type: 'circle', data: [heatZoneData], sublayer: 'heatZone'})

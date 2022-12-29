@@ -87,6 +87,7 @@ export function drawLine({
         opacity: config.opacity,
         source: config.source,
         evented: config.evented,
+        perPixelTargetFind: true,
         originX: 'center',
       } as ILineOptions)
       container.addWithUpdate(line)

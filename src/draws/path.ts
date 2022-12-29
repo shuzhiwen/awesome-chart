@@ -78,6 +78,7 @@ export function drawPath({
         opacity: config.opacity,
         source: config.source,
         evented: config.evented,
+        perPixelTargetFind: true,
         originX: 'center',
         originY: 'center',
       } as IPathOptions)
