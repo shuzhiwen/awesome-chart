@@ -4,6 +4,8 @@ import {Canvas, Group, IGroupOptions} from 'fabric/fabric-impl'
 import {D3Selection, DrawerTarget} from '../../types'
 import {isCC, isSC} from '../../utils'
 
+fabric.Object.prototype.objectCaching = false
+
 type FObject = fabric.Object
 
 class Selector {
@@ -83,9 +85,10 @@ class Selector {
       return target.append('g').attr('class', className)
     } else if (isCC(target)) {
       const group = new fabric.Group([], {
-        className,
         selectable: false,
         subTargetCheck: true,
+        perPixelTargetFind: true,
+        className,
         evented,
       } as IGroupOptions)
       target.add(group)

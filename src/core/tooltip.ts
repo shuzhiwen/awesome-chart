@@ -68,7 +68,7 @@ export class Tooltip {
     this.hideTimeout = setTimeout(() => {
       this.isVisible = false
       this.instance?.style('display', 'none')
-    }, 100)
+    })
   }
 
   private getListData(data: ElConfig): TooltipData {

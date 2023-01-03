@@ -32,8 +32,6 @@ import {
   ChartTheme,
 } from '../types'
 
-fabric.Object.prototype.objectCaching = false
-
 export class Chart {
   private _layout: Layout
 

@@ -134,7 +134,7 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
   }
 
   end() {
-    if (this.isAnimationAvailable && this.options.loop && this.queue.length > 1) {
+    if (this.isAvailable && this.options.loop && this.queue.length > 1) {
       this.queue.forEach((instance) => instance.destroy())
       this.queue.forEach((instance) => instance.init())
       this.play()
@@ -146,7 +146,7 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
       () => this.queue.length > 1,
       () => {
         const instance = this.queue.pop()
-        instance?.isAnimationAvailable && instance.destroy()
+        instance?.isAvailable && instance.destroy()
       }
     )
   }

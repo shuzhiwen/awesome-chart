@@ -14,20 +14,20 @@ export abstract class AnimationBase<Options extends AnimationOptions> {
 
   protected _isInitialized = false
 
-  protected _isAnimationStarted = false
+  protected _isStarted = false
 
-  protected _isAnimationAvailable = true
+  protected _isAvailable = true
 
   get isInitialized() {
     return this._isInitialized
   }
 
-  get isAnimationStarted() {
-    return this._isAnimationStarted
+  get isStarted() {
+    return this._isStarted
   }
 
-  get isAnimationAvailable() {
-    return this._isAnimationAvailable
+  get isAvailable() {
+    return this._isAvailable
   }
 
   protected start(...args: any) {
@@ -39,7 +39,7 @@ export abstract class AnimationBase<Options extends AnimationOptions> {
   }
 
   protected end(...args: any) {
-    this.options.loop && this._isAnimationAvailable && this.play()
+    this.options.loop && this._isAvailable && this.play()
     return args
   }
 
@@ -74,11 +74,11 @@ export abstract class AnimationBase<Options extends AnimationOptions> {
             this.log.warn('The animation is already initialized!')
             return
           } else if (name === 'play') {
-            if (!this._isAnimationAvailable) {
+            if (!this._isAvailable) {
               this.log.warn('The animation is not available!')
               return
             }
-            if (this._isAnimationStarted) {
+            if (this._isStarted) {
               this.log.warn('The animation is already started!')
               return
             }
@@ -92,13 +92,13 @@ export abstract class AnimationBase<Options extends AnimationOptions> {
 
           if (name === 'init') {
             this._isInitialized = true
-            this._isAnimationAvailable = true
+            this._isAvailable = true
           } else if (name === 'start') {
-            this._isAnimationStarted = true
+            this._isStarted = true
           } else if (name === 'end') {
-            this._isAnimationStarted = false
+            this._isStarted = false
           } else if (name === 'destroy') {
-            this._isAnimationAvailable = false
+            this._isAvailable = false
             this._isInitialized = false
           }
         } catch (error) {
