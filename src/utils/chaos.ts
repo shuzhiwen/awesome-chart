@@ -148,22 +148,6 @@ export function errorCatcher<Fn extends AnyFunction>(fn: Fn, onError: (error: Er
 }
 
 /**
- * Convert svg shadow string to fabric shadow string.
- * @remark
- * Only the first shadow will be converted.
- * @example
- * svgShadowToFabricShadow('0 0 4px black') // 'black 0 0 4px'
- * svgShadowToFabricShadow('0 0 4px black, 0 0 4px black') // 'black 0 0 4px'
- */
-export function svgShadowToFabricShadow(shadows: string) {
-  return shadows.split(',').map((shadow) => {
-    const shadowAttrs = shadow.split(' ')
-    shadowAttrs.unshift(shadowAttrs.pop()!)
-    return shadowAttrs.reduce((prev, cur) => `${prev} ${cur}`)
-  })[0]
-}
-
-/**
  * Rectangle Collision Detection.
  * @returns
  * Return collision or not.

@@ -1,7 +1,7 @@
 body {
   margin: 0;
   color: #1d1d1f;
-  font-size: 20px;
+  font-size: 0;
 }
 
 ::-webkit-scrollbar {

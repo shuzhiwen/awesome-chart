@@ -21,10 +21,13 @@ export const Chart = (props: {
   const {debuggers, variant, schema} = props,
     chartRef = useRef<any>(null),
     [chart, setChart] = useState<ChartShape>(),
-    [engine, setEngine] = useState<'svg' | 'canvas'>('svg')
+    [engine, setEngine] = useState<'svg' | 'canvas'>(
+      (localStorage.getItem(`${variant}-engine`) as 'svg' | 'canvas') || 'svg'
+    )
   const toggleEngine = useCallback(() => {
+    localStorage.setItem(`${variant}-engine`, engine === 'svg' ? 'canvas' : 'svg')
     setEngine(engine === 'svg' ? 'canvas' : 'svg')
-  }, [engine])
+  }, [engine, variant])
   const downloadFile = useCallback(() => {
     engine === 'svg'
       ? download(chartRef.current?.children?.[0].outerHTML ?? '', 'chart.svg')

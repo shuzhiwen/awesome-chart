@@ -17,11 +17,6 @@ export default () => [
   {
     type: 'candle',
     data,
-    animation: `(theme) => ({
-      rect: {
-        enter: theme.animation.presets.zoomIn,
-      },
-    })`,
   },
   {
     type: 'brush',

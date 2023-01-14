@@ -1,7 +1,6 @@
-import {fabric} from 'fabric'
+import {Graphics} from 'pixi.js'
 import {isArray, merge} from 'lodash'
-import {IRectOptions} from 'fabric/fabric-impl'
-import {mergeAlpha, getAttr, isSC, isCC, noChange} from '../utils'
+import {getAttr, isSC, isCC, noChange, splitAlpha} from '../utils'
 import {DrawerData, RectDrawerProps} from '../types'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
@@ -69,33 +68,30 @@ export function drawRect({
   }
 
   if (isCC(container)) {
-    container.remove(...selector.getChildren(container, className))
-    mappedData.forEach((config) => {
-      const rect = new fabric.Rect({
-        className: config.className,
-        top: config.y,
-        left: config.x,
-        width: config.width,
-        height: config.height,
-        rx: config.rx,
-        ry: config.ry,
-        fill: mergeAlpha(config.fill, config.fillOpacity),
-        stroke: mergeAlpha(config.stroke, config.strokeOpacity),
-        strokeWidth: config.strokeWidth,
-        opacity: config.opacity,
-        source: config.source,
-        evented: config.evented,
-        ...getTransformFabricAttr(config),
-      } as IRectOptions)
-      container.addWithUpdate(rect)
+    container.removeChild(...selector.getChildren(container, className))
+    mappedData.forEach((d) => {
+      const graphics = new Graphics()
+      graphics.data = d
+      graphics.alpha = d.opacity
+      graphics.className = d.className
+      graphics.interactive = d.evented
+      graphics.pivot = getTransformPosition(d)
+      graphics.position = getTransformPosition(d)
+      graphics.cursor = d.evented ? 'pointer' : 'auto'
+      graphics
+        .lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        .beginFill(...splitAlpha(d.fill, d.fillOpacity))
+        .drawRect(d.x, d.y, d.width, d.height)
+        .endFill()
+      container.addChild(graphics)
     })
   }
 }
 
 const getTransformOrigin = (data: DrawerData<RectDrawerProps>) => {
-  const {x, y, width, height, transformOrigin = 'center'} = data
+  const {x, y, width, height, transformOrigin: origin = 'center'} = data
 
-  switch (transformOrigin) {
+  switch (origin) {
     case 'center':
       return `${x + width / 2}px ${y + height / 2}px`
     case 'left':
@@ -111,46 +107,21 @@ const getTransformOrigin = (data: DrawerData<RectDrawerProps>) => {
   }
 }
 
-const getTransformFabricAttr = (data: DrawerData<RectDrawerProps>) => {
-  const {x, y, width, height, transformOrigin = 'center'} = data
+const getTransformPosition = (data: DrawerData<RectDrawerProps>) => {
+  const {x, y, width, height, transformOrigin: origin = 'center'} = data
 
-  switch (transformOrigin) {
+  switch (origin) {
     case 'center':
-      return {
-        left: x + width / 2,
-        top: y + height / 2,
-        originX: 'center',
-        originY: 'center',
-      }
+      return {x: x + width / 2, y: y + height / 2}
     case 'top':
-      return {
-        left: x + width / 2,
-        top: y,
-        originX: 'center',
-        originY: 'top',
-      }
+      return {x: x + width / 2, y: y}
     case 'bottom':
-      return {
-        left: x + width / 2,
-        top: y + height,
-        originX: 'center',
-        originY: 'bottom',
-      }
+      return {x: x + width / 2, y: y + height}
     case 'left':
-      return {
-        left: x,
-        top: y + height / 2,
-        originX: 'left',
-        originY: 'center',
-      }
+      return {x: x, y: y + height / 2}
     case 'right':
-      return {
-        left: x + width,
-        top: y + height / 2,
-        originX: 'right',
-        originY: 'center',
-      }
+      return {x: x + width, y: y + height / 2}
     default:
-      return null
+      return isArray(origin) ? {x: origin[0], y: origin[1]} : {x: 0, y: 0}
   }
 }

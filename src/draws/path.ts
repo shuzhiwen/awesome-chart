@@ -1,9 +1,6 @@
-import {fabric} from 'fabric'
 import {svgEasing} from '../animation'
 import {PathDrawerProps} from '../types'
-import {IPathOptions} from 'fabric/fabric-impl'
-import {mergeAlpha, getAttr, noChange, isCC, isSC} from '../utils'
-import {selector} from '../layers'
+import {getAttr, noChange, isCC, isSC} from '../utils'
 import {merge} from 'lodash'
 
 export function drawPath({
@@ -63,28 +60,10 @@ export function drawPath({
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
       // transition occur attribute attach delay
-      // css transform will override attr transform
       .style('transform', (d) => `translate(${d.centerX}px,${d.centerY}px)`)
   }
 
   if (isCC(container)) {
-    container.remove(...selector.getChildren(container, className))
-    mappedData.forEach((config) => {
-      const path = new fabric.Path(config.path, {
-        className: config.className,
-        fill: mergeAlpha(config.fill, config.fillOpacity),
-        stroke: mergeAlpha(config.stroke, config.strokeOpacity),
-        strokeWidth: config.strokeWidth,
-        opacity: config.opacity,
-        source: config.source,
-        evented: config.evented,
-        perPixelTargetFind: true,
-        originX: 'center',
-        originY: 'center',
-      } as IPathOptions)
-      path.left = path.left ? path.left + config.centerX : config.centerX
-      path.top = path.top ? path.top + config.centerY : config.centerY
-      container.addWithUpdate(path)
-    })
+    throw new Error('WebGL does not support path element.')
   }
 }

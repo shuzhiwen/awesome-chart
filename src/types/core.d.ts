@@ -72,7 +72,7 @@ export type ChartTheme = Readonly<{
   text: {
     fontFamily: string
     fontSize: number
-    fontWeight: number
+    fontWeight: string
     shadow: string
     fill: string
     stroke: string

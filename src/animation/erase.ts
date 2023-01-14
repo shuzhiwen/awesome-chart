@@ -1,20 +1,37 @@
+import {Graphics} from 'pixi.js'
 import anime, {AnimeParams} from 'animejs'
-import {AnimationEraseOptions, AnimationProps, D3Selection} from '../types'
+import {AnimationEraseOptions, AnimationProps, Box, D3Selection} from '../types'
 import {AnimationBase} from './base'
-import {isCC, isSC} from '../utils'
-import {fabric} from 'fabric'
+import {isSC} from '../utils'
 
 export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
   private defs: Maybe<D3Selection>
 
-  private maskNode: Maybe<fabric.Rect>
+  private mask: Maybe<Graphics>
 
   constructor(props: AnimationProps<AnimationEraseOptions>) {
     super(props)
   }
 
+  get isXEnd() {
+    return this.options.direction === 'left'
+  }
+
+  get isYEnd() {
+    return this.options.direction === 'top'
+  }
+
+  get isHorizontal() {
+    return this.options.direction === 'left' || this.options.direction === 'right'
+  }
+
+  updateClipPath(mask: Graphics, b: Box) {
+    mask.clear()
+    mask.beginFill(0xffffff).drawRect(b.x, b.y, b.width, b.height).endFill()
+  }
+
   init() {
-    const {targets, context, direction} = this.options
+    const {targets, context} = this.options
 
     if (isSC(targets) && isSC(context)) {
       this.defs = context.append('defs')
@@ -22,71 +39,55 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
         .append('clipPath')
         .attr('id', `erase-${this.id}`)
         .append('rect')
-        .attr('x', direction === 'left' ? '100%' : '0%')
-        .attr('y', direction === 'top' ? '100%' : '0%')
-        .attr('width', direction === 'left' || direction === 'right' ? '0%' : '100%')
-        .attr('height', direction === 'top' || direction === 'bottom' ? '0%' : '100%')
+        .attr('x', this.isXEnd ? '100%' : '0%')
+        .attr('y', this.isYEnd ? '100%' : '0%')
+        .attr('width', this.isHorizontal ? '0%' : '100%')
+        .attr('height', !this.isHorizontal ? '0%' : '100%')
       targets.attr('clip-path', `url(#erase-${this.id})`)
-    }
-
-    if (!isSC(targets) && isCC(context)) {
-      const {width = 0, height = 0} = context.canvas!
-
-      this.maskNode = new fabric.Rect({
-        left: direction === 'left' ? width : 0,
-        top: direction === 'top' ? height : 0,
-        width: direction === 'left' || direction === 'right' ? 0 : width,
-        height: direction === 'top' || direction === 'bottom' ? 0 : height,
-        absolutePositioned: true,
+    } else {
+      const {x, y, width, height} = this.canvasRoot.getBounds()
+      this.canvasRoot.mask = this.mask = new Graphics()
+      this.updateClipPath(this.mask, {
+        x: this.isXEnd ? x + width : x,
+        y: this.isYEnd ? y + height : y,
+        width: this.isHorizontal ? 0 : width,
+        height: !this.isHorizontal ? 0 : height,
       })
-
-      targets?.forEach((target) => (target.clipPath = this.maskNode!))
-      this.renderCanvas()
     }
-  }
-
-  process(...args: unknown[]) {
-    super.process(...args)
-    const {targets} = this.options
-
-    if (!isSC(targets) && targets?.[0].clipPath) {
-      targets[0].drawClipPathOnCache(this.getCanvasContext()!)
-      this.renderCanvas()
-    }
-
-    return args
   }
 
   play() {
-    const {context, delay, duration, easing, direction = 'right'} = this.options
+    const {context, delay, duration, easing} = this.options
+    const rect = {x: 0, y: 0, width: 0, height: 0}
     const configs: AnimeParams = {
       duration,
       delay,
       easing,
       loopBegin: this.start,
       loopComplete: this.end,
-      update: this.process,
+      update: (...args: unknown[]) => {
+        super.process(...args)
+        this.mask && this.updateClipPath(this.mask, rect)
+        return args
+      },
     }
 
     if (isSC(context)) {
       Object.assign(configs, {
         targets: context.selectAll(`#erase-${this.id} rect`).nodes(),
-        x: [direction === 'left' ? '100%' : '0%', '0%'],
-        y: [direction === 'top' ? '100%' : '0%', '0%'],
-        width: [direction === 'left' || direction === 'right' ? '0%' : '100%', '100%'],
-        height: [direction === 'top' || direction === 'bottom' ? '0%' : '100%', '100%'],
+        x: [this.isXEnd ? '100%' : '0%', '0%'],
+        y: [this.isYEnd ? '100%' : '0%', '0%'],
+        width: [this.isHorizontal ? '0%' : '100%', '100%'],
+        height: [!this.isHorizontal ? '0%' : '100%', '100%'],
       })
-    }
-
-    if (isCC(context)) {
-      const {width = 0, height = 0} = context.canvas!
-
+    } else {
+      const {x, y, width, height} = this.canvasRoot.getBounds()
       Object.assign(configs, {
-        targets: this.maskNode,
-        left: [direction === 'left' ? width : 0, 0],
-        top: [direction === 'top' ? height : 0, 0],
-        width: [direction === 'left' || direction === 'right' ? 0 : width, width],
-        height: [direction === 'top' || direction === 'bottom' ? 0 : height, height],
+        targets: rect,
+        x: [this.isXEnd ? x + width : x, x],
+        y: [this.isYEnd ? y + height : y, y],
+        width: [this.isHorizontal ? 0 : width, width],
+        height: [!this.isHorizontal ? 0 : height, height],
       })
     }
 
@@ -94,16 +95,13 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
   }
 
   destroy() {
-    const {targets} = this.options
-
-    if (isSC(targets)) {
-      this.defs?.remove()
-      targets.attr('clip-path', null)
-    } else if (isCC(targets)) {
-      targets.forEach((target) => (target.clipPath = undefined))
+    if (this.defs && isSC(this.options.targets)) {
+      this.options.targets.attr('clip-path', null)
+      this.defs.remove()
+      this.defs = null
+    } else {
+      this.canvasRoot.mask = null
+      this.mask = null
     }
-
-    this.defs = null
-    this.maskNode = null
   }
 }

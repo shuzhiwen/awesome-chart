@@ -1,4 +1,4 @@
-import {Gradient} from 'fabric/fabric-impl'
+import {Texture} from 'pixi.js'
 import {EventManager} from '../utils'
 import {D3Selection} from './draw'
 
@@ -21,6 +21,8 @@ export type LinearGradientSchema = {
   y1?: number
   x2?: number
   y2?: number
+  width?: number
+  height?: number
   stops: Stop[]
 }
 
@@ -32,6 +34,8 @@ export type RadialGradientSchema = {
   y1?: number
   x2?: number
   y2?: number
+  width?: number
+  height?: number
   stops: Stop[]
 }
 
@@ -41,7 +45,7 @@ export type CreateDefsSchema = Partial<{
 }>
 
 export type GradientCreatorProps<Schema> = {
-  container: D3Selection | Gradient[]
+  container: D3Selection | Texture[]
   schema: Schema
 }
 

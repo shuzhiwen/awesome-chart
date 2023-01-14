@@ -101,7 +101,7 @@ function createDefaultTheme({
     text: {
       fontFamily: '',
       fontSize: 12,
-      fontWeight: 400,
+      fontWeight: '400',
       opacity: 1,
       fillOpacity: 1,
       strokeOpacity: 1,
@@ -155,14 +155,6 @@ function createDefaultTheme({
           delay: 0,
           duration: 5000,
           direction: 'right',
-          opacity: 0.5,
-          color: 'white',
-        },
-        scanOut: {
-          type: 'scan',
-          delay: 0,
-          duration: 5000,
-          direction: 'outer',
           opacity: 0.5,
           color: 'white',
         },

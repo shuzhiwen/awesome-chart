@@ -404,10 +404,12 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
         {fixedStep, count} = this.scale.nice ?? {},
         step = fixedStep || (max - min) / (count ?? 1)
 
-      return robustRange(min, max, step).map((label) => ({
-        label,
-        position: scale(label),
-      }))
+      return count === 0
+        ? []
+        : robustRange(min, max, step).map((label) => ({
+            label,
+            position: scale(label),
+          }))
     }
 
     return []

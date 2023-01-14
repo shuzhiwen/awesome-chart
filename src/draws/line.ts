@@ -1,10 +1,9 @@
-import {fabric} from 'fabric'
-import {svgEasing} from '../animation'
-import {LineDrawerProps} from '../types'
-import {ILineOptions} from 'fabric/fabric-impl'
-import {isCC, isSC, noChange, mergeAlpha, getAttr} from '../utils'
-import {selector} from '../layers'
 import {merge} from 'lodash'
+import {Graphics} from 'pixi.js'
+import {svgEasing} from '../animation'
+import {isCC, isSC, noChange, getAttr, splitAlpha} from '../utils'
+import {LineDrawerProps} from '../types'
+import {selector} from '../layers'
 
 export function drawLine({
   rotation,
@@ -67,10 +66,10 @@ export function drawLine({
   }
 
   if (isCC(container)) {
-    container.remove(...selector.getChildren(container, className))
-    mappedData.forEach((config) => {
-      const {x1, x2, y1, y2, rotation} = config,
-        // relative to svg rotation origin
+    container.removeChild(...selector.getChildren(container, className))
+    mappedData.forEach((d) => {
+      const graphics = new Graphics(),
+        {x1, x2, y1, y2, rotation} = d,
         theta =
           (rotation / 180) * Math.PI -
           Math.atan((y1 - y2) / (x2 - x1)) +
@@ -79,18 +78,16 @@ export function drawLine({
         _x2 = rotation === 0 ? x2 : x1 + Math.sin(theta) * length,
         _y2 = rotation === 0 ? y2 : y1 - Math.cos(theta) * length
 
-      const line = new fabric.Line([config.x1, config.y1, _x2, _y2], {
-        className: config.className,
-        stroke: mergeAlpha(config.stroke, config.strokeOpacity),
-        strokeDashArray: config.strokeDasharray.split(' ').map(Number),
-        strokeWidth: config.strokeWidth,
-        opacity: config.opacity,
-        source: config.source,
-        evented: config.evented,
-        perPixelTargetFind: true,
-        originX: 'center',
-      } as ILineOptions)
-      container.addWithUpdate(line)
+      graphics.data = d
+      graphics.alpha = d.opacity
+      graphics.className = d.className
+      graphics.interactive = d.evented
+      graphics.cursor = d.evented ? 'pointer' : 'auto'
+      graphics
+        .moveTo(x1, y1)
+        .lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        .dashLineTo(_x2, _y2, d.strokeDasharray)
+      container.addChild(graphics)
     })
   }
 }

@@ -1,19 +1,10 @@
-import {fabric} from 'fabric'
-import {interpolateNumber} from 'd3'
-import {TextOptions} from 'fabric/fabric-impl'
-import {TextDrawerProps} from '../types'
-import {svgEasing} from '../animation'
-import {selector} from '../layers'
 import {merge} from 'lodash'
-import {
-  mergeAlpha,
-  getAttr,
-  isSC,
-  isCC,
-  noChange,
-  svgShadowToFabricShadow,
-  isRealNumber,
-} from '../utils'
+import {interpolateNumber} from 'd3'
+import {svgEasing} from '../animation'
+import {TextDrawerProps} from '../types'
+import {getAttr, isSC, isCC, noChange, isRealNumber, mergeAlpha} from '../utils'
+import {Text, TextStyleFontWeight} from 'pixi.js'
+import {selector} from '../layers'
 
 export function drawText({
   fontFamily,
@@ -90,7 +81,7 @@ export function drawText({
         return () => d.value
       })
       .attr('x', (d) => d.x)
-      .attr('y', (d) => d.y - d.fontSize / 2)
+      .attr('y', (d) => d.y - d.textHeight / 2)
       .attr('fill', (d) => d.fill)
       .attr('stroke', (d) => d.stroke)
       .attr('stroke-width', (d) => d.strokeWidth)
@@ -103,34 +94,30 @@ export function drawText({
       .attr('writing-mode', (d) => d.writingMode)
       .attr('transform-origin', (d) => `${d.centerX} ${d.centerY}`)
       .attr('text-decoration', (d) => d.textDecoration)
-      .attr('dominant-baseline', 'central')
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
       .attr('transform', (d) => `rotate(${d.rotation})`)
       .style('text-shadow', (d) => d.shadow)
+      .style('dominant-baseline', 'central')
   }
 
   if (isCC(container)) {
-    container.remove(...selector.getChildren(container, className))
-    mappedData.forEach((config) => {
-      const text = new fabric.Text(config.value, {
-        className: config.className,
-        left: config.x,
-        top: config.y - config.fontSize,
-        fontSize: config.fontSize,
-        fontFamily: config.fontFamily,
-        fontWeight: config.fontWeight,
-        fill: mergeAlpha(config.fill, config.fillOpacity),
-        stroke: mergeAlpha(config.stroke, config.strokeOpacity),
-        strokeWidth: config.strokeWidth,
-        opacity: config.opacity,
-        shadow: svgShadowToFabricShadow(config.shadow),
-        linethrough: config.textDecoration === 'line-through',
-        overline: config.textDecoration === 'overline',
-        underline: config.textDecoration === 'underline',
-        evented: config.evented,
-      } as TextOptions)
-      text.rotate(config.rotation)
-      container.addWithUpdate(text)
+    container.removeChild(...selector.getChildren(container, className))
+    mappedData.forEach((d) => {
+      const text = new Text(d.value, {
+        fontFamily: d.fontFamily,
+        fontSize: d.fontSize,
+        fontWeight: d.fontWeight as TextStyleFontWeight,
+        fill: mergeAlpha(d.fill, d.fillOpacity),
+        stroke: mergeAlpha(d.stroke, d.strokeOpacity),
+        strokeThickness: d.strokeWidth,
+      })
+      text.x = d.x
+      text.y = d.y - d.textHeight
+      text.alpha = d.opacity
+      text.className = d.className
+      text.interactive = d.evented
+      text.cursor = d.evented ? 'pointer' : 'auto'
+      container.addChild(text)
     })
   }
 }

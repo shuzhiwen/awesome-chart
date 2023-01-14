@@ -1,5 +1,5 @@
 import {select} from 'd3'
-import {fabric} from 'fabric'
+import {Container} from 'pixi.js'
 import {isArray, isNil, isNumber} from 'lodash'
 import {LayerAxis, LayerBasemap, LayerBrush, LayerLegend} from '../layers'
 import {
@@ -51,10 +51,10 @@ export function isSC(selector: any): selector is D3Selection {
 /**
  * Check if input is canvas container.
  * @returns
- * Is the value a fabric group.
+ * Is the value a pixi group.
  */
-export function isCC(selector: any): selector is fabric.Group {
-  return selector?.constructor.name === fabric.Group.name && selector?.getObjects
+export function isCC(selector: any): selector is Container {
+  return selector?.constructor.name === Container.name
 }
 
 export function isLayerAxis(instance: Maybe<LayerInstance>): instance is LayerAxis {

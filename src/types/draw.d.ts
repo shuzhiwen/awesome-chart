@@ -1,18 +1,18 @@
 import {Selection} from 'd3'
-import {IEvent} from 'fabric/fabric-impl'
+import {Container, FederatedPointerEvent} from 'pixi.js'
 import {GraphStyle, TextStyle} from './styles'
 import {drawerMapping} from '../draws'
 import {ChartTheme} from './core'
 
 export type DrawerType = Keys<typeof drawerMapping>
 
-export type DrawerTarget = D3Selection | fabric.Group
+export type DrawerTarget = D3Selection | Container
 
 export type DrawerData<Props> = Props extends BasicDrawerProps<infer V> ? V : never
 
 export type D3Selection<GDatum = unknown> = Selection<any, GDatum, any, unknown>
 
-export type ElEvent = MouseEvent | IEvent<MouseEvent>
+export type ElEvent = MouseEvent | FederatedPointerEvent
 
 export type ElSource = AnyObject &
   Partial<{

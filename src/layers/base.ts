@@ -1,3 +1,4 @@
+import {Graphics} from 'pixi.js'
 import {drawerMapping} from '../draws'
 import {AnimationQueue} from '../animation'
 import {makeClass, selector} from './helpers'
@@ -103,22 +104,16 @@ export abstract class LayerBase<Options extends LayerOptions> {
     this.root = selector.createGroup(this.options.root as DrawerTarget, this.className)
     this.createLifeCycles()
     this.createEvent()
-    /**
-     * Manually set the size of the canvas root element
-     * to avoid affecting the event response of other areas.
-     */
-    if (isCC(this.root)) {
-      this.root.left = this.options.layout.left
-      this.root.top = this.options.layout.top
-    }
   }
 
   private createEvent() {
     const {tooltip} = this.options,
       getMouseEvent = (event: ElEvent): MouseEvent =>
-        event instanceof MouseEvent ? event : event.e,
+        event instanceof MouseEvent ? event : (event.nativeEvent as MouseEvent),
       getData = (event: ElEvent, data?: ElConfig): ElConfig =>
-        event instanceof MouseEvent ? data : ((event.subTargets?.[0] || event.target) as any)
+        event instanceof MouseEvent ? data! : (event.target as Graphics).data!,
+      getTarget = (event: ElEvent): EventTarget =>
+        event instanceof MouseEvent ? event.target! : event.target
 
     merge(this.cacheEvent, {
       'tooltip.mouseout': () => tooltip.hide(),
@@ -138,6 +133,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
               this.event.fire(`${type}-${sublayer}`, {
                 data: getData(event, data),
                 event: getMouseEvent(event),
+                target: getTarget(event),
               })
             },
           ])
@@ -462,9 +458,6 @@ export abstract class LayerBase<Options extends LayerOptions> {
 
     this.bindEvent(sublayer)
     this.createAnimation(sublayer)
-    if (isCC(this.root)) {
-      this.root.canvas?.requestRenderAll()
-    }
   }
 
   destroy() {

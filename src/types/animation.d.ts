@@ -1,6 +1,7 @@
 import {ChartTheme} from './core'
 import {D3Selection, DrawerTarget} from './draw'
 import {animationMapping} from '../animation'
+import {Graphics} from 'pixi.js'
 
 export type AnimationType = Keys<typeof animationMapping>
 
@@ -38,7 +39,7 @@ type BasicAnimationOptions<
      * Basic elements to be animated.
      * @internal
      */
-    targets: Maybe<D3Selection | fabric.Object[]>
+    targets: Maybe<D3Selection | Graphics[]>
   }
 >
 
@@ -129,7 +130,7 @@ export type AnimationScanOptions = BasicAnimationOptions<
     /**
      * The direction in which the scan animation proceeds.
      */
-    direction: Position4 | Position2
+    direction: Position4
     color: string
     opacity: number
   }

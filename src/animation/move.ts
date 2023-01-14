@@ -1,6 +1,6 @@
 import {AnimationBase} from './base'
 import {AnimationMoveOptions, AnimationProps} from '../types'
-import {isCC, isSC} from '../utils'
+import {isSC} from '../utils'
 import {noop} from 'lodash'
 import anime from 'animejs'
 
@@ -22,22 +22,10 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
       })
     } else if (targets) {
       targets.forEach((target) => {
-        target.left = (target.left ?? 0) + initialOffset[0]
-        target.top = (target.top ?? 0) + initialOffset[1]
+        target.x += initialOffset[0]
+        target.y += initialOffset[1]
       })
-      this.renderCanvas()
     }
-  }
-
-  process(...args: unknown[]) {
-    super.process(...args)
-    const {context} = this.options
-
-    if (isCC(context)) {
-      this.renderCanvas()
-    }
-
-    return args
   }
 
   play() {
@@ -53,7 +41,7 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
       endOffset = [0, 0],
     } = this.options
     const nodes = isSC(targets) ? targets.nodes() : targets!
-    const attrs = isSC(targets) ? ['translateX', 'translateY'] : ['left', 'top']
+    const attrs = isSC(targets) ? ['translateX', 'translateY'] : ['x', 'y']
 
     nodes.forEach((targets, i, array) => {
       anime({

@@ -1,4 +1,3 @@
-import 'fabric/fabric-impl'
 import './constant'
 import './global'
 import './module'
@@ -13,18 +12,3 @@ export * from './options'
 export * from './scale'
 export * from './styles'
 export * from './utils'
-
-declare module 'fabric/fabric-impl' {
-  interface Canvas {
-    padding: Padding
-  }
-  interface Object {
-    className?: string
-  }
-  interface Group {
-    className?: string
-  }
-  interface Gradient {
-    id: string
-  }
-}

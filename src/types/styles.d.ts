@@ -26,7 +26,7 @@ export type TextStyle = GraphStyle &
     writingMode: 'horizontal-tb' | 'vertical-rl'
     textDecoration: 'line-through' | 'overline' | 'underline' | 'none'
     fontFamily: MaybeGroup<string>
-    fontWeight: MaybeGroup<string | number>
+    fontWeight: MaybeGroup<string>
     fontSize: MaybeGroup<number>
     shadow: MaybeGroup<string>
     format: FormatNumberConfig

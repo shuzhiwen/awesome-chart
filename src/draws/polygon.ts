@@ -1,10 +1,9 @@
-import {fabric} from 'fabric'
-import {svgEasing} from '../animation'
-import {PolyDrawerProps} from '../types'
-import {IPolylineOptions} from 'fabric/fabric-impl'
-import {mergeAlpha, getAttr, noChange, isSC, isCC} from '../utils'
-import {selector} from '../layers'
 import {merge} from 'lodash'
+import {Graphics} from 'pixi.js'
+import {svgEasing} from '../animation'
+import {selector} from '../layers'
+import {PolyDrawerProps} from '../types'
+import {getAttr, noChange, isSC, isCC, splitAlpha} from '../utils'
 
 export function drawPolygon({
   fill,
@@ -65,21 +64,22 @@ export function drawPolygon({
   }
 
   if (isCC(container)) {
-    container.remove(...selector.getChildren(container, className))
-    mappedData.forEach((config) => {
-      const polygon = new fabric.Polygon(config.points, {
-        className: config.className,
-        fill: mergeAlpha(config.fill, config.fillOpacity),
-        stroke: mergeAlpha(config.stroke, config.strokeOpacity),
-        strokeWidth: config.strokeWidth,
-        opacity: config.opacity,
-        source: config.source,
-        evented: config.evented,
-        perPixelTargetFind: true,
-        originX: 'center',
-        originY: 'center',
-      } as IPolylineOptions)
-      container.addWithUpdate(polygon)
+    container.removeChild(...selector.getChildren(container, className))
+    mappedData.forEach((d) => {
+      const graphics = new Graphics()
+      graphics.data = d
+      graphics.alpha = d.opacity
+      graphics.className = d.className
+      graphics.interactive = d.evented
+      graphics.pivot = {x: d.centerX, y: d.centerY}
+      graphics.position = {x: d.centerX, y: d.centerY}
+      graphics.cursor = d.evented ? 'pointer' : 'auto'
+      graphics
+        .lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        .beginFill(...splitAlpha(d.fill, d.fillOpacity))
+        .drawPolygon(d.points)
+        .endFill()
+      container.addChild(graphics)
     })
   }
 }

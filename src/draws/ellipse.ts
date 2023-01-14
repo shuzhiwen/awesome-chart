@@ -1,10 +1,9 @@
-import {fabric} from 'fabric'
+import {merge} from 'lodash'
+import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
-import {IEllipseOptions} from 'fabric/fabric-impl'
-import {mergeAlpha, getAttr, noChange, isSC, isCC} from '../utils'
+import {getAttr, noChange, isSC, isCC, splitAlpha} from '../utils'
 import {EllipseDrawerProps} from '../types'
 import {selector} from '../layers'
-import {merge} from 'lodash'
 
 export function drawEllipse({
   fill,
@@ -67,27 +66,22 @@ export function drawEllipse({
   }
 
   if (isCC(container)) {
-    container.remove(...selector.getChildren(container, className))
-    mappedData.forEach((config) => {
-      const ellipse = new fabric.Ellipse({
-        className: config.className,
-        rx: config.rx,
-        ry: config.ry,
-        cx: config.cx,
-        cy: config.cy,
-        left: config.cx,
-        top: config.cy,
-        fill: mergeAlpha(config.fill, config.fillOpacity),
-        stroke: mergeAlpha(config.stroke, config.strokeOpacity),
-        strokeWidth: config.strokeWidth,
-        opacity: config.opacity,
-        source: config.source,
-        evented: config.evented,
-        perPixelTargetFind: true,
-        originX: 'center',
-        originY: 'center',
-      } as IEllipseOptions)
-      container.addWithUpdate(ellipse)
+    container.removeChild(...selector.getChildren(container, className))
+    mappedData.forEach((d) => {
+      const graphics = new Graphics()
+      graphics.data = d
+      graphics.alpha = d.opacity
+      graphics.className = d.className
+      graphics.interactive = d.evented
+      graphics.pivot = {x: d.cx, y: d.cy}
+      graphics.position = {x: d.cx, y: d.cy}
+      graphics.cursor = d.evented ? 'pointer' : 'auto'
+      graphics
+        .lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        .beginFill(...splitAlpha(d.fill, d.fillOpacity))
+        .drawEllipse(d.cx, d.cy, d.rx, d.ry)
+        .endFill()
+      container.addChild(graphics)
     })
   }
 }

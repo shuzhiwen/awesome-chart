@@ -71,7 +71,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     super({context, options, sublayers: ['rect', 'interactive'], interactive: ['interactive']})
     const {layout, createSublayer, event} = this.options
 
-    this.event.on('destroy', 'internal', () => {
+    this.event.onWithOff('destroy', 'internal', () => {
       this.helperAuxiliary.forEach((auxiliary) => auxiliary.destroy())
     })
 
@@ -96,7 +96,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       layer.options.theme.animation.update.duration = 100
     })
 
-    event.on('MouseEvent', this.className, ({event}: {event: MouseEvent}) => {
+    event.on('globalEvent', this.className, ({event}: {event: MouseEvent}) => {
       const {offsetX, offsetY} = event,
         {scaleX, scaleY} = this.scale,
         {left, right, top, bottom} = layout,
@@ -264,7 +264,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       sublayer: 'interactive',
     })
 
-    this.event.onWithOff('mouseover-interactive', 'internal', ({data, event}) => {
+    this.event.onWithOff('mouseover-interactive', 'internal', ({data, target}) => {
       if (data.source.key.match('secondary')) {
         return
       }
@@ -275,14 +275,14 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
             select(els[i]).attr('opacity', shadowOpacity)
           }
         })
-        select(event.target).attr('opacity', 0)
+        select(target).attr('opacity', 0)
       } else {
         selector.getChildren(this.root, makeClass('interactive', false)).forEach((child) => {
-          if ((child as any).source.key.match(data.source.key)) {
-            child.opacity = shadowOpacity
+          if ((child as any).data.source.key.match(data.source.key)) {
+            child.alpha = shadowOpacity
           }
         })
-        data.opacity = 0
+        target.alpha = 0
       }
     })
     this.event.onWithOff('mouseout-interactive', 'internal', () => {
@@ -291,7 +291,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
       } else {
         selector
           .getChildren(this.root, makeClass('interactive', false))
-          .forEach((child) => (child.opacity = 0))
+          .forEach((child) => (child.alpha = 0))
       }
     })
   }

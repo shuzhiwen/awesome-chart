@@ -1,4 +1,3 @@
-import {fabric} from 'fabric'
 import * as d3 from 'd3-ease'
 
 export const svgEasing = new Map<Easing | undefined, (normalizedTime: number) => number>([
@@ -27,35 +26,4 @@ export const svgEasing = new Map<Easing | undefined, (normalizedTime: number) =>
   ['easeOutExpo', d3.easeExpOut],
   ['easeOutQuad', d3.easeQuadOut],
   ['easeOutSine', d3.easeSinOut],
-])
-
-export const canvasEasing = new Map<
-  Easing | undefined,
-  (t: number, b: number, c: number, d: number) => number
->([
-  [undefined, fabric.util.ease.easeInOutSine],
-  ['easeInBack', fabric.util.ease.easeInBack],
-  ['easeInBounce', fabric.util.ease.easeInBounce],
-  ['easeInCirc', fabric.util.ease.easeInCirc],
-  ['easeInCubic', fabric.util.ease.easeInCubic],
-  ['easeInElastic', fabric.util.ease.easeInElastic],
-  ['easeInExpo', fabric.util.ease.easeInExpo],
-  ['easeInOutBack', fabric.util.ease.easeInOutBack],
-  ['easeInOutBounce', fabric.util.ease.easeInOutBounce],
-  ['easeInOutCirc', fabric.util.ease.easeInOutCirc],
-  ['easeInOutCubic', fabric.util.ease.easeInOutCubic],
-  ['easeInOutElastic', fabric.util.ease.easeInOutElastic],
-  ['easeInOutExpo', fabric.util.ease.easeInOutExpo],
-  ['easeInOutQuad', fabric.util.ease.easeInOutQuad],
-  ['easeInOutSine', fabric.util.ease.easeInOutSine],
-  ['easeInQuad', fabric.util.ease.easeInQuad],
-  ['easeInSine', fabric.util.ease.easeInSine],
-  ['easeOutBack', fabric.util.ease.easeOutBack],
-  ['easeOutBounce', fabric.util.ease.easeOutBounce],
-  ['easeOutCirc', fabric.util.ease.easeOutCirc],
-  ['easeOutCubic', fabric.util.ease.easeOutCubic],
-  ['easeOutElastic', fabric.util.ease.easeOutElastic],
-  ['easeOutExpo', fabric.util.ease.easeOutExpo],
-  ['easeOutQuad', fabric.util.ease.easeOutQuad],
-  ['easeOutSine', fabric.util.ease.easeOutSine],
 ])

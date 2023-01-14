@@ -49,6 +49,22 @@ export function mergeAlpha<T>(color: T, opacity: number) {
 }
 
 /**
+ * Extract opacity from color.
+ * @example
+ * splitAlpha('rgba(0,0,0,0.8)', 0.5) // [0x0, 0.4]
+ * splitAlpha('rgba(0,0,0,0)', 1) // [0x0, 0]
+ * @returns
+ * Color without alpha and merged alpha.
+ */
+export function splitAlpha(color: string, opacity: number) {
+  try {
+    return [chroma(color).num(), chroma(color).alpha() * opacity]
+  } catch (error) {
+    return [0x0, 0]
+  }
+}
+
+/**
  * Attribute fetching method for drawing methods.
  * @param index
  * The group index for one attribute.

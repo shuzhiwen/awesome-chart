@@ -1,9 +1,8 @@
 import {merge} from 'lodash'
-import {fabric} from 'fabric'
-import {svgEasing} from '../animation'
-import {IImageOptions} from 'fabric/fabric-impl'
-import {getAttr, isCC, isSC, noChange, uuid} from '../utils'
 import {selector} from '../layers'
+import {svgEasing} from '../animation'
+import {getAttr, isCC, isSC, noChange, uuid} from '../utils'
+import {BaseTexture, Rectangle, Sprite, Texture} from 'pixi.js'
 import {
   DrawerData,
   DrawerType,
@@ -79,39 +78,20 @@ export function drawImage({
   }
 
   if (isCC(container)) {
-    container.remove(...selector.getChildren(container, className))
-    mappedData.forEach((config) => {
-      fabric.Image.fromURL(
-        config.url,
-        (image) => {
-          const scaleX = config.width / (config.viewBox?.width ?? image.width!),
-            scaleY = config.height / (config.viewBox?.height ?? image.height!),
-            minScale = Math.min(scaleX, scaleY)
+    container.removeChild(...selector.getChildren(container, className))
+    mappedData.forEach((d) => {
+      const {x, y, width, height} = d.viewBox ?? {},
+        baseTexture = BaseTexture.from(d.url),
+        texture = new Texture(baseTexture, d.viewBox && new Rectangle(x, y, width, height)),
+        sprite = new Sprite(texture)
 
-          image.scaleX = minScale
-          image.scaleY = minScale
-          container.addWithUpdate(image)
-          container.canvas?.requestRenderAll()
-        },
-        {
-          className: config.className,
-          left: config.x + config.width / 2,
-          top: config.y + config.height / 2,
-          opacity: config.opacity,
-          source: config.source,
-          evented: config.evented,
-          ...(config.viewBox
-            ? {
-                cropX: config.viewBox?.x,
-                cropY: config.viewBox?.y,
-                width: config.viewBox?.width,
-                height: config.viewBox?.height,
-              }
-            : undefined),
-          originX: 'center',
-          originY: 'center',
-        } as IImageOptions
-      )
+      sprite.x = d.x
+      sprite.y = d.y
+      sprite.width = d.width
+      sprite.height = d.height
+      sprite.alpha = d.opacity
+      sprite.cursor = d.evented ? 'pointer' : 'auto'
+      container.addChild(sprite)
     })
   }
 }
@@ -125,9 +105,7 @@ export function transformToImage<T extends ElConfig>(
     url?: string
   }
 ): T {
-  if (!data.size || !data.url) {
-    return data
-  }
+  if (!data.size || !data.url) return data
 
   const {from, url, size, viewBox, offset = [0, 0]} = data,
     {container, theme, source, className} = data as typeof data &

@@ -1,6 +1,5 @@
 import {select} from 'd3'
-import {fabric} from 'fabric'
-import {Canvas} from 'fabric/fabric-impl'
+import {Application, Container} from 'pixi.js'
 import {defaultLayoutCreator} from '../layout'
 import {LayerAxis, LayerLegend, layerMapping} from '../layers'
 import {isNil, noop} from 'lodash'
@@ -60,7 +59,7 @@ export class Chart {
    * Manage lifecycle or error events.
    */
   readonly event = new EventManager<
-    'MouseEvent' | 'initialized' | 'error' | Keys<typeof chartLifeCycles>
+    'globalEvent' | 'initialized' | 'error' | Keys<typeof chartLifeCycles>
   >(Chart.name)
 
   /**
@@ -81,7 +80,7 @@ export class Chart {
    * Once you specify the engine,
    * the corresponding graph root element will be created.
    */
-  readonly root: D3Selection | Canvas
+  readonly root: D3Selection | Container
 
   /**
    * The theme of the chart.
@@ -157,15 +156,21 @@ export class Chart {
     ]
 
     if (engine === 'canvas') {
-      const canvas = domContainer
-        .append('canvas')
-        .attr('width', this.containerWidth)
-        .attr('height', this.containerHeight)
-        .style('position', 'absolute')
       this.defs = []
-      this.root = new fabric.Canvas(canvas.node(), {selection: false, hoverCursor: 'pointer'})
-      this.root.on('mouse:move', ({e: event}) => this.event.fire('MouseEvent', {event}))
-      this.root.padding = this.padding
+      const app = new Application({
+        width: this.containerWidth,
+        height: this.containerHeight,
+        backgroundAlpha: 0,
+        autoDensity: true,
+        resolution: 2,
+      })
+      this.root = app.stage
+      this.root.getApp = () => app
+      this.event.once('destroy', uuid(), () => app.destroy())
+      this.container.appendChild(app.view as HTMLCanvasElement)
+      this.root.on('mousemove', ({nativeEvent: event}) => {
+        this.event.fire('globalEvent', {event})
+      })
     } else {
       this.root = domContainer
         .append('svg')
@@ -174,7 +179,9 @@ export class Chart {
         .attr('xmlns', 'http://www.w3.org/2000/svg')
         .style('position', 'absolute')
       this.defs = this.root.append('defs')
-      this.root.on('mousemove', (event) => this.event.fire('MouseEvent', {event}))
+      this.root.on('mousemove', (event) => {
+        this.event.fire('globalEvent', {event})
+      })
     }
 
     this._layout = layoutCreator({

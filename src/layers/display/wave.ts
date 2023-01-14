@@ -1,4 +1,3 @@
-import {fabric} from 'fabric'
 import {LayerBase} from '../base'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 import {createSinusoidal, isSC} from '../../utils'
@@ -30,7 +29,7 @@ const defaultStyle: LayerWaveStyle = {
   },
   text: {
     fontSize: 30,
-    fontWeight: 700,
+    fontWeight: '700',
   },
 }
 
@@ -81,12 +80,7 @@ export class LayerWave extends LayerBase<LayerWaveOptions> {
         .attr('r', radius)
       this.root.attr('clip-path', `url(#clipPath-${this.options.id})`)
     } else {
-      this.root.clipPath = new fabric.Circle({
-        absolutePositioned: true,
-        left: left + width / 2 - radius,
-        top: top + height / 2 - radius,
-        radius,
-      })
+      // TODO: pixi clippath
     }
   }
 

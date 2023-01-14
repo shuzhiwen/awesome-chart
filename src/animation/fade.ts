@@ -1,6 +1,6 @@
 import {AnimationBase} from './base'
 import {AnimationFadeOptions, AnimationProps} from '../types'
-import {isCC, isSC} from '../utils'
+import {isSC} from '../utils'
 import anime from 'animejs'
 
 export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
@@ -14,33 +14,24 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
     if (isSC(targets)) {
       targets.attr('opacity', initialOpacity)
     } else if (targets) {
-      targets.forEach((target) => (target.opacity = initialOpacity))
-      this.renderCanvas()
+      targets.forEach((target) => (target.alpha = initialOpacity))
     }
-  }
-
-  process(...args: unknown[]) {
-    super.process(...args)
-    const {context} = this.options
-
-    if (isCC(context)) {
-      this.renderCanvas()
-    }
-
-    return args
   }
 
   play() {
     const {
-      targets,
-      delay,
-      duration,
-      easing,
-      alternate,
-      stagger = null,
-      startOpacity = 0,
-      endOpacity = 1,
-    } = this.options
+        targets,
+        delay,
+        duration,
+        easing,
+        alternate,
+        stagger = null,
+        startOpacity = 0,
+        endOpacity = 1,
+      } = this.options,
+      name = isSC(targets) ? 'opacity' : 'alpha',
+      start = Math.max(startOpacity, 5e-6),
+      end = Math.max(endOpacity, 5e-6)
 
     anime({
       targets: isSC(targets) ? targets.nodes() : targets,
@@ -50,24 +41,9 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
       loopBegin: this.start,
       loopComplete: this.end,
       keyframes: [
-        {
-          opacity: startOpacity,
-          duration: 0,
-          delay: 0,
-        },
-        {
-          opacity: endOpacity,
-          delay: stagger ? anime.stagger(stagger) : delay,
-        },
-        alternate
-          ? {
-              opacity: startOpacity,
-              delay: 0,
-            }
-          : {
-              duration: 0,
-              delay: 0,
-            },
+        {[name]: start, duration: 0, delay: 0},
+        {[name]: end, delay: stagger ? anime.stagger(stagger) : delay},
+        alternate ? {[name]: start, delay: 0} : {duration: 0, delay: 0},
       ],
     })
   }

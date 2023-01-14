@@ -31,16 +31,13 @@ export class Tooltip {
 
   constructor(options: TooltipOptions) {
     this.setOptions(options)
-
-    const {container, backgroundColor, mode} = this.options
-
-    this.instance = select(container)
+    this.instance = select(this.options.container)
       .append('div')
       .attr('class', 'tooltip')
       .style('border-radius', '4px')
       .style('row-gap', '4px')
       .style('flex-direction', 'column')
-      .style('background-color', backgroundColor)
+      .style('background-color', this.options.backgroundColor)
       .style('position', 'fixed')
       .style('overflow', 'hidden')
       .style('display', 'none')
@@ -49,7 +46,7 @@ export class Tooltip {
       .style('top', 0)
 
     this.getListData = errorCatcher(this.getListData.bind(this), (error) => {
-      this.log.error(`The layer does not support ${mode} mode`, error)
+      this.log.error(`The layer does not support ${this.options.mode} mode`, error)
     })
   }
 
@@ -212,22 +209,22 @@ export class Tooltip {
     }
   }
 
-  move({pageX, pageY}: MouseEvent) {
+  move({clientX: x, clientY: y}: MouseEvent) {
     const rect = this.instance.node().getBoundingClientRect()
     const drift = 10
 
-    if (pageX + rect.width > document.body.clientWidth) {
-      pageX -= rect.width + drift
+    if (x + rect.width > document.body.clientWidth) {
+      x -= rect.width + drift
     } else {
-      pageX += drift
+      x += drift
     }
-    if (pageY + rect.height > document.body.clientHeight) {
-      pageY -= rect.height + drift
+    if (y + rect.height > document.body.clientHeight) {
+      y -= rect.height + drift
     } else {
-      pageY += drift
+      y += drift
     }
 
-    this.instance.style('left', `${pageX}px`).style('top', `${pageY}px`)
+    this.instance.style('left', `${x}px`).style('top', `${y}px`)
   }
 
   destroy() {

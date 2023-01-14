@@ -34,7 +34,7 @@ export default ({mode}) => [
     animation: `(theme) => ({
       polygon: {
         enter: theme.animation.presets.zoomIn,
-        loop: theme.animation.presets.scanOut,
+        loop: theme.animation.presets.scanRight,
       },
       point: {
         enter: theme.animation.presets.fadeIn,

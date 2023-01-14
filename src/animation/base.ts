@@ -1,5 +1,5 @@
 import {throttle, merge} from 'lodash'
-import {animationLifeCycles, EventManager, createLog, isCC, noChange, uuid} from '../utils'
+import {animationLifeCycles, EventManager, createLog, noChange, uuid, isSC} from '../utils'
 import {AnimationProps, AnimationOptions} from '../types'
 import {selector} from '../layers'
 
@@ -30,6 +30,11 @@ export abstract class AnimationBase<Options extends AnimationOptions> {
     return this._isAvailable
   }
 
+  get canvasRoot() {
+    if (isSC(this.options.targets)) throw new Error('Wrong call with svg context')
+    return this.options.targets![0].parent.parent
+  }
+
   protected start(...args: any) {
     return args
   }
@@ -48,18 +53,6 @@ export abstract class AnimationBase<Options extends AnimationOptions> {
   play(): void {}
 
   destroy(): void {}
-
-  protected getCanvasContext = () => {
-    if (isCC(this.options.context)) {
-      return this.options.context.toCanvasElement().getContext('2d')!
-    }
-  }
-
-  protected renderCanvas = () => {
-    if (isCC(this.options.context)) {
-      this.options.context.canvas?.requestRenderAll()
-    }
-  }
 
   constructor({options, context}: AnimationProps<Options>) {
     this.options = merge({}, options, {context})
