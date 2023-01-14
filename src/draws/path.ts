@@ -1,8 +1,8 @@
-import {merge} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {PathDrawerProps} from '../types'
 import {getAttr, noChange, isCC, isSC, splitAlpha} from '../utils'
+import {isFunction, merge} from 'lodash'
 import {selector} from '../layers'
 
 export function drawPath({
@@ -53,7 +53,7 @@ export function drawPath({
       .ease(svgEasing.get(getAttr(transition?.easing, 0, update.easing))!)
       .duration(getAttr(transition?.duration, 0, update.duration))
       .delay(getAttr(transition?.delay, 0, update.delay))
-      .attr('d', (d) => d.path)
+      .attr('d', (d) => (isFunction(d.path) ? d.path() : d.path))
       .attr('fill', (d) => d.fill)
       .attr('stroke', (d) => d.stroke)
       .attr('stroke-width', (d) => d.strokeWidth)
@@ -73,14 +73,14 @@ export function drawPath({
       graphics.alpha = d.opacity
       graphics.className = d.className
       graphics.interactive = d.evented
-      graphics.pivot = {x: d.centerX, y: d.centerY}
       graphics.position = {x: d.centerX, y: d.centerY}
       graphics.cursor = d.evented ? 'pointer' : 'auto'
       graphics
         .lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
         .beginFill(...splitAlpha(d.fill, d.fillOpacity))
-        .drawPath(d.path, [d.centerX, d.centerY])
-        .endFill()
+      if (isFunction(d.path)) d.path(graphics as unknown as CanvasRenderingContext2D)
+      else graphics.drawPath(d.path, [d.centerX, d.centerY])
+      graphics.endFill()
       container.addChild(graphics)
     })
   }

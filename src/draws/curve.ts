@@ -7,11 +7,13 @@ export function drawCurve({data = [], ...rest}: CurveDrawerProps) {
     data: data.map(({points, curve}) => ({
       centerX: 0,
       centerY: 0,
-      path: d3
-        .line()
-        .x((d) => d[0])
-        .y((d) => d[1])
-        .curve(d3[curve])(points.map(({x, y}) => [x, y]))!,
+      path: (context) =>
+        d3
+          .line()
+          .context(context || null)
+          .x((d) => d[0])
+          .y((d) => d[1])
+          .curve(d3[curve])(points.map(({x, y}) => [x, y]))!,
     })),
     ...rest,
     fillOpacity: 0,

@@ -5,7 +5,10 @@ import {ArcDrawerProps} from '../types'
 export function drawArc({data = [], ...rest}: ArcDrawerProps) {
   return drawPath({
     data: data.map(({centerX, centerY, cornerRadius, ...rest}) => ({
-      path: arc().cornerRadius(cornerRadius ?? 0)(rest)!,
+      path: (context) =>
+        arc()
+          .context(context || null)
+          .cornerRadius(cornerRadius ?? 0)(rest)!,
       centerX,
       centerY,
     })),
