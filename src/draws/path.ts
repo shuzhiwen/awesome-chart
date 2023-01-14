@@ -1,7 +1,9 @@
+import {merge} from 'lodash'
+import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {PathDrawerProps} from '../types'
-import {getAttr, noChange, isCC, isSC} from '../utils'
-import {merge} from 'lodash'
+import {getAttr, noChange, isCC, isSC, splitAlpha} from '../utils'
+import {selector} from '../layers'
 
 export function drawPath({
   fill,
@@ -64,6 +66,22 @@ export function drawPath({
   }
 
   if (isCC(container)) {
-    throw new Error('WebGL does not support path element.')
+    container.removeChild(...selector.getChildren(container, className))
+    mappedData.forEach((d) => {
+      const graphics = new Graphics()
+      graphics.data = d
+      graphics.alpha = d.opacity
+      graphics.className = d.className
+      graphics.interactive = d.evented
+      graphics.pivot = {x: d.centerX, y: d.centerY}
+      graphics.position = {x: d.centerX, y: d.centerY}
+      graphics.cursor = d.evented ? 'pointer' : 'auto'
+      graphics
+        .lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        .beginFill(...splitAlpha(d.fill, d.fillOpacity))
+        .drawPath(d.path, [d.centerX, d.centerY])
+        .endFill()
+      container.addChild(graphics)
+    })
   }
 }
