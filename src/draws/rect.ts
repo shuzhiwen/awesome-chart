@@ -1,5 +1,5 @@
 import {Graphics} from 'pixi.js'
-import {isArray, merge} from 'lodash'
+import {isArray, isString, merge} from 'lodash'
 import {getAttr, isSC, isCC, noChange, splitAlpha} from '../utils'
 import {DrawerData, RectDrawerProps} from '../types'
 import {svgEasing} from '../animation'
@@ -78,11 +78,15 @@ export function drawRect({
       graphics.pivot = getTransformPosition(d)
       graphics.position = getTransformPosition(d)
       graphics.cursor = d.evented ? 'pointer' : 'auto'
-      graphics
-        .lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
-        .beginFill(...splitAlpha(d.fill, d.fillOpacity))
-        .drawRect(d.x, d.y, d.width, d.height)
-        .endFill()
+
+      isString(d.stroke)
+        ? graphics.lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        : graphics.lineTextureStyle({texture: d.stroke})
+      isString(d.fill)
+        ? graphics.beginFill(...splitAlpha(d.fill, d.fillOpacity))
+        : graphics.beginTextureFill({texture: d.fill})
+
+      graphics.drawRect(d.x, d.y, d.width, d.height).endFill()
       container.addChild(graphics)
     })
   }

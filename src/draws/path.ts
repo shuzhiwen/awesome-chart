@@ -2,7 +2,7 @@ import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {PathDrawerProps} from '../types'
 import {getAttr, noChange, isCC, isSC, splitAlpha} from '../utils'
-import {isFunction, merge} from 'lodash'
+import {isFunction, isString, merge} from 'lodash'
 import {selector} from '../layers'
 
 export function drawPath({
@@ -75,11 +75,18 @@ export function drawPath({
       graphics.interactive = d.evented
       graphics.position = {x: d.centerX, y: d.centerY}
       graphics.cursor = d.evented ? 'pointer' : 'auto'
-      graphics
-        .lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
-        .beginFill(...splitAlpha(d.fill, d.fillOpacity))
-      if (isFunction(d.path)) d.path(graphics as unknown as CanvasRenderingContext2D)
-      else graphics.drawPath(d.path, [d.centerX, d.centerY])
+
+      isString(d.stroke)
+        ? graphics.lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        : graphics.lineTextureStyle({texture: d.stroke})
+      isString(d.fill)
+        ? graphics.beginFill(...splitAlpha(d.fill, d.fillOpacity))
+        : graphics.beginTextureFill({texture: d.fill})
+
+      isFunction(d.path)
+        ? d.path(graphics as unknown as CanvasRenderingContext2D)
+        : graphics.drawPath(d.path, [d.centerX, d.centerY])
+
       graphics.endFill()
       container.addChild(graphics)
     })

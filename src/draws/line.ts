@@ -1,8 +1,8 @@
-import {merge} from 'lodash'
 import {Graphics} from 'pixi.js'
-import {svgEasing} from '../animation'
+import {isString, merge} from 'lodash'
 import {isCC, isSC, noChange, getAttr, splitAlpha} from '../utils'
 import {LineDrawerProps} from '../types'
+import {svgEasing} from '../animation'
 import {selector} from '../layers'
 
 export function drawLine({
@@ -83,10 +83,12 @@ export function drawLine({
       graphics.className = d.className
       graphics.interactive = d.evented
       graphics.cursor = d.evented ? 'pointer' : 'auto'
-      graphics
-        .moveTo(x1, y1)
-        .lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
-        .dashLineTo(_x2, _y2, d.strokeDasharray)
+
+      isString(d.stroke)
+        ? graphics.lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        : graphics.lineTextureStyle({texture: d.stroke})
+
+      graphics.moveTo(x1, y1).dashLineTo(_x2, _y2, d.strokeDasharray)
       container.addChild(graphics)
     })
   }

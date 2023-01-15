@@ -54,16 +54,23 @@ export const createRadialGradients = ({
   container,
   schema,
 }: GradientCreatorProps<RadialGradientSchema[]>) => {
-  schema.forEach(({id, r = 0, x1 = 0.5, x2 = 0.5, y1 = 0.5, y2 = 0.5, stops, ...rest}) => {
+  schema.forEach(({id, x1 = 0, x2 = 0, y1 = 0, y2 = 0, stops, ...rest}) => {
+    const {r = 0, r2 = 0, width, height} = rest
+
+    if (width) (x1 *= width), (x2 *= width)
+    if (height) (y1 *= height), (y2 *= height)
+
     if (isSC(container)) {
       const radialGradient = container
         .append('radialGradient')
+        .attr('gradientUnits', 'userSpaceOnUse')
         .attr('id', id)
-        .attr('r', r)
-        .attr('cx', x1)
-        .attr('cy', y1)
-        .attr('fx', x2)
-        .attr('fy', y2)
+        .attr('fx', x1)
+        .attr('fy', y1)
+        .attr('fr', r)
+        .attr('cx', x2)
+        .attr('cy', y2)
+        .attr('r', r2)
 
       stops.forEach(({offset = 1, opacity = 1, color = '#fff'}) => {
         radialGradient
@@ -73,24 +80,20 @@ export const createRadialGradients = ({
           .style('stop-opacity', opacity)
       })
     } else {
-      const {r2 = 0, width = 100, height = 100} = rest,
+      const [_width, _height] = [width ?? 100, height ?? 100],
         canvas = document.createElement('canvas'),
         ctx = canvas.getContext('2d')!,
-        [_x1, _y1, _x2, _y2] = [x1 * width, y1 * height, x2 * width, y2 * height],
-        gradient = ctx.createRadialGradient(_x1, _y1, r, _x2, _y2, r2)
+        gradient = ctx.createRadialGradient(x1, y1, r, x2, y2, r2)
 
       stops.forEach(({offset = 1, opacity = 1, color = '#fff'}) => {
         gradient.addColorStop(offset, mergeAlpha(color, opacity))
       })
 
-      canvas.width = width
-      canvas.height = height
+      canvas.width = _width
+      canvas.height = _height
       ctx.fillStyle = gradient
-      ctx.fillRect(x1, y1, width, height)
+      ctx.fillRect(0, 0, _width, _height)
       container.push(Object.assign(Texture.from(canvas), {gradientId: id}))
-
-      canvas.style.background = 'green'
-      document.body.appendChild(canvas)
     }
   })
 }
@@ -129,7 +132,10 @@ export const getEasyGradientCreator = ({
       }
 
     if (type === 'radial') {
-      schema.radialGradient = {r: 0.5, ...baseSchema, ...other}
+      schema.radialGradient = {
+        ...baseSchema,
+        ...other,
+      }
     } else {
       schema.linearGradient = {
         x2: direction === 'horizontal' ? 1 : 0,
@@ -142,6 +148,8 @@ export const getEasyGradientCreator = ({
     createDefs({container, schema})
     if (isSC(container)) {
       return `url(#${baseSchema.id})`
+    } else {
+      return container.find((item) => item.gradientId === baseSchema.id)!
     }
   }
 }

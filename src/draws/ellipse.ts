@@ -1,8 +1,8 @@
-import {merge} from 'lodash'
 import {Graphics} from 'pixi.js'
-import {svgEasing} from '../animation'
+import {isString, merge} from 'lodash'
 import {getAttr, noChange, isSC, isCC, splitAlpha} from '../utils'
 import {EllipseDrawerProps} from '../types'
+import {svgEasing} from '../animation'
 import {selector} from '../layers'
 
 export function drawEllipse({
@@ -76,11 +76,15 @@ export function drawEllipse({
       graphics.pivot = {x: d.cx, y: d.cy}
       graphics.position = {x: d.cx, y: d.cy}
       graphics.cursor = d.evented ? 'pointer' : 'auto'
-      graphics
-        .lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
-        .beginFill(...splitAlpha(d.fill, d.fillOpacity))
-        .drawEllipse(d.cx, d.cy, d.rx, d.ry)
-        .endFill()
+
+      isString(d.stroke)
+        ? graphics.lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        : graphics.lineTextureStyle({texture: d.stroke})
+      isString(d.fill)
+        ? graphics.beginFill(...splitAlpha(d.fill, d.fillOpacity))
+        : graphics.beginTextureFill({texture: d.fill})
+
+      graphics.drawEllipse(d.cx, d.cy, d.rx, d.ry).endFill()
       container.addChild(graphics)
     })
   }

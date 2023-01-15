@@ -65,22 +65,32 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
       throw new Error('Invalid data or scale')
     }
 
-    const {layout, createGradient} = this.options,
-      {scaleX, scaleY} = this.scale,
+    const {scaleX, scaleY} = this.scale,
+      {layout, createGradient} = this.options,
       {heatZone, radiusFactor = 1} = this.style,
-      data = tableListToObjects<DataKey>(this.data.source),
-      color = createGradient({type: 'radial', colors: group(heatZone?.fill)})
+      data = tableListToObjects<DataKey>(this.data.source)
 
     this.heatZoneData = data
       .map((item) => ({
         x: layout.left + scaleX(item.x),
         y: layout.top + scaleY(item.y),
         r: radiusFactor * Number(item.value),
-        color: color as string,
       }))
-      .filter(({x, y}) => {
-        return isRealNumber(x) && isRealNumber(y)
-      })
+      .filter(({x, y}) => isRealNumber(x) && isRealNumber(y))
+      .map((item) => ({
+        ...item,
+        color: createGradient({
+          type: 'radial',
+          r2: item.r,
+          width: item.x + item.r,
+          height: item.y + item.r,
+          colors: group(heatZone?.fill),
+          x1: item.x / (item.x + item.r),
+          x2: item.x / (item.x + item.r),
+          y1: item.y / (item.y + item.r),
+          y2: item.y / (item.y + item.r),
+        }) as string,
+      }))
   }
 
   draw() {

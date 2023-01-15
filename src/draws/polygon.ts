@@ -1,9 +1,9 @@
-import {merge} from 'lodash'
 import {Graphics} from 'pixi.js'
+import {isString, merge} from 'lodash'
+import {getAttr, noChange, isSC, isCC, splitAlpha} from '../utils'
+import {PolyDrawerProps} from '../types'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
-import {PolyDrawerProps} from '../types'
-import {getAttr, noChange, isSC, isCC, splitAlpha} from '../utils'
 
 export function drawPolygon({
   fill,
@@ -74,11 +74,15 @@ export function drawPolygon({
       graphics.pivot = {x: d.centerX, y: d.centerY}
       graphics.position = {x: d.centerX, y: d.centerY}
       graphics.cursor = d.evented ? 'pointer' : 'auto'
-      graphics
-        .lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
-        .beginFill(...splitAlpha(d.fill, d.fillOpacity))
-        .drawPolygon(d.points)
-        .endFill()
+
+      isString(d.stroke)
+        ? graphics.lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        : graphics.lineTextureStyle({texture: d.stroke})
+      isString(d.fill)
+        ? graphics.beginFill(...splitAlpha(d.fill, d.fillOpacity))
+        : graphics.beginTextureFill({texture: d.fill})
+
+      graphics.drawPolygon(d.points).endFill()
       container.addChild(graphics)
     })
   }
