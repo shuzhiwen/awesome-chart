@@ -147,6 +147,7 @@ Graphics.prototype.drawPath = function (d: string, offset?: Position) {
     this.beginTextureFill({texture: Texture.from(canvas)})
     this.lineTextureStyle({texture: Texture.from(canvas), width: line.width})
     this.drawRect(0, 0, x * 2, y * 2)
+    this.interactive = false
     this.x -= x
     this.y -= y
   }

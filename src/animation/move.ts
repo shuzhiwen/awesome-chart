@@ -1,10 +1,13 @@
+import anime from 'animejs'
+import {Graphics} from 'pixi.js'
 import {AnimationBase} from './base'
 import {AnimationMoveOptions, AnimationProps} from '../types'
 import {isSC} from '../utils'
 import {noop} from 'lodash'
-import anime from 'animejs'
 
 export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
+  private originPosition: [number, number][] = []
+
   constructor(props: AnimationProps<AnimationMoveOptions>) {
     super(props)
   }
@@ -24,8 +27,16 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
       targets.forEach((target) => {
         target.x += initialOffset[0]
         target.y += initialOffset[1]
+        this.originPosition.push([target.x, target.y])
       })
     }
+  }
+
+  getRealPosition(targets: Graphics | HTMLElement, index: number) {
+    if (targets instanceof Graphics) {
+      return this.originPosition[index]
+    }
+    return [0, 0]
   }
 
   play() {
@@ -40,10 +51,11 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
       startOffset = [0, 0],
       endOffset = [0, 0],
     } = this.options
-    const nodes = isSC(targets) ? targets.nodes() : targets!
+    const nodes = isSC(targets) ? (targets.nodes() as HTMLElement[]) : targets!
     const attrs = isSC(targets) ? ['translateX', 'translateY'] : ['x', 'y']
 
     nodes.forEach((targets, i, array) => {
+      const [x, y] = this.getRealPosition(targets, i)
       anime({
         targets,
         easing,
@@ -53,20 +65,20 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
         loopComplete: i === array.length - 1 ? this.end : noop,
         keyframes: [
           {
-            [attrs[0]]: startOffset[0],
-            [attrs[1]]: startOffset[1],
+            [attrs[0]]: x + startOffset[0],
+            [attrs[1]]: y + startOffset[1],
             duration: 0,
             delay: 0,
           },
           {
-            [attrs[0]]: endOffset[0] * Math.pow(decayFactor, i),
-            [attrs[1]]: endOffset[1] * Math.pow(decayFactor, i),
+            [attrs[0]]: x + endOffset[0] * Math.pow(decayFactor, i),
+            [attrs[1]]: y + endOffset[1] * Math.pow(decayFactor, i),
             delay: stagger ? stagger * i : delay,
           },
           alternate
             ? {
-                [attrs[0]]: startOffset[0],
-                [attrs[1]]: startOffset[1],
+                [attrs[0]]: x + startOffset[0],
+                [attrs[1]]: y + startOffset[1],
                 delay: 0,
               }
             : {
