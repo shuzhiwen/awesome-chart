@@ -1,3 +1,4 @@
+import {Graphics} from 'pixi.js'
 import {LayerBase} from '../base'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 import {createSinusoidal, isSC} from '../../utils'
@@ -80,7 +81,10 @@ export class LayerWave extends LayerBase<LayerWaveOptions> {
         .attr('r', radius)
       this.root.attr('clip-path', `url(#clipPath-${this.options.id})`)
     } else {
-      // TODO: pixi clippath
+      this.root.mask = new Graphics()
+        .beginFill(0xffffff)
+        .drawCircle(left + width / 2, top + height / 2, radius)
+        .endFill()
     }
   }
 
