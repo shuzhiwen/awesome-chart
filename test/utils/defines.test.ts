@@ -1,5 +1,5 @@
 import {select} from 'd3'
-import {fabric} from 'fabric'
+import {Texture} from 'pixi.js'
 import {getEasyGradientCreator} from '../../src'
 
 test('defines', () => {
@@ -11,7 +11,7 @@ test('defines', () => {
     direction: 'horizontal',
     colors: ['red', 'blue', 'yellow'],
   })
-  const fabricGradient = canvasCreator({
+  const canvasGradient = canvasCreator({
     type: 'radial',
     direction: 'vertical',
     colors: ['red', 'blue', 'yellow'],
@@ -19,5 +19,5 @@ test('defines', () => {
 
   expect(typeof svgId === 'string').toBe(true)
   expect(svgContainer.nodes().length).toBeGreaterThan(0)
-  expect(fabricGradient instanceof fabric.Gradient).toBe(true)
+  expect(canvasGradient instanceof Texture).toBe(true)
 })

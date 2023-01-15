@@ -1,5 +1,5 @@
 import {select} from 'd3'
-import {fabric} from 'fabric'
+import {Container} from 'pixi.js'
 import {selector} from '../../src'
 
 // disable log message
@@ -19,7 +19,7 @@ jest.mock('../../src/utils/create-log', () => ({
 
 test('Selector', () => {
   const svgContainer = select(document.createElement('svg'))
-  const canvasContainer = new fabric.Group()
+  const canvasContainer = new Container()
 
   expect(selector.createGroup(svgContainer, 'sub')).not.toBeNull()
   expect(selector.createGroup(svgContainer, 'sub')).not.toBeUndefined()

@@ -25,7 +25,7 @@ test('defines', () => {
   select(svgContainer).attr('width', '1000px').attr('height', '1000px')
   select(canvasContainer).attr('width', '1000px').attr('height', '1000px')
 
-  const schema = base(rect({variant: 'column', mode: 'group'}))
+  const schema = {...base(rect({variant: 'column'})), tooltipOptions: {}}
   const svgChart = createChart({container: svgContainer, ...schema, engine: 'svg'})
   const canvasChart = createChart({container: svgContainer, ...schema, engine: 'canvas'})
   const charts = [svgChart, canvasChart]
