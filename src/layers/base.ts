@@ -6,7 +6,6 @@ import {cloneDeep, isArray, isEqual, isFunction, merge, noop, range} from 'lodas
 import {
   commonEvents,
   layerLifeCycles,
-  disableEventDrawers,
   tooltipEvents,
   createLog,
   EventManager,
@@ -364,13 +363,12 @@ export abstract class LayerBase<Options extends LayerOptions> {
 
     const {theme} = this.options,
       cacheData = this.cacheData[sublayer],
-      evented = !disableEventDrawers.has(type),
       sublayerClassName = `${this.className}-${sublayer}`,
       maxGroupLength = Math.max(cacheData.data.length, data.length),
       isFirstDraw = cacheData.data.length === 0,
       sublayerContainer =
         selector.getDirectChild(this.root, sublayerClassName) ||
-        selector.createGroup(this.root, sublayerClassName, evented)
+        selector.createGroup(this.root, sublayerClassName)
 
     /**
      * If data length is more than last time, add missing group container.
@@ -381,7 +379,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
       const groupContainer = selector.getDirectChild(sublayerContainer, groupClassName)
 
       if (groupIndex < data.length && !groupContainer) {
-        selector.createGroup(sublayerContainer, groupClassName, evented)
+        selector.createGroup(sublayerContainer, groupClassName)
       } else if (groupIndex >= data.length) {
         selector.remove(groupContainer)
       }

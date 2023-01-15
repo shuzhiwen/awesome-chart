@@ -3,11 +3,6 @@ export const chartLifeCycles = new Set(['draw', 'destroy', 'rebuildScale'] as co
 export const tooltipEvents = new Set(['mouseover', 'mouseout', 'mousemove'] as const)
 
 /**
- * Disabled event drawer means the drawer that has no interactive.
- */
-export const disableEventDrawers = new Set(['text', 'line', 'area'])
-
-/**
  * Dependant layer means the layer that create scale itself.
  */
 export const dependantLayers = new Set([

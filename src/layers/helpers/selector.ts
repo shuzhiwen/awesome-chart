@@ -66,20 +66,18 @@ class Selector {
    * Svg container or canvas container.
    * @param className
    * The className of the container.
-   * @param evented
-   * Whether the container responds to interaction events.
    */
-  createGroup(target: D3Selection, className: string, evented?: boolean): D3Selection
-  createGroup(target: Container, className: string, evented?: boolean): Container
-  createGroup(target: DrawerTarget, className: string, evented?: boolean): DrawerTarget
-  createGroup(target: Maybe<DrawerTarget>, className: string, evented = true) {
+  createGroup(target: D3Selection, className: string): D3Selection
+  createGroup(target: Container, className: string): Container
+  createGroup(target: DrawerTarget, className: string): DrawerTarget
+  createGroup(target: Maybe<DrawerTarget>, className: string) {
     if (isSC(target)) {
       return target.append('g').attr('class', className)
     } else if (isCC(target)) {
       const group = new Container()
-      group.className = className
-      group.interactive = evented
       group.getApp = target.getApp
+      group.className = className
+      group.interactive = false
       target.addChild(group)
       return group
     }
