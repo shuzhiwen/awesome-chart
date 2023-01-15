@@ -12,7 +12,10 @@ import {
   isLayerAxis,
   errorCatcher,
   randomRelation,
+  createLog,
 } from '../utils'
+
+const log = createLog('CreateChart')
 
 export const createLayer = (chart: Chart, schema: ArrayItem<CreateChartProps['layers']>) => {
   const {type, options, data, scale, style, animation, event} = schema!,
@@ -82,7 +85,7 @@ export const createChart = errorCatcher(
       Promise.all(batchAnimation).then(() => {
         layer.setVisible(true)
         if (batchAnimation.length) {
-          console.info('Layer animation Initialized!')
+          log.info('Layer animation Initialized!')
         }
       })
     })
@@ -92,6 +95,6 @@ export const createChart = errorCatcher(
     return chart
   },
   (error: Error) => {
-    console.error('Chart initialization failed', error)
+    log.error('Chart initialization failed', error)
   }
 )
