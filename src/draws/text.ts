@@ -1,9 +1,9 @@
 import {merge} from 'lodash'
 import {interpolateNumber} from 'd3'
-import {svgEasing} from '../animation'
 import {TextDrawerProps} from '../types'
 import {getAttr, isSC, isCC, noChange, isRealNumber, mergeAlpha} from '../utils'
 import {Text, TextStyleFontWeight} from 'pixi.js'
+import {svgEasing} from '../animation'
 import {selector} from '../layers'
 
 export function drawText({
@@ -111,11 +111,12 @@ export function drawText({
         stroke: mergeAlpha(d.stroke, d.strokeOpacity),
         strokeThickness: d.strokeWidth,
       })
-      text.x = d.x
-      text.y = d.y - d.textHeight
       text.alpha = d.opacity
+      text.angle = d.rotation
       text.className = d.className
       text.interactive = d.evented
+      text.pivot = {x: d.textWidth / 2, y: d.textHeight / 2}
+      text.position = {x: d.x + d.textWidth / 2, y: d.y - d.textHeight / 2}
       text.cursor = d.evented ? 'pointer' : 'auto'
       container.addChild(text)
     })

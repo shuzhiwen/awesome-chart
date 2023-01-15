@@ -158,11 +158,11 @@ export class Chart {
     if (engine === 'canvas') {
       this.defs = []
       const app = new Application({
+        resolution: window.devicePixelRatio,
         width: this.containerWidth,
         height: this.containerHeight,
         backgroundAlpha: 0,
         autoDensity: true,
-        resolution: 2,
       })
       this.root = app.stage
       this.root.getApp = () => app
