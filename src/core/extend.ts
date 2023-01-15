@@ -88,7 +88,7 @@ function generateCommandData(d: string) {
     .trim()
     .split(/[MLHVCSQTAZ]/gi)
     .slice(1)
-    .map((item) => item.split(/,|\s+/gi))
+    .map((item) => item.trim().split(/,|\s+/gi))
 
   return commands?.map((command, i) => ({
     command,

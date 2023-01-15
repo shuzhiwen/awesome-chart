@@ -1,9 +1,9 @@
 import {max, range, sum} from 'd3'
-import {LayerBase} from '../base'
 import {DataRelation} from '../../data'
 import {scaleLinear} from '../../scales'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 import {getAttr, noChange} from '../../utils'
+import {LayerBase} from '../base'
 import {
   ChartContext,
   DrawerData,
@@ -77,7 +77,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
 
     const {edges, nodes} = this.data,
       {layout, createGradient} = this.options,
-      {align, text, node, direction} = this.style,
+      {align, text, node, direction = 'horizontal'} = this.style,
       {labelOffset = 5, nodeWidth = 5, nodeGap = 0, edgeGap = 0} = this.style,
       levels = range(0, (max(nodes.map(({level}) => level ?? 0)) ?? 0) + 1),
       groups = levels.map((value) => nodes.filter(({level}) => level === value)),
@@ -125,26 +125,23 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
       })
     })
 
-    // move rect node according align value
+    // align rect nodes
     this.nodeData.forEach((group) => {
       const tailNode = group[group.length - 1]
 
       if (direction === 'horizontal') {
         const offset = layout.top + layout.height - tailNode.y - tailNode.height,
           moveY = align === 'end' ? offset : align === 'middle' ? offset / 2 : 0
-
         group.forEach((item) => (item.y += moveY))
-      }
-
-      if (direction === 'vertical') {
+      } else if (direction === 'vertical') {
         const offset = layout.top + layout.width - tailNode.y - tailNode.height,
           moveX = align === 'end' ? offset : align === 'middle' ? offset / 2 : 0
-
         group.forEach((item) => (item.y += moveX))
       }
     })
 
     const flatNodes = this.nodeData.flatMap(noChange)
+
     this.edgeData = edges.map(({from, to, value}) => {
       const length = scaleNode(value ?? NaN),
         fromNode = flatNodes.find(({id}) => id === from)!,
@@ -165,10 +162,18 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
         y3: toNode.y + toNode.stackedEdgeLength[0],
         color: createGradient({
           type: 'linear',
-          direction: direction ?? 'horizontal',
+          direction,
+          width: this.options.containerWidth,
+          height: this.options.containerHeight,
           colors: [fromNode.color, toNode.color],
-          x1: fromNode.x + fromNode.width + edgeGap,
-          x2: toNode.x - edgeGap,
+          ...(direction === 'horizontal' && {
+            x1: fromNode.x + fromNode.width + edgeGap,
+            x2: toNode.x - edgeGap,
+          }),
+          ...(direction === 'vertical' && {
+            y1: fromNode.x + fromNode.width + edgeGap - layout.left + layout.top,
+            y2: toNode.x - edgeGap - layout.left + layout.top,
+          }),
         }) as string,
       }
     })

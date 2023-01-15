@@ -81,7 +81,7 @@ export function drawRect({
 
       isString(d.stroke)
         ? graphics.lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
-        : graphics.lineTextureStyle({texture: d.stroke})
+        : graphics.lineTextureStyle({texture: d.stroke, width: d.strokeWidth})
       isString(d.fill)
         ? graphics.beginFill(...splitAlpha(d.fill, d.fillOpacity))
         : graphics.beginTextureFill({texture: d.fill})

@@ -86,7 +86,7 @@ export function drawLine({
 
       isString(d.stroke)
         ? graphics.lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
-        : graphics.lineTextureStyle({texture: d.stroke})
+        : graphics.lineTextureStyle({texture: d.stroke, width: d.strokeWidth})
 
       graphics.moveTo(x1, y1).dashLineTo(_x2, _y2, d.strokeDasharray)
       container.addChild(graphics)
