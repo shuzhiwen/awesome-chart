@@ -100,7 +100,6 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
       this.defs.remove()
       this.defs = null
     } else {
-      this.canvasRoot.mask = null
       this.mask = null
     }
   }

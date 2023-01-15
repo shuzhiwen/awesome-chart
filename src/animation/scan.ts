@@ -167,12 +167,7 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
   destroy() {
     isSC(this.gradient) ? this.gradient.remove() : this.gradient?.destroy()
     isSC(this.defs) ? this.defs.remove() : this.defs?.length === 0
-
-    if (isSC(this.mask)) this.mask.remove()
-    else if (isCC(this.mask)) {
-      this.canvasRoot.removeChild(this.mask)
-      this.mask.destroy()
-    }
+    isSC(this.mask) && this.mask.remove()
 
     this.gradient = null
     this.defs = null
