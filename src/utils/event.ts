@@ -126,7 +126,7 @@ export class EventManager<
 
 /**
  * Replay the events of the source on the target.
- * @param targets
+ * @param target
  * The target `EventManager`.
  * @param sources
  * The group of `EventManager`.

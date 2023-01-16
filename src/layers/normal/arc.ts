@@ -182,11 +182,12 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
     const labelLine = this.arcData.map((group) =>
       group.map((data) => this.createArcLabelAndGuideLine(data))
     )
+
     this.textData = labelLine.map((group) => group.map(({text}) => text))
     this.guideLineData = labelLine.map((group) => group.map(({points}) => points))
   }
 
-  private createArcLabelAndGuideLine = (props: ArrayItem<ArrayItem<LayerArc['arcData']>>) => {
+  private createArcLabelAndGuideLine = (props: Ungroup<LayerArc['arcData']>) => {
     const {text: style, labelPosition, labelOffset = 0} = this.style,
       {value, centerX, centerY, innerRadius, outerRadius, startAngle, endAngle} = props,
       getX = (r: number) => centerX + Math.sin(angle) * r,
@@ -290,5 +291,33 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
     this.drawBasic({type: 'arc', data: arcData})
     this.drawBasic({type: 'curve', data: guideLineData, sublayer: 'guideLine'})
     this.drawBasic({type: 'text', data: textData})
+
+    this.event.onWithOff('click-arc', 'internal', ({data}) => {
+      if (this.options.variant === 'nightingaleRose') return
+
+      const {groupIndex, itemIndex} = data.source,
+        {width, height, left, top} = this.options.layout,
+        [centerX, centerY] = [left + width / 2, top + height / 2],
+        target = this.arcData[groupIndex][itemIndex],
+        angle = (target.startAngle + target.endAngle) / 2,
+        move = target.centerX === centerX && target.centerY === centerY
+
+      this.arcData.forEach((group) =>
+        group.forEach((item) => ((item.centerX = centerX), (item.centerY = centerY)))
+      )
+
+      if (move) {
+        target.centerX += (Math.sin(angle) * target.outerRadius) / 10
+        target.centerY -= (Math.cos(angle) * target.outerRadius) / 10
+      }
+
+      const labelLine = this.arcData.map((group) =>
+        group.map((data) => this.createArcLabelAndGuideLine(data))
+      )
+
+      this.textData = labelLine.map((group) => group.map(({text}) => text))
+      this.guideLineData = labelLine.map((group) => group.map(({points}) => points))
+      this.draw()
+    })
   }
 }
