@@ -89,6 +89,7 @@ export function drawLine({
         : graphics.lineTextureStyle({texture: d.stroke, width: d.strokeWidth})
 
       graphics.moveTo(x1, y1).dashLineTo(_x2, _y2, d.strokeDasharray)
+      graphics.hitArea = graphics.getBounds()
       container.addChild(graphics)
     })
   }
