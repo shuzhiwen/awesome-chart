@@ -30,7 +30,7 @@ export type TextStyle = GraphStyle &
     fontSize: MaybeGroup<number>
     shadow: MaybeGroup<string>
     format: FormatNumberConfig
-    offset: [number, number]
+    offset: Vec2
   }>
 
 export type LayerAxisStyle = Partial<{
@@ -55,8 +55,8 @@ export type LayerAxisStyle = Partial<{
 export type LayerLegendStyle = Partial<{
   maxColumn: number
   align: [Alignment, Alignment]
-  offset: [number, number]
-  gap: [number, number]
+  offset: Vec2
+  gap: Vec2
   shapeSize: number
   shape: GraphStyle
   text: TextStyle
@@ -95,7 +95,7 @@ export type LayerODLineStyle = Partial<{
 }>
 
 export type LayerTextStyle = Partial<{
-  sanger: [number, number]
+  sanger: Vec2
   text: Partial<TextStyle & {align: [Alignment, Alignment]}>
   groupText: Partial<TextStyle & {align: [Alignment, Alignment]}>[]
 }>
@@ -131,7 +131,7 @@ export type LayerArcStyle = Partial<{
 }>
 
 export type LayerScatterStyle = Partial<{
-  pointSize: [number, number]
+  pointSize: Vec2
   point: GraphStyle
   text: TextStyle
 }>
@@ -165,7 +165,7 @@ export type LayerPackStyle = Partial<{
 }>
 
 export type LayerForceStyle = Partial<{
-  nodeSize: [number, number]
+  nodeSize: Vec2
   node: GraphStyle
   text: TextStyle
 }>
@@ -205,7 +205,7 @@ export type LayerTreeStyle = Partial<{
 
 export type LayerMatrixStyle = Partial<{
   shape: 'circle' | 'rect'
-  colorDomain: [number, number] | 'auto'
+  colorDomain: Vec2 | 'auto'
   circleSize: [number | 'auto', number | 'auto']
   circle: GraphStyle
   rect: GraphStyle
@@ -220,7 +220,7 @@ export type LayerRadarStyle = Partial<{
 }>
 
 export type LayerDashboardStyle = Partial<{
-  step: [number, number]
+  step: Vec2
   startAngle: number
   endAngle: number
   arcWidth: number

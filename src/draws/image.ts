@@ -100,8 +100,8 @@ export function transformToImage<T extends ElConfig>(
   data: T & {
     from: Extract<DrawerType, 'ellipse' | 'rect' | 'text'>
     viewBox?: DrawerData<ImageDrawerProps>['viewBox']
-    size?: [number, number]
-    offset?: [number, number]
+    size?: Vec2
+    offset?: Vec2
     url?: string
   }
 ): T {

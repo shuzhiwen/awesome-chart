@@ -442,7 +442,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       range1 = this.data.select(headers.slice(1), {mode: selectMode}).range(),
       range2 = this.data.select(headers.slice(1), {mode: 'copy'}).range(),
       finalRange = [Math.min(range1[0], range2[0]), Math.max(range1[1], range2[1])],
-      linearDomain = (mode !== 'percentage' ? finalRange : [0, 1]) as [number, number]
+      linearDomain = (mode !== 'percentage' ? finalRange : [0, 1]) as Vec2
 
     if (variant === 'column') {
       this._scale = createScale(

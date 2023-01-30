@@ -85,7 +85,7 @@ export function drawPath({
 
       isFunction(d.path)
         ? d.path(graphics as unknown as CanvasRenderingContext2D)
-        : graphics.drawPath(d.path, [d.centerX, d.centerY])
+        : graphics.drawPath(d.path)
 
       graphics.endFill()
       container.addChild(graphics)

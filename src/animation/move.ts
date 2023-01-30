@@ -6,7 +6,7 @@ import {isSC} from '../utils'
 import {noop} from 'lodash'
 
 export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
-  private originPosition: [number, number][] = []
+  private originPosition: Vec2[] = []
 
   constructor(props: AnimationProps<AnimationMoveOptions>) {
     super(props)

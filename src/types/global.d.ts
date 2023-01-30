@@ -1,5 +1,7 @@
 type Meta = number | string
 
+type Vec2 = [number, number]
+
 type Maybe<T> = T | null | undefined
 
 type MaybeGroup<T> = Maybe<T | T[]>

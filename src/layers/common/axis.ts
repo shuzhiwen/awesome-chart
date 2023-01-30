@@ -214,8 +214,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
 
       if (isScaleLinear(scale)) {
         this.scale[type] = scaleLinear({
-          domain: scale.domain() as [number, number],
-          range: scale.range() as [number, number],
+          domain: scale.domain() as Vec2,
+          range: scale.range() as Vec2,
           nice: this.scale.nice,
         })
       } else if (isScaleBand(scale)) {

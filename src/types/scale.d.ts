@@ -81,19 +81,19 @@ export type ScaleNice = ScaleLinearNice & ScaleBandNice & ScaleArcNice
 
 export type ScaleBandProps = {
   domain: Meta[]
-  range: [number, number]
+  range: Vec2
   nice?: ScaleBandNice
 }
 
 export type ScaleLinearProps = {
-  domain: [number, number]
-  range: [number, number]
+  domain: Vec2
+  range: Vec2
   nice?: ScaleLinearNice
 }
 
 export type ScaleArcProps = {
   domain: [Meta[], Meta[]]
-  range: [number, number]
+  range: Vec2
   nice?: ScaleArcNice
 }
 

@@ -145,7 +145,7 @@ export class DataTableList extends DataBase<RawTableList> {
     return newTableList
   }
 
-  range(): [number, number] {
+  range(): Vec2 {
     return [
       Number(min(this._data.map(({list, min: value}) => min([value, min(list)])))),
       Number(max(this._data.map(({list, max: value}) => max([value, max(list)])))),

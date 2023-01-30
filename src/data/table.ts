@@ -83,7 +83,7 @@ export class DataTable extends DataBase<RawTable> {
     })
   }
 
-  range(): [number, number] {
+  range(): Vec2 {
     return [
       Number(min(this.body.map((row) => min(row)))),
       Number(max(this.body.map((row) => max(row)))),

@@ -48,8 +48,8 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
 
   private zoomConfig: Maybe<{
     maxHeight: number
-    view: [number, number]
-    offset: [number, number]
+    view: Vec2
+    offset: Vec2
     k: number
   }>
 

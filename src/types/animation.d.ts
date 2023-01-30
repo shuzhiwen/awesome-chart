@@ -104,9 +104,9 @@ export type AnimationMoveOptions = BasicAnimationOptions<
      * if value < 1, the subsequent elements will be slower and slower.
      */
     decayFactor: number
-    initialOffset: [number, number]
-    startOffset: [number, number]
-    endOffset: [number, number]
+    initialOffset: Vec2
+    startOffset: Vec2
+    endOffset: Vec2
   }
 >
 

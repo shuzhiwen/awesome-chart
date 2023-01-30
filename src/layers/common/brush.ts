@@ -129,7 +129,7 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
       {width, height, left, top} = layout,
       {direction, targets, handleZoom = 1} = this.style,
       total = direction === 'horizontal' ? width : height,
-      selection = (event.selection ?? [0, total]) as [number, number],
+      selection = (event.selection ?? [0, total]) as Vec2,
       zoomFactor = total / Math.max(selection[1] - selection[0], Number.MIN_VALUE)
 
     Object.entries(this.scale).forEach(([name, scale]) => {
