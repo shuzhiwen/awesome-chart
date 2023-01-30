@@ -1,9 +1,9 @@
-import {hierarchy, treemap} from 'd3'
 import * as d3 from 'd3-hierarchy'
-import {LayerBase} from '../base'
-import {DataRelation} from '../../data'
-import {getAttr, overflowControl, uuid} from '../../utils'
+import {hierarchy, treemap} from 'd3'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
+import {getAttr, overflowControl, uuid} from '../../utils'
+import {DataRelation} from '../../data'
+import {LayerBase} from '../base'
 import {
   ChartContext,
   DrawerData,
@@ -63,9 +63,9 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
       {tile = 'treemapSquarify', rect, labelGap = 0, text} = this.style,
       [align, verticalAlign] = this.style.align ?? ['start', 'start'],
       root = {id: uuid(), name: 'root', value: 0, children: nodes.filter(({level}) => level === 0)},
-      hierarchyNode = hierarchy(root)
-        .sum((d) => d.value)
-        .sort((a, b) => b.data.value - a.data.value),
+      hierarchyNode = hierarchy<Node>(root)
+        .sum((d) => d.value!)
+        .sort((a, b) => b.data.value! - a.data.value!),
       leaves = treemap<Node>()
         .tile(d3[tile])
         .size([width, height])

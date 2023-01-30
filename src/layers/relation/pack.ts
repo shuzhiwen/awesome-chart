@@ -83,9 +83,9 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
       children: nodes.filter(({level}) => level === 0),
       value: 0,
     }
-    this.treeData = hierarchy(root)
-      .sum((d) => d.value)
-      .sort((a, b) => b.data.value - a.data.value)
+    this.treeData = hierarchy<Node>(root)
+      .sum((d) => d.value!)
+      .sort((a, b) => b.data.value! - a.data.value!)
 
     this.zoomConfig = {
       maxHeight: max(this.treeData.descendants().map(({height}) => height + 1)) ?? -1,
