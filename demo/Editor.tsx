@@ -67,7 +67,7 @@ export function Editor(props: {schema?: AnyObject; onChange: AnyFunction}) {
 
     const container = editorRef.current
     const editor = monaco.editor.create(container, {
-      value: localStorage.getItem('editorContent') ?? '',
+      value: localStorage.getItem('editorContent') ?? '// 点击左侧菜单选择图表',
       language: 'typescript',
       fontSize: 14,
       tabSize: 2,
@@ -89,7 +89,7 @@ export function Editor(props: {schema?: AnyObject; onChange: AnyFunction}) {
     })
 
     setEditor(editor)
-    parse(editor.getValue(), (value) => onChange(value))
+    parse(editor.getValue(), (value) => value && onChange(value))
 
     return () => editor.dispose()
   }, [onChange])
