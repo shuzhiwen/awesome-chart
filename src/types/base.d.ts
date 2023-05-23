@@ -1,4 +1,4 @@
-import {LayerBase, layerMapping} from '../layers'
+import {LayerBase, LayerDict} from '../layers'
 import {DrawerType, GraphDrawerProps} from './draw'
 import {commonEvents, tooltipEvents} from '../utils'
 import {RawScale, ScaleNice} from './scale'
@@ -9,7 +9,12 @@ import {LayerOptions} from './options'
 import {TextStyle} from './styles'
 import {LegendData} from './data'
 
-export type LayerType = Keys<typeof layerMapping>
+export type LayerType = Keys<typeof LayerDict>
+
+export type LayerDictInstance<
+  T extends LayerType,
+  P extends typeof LayerDict[T] = typeof LayerDict[T]
+> = InstanceType<P>
 
 /**
  * Drawing data will be cached each time.

@@ -1,7 +1,7 @@
 import {select} from 'd3'
 import {Application, Container} from 'pixi.js'
 import {defaultLayoutCreator} from '../layout'
-import {LayerAxis, LayerLegend, layerMapping} from '../layers'
+import {LayerAxis, LayerLegend, LayerDict} from '../layers'
 import {isNil, noop} from 'lodash'
 import {lightTheme} from './theme'
 import {Tooltip} from './tooltip'
@@ -19,7 +19,6 @@ import {
   uuid,
 } from '../utils'
 import {
-  LayerInstance,
   Layout,
   ChartProps,
   ChartContext,
@@ -29,6 +28,8 @@ import {
   LayerType,
   LayerAxisScale,
   ChartTheme,
+  LayerDictInstance,
+  LayerInstance,
 } from '../types'
 
 export class Chart {
@@ -252,7 +253,7 @@ export class Chart {
    * @returns
    * Returns the layer instance if successful.
    */
-  createLayer(options: LayerOptions) {
+  createLayer<T extends LayerType>(options: LayerOptions & {type: T}) {
     const context: ChartContext = {
       ...this,
       root: options.sublayerConfig?.root || this.root,
@@ -282,10 +283,10 @@ export class Chart {
       }
     }
 
-    const layer = new layerMapping[options.type](options as never, context)
+    const layer = new LayerDict[options.type](options as never, context)
     this._layers.push(layer)
 
-    return layer
+    return layer as Maybe<LayerDictInstance<T>>
   }
 
   /**

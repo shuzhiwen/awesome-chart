@@ -12,7 +12,7 @@ export * from './display'
 export * from './normal'
 export * from './relation'
 
-export const layerMapping = {
+export const LayerDict = {
   arc: Layer.LayerArc,
   auxiliary: Layer.LayerAuxiliary,
   axis: Layer.LayerAxis,
@@ -48,4 +48,4 @@ export const registerCustomLayer = createClassRegister?.<
   string,
   Layer.LayerBase<BasicLayerOptions<any>>,
   [BasicLayerOptions<any>, ChartContext]
->(layerMapping)
+>(LayerDict)

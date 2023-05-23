@@ -8,7 +8,7 @@ export * from './relation'
 export * from './table-list'
 export * from './table'
 
-export const dataMapping = {
+export const DataDict = {
   base: Data.DataBase,
   table: Data.DataTable,
   tableList: Data.DataTableList,
@@ -19,4 +19,4 @@ export const registerCustomData = createClassRegister?.<
   string,
   Data.DataBase<AnyObject>,
   [any, DataBaseOptions]
->(dataMapping)
+>(DataDict)

@@ -14,7 +14,7 @@ export * from './scan'
 export * from './queue'
 export * from './zoom'
 
-export const animationMapping = {
+export const AnimationDict = {
   erase: Animation.AnimationErase,
   empty: Animation.AnimationEmpty,
   fade: Animation.AnimationFade,
@@ -28,4 +28,4 @@ export const registerCustomAnimation = createClassRegister?.<
   string,
   Animation.AnimationBase<BasicAnimationOptions<any>>,
   AnimationProps<BasicAnimationOptions<any>>
->(animationMapping)
+>(AnimationDict)

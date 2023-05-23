@@ -1,10 +1,10 @@
 import {Selection} from 'd3'
 import {Container, FederatedPointerEvent} from 'pixi.js'
 import {GraphStyle, TextStyle} from './styles'
-import {drawerMapping} from '../draws'
+import {DrawerDict} from '../draws'
 import {ChartTheme} from './core'
 
-export type DrawerType = Keys<typeof drawerMapping>
+export type DrawerType = Keys<typeof DrawerDict>
 
 export type DrawerTarget = D3Selection | Container
 

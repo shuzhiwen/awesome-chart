@@ -1,9 +1,9 @@
 import {ChartTheme} from './core'
 import {D3Selection, DrawerTarget} from './draw'
-import {animationMapping} from '../animation'
+import {AnimationDict} from '../animation'
 import {Graphics} from 'pixi.js'
 
-export type AnimationType = Keys<typeof animationMapping>
+export type AnimationType = Keys<typeof AnimationDict>
 
 export type LayerAnimation<T> = Computable<Partial<T>, ChartTheme>
 

@@ -1,5 +1,5 @@
 import {isFunction, merge} from 'lodash'
-import {DataBase, dataMapping, DataTableList} from '../../data'
+import {DataBase, DataDict, DataTableList} from '../../data'
 import {ChartContext, DataType, LayerScale, LayerStyle} from '../../types'
 import {scaleTypes} from '../../utils'
 
@@ -49,7 +49,7 @@ export function validateAndCreateData<Data extends Maybe<DataBase<unknown>>>(
 ) {
   if (!incomingData) {
     return currentData
-  } else if (!(incomingData instanceof dataMapping[dataType])) {
+  } else if (!(incomingData instanceof DataDict[dataType])) {
     throw new Error('require the right data processor')
   }
 

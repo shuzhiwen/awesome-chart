@@ -1,5 +1,5 @@
 import {max, range} from 'd3'
-import {animationMapping} from '.'
+import {AnimationDict} from '.'
 import {safeLoop, uuid} from '../utils'
 import {AnimationType, DrawerTarget, AnimationOptions} from '../types'
 import {AnimationEmpty} from './empty'
@@ -94,14 +94,14 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
   }
 
   pushAnimation(type: AnimationType, options: AnimationOptions, context: DrawerTarget) {
-    if (!animationMapping[type]) {
+    if (!AnimationDict[type]) {
       this.log.error('Animation type error', type)
       return
     }
 
     this.isConnected = false
     this.queue.push(
-      new animationMapping[type]({
+      new AnimationDict[type]({
         options: {id: uuid(), ...options} as never,
         context,
       })

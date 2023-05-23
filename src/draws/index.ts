@@ -13,7 +13,7 @@ export * from './polygon'
 export * from './rect'
 export * from './text'
 
-export const drawerMapping = {
+export const DrawerDict = {
   arc: Drawer.drawArc,
   area: Drawer.drawArea,
   circle: Drawer.drawCircle,

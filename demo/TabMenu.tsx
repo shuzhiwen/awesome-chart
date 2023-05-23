@@ -16,7 +16,7 @@ import {
   Chart,
   uuid,
   LayerBase,
-  layerMapping,
+  LayerDict,
   isSC,
 } from '../src'
 
@@ -214,7 +214,7 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
   }
 }
 
-if (!layerMapping['tabMenu']) {
+if (!LayerDict['tabMenu']) {
   registerCustomLayer('tabMenu', LayerTabMenu)
 }
 

@@ -1,7 +1,7 @@
-import {DataBase, dataMapping, DataRelation, DataTable, DataTableList} from '../data'
+import {DataBase, DataDict, DataRelation, DataTable, DataTableList} from '../data'
 import {ColorMatrix} from '../utils'
 
-export type DataType = Keys<typeof dataMapping>
+export type DataType = Keys<typeof DataDict>
 
 export type LayerData = DataBase<any> | DataTableList | DataTable | DataRelation
 

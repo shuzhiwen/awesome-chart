@@ -1,5 +1,5 @@
 import {Graphics} from 'pixi.js'
-import {drawerMapping} from '../draws'
+import {DrawerDict} from '../draws'
 import {AnimationQueue} from '../animation'
 import {makeClass, selector} from './helpers'
 import {cloneDeep, isArray, isEqual, isFunction, merge, noop, range} from 'lodash'
@@ -450,7 +450,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
         theme,
       }
 
-      drawerMapping[type](options as any)
+      DrawerDict[type](options as any)
       cacheData.data[i] = cloneDeep(groupData as any)
     })
 
