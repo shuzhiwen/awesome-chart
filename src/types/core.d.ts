@@ -225,7 +225,7 @@ export type CreateChartProps = ChartProps & {
     /**
      * Unrecognized data will be converted to `DataBase`.
      */
-    data: any
+    data?: any
     /**
      * Scale nice options only for axis layer.
      */
