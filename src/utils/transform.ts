@@ -46,7 +46,7 @@ export function tableListToTable(tableList: RawTableList): RawTable {
   return [
     rows,
     columns,
-    rows.map((row) => columns.map((column) => map.get(`${row}-${column}`) || NaN)),
+    rows.map((row) => columns.map((column) => map.get(`${row}-${column}`) ?? NaN)),
   ]
 }
 
@@ -82,7 +82,7 @@ export function relationToTable([nodeTableList, linkTableList]: RawRelation): Ra
   return [
     nodeNames,
     nodeNames,
-    nodeIds.map((row) => nodeIds.map((column) => map.get(`${row}-${column}`) || NaN)),
+    nodeIds.map((row) => nodeIds.map((column) => map.get(`${row}-${column}`) ?? NaN)),
   ]
 }
 
