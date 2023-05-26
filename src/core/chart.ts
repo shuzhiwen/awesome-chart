@@ -1,36 +1,36 @@
 import {select} from 'd3'
-import {Application, Container} from 'pixi.js'
-import {defaultLayoutCreator} from '../layout'
-import {LayerAxis, LayerLegend, LayerDict} from '../layers'
 import {isNil, noop} from 'lodash'
-import {lightTheme} from './theme'
-import {Tooltip} from './tooltip'
+import {Application, Container} from 'pixi.js'
+import {LayerAxis, LayerBase, LayerDict, LayerLegend} from '../layers'
+import {defaultLayoutCreator} from '../layout'
 import {
+  ChartContext,
+  ChartProps,
+  ChartTheme,
+  D3Selection,
+  GradientCreatorProps,
+  LayerAxisScale,
+  LayerDictInstance,
+  LayerInstance,
+  LayerOptions,
+  LayerType,
+  Layout,
+} from '../types'
+import {
+  chartLifeCycles,
   createLog,
+  dependantLayers,
   EventManager,
   getEasyGradientCreator,
   getPercentageNumber,
-  isLayerBasemap,
-  dependantLayers,
-  noChange,
-  chartLifeCycles,
-  isLayerLegend,
   isLayerAxis,
+  isLayerBasemap,
+  isLayerLegend,
+  noChange,
   uuid,
 } from '../utils'
-import {
-  Layout,
-  ChartProps,
-  ChartContext,
-  GradientCreatorProps,
-  LayerOptions,
-  D3Selection,
-  LayerType,
-  LayerAxisScale,
-  ChartTheme,
-  LayerDictInstance,
-  LayerInstance,
-} from '../types'
+import {lightTheme} from './theme'
+import {Tooltip} from './tooltip'
 
 export class Chart {
   private _layout: Layout
@@ -224,24 +224,28 @@ export class Chart {
     return this.layers.find(({options}) => options.id === id)
   }
 
-  getLayerByType(type: LayerType) {
-    return this.layers.find(({options}) => options.type === type)
+  getLayerByType<T extends LayerType>(type: T) {
+    return (this.layers as LayerDictInstance<T>[]).find(({options}) => {
+      return options.type === type
+    })
   }
 
-  getLayersByType(type: LayerType) {
-    return this.layers.filter(({options}) => options.type === type)
+  getLayersByType<T extends LayerType>(type: T) {
+    return (this.layers as LayerDictInstance<T>[]).filter(({options}) => {
+      return options.type === type
+    })
   }
 
-  getDependantLayers() {
-    return this.layers.filter(({options: {type}}) => dependantLayers.has(type))
+  private get independentLayers() {
+    return this.layers.filter(({options: {type}}) => {
+      return !dependantLayers.has(type)
+    })
   }
 
-  getIndependentLayers() {
-    return this.layers.filter(({options: {type}}) => !dependantLayers.has(type))
-  }
-
-  getNonUniqueLayers() {
-    return this.layers.filter((layer) => !isLayerLegend(layer) && !isLayerAxis(layer))
+  private get nonUniqueLayers() {
+    return this.layers.filter((layer) => {
+      return !isLayerLegend(layer) && !isLayerAxis(layer)
+    })
   }
 
   /**
@@ -296,11 +300,11 @@ export class Chart {
    * @param props.redraw
    * Whether all layers requiring scales are redrawn after merged scale.
    */
-  rebuildScale(props: Partial<{trigger: LayerInstance; redraw: boolean}>) {
+  rebuildScale(props: {trigger?: LayerBase<LayerOptions>; redraw?: boolean}) {
     const {trigger, redraw} = props,
       axisLayer = this.getLayerByType('axis') as Maybe<LayerAxis>,
       legendLayer = this.getLayerByType('legend') as Maybe<LayerLegend>,
-      layers = this.getIndependentLayers().concat(this.getLayersByType('brush'))
+      layers = this.independentLayers.concat(this.getLayersByType('brush'))
 
     if (!axisLayer) {
       throw new Error('There is no axis layer available')
@@ -369,9 +373,9 @@ export class Chart {
     const axisLayer = this.getLayerByType('axis')
     const legendLayer = this.getLayerByType('legend')
 
-    this.getIndependentLayers().forEach((layer) => layer.update())
+    this.independentLayers.forEach((layer) => layer.update())
     axisLayer && this.rebuildScale({redraw: false, trigger: legendLayer})
-    this.getNonUniqueLayers().forEach((layer) => layer.draw())
+    this.nonUniqueLayers.forEach((layer) => layer.draw())
 
     axisLayer?.draw()
     if (isLayerLegend(legendLayer)) {
@@ -380,6 +384,10 @@ export class Chart {
     }
   }
 
+  /**
+   * Release the space occupied by all layers and tooltip of the chart,
+   * but will not destroy the root element.
+   */
   destroy() {
     this.layers.forEach((layer) => layer.destroy())
     this._layers.length = 0
