@@ -1,24 +1,23 @@
-import React from 'react'
-import {schemaMenu} from './schema'
-import {hierarchy, select} from 'd3'
-import {useEffect, useRef} from 'react'
-import {cloneDeep, max, merge} from 'lodash'
-import {BasicLayerOptions, ChartContext, D3Selection} from '../src/types'
-import s from './TabMenu.module.css'
 import {
   addStyle,
-  getAttr,
-  robustRange,
-  transformAttr,
-  DataBase,
-  validateAndCreateData,
-  registerCustomLayer,
   Chart,
-  uuid,
+  DataBase,
+  getAttr,
+  isSC,
   LayerBase,
   LayerDict,
-  isSC,
-} from '../src'
+  registerCustomLayer,
+  robustRange,
+  transformAttr,
+  uuid,
+  validateAndCreateData,
+} from 'awesome-chart'
+import {BasicLayerOptions, ChartContext, D3Selection} from 'awesome-chart/dist/types'
+import {hierarchy, select} from 'd3'
+import {cloneDeep, max, merge} from 'lodash'
+import React, {useEffect, useRef} from 'react'
+import {schemaMenu} from './schema'
+import s from './TabMenu.module.css'
 
 type MenuItem = {
   name: Meta

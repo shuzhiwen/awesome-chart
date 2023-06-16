@@ -1,24 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "useDefineForClassFields": true,
-    "declaration": true,
     "allowJs": true,
-    "checkJs": true,
-    "skipLibCheck": false,
-    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
+    "checkJs": true,
+    "declaration": true,
+    "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "Node",
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "noEmit": true,
+    "noImplicitAny": true,
+    "outDir": "dist",
     "rootDir": "src",
-    "outDir": "dist"
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "ESNext",
+    "useDefineForClassFields": true
   },
   "include": ["src"]
 }

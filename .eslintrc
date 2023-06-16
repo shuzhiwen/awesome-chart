@@ -20,7 +20,7 @@
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "indent": "off",
-    "linebreak-style": ["error", "unix"],
+    "linebreak-style": ["error", "unix", "windows"],
     "quotes": ["error", "single"],
     "semi": ["error", "never"],
     "react/react-in-jsx-scope": "off",
