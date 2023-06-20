@@ -1,10 +1,10 @@
 {
   "name": "awesome-chart",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "type": "module",
   "description": "A lightweight 2d chart library",
   "typings": "dist/index.d.ts",
-  "main": "dist/bundle.min.js",
+  "main": "dist/bundle.js",
   "license": "MIT",
   "files": [
     "dist"
@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "vite  --port 9527",
     "build": "yarn tsc && vite build",
-    "package": "rm -rf dist && yarn tsc && yarn rollup -c && cp -r src/types dist/types",
+    "package": "rm -r dist && yarn tsc && yarn rollup -c && cp -r src/types dist/types",
     "docs": "yarn typedoc src/index.ts",
     "push": "yarn test && git push origin",
     "test": "yarn jest"

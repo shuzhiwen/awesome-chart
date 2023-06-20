@@ -83,8 +83,8 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
 
     this.root = (this.root as D3Selection)
       .append('foreignObject')
-      .style('width', width)
-      .style('height', height)
+      .attr('width', width)
+      .attr('height', height)
       .append('xhtml:div')
       .style('width', `${width}px`)
       .style('height', `${height}px`)
