@@ -99,7 +99,10 @@ function createDefaultTheme({
       evented: true,
     },
     text: {
-      fontFamily: '',
+      /**
+       * Empty fontFamily will cause the mobile page to crash.
+       */
+      fontFamily: 'Arial, Helvetica, Sans-Serif',
       fontSize: 12,
       fontWeight: '400',
       opacity: 1,
