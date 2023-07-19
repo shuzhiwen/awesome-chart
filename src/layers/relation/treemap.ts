@@ -1,19 +1,19 @@
-import * as d3 from 'd3-hierarchy'
 import {hierarchy, treemap} from 'd3'
-import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
-import {getAttr, overflowControl, uuid} from '../../utils'
+import * as d3 from 'd3-hierarchy'
 import {DataRelation} from '../../data'
-import {LayerBase} from '../base'
 import {
   ChartContext,
   DrawerData,
-  LayerTreemapStyle,
+  LayerStyle,
   LayerTreemapOptions,
-  TextDrawerProps,
+  LayerTreemapStyle,
   Node,
   RectDrawerProps,
-  LayerStyle,
+  TextDrawerProps,
 } from '../../types'
+import {getAttr, overflowControl, uuid} from '../../utils'
+import {LayerBase} from '../base'
+import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 
 const defaultStyle: LayerTreemapStyle = {
   align: ['middle', 'middle'],

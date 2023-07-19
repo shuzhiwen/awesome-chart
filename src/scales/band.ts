@@ -1,6 +1,6 @@
+import {scaleBand as d3ScaleBand} from 'd3'
 import {isNumber} from 'lodash'
 import {ScaleBandProps} from '../types'
-import {scaleBand as d3ScaleBand} from 'd3'
 
 export function scaleBand({domain, range, nice = {}}: ScaleBandProps) {
   const {fixedBandwidth, fixedPaddingInner, fixedBoundary, paddingInner} = nice,

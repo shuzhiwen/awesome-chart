@@ -1,6 +1,6 @@
+import {LayerType} from './base'
 import {DrawerTarget} from './draw'
 import {LayoutArea} from './layout'
-import {LayerType} from './base'
 
 export type LayerOptions =
   | LayerAxisOptions

@@ -1,16 +1,16 @@
-import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {createScale, createStyle, validateAndCreateData} from '../helpers'
-import {group, isRealNumber, tableListToObjects} from '../../utils'
 import {
   ChartContext,
-  LayerHeatmapStyle,
+  CircleDrawerProps,
+  DrawerData,
   LayerHeatmapOptions,
   LayerHeatmapScale,
-  DrawerData,
-  CircleDrawerProps,
+  LayerHeatmapStyle,
   LayerStyle,
 } from '../../types'
+import {group, isRealNumber, tableListToObjects} from '../../utils'
+import {LayerBase} from '../base'
+import {createScale, createStyle, validateAndCreateData} from '../helpers'
 
 type DataKey = 'x' | 'y' | 'value'
 

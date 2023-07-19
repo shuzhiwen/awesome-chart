@@ -1,17 +1,17 @@
 import {path} from 'd3'
-import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {isRealNumber, isSC, tableListToObjects} from '../../utils'
-import {checkColumns, createScale, createStyle, makeClass, validateAndCreateData} from '../helpers'
 import {
   ChartContext,
+  DrawerData,
   LayerODLineOptions,
   LayerODLineScale,
   LayerODLineStyle,
-  PathDrawerProps,
-  DrawerData,
   LayerStyle,
+  PathDrawerProps,
 } from '../../types'
+import {isRealNumber, isSC, tableListToObjects} from '../../utils'
+import {LayerBase} from '../base'
+import {checkColumns, createScale, createStyle, makeClass, validateAndCreateData} from '../helpers'
 
 type DataKey = 'fromX' | 'fromY' | 'toX' | 'toY'
 

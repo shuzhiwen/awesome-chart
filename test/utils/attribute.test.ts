@@ -1,5 +1,5 @@
 import {select} from 'd3'
-import {getAttr, addStyle, addEvent, mergeAlpha, transformAttr} from '../../src'
+import {addEvent, addStyle, getAttr, mergeAlpha, transformAttr} from '../../src'
 
 test('mergeAlpha', () => {
   expect(typeof mergeAlpha(0xffffff, 0.5)).toBe('string')

@@ -1,7 +1,17 @@
 import {sum} from 'd3'
-import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {scaleAngle, scaleBand, scaleLinear} from '../../scales'
+import {
+  ChartContext,
+  CircleDrawerProps,
+  DrawerData,
+  LayerAxisOptions,
+  LayerAxisScale,
+  LayerAxisStyle,
+  LayerStyle,
+  LineDrawerProps,
+  Scale,
+} from '../../types'
 import {
   isRealNumber,
   isScaleAngle,
@@ -12,6 +22,7 @@ import {
   scaleTypes,
   ungroup,
 } from '../../utils'
+import {LayerBase} from '../base'
 import {
   createArcText,
   createScale,
@@ -20,17 +31,6 @@ import {
   isTextCollision,
   validateAndCreateData,
 } from '../helpers'
-import {
-  Scale,
-  ChartContext,
-  LayerAxisStyle,
-  LayerAxisScale,
-  LayerAxisOptions,
-  DrawerData,
-  LineDrawerProps,
-  CircleDrawerProps,
-  LayerStyle,
-} from '../../types'
 
 const defaultSplitLine = {
   strokeWidth: 1,

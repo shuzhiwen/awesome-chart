@@ -1,22 +1,6 @@
-import {LayerBase} from '../base'
+import {cloneDeep, isArray} from 'lodash'
 import {DataTableList} from '../../data'
 import {scaleBand, scaleLinear} from '../../scales'
-import {cloneDeep, isArray} from 'lodash'
-import {
-  ColorMatrix,
-  errorCatcher,
-  formatNumber,
-  getPercentageNumber,
-  isRealNumber,
-  swap,
-} from '../../utils'
-import {
-  createColorMatrix,
-  createScale,
-  createStyle,
-  createText,
-  validateAndCreateData,
-} from '../helpers'
 import {
   ChartContext,
   DrawerData,
@@ -31,6 +15,22 @@ import {
   ScaleLinear,
   TextDrawerProps,
 } from '../../types'
+import {
+  ColorMatrix,
+  errorCatcher,
+  formatNumber,
+  getPercentageNumber,
+  isRealNumber,
+  swap,
+} from '../../utils'
+import {LayerBase} from '../base'
+import {
+  createColorMatrix,
+  createScale,
+  createStyle,
+  createText,
+  validateAndCreateData,
+} from '../helpers'
 
 const defaultOptions: Partial<LayerRectOptions> = {
   variant: 'column',

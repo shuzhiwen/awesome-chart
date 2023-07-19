@@ -1,6 +1,6 @@
 import {select} from 'd3'
-import {Container} from 'pixi.js'
 import {isArray, isNil, isNumber} from 'lodash'
+import {Container} from 'pixi.js'
 import {LayerAxis, LayerBasemap, LayerBrush, LayerLegend} from '../layers'
 import {
   D3Selection,

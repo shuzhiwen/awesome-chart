@@ -1,7 +1,7 @@
+import {Graphics} from 'pixi.js'
+import {AnimationDict} from '../animation'
 import {ChartTheme} from './core'
 import {D3Selection, DrawerTarget} from './draw'
-import {AnimationDict} from '../animation'
-import {Graphics} from 'pixi.js'
 
 export type AnimationType = Keys<typeof AnimationDict>
 

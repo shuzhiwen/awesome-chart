@@ -1,7 +1,20 @@
-import {LayerBase} from '../base'
-import {scaleBand, scaleLinear} from '../../scales'
-import {errorCatcher} from '../../utils'
 import {DataTableList} from '../../data'
+import {scaleBand, scaleLinear} from '../../scales'
+import {
+  ChartContext,
+  CircleDrawerProps,
+  DrawerData,
+  ElSource,
+  LayerRadarOptions,
+  LayerRadarScale,
+  LayerRadarStyle,
+  LayerStyle,
+  LegendData,
+  PolyDrawerProps,
+  TextDrawerProps,
+} from '../../types'
+import {errorCatcher} from '../../utils'
+import {LayerBase} from '../base'
 import {
   createArcText,
   createColorMatrix,
@@ -9,19 +22,6 @@ import {
   createStyle,
   validateAndCreateData,
 } from '../helpers'
-import {
-  ChartContext,
-  LayerRadarStyle,
-  DrawerData,
-  TextDrawerProps,
-  LayerRadarOptions,
-  LegendData,
-  LayerRadarScale,
-  CircleDrawerProps,
-  PolyDrawerProps,
-  ElSource,
-  LayerStyle,
-} from '../../types'
 
 const defaultOptions: Partial<LayerRadarOptions> = {
   mode: 'cover',

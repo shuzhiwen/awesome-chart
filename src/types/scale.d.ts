@@ -1,5 +1,5 @@
-import {scaleBand, scaleLinear, scaleAngle} from '../scales'
 import {ScalePoint, ScaleQuantize} from 'd3'
+import {scaleAngle, scaleBand, scaleLinear} from '../scales'
 
 export type ScaleAngle = ReturnType<typeof scaleAngle>
 

@@ -1,7 +1,7 @@
-import {mean} from 'd3'
 import chroma from 'chroma-js'
-import {createLog} from './create-log'
+import {mean} from 'd3'
 import {safeLoop} from './chaos'
+import {createLog} from './create-log'
 
 export class ColorMatrix {
   readonly log = createLog(ColorMatrix.name)

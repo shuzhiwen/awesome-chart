@@ -1,16 +1,5 @@
-import {LayerBase} from '../base'
 import {cloneDeep, max, sum} from 'lodash'
-import {createStyle, createText} from '../helpers'
 import {DataBase, DataTableList} from '../../data'
-import {
-  ColorMatrix,
-  createStar,
-  formatNumber,
-  getTextWidth,
-  mergeAlpha,
-  robustRange,
-  ungroup,
-} from '../../utils'
 import {
   ChartContext,
   CircleDrawerProps,
@@ -26,6 +15,17 @@ import {
   RectDrawerProps,
   TextDrawerProps,
 } from '../../types'
+import {
+  ColorMatrix,
+  createStar,
+  formatNumber,
+  getTextWidth,
+  mergeAlpha,
+  robustRange,
+  ungroup,
+} from '../../utils'
+import {LayerBase} from '../base'
+import {createStyle, createText} from '../helpers'
 
 const defaultStyle: LayerLegendStyle = {
   maxColumn: 10,

@@ -1,7 +1,7 @@
 import {select} from 'd3'
-import {isEqual, merge, isNil} from 'lodash'
-import {errorCatcher, createLog, getAttr, group, ungroup, noChange} from '../utils'
-import {ElConfig, D3Selection, TooltipOptions, TooltipData} from '../types'
+import {isEqual, isNil, merge} from 'lodash'
+import {D3Selection, ElConfig, TooltipData, TooltipOptions} from '../types'
+import {createLog, errorCatcher, getAttr, group, noChange, ungroup} from '../utils'
 
 const defaultOptions = {
   container: null,

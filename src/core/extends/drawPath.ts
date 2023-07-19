@@ -1,7 +1,7 @@
 import chroma from 'chroma-js'
 import {Graphics, Texture} from 'pixi.js'
-import {svgArcToCanvas} from './arcTranslate'
 import {createLog, mergeAlpha} from '../..'
+import {svgArcToCanvas} from './arcTranslate'
 
 function getPosition(
   this: Graphics,

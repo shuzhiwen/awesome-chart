@@ -1,9 +1,9 @@
-import {Graphics} from 'pixi.js'
 import {isString, merge} from 'lodash'
-import {getAttr, noChange, isSC, isCC, splitAlpha} from '../utils'
-import {PolyDrawerProps} from '../types'
+import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
+import {PolyDrawerProps} from '../types'
+import {getAttr, isCC, isSC, noChange, splitAlpha} from '../utils'
 
 export function drawPolygon({
   fill,

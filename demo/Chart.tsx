@@ -1,17 +1,16 @@
-import React from 'react'
-import styles from './Chart.module.css'
-import {useCallback, useEffect, useRef, useState} from 'react'
-import {darkTheme, lightTheme} from '../src/core/theme'
-import {CreateChartProps} from '../src/types'
-import {MenuItemShape} from './schema'
 import {cloneDeep} from 'lodash'
+import React, {useCallback, useEffect, useRef, useState} from 'react'
 import {
-  download,
+  Chart as ChartShape,
   createChart,
+  download,
   getFacetLayoutCreator,
   getStandardLayoutCreator,
-  Chart as ChartShape,
 } from '../src'
+import {darkTheme, lightTheme} from '../src/core/theme'
+import {CreateChartProps} from '../src/types'
+import styles from './Chart.module.css'
+import {MenuItemShape} from './schema'
 
 export const Chart = (props: {
   variant: 'light' | 'dark'

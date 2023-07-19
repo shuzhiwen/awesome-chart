@@ -1,8 +1,7 @@
 import {merge} from 'lodash'
-import {selector} from '../layers'
-import {svgEasing} from '../animation'
-import {getAttr, isCC, isSC, noChange, uuid} from '../utils'
 import {BaseTexture, Rectangle, Sprite, Texture} from 'pixi.js'
+import {svgEasing} from '../animation'
+import {selector} from '../layers'
 import {
   DrawerData,
   DrawerType,
@@ -13,6 +12,7 @@ import {
   RectDrawerProps,
   TextDrawerProps,
 } from '../types'
+import {getAttr, isCC, isSC, noChange, uuid} from '../utils'
 
 export function drawImage({
   opacity,

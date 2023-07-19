@@ -1,7 +1,7 @@
-import {DataRelation, randomRelation, Chart} from '../../src'
+import {Chart, DataRelation, randomRelation} from '../../src'
 import {LayerType} from '../../src/types'
 
-const debugRelationLayer = (type: LayerType) => (chart: Chart) => {
+const debugRelationLayer = (type: Extract<LayerType, 'sankey'>) => (chart: Chart) => {
   const data = randomRelation({
       mode: 'normal',
       mu: 1000,

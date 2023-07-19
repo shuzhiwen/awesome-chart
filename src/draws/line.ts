@@ -1,9 +1,9 @@
-import {Graphics} from 'pixi.js'
 import {isString, merge} from 'lodash'
-import {isCC, isSC, noChange, getAttr, splitAlpha} from '../utils'
-import {LineDrawerProps} from '../types'
+import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
+import {LineDrawerProps} from '../types'
+import {getAttr, isCC, isSC, noChange, splitAlpha} from '../utils'
 
 export function drawLine({
   rotation,

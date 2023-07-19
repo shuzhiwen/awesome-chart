@@ -1,7 +1,5 @@
-import {LayerBase} from '../base'
-import {DataBase} from '../../data'
 import {GeoGeometryObjects, geoMercator, geoPath} from 'd3'
-import {createScale, createStyle, createText, validateAndCreateData} from '../helpers'
+import {DataBase} from '../../data'
 import {
   ChartContext,
   DrawerData,
@@ -13,6 +11,8 @@ import {
   RectDrawerProps,
   TextDrawerProps,
 } from '../../types'
+import {LayerBase} from '../base'
+import {createScale, createStyle, createText, validateAndCreateData} from '../helpers'
 
 type GeoFeature = {
   type: 'Feature'

@@ -1,7 +1,19 @@
-import {LayerBase} from '../base'
-import {DataRelation} from '../../data'
 import {max, scalePoint} from 'd3'
+import {DataRelation} from '../../data'
+import {
+  ChartContext,
+  CircleDrawerProps,
+  DrawerData,
+  LayerStyle,
+  LayerTreeOptions,
+  LayerTreeScale,
+  LayerTreeStyle,
+  LineDrawerProps,
+  Node,
+  TextDrawerProps,
+} from '../../types'
 import {robustRange} from '../../utils'
+import {LayerBase} from '../base'
 import {
   createColorMatrix,
   createScale,
@@ -9,18 +21,6 @@ import {
   createText,
   validateAndCreateData,
 } from '../helpers'
-import {
-  ChartContext,
-  DrawerData,
-  LayerTreeStyle,
-  LayerTreeOptions,
-  TextDrawerProps,
-  CircleDrawerProps,
-  LayerTreeScale,
-  Node,
-  LineDrawerProps,
-  LayerStyle,
-} from '../../types'
 
 const defaultStyle: LayerTreeStyle = {
   direction: 'horizontal',

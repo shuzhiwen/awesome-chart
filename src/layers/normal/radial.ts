@@ -1,20 +1,20 @@
-import {LayerBase} from '../base'
-import {isRealNumber} from '../../utils'
 import {DataTableList} from '../../data'
-import {createColorMatrix, createScale, createStyle, validateAndCreateData} from '../helpers'
 import {scaleBand, scaleLinear} from '../../scales'
 import {
-  ChartContext,
-  LayerRadialStyle,
-  DrawerData,
-  TextDrawerProps,
-  LayerRadialOptions,
-  LegendData,
-  LayerRadialScale,
-  ElSource,
   ArcDrawerProps,
+  ChartContext,
+  DrawerData,
+  ElSource,
+  LayerRadialOptions,
+  LayerRadialScale,
+  LayerRadialStyle,
   LayerStyle,
+  LegendData,
+  TextDrawerProps,
 } from '../../types'
+import {isRealNumber} from '../../utils'
+import {LayerBase} from '../base'
+import {createColorMatrix, createScale, createStyle, validateAndCreateData} from '../helpers'
 
 const defaultStyle: LayerRadialStyle = {
   innerRadius: 10,

@@ -1,14 +1,14 @@
 import {Chart} from '../core'
-import {ElConfig} from './draw'
-import {ScaleNice} from './scale'
-import {LayoutCreator} from './layout'
-import {RandomTableListOptions, RandomRelationOptions} from './utils'
-import {AnimationOptions, LayerAnimation} from './animation'
 import {getEasyGradientCreator} from '../utils'
+import {AnimationOptions, LayerAnimation} from './animation'
 import {CacheLayerData, LayerType} from './base'
-import {BasicLayerOptions} from './options'
-import {LayerStyle} from './styles'
 import {TooltipData} from './data'
+import {ElConfig} from './draw'
+import {LayoutCreator} from './layout'
+import {BasicLayerOptions} from './options'
+import {ScaleNice} from './scale'
+import {LayerStyle} from './styles'
+import {RandomRelationOptions, RandomTableListOptions} from './utils'
 
 /**
  * The context for layer from chart includes some global data.

@@ -1,11 +1,10 @@
-import * as awesome from '../src'
-import * as monaco from 'monaco-editor'
-import styles from './Editor.module.css'
-import {useEffect, useMemo, useRef, useState} from 'react'
-import {download, errorCatcher} from '../src'
-import {noop, throttle} from 'lodash'
 import chroma from 'chroma-js'
-import React from 'react'
+import {noop, throttle} from 'lodash'
+import * as monaco from 'monaco-editor'
+import React, {useEffect, useMemo, useRef, useState} from 'react'
+import * as awesome from '../src'
+import {download, errorCatcher} from '../src'
+import styles from './Editor.module.css'
 
 const throttleDownload = throttle(download, 500)
 

@@ -1,35 +1,35 @@
-import {Graphics} from 'pixi.js'
-import {DrawerDict} from '../draws'
-import {AnimationQueue} from '../animation'
-import {makeClass, selector} from './helpers'
 import {cloneDeep, isArray, isEqual, isFunction, merge, noop, range} from 'lodash'
+import {Graphics} from 'pixi.js'
+import {AnimationQueue} from '../animation'
+import {DrawerDict} from '../draws'
 import {
-  commonEvents,
-  layerLifeCycles,
-  tooltipEvents,
-  createLog,
-  EventManager,
-  ungroup,
-  isSC,
-  isCC,
-  group,
-} from '../utils'
-import {
-  LayerData,
+  CacheLayerAnimation,
   CacheLayerData,
-  ElConfig,
+  CacheLayerEvent,
+  ChartContext,
   DrawBasicProps,
   DrawerTarget,
+  ElConfig,
   ElEvent,
-  LayerBaseProps,
-  CacheLayerAnimation,
-  LayerOptions,
-  ChartContext,
-  LayerScale,
-  CacheLayerEvent,
-  LayerStyle,
   LayerAnimation,
+  LayerBaseProps,
+  LayerData,
+  LayerOptions,
+  LayerScale,
+  LayerStyle,
 } from '../types'
+import {
+  commonEvents,
+  createLog,
+  EventManager,
+  group,
+  isCC,
+  isSC,
+  layerLifeCycles,
+  tooltipEvents,
+  ungroup,
+} from '../utils'
+import {makeClass, selector} from './helpers'
 
 export abstract class LayerBase<Options extends LayerOptions> {
   abstract data: Maybe<LayerData>

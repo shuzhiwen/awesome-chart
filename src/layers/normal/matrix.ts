@@ -1,15 +1,6 @@
-import {LayerBase} from '../base'
+import {scaleLinear, scaleQuantize} from 'd3'
 import {DataTable} from '../../data'
 import {scaleBand} from '../../scales'
-import {scaleLinear, scaleQuantize} from 'd3'
-import {getMagnitude, noChange} from '../../utils'
-import {
-  createColorMatrix,
-  createScale,
-  createStyle,
-  createText,
-  validateAndCreateData,
-} from '../helpers'
 import {
   ChartContext,
   CircleDrawerProps,
@@ -23,6 +14,15 @@ import {
   RectDrawerProps,
   TextDrawerProps,
 } from '../../types'
+import {getMagnitude, noChange} from '../../utils'
+import {LayerBase} from '../base'
+import {
+  createColorMatrix,
+  createScale,
+  createStyle,
+  createText,
+  validateAndCreateData,
+} from '../helpers'
 
 const defaultStyle: LayerMatrixStyle = {
   shape: 'rect',

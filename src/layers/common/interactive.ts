@@ -1,8 +1,18 @@
 import {select} from 'd3'
-import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {LayerAuxiliary} from './auxiliary'
-import {isScaleBand, isScaleLinear, isSC, uuid} from '../../utils'
+import {
+  ChartContext,
+  DrawerData,
+  ElSource,
+  LayerAxisScale,
+  LayerInteractiveOptions,
+  LayerInteractiveStyle,
+  LayerStyle,
+  LegendData,
+  RectDrawerProps,
+} from '../../types'
+import {isSC, isScaleBand, isScaleLinear, uuid} from '../../utils'
+import {LayerBase} from '../base'
 import {
   createScale,
   createStyle,
@@ -11,17 +21,7 @@ import {
   stickyBandScale,
   validateAndCreateData,
 } from '../helpers'
-import {
-  ChartContext,
-  LayerInteractiveStyle,
-  LegendData,
-  LayerAxisScale,
-  LayerInteractiveOptions,
-  RectDrawerProps,
-  DrawerData,
-  ElSource,
-  LayerStyle,
-} from '../../types'
+import {LayerAuxiliary} from './auxiliary'
 
 const shadowOpacity = 0.5
 

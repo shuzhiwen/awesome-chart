@@ -1,6 +1,6 @@
-import {cloneDeep, sum, min, max} from 'lodash'
-import {group, isRawTableList, transpose} from '../utils'
+import {cloneDeep, max, min, sum} from 'lodash'
 import {DataBaseOptions, RawTableList, TableListData, TableListOptions} from '../types'
+import {group, isRawTableList, transpose} from '../utils'
 import {DataBase} from './base'
 
 export class DataTableList extends DataBase<RawTableList> {

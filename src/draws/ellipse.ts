@@ -1,9 +1,9 @@
-import {Graphics} from 'pixi.js'
 import {isString, merge} from 'lodash'
-import {getAttr, noChange, isSC, isCC, splitAlpha} from '../utils'
-import {EllipseDrawerProps} from '../types'
+import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
+import {EllipseDrawerProps} from '../types'
+import {getAttr, isCC, isSC, noChange, splitAlpha} from '../utils'
 
 export function drawEllipse({
   fill,

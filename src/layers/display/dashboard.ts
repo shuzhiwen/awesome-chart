@@ -1,7 +1,18 @@
-import {LayerBase} from '../base'
 import {DataBase} from '../../data'
 import {scaleLinear} from '../../scales'
+import {
+  ArcDrawerProps,
+  ChartContext,
+  DrawerData,
+  ElSource,
+  LayerDashboardOptions,
+  LayerDashboardStyle,
+  LayerStyle,
+  LineDrawerProps,
+  TextDrawerProps,
+} from '../../types'
 import {getAttr, isRealNumber, robustRange} from '../../utils'
+import {LayerBase} from '../base'
 import {
   createArcText,
   createColorMatrix,
@@ -9,17 +20,6 @@ import {
   createText,
   validateAndCreateData,
 } from '../helpers'
-import {
-  ChartContext,
-  LayerDashboardStyle,
-  DrawerData,
-  TextDrawerProps,
-  LayerDashboardOptions,
-  LineDrawerProps,
-  ArcDrawerProps,
-  ElSource,
-  LayerStyle,
-} from '../../types'
 
 const defaultStyle: LayerDashboardStyle = {
   step: [2, 10],

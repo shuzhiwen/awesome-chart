@@ -1,20 +1,20 @@
-import {LayerBase} from '../base'
-import {DataTableList} from '../../data'
-import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
-import {forceCollide, forceSimulation, Simulation, forceX, forceY} from 'd3'
-import {scaleLinear} from '../../scales'
+import {forceCollide, forceSimulation, forceX, forceY, Simulation} from 'd3'
 import {merge} from 'lodash'
+import {DataTableList} from '../../data'
+import {scaleLinear} from '../../scales'
 import {
-  ChartContext,
-  DrawerData,
-  TextDrawerProps,
-  CircleDrawerProps,
-  LayerForceStyle,
-  LayerForceOptions,
   CacheLayerAnimation,
-  LayerStyle,
+  ChartContext,
+  CircleDrawerProps,
+  DrawerData,
   LayerAnimation,
+  LayerForceOptions,
+  LayerForceStyle,
+  LayerStyle,
+  TextDrawerProps,
 } from '../../types'
+import {LayerBase} from '../base'
+import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 
 const defaultStyle: LayerForceStyle = {
   nodeSize: [5, 20],

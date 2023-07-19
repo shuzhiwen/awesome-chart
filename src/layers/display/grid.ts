@@ -1,8 +1,5 @@
-import {LayerBase} from '../base'
-import {DataTableList} from '../../data'
 import {drag, max, range} from 'd3'
-import {checkColumns, createStyle, makeClass, validateAndCreateData} from '../helpers'
-import {isCC, isBoxCollision, tableListToObjects, ungroup, uuid} from '../../utils'
+import {DataTableList} from '../../data'
 import {
   Box,
   ChartContext,
@@ -14,6 +11,9 @@ import {
   LineDrawerProps,
   RectDrawerProps,
 } from '../../types'
+import {isBoxCollision, isCC, tableListToObjects, ungroup, uuid} from '../../utils'
+import {LayerBase} from '../base'
+import {checkColumns, createStyle, makeClass, validateAndCreateData} from '../helpers'
 
 type DataKey = 'width' | 'height' | 'key'
 

@@ -1,19 +1,19 @@
 import {merge} from 'lodash'
-import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
-import {createScale, createStyle, validateAndCreateData} from '../helpers'
-import {bindEventManager, commonEvents, uuid} from '../../utils'
-import {LayerRect} from '../normal'
 import {
-  ChartContext,
-  LayerCandleStyle,
-  LegendData,
-  LayerCandleOptions,
-  LayerRectScale,
   CacheLayerAnimation,
-  LayerStyle,
+  ChartContext,
   LayerAnimation,
+  LayerCandleOptions,
+  LayerCandleStyle,
+  LayerRectScale,
+  LayerStyle,
+  LegendData,
 } from '../../types'
+import {bindEventManager, commonEvents, uuid} from '../../utils'
+import {LayerBase} from '../base'
+import {createScale, createStyle, validateAndCreateData} from '../helpers'
+import {LayerRect} from '../normal'
 
 const defaultStyle: LayerCandleStyle = {
   positiveColor: 'red',

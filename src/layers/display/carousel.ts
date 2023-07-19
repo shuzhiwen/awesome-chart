@@ -1,8 +1,5 @@
 import {isNil, max, merge, min, range} from 'lodash'
-import {createStyle, validateAndCreateData} from '../helpers'
 import {DataTableList} from '../../data'
-import {getAttr} from '../../utils'
-import {LayerBase} from '../base'
 import {
   ChartContext,
   DrawerData,
@@ -12,6 +9,9 @@ import {
   LayerStyle,
   RectDrawerProps,
 } from '../../types'
+import {getAttr} from '../../utils'
+import {LayerBase} from '../base'
+import {createStyle, validateAndCreateData} from '../helpers'
 
 const defaultOptions: Partial<LayerCarouselOptions> = {
   mode: 'slide',

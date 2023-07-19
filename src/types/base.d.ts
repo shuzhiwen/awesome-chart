@@ -1,13 +1,13 @@
-import {LayerBase, LayerDict} from '../layers'
-import {DrawerType, GraphDrawerProps} from './draw'
-import {commonEvents, tooltipEvents} from '../utils'
-import {RawScale, ScaleNice} from './scale'
-import {AnimationOptions} from './animation'
 import {AnimationQueue} from '../animation'
+import {LayerBase, LayerDict} from '../layers'
+import {commonEvents, tooltipEvents} from '../utils'
+import {AnimationOptions} from './animation'
 import {ChartContext} from './core'
-import {LayerOptions} from './options'
-import {TextStyle} from './styles'
 import {LegendData} from './data'
+import {DrawerType, GraphDrawerProps} from './draw'
+import {LayerOptions} from './options'
+import {RawScale, ScaleNice} from './scale'
+import {TextStyle} from './styles'
 
 export type LayerType = Keys<typeof LayerDict>
 

@@ -1,7 +1,20 @@
-import {LayerBase} from '../base'
-import {errorCatcher, isRealNumber} from '../../utils'
-import {scaleBand, scaleLinear} from '../../scales'
 import {DataTableList} from '../../data'
+import {scaleBand, scaleLinear} from '../../scales'
+import {
+  AreaDrawerProps,
+  ChartContext,
+  CircleDrawerProps,
+  DrawerData,
+  ElSource,
+  LayerLineOptions,
+  LayerLineScale,
+  LayerLineStyle,
+  LayerStyle,
+  LegendData,
+  TextDrawerProps,
+} from '../../types'
+import {errorCatcher, isRealNumber} from '../../utils'
+import {LayerBase} from '../base'
 import {
   createColorMatrix,
   createScale,
@@ -9,19 +22,6 @@ import {
   createText,
   validateAndCreateData,
 } from '../helpers'
-import {
-  ChartContext,
-  LayerLineStyle,
-  DrawerData,
-  TextDrawerProps,
-  LayerLineOptions,
-  LegendData,
-  LayerLineScale,
-  CircleDrawerProps,
-  AreaDrawerProps,
-  ElSource,
-  LayerStyle,
-} from '../../types'
 
 const defaultOptions: Partial<LayerLineOptions> = {
   mode: 'cover',

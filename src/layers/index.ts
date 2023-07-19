@@ -3,12 +3,12 @@ import {BasicLayerOptions, ChartContext} from '../types'
 import {createClassRegister} from '../utils'
 
 export default Layer
+export * from './base'
 export * from './combine'
 export * from './common'
-export * from './base'
+export * from './display'
 export * from './geography'
 export * from './helpers'
-export * from './display'
 export * from './normal'
 export * from './relation'
 

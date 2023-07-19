@@ -1,7 +1,18 @@
 import {hierarchy, HierarchyNode, max, pack, range} from 'd3'
-import {LayerBase} from '../base'
 import {DataRelation} from '../../data'
+import {
+  ChartContext,
+  CircleDrawerProps,
+  DrawerData,
+  EllipseDrawerProps,
+  LayerPackOptions,
+  LayerPackStyle,
+  LayerStyle,
+  Node,
+  TextDrawerProps,
+} from '../../types'
 import {uuid} from '../../utils'
+import {LayerBase} from '../base'
 import {
   createColorMatrix,
   createLimitText,
@@ -9,17 +20,6 @@ import {
   createText,
   validateAndCreateData,
 } from '../helpers'
-import {
-  ChartContext,
-  DrawerData,
-  LayerPackStyle,
-  LayerPackOptions,
-  TextDrawerProps,
-  CircleDrawerProps,
-  EllipseDrawerProps,
-  Node,
-  LayerStyle,
-} from '../../types'
 
 const defaultOptions: Partial<LayerPackOptions> = {
   variant: 'pack',

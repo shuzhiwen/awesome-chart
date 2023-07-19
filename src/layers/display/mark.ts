@@ -1,6 +1,3 @@
-import {LayerBase} from '../base'
-import {checkColumns, createScale, createStyle, createText, validateAndCreateData} from '../helpers'
-import {createDroplet, isScaleBand, tableListToObjects} from '../../utils'
 import {DataTableList} from '../../data'
 import {
   ChartContext,
@@ -12,6 +9,9 @@ import {
   PathDrawerProps,
   TextDrawerProps,
 } from '../../types'
+import {createDroplet, isScaleBand, tableListToObjects} from '../../utils'
+import {LayerBase} from '../base'
+import {checkColumns, createScale, createStyle, createText, validateAndCreateData} from '../helpers'
 
 type DataKey = 'x' | 'y' | 'value'
 

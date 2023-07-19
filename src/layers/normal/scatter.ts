@@ -1,7 +1,19 @@
-import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
 import {scaleLinear} from '../../scales'
+import {
+  ChartContext,
+  CircleDrawerProps,
+  DrawerData,
+  ElSource,
+  LayerScatterOptions,
+  LayerScatterScale,
+  LayerScatterStyle,
+  LayerStyle,
+  LegendData,
+  TextDrawerProps,
+} from '../../types'
 import {isRealNumber, tableListToObjects, ungroup} from '../../utils'
+import {LayerBase} from '../base'
 import {
   checkColumns,
   createColorMatrix,
@@ -10,18 +22,6 @@ import {
   createText,
   validateAndCreateData,
 } from '../helpers'
-import {
-  ChartContext,
-  DrawerData,
-  LayerScatterOptions,
-  LayerScatterStyle,
-  LayerScatterScale,
-  TextDrawerProps,
-  LegendData,
-  CircleDrawerProps,
-  ElSource,
-  LayerStyle,
-} from '../../types'
 
 type DataKey = 'x' | 'y' | 'value' | 'category'
 

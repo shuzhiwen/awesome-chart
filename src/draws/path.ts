@@ -1,9 +1,9 @@
+import {isFunction, isString, merge} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
-import {PathDrawerProps} from '../types'
-import {getAttr, noChange, isCC, isSC, splitAlpha} from '../utils'
-import {isFunction, isString, merge} from 'lodash'
 import {selector} from '../layers'
+import {PathDrawerProps} from '../types'
+import {getAttr, isCC, isSC, noChange, splitAlpha} from '../utils'
 
 export function drawPath({
   fill,

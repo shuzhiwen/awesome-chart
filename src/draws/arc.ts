@@ -1,6 +1,6 @@
 import {arc} from 'd3'
-import {drawPath} from './path'
 import {ArcDrawerProps} from '../types'
+import {drawPath} from './path'
 
 export function drawArc({data = [], ...rest}: ArcDrawerProps) {
   return drawPath({

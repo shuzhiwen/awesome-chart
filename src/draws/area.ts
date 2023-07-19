@@ -1,6 +1,6 @@
 import * as d3 from 'd3-shape'
-import {drawPath} from './path'
 import {AreaDrawerProps} from '../types'
+import {drawPath} from './path'
 
 export function drawArea({data = [], ...rest}: AreaDrawerProps) {
   return drawPath({

@@ -1,4 +1,4 @@
-import {isRawTable, isRawTableList, isRawRelation} from '../../src'
+import {isRawRelation, isRawTable, isRawTableList} from '../../src'
 
 test('isRawTableList', () => {
   expect(

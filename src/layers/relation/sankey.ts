@@ -1,19 +1,19 @@
 import {max, range, sum} from 'd3'
 import {DataRelation} from '../../data'
 import {scaleLinear} from '../../scales'
-import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
-import {getAttr, noChange} from '../../utils'
-import {LayerBase} from '../base'
 import {
   ChartContext,
   DrawerData,
-  LayerSankeyStyle,
   LayerSankeyOptions,
-  TextDrawerProps,
+  LayerSankeyStyle,
+  LayerStyle,
   Node,
   RectDrawerProps,
-  LayerStyle,
+  TextDrawerProps,
 } from '../../types'
+import {getAttr, noChange} from '../../utils'
+import {LayerBase} from '../base'
+import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 
 type RibbonKey = 'x1' | 'y1' | 'x2' | 'y2' | 'x3' | 'y3' | 'x4' | 'y4'
 

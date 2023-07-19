@@ -1,11 +1,8 @@
 import anime from 'animejs'
 import {select} from 'd3'
 import {cloneDeep, merge} from 'lodash'
-import {LayerBase} from '../base'
-import {DataBase} from '../../data'
 import {lightTheme} from '../../core/theme'
-import {addStyle, isCC, isSC, mergeAlpha, robustRange} from '../../utils'
-import {createStyle, validateAndCreateData} from '../helpers'
+import {DataBase} from '../../data'
 import {
   ChartContext,
   LayerAnimation,
@@ -13,6 +10,9 @@ import {
   LayerFlopperStyle,
   LayerStyle,
 } from '../../types'
+import {addStyle, isCC, isSC, mergeAlpha, robustRange} from '../../utils'
+import {LayerBase} from '../base'
+import {createStyle, validateAndCreateData} from '../helpers'
 
 const defaultOptions: Partial<LayerFlopperOptions> = {
   variant: 'vertical',

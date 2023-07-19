@@ -1,7 +1,4 @@
 import {merge} from 'lodash'
-import {LayerBase} from '../base'
-import {getAttr, getTextWidth, group} from '../../utils'
-import {createStyle, createText, validateAndCreateData} from '../helpers'
 import {DataBase} from '../../data'
 import {
   ChartContext,
@@ -11,6 +8,9 @@ import {
   LayerTextStyle,
   TextDrawerProps,
 } from '../../types'
+import {getAttr, getTextWidth, group} from '../../utils'
+import {LayerBase} from '../base'
+import {createStyle, createText, validateAndCreateData} from '../helpers'
 
 const defaultStyle: LayerTextStyle = {
   sanger: [1, 1],

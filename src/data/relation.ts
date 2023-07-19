@@ -1,7 +1,7 @@
+import {max, merge, sum} from 'lodash'
+import {Edge, Node, RawRelation, RelationData} from '../types'
+import {formatNumber, isRawRelation, tableListToObjects} from '../utils'
 import {DataBase} from './base'
-import {merge, max, sum} from 'lodash'
-import {isRawRelation, formatNumber, tableListToObjects} from '../utils'
-import {RelationData, RawRelation, Node, Edge} from '../types'
 
 export class DataRelation extends DataBase<RawRelation> {
   private nodeMap: Map<Meta, Node> = new Map()

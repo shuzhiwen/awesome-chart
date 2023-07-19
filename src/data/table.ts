@@ -1,5 +1,5 @@
+import {isArray, max, min} from 'lodash'
 import {RawTable, TableOptions} from '../types'
-import {min, max, isArray} from 'lodash'
 import {isRawTable} from '../utils'
 import {DataBase} from './base'
 

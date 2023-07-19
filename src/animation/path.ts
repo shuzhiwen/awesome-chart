@@ -1,7 +1,7 @@
-import {AnimationBase} from './base'
+import anime from 'animejs'
 import {AnimationPathOptions, AnimationProps} from '../types'
 import {isCC, isSC} from '../utils'
-import anime from 'animejs'
+import {AnimationBase} from './base'
 
 export class AnimationPath extends AnimationBase<AnimationPathOptions> {
   private instances: anime.AnimeInstance[] = []

@@ -1,7 +1,4 @@
-import {LayerBase} from '../base'
-import {createScale, createStyle} from '../helpers'
-import {addStyle, isSC, transformAttr} from '../../utils'
-import {BrushBehavior, D3BrushEvent, brushX, brushY} from 'd3'
+import {BrushBehavior, brushX, brushY, D3BrushEvent} from 'd3'
 import {
   ChartContext,
   LayerAxisScale,
@@ -9,6 +6,9 @@ import {
   LayerBrushStyle,
   LayerStyle,
 } from '../../types'
+import {addStyle, isSC, transformAttr} from '../../utils'
+import {LayerBase} from '../base'
+import {createScale, createStyle} from '../helpers'
 
 const defaultStyle: LayerBrushStyle = {
   handleZoom: 0.5,

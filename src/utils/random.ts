@@ -1,14 +1,14 @@
+import {group, randomNormal, randomPoisson, range, sum} from 'd3'
 import {sample} from 'lodash'
-import {range, sum, randomNormal, randomPoisson, group} from 'd3'
 import {
-  RawTable,
-  RandomTableListOptions,
-  RawTableList,
-  RawRelation,
-  RandomRelationOptions,
-  RandomNumberOptions,
-  Node,
   Edge,
+  Node,
+  RandomNumberOptions,
+  RandomRelationOptions,
+  RandomTableListOptions,
+  RawRelation,
+  RawTable,
+  RawTableList,
 } from '../types'
 
 const mapping = {

@@ -1,6 +1,6 @@
 export * from './display'
 export * from './dynamic-rect'
 export * from './geography'
-export * from './table-list'
 export * from './relation'
+export * from './table-list'
 export * from './wave'

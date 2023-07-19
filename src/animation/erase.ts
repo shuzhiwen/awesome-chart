@@ -1,8 +1,8 @@
-import {Graphics} from 'pixi.js'
 import anime, {AnimeParams} from 'animejs'
+import {Graphics} from 'pixi.js'
 import {AnimationEraseOptions, AnimationProps, Box, D3Selection} from '../types'
-import {AnimationBase} from './base'
 import {isSC} from '../utils'
+import {AnimationBase} from './base'
 
 export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
   private defs: Maybe<D3Selection>

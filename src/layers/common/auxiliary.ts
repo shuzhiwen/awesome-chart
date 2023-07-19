@@ -1,6 +1,18 @@
-import {LayerBase} from '../base'
 import {DataTableList} from '../../data'
+import {
+  ChartContext,
+  DrawerData,
+  LayerAuxiliaryOptions,
+  LayerAuxiliaryScale,
+  LayerAuxiliaryStyle,
+  LayerStyle,
+  LegendData,
+  LineDrawerProps,
+  RectDrawerProps,
+  TextDrawerProps,
+} from '../../types'
 import {getAttr, isScaleBand, isScaleLinear} from '../../utils'
+import {LayerBase} from '../base'
 import {
   createColorMatrix,
   createScale,
@@ -8,18 +20,6 @@ import {
   createText,
   validateAndCreateData,
 } from '../helpers'
-import {
-  ChartContext,
-  LayerAuxiliaryStyle,
-  DrawerData,
-  TextDrawerProps,
-  LegendData,
-  LayerAuxiliaryScale,
-  LayerAuxiliaryOptions,
-  LineDrawerProps,
-  RectDrawerProps,
-  LayerStyle,
-} from '../../types'
 
 const defaultStyle: LayerAuxiliaryStyle = {
   direction: 'horizontal',

@@ -5,13 +5,13 @@ import {createClassRegister} from '../utils'
 export default Animation
 export * from './base'
 export * from './easing'
-export * from './erase'
 export * from './empty'
+export * from './erase'
 export * from './fade'
 export * from './move'
 export * from './path'
-export * from './scan'
 export * from './queue'
+export * from './scan'
 export * from './zoom'
 
 export const AnimationDict = {

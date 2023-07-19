@@ -1,5 +1,5 @@
-import {AnimationBase} from './base'
 import {AnimationEmptyOptions, AnimationProps} from '../types'
+import {AnimationBase} from './base'
 
 export class AnimationEmpty extends AnimationBase<AnimationEmptyOptions> {
   constructor(props: AnimationProps<AnimationEmptyOptions>) {

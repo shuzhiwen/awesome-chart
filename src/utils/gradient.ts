@@ -1,13 +1,13 @@
-import {uuid} from './random'
-import {group, isSC, mergeAlpha} from '.'
 import {Texture} from 'pixi.js'
+import {group, isSC, mergeAlpha} from '.'
 import {
+  CreateDefsSchema,
+  EasyGradientCreatorProps,
   GradientCreatorProps,
   LinearGradientSchema,
   RadialGradientSchema,
-  CreateDefsSchema,
-  EasyGradientCreatorProps,
 } from '../types'
+import {uuid} from './random'
 
 export const createLinearGradients = ({
   container,

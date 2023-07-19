@@ -1,11 +1,11 @@
 import {
-  robustRange,
+  errorCatcher,
+  getMagnitude,
   getTextWidth,
   group,
-  ungroup,
-  getMagnitude,
+  robustRange,
   swap,
-  errorCatcher,
+  ungroup,
 } from '../../src'
 
 test('group', () => {

@@ -1,22 +1,22 @@
 import {chord, group, ribbon} from 'd3'
-import {LayerBase} from '../base'
 import {DataTable} from '../../data'
+import {
+  ArcDrawerProps,
+  ChartContext,
+  DrawerData,
+  ElSource,
+  LayerChordOptions,
+  LayerChordStyle,
+  LayerStyle,
+  PathDrawerProps,
+} from '../../types'
+import {LayerBase} from '../base'
 import {
   createColorMatrix,
   createRotatedArcText,
   createStyle,
   validateAndCreateData,
 } from '../helpers'
-import {
-  ChartContext,
-  DrawerData,
-  LayerChordStyle,
-  LayerChordOptions,
-  LayerStyle,
-  ArcDrawerProps,
-  PathDrawerProps,
-  ElSource,
-} from '../../types'
 
 const defaultStyle: LayerChordStyle = {
   arcWidth: 10,

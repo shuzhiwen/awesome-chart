@@ -1,10 +1,10 @@
-import {merge} from 'lodash'
 import {interpolateNumber} from 'd3'
-import {TextDrawerProps} from '../types'
-import {getAttr, isSC, isCC, noChange, isRealNumber, mergeAlpha} from '../utils'
+import {merge} from 'lodash'
 import {Text, TextStyleFontWeight} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
+import {TextDrawerProps} from '../types'
+import {getAttr, isCC, isRealNumber, isSC, mergeAlpha, noChange} from '../utils'
 
 export function drawText({
   fontFamily,

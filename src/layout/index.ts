@@ -1,2 +1,2 @@
-export * from './standard'
 export * from './facet'
+export * from './standard'

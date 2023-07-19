@@ -1,9 +1,9 @@
 import {max, range} from 'd3'
 import {AnimationDict} from '.'
+import {AnimationOptions, AnimationType, DrawerTarget} from '../types'
 import {safeLoop, uuid} from '../utils'
-import {AnimationType, DrawerTarget, AnimationOptions} from '../types'
-import {AnimationEmpty} from './empty'
 import {AnimationBase} from './base'
+import {AnimationEmpty} from './empty'
 
 type Animation = AnimationBase<AnimationOptions>
 

@@ -1,7 +1,7 @@
-import {throttle, merge} from 'lodash'
-import {animationLifeCycles, EventManager, createLog, noChange, uuid, isSC} from '../utils'
-import {AnimationProps, AnimationOptions} from '../types'
+import {merge, throttle} from 'lodash'
 import {selector} from '../layers'
+import {AnimationOptions, AnimationProps} from '../types'
+import {animationLifeCycles, createLog, EventManager, isSC, noChange, uuid} from '../utils'
 
 export abstract class AnimationBase<Options extends AnimationOptions> {
   readonly log = createLog(this.constructor.name)

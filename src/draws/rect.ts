@@ -1,9 +1,9 @@
-import {Graphics} from 'pixi.js'
 import {isArray, isString, merge} from 'lodash'
-import {getAttr, isSC, isCC, noChange, splitAlpha} from '../utils'
-import {DrawerData, RectDrawerProps} from '../types'
+import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
+import {DrawerData, RectDrawerProps} from '../types'
+import {getAttr, isCC, isSC, noChange, splitAlpha} from '../utils'
 
 export function drawRect({
   fill,

@@ -1,7 +1,20 @@
-import {LayerBase} from '../base'
-import {errorCatcher, isRealNumber} from '../../utils'
-import {scaleAngle, scaleLinear} from '../../scales'
 import {DataTableList} from '../../data'
+import {scaleAngle, scaleLinear} from '../../scales'
+import {
+  ArcDrawerProps,
+  ChartContext,
+  CurveDrawerProps,
+  DrawerData,
+  ElSource,
+  LayerArcOptions,
+  LayerArcScale,
+  LayerArcStyle,
+  LayerStyle,
+  LegendData,
+  TextDrawerProps,
+} from '../../types'
+import {errorCatcher, isRealNumber} from '../../utils'
+import {LayerBase} from '../base'
 import {
   createColorMatrix,
   createScale,
@@ -9,19 +22,6 @@ import {
   createText,
   validateAndCreateData,
 } from '../helpers'
-import {
-  ChartContext,
-  LayerArcStyle,
-  DrawerData,
-  TextDrawerProps,
-  LayerArcOptions,
-  LegendData,
-  LayerArcScale,
-  ArcDrawerProps,
-  ElSource,
-  CurveDrawerProps,
-  LayerStyle,
-} from '../../types'
 
 const defaultOptions: Partial<LayerArcOptions> = {
   variant: 'pie',

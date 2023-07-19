@@ -5,8 +5,8 @@ import {createClassRegister} from '../utils'
 export default Data
 export * from './base'
 export * from './relation'
-export * from './table-list'
 export * from './table'
+export * from './table-list'
 
 export const DataDict = {
   base: Data.DataBase,

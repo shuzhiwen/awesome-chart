@@ -1,19 +1,19 @@
-import {DataTableList, DataTable, DataRelation, DataBase} from '../data'
-import {CreateChartProps, LayerOptions} from '../types'
+import {DataBase, DataRelation, DataTable, DataTableList} from '../data'
 import {LayerBase, LayerText} from '../layers'
-import {Chart} from './chart'
+import {CreateChartProps, LayerOptions} from '../types'
 import {
+  createLog,
+  errorCatcher,
+  isLayerAxis,
+  isLayerLegend,
+  isRawRelation,
   isRawTable,
   isRawTableList,
-  isRawRelation,
-  randomTableList,
-  randomTable,
-  isLayerLegend,
-  isLayerAxis,
-  errorCatcher,
   randomRelation,
-  createLog,
+  randomTable,
+  randomTableList,
 } from '../utils'
+import {Chart} from './chart'
 
 const log = createLog('CreateChart')
 

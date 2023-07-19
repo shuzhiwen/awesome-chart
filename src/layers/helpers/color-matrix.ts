@@ -1,8 +1,8 @@
 import chroma from 'chroma-js'
 import {isArray} from 'lodash'
 import {DataTableList} from '../../data'
-import {ColorMatrix, safeLoop} from '../../utils'
 import {CreateColorMatrixProps} from '../../types'
+import {ColorMatrix, safeLoop} from '../../utils'
 
 /**
  * Create `ColorMatrix` for the layer.

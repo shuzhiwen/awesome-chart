@@ -1,9 +1,6 @@
-import {Graphics} from 'pixi.js'
-import {LayerBase} from '../base'
-import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
-import {createSinusoidal, isSC} from '../../utils'
-import {DataBase} from '../../data'
 import {range} from 'd3'
+import {Graphics} from 'pixi.js'
+import {DataBase} from '../../data'
 import {
   AreaDrawerProps,
   ChartContext,
@@ -14,6 +11,9 @@ import {
   LayerWaveStyle,
   TextDrawerProps,
 } from '../../types'
+import {createSinusoidal, isSC} from '../../utils'
+import {LayerBase} from '../base'
+import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 
 const defaultStyle: LayerWaveStyle = {
   wavelength: 50,

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import data from '../../public/covid19.json'
 import {Chart} from '../../src/core'
 import {DataTableList} from '../../src/data'

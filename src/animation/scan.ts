@@ -1,8 +1,8 @@
-import {select} from 'd3'
 import anime, {AnimeParams} from 'animejs'
+import {select} from 'd3'
 import {Container, Graphics, Texture} from 'pixi.js'
+import {AnimationProps, AnimationScanOptions, Box, D3Selection} from '../types'
 import {createLinearGradients, isCC, isSC} from '../utils'
-import {AnimationScanOptions, AnimationProps, D3Selection, Box} from '../types'
 import {AnimationBase} from './base'
 
 export class AnimationScan extends AnimationBase<AnimationScanOptions> {
