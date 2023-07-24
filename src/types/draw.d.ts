@@ -51,6 +51,11 @@ export type ElConfig = {
   | TextDrawerProps
 >
 
+export type DrawerDictProps<
+  T extends DrawerType,
+  P extends typeof DrawerDict[T] = typeof DrawerDict[T]
+> = Parameters<P>[0]
+
 export type TextDrawerProps = TextStyle &
   BasicDrawerProps<{
     x: number

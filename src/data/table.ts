@@ -20,7 +20,12 @@ export class DataTable extends DataBase<RawTable> {
 
   constructor(data: RawTable) {
     super(data)
-    this.update(data)
+
+    if (isRawTable(data)) {
+      this._data = data
+    } else {
+      throw new Error('Illegal data')
+    }
   }
 
   select(rows: Meta[], columns: Meta[]) {
@@ -41,11 +46,6 @@ export class DataTable extends DataBase<RawTable> {
     const result = new DataTable(data)
 
     return result
-  }
-
-  update(table: RawTable) {
-    if (!isRawTable(table)) throw new Error('Illegal data')
-    this._data = table
   }
 
   push(target: TableOptions['target'] = 'row', ...data: Meta[][]) {

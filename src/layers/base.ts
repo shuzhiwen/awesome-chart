@@ -9,6 +9,7 @@ import {
   ChartContext,
   DrawBasicProps,
   DrawerTarget,
+  DrawerType,
   ElConfig,
   ElEvent,
   LayerAnimation,
@@ -355,13 +356,9 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * Unified layer drawing function to map drawing data to graphics.
    * Layers should always be drawn using this method.
    */
-  protected drawBasic({type, data, sublayer = type}: DrawBasicProps<AnyObject>) {
-    if (!this.sublayers.includes(sublayer)) {
-      this.log.debug.error('Invalid sublayer type for drawBasic')
-      return
-    }
-
-    const {theme} = this.options,
+  protected drawBasic<T extends DrawerType>(props: DrawBasicProps<T>) {
+    let data = props.data
+    const {type, sublayer = type} = props,
       cacheData = this.cacheData[sublayer],
       sublayerClassName = `${this.className}-${sublayer}`,
       maxGroupLength = Math.max(cacheData.data.length, data.length),
@@ -369,6 +366,11 @@ export abstract class LayerBase<Options extends LayerOptions> {
       sublayerContainer =
         selector.getDirectChild(this.root, sublayerClassName) ||
         selector.createGroup(this.root, sublayerClassName)
+
+    if (!this.sublayers.includes(sublayer)) {
+      this.log.debug.error('Invalid sublayer type for drawBasic')
+      return
+    }
 
     /**
      * If data length is more than last time, add missing group container.
@@ -447,7 +449,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
             : this.cacheAnimation.options[sublayer]?.update,
         className: makeClass(sublayer, false),
         container: groupContainer,
-        theme,
+        theme: this.options.theme,
       }
 
       DrawerDict[type](options as any)

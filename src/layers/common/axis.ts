@@ -98,8 +98,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
   private _style = defaultStyle
 
   private lineData: Record<
-    'splitLineAxisX' | 'splitLineAxisY' | 'splitLineAngle' | 'splitLineRadius',
-    (Partial<DrawerData<LineDrawerProps> & DrawerData<CircleDrawerProps>> & {
+    'splitLineAxisX' | 'splitLineAxisY' | 'splitLineAngle',
+    (DrawerData<LineDrawerProps> & {
       value: Meta
       angle?: number
       labelX?: number
@@ -110,8 +110,11 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     splitLineAxisX: [],
     splitLineAxisY: [],
     splitLineAngle: [],
-    splitLineRadius: [],
   }
+
+  private splitLineRadiusData: (DrawerData<CircleDrawerProps> & {
+    value: Meta
+  })[] = []
 
   private disabledAxisX: Set<ReturnType<typeof createText>> = new Set()
 
@@ -282,14 +285,12 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       })
     )
 
-    this.lineData.splitLineRadius = this.getLabelAndPosition(scaleRadius!).map(
-      ({label, position}) => ({
-        value: label,
-        x: left + width / 2,
-        y: top + height / 2,
-        r: position,
-      })
-    )
+    this.splitLineRadiusData = this.getLabelAndPosition(scaleRadius!).map(({label, position}) => ({
+      value: label,
+      x: left + width / 2,
+      y: top + height / 2,
+      r: position,
+    }))
 
     this.textData.titleX = [
       createText({
@@ -338,7 +339,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       )
     }
 
-    this.textData.textRadius = this.lineData.splitLineRadius.map(({value, x, y, r}) =>
+    this.textData.textRadius = this.splitLineRadiusData.map(({value, x, y, r}) =>
       createText({x: x!, y: y! - r!, value, style: textRadius, position: 'left', offset})
     )
 
@@ -464,7 +465,10 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     if (coordinate === 'polar') {
       this.drawBasic({
         type: 'circle',
-        data: getLineData('splitLineRadius'),
+        data: this.splitLineRadiusData.map((item) => ({
+          data: [item],
+          ...this.style.splitLineRadius,
+        })),
         sublayer: 'splitLineRadius',
       })
       this.drawBasic({

@@ -187,7 +187,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
     )
   }
 
-  private fallbackFilter(position: {y?: number; y1?: number; y2?: number}[]) {
+  private fallbackFilter<T extends {y?: number; y1?: number; y2?: number}>(position: T[]) {
     if (!this.scale) return []
 
     const {layout} = this.options,
@@ -195,7 +195,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
       {scaleY} = this.scale
 
     if (fallback === 'break') {
-      return position.reduce<{y?: number; y1?: number; y2?: number}[][]>(
+      return position.reduce<T[][]>(
         (prev, cur) =>
           cur.y || cur.y1
             ? [...prev.slice(0, prev.length - 1), [...prev[prev.length - 1], cur]]
@@ -224,7 +224,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
   draw() {
     const areaData = this.areaData[0].map(({color}, index) => ({
       data: this.fallbackFilter(this.areaData.map((item) => item[index])).map((lines) => ({
-        curve: this.style.curveType,
+        curve: this.style.curveType!,
         lines,
       })),
       ...this.style.area,
@@ -232,7 +232,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
     }))
     const curveData = this.pointData[0].map(({color}, index) => ({
       data: this.fallbackFilter(this.pointData.map((item) => item[index])).map((points) => ({
-        curve: this.style.curveType,
+        curve: this.style.curveType!,
         points,
       })),
       ...this.style.curve,

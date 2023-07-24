@@ -280,7 +280,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       fill: group.map(({color}) => color!),
     }))
     const guideLineData = this.guideLineData.map((group) => ({
-      data: group.map((points) => ({points, curve: 'curveLinear'})),
+      data: group.map((points) => ({points, curve: 'curveLinear' as Curve})),
       ...this.style.guideLine,
     }))
     const textData = this.textData.map((group) => ({

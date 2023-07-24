@@ -165,7 +165,7 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
     const textData = this.textData.map((group) => ({
       data: group,
       ...text,
-      fontSize: variant === 'pack' ? text?.fontSize : group.flatMap(({fontSize}) => fontSize),
+      fontSize: variant === 'pack' ? text?.fontSize : group.flatMap(({fontSize}) => fontSize!),
     }))
 
     this.drawBasic({type: 'circle', data: circleData})

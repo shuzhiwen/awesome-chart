@@ -276,7 +276,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
       fill: group.map(({color}) => color ?? 'black'),
     }))
     const edgeData = this.edgeData.map(({color, length, ...rest}) => ({
-      data: [{path: this.getPath(rest)}],
+      data: [{path: this.getPath(rest)!}],
       ...this.style.edge,
       fill: edgeVariant === 'ribbon' ? color : '#ffffff00',
       stroke: edgeVariant === 'curve' ? color : edge?.stroke,

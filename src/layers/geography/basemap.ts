@@ -192,7 +192,7 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
   draw() {
     const blockData = {
       data: this.blockData.map(({geometry}) => ({
-        path: this.path!(geometry),
+        path: this.path?.(geometry) ?? '',
         centerX: 0,
         centerY: 0,
       })),

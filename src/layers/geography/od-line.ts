@@ -144,7 +144,9 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
 
   draw() {
     const odLineData = {
-      data: this.odLineData.filter(({path}) => Boolean(path)),
+      data: this.odLineData.filter(({path}) =>
+        Boolean(path)
+      ) as (LayerODLine['odLineData'][number] & {path: string})[],
       source: this.odLineData.map(({source}) => source),
       ...this.style.odLine,
     }

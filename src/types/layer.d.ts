@@ -4,7 +4,7 @@ import {commonEvents, tooltipEvents} from '../utils'
 import {AnimationOptions} from './animation'
 import {ChartContext} from './core'
 import {LegendData} from './data'
-import {DrawerType, GraphDrawerProps} from './draw'
+import {DrawerDictProps, DrawerType, GraphDrawerProps} from './draw'
 import {LayerOptions} from './options'
 import {RawScale, ScaleNice} from './scale'
 import {TextStyle} from './styles'
@@ -80,16 +80,18 @@ export type LayerBaseProps<Options extends LayerOptions> = Readonly<{
   interactive?: string[]
 }>
 
-export type DrawBasicProps<Datum> = {
+export type DrawBasicProps<T extends DrawerType> = {
   /**
    * Basic element type, type of drawer.
    */
-  type: DrawerType
+  type: T
   /**
    * Drawing data for a sublayer.
    */
-  data: (Omit<GraphDrawerProps<Datum>, 'className' | 'container' | 'theme' | 'source'> &
-    Partial<Pick<GraphDrawerProps<Datum>, 'source'> & {disableUpdateAnimation?: boolean}>)[]
+  data: (Omit<DrawerDictProps<T>, 'className' | 'container' | 'theme' | 'source'> & {
+    source?: GraphDrawerProps<unknown>['source']
+    disableUpdateAnimation?: boolean
+  })[]
   /**
    * @see LayerBaseProps.sublayers
    */
