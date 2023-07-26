@@ -44,19 +44,19 @@ export type TableOptions = Partial<{
 /**
  * `RawTableList` can be seen as a relational table in the database.
  */
-export type RawTableList = Meta[][]
+export type RawTableList<T = Meta> = T[][]
 
 /**
  * `RawTable` can be seen as a matrix.
  */
-export type RawTable = [Meta[], Meta[], RawTableList]
+export type RawTable<T = Meta> = [Meta[], Meta[], RawTableList<T>]
 
 /**
  * `RawRelation` can be seen as two relational table in the database.
  * The first table is represents node information.
  * The second table is represents link information.
  */
-export type RawRelation = [RawTableList, RawTableList]
+export type RawRelation<T = Meta> = [RawTableList<T>, RawTableList<T>]
 
 /**
  * Data structure of `TableList` item.

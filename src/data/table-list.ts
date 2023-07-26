@@ -6,18 +6,31 @@ import {DataBase} from './base'
 export class DataTableList extends DataBase<RawTableList> {
   private _data: TableListData = []
 
+  /**
+   * A header is usually a dimension of a list.
+   */
   get headers() {
     return this._data.map(({header}) => header)
   }
 
+  /**
+   * A list corresponds to a column in the database table.
+   */
   get lists() {
     return this._data.map(({list}) => list)
   }
 
+  /**
+   * Pure data without headers.
+   */
   get rawTableList() {
     return transpose(this.lists)
   }
 
+  /**
+   * The combination of `this.headers` and `this.rawTableList`.
+   * Which is equivalent to the original data.
+   */
   get rawTableListWithHeaders() {
     return [this.headers].concat(this.rawTableList)
   }
@@ -27,7 +40,14 @@ export class DataTableList extends DataBase<RawTableList> {
     this.update(data)
   }
 
-  filterRows(rows: number[]) {
+  /**
+   * Filter some rows inside a database table.
+   * @param rows
+   * An array of row indices.
+   * @returns
+   * New `DataTableList` containing specific rows.
+   */
+  selectRows(rows: number[]) {
     const data = this._data.map(({list, header}) => [
       header,
       ...list.filter((_, index) => rows.includes(index)),
@@ -36,6 +56,16 @@ export class DataTableList extends DataBase<RawTableList> {
     return new DataTableList(transpose(data), this.options)
   }
 
+  /**
+   * Filter some columns in a database table,
+   * and perform aggregate operations on demand.
+   * @param headers
+   * The header of the data list to be selected.
+   * @param options
+   * Aggregate operation configuration.
+   * @returns
+   * New `DataTableList` containing specific columns.
+   */
   select(headers: MaybeGroup<Meta>, options?: TableListOptions): DataTableList {
     const {mode = 'copy', target = 'row'} = options || {}
     let data = cloneDeep(this._data.filter(({header}) => group(headers).includes(header)))
@@ -84,6 +114,13 @@ export class DataTableList extends DataBase<RawTableList> {
     return result
   }
 
+  /**
+   * Overwrite or append some columns to existing columns.
+   * @param tableList
+   * The `rawTableList` that need to perform the merge operation.
+   * @param options
+   * Some extra info on the columns.
+   */
   update(tableList: RawTableList, options: AnyObject = {}) {
     if (!isRawTableList(tableList)) {
       throw new Error('Illegal data')
@@ -105,16 +142,13 @@ export class DataTableList extends DataBase<RawTableList> {
     })
   }
 
-  push(...rows: Meta[][]) {
-    rows.forEach((row) => {
-      if (row.length !== this._data.length) {
-        throw new Error('Illegal data')
-      } else {
-        row.forEach((value, i) => this.lists[i].push(value))
-      }
-    })
-  }
-
+  /**
+   * Remove some columns from existing columns.
+   * @param headers
+   * The header of the data list to be deleted.
+   * @returns
+   * Deleted `TableListData`.
+   */
   remove(headers: MaybeGroup<string>) {
     const removedList: TableListData[] = []
 
@@ -128,23 +162,13 @@ export class DataTableList extends DataBase<RawTableList> {
     return removedList
   }
 
-  concat(...tableLists: DataTableList[]) {
-    const newTableList = cloneDeep(this)
-
-    tableLists.forEach((tableList) => {
-      cloneDeep(tableList)._data.forEach((item) => {
-        const index = newTableList.headers.indexOf(item.header)
-        if (index !== -1) {
-          newTableList._data[index] = item
-        } else {
-          newTableList._data.push(item)
-        }
-      })
-    })
-
-    return newTableList
-  }
-
+  /**
+   * Calculate the maximum and minimum values in the current tableList.
+   * @remarks
+   * This usually requires lists to be of the same type.
+   * @returns
+   * Return maximum and minimum.
+   */
   range(): Vec2 {
     return [
       Number(min(this._data.map(({list, min: value}) => min([value, min(list)])))),
@@ -152,6 +176,13 @@ export class DataTableList extends DataBase<RawTableList> {
     ]
   }
 
+  /**
+   * Sort the entire row of data by dimension or group weight.
+   * @remarks
+   * This method mutates the array.
+   * @param options
+   * The sort configuration.
+   */
   sort(options: {mode: 'asc' | 'desc'; targets: 'dimension' | 'groupWeight'; variant?: 'date'}) {
     const {rawTableList, headers} = this,
       {mode, targets, variant} = options,

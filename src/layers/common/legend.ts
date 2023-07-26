@@ -161,7 +161,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
         if (filterTypes[index] === 'row') {
           const mapping = robustRange(start, start + counts[index] - 1).map((i) => active[i])
 
-          filteredData = layerData.filterRows(
+          filteredData = layerData.selectRows(
             mapping.map((v, i) => (v === true ? i : -1)).filter((v) => v !== -1)
           )
           layerData.lists[0].forEach((category, i) => (order.mapping[category] = i))

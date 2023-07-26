@@ -6,14 +6,23 @@ import {DataBase} from './base'
 export class DataTable extends DataBase<RawTable> {
   private _data: RawTable = [[], [], []]
 
+  /**
+   * Row keys of the table.
+   */
   get rows() {
     return this._data[0]
   }
 
+  /**
+   * Column keys of the table.
+   */
   get columns() {
     return this._data[1]
   }
 
+  /**
+   * Matrix data of the table.
+   */
   get body() {
     return this._data[2]
   }
@@ -28,6 +37,15 @@ export class DataTable extends DataBase<RawTable> {
     }
   }
 
+  /**
+   * Select to generate a submatrix.
+   * @param rows
+   * The rows of the submatrix.
+   * @param columns
+   * The columns of the submatrix.
+   * @returns
+   * New `DataTable` containing specific rows and columns.
+   */
   select(rows: Meta[], columns: Meta[]) {
     const _rows = isArray(rows) ? rows : [rows],
       _columns = isArray(columns) ? columns : [columns],
@@ -43,11 +61,16 @@ export class DataTable extends DataBase<RawTable> {
       data[2].push(row)
     }
 
-    const result = new DataTable(data)
-
-    return result
+    return new DataTable(data)
   }
 
+  /**
+   * Append rows or columns to the current table.
+   * @param target
+   * Operating mode.
+   * @param data
+   * Append data with row name or column name.
+   */
   push(target: TableOptions['target'] = 'row', ...data: Meta[][]) {
     data.forEach((item) => {
       if (
@@ -69,6 +92,13 @@ export class DataTable extends DataBase<RawTable> {
     })
   }
 
+  /**
+   * Remove rows or columns from the current table.
+   * @param target
+   * Operating mode.
+   * @param data
+   * Array of rows or columns.
+   */
   remove(target: TableOptions['target'] = 'row', ...data: Meta[]) {
     const removedList: Meta[][] = []
 
@@ -83,6 +113,13 @@ export class DataTable extends DataBase<RawTable> {
     })
   }
 
+  /**
+   * Calculate the maximum and minimum values in the current table.
+   * @remarks
+   * This usually requires lists to be of the same type.
+   * @returns
+   * Return maximum and minimum.
+   */
   range(): Vec2 {
     return [
       Number(min(this.body.map((row) => min(row)))),

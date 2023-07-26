@@ -10,14 +10,23 @@ export class DataRelation extends DataBase<RawRelation> {
 
   private _data: RelationData = {nodes: [], edges: [], roots: []}
 
+  /**
+   * Node data in the relationship graph.
+   */
   get nodes() {
     return this._data.nodes
   }
 
+  /**
+   * Edge data in the relationship graph.
+   */
   get edges() {
     return this._data.edges
   }
 
+  /**
+   * Start node data in DAG.
+   */
   get roots() {
     return this._data.roots
   }
@@ -35,6 +44,11 @@ export class DataRelation extends DataBase<RawRelation> {
     this.update(source)
   }
 
+  /**
+   * Construct discrete node data and edge data into a graph.
+   * @param relation
+   * Discrete node data and edge data.
+   */
   update(relation: RawRelation) {
     if (!isRawRelation(relation)) {
       throw new Error('Illegal data')
@@ -50,8 +64,8 @@ export class DataRelation extends DataBase<RawRelation> {
 
     if (!nodeData[0].includes('value') && edgeData[0].includes('value')) {
       this.nodes.forEach((node) => {
-        const from = this.edges.filter(({from}) => from === node.id).map(({value}) => value),
-          to = this.edges.filter(({to}) => to === node.id).map(({value}) => value)
+        const from = this.edges.filter(({from}) => from === node.id).map(({value}) => value)
+        const to = this.edges.filter(({to}) => to === node.id).map(({value}) => value)
         node.value = Number(formatNumber(max([sum(from), sum(to)])!))
       })
     }
@@ -98,7 +112,7 @@ export class DataRelation extends DataBase<RawRelation> {
           if (level[nextId] === -1) {
             level[nextId] = level[id] + 1
           } else if (level[nextId] - level[id] !== 1) {
-            // update all ancestor nodes of the child node when different
+            // backtracking and rebuilding hierarchies
             parents.map((prevId) => (level[prevId] += level[nextId] - level[id] - 1))
           }
           generateLevel(nextId, parents)
