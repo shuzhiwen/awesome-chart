@@ -187,7 +187,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
     this.guideLineData = labelLine.map((group) => group.map(({points}) => points))
   }
 
-  private createArcLabelAndGuideLine = (props: Ungroup<LayerArc['arcData']>) => {
+  private createArcLabelAndGuideLine = (props: NonNullable<Ungroup<LayerArc['arcData']>>) => {
     const {text: style, labelPosition, labelOffset = 0} = this.style,
       {value, centerX, centerY, innerRadius, outerRadius, startAngle, endAngle} = props,
       getX = (r: number) => centerX + Math.sin(angle) * r,

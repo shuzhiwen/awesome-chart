@@ -357,8 +357,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * Layers should always be drawn using this method.
    */
   protected drawBasic<T extends DrawerType>(props: DrawBasicProps<T>) {
-    let data = props.data
-    const {type, sublayer = type} = props,
+    const {data, type, sublayer = type} = props,
       cacheData = this.cacheData[sublayer],
       sublayerClassName = `${this.className}-${sublayer}`,
       maxGroupLength = Math.max(cacheData.data.length, data.length),
@@ -366,6 +365,20 @@ export abstract class LayerBase<Options extends LayerOptions> {
       sublayerContainer =
         selector.getDirectChild(this.root, sublayerClassName) ||
         selector.createGroup(this.root, sublayerClassName)
+
+    /**
+     * Unified insertion of groupIndex and itemIndex into the source data.
+     * Layers should avoid reimplementing these two fields.
+     */
+    let nextData = data.map((groupData, groupIndex) => ({
+      ...groupData,
+      source: groupData.data.map((_, itemIndex) => {
+        const target = groupData.source?.[itemIndex]
+        return isArray(target)
+          ? target.map((item) => ({...item, groupIndex, itemIndex}))
+          : {...target, groupIndex, itemIndex}
+      }),
+    }))
 
     if (!this.sublayers.includes(sublayer)) {
       this.log.debug.error('Invalid sublayer type for drawBasic')
@@ -380,24 +393,11 @@ export abstract class LayerBase<Options extends LayerOptions> {
       const groupClassName = `${sublayerClassName}-${groupIndex}`
       const groupContainer = selector.getDirectChild(sublayerContainer, groupClassName)
 
-      if (groupIndex < data.length && !groupContainer) {
+      if (groupIndex < nextData.length && !groupContainer) {
         selector.createGroup(sublayerContainer, groupClassName)
-      } else if (groupIndex >= data.length) {
+      } else if (groupIndex >= nextData.length) {
         selector.remove(groupContainer)
       }
-    })
-
-    /**
-     * Unified insertion of groupIndex and itemIndex into the source data.
-     * Layers should avoid reimplementing these two fields.
-     */
-    cacheData.data.length = data.length
-    data.forEach((groupData, groupIndex) => {
-      groupData.source = groupData.data.map((_, itemIndex) => {
-        const target = groupData.source?.[itemIndex]
-        if (!isArray(target)) return {...target, groupIndex, itemIndex}
-        else return target.map((item) => ({...item, groupIndex, itemIndex}))
-      })
     })
 
     /**
@@ -406,27 +406,27 @@ export abstract class LayerBase<Options extends LayerOptions> {
      */
     if (!cacheData.order) {
       cacheData.order = new Map(
-        data
-          .filter((item) => ungroup(item.source![0])?.dimension)
-          .map((item, i) => [ungroup(item.source![0])?.dimension as Meta, i])
+        nextData
+          .filter(({source}) => ungroup(source)?.dimension)
+          .map(({source}, i) => [ungroup(source)?.dimension!, i])
       )
     } else {
       const {order: prevOrder} = cacheData,
-        orderedGroupData = new Array(data.length),
-        curOrder = data.map((item) => ungroup(item.source![0])?.dimension ?? '')
+        orderedGroupData = new Array(nextData.length),
+        curOrder = nextData.map(({source}) => ungroup(source)?.dimension ?? '')
 
       curOrder.forEach((dimension, i) => {
         if (prevOrder?.has(dimension)) {
-          orderedGroupData[prevOrder.get(dimension)!] = data[i]
+          orderedGroupData[prevOrder.get(dimension)!] = nextData[i]
         } else {
-          orderedGroupData.push(data[i])
+          orderedGroupData.push(nextData[i])
         }
       })
       prevOrder.clear()
-      data = orderedGroupData.filter(Boolean)
-      data.forEach((item, i) => {
-        if (ungroup(item.source![0])?.dimension) {
-          prevOrder.set(ungroup(item.source![0])?.dimension as Meta, i)
+      nextData = orderedGroupData.filter(Boolean)
+      nextData.forEach(({source}, i) => {
+        if (ungroup(source)?.dimension) {
+          prevOrder.set(ungroup(source)?.dimension!, i)
         }
       })
     }
@@ -436,7 +436,8 @@ export abstract class LayerBase<Options extends LayerOptions> {
      * Skip rendering if data hasn't changed to optimize performance.
      * Data update animation is not triggered on first render.
      */
-    data.forEach((groupData, i) => {
+    cacheData.data.length = nextData.length
+    nextData.forEach((groupData, i) => {
       if (groupData.hidden || isEqual(cacheData.data[i], groupData)) return
 
       const groupClassName = `${sublayerClassName}-${i}`
@@ -452,8 +453,8 @@ export abstract class LayerBase<Options extends LayerOptions> {
         theme: this.options.theme,
       }
 
-      DrawerDict[type](options as any)
-      cacheData.data[i] = cloneDeep(groupData as any)
+      DrawerDict[type](options as never)
+      cacheData.data[i] = cloneDeep(groupData as never)
     })
 
     this.bindEvent(sublayer)

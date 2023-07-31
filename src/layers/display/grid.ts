@@ -281,7 +281,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   }
 
   private dragged(event: DragEvent, d: ElData) {
-    const {width, height, groupIndex: index = 0} = ungroup(d.source),
+    const {width, height, groupIndex: index = 0} = ungroup(d.source) ?? {},
       {sangerColumn: sanger = 12, sangerGap: gap = 0} = this.style,
       {width: layoutWidth, height: layoutHeight, left, top} = this.options.layout,
       unitWidth = (layoutWidth - (sanger - 1) * gap) / sanger,
@@ -296,7 +296,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
 
   private dragEnded(_: DragEvent, d: ElData) {
     const rawTableList = this.data!.rawTableListWithHeaders,
-      target = rawTableList.splice(ungroup(d.source).groupIndex! + 1, 1)[0]
+      target = rawTableList.splice(ungroup(d.source)?.groupIndex! + 1, 1)[0]
 
     if (this.boxData[this.insertIndex]) {
       Object.assign(this.boxData[this.insertIndex], this.placeholderData)

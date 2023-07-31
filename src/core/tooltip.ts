@@ -90,7 +90,7 @@ export class Tooltip {
 
   private getSingleListData(data: ElConfig): TooltipData {
     return {
-      title: ungroup(data.source).dimension,
+      title: ungroup(data.source)?.dimension,
       list: group(data.source).map(({value, category}) => ({
         color: data.fill || data.stroke,
         label: category,
@@ -101,22 +101,21 @@ export class Tooltip {
 
   private getDimensionListData(data: Partial<ElConfig>): TooltipData {
     const {dimension} = getAttr(data.source, 0, {}),
-      backups = this.options.getLayersBackupData()
+      backups = this.options.getLayersBackupData(),
+      matched = backups.filter((d) => ungroup(d.source)?.dimension === dimension)
 
     return {
       title: dimension,
-      list: backups
-        .filter(({source}) => ungroup(source).dimension === dimension)
-        .flatMap(
-          ({source, fill, stroke}) =>
-            source.flatMap((item, i) =>
-              group(item).map(({category, value}) => ({
-                color: getAttr(fill, i, '') || getAttr(stroke, i, ''),
-                label: category,
-                value,
-              }))
-            ) ?? []
-        ),
+      list: matched.flatMap(
+        ({source, fill, stroke}) =>
+          source.flatMap((item, i) =>
+            group(item).map(({category, value}) => ({
+              color: getAttr(fill, i, '') || getAttr(stroke, i, ''),
+              label: category,
+              value,
+            }))
+          ) ?? []
+      ),
     }
   }
 

@@ -130,7 +130,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       active = new Array<boolean>(colors.length).fill(true)
 
     this.event.onWithOff('click-interactive', 'internal', (d: {data: ElConfig}) => {
-      const itemIndex = ungroup(d.data.source).itemIndex ?? -1,
+      const itemIndex = ungroup(d.data.source)?.itemIndex ?? -1,
         index = counts.findIndex((_, i) => sum(counts.slice(0, i + 1)) > itemIndex),
         start = counts.slice(0, index).reduce((prev, cur) => prev + cur, 0),
         layerData = originData[index],
@@ -198,7 +198,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       data = this.data.source,
       shapeWidth = shapeSize * 2,
       fontSize = ungroup(text?.fontSize) ?? 12,
-      maxHeight = Math.max(shapeSize, ungroup(fontSize)),
+      maxHeight = Math.max(shapeSize, fontSize),
       textData = data.text.map((value) => formatNumber(value, text?.format)),
       textWidths = textData.map((value) => getTextWidth(value, fontSize)),
       groupTextWidths = robustRange(0, maxColumn - 1).map(

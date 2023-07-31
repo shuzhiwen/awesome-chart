@@ -14,7 +14,7 @@ type AnyFunction<T = unknown> = (...args: any) => T
 
 type AnyEventObject = Record<string, AnyFunction>
 
-type Ungroup<T> = T extends Array<infer V> ? Ungroup<V> : T
+type Ungroup<T> = T extends Array<infer V> ? Ungroup<V> : Maybe<T>
 
 type ArrayItem<T> = T extends Array<infer V> ? V : T
 
