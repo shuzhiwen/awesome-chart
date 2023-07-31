@@ -1,16 +1,26 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {BrowserRouter as Router, Route} from 'react-router-dom'
-import './App.css'
-import {Root} from './Root'
+import {createChart} from 'awesome-chart'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <Route path="/">
-        <Root />
-      </Route>
-    </Router>
-  </React.StrictMode>,
-  document.getElementById('root')
-)
+createChart({
+  engine: 'svg',
+  adjust: false,
+  width: 200,
+  height: 200,
+  padding: [24, 24, 24, 24],
+  container: document.body,
+  layers: [
+    {
+      type: 'text',
+      options: {
+        id: 'title',
+        layout: 'main',
+      },
+      data: 'This is a text',
+      style: {
+        text: {
+          fill: 'red',
+          fontSize: 24,
+        },
+      },
+    },
+  ],
+})

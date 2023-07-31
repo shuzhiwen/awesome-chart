@@ -22,14 +22,15 @@ const defaultStyle: LayerTextStyle = {
 export class LayerText extends LayerBase<LayerTextOptions> {
   private _data: Maybe<
     DataBase<
-      (
-        | string
-        | {
-            text: string
-            x: number
-            y: number
-          }
-      )[]
+      | string
+      | (
+          | string
+          | {
+              text: string
+              x: number
+              y: number
+            }
+        )[]
     >
   >
 
