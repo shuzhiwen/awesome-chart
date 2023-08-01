@@ -25,4 +25,4 @@ dist-ssr
 
 # Temporary
 tsconfig.tsbuildinfo
-docs
+docs/apis

@@ -9,6 +9,12 @@ npm install awesome-chart
 yarn add awesome-chart
 ```
 
+## Documents
+
+1. [Some basic concepts of chart.](./docs/concept.md)
+2. [How charts lay out content.](./docs/layout.md)
+3. [How charts work with data.](./docs/data.md)
+
 ## Examples
 
 There are several examples [on the website](http://www.shuzhiwen.com/app/chart). Awesome Chart supports two ways of writing.
@@ -74,7 +80,3 @@ createChart({
   ],
 })
 ```
-
-## Documents
-
-See you in the future!
