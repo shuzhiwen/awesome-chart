@@ -52,7 +52,7 @@ export function drawText({
     textDecoration: getAttr(textDecoration, i, 'none'),
     evented: getAttr(evented, i, text.evented),
     rotation: getAttr(rotation, i, 0),
-    source: getAttr(source, i, []),
+    source: getAttr(source, i, {}),
   }))
   const mappedData = configuredData.map((datum) => {
     return merge(datum, mapping({...datum, container, theme}))

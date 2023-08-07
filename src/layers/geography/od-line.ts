@@ -35,12 +35,9 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
   private flyingObjectData: DrawerData<PathDrawerProps>[] = []
 
   private odLineData: {
+    meta: AnyObject
     path: string | null
     position: Record<DataKey, number>
-    source: {
-      category: 'from' | 'to'
-      value: string
-    }[]
   }[] = []
 
   get scale() {
@@ -96,10 +93,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
       }
 
       return {
-        source: [
-          {category: 'from', value: `(${d.fromX},${d.fromY})`},
-          {category: 'to', value: `(${d.toX},${d.toY})`},
-        ],
+        meta: {from: `(${d.fromX},${d.fromY})`, to: `(${d.toX},${d.toY})`},
         // geo coordinates => svg coordinates
         path: this.getPath(position),
         position,
@@ -147,7 +141,6 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
       data: this.odLineData.filter(({path}) =>
         Boolean(path)
       ) as (LayerODLine['odLineData'][number] & {path: string})[],
-      source: this.odLineData.map(({source}) => source),
       ...this.style.odLine,
     }
     const flyingObjectData = {

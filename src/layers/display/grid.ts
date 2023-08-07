@@ -17,7 +17,7 @@ import {checkColumns, createStyle, makeClass, validateAndCreateData} from '../he
 
 type DataKey = 'width' | 'height' | 'key'
 
-type ElData = ElConfig & ArrayItem<LayerGrid['boxData']>
+type ElData = ElConfig & {source: {meta: ArrayItem<LayerGrid['boxData']>}}
 
 type GridBox = Box & {index: number; event: DragEvent; source: ElData['source']}
 
@@ -79,7 +79,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   private insertIndex = -1
 
   private boxData: (DrawerData<RectDrawerProps> & {
-    source: DrawerData<RectDrawerProps> & {dimension: Meta}
+    meta: DrawerData<RectDrawerProps> & {dimension: Meta}
   })[] = []
 
   private gridLineData: DrawerData<LineDrawerProps>[][] = []
@@ -100,6 +100,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   }
 
   setData(data: LayerGrid['data']) {
+    this.placeholderData = {width: 0, height: 0, x: 0, y: 0}
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
       if (!data) return
 
@@ -171,7 +172,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
           y: event.y,
           width: this.placeholderData.width,
           height: this.placeholderData.height,
-          source: {...box, dimension: item.key},
+          meta: {...box, dimension: item.key},
         }
         for (let i = x; i < x + width; i++) {
           columnHeight[i] = y + height
@@ -185,7 +186,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
           y: top + y * (unitHeight + gap),
           width: getLengthFromIndex(width, unitWidth, gap),
           height: getLengthFromIndex(height, unitHeight, gap),
-          source: {x, y, width, height, dimension: item.key},
+          meta: {x, y, width, height, dimension: item.key},
         }
       }
     })
@@ -194,7 +195,6 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   draw() {
     const boxData = this.boxData.map((box, i) => ({
       data: [box],
-      source: [box.source],
       ...this.style.box,
       disableUpdateAnimation: i === this.insertIndex,
     }))
@@ -259,7 +259,8 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
     const {sangerColumn = 12} = this.style,
       columnHeight1 = new Array<number>(sangerColumn).fill(0),
       columnHeight2 = new Array<number>(sangerColumn).fill(0),
-      target = data.splice(box.index, 1)
+      target = data.splice(box.index, 1),
+      key = box.source.meta!.dimension
 
     this.insertIndex = data
       .map((item) => {
@@ -267,9 +268,9 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
           {x, y} = placeBox(width, height, columnHeight1)
         return {x, y, width, height, key: item.key}
       })
-      .concat({...box, x: box.x - 1, y: box.y - 1, key: box.source.dimension})
+      .concat({...box, x: box.x - 1, y: box.y - 1, key})
       .sort((a, b) => a.x - b.x + a.y - b.y)
-      .findIndex(({key}) => key === box.source.dimension)
+      .findIndex((item) => item.key === key)
 
     for (let i = 0; i < this.insertIndex; i++) {
       placeBox(Number(data[i].width), Number(data[i].height), columnHeight2)
@@ -281,13 +282,14 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
   }
 
   private dragged(event: DragEvent, d: ElData) {
-    const {width, height, groupIndex: index = 0} = ungroup(d.source) ?? {},
+    const {groupIndex: index = 0, meta} = d.source,
       {sangerColumn: sanger = 12, sangerGap: gap = 0} = this.style,
       {width: layoutWidth, height: layoutHeight, left, top} = this.options.layout,
       unitWidth = (layoutWidth - (sanger - 1) * gap) / sanger,
       unitHeight = (layoutHeight - (sanger - 1) * gap) / sanger,
       x = Math.round((event.x - left) / (unitWidth + gap)),
-      y = Math.round((event.y - top) / (unitHeight + gap))
+      y = Math.round((event.y - top) / (unitHeight + gap)),
+      {width, height} = meta
 
     this.needRecalculated = true
     this.update({x, y, width, height, event, index, source: d.source})

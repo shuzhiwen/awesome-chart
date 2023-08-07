@@ -4,12 +4,12 @@ import {
   ArcDrawerProps,
   ChartContext,
   DrawerData,
-  ElSource,
   LayerRadialOptions,
   LayerRadialScale,
   LayerRadialStyle,
   LayerStyle,
   LegendData,
+  SourceMeta,
   TextDrawerProps,
 } from '../../types'
 import {isRealNumber} from '../../utils'
@@ -36,7 +36,7 @@ export class LayerRadial extends LayerBase<LayerRadialOptions> {
 
   private arcData: (DrawerData<ArcDrawerProps> & {
     value: Meta
-    source: ElSource
+    meta: SourceMeta
     color?: string
   })[] = []
 
@@ -100,7 +100,7 @@ export class LayerRadial extends LayerBase<LayerRadialOptions> {
       centerY,
       innerRadius: scaleRadius(dimension) ?? 0,
       outerRadius: (scaleRadius(dimension) ?? 0) + scaleRadius.bandwidth(),
-      source: {value, dimension, category: headers[1]},
+      meta: {dimension, category: headers[1], value},
       startAngle: 0,
       endAngle: scaleAngle((value as number) / (maxValue as number)),
       cornerRadius,
@@ -135,7 +135,6 @@ export class LayerRadial extends LayerBase<LayerRadialOptions> {
   draw() {
     const arcData = this.arcData.map((group) => ({
       data: [group],
-      source: [group.source],
       ...this.style.arc,
       fill: group.color,
     }))

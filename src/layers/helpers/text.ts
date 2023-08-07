@@ -12,8 +12,8 @@ import {
 /**
  * Easy way to calculate text data.
  */
-export function createText(props: CreateTextProps) {
-  const {x, y, value, style = {}, position = 'rightTop', offset = 0} = props,
+export function createText<T extends CreateTextProps>(props: T) {
+  const {x, y, value, style = {}, position = 'rightTop', offset = 0, ...rest} = props,
     {fontSize: _fontSize, writingMode, format} = style,
     fontSize = getAttr(_fontSize, 0, 12),
     formattedText = String(formatNumber(value, format)),
@@ -61,6 +61,7 @@ export function createText(props: CreateTextProps) {
   }
 
   return {
+    ...rest,
     x: positionX,
     y: positionY,
     value: formattedText,

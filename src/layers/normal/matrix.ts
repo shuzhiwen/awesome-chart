@@ -5,13 +5,13 @@ import {
   ChartContext,
   CircleDrawerProps,
   DrawerData,
-  ElSource,
   LayerMatrixOptions,
   LayerMatrixScale,
   LayerMatrixStyle,
   LayerStyle,
   LegendData,
   RectDrawerProps,
+  SourceMeta,
   TextDrawerProps,
 } from '../../types'
 import {getMagnitude, noChange} from '../../utils'
@@ -41,13 +41,13 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
 
   private rectData: (DrawerData<RectDrawerProps> & {
     value: Meta
-    source: ElSource
+    meta: Pick<SourceMeta, 'dimension' | 'value'>
     color: string
   })[][] = []
 
   private circleData: (DrawerData<CircleDrawerProps> & {
     value: Meta
-    source: ElSource
+    meta: Pick<SourceMeta, 'dimension' | 'value'>
     color: string
   })[][] = []
 
@@ -142,7 +142,7 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
       this.rectData = body.map((values, i) =>
         values.map((value, j) => ({
           value,
-          source: {dimension: `${rows[i]} ${columns[j]}`, value},
+          meta: {dimension: `${rows[i]} ${columns[j]}`, value},
           x: left + (scaleX(columns[j]) ?? 0),
           y: top + (scaleY(rows[i]) ?? 0),
           width: bandwidthX,
@@ -156,7 +156,7 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
       this.circleData = body.map((values, i) =>
         values.map((value, j) => ({
           value,
-          source: {dimension: `${rows[i]} ${columns[j]}`, value},
+          meta: {dimension: `${rows[i]} ${columns[j]}`, value},
           x: left + (scaleX(columns[j]) ?? 0) + bandwidthX / 2,
           y: top + (scaleY(rows[i]) ?? 0) + bandwidthY / 2,
           r: Math.min(bandwidthX, bandwidthY) / 2,
@@ -195,13 +195,11 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
   draw() {
     const rectData = this.rectData.map((group) => ({
       data: group,
-      source: group.map(({source}) => source),
       ...this.style.rect,
       fill: group.map(({color}) => color),
     }))
     const circleData = this.circleData.map((group) => ({
       data: group,
-      source: group.map(({source}) => source),
       ...this.style.circle,
       fill: group.map(({color}) => color),
     }))

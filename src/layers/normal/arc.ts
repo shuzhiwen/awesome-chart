@@ -5,12 +5,12 @@ import {
   ChartContext,
   CurveDrawerProps,
   DrawerData,
-  ElSource,
   LayerArcOptions,
   LayerArcScale,
   LayerArcStyle,
   LayerStyle,
   LegendData,
+  SourceMeta,
   TextDrawerProps,
 } from '../../types'
 import {errorCatcher, isRealNumber} from '../../utils'
@@ -54,7 +54,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
 
   private arcData: (DrawerData<ArcDrawerProps> & {
     value: Meta
-    source: ElSource
+    meta: SourceMeta
     color?: string
   })[][] = []
 
@@ -125,7 +125,7 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
         centerY,
         innerRadius,
         outerRadius: scaleRadius(value as number),
-        source: {value, dimension, category: headers[i + 1]},
+        meta: {dimension, category: headers[i + 1], value},
         ...scaleAngle(dimension as string),
       }))
     )
@@ -275,7 +275,6 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
   draw() {
     const arcData = this.arcData.map((group) => ({
       data: group,
-      source: group.map((item) => item.source),
       ...this.style.arc,
       fill: group.map(({color}) => color!),
     }))

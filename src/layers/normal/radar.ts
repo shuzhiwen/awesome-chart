@@ -4,13 +4,13 @@ import {
   ChartContext,
   CircleDrawerProps,
   DrawerData,
-  ElSource,
   LayerRadarOptions,
   LayerRadarScale,
   LayerRadarStyle,
   LayerStyle,
   LegendData,
   PolyDrawerProps,
+  SourceMeta,
   TextDrawerProps,
 } from '../../types'
 import {errorCatcher} from '../../utils'
@@ -48,7 +48,7 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
 
   private pointData: (DrawerData<CircleDrawerProps> & {
     angle: number
-    source: ElSource
+    meta: SourceMeta
     color: string
   })[][] = []
 
@@ -141,8 +141,8 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
           centerR = scaleRadius(Number(value)),
           x = centerX + Math.sin(angle) * centerR,
           y = centerY - Math.cos(angle) * centerR,
-          source = {value, dimension, category: headers[i + 1]}
-        return {x, y, angle, r: pointSize / 2, color: colorMatrix.get(0, i), source}
+          meta = {value, dimension, category: headers[i + 1]}
+        return {x, y, angle, r: pointSize / 2, color: colorMatrix.get(0, i), meta}
       })
     )
 
@@ -165,7 +165,7 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
     }))
 
     this.textData = this.pointData.map((group) =>
-      group.map(({source, x, y, angle}) => createArcText({x, y, value: source.value, angle}))
+      group.map(({meta, x, y, angle}) => createArcText({x, y, value: meta.value, angle}))
     )
 
     this.legendData = {
@@ -188,7 +188,6 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
     }))
     const pointData = this.pointData.map((group) => ({
       data: group,
-      source: group.map(({source}) => source),
       ...this.style.point,
       fill: group.map((item) => item.color),
     }))

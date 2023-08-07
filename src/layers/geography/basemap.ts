@@ -3,7 +3,6 @@ import {DataBase} from '../../data'
 import {
   ChartContext,
   DrawerData,
-  ElSource,
   LayerBasemapOptions,
   LayerBasemapScale,
   LayerBasemapStyle,
@@ -54,7 +53,6 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
   private blockData: {
     properties: AnyObject
     geometry: any
-    source: ElSource
   }[] = []
 
   private parentCode: number[] = []
@@ -137,7 +135,6 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
     this.backgroundData = [{x: left, y: top, width, height}]
 
     this.blockData = this.data.source.features.map(({properties, ...rest}) => ({
-      source: Object.entries(properties).map(([category, value]) => ({category, value})),
       properties,
       ...rest,
     }))
@@ -191,12 +188,12 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
 
   draw() {
     const blockData = {
-      data: this.blockData.map(({geometry}) => ({
+      data: this.blockData.map(({geometry, properties}) => ({
+        meta: properties,
         path: this.path?.(geometry) ?? '',
         centerX: 0,
         centerY: 0,
       })),
-      source: this.blockData.map(({source}) => source),
       ...this.style.block,
     }
     const textData = {
@@ -225,12 +222,9 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
     })
 
     this.event.onWithOff('click-block', 'internal', ({data}) => {
-      const blockCode = data.source.find(({category}: ElSource) => category === 'adcode')?.value
-      this.parentCode.push(
-        data.source.find(({category}: ElSource) => category === 'parent')?.value?.adcode
-      )
-      if (blockCode) {
-        this.fetchOnlineData(blockCode)
+      this.parentCode.push(data.source.meta.parent.adcode)
+      if (data.source.meta.adcode) {
+        this.fetchOnlineData(data.source.meta.adcode)
       }
     })
   }

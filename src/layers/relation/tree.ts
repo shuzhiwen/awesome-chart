@@ -47,6 +47,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
 
   private nodeData: (DrawerData<CircleDrawerProps> &
     Pick<Node, 'id' | 'name' | 'value'> & {
+      meta: AnyObject
       color: string
       parents: (Node & {
         order?: number
@@ -149,6 +150,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
             : scaleY(item.level ?? -1) ?? 0),
         color: colorMatrix.get(j, 0),
         parents: item.parents ?? [],
+        meta: {[item.name]: item.value},
         ...item,
       }))
     })
@@ -282,8 +284,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
 
   draw() {
     const nodeData = this.nodeData.map((group) => ({
-      data: group.map(({x, y, r}) => ({x, y, r})),
-      source: group.map(({name, value}) => ({category: name, value})),
+      data: group.map(({x, y, r, meta}) => ({x, y, r, meta})),
       fill: group.map(({color}) => color),
       ...this.style.node,
     }))

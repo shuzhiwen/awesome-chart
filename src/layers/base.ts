@@ -1,4 +1,4 @@
-import {cloneDeep, isArray, isEqual, isFunction, merge, noop, range} from 'lodash'
+import {cloneDeep, isEqual, isFunction, merge, noop, range} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {AnimationQueue} from '../animation'
 import {DrawerDict} from '../draws'
@@ -372,12 +372,11 @@ export abstract class LayerBase<Options extends LayerOptions> {
      */
     let nextData = data.map((groupData, groupIndex) => ({
       ...groupData,
-      source: groupData.data.map((_, itemIndex) => {
-        const target = groupData.source?.[itemIndex]
-        return isArray(target)
-          ? target.map((item) => ({...item, groupIndex, itemIndex}))
-          : {...target, groupIndex, itemIndex}
-      }),
+      source: groupData.data.map((datum, itemIndex) => ({
+        meta: datum.meta,
+        groupIndex,
+        itemIndex,
+      })),
     }))
 
     if (!this.sublayers.includes(sublayer)) {
@@ -407,13 +406,13 @@ export abstract class LayerBase<Options extends LayerOptions> {
     if (!cacheData.order) {
       cacheData.order = new Map(
         nextData
-          .filter(({source}) => ungroup(source)?.dimension)
-          .map(({source}, i) => [ungroup(source)?.dimension!, i])
+          .filter(({source}) => ungroup(source)?.meta?.dimension)
+          .map(({source}, i) => [ungroup(source)?.meta?.dimension, i])
       )
     } else {
       const {order: prevOrder} = cacheData,
         orderedGroupData = new Array(nextData.length),
-        curOrder = nextData.map(({source}) => ungroup(source)?.dimension ?? '')
+        curOrder = nextData.map(({source}) => ungroup(source)?.meta?.dimension)
 
       curOrder.forEach((dimension, i) => {
         if (prevOrder?.has(dimension)) {
@@ -424,10 +423,9 @@ export abstract class LayerBase<Options extends LayerOptions> {
       })
       prevOrder.clear()
       nextData = orderedGroupData.filter(Boolean)
-      nextData.forEach(({source}, i) => {
-        if (ungroup(source)?.dimension) {
-          prevOrder.set(ungroup(source)?.dimension!, i)
-        }
+      nextData.forEach((item, i) => {
+        const dimension = ungroup(item.source)?.meta?.dimension
+        dimension && prevOrder.set(dimension, i)
       })
     }
 

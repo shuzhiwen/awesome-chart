@@ -3,7 +3,6 @@ import {DataTableList} from '../../data'
 import {
   ChartContext,
   DrawerData,
-  ElSource,
   LayerAxisScale,
   LayerInteractiveOptions,
   LayerInteractiveStyle,
@@ -46,11 +45,11 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
   private _style = defaultStyle
 
   private rectDataX: (DrawerData<RectDrawerProps> & {
-    source: ElSource
+    meta: AnyObject
   })[][] = []
 
   private rectDataY: (DrawerData<RectDrawerProps> & {
-    source: ElSource
+    meta: AnyObject
   })[][] = []
 
   private helperAuxiliary: [LayerAuxiliary, LayerAuxiliary]
@@ -189,21 +188,21 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
             y: top,
             height,
             width: rectX - (isHead ? 0 : halfGap),
-            source: {key: `x-${i}-secondary`},
+            meta: {key: `x-${i}-secondary`},
           },
           {
             x: left + rectX - (isHead ? 0 : halfGap),
             y: top,
             height,
             width: rectWidth + halfGap * (isHead || isTail ? 1 : 2),
-            source: {key: `x-${i}`, dimension: domain},
+            meta: {key: `x-${i}`, dimension: domain},
           },
           {
             x: left + rectX + rectWidth + halfGap * (isTail ? 0 : 1),
             y: top,
             height,
             width: Math.abs(width - rectX - rectWidth - halfGap * (isTail ? 0 : 1)),
-            source: {key: `x-${i}-secondary`},
+            meta: {key: `x-${i}-secondary`},
           },
         ]
       })
@@ -223,21 +222,21 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
             y: top,
             width,
             height: rectY - (isHead ? 0 : halfGap),
-            source: {key: `y-${i}-secondary`},
+            meta: {key: `y-${i}-secondary`},
           },
           {
             x: left,
             y: top + rectY - (isHead ? 0 : halfGap),
             width,
             height: rectHeight + halfGap * (isHead || isTail ? 1 : 2),
-            source: {key: `y-${i}`, dimension: domain},
+            meta: {key: `y-${i}`, dimension: domain},
           },
           {
             x: left,
             y: top + rectY + rectHeight + halfGap * (isTail ? 0 : 1),
             width,
             height: Math.abs(height - rectY - rectHeight - halfGap * (isTail ? 0 : 1)),
-            source: {key: `y-${i}-secondary`},
+            meta: {key: `y-${i}-secondary`},
           },
         ]
       })
@@ -247,13 +246,11 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
   draw() {
     const darkRectData = [...this.rectDataY, ...this.rectDataX].map(([head, , tail]) => ({
       data: [head, tail],
-      source: [head.source, tail.source],
       evented: false,
       ...this.style.interactive,
     }))
     const lightRectData = [...this.rectDataY, ...this.rectDataX].map(([, body]) => ({
       data: [body],
-      source: [body.source],
       evented: true,
       ...this.style.interactive,
     }))

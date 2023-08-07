@@ -30,6 +30,7 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
   private textData: DrawerData<TextDrawerProps>[] = []
 
   private nodeData: (DrawerData<CircleDrawerProps> & {
+    meta: AnyObject
     label: Meta
     value: Meta
     color?: string
@@ -89,6 +90,7 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
       })
 
     this.nodeData = rawTableList.map(([label, value], i) => ({
+      meta: {[label]: value},
       x: Math.random() > 0.5 ? containerWidth + Math.random() * width : -Math.random() * width,
       y: Math.random() > 0.5 ? containerHeight + Math.random() * height : -Math.random() * height,
       r: scaleNodeSize(value as number),
@@ -119,7 +121,6 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
     const {node, text} = this.style
     const nodeData = this.nodeData.map((item) => ({
       data: [item],
-      source: [{category: item.label, value: item.value}],
       ...node,
       fill: item.color,
     }))

@@ -28,7 +28,7 @@ export type CacheLayerData<Datum> = Record<
      * Mapping from dimension to group index.
      * In order to avoid wrong data update animation.
      */
-    order?: Map<Meta, number>
+    order?: Map<Maybe<Meta>, number>
   }
 >
 
@@ -89,7 +89,7 @@ export type DrawBasicProps<T extends DrawerType> = {
    * Drawing data for a sublayer.
    */
   data: (Omit<DrawerDictProps<T>, 'className' | 'container' | 'theme' | 'source'> & {
-    source?: GraphDrawerProps<unknown>['source']
+    data: {meta?: GraphDrawerProps<unknown>['source'][number]['meta']}[]
     disableUpdateAnimation?: boolean
   })[]
   /**

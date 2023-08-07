@@ -5,12 +5,12 @@ import {
   ChartContext,
   CircleDrawerProps,
   DrawerData,
-  ElSource,
   LayerLineOptions,
   LayerLineScale,
   LayerLineStyle,
   LayerStyle,
   LegendData,
+  SourceMeta,
   TextDrawerProps,
 } from '../../types'
 import {errorCatcher, isRealNumber} from '../../utils'
@@ -57,7 +57,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
 
   private pointData: (DrawerData<CircleDrawerProps> & {
     value: Meta
-    source: ElSource
+    meta: SourceMeta
     color: string
   })[][] = []
 
@@ -125,7 +125,7 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
         x: left + (scaleX(dimension as string) || 0) + scaleX.bandwidth() / 2,
         y: isRealNumber(value) ? top + scaleY(value) : NaN,
         r: pointSize / 2,
-        source: {dimension, category: headers[i + 1], value},
+        meta: {dimension, category: headers[i + 1], value},
         color: colorMatrix.get(0, i),
       }))
     )
@@ -244,7 +244,6 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
     }))
     const pointData = this.pointData.map((group) => ({
       data: group.filter(({y}) => isRealNumber(y)),
-      source: group.map(({source}) => source),
       ...this.style.point,
       stroke: group.map(({color}) => color),
     }))

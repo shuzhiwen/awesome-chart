@@ -2455,16 +2455,16 @@ available-typed-arrays@^1.0.5:
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz#92f95616501069d07d10edb2fc37d3e1c65123b7"
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
-awesome-chart@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/awesome-chart/-/awesome-chart-0.4.1.tgz#bbfa521e6444ff3ae1dcec53f2e0dd34e5d44637"
-  integrity sha512-aFdyHUYPgXNDVMfewzw9D/h54d+hyL5tCyKfFdgMsQAp4yN9EAZ1ZzZQ29nNroTOo3N36cdxDAbU0o81vRHTTA==
+awesome-chart@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/awesome-chart/-/awesome-chart-0.4.3.tgz#f8026fd0013297b6fea4870a8614d5692bacceff"
+  integrity sha512-rOu6uE6RYEU+xYrHs18GhYcGlgO4GD0BFhLQOS6lIzJAOctjml3qmfLNbEIHSPaFLdQQg1G3Ue3gkIMXkS7+iA==
   dependencies:
     animejs "^3.2.1"
     chroma-js "^2.1.1"
     d3 "^7.6.1"
     lodash "^4.17.21"
-    pixi.js "^7.0.5"
+    pixi.js "^7.2.4"
 
 babel-jest@^27.5.1:
   version "27.5.1"
@@ -5139,7 +5139,7 @@ pirates@^4.0.4:
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.5.tgz#feec352ea5c3268fb23a37c702ab1699f35a5f3b"
   integrity sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==
 
-pixi.js@^7.0.5, pixi.js@^7.2.4:
+pixi.js@^7.2.4:
   version "7.2.4"
   resolved "https://registry.yarnpkg.com/pixi.js/-/pixi.js-7.2.4.tgz#4cd6776bf7f74a6c5e121dd1b59329e66be2ce49"
   integrity sha512-nBH60meoLnHxoMFz17HoMxXS4uJpG5jwIdL+Gx2S11TzWgP3iKF+/WLOTrkSdyuQoQSdIBxVqpnYii0Wiox15A==

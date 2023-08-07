@@ -42,6 +42,7 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
   private treeData: Maybe<HierarchyNode<Node>>
 
   private circleData: (DrawerData<CircleDrawerProps> & {
+    meta: AnyObject
     value: Meta
     color?: string
   })[][] = []
@@ -111,9 +112,10 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
       nodes = pack<Node>().size(view).padding(padding)(this.treeData).descendants(),
       circleData = nodes.map(({x, y, data, ...rest}) => ({
         ...rest,
+        value: data.name,
         x: x + left + offset[0],
         y: y + top + offset[1],
-        value: data.name,
+        meta: {[data.name]: [data.value]},
       }))
 
     // classify circles by height
@@ -157,7 +159,6 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
     const {zoom, circle, text} = this.style
     const circleData = this.circleData.map((group) => ({
       data: group,
-      source: group.map(({value}) => ({category: value})),
       ...circle,
       fill: group.map(({color}) => color!),
       fillOpacity: variant === 'wordCloud' ? 0 : circle?.fillOpacity,

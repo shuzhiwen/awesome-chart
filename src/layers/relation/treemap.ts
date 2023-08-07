@@ -30,6 +30,7 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
   private rectData: (DrawerData<RectDrawerProps> & {
     data: Node
     color: string
+    meta: AnyObject
   })[] = []
 
   get data() {
@@ -86,6 +87,7 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
       width: x1 - x0,
       height: y1 - y0,
       color: colorMatrix.get(i, 0),
+      meta: {[data.name]: data.value},
     }))
 
     this.textData = this.rectData.map(({x, y, width, height, data: {name, value}}, i) => {
@@ -129,9 +131,8 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
   }
 
   draw() {
-    const rectData = this.rectData.map(({width, height, x, y, data, color}) => ({
-      data: [{width, height, x, y}],
-      source: [{category: data.name, value: data.value}],
+    const rectData = this.rectData.map(({width, height, x, y, meta, color}) => ({
+      data: [{width, height, x, y, meta}],
       ...this.style.rect,
       fill: color,
     }))

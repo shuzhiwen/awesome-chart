@@ -4,7 +4,6 @@ import {scaleBand, scaleLinear} from '../../scales'
 import {
   ChartContext,
   DrawerData,
-  ElSource,
   LayerRectOptions,
   LayerRectScale,
   LayerRectStyle,
@@ -13,6 +12,7 @@ import {
   RectDrawerProps,
   ScaleBand,
   ScaleLinear,
+  SourceMeta,
   TextDrawerProps,
 } from '../../types'
 import {
@@ -57,11 +57,13 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
 
   private _style = defaultStyle
 
-  private textData: DrawerData<TextDrawerProps>[][] = []
+  private textData: (DrawerData<TextDrawerProps> & {
+    meta: Pick<SourceMeta, 'dimension'>
+  })[][] = []
 
   private rectData: (DrawerData<RectDrawerProps> & {
     value: number
-    source: ElSource
+    meta: SourceMeta
     color?: string
   })[][] = []
 
@@ -134,7 +136,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       this.rectData = rawTableList.map(([dimension, ...values]) =>
         values.map((value, i) => ({
           value: Number(value),
-          source: {dimension, category: headers[i + 1], value},
+          meta: {dimension, category: headers[i + 1], value},
           x: layout.left + (scaleX(dimension as string) || 0),
           y: layout.top + (value > 0 ? scaleY(value as number) : scaleY(0)),
           width: scaleX.bandwidth(),
@@ -155,7 +157,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       this.rectData = rawTableList.map(([dimension, ...values]) =>
         values.map((value, i) => ({
           value: Number(value),
-          source: {dimension, category: headers[i + 1], value},
+          meta: {dimension, category: headers[i + 1], value},
           y: layout.top + (scaleY(dimension as string) || 0),
           x: layout.left + (value < 0 ? scaleX(value as number) : scaleX(0)),
           width: Math.abs(scaleX(value as number) - scaleX(0)),
@@ -312,7 +314,8 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
     this.rectData = this.rectData.map((group) => {
       const [data1, data2] = [group[0], group[1]],
         min = Math.min(Number(data1.value), Number(data2.value)),
-        max = Math.max(Number(data1.value), Number(data2.value))
+        max = Math.max(Number(data1.value), Number(data2.value)),
+        meta = Object.fromEntries(group.map(({meta}) => [meta.category, meta.value]))
 
       if (variant === 'column') {
         const y1 = data1.value < 0 ? data1.y + data1.height : data1.y
@@ -324,7 +327,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
             value: max - min,
             y: Math.min(y1, y2),
             height: Math.abs(y1 - y2),
-            source: group.map(({source}) => source),
+            meta: meta as SourceMeta,
           },
         ]
       } else {
@@ -337,7 +340,7 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
             value: max - min,
             x: Math.min(x1, x2),
             width: Math.abs(x1 - x2),
-            source: group.map(({source}) => source),
+            meta: meta as SourceMeta,
           },
         ]
       }
@@ -482,13 +485,12 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       positionMax = isArray(labelPosition) ? labelPosition[1] : labelPosition
 
     this.textData = this.rectData.map((group) =>
-      group.map(({value, x, y, width, height}) => {
+      group.map(({value, x: originX, y: originY, width, height, meta}) => {
         const text = cloneDeep(originText)!,
           [offsetX = 0, offsetY = 0] = text.offset!,
           labelPosition = value > 0 ? positionMax : positionMin
         let position: Position9 = 'center',
-          positionX = x,
-          positionY = y
+          [x, y] = [originX, originY]
 
         if (value < 0) {
           text.offset = [
@@ -498,25 +500,25 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
         }
 
         if (labelPosition === 'top') {
-          positionX = x + width / 2
+          x = originX + width / 2
           position = labelPositionOrient === 'inner' ? 'bottom' : 'top'
         } else if (labelPosition === 'bottom') {
-          positionX = x + width / 2
-          positionY = y + height
+          x = originX + width / 2
+          y = originY + height
           position = labelPositionOrient === 'inner' ? 'top' : 'bottom'
         } else if (labelPosition === 'left') {
-          positionY = y + height / 2
+          y = originY + height / 2
           position = labelPositionOrient === 'inner' ? 'right' : 'left'
         } else if (labelPosition === 'right') {
-          positionX = x + width
-          positionY = y + height / 2
+          x = originX + width
+          y = originY + height / 2
           position = labelPositionOrient === 'inner' ? 'left' : 'right'
         } else if (labelPosition === 'center') {
-          positionX = x + width / 2
-          positionY = y + height / 2
+          x = originX + width / 2
+          y = originY + height / 2
         }
 
-        return createText({x: positionX, y: positionY, position, value, style: text})
+        return createText({x, y, position, value, style: text, meta})
       })
     )
   }
@@ -524,7 +526,6 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
   draw() {
     const rectData = this.rectData.map((group) => ({
       data: group,
-      source: group.map((item) => item.source),
       ...this.style.rect,
       fill: group.map(({color}) => color ?? 'black'),
     }))

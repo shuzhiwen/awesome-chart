@@ -4,7 +4,6 @@ import {
   ChartContext,
   CircleDrawerProps,
   DrawerData,
-  ElSource,
   LayerScatterOptions,
   LayerScatterScale,
   LayerScatterStyle,
@@ -44,7 +43,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
     value: Meta
     color: string
     category: Meta
-    source: ElSource[]
+    meta: AnyObject
   })[][] = []
 
   get scale() {
@@ -84,20 +83,16 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
     }
 
     const {top, left} = this.options.layout,
-      {source, headers, rawTableList} = this.data,
-      {scaleX, scaleY, scalePointSize} = this.scale,
       {text, point, pointSize} = this.style,
-      data = tableListToObjects<DataKey>(source),
-      pointData = data.map((item, i) => ({
-        value: item.value,
-        category: item.category,
-        x: left + scaleX(item.x as number) ?? NaN,
-        y: top + scaleY(item.y as number) ?? NaN,
-        r: scalePointSize(item.value as number) ?? ungroup(pointSize),
-        source: headers.map((header, j) => ({
-          value: rawTableList[i][j],
-          category: header,
-        })),
+      {scaleX, scaleY, scalePointSize} = this.scale,
+      data = tableListToObjects<DataKey>(this.data.source),
+      pointData = data.map((meta) => ({
+        value: meta.value,
+        category: meta.category,
+        x: left + scaleX(meta.x as number) ?? NaN,
+        y: top + scaleY(meta.y as number) ?? NaN,
+        r: scalePointSize(meta.value as number) ?? ungroup(pointSize),
+        meta,
       })),
       categories = Array.from(new Set(pointData.map(({category}) => category))),
       colorMatrix = createColorMatrix({
@@ -171,7 +166,6 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
     }))
     const pointData = this.pointData.map((group) => ({
       data: group,
-      source: group.map(({source}) => source),
       ...this.style.point,
       fill: group.map(({color}) => color),
     }))

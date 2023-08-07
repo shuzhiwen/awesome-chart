@@ -4,11 +4,11 @@ import {
   ArcDrawerProps,
   ChartContext,
   DrawerData,
-  ElSource,
   LayerChordOptions,
   LayerChordStyle,
   LayerStyle,
   PathDrawerProps,
+  SourceMeta,
 } from '../../types'
 import {LayerBase} from '../base'
 import {
@@ -34,7 +34,7 @@ export class LayerChord extends LayerBase<LayerChordOptions> {
   private textData: ReturnType<typeof createRotatedArcText>[] = []
 
   private nodeData: (DrawerData<ArcDrawerProps> & {
-    source: ElSource
+    meta: Pick<SourceMeta, 'category' | 'value'>
     color: string
     index: number
   })[] = []
@@ -90,7 +90,7 @@ export class LayerChord extends LayerBase<LayerChordOptions> {
       })
 
     this.nodeData = chordData.groups.map(({value, ...rest}, i) => ({
-      source: {category: rows[i], value},
+      meta: {category: rows[i], value},
       color: colorMatrix.get(0, i),
       innerRadius: radius,
       outerRadius: maxRadius,
@@ -116,7 +116,7 @@ export class LayerChord extends LayerBase<LayerChordOptions> {
     )
 
     this.textData = this.nodeData.map((item) => {
-      const value = item.source.category,
+      const value = item.meta.category,
         angle = (item.startAngle + item.endAngle) / 2,
         radius = item.outerRadius + labelOffset,
         x = Math.sin(angle) * radius + centerX,
@@ -129,7 +129,6 @@ export class LayerChord extends LayerBase<LayerChordOptions> {
   draw() {
     const nodeData = {
       data: this.nodeData,
-      source: this.nodeData.map(({source}) => source),
       ...this.style.node,
       fill: this.nodeData.map(({color}) => color),
     }

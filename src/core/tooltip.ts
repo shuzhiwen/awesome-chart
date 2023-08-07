@@ -1,7 +1,7 @@
 import {select} from 'd3'
 import {isEqual, isNil, merge} from 'lodash'
 import {D3Selection, ElConfig, TooltipData, TooltipOptions} from '../types'
-import {createLog, errorCatcher, getAttr, group, noChange, ungroup} from '../utils'
+import {createLog, errorCatcher, getAttr, noChange, ungroup} from '../utils'
 
 const defaultOptions = {
   container: null,
@@ -19,8 +19,6 @@ export class Tooltip {
 
   public isAvailable = false
 
-  readonly log = createLog(Tooltip.name)
-
   private instance: D3Selection
 
   private options = defaultOptions
@@ -29,24 +27,26 @@ export class Tooltip {
 
   private hideTimeout: NodeJS.Timeout | undefined
 
+  readonly log = createLog(Tooltip.name)
+
   constructor(options: TooltipOptions) {
     this.setOptions(options)
-    this.instance = select(this.options.container)
+    const {container, backgroundColor, mode} = this.options
+    this.instance = select(container)
       .append('div')
       .attr('class', 'tooltip')
       .style('border-radius', '4px')
       .style('row-gap', '4px')
       .style('flex-direction', 'column')
-      .style('background-color', this.options.backgroundColor)
+      .style('background-color', backgroundColor)
       .style('position', 'fixed')
       .style('overflow', 'hidden')
       .style('display', 'none')
       .style('z-index', 999999)
       .style('left', 0)
       .style('top', 0)
-
     this.getListData = errorCatcher(this.getListData.bind(this), (error) => {
-      this.log.error(`The layer does not support ${this.options.mode} mode`, error)
+      this.log.error(`The layer does not support ${mode} mode`, error)
     })
   }
 
@@ -58,7 +58,7 @@ export class Tooltip {
     this.isVisible = true
     this.instance?.style('display', 'flex')
     clearTimeout(this.hideTimeout)
-    event && this.move(event)
+    this.move(event)
   }
 
   hide() {
@@ -69,69 +69,65 @@ export class Tooltip {
   }
 
   private getListData(data: ElConfig): TooltipData {
-    const {mode} = this.options,
-      {dimension, category} = getAttr(data.source, 0, {})
+    const {mode} = this.options
+    const {dimension, category} = data.source.meta ?? {}
 
     if (this.options.mode === 'single') {
       return this.getSingleListData(data)
     }
 
-    if ((mode === 'dimension' && !dimension) || (mode === 'category' && !category))
-      throw new Error()
-
-    if (this.options.mode === 'dimension') {
+    if (mode === 'dimension' && dimension) {
       return this.getDimensionListData(data)
     }
 
-    if (this.options.mode === 'category') {
+    if (mode === 'category' && category) {
       return this.getCategoryListData(data)
     }
   }
 
   private getSingleListData(data: ElConfig): TooltipData {
     return {
-      title: ungroup(data.source)?.dimension,
-      list: group(data.source).map(({value, category}) => ({
+      title: data.source.meta?.dimension,
+      list: Object.entries(data.source.meta ?? []).map(([key, value]) => ({
         color: data.fill || data.stroke,
-        label: category,
+        label: key,
         value,
       })),
     }
   }
 
-  private getDimensionListData(data: Partial<ElConfig>): TooltipData {
-    const {dimension} = getAttr(data.source, 0, {}),
-      backups = this.options.getLayersBackupData(),
-      matched = backups.filter((d) => ungroup(d.source)?.dimension === dimension)
+  private getDimensionListData(data: ElConfig): TooltipData {
+    const dimension = data.source.meta?.dimension
+    const backups = this.options.getLayersBackupData()
+    const matchedGroups = backups.filter(
+      ({source}) => ungroup(source)?.meta?.dimension === dimension
+    )
 
     return {
       title: dimension,
-      list: matched.flatMap(
-        ({source, fill, stroke}) =>
-          source.flatMap((item, i) =>
-            group(item).map(({category, value}) => ({
-              color: getAttr(fill, i, '') || getAttr(stroke, i, ''),
-              label: category,
-              value,
-            }))
-          ) ?? []
+      list: matchedGroups.flatMap(({source, fill, stroke}) =>
+        source.flatMap(({meta}, i) => ({
+          color: getAttr(fill, i, '') || getAttr(stroke, i, ''),
+          label: meta?.category,
+          value: meta?.value,
+        }))
       ),
     }
   }
 
-  private getCategoryListData(data: Partial<ElConfig>): TooltipData {
-    const {category} = getAttr(data.source, 0, {}),
-      backups = this.options.getLayersBackupData(),
-      groups = backups.flatMap(({source}) =>
-        source.filter((item) => ungroup(item)?.category === category)
-      )
+  private getCategoryListData(data: ElConfig): TooltipData {
+    const category = data.source.meta?.category
+    const backups = this.options.getLayersBackupData()
+    const matchedGroups = backups.flatMap(({source}) =>
+      source.filter((item) => item.meta?.category === category)
+    )
 
     return {
-      title: ungroup(groups)?.category,
-      list: groups.map((item, i) => ({
+      title: ungroup(matchedGroups)?.meta?.category,
+      list: matchedGroups.map(({meta}, i) => ({
         color: getAttr(data.fill, i, '') || getAttr(data.stroke, i, ''),
-        label: ungroup(item)?.dimension,
-        value: ungroup(item)?.value,
+        label: meta?.dimension,
+        value: meta?.value,
       })),
     }
   }

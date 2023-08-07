@@ -41,6 +41,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
   private textData: DrawerData<TextDrawerProps>[][] = []
 
   private nodeData: (DrawerData<RectDrawerProps> & {
+    meta: AnyObject
     stackedEdgeLength: [0, 0]
     color: string
   } & Node)[][] = []
@@ -113,6 +114,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
         x: layout.left + groupNodeGap * i + sum(groupNodeWidths.slice(0, i)),
         width: groupNodeWidths[i],
         height: scaleNode(item.value ?? 0),
+        meta: {[item.name]: item.value},
         color: colorMatrix.get(j, 0),
         stackedEdgeLength: [0, 0],
         ...item,
@@ -270,8 +272,7 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
   draw() {
     const {edgeVariant, edge} = this.style
     const nodeData = this.nodeData.map((group) => ({
-      data: group.map(({width, height, x, y}) => ({x, y, width, height})),
-      source: group.map(({value, name}) => ({category: name, value})),
+      data: group.map(({width, height, x, y, meta}) => ({x, y, width, height, meta})),
       ...this.style.node,
       fill: group.map(({color}) => color ?? 'black'),
     }))

@@ -35,7 +35,7 @@ export function drawEllipse({
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     evented: getAttr(evented, i, graph.evented),
-    source: getAttr(source, i, []),
+    source: getAttr(source, i, {}),
   }))
   const mappedData = configuredData.map((datum) => {
     return merge(datum, mapping({...datum, container, theme}))

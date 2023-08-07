@@ -434,9 +434,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
         })),
       getTextData = (key: Keys<LayerAxis['textData']>, rotation?: number) =>
         this.textData[key].map((item, i) => ({
-          data: [item],
+          data: [{...item, meta: {dimension: item.value}}],
           opacity: key === 'textX' && disabledAxisXIndex.includes(i) ? 0 : 1,
-          source: [{dimension: item.value}],
           rotation,
           ...this.style[key],
         }))

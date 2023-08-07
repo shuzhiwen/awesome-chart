@@ -4,11 +4,11 @@ import {
   ArcDrawerProps,
   ChartContext,
   DrawerData,
-  ElSource,
   LayerDashboardOptions,
   LayerDashboardStyle,
   LayerStyle,
   LineDrawerProps,
+  SourceMeta,
   TextDrawerProps,
 } from '../../types'
 import {getAttr, isRealNumber, robustRange} from '../../utils'
@@ -65,7 +65,7 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
   })[] = []
 
   private arcData: (DrawerData<ArcDrawerProps> & {
-    source: ElSource
+    meta: Pick<SourceMeta, 'category' | 'value'>
     color: string
   })[] = []
 
@@ -152,7 +152,7 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
       startAngle: scaleAngle(start),
       endAngle: scaleAngle(end),
       color: colorMatrix.get(0, i),
-      source: {category: label, value: `${start}-${end}`},
+      meta: {category: label, value: `${start}-${end}`},
     }))
 
     this.pointerData = [
@@ -228,7 +228,6 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
   draw() {
     const arcData = {
       data: this.arcData,
-      source: this.arcData.map(({source}) => source),
       ...this.style.arc,
       fill: this.arcData.map(({color}) => color!),
     }

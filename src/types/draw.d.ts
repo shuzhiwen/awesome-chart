@@ -14,18 +14,17 @@ export type D3Selection<GDatum = unknown> = Selection<any, GDatum, any, unknown>
 
 export type ElEvent = MouseEvent | FederatedPointerEvent
 
-export type ElSource = AnyObject &
-  Partial<{
-    groupIndex: number
-    itemIndex: number
-    dimension: Meta
-    category: Meta
-    value: Meta
-  }>
+export type SourceMeta = Record<'dimension' | 'category' | 'value', Meta>
+
+export type ElSource = Partial<{
+  meta: Record<Meta, Meta> | SourceMeta
+  groupIndex: number
+  itemIndex: number
+}>
 
 export type BasicDrawerProps<Datum> = {
   data: Datum[]
-  source: (ElSource | ElSource[])[]
+  source: ElSource[]
   className: string
   container: DrawerTarget
   theme: ChartTheme
@@ -34,7 +33,7 @@ export type BasicDrawerProps<Datum> = {
 
 export type ElConfig = {
   className: string
-  source: ElSource | ElSource[]
+  source: ElSource
   fill?: string
   stroke?: string
   opacity?: number
