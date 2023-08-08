@@ -40,7 +40,7 @@ export default () =>
         rect: {
           fill: 'seagreen',
           opacity: 0,
-          mapping: `({source: {value}, x, y, width, height, fill, container, theme, className}) => {
+          mapping: `({source, x, y, width, height, fill, container, theme, className}) => {
             const {drawLine} = window.awesome
             // replace label with image
             drawLine({
@@ -52,7 +52,7 @@ export default () =>
                   y2: y + height,
                 },
               ],
-              stroke: value > 4000 ? 'red' : fill,
+              stroke: source.meta.value > 4000 ? 'red' : fill,
               strokeWidth: width,
               strokeDasharray: '5 5',
               container,

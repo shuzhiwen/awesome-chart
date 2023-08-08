@@ -33,18 +33,19 @@ const rawTableLists2 = [
 ]
 
 export const debugDynamicRectLayer = (chart: Chart) => {
-  const layers = chart.getLayersByType('rect').filter((item) => (item as LayerRect).options.sort)
-
-  if (!layers.length) return
-
   dynamicRawTableLists.forEach((data, i) => {
     setTimeout(() => {
-      layers.forEach((layer) => {
-        layer.setData(new DataTableList(data))
-        layer.update()
+      const layers = chart.getLayersByType('rect').filter((item) => {
+        return (item as LayerRect).options.sort
       })
-      chart.rebuildScale({redraw: true})
-      layers.length && console.info('Random TableList Data', data)
+      if (layers.length) {
+        layers.forEach((layer) => {
+          layer.setData(new DataTableList(data))
+          layer.update()
+        })
+        chart.rebuildScale({redraw: true})
+        console.info('Random TableList Data', data)
+      }
     }, i * 500)
   })
 }

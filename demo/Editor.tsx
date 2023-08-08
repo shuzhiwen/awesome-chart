@@ -95,6 +95,7 @@ export function Editor(props: {schema?: AnyObject; onChange: AnyFunction}) {
 
   useEffect(() => {
     editor?.trigger('source', 'editor.action.formatDocument', null)
+
     if (editor && schema && editor.getValue() !== schema) {
       editor.setValue(schema ?? '')
       localStorage.setItem('editorContent', schema ?? '')

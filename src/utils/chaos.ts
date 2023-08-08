@@ -62,7 +62,7 @@ export function getPercentageNumber(input: Meta, relative: number) {
 export function getTextWidth(
   text: Meta,
   fontSize: Meta = 12,
-  fontFamily = 'PingFang SC, Helvetica, sans-serif'
+  fontFamily = 'Arial, Helvetica, sans-serif'
 ) {
   ctx.font = `${isNumber(fontSize) ? `${fontSize}px` : fontSize} ${fontFamily}`
   return ctx.measureText(String(text)).width
