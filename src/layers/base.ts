@@ -177,7 +177,6 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * This method will force the layer to recalculate.
    * @see needRecalculated
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setData(_: Maybe<LayerData>) {}
 
   /**
@@ -185,7 +184,6 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * This method will force the layer to recalculate.
    * @see needRecalculated
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setScale(_: Maybe<LayerScale>) {}
 
   /**
@@ -193,7 +191,6 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * This method may force the layer to recalculate.
    * @see needRecalculated
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setStyle(_: Maybe<LayerStyle<AnyObject>>) {}
 
   /**
@@ -357,11 +354,17 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * Layers should always be drawn using this method.
    */
   protected drawBasic<T extends DrawerType>(props: DrawBasicProps<T>) {
-    const {data, type, sublayer = type} = props,
-      cacheData = this.cacheData[sublayer],
+    const {data, type, sublayer = type} = props
+
+    if (!this.sublayers.includes(sublayer)) {
+      this.log.debug.error('Invalid sublayer type for drawBasic')
+      return
+    }
+
+    const cacheData = this.cacheData[sublayer],
+      isFirstDraw = cacheData.data.length === 0,
       sublayerClassName = `${this.className}-${sublayer}`,
       maxGroupLength = Math.max(cacheData.data.length, data.length),
-      isFirstDraw = cacheData.data.length === 0,
       sublayerContainer =
         selector.getDirectChild(this.root, sublayerClassName) ||
         selector.createGroup(this.root, sublayerClassName)
@@ -378,11 +381,6 @@ export abstract class LayerBase<Options extends LayerOptions> {
         itemIndex,
       })),
     }))
-
-    if (!this.sublayers.includes(sublayer)) {
-      this.log.debug.error('Invalid sublayer type for drawBasic')
-      return
-    }
 
     /**
      * If data length is more than last time, add missing group container.
