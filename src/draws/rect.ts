@@ -2,7 +2,7 @@ import {isArray, isString, merge} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
-import {DrawerData, RectDrawerProps} from '../types'
+import {DrawerData, ElSource, RectDrawerProps} from '../types'
 import {getAttr, isCC, isSC, noChange, splitAlpha} from '../utils'
 
 export function drawRect({
@@ -35,7 +35,7 @@ export function drawRect({
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     evented: getAttr(evented, i, graph.evented),
-    source: getAttr(source, i, {}),
+    source: getAttr(source, i, {} as ElSource),
   }))
   const mappedData = configuredData.map((datum) => {
     return merge(datum, mapping({...datum, container, theme}))

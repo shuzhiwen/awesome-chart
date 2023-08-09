@@ -4,7 +4,7 @@ import {
   ChartContext,
   CircleDrawerProps,
   DrawerData,
-  EllipseDrawerProps,
+  ElConfig,
   LayerPackOptions,
   LayerPackStyle,
   LayerStyle,
@@ -177,8 +177,8 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
     }
   }
 
-  private zoom = ({data}: {data: DrawerData<EllipseDrawerProps>}) => {
-    const {cx, cy, rx, ry} = data,
+  private zoom = ({data}: {data: ElConfig}) => {
+    const {cx, cy, rx, ry} = data as ElConfig<'ellipse'>,
       {left, top, width, height} = this.options.layout,
       {k: prevK = -1, offset: [prevX, prevY] = [0, 0], maxHeight = -1} = this.zoomConfig!,
       nextK = (Math.min(width, height) / (rx + ry)) * prevK,

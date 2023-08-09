@@ -8,11 +8,11 @@ declare module 'pixi.js' {
     drawPath(d: string): Graphics
     dashLineTo(x: number, y: number, dasharray: string): Graphics
     className?: string
-    data?: ElConfig
   }
   interface Container {
     getApp?(): Application
     className?: string
+    data?: ElConfig
   }
   interface Texture {
     gradientId?: string

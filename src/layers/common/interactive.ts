@@ -1,8 +1,10 @@
 import {select} from 'd3'
+import {Graphics} from 'pixi.js'
 import {DataTableList} from '../../data'
 import {
   ChartContext,
   DrawerData,
+  ElConfig,
   LayerAxisScale,
   LayerInteractiveOptions,
   LayerInteractiveStyle,
@@ -262,24 +264,26 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     })
 
     this.event.onWithOff('mouseover-interactive', 'internal', ({data, target}) => {
-      if (data.source.key.match('secondary')) {
+      const getKey = (data: ElConfig) => data.source.meta.key as string
+
+      if (getKey(data).match('secondary')) {
         return
       }
 
       if (isSC(this.root)) {
         this.root.selectAll(makeClass('interactive', true)).each((d, i, els) => {
-          if ((d as any).source.key.match(data.source.key)) {
+          if (getKey(d as ElConfig).match(getKey(data))) {
             select(els[i]).attr('opacity', shadowOpacity)
           }
         })
-        select(target).attr('opacity', 0)
+        select(target as HTMLElement).attr('opacity', 0)
       } else {
-        selector.getChildren(this.root, makeClass('interactive', false)).forEach((child) => {
-          if ((child as any).data.source.key.match(data.source.key)) {
-            child.alpha = shadowOpacity
+        selector.getChildren(this.root, makeClass('interactive', false)).forEach((c) => {
+          if (getKey(c.data!).match(getKey(data))) {
+            c.alpha = shadowOpacity
           }
         })
-        target.alpha = 0
+        ;(target as Graphics).alpha = 0
       }
     })
     this.event.onWithOff('mouseout-interactive', 'internal', () => {

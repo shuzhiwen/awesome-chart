@@ -2,7 +2,7 @@ import {isString, merge} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
-import {LineDrawerProps} from '../types'
+import {ElSource, LineDrawerProps} from '../types'
 import {getAttr, isCC, isSC, noChange, splitAlpha} from '../utils'
 
 export function drawLine({
@@ -35,7 +35,7 @@ export function drawLine({
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     strokeDasharray: getAttr(strokeDasharray, i, ''),
     evented: getAttr(evented, i, graph.evented),
-    source: getAttr(source, i, {}),
+    source: getAttr(source, i, {} as ElSource),
   }))
   const mappedData = configuredData.map((datum) => {
     return merge(datum, mapping({...datum, container, theme}))

@@ -260,7 +260,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
       columnHeight1 = new Array<number>(sangerColumn).fill(0),
       columnHeight2 = new Array<number>(sangerColumn).fill(0),
       target = data.splice(box.index, 1),
-      key = box.source.meta!.dimension
+      key = box.source.meta.dimension!
 
     this.insertIndex = data
       .map((item) => {

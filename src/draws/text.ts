@@ -3,7 +3,7 @@ import {merge} from 'lodash'
 import {Text, TextStyleFontWeight} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
-import {TextDrawerProps} from '../types'
+import {ElSource, TextDrawerProps} from '../types'
 import {getAttr, isCC, isRealNumber, isSC, mergeAlpha, noChange} from '../utils'
 
 export function drawText({
@@ -44,6 +44,7 @@ export function drawText({
     fillOpacity: getAttr(fillOpacity, i, text.fillOpacity),
     strokeOpacity: getAttr(strokeOpacity, i, text.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, text.strokeWidth),
+    rotation: getAttr(rotation, i, 0),
     shadow: getAttr(shadow, i, text.shadow),
     fontSize: getAttr(fontSize, i, text.fontSize),
     fontFamily: getAttr(fontFamily, i, text.fontFamily),
@@ -51,8 +52,7 @@ export function drawText({
     writingMode: getAttr(writingMode, i, 'horizontal-tb'),
     textDecoration: getAttr(textDecoration, i, 'none'),
     evented: getAttr(evented, i, text.evented),
-    rotation: getAttr(rotation, i, 0),
-    source: getAttr(source, i, {}),
+    source: getAttr(source, i, {} as ElSource),
   }))
   const mappedData = configuredData.map((datum) => {
     return merge(datum, mapping({...datum, container, theme}))

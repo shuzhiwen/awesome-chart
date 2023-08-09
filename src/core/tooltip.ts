@@ -87,7 +87,7 @@ export class Tooltip {
 
   private getSingleListData(data: ElConfig): TooltipData {
     return {
-      title: data.source.meta?.dimension,
+      title: data.source.meta.dimension,
       list: Object.entries(data.source.meta ?? []).map(([key, value]) => ({
         color: data.fill || data.stroke,
         label: key,
@@ -97,10 +97,10 @@ export class Tooltip {
   }
 
   private getDimensionListData(data: ElConfig): TooltipData {
-    const dimension = data.source.meta?.dimension
+    const dimension = data.source.meta.dimension
     const backups = this.options.getLayersBackupData()
     const matchedGroups = backups.filter(
-      ({source}) => ungroup(source)?.meta?.dimension === dimension
+      ({source}) => ungroup(source)?.meta.dimension === dimension
     )
 
     return {
@@ -108,26 +108,26 @@ export class Tooltip {
       list: matchedGroups.flatMap(({source, fill, stroke}) =>
         source.flatMap(({meta}, i) => ({
           color: getAttr(fill, i, '') || getAttr(stroke, i, ''),
-          label: meta?.category,
-          value: meta?.value,
+          label: meta.category,
+          value: meta.value,
         }))
       ),
     }
   }
 
   private getCategoryListData(data: ElConfig): TooltipData {
-    const category = data.source.meta?.category
+    const category = data.source.meta.category
     const backups = this.options.getLayersBackupData()
     const matchedGroups = backups.flatMap(({source}) =>
-      source.filter((item) => item.meta?.category === category)
+      source.filter((item) => item.meta.category === category)
     )
 
     return {
-      title: ungroup(matchedGroups)?.meta?.category,
+      title: ungroup(matchedGroups)?.meta.category,
       list: matchedGroups.map(({meta}, i) => ({
         color: getAttr(data.fill, i, '') || getAttr(data.stroke, i, ''),
-        label: meta?.dimension,
-        value: meta?.value,
+        label: meta.dimension,
+        value: meta.value,
       })),
     }
   }

@@ -2,7 +2,7 @@ import {isString, merge} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
-import {EllipseDrawerProps} from '../types'
+import {EllipseDrawerProps, ElSource} from '../types'
 import {getAttr, isCC, isSC, noChange, splitAlpha} from '../utils'
 
 export function drawEllipse({
@@ -35,7 +35,7 @@ export function drawEllipse({
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     evented: getAttr(evented, i, graph.evented),
-    source: getAttr(source, i, {}),
+    source: getAttr(source, i, {} as ElSource),
   }))
   const mappedData = configuredData.map((datum) => {
     return merge(datum, mapping({...datum, container, theme}))

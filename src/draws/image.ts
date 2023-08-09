@@ -7,6 +7,7 @@ import {
   DrawerType,
   ElConfig,
   EllipseDrawerProps,
+  ElSource,
   GraphStyle,
   ImageDrawerProps,
   RectDrawerProps,
@@ -35,7 +36,7 @@ export function drawImage({
     id: `${className}-${uuid()}`,
     opacity: getAttr(opacity, i, graph.opacity),
     evented: getAttr(evented, i, graph.evented),
-    source: getAttr(source, i, {}),
+    source: getAttr(source, i, {} as ElSource),
   }))
   const mappedData = configuredData.map((datum) => {
     return merge(datum, mapping({...datum, container, theme}))

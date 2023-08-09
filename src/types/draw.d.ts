@@ -16,11 +16,11 @@ export type ElEvent = MouseEvent | FederatedPointerEvent
 
 export type SourceMeta = Record<'dimension' | 'category' | 'value', Meta>
 
-export type ElSource = Partial<{
-  meta: Record<Meta, Meta> | SourceMeta
+export type ElSource = {
+  meta: AnyObject & Partial<SourceMeta>
   groupIndex: number
   itemIndex: number
-}>
+}
 
 export type BasicDrawerProps<Datum> = {
   data: Datum[]
@@ -31,7 +31,7 @@ export type BasicDrawerProps<Datum> = {
   evented?: boolean
 }
 
-export type ElConfig = {
+export type ElConfig<T extends DrawerType = DrawerType> = {
   className: string
   source: ElSource
   fill?: string
@@ -40,15 +40,7 @@ export type ElConfig = {
   fillOpacity?: number
   strokeOpacity?: number
   strokeWidth?: number
-} & DrawerData<
-  | EllipseDrawerProps
-  | ImageDrawerProps
-  | LineDrawerProps
-  | PathDrawerProps
-  | PolyDrawerProps
-  | RectDrawerProps
-  | TextDrawerProps
->
+} & DrawerDictProps<T>['data'][number]
 
 export type DrawerDictProps<
   T extends DrawerType,

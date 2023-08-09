@@ -71,7 +71,11 @@ export abstract class LayerBase<Options extends LayerOptions> {
   /**
    * Manage lifecycle or tooltip events.
    */
-  readonly event = new EventManager<string, 'internal' | 'user'>(this.className)
+  readonly event = new EventManager<
+    string,
+    'internal' | 'user',
+    (props: {event: MouseEvent; data: ElConfig; target: EventTarget}) => void
+  >(this.className)
 
   readonly options: Options & ChartContext
 
@@ -376,7 +380,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
     let nextData = data.map((groupData, groupIndex) => ({
       ...groupData,
       source: groupData.data.map((datum, itemIndex) => ({
-        meta: datum.meta,
+        meta: datum.meta ?? {},
         groupIndex,
         itemIndex,
       })),
@@ -404,13 +408,13 @@ export abstract class LayerBase<Options extends LayerOptions> {
     if (!cacheData.order) {
       cacheData.order = new Map(
         nextData
-          .filter(({source}) => ungroup(source)?.meta?.dimension)
-          .map(({source}, i) => [ungroup(source)?.meta?.dimension, i])
+          .filter(({source}) => ungroup(source)?.meta.dimension)
+          .map(({source}, i) => [ungroup(source)?.meta.dimension, i])
       )
     } else {
       const {order: prevOrder} = cacheData,
         orderedGroupData = new Array(nextData.length),
-        curOrder = nextData.map(({source}) => ungroup(source)?.meta?.dimension)
+        curOrder = nextData.map(({source}) => ungroup(source)?.meta.dimension)
 
       curOrder.forEach((dimension, i) => {
         if (prevOrder?.has(dimension)) {
@@ -421,8 +425,8 @@ export abstract class LayerBase<Options extends LayerOptions> {
       })
       prevOrder.clear()
       nextData = orderedGroupData.filter(Boolean)
-      nextData.forEach((item, i) => {
-        const dimension = ungroup(item.source)?.meta?.dimension
+      nextData.forEach(({source}, i) => {
+        const dimension = ungroup(source)?.meta.dimension
         dimension && prevOrder.set(dimension, i)
       })
     }
