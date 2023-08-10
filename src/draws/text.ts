@@ -73,12 +73,11 @@ export function drawText({
       .duration(getAttr(transition?.duration, 0, update.duration))
       .delay(getAttr(transition?.delay, 0, update.delay))
       .textTween((d, i) => {
-        const prevText = Number(prevTexts[i])
+        const [prev, next] = [parseFloat(prevTexts[i]), parseFloat(d.value)]
         const decimals = d.value.toString().split('.')[1]?.length || 0
-        if (isRealNumber(Number(d.value)) && isRealNumber(prevText)) {
-          return (t) => interpolateNumber(prevText, Number(d.value))(t).toFixed(decimals)
-        }
-        return () => d.value
+        return isRealNumber(prev) && isRealNumber(next)
+          ? (t) => interpolateNumber(prev, next)(t).toFixed(decimals)
+          : () => d.value
       })
       .attr('x', (d) => d.x)
       .attr('y', (d) => d.y - d.textHeight / 2)
