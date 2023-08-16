@@ -1,4 +1,5 @@
 import {cloneDeep, max, sum} from 'lodash'
+import {EVENT_KEY} from '../../core'
 import {DataBase, DataTableList} from '../../data'
 import {
   ChartContext,
@@ -134,7 +135,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions, Key> {
       colorMatrix = this.legendDataGroup.map(({colorMatrix}) => colorMatrix),
       active = new Array<boolean>(colors.length).fill(true)
 
-    this.event.onWithOff('click-interactive', 'internal', (d: {data: ElConfig}) => {
+    this.event.onWithOff('click-interactive', EVENT_KEY, (d: {data: ElConfig}) => {
       const itemIndex = ungroup(d.data.source)?.itemIndex ?? -1,
         index = counts.findIndex((_, i) => sum(counts.slice(0, i + 1)) > itemIndex),
         start = counts.slice(0, index).reduce((prev, cur) => prev + cur, 0),

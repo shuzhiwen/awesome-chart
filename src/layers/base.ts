@@ -1,6 +1,7 @@
 import {cloneDeep, isEqual, merge, noop, range} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {AnimationQueue} from '../animation'
+import {commonEvents, layerLifeCycles, tooltipEvents} from '../core'
 import {DrawerDict} from '../draws'
 import {
   CacheLayerAnimation,
@@ -19,19 +20,7 @@ import {
   LayerScale,
   LayerStyle,
 } from '../types'
-import {
-  commonEvents,
-  compute,
-  createLog,
-  EventManager,
-  fromEntries,
-  group,
-  isCC,
-  isSC,
-  layerLifeCycles,
-  tooltipEvents,
-  ungroup,
-} from '../utils'
+import {compute, createLog, EventManager, fromEntries, group, isCC, isSC, ungroup} from '../utils'
 import {makeClass, selector} from './helpers'
 
 export abstract class LayerBase<Options extends LayerOptions, Key extends string> {

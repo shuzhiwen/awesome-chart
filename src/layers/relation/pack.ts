@@ -1,4 +1,5 @@
 import {hierarchy, HierarchyNode, max, pack, range} from 'd3'
+import {EVENT_KEY} from '../../core'
 import {DataRelation} from '../../data'
 import {
   ChartContext,
@@ -175,7 +176,7 @@ export class LayerPack extends LayerBase<LayerPackOptions, Key> {
     this.drawBasic({type: 'text', key: 'text', data: textData.slice(textData.length - 1)})
 
     if (zoom) {
-      this.event.onWithOff('mousedown-circle', 'internal', this.zoom)
+      this.event.onWithOff('mousedown-circle', EVENT_KEY, this.zoom)
     }
   }
 

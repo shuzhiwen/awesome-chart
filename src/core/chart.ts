@@ -18,9 +18,7 @@ import {
   RebuildScaleProps,
 } from '../types'
 import {
-  chartLifeCycles,
   createLog,
-  dependantLayers,
   EventManager,
   getEasyGradientCreator,
   getPercentageNumber,
@@ -30,6 +28,7 @@ import {
   noChange,
   uuid,
 } from '../utils'
+import {chartLifeCycles, dependantLayers} from './constants'
 import {lightTheme} from './theme'
 import {Tooltip} from './tooltip'
 

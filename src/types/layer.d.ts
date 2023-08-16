@@ -1,6 +1,6 @@
 import {AnimationQueue} from '../animation'
+import {commonEvents, tooltipEvents} from '../core'
 import {LayerBase, LayerDict} from '../layers'
-import {commonEvents, tooltipEvents} from '../utils'
 import {AnimationOptions} from './animation'
 import {ChartContext} from './core'
 import {LegendData} from './data'

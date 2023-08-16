@@ -1,3 +1,5 @@
+export const EVENT_KEY = 'AWESOME_CHART'
+
 export const chartLifeCycles = new Set(['draw', 'destroy', 'rebuildScale'] as const)
 
 export const tooltipEvents = new Set(['mouseover', 'mouseout', 'mousemove'] as const)

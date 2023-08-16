@@ -1,4 +1,5 @@
 import {GeoGeometryObjects, geoMercator, geoPath} from 'd3'
+import {EVENT_KEY} from '../../core'
 import {DataBase} from '../../data'
 import {
   ChartContext,
@@ -216,14 +217,14 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions, Key> {
       this.options.rebuildScale({trigger: this, redraw: true})
     }
 
-    this.event.onWithOff('click-background', 'internal', () => {
+    this.event.onWithOff('click-background', EVENT_KEY, () => {
       const parentCode = this.parentCode.pop()
       if (parentCode) {
         this.fetchOnlineData(parentCode)
       }
     })
 
-    this.event.onWithOff('click-block', 'internal', ({data}) => {
+    this.event.onWithOff('click-block', EVENT_KEY, ({data}) => {
       this.parentCode.push(data.source.meta.parent.adcode)
       if (data.source.meta.adcode) {
         this.fetchOnlineData(data.source.meta.adcode)

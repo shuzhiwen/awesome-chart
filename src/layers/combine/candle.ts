@@ -1,4 +1,5 @@
 import {merge} from 'lodash'
+import {commonEvents} from '../../core'
 import {DataTableList} from '../../data'
 import {
   ChartContext,
@@ -8,7 +9,7 @@ import {
   LayerStyle,
   LegendData,
 } from '../../types'
-import {bindEventManager, commonEvents, uuid} from '../../utils'
+import {bindEventManager, uuid} from '../../utils'
 import {LayerBase} from '../base'
 import {createScale, createStyle, validateAndCreateData} from '../helpers'
 import {LayerRect} from '../normal'

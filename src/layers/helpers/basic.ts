@@ -1,7 +1,7 @@
 import {isFunction, merge} from 'lodash'
+import {scaleTypes} from '../../core'
 import {DataBase, DataDict, DataTableList} from '../../data'
 import {ChartContext, DataType, LayerScale, LayerStyle} from '../../types'
-import {scaleTypes} from '../../utils'
 
 /**
  * Integrate scales from different sources into the final scale.

@@ -1,5 +1,6 @@
 import {forceCollide, forceSimulation, forceX, forceY, Simulation} from 'd3'
 import {merge} from 'lodash'
+import {EVENT_KEY} from '../../core'
 import {DataTableList} from '../../data'
 import {scaleLinear} from '../../scales'
 import {
@@ -47,7 +48,7 @@ export class LayerForce extends LayerBase<LayerForceOptions, Key> {
   constructor(options: LayerForceOptions, context: ChartContext) {
     super({options, context, sublayers: ['node', 'text'], interactive: ['node']})
 
-    this.systemEvent.onWithOff('destroy', 'internal', () => {
+    this.systemEvent.onWithOff('destroy', EVENT_KEY, () => {
       this.simulation?.on('tick', null).stop()
     })
   }

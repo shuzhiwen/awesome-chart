@@ -1,4 +1,5 @@
 import {path} from 'd3'
+import {EVENT_KEY} from '../../core'
 import {DataTableList} from '../../data'
 import {
   ChartContext,
@@ -154,7 +155,7 @@ export class LayerODLine extends LayerBase<LayerODLineOptions, Key> {
     this.drawBasic({type: 'path', key: 'odLine', data: [odLineData]})
     this.drawBasic({type: 'path', key: 'flyingObject', data: [flyingObjectData]})
 
-    this.cacheAnimation['animations']['flyingObject']?.event.on('start', 'internal', () => {
+    this.cacheAnimation['animations']['flyingObject']?.event.on('start', EVENT_KEY, () => {
       if (isSC(this.root) && this.odLineData.some(({path}) => path)) {
         this.root
           .selectAll(makeClass('flyingObject', true))

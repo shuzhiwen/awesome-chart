@@ -1,3 +1,4 @@
+import {EVENT_KEY} from '../../core'
 import {DataTableList} from '../../data'
 import {scaleAngle, scaleLinear} from '../../scales'
 import {
@@ -293,7 +294,7 @@ export class LayerArc extends LayerBase<LayerArcOptions, Key> {
     this.drawBasic({type: 'curve', key: 'guideLine', data: guideLineData})
     this.drawBasic({type: 'text', key: 'text', data: textData})
 
-    this.event.onWithOff('click-arc', 'internal', ({data}) => {
+    this.event.onWithOff('click-arc', EVENT_KEY, ({data}) => {
       if (this.options.variant === 'nightingaleRose') return
 
       const {groupIndex, itemIndex} = data.source,

@@ -1,5 +1,6 @@
 import {select} from 'd3'
 import {Graphics} from 'pixi.js'
+import {EVENT_KEY} from '../../core'
 import {DataTableList} from '../../data'
 import {
   ChartContext,
@@ -72,7 +73,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions, Key> {
     super({context, options, sublayers: ['rect', 'interactive'], interactive: ['interactive']})
     const {layout, createSublayer, event} = this.options
 
-    this.systemEvent.onWithOff('destroy', 'internal', () => {
+    this.systemEvent.onWithOff('destroy', EVENT_KEY, () => {
       this.helperAuxiliary.forEach((auxiliary) => auxiliary.destroy())
     })
 
@@ -263,7 +264,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions, Key> {
       data: darkRectData.concat(lightRectData),
     })
 
-    this.event.onWithOff('mouseover-interactive', 'internal', ({data, target}) => {
+    this.event.onWithOff('mouseover-interactive', EVENT_KEY, ({data, target}) => {
       const getKey = (data: ElConfig) => data.source.meta.key as string
       const shadowOpacity = 0.5
 
@@ -287,7 +288,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions, Key> {
         ;(target as Graphics).alpha = 0
       }
     })
-    this.event.onWithOff('mouseout-interactive', 'internal', () => {
+    this.event.onWithOff('mouseout-interactive', EVENT_KEY, () => {
       if (isSC(this.root)) {
         this.root.selectAll(makeClass('interactive', true)).attr('opacity', 0)
       } else {

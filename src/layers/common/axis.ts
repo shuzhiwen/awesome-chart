@@ -1,4 +1,5 @@
 import {sum} from 'd3'
+import {scaleTypes} from '../../core'
 import {DataBase} from '../../data'
 import {scaleAngle, scaleBand, scaleLinear} from '../../scales'
 import {
@@ -19,7 +20,6 @@ import {
   isScaleLinear,
   robustRange,
   safeLoop,
-  scaleTypes,
   ungroup,
 } from '../../utils'
 import {LayerBase} from '../base'
