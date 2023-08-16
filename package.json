@@ -1,6 +1,6 @@
 {
   "name": "awesome-chart",
-  "version": "0.4.5",
+  "version": "0.5.0",
   "type": "module",
   "description": "A lightweight 2d chart library",
   "typings": "dist/index.d.ts",
