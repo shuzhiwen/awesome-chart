@@ -13,6 +13,8 @@ import {isRealNumber, isSC, tableListToObjects} from '../../utils'
 import {LayerBase} from '../base'
 import {checkColumns, createScale, createStyle, makeClass, validateAndCreateData} from '../helpers'
 
+type Key = 'odLine' | 'flyingObject' | 'text'
+
 type DataKey = 'fromX' | 'fromY' | 'toX' | 'toY'
 
 const defaultStyle: LayerODLineStyle = {
@@ -25,7 +27,7 @@ const defaultStyle: LayerODLineStyle = {
   },
 }
 
-export class LayerODLine extends LayerBase<LayerODLineOptions> {
+export class LayerODLine extends LayerBase<LayerODLineOptions, Key> {
   private _data: Maybe<DataTableList>
 
   private _scale: LayerODLineScale
@@ -149,10 +151,10 @@ export class LayerODLine extends LayerBase<LayerODLineOptions> {
       opacity: 0,
     }
 
-    this.drawBasic({type: 'path', data: [odLineData], sublayer: 'odLine'})
-    this.drawBasic({type: 'path', data: [flyingObjectData], sublayer: 'flyingObject'})
+    this.drawBasic({type: 'path', key: 'odLine', data: [odLineData]})
+    this.drawBasic({type: 'path', key: 'flyingObject', data: [flyingObjectData]})
 
-    this.event.once('flyingObject-animation-start', 'internal', () => {
+    this.cacheAnimation['animations']['flyingObject']?.event.on('start', 'internal', () => {
       if (isSC(this.root) && this.odLineData.some(({path}) => path)) {
         this.root
           .selectAll(makeClass('flyingObject', true))

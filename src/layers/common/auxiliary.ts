@@ -21,6 +21,8 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = 'text' | 'line' | 'background'
+
 const defaultStyle: LayerAuxiliaryStyle = {
   direction: 'horizontal',
   enableLegend: true,
@@ -34,7 +36,7 @@ const defaultStyle: LayerAuxiliaryStyle = {
   },
 }
 
-export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
+export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions, Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -167,8 +169,8 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions> {
       ...this.style.labelBackground,
     }
 
-    this.drawBasic({type: 'rect', data: [backgroundData], sublayer: 'background'})
-    this.drawBasic({type: 'line', data: [lineData]})
-    this.drawBasic({type: 'text', data: [textData]})
+    this.drawBasic({type: 'rect', key: 'background', data: [backgroundData]})
+    this.drawBasic({type: 'line', key: 'line', data: [lineData]})
+    this.drawBasic({type: 'text', key: 'text', data: [textData]})
   }
 }

@@ -27,6 +27,8 @@ import {
 import {LayerBase} from '../base'
 import {createStyle, createText} from '../helpers'
 
+type Key = 'interactive' | 'circle' | 'rect' | 'polygon' | 'line' | 'text'
+
 const defaultStyle: LayerLegendStyle = {
   maxColumn: 10,
   align: ['end', 'start'],
@@ -39,7 +41,7 @@ const defaultStyle: LayerLegendStyle = {
   },
 }
 
-export class LayerLegend extends LayerBase<LayerLegendOptions> {
+export class LayerLegend extends LayerBase<LayerLegendOptions, Key> {
   private disabledColor: string
 
   private _data = new DataBase<{
@@ -93,8 +95,11 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
   }
 
   constructor(options: LayerLegendOptions, context: ChartContext) {
-    const sublayers = ['interactive', 'circle', 'rect', 'polygon', 'line', 'text']
-    super({context, options, sublayers})
+    super({
+      context,
+      options,
+      sublayers: ['interactive', 'circle', 'rect', 'polygon', 'line', 'text'],
+    })
     this.disabledColor = mergeAlpha(this.options.theme.text.fill, 0.3)
   }
 
@@ -365,11 +370,11 @@ export class LayerLegend extends LayerBase<LayerLegendOptions> {
       ),
     }
 
-    this.drawBasic({type: 'text', data: [textData]})
-    this.drawBasic({type: 'rect', data: [rectData]})
-    this.drawBasic({type: 'line', data: [lineData]})
-    this.drawBasic({type: 'circle', data: [circleData]})
-    this.drawBasic({type: 'polygon', data: [polygonData]})
-    this.drawBasic({type: 'rect', data: [interactiveData], sublayer: 'interactive'})
+    this.drawBasic({type: 'text', key: 'text', data: [textData]})
+    this.drawBasic({type: 'rect', key: 'rect', data: [rectData]})
+    this.drawBasic({type: 'line', key: 'line', data: [lineData]})
+    this.drawBasic({type: 'circle', key: 'circle', data: [circleData]})
+    this.drawBasic({type: 'polygon', key: 'polygon', data: [polygonData]})
+    this.drawBasic({type: 'rect', key: 'interactive', data: [interactiveData]})
   }
 }

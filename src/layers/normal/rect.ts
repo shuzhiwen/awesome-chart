@@ -32,6 +32,8 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = 'text' | 'rect' | 'background'
+
 const defaultOptions: Partial<LayerRectOptions> = {
   variant: 'column',
   mode: 'group',
@@ -48,7 +50,7 @@ const defaultStyle: LayerRectStyle = {
   },
 }
 
-export class LayerRect extends LayerBase<LayerRectOptions> {
+export class LayerRect extends LayerBase<LayerRectOptions, Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -538,8 +540,8 @@ export class LayerRect extends LayerBase<LayerRectOptions> {
       ...this.style.text,
     }))
 
-    this.drawBasic({type: 'rect', data: background, sublayer: 'background'})
-    this.drawBasic({type: 'rect', data: rectData})
-    this.drawBasic({type: 'text', data: textData})
+    this.drawBasic({type: 'rect', key: 'background', data: background})
+    this.drawBasic({type: 'rect', key: 'rect', data: rectData})
+    this.drawBasic({type: 'text', key: 'text', data: textData})
   }
 }

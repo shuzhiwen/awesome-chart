@@ -21,6 +21,8 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = 'circle' | 'text'
+
 const defaultOptions: Partial<LayerPackOptions> = {
   variant: 'pack',
 }
@@ -30,7 +32,7 @@ const defaultStyle: LayerPackStyle = {
   padding: 0,
 }
 
-export class LayerPack extends LayerBase<LayerPackOptions> {
+export class LayerPack extends LayerBase<LayerPackOptions, Key> {
   private _data: Maybe<DataRelation>
 
   private _style = defaultStyle
@@ -169,8 +171,8 @@ export class LayerPack extends LayerBase<LayerPackOptions> {
       fontSize: variant === 'pack' ? text?.fontSize : group.flatMap(({fontSize}) => fontSize!),
     }))
 
-    this.drawBasic({type: 'circle', data: circleData})
-    this.drawBasic({type: 'text', data: textData.slice(textData.length - 1)})
+    this.drawBasic({type: 'circle', key: 'circle', data: circleData})
+    this.drawBasic({type: 'text', key: 'text', data: textData.slice(textData.length - 1)})
 
     if (zoom) {
       this.event.onWithOff('mousedown-circle', 'internal', this.zoom)

@@ -1,4 +1,4 @@
-import {cloneDeep, isEqual, isFunction, merge, noop, range} from 'lodash'
+import {cloneDeep, isEqual, merge, noop, range} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {AnimationQueue} from '../animation'
 import {DrawerDict} from '../draws'
@@ -21,8 +21,10 @@ import {
 } from '../types'
 import {
   commonEvents,
+  compute,
   createLog,
   EventManager,
+  fromEntries,
   group,
   isCC,
   isSC,
@@ -32,9 +34,15 @@ import {
 } from '../utils'
 import {makeClass, selector} from './helpers'
 
-export abstract class LayerBase<Options extends LayerOptions> {
+export abstract class LayerBase<Options extends LayerOptions, Key extends string> {
+  /**
+   * Record raw data for layer elements.
+   */
   abstract data: Maybe<LayerData>
 
+  /**
+   * Record style information for layer elements.
+   */
   abstract style: Maybe<AnyObject>
 
   /**
@@ -52,6 +60,11 @@ export abstract class LayerBase<Options extends LayerOptions> {
   abstract draw(): void
 
   /**
+   * The className is used to classify drawing elements of different layers.
+   */
+  readonly className = this.constructor.name
+
+  /**
    * Declare what elements the layer contains.
    * Each sublayer is associated with a base element type.
    */
@@ -64,28 +77,27 @@ export abstract class LayerBase<Options extends LayerOptions> {
   readonly interactive
 
   /**
-   * The className is used to classify drawing elements of different layers.
+   * Manage element events.
    */
-  readonly className = this.constructor.name
+  readonly event = new EventManager<
+    `${Keys<typeof commonEvents>}-${Key}`,
+    (props: {event: MouseEvent; data: ElConfig; target: EventTarget}) => void
+  >()
 
   /**
    * Manage lifecycle or tooltip events.
    */
-  readonly event = new EventManager<
-    string,
-    'internal' | 'user',
-    (props: {event: MouseEvent; data: ElConfig; target: EventTarget}) => void
-  >(this.className)
+  readonly systemEvent = new EventManager<`${Keys<typeof layerLifeCycles>}`, AnyFunction>()
+
+  readonly log = createLog(this.className)
 
   readonly options: Options & ChartContext
 
-  readonly cacheData: CacheLayerData<unknown> = {}
+  readonly cacheAnimation: CacheLayerAnimation<Key>
 
-  readonly cacheAnimation: CacheLayerAnimation
+  readonly cacheData: CacheLayerData<Key>
 
-  protected readonly cacheEvent = {} as CacheLayerEvent
-
-  protected readonly log = createLog(this.className)
+  readonly cacheEvent: CacheLayerEvent<Key>
 
   /**
    * In order to save unnecessary layer data calculation,
@@ -99,18 +111,18 @@ export abstract class LayerBase<Options extends LayerOptions> {
    */
   protected root: DrawerTarget
 
-  constructor({options, context, sublayers, interactive}: LayerBaseProps<Options>) {
+  constructor({options, context, sublayers, interactive}: LayerBaseProps<Options, Key>) {
     this.options = merge(options, context)
     this.sublayers = sublayers || []
     this.interactive = interactive || []
-    this.cacheAnimation = {animations: {}, timer: {}, options: {}}
-    this.sublayers.forEach((name) => (this.cacheData[name] = {data: []}))
     this.root = selector.createGroup(this.options.root as DrawerTarget, this.className)
-    this.createLifeCycles()
-    this.createEvent()
+    this.cacheData = fromEntries(this.sublayers.map((key) => [key, {data: []}]))
+    this.cacheAnimation = {animations: {}, options: {}, timer: {}}
+    this.cacheEvent = this.initializeEvent()
+    this.initializeLifeCycles()
   }
 
-  private createEvent() {
+  private initializeEvent(): CacheLayerEvent<Key> {
     const {tooltip} = this.options,
       getMouseEvent = (event: ElEvent): MouseEvent =>
         event instanceof MouseEvent ? event : (event.nativeEvent as MouseEvent),
@@ -119,34 +131,34 @@ export abstract class LayerBase<Options extends LayerOptions> {
       getTarget = (event: ElEvent): EventTarget =>
         event instanceof MouseEvent ? event.target! : event.target
 
-    merge(this.cacheEvent, {
+    return {
       'tooltip.mouseout': () => tooltip.hide(),
       'tooltip.mousemove': (event: ElEvent) => tooltip.move(getMouseEvent(event)),
       'tooltip.mouseover': (event: ElEvent, data?: ElConfig) => {
         tooltip.update({data: getData(event, data)})
         tooltip.show(getMouseEvent(event))
       },
-    })
-
-    commonEvents.forEach((type) => {
-      merge(this.cacheEvent, {
-        [`common.${type}`]: Object.fromEntries(
-          this.sublayers.map((sublayer) => [
-            sublayer,
-            (event: ElEvent, data: ElConfig) => {
-              this.event.fire(`${type}-${sublayer}`, {
-                data: getData(event, data),
-                event: getMouseEvent(event),
-                target: getTarget(event),
-              })
-            },
-          ])
-        ),
-      })
-    })
+      ...fromEntries(
+        Array.from(commonEvents).map((type) => [
+          `common.${type}`,
+          fromEntries(
+            this.sublayers.map((sublayer) => [
+              sublayer,
+              (event: ElEvent, data: ElConfig) => {
+                this.event.fire(`${type}-${sublayer}`, {
+                  data: getData(event, data),
+                  event: getMouseEvent(event),
+                  target: getTarget(event),
+                })
+              },
+            ])
+          ),
+        ])
+      ),
+    }
   }
 
-  private createLifeCycles() {
+  private initializeLifeCycles() {
     layerLifeCycles.forEach((name) => {
       const fn: AnyFunction = this[name] || noop
 
@@ -159,9 +171,8 @@ export abstract class LayerBase<Options extends LayerOptions> {
             return
           }
 
-          this.event.fire(`before:${name}`, {...parameters})
           fn.call(this, ...parameters)
-          this.event.fire(name, {...parameters})
+          this.systemEvent.fire(name, {...parameters})
 
           if (name === 'setData' || name === 'setScale' || name === 'setStyle') {
             this.needRecalculated = true
@@ -201,13 +212,9 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * Set the animation of the layer and generate the corresponding animation queue.
    * Calling this method will cause the animation in progress to stop.
    */
-  setAnimation(config: Maybe<LayerAnimation<CacheLayerAnimation['options']>>) {
-    merge(this.cacheAnimation, {
-      options: isFunction(config) ? config(this.options.theme) : config,
-    })
-    this.sublayers.forEach((sublayer) => {
-      this.createAnimation(sublayer)
-    })
+  setAnimation(config: Maybe<LayerAnimation<CacheLayerAnimation<Key>['options']>>) {
+    merge(this.cacheAnimation, {options: compute(config, this.options.theme)})
+    this.sublayers.forEach((sublayer) => this.createAnimation(sublayer))
   }
 
   /**
@@ -227,7 +234,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * @param sublayer
    * Specifies the sublayer to show/hide, undefined means the entire layer.
    */
-  setVisible(visible: boolean, sublayer?: string) {
+  setVisible(visible: boolean, sublayer?: Key) {
     const className = `${this.className}-${sublayer}`
     const target = sublayer ? selector.getDirectChild(this.root, className) : this.root
     selector.setVisible(target, visible)
@@ -241,7 +248,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * @param sublayer
    * The target elements.
    */
-  private bindEvent(sublayer: string) {
+  private bindEvent(sublayer: Key) {
     if (isSC(this.root)) {
       const els = this.root.selectAll(makeClass(sublayer, true)).style('cursor', 'pointer')
 
@@ -286,7 +293,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * @param sublayer
    * The target elements.
    */
-  private createAnimation(sublayer: string) {
+  private createAnimation(sublayer: Key) {
     if (this.cacheAnimation.animations[sublayer]) {
       this.cacheAnimation.animations[sublayer]?.destroy()
     }
@@ -298,8 +305,7 @@ export abstract class LayerBase<Options extends LayerOptions> {
        * Otherwise the elements created by the last animation will be selected.
        */
       targets = selector.getChildren(this.root, makeClass(sublayer, false)),
-      isFirstPlay = !this.cacheAnimation.animations[sublayer],
-      prefix = `${sublayer}-animation-`
+      isFirstPlay = !this.cacheAnimation.animations[sublayer]
 
     if (
       !options[sublayer] ||
@@ -313,10 +319,9 @@ export abstract class LayerBase<Options extends LayerOptions> {
     const animationQueue = new AnimationQueue({loop: false}),
       enterQueue = new AnimationQueue({loop: false, id: 'enter'}),
       loopQueue = new AnimationQueue({loop: true, id: 'loop'}),
-      update = merge({}, animation.update, options[sublayer].update),
-      enter = group(options[sublayer].enter),
-      loop = group(options[sublayer].loop),
-      event = animationQueue.event
+      update = merge({}, animation.update, options[sublayer]?.update),
+      enter = group(options[sublayer]?.enter),
+      loop = group(options[sublayer]?.loop)
 
     if (isFirstPlay && enter.length) {
       animationQueue.pushQueue(enterQueue)
@@ -334,9 +339,6 @@ export abstract class LayerBase<Options extends LayerOptions> {
       })
     }
 
-    event.on('start', 'base', (d) => this.event.fire(`${prefix}start`, d))
-    event.on('process', 'base', (d) => this.event.fire(`${prefix}process`, d))
-    event.on('end', 'base', (d) => this.event.fire(`${prefix}end`, d))
     this.cacheAnimation.animations[sublayer] = animationQueue
 
     /**
@@ -357,17 +359,11 @@ export abstract class LayerBase<Options extends LayerOptions> {
    * Unified layer drawing function to map drawing data to graphics.
    * Layers should always be drawn using this method.
    */
-  protected drawBasic<T extends DrawerType>(props: DrawBasicProps<T>) {
-    const {data, type, sublayer = type} = props
-
-    if (!this.sublayers.includes(sublayer)) {
-      this.log.debug.error('Invalid sublayer type for drawBasic')
-      return
-    }
-
-    const cacheData = this.cacheData[sublayer],
+  protected drawBasic<T extends DrawerType>(props: DrawBasicProps<T, Key>) {
+    const {type, key, data} = props,
+      cacheData = this.cacheData[key],
       isFirstDraw = cacheData.data.length === 0,
-      sublayerClassName = `${this.className}-${sublayer}`,
+      sublayerClassName = `${this.className}-${key}`,
       maxGroupLength = Math.max(cacheData.data.length, data.length),
       sublayerContainer =
         selector.getDirectChild(this.root, sublayerClassName) ||
@@ -447,8 +443,8 @@ export abstract class LayerBase<Options extends LayerOptions> {
         transition:
           isFirstDraw || groupData.disableUpdateAnimation
             ? {duration: 0, delay: 0}
-            : this.cacheAnimation.options[sublayer]?.update,
-        className: makeClass(sublayer, false),
+            : this.cacheAnimation.options[key]?.update,
+        className: makeClass(key, false),
         container: groupContainer,
         theme: this.options.theme,
       }
@@ -457,8 +453,8 @@ export abstract class LayerBase<Options extends LayerOptions> {
       cacheData.data[i] = cloneDeep(groupData as never)
     })
 
-    this.bindEvent(sublayer)
-    this.createAnimation(sublayer)
+    this.bindEvent(key)
+    this.createAnimation(key)
   }
 
   destroy() {

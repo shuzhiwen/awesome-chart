@@ -1,7 +1,6 @@
 import {isFunction, isNil} from 'lodash'
 import {EventCallback} from '../types'
 import {group} from './chaos'
-import {uuid} from './random'
 
 const methods = ['on', 'once', 'off', 'onWithOff', 'fire'] as const
 
@@ -9,26 +8,12 @@ const isCallback = (fn: unknown): fn is EventCallback => isFunction(fn)
 
 export class EventManager<
   Name extends string = string,
-  Category extends string = string,
   Callback extends EventCallback = EventCallback
 > {
-  /**
-   * The key of the event, used to generate the ID.
-   */
-  private key: string
-
   /**
    * All active listener functions.
    */
   private cache: Record<string, Callback[]> = {}
-
-  constructor(key: string) {
-    this.key = `__event_${key}_${uuid()}`
-  }
-
-  private rename(name: Name) {
-    return `${this.key}_${name}`
-  }
 
   /**
    * Has event listener or not.
@@ -37,7 +22,7 @@ export class EventManager<
    * @eventProperty
    */
   has(name: Name) {
-    return !!this.cache[this.rename(name)]
+    return !!this.cache[name]
   }
 
   /**
@@ -50,7 +35,7 @@ export class EventManager<
    * The listener instance.
    * @eventProperty
    */
-  onWithOff(name: Name, category: Category, fn: Callback) {
+  onWithOff(name: Name, category: string, fn: Callback) {
     this.off(name, category)
     this.on(name, category, fn)
   }
@@ -59,10 +44,9 @@ export class EventManager<
    * Register listener for specific event.
    * @see onWithOff
    */
-  on(name: Name, category: Category, fn: Callback) {
-    const prefixedName = this.rename(name)
-    this.cache[prefixedName] = this.cache[prefixedName] || []
-    this.cache[prefixedName].push(fn)
+  on(name: Name, category: string, fn: Callback) {
+    this.cache[name] = this.cache[name] || []
+    this.cache[name].push(fn)
     fn.category = category
   }
 
@@ -70,10 +54,9 @@ export class EventManager<
    * Register listener that will be destroy after fire.
    * @see onWithOff
    */
-  once(name: Name, category: Category, fn: Callback) {
-    const prefixedName = this.rename(name)
-    this.cache[prefixedName] = this.cache[prefixedName] || []
-    this.cache[prefixedName].push(fn)
+  once(name: Name, category: string, fn: Callback) {
+    this.cache[name] = this.cache[name] || []
+    this.cache[name].push(fn)
     fn.category = category
     fn.isOnceDone = false
   }
@@ -84,21 +67,20 @@ export class EventManager<
    */
   off(name: Name): void
   off(name: Name, fn: Callback): void
-  off(name: Name, category: Category): void
-  off(name: Name, input?: Callback | Category): void {
-    const prefixedName = this.rename(name)
-    const fns = this.cache[prefixedName] || []
+  off(name: Name, category: string): void
+  off(name: Name, input?: Callback | string): void {
+    const fns = this.cache[name] || []
 
     if (!input) {
-      delete this.cache[prefixedName]
+      delete this.cache[name]
     } else if (isCallback(input)) {
       fns.splice(fns.indexOf(input), 1)
     } else {
-      this.cache[prefixedName] = fns.filter(({category}) => category !== input)
+      this.cache[name] = fns.filter(({category}) => category !== input)
     }
 
-    if (!this.cache[prefixedName] || !this.cache[prefixedName].length) {
-      delete this.cache[prefixedName]
+    if (!this.cache[name] || !this.cache[name].length) {
+      delete this.cache[name]
     }
   }
 
@@ -112,12 +94,12 @@ export class EventManager<
    * The context for listener.
    * @eventProperty
    */
-  fire(name: Name, args?: unknown, context?: unknown) {
-    group(this.cache[this.rename(name)]).forEach((fn) => {
+  fire(name: Name, ...args: Parameters<Callback>) {
+    group(this.cache[name]).forEach((fn) => {
       if (isNil(fn.isOnceDone)) {
-        fn.apply(context || null, group(args))
+        fn.apply(null, group(args))
       } else if (fn.isOnceDone === false) {
-        fn.apply(context || null, group(args))
+        fn.apply(null, group(args))
         fn.isOnceDone = true
       }
     })

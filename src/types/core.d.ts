@@ -3,7 +3,7 @@ import {getEasyGradientCreator} from '../utils'
 import {AnimationOptions, LayerAnimation} from './animation'
 import {TooltipData} from './data'
 import {ElConfig} from './draw'
-import {CacheLayerData, LayerType} from './layer'
+import {CacheLayerData, LayerInstance, LayerType} from './layer'
 import {LayoutCreator} from './layout'
 import {BasicLayerOptions} from './options'
 import {ScaleNice} from './scale'
@@ -147,8 +147,19 @@ export type TooltipOptions = {
   /**
    * Tool function provided by the chart to obtain layer's data.
    */
-  getLayersBackupData?: () => CacheLayerData<unknown>['data']['data']
+  getLayersBackupData?: () => CacheLayerData<string>['data']['data']
 }
+
+export type RebuildScaleProps = Partial<{
+  /**
+   * Trigger layer is the layer that do not want to be updated after merged scale.
+   */
+  trigger: LayerInstance
+  /**
+   * Whether all layers requiring scales are redrawn after merged scale.
+   */
+  redraw: boolean
+}>
 
 export type ChartProps = {
   /**

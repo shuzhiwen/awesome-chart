@@ -21,6 +21,8 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = 'arc' | 'pointer' | 'tickLine' | 'tickText' | 'valueText' | 'labelText'
+
 const defaultStyle: LayerDashboardStyle = {
   step: [2, 10],
   startAngle: -120,
@@ -47,7 +49,7 @@ type DataShape = {
   }[]
 }
 
-export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
+export class LayerDashboard extends LayerBase<LayerDashboardOptions, Key> {
   private _data: Maybe<DataBase<DataShape>>
 
   private _style = defaultStyle
@@ -253,11 +255,11 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions> {
       ...this.style.valueText,
     }
 
-    this.drawBasic({type: 'arc', data: [arcData]})
-    this.drawBasic({type: 'line', data: [tickLineData], sublayer: 'tickLine'})
-    this.drawBasic({type: 'line', data: [pointerData], sublayer: 'pointer'})
-    this.drawBasic({type: 'text', data: [tickTextData], sublayer: 'tickText'})
-    this.drawBasic({type: 'text', data: [labelTextData], sublayer: 'labelText'})
-    this.drawBasic({type: 'text', data: [valueTextData], sublayer: 'valueText'})
+    this.drawBasic({type: 'arc', key: 'arc', data: [arcData]})
+    this.drawBasic({type: 'line', key: 'tickLine', data: [tickLineData]})
+    this.drawBasic({type: 'line', key: 'pointer', data: [pointerData]})
+    this.drawBasic({type: 'text', key: 'tickText', data: [tickTextData]})
+    this.drawBasic({type: 'text', key: 'labelText', data: [labelTextData]})
+    this.drawBasic({type: 'text', key: 'valueText', data: [valueTextData]})
   }
 }

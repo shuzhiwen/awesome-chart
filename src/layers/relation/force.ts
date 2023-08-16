@@ -3,11 +3,9 @@ import {merge} from 'lodash'
 import {DataTableList} from '../../data'
 import {scaleLinear} from '../../scales'
 import {
-  CacheLayerAnimation,
   ChartContext,
   CircleDrawerProps,
   DrawerData,
-  LayerAnimation,
   LayerForceOptions,
   LayerForceStyle,
   LayerStyle,
@@ -16,11 +14,13 @@ import {
 import {LayerBase} from '../base'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 
+type Key = 'node' | 'text'
+
 const defaultStyle: LayerForceStyle = {
   nodeSize: [5, 20],
 }
 
-export class LayerForce extends LayerBase<LayerForceOptions> {
+export class LayerForce extends LayerBase<LayerForceOptions, Key> {
   private _data: Maybe<DataTableList>
 
   private _style = defaultStyle
@@ -47,12 +47,12 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
   constructor(options: LayerForceOptions, context: ChartContext) {
     super({options, context, sublayers: ['node', 'text'], interactive: ['node']})
 
-    this.event.onWithOff('destroy', 'internal', () => {
+    this.systemEvent.onWithOff('destroy', 'internal', () => {
       this.simulation?.on('tick', null).stop()
     })
   }
 
-  setAnimation(options: Maybe<LayerAnimation<CacheLayerAnimation['options']>>) {
+  setAnimation(options: Parameters<LayerBase<any, Key>['setAnimation']>[0]) {
     super.setAnimation(
       merge({}, options, {
         node: {update: {duration: 0, delay: 0}},
@@ -129,7 +129,7 @@ export class LayerForce extends LayerBase<LayerForceOptions> {
       ...text,
     }))
 
-    this.drawBasic({type: 'circle', data: nodeData, sublayer: 'node'})
-    this.drawBasic({type: 'text', data: textData})
+    this.drawBasic({type: 'circle', key: 'node', data: nodeData})
+    this.drawBasic({type: 'text', key: 'text', data: textData})
   }
 }

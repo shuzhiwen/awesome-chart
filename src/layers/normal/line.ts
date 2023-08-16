@@ -23,6 +23,8 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = 'text' | 'curve' | 'point' | 'area'
+
 const defaultOptions: Partial<LayerLineOptions> = {
   mode: 'cover',
 }
@@ -44,7 +46,7 @@ const defaultStyle: LayerLineStyle = {
   },
 }
 
-export class LayerLine extends LayerBase<LayerLineOptions> {
+export class LayerLine extends LayerBase<LayerLineOptions, Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -248,9 +250,9 @@ export class LayerLine extends LayerBase<LayerLineOptions> {
       stroke: group.map(({color}) => color),
     }))
 
-    this.drawBasic({type: 'area', data: areaData})
-    this.drawBasic({type: 'curve', data: curveData})
-    this.drawBasic({type: 'circle', data: pointData, sublayer: 'point'})
-    this.drawBasic({type: 'text', data: textData})
+    this.drawBasic({type: 'area', key: 'area', data: areaData})
+    this.drawBasic({type: 'curve', key: 'curve', data: curveData})
+    this.drawBasic({type: 'circle', key: 'point', data: pointData})
+    this.drawBasic({type: 'text', key: 'text', data: textData})
   }
 }

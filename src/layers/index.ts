@@ -46,6 +46,6 @@ export const LayerDict = {
 
 export const registerCustomLayer = createClassRegister?.<
   string,
-  Layer.LayerBase<BasicLayerOptions<any>>,
+  Layer.LayerBase<BasicLayerOptions<any>, string>,
   [BasicLayerOptions<any>, ChartContext]
 >(LayerDict)

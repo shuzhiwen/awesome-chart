@@ -13,6 +13,8 @@ import {getAttr} from '../../utils'
 import {LayerBase} from '../base'
 import {createStyle, validateAndCreateData} from '../helpers'
 
+type Key = 'carousel' | 'dot'
+
 const defaultOptions: Partial<LayerCarouselOptions> = {
   mode: 'slide',
 }
@@ -24,7 +26,7 @@ const defaultStyle: LayerCarouselStyle = {
   zoom: 0.7,
 }
 
-export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
+export class LayerCarousel extends LayerBase<LayerCarouselOptions, Key> {
   private _data: Maybe<DataTableList>
 
   private _style = defaultStyle
@@ -56,7 +58,7 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
     super({
       context,
       options: {...defaultOptions, ...options},
-      sublayers: ['carousel', 'dot', 'text'],
+      sublayers: ['carousel', 'dot'],
     })
   }
 
@@ -220,8 +222,8 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions> {
       opacity: this.dotData.map(({opacity}, i) => opacity * getAttr(this.style.dot?.opacity, i, 1)),
     }
 
-    this.drawBasic({type: 'image', data: carouselData, sublayer: 'carousel'})
-    this.drawBasic({type: 'rect', data: [dotData], sublayer: 'dot'})
+    this.drawBasic({type: 'image', key: 'carousel', data: carouselData})
+    this.drawBasic({type: 'rect', key: 'dot', data: [dotData]})
 
     !isNil(this.timer) && clearTimeout(this.timer)
     this.timer = setTimeout(this.next.bind(this), animation.duration + animation.delay)

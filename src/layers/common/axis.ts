@@ -32,6 +32,8 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = Keys<typeof defaultStyle>
+
 const defaultSplitLine = {
   strokeWidth: 1,
   strokeOpacity: 0.5,
@@ -78,7 +80,7 @@ const defaultStyle: LayerAxisStyle = {
   titleYR: defaultTitle,
 }
 
-export class LayerAxis extends LayerBase<LayerAxisOptions> {
+export class LayerAxis extends LayerBase<LayerAxisOptions, Key> {
   private _data: Maybe<
     DataBase<{
       titleX?: string
@@ -148,7 +150,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
     super({
       context,
       options: {...defaultOptions, ...options},
-      sublayers: Object.keys(defaultStyle),
+      sublayers: Object.keys(defaultStyle) as Key[],
     })
   }
 
@@ -444,39 +446,39 @@ export class LayerAxis extends LayerBase<LayerAxisOptions> {
       isScaleLinear(scaleX) &&
         this.drawBasic({
           type: 'line',
+          key: 'splitLineAxisX',
           data: getLineData('splitLineAxisX'),
-          sublayer: 'splitLineAxisX',
         })
       isScaleLinear(scaleY) &&
         this.drawBasic({
           type: 'line',
+          key: 'splitLineAxisY',
           data: getLineData('splitLineAxisY'),
-          sublayer: 'splitLineAxisY',
         })
-      this.drawBasic({type: 'text', data: getTextData('textX'), sublayer: 'textX'})
-      this.drawBasic({type: 'text', data: getTextData('textY'), sublayer: 'textY'})
-      this.drawBasic({type: 'text', data: getTextData('textYR'), sublayer: 'textYR'})
-      this.drawBasic({type: 'text', data: getTextData('titleX'), sublayer: 'titleX'})
-      this.drawBasic({type: 'text', data: getTextData('titleY', -90), sublayer: 'titleY'})
-      this.drawBasic({type: 'text', data: getTextData('titleYR', 90), sublayer: 'titleYR'})
+      this.drawBasic({type: 'text', key: 'textX', data: getTextData('textX')})
+      this.drawBasic({type: 'text', key: 'textY', data: getTextData('textY')})
+      this.drawBasic({type: 'text', key: 'textYR', data: getTextData('textYR')})
+      this.drawBasic({type: 'text', key: 'titleX', data: getTextData('titleX')})
+      this.drawBasic({type: 'text', key: 'titleY', data: getTextData('titleY', -90)})
+      this.drawBasic({type: 'text', key: 'titleYR', data: getTextData('titleYR', 90)})
     }
 
     if (coordinate === 'polar') {
       this.drawBasic({
         type: 'circle',
+        key: 'splitLineRadius',
         data: this.splitLineRadiusData.map((item) => ({
           data: [item],
           ...this.style.splitLineRadius,
         })),
-        sublayer: 'splitLineRadius',
       })
       this.drawBasic({
         type: 'line',
+        key: 'splitLineAngle',
         data: getLineData('splitLineAngle'),
-        sublayer: 'splitLineAngle',
       })
-      this.drawBasic({type: 'text', data: getTextData('textAngle'), sublayer: 'textAngle'})
-      this.drawBasic({type: 'text', data: getTextData('textRadius'), sublayer: 'textRadius'})
+      this.drawBasic({type: 'text', key: 'textAngle', data: getTextData('textAngle')})
+      this.drawBasic({type: 'text', key: 'textRadius', data: getTextData('textRadius')})
     }
   }
 }

@@ -1,9 +1,7 @@
 import {merge} from 'lodash'
 import {DataTableList} from '../../data'
 import {
-  CacheLayerAnimation,
   ChartContext,
-  LayerAnimation,
   LayerCandleOptions,
   LayerCandleStyle,
   LayerRectScale,
@@ -14,6 +12,8 @@ import {bindEventManager, commonEvents, uuid} from '../../utils'
 import {LayerBase} from '../base'
 import {createScale, createStyle, validateAndCreateData} from '../helpers'
 import {LayerRect} from '../normal'
+
+type Key = 'rect' | 'text'
 
 const defaultStyle: LayerCandleStyle = {
   positiveColor: 'red',
@@ -29,7 +29,7 @@ const defaultStyle: LayerCandleStyle = {
   },
 }
 
-export class LayerCandle extends LayerBase<LayerCandleOptions> {
+export class LayerCandle extends LayerBase<LayerCandleOptions, Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -55,7 +55,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
   }
 
   constructor(options: LayerCandleOptions, context: ChartContext) {
-    super({context, options, sublayers: ['rect', 'text']})
+    super({context, options})
     const {layout, createSublayer} = this.options
 
     this.lineLayer = createSublayer({
@@ -126,7 +126,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
     this.rectLayer.draw()
   }
 
-  setVisible(visible: boolean, sublayer?: string) {
+  setVisible(visible: boolean, sublayer?: Key) {
     this.rectLayer.setVisible(visible, sublayer)
     this.lineLayer.setVisible(visible, sublayer)
   }
@@ -136,7 +136,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions> {
     this.lineLayer.playAnimation()
   }
 
-  setAnimation(options: Maybe<LayerAnimation<CacheLayerAnimation['options']>>) {
+  setAnimation(options: Parameters<LayerBase<any, Key>['setAnimation']>[0]) {
     this.rectLayer.setAnimation(options)
     this.lineLayer.setAnimation(options)
   }

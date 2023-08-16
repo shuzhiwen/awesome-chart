@@ -1,4 +1,4 @@
-import {isArray, isNil, isNumber, range} from 'lodash'
+import {isArray, isFunction, isNil, isNumber, range} from 'lodash'
 import {Box} from '../types'
 
 const ctx = document.createElement('canvas').getContext('2d')!
@@ -202,4 +202,25 @@ export function createClassRegister<K extends string, V, P>(mapping: Record<K, A
       console.error('Invalid Class Constructor!\n', e)
     }
   }
+}
+
+/**
+ * Attach strong type resolution to native methods.
+ * @see Object.fromEntries
+ */
+export function fromEntries<Key extends string, Value>(entries: [Key, Value][]) {
+  return Object.fromEntries(entries) as Record<Key, Value>
+}
+
+/**
+ * Syntactic sugar for computed properties.
+ * @param computable
+ * Property value or property value generating function.
+ * @param params
+ * Function arguments that generate properties.
+ * @returns
+ * The attribute value.
+ */
+export function compute<T, P>(computable: Computable<T, P>, params: P) {
+  return isFunction(computable) ? computable(params) : computable
 }

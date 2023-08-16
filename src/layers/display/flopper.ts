@@ -27,7 +27,7 @@ const defaultStyle: LayerFlopperStyle = {
 
 const characterSet = ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.']
 
-export class LayerFlopper extends LayerBase<LayerFlopperOptions> {
+export class LayerFlopper extends LayerBase<LayerFlopperOptions, never> {
   private _data: Maybe<DataBase<{value: number}>>
 
   private _style = defaultStyle

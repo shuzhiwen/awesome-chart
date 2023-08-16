@@ -21,7 +21,7 @@ const defaultStyle: LayerHeatmapStyle = {
   },
 }
 
-export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
+export class LayerHeatmap extends LayerBase<LayerHeatmapOptions, 'heatZone'> {
   private _data: Maybe<DataTableList>
 
   private _scale: LayerHeatmapScale
@@ -101,6 +101,6 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions> {
       evented: false,
     }
 
-    this.drawBasic({type: 'circle', data: [heatZoneData], sublayer: 'heatZone'})
+    this.drawBasic({type: 'circle', key: 'heatZone', data: [heatZoneData]})
   }
 }

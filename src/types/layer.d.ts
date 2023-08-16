@@ -20,10 +20,10 @@ export type LayerDictInstance<
  * Drawing data will be cached each time.
  * This cache use for show tooltip or support update animation etc.
  */
-export type CacheLayerData<Datum> = Record<
-  string,
+export type CacheLayerData<Key extends string> = Record<
+  Key,
   {
-    data: Omit<GraphDrawerProps<Datum>, 'className' | 'container' | 'theme'>[]
+    data: Omit<GraphDrawerProps<unknown>, 'className' | 'container' | 'theme'>[]
     /**
      * Mapping from dimension to group index.
      * In order to avoid wrong data update animation.
@@ -32,7 +32,7 @@ export type CacheLayerData<Datum> = Record<
   }
 >
 
-export type CacheLayerAnimation<Options = AnimationOptions> = {
+export type CacheLayerAnimation<Key extends string> = {
   /**
    * Mapping from sublayer to timer.
    * Loop animation should await for update animation after draw.
@@ -41,7 +41,7 @@ export type CacheLayerAnimation<Options = AnimationOptions> = {
   /**
    * Animation instance for control.
    */
-  animations: Record<string, Maybe<AnimationQueue>>
+  animations: Partial<Record<Key, Maybe<AnimationQueue>>>
   /**
    * Animation options for config.
    *
@@ -50,9 +50,15 @@ export type CacheLayerAnimation<Options = AnimationOptions> = {
    * - `loop`: Always running while chart available.
    * - `update`: Trigger when chart occur data updating.
    */
-  options: Record<
-    string,
-    Partial<Record<'enter' | 'loop', MaybeGroup<Options>> & {update: Options}>
+  options: Partial<
+    Record<
+      Key,
+      Partial<
+        Record<'enter' | 'loop', MaybeGroup<AnimationOptions>> & {
+          update: AnimationOptions
+        }
+      >
+    >
   >
 }
 
@@ -62,25 +68,25 @@ export type CacheLayerAnimation<Options = AnimationOptions> = {
  * - `tooltip`: Events for tooltip only.
  * @internal
  */
-export type CacheLayerEvent = Readonly<
-  Record<`common.${Keys<typeof commonEvents>}`, Record<string, AnyFunction>> &
+export type CacheLayerEvent<Key extends string> = Readonly<
+  Record<`common.${Keys<typeof commonEvents>}`, Record<Key, AnyFunction>> &
     Record<`tooltip.${Keys<typeof tooltipEvents>}`, AnyFunction>
 >
 
-export type LayerBaseProps<Options extends LayerOptions> = Readonly<{
+export type LayerBaseProps<Options extends LayerOptions, Key extends string> = Readonly<{
   context: ChartContext
   options: Options
   /**
    * @see LayerBase.sublayers
    */
-  sublayers?: string[]
+  sublayers?: Key[]
   /**
    * @see LayerBase.interactive
    */
-  interactive?: string[]
+  interactive?: Key[]
 }>
 
-export type DrawBasicProps<T extends DrawerType> = {
+export type DrawBasicProps<T extends DrawerType, Key extends string> = {
   /**
    * Basic element type, type of drawer.
    */
@@ -95,7 +101,7 @@ export type DrawBasicProps<T extends DrawerType> = {
   /**
    * @see LayerBaseProps.sublayers
    */
-  sublayer?: string
+  key: Key
 }
 
 export type LayerScale = Partial<{
@@ -123,7 +129,7 @@ export type LayerScale = Partial<{
   nice: ScaleNice
 }>
 
-export type LayerInstance = LayerBase<LayerOptions> & {
+export type LayerInstance = LayerBase<LayerOptions, string> & {
   /**
    * If scale is declared, it will be captured by the axis layer.
    */

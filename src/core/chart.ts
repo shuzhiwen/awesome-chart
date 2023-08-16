@@ -1,7 +1,7 @@
 import {select} from 'd3'
 import {isNil, noop} from 'lodash'
 import {Application, Container} from 'pixi.js'
-import {LayerAxis, LayerBase, LayerDict, LayerLegend} from '../layers'
+import {LayerAxis, LayerDict, LayerLegend} from '../layers'
 import {defaultLayoutCreator} from '../layout'
 import {
   ChartContext,
@@ -15,6 +15,7 @@ import {
   LayerOptions,
   LayerType,
   Layout,
+  RebuildScaleProps,
 } from '../types'
 import {
   chartLifeCycles,
@@ -61,7 +62,7 @@ export class Chart {
    */
   readonly event = new EventManager<
     'globalEvent' | 'initialized' | 'error' | Keys<typeof chartLifeCycles>
-  >(Chart.name)
+  >()
 
   /**
    * Decide how the graph will be drawn.
@@ -200,11 +201,11 @@ export class Chart {
         ),
     })
 
-    this.createLifeCycles()
+    this.initializeLifeCycles()
     this.event.fire('initialized')
   }
 
-  private createLifeCycles() {
+  private initializeLifeCycles() {
     chartLifeCycles.forEach((name) => {
       const fn: AnyFunction = this[name] || noop
 
@@ -295,14 +296,9 @@ export class Chart {
 
   /**
    * This function is responsible for integrating the scales of all layers.
-   * @param props.trigger
-   * Trigger layer is the layer that do not want to be updated after merged scale.
-   * @param props.redraw
-   * Whether all layers requiring scales are redrawn after merged scale.
    */
-  rebuildScale(props: {trigger?: LayerBase<LayerOptions>; redraw?: boolean}) {
-    const {trigger, redraw} = props,
-      axisLayer = this.getLayerByType('axis') as Maybe<LayerAxis>,
+  rebuildScale({trigger, redraw}: RebuildScaleProps) {
+    const axisLayer = this.getLayerByType('axis') as Maybe<LayerAxis>,
       legendLayer = this.getLayerByType('legend') as Maybe<LayerLegend>,
       layers = this.independentLayers.concat(this.getLayersByType('brush'))
 

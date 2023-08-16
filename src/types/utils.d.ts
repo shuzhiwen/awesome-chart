@@ -49,8 +49,6 @@ export type GradientCreatorProps<Schema> = {
   schema: Schema
 }
 
-export type EventCategory<T> = T extends EventManager<string, infer F> ? F : never
-
 export type EventCallback = AnyFunction & {
   /**
    * The event category that used to distinguish event sources.

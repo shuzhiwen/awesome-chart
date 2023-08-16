@@ -6,7 +6,7 @@ import {animationLifeCycles, createLog, EventManager, isSC, noChange, uuid} from
 export abstract class AnimationBase<Options extends AnimationOptions> {
   readonly log = createLog(this.constructor.name)
 
-  readonly event = new EventManager<Keys<typeof animationLifeCycles>>(this.constructor.name)
+  readonly event = new EventManager<Keys<typeof animationLifeCycles>>()
 
   readonly options
 

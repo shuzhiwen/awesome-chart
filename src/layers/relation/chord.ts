@@ -18,6 +18,8 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = 'node' | 'edge' | 'text'
+
 const defaultStyle: LayerChordStyle = {
   arcWidth: 10,
   labelOffset: 10,
@@ -26,7 +28,7 @@ const defaultStyle: LayerChordStyle = {
   },
 }
 
-export class LayerChord extends LayerBase<LayerChordOptions> {
+export class LayerChord extends LayerBase<LayerChordOptions, Key> {
   private _data: Maybe<DataTable>
 
   private _style = defaultStyle
@@ -143,8 +145,8 @@ export class LayerChord extends LayerBase<LayerChordOptions> {
       ...this.style.text,
     }
 
-    this.drawBasic({type: 'arc', data: [nodeData], sublayer: 'node'})
-    this.drawBasic({type: 'path', data: edgeData, sublayer: 'edge'})
-    this.drawBasic({type: 'text', data: [textData]})
+    this.drawBasic({type: 'arc', key: 'node', data: [nodeData]})
+    this.drawBasic({type: 'path', key: 'edge', data: edgeData})
+    this.drawBasic({type: 'text', key: 'text', data: [textData]})
   }
 }

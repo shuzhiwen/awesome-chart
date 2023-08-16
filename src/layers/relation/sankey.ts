@@ -15,6 +15,8 @@ import {getAttr, noChange} from '../../utils'
 import {LayerBase} from '../base'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 
+type Key = 'node' | 'edge' | 'text'
+
 type RibbonKey = 'x1' | 'y1' | 'x2' | 'y2' | 'x3' | 'y3' | 'x4' | 'y4'
 
 const defaultStyle: LayerSankeyStyle = {
@@ -33,7 +35,7 @@ const defaultStyle: LayerSankeyStyle = {
   },
 }
 
-export class LayerSankey extends LayerBase<LayerSankeyOptions> {
+export class LayerSankey extends LayerBase<LayerSankeyOptions, Key> {
   private _data: Maybe<DataRelation>
 
   private _style = defaultStyle
@@ -288,8 +290,8 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions> {
       ...this.style.text,
     }))
 
-    this.drawBasic({type: 'rect', data: nodeData, sublayer: 'node'})
-    this.drawBasic({type: 'path', data: edgeData, sublayer: 'edge'})
-    this.drawBasic({type: 'text', data: textData})
+    this.drawBasic({type: 'rect', key: 'node', data: nodeData})
+    this.drawBasic({type: 'path', key: 'edge', data: edgeData})
+    this.drawBasic({type: 'text', key: 'text', data: textData})
   }
 }

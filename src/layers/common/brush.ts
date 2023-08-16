@@ -38,7 +38,7 @@ const defaultStyle: LayerBrushStyle = {
   },
 }
 
-export class LayerBrush extends LayerBase<LayerBrushOptions> {
+export class LayerBrush extends LayerBase<LayerBrushOptions, never> {
   private _scale: Omit<LayerAxisScale, 'nice'> = {}
 
   private originScaleRangeMap: Map<string, any[]> = new Map()
@@ -60,7 +60,7 @@ export class LayerBrush extends LayerBase<LayerBrushOptions> {
   }
 
   constructor(options: LayerBrushOptions, context: ChartContext) {
-    super({options, context, sublayers: ['text']})
+    super({options, context})
   }
 
   setScale(scale: LayerAxisScale) {

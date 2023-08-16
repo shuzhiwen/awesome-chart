@@ -22,6 +22,8 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = 'node' | 'edge' | 'text'
+
 const defaultStyle: LayerTreeStyle = {
   direction: 'horizontal',
   curveType: 'curveBumpX',
@@ -34,7 +36,7 @@ const defaultStyle: LayerTreeStyle = {
   },
 }
 
-export class LayerTree extends LayerBase<LayerTreeOptions> {
+export class LayerTree extends LayerBase<LayerTreeOptions, Key> {
   private needRescale = false
 
   private _data: Maybe<DataRelation>
@@ -304,8 +306,8 @@ export class LayerTree extends LayerBase<LayerTreeOptions> {
       ...this.style.text,
     }))
 
-    this.drawBasic({type: 'curve', data: edgeData, sublayer: 'edge'})
-    this.drawBasic({type: 'circle', data: nodeData, sublayer: 'node'})
-    this.drawBasic({type: 'text', data: textData})
+    this.drawBasic({type: 'curve', key: 'edge', data: edgeData})
+    this.drawBasic({type: 'circle', key: 'node', data: nodeData})
+    this.drawBasic({type: 'text', key: 'text', data: textData})
   }
 }

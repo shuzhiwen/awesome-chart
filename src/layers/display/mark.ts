@@ -13,6 +13,8 @@ import {createDroplet, isScaleBand, tableListToObjects} from '../../utils'
 import {LayerBase} from '../base'
 import {checkColumns, createScale, createStyle, createText, validateAndCreateData} from '../helpers'
 
+type Key = 'mark' | 'text'
+
 type DataKey = 'x' | 'y' | 'value'
 
 const defaultStyle: LayerMarkStyle = {
@@ -26,7 +28,7 @@ const defaultStyle: LayerMarkStyle = {
   },
 }
 
-export class LayerMark extends LayerBase<LayerMarkOptions> {
+export class LayerMark extends LayerBase<LayerMarkOptions, Key> {
   private _scale: LayerMarkScale
 
   private _data: Maybe<DataTableList>
@@ -100,7 +102,7 @@ export class LayerMark extends LayerBase<LayerMarkOptions> {
       ...this.style.text,
     }
 
-    this.drawBasic({type: 'path', data: [pathData], sublayer: 'mark'})
-    this.drawBasic({type: 'text', data: [textData]})
+    this.drawBasic({type: 'path', key: 'mark', data: [pathData]})
+    this.drawBasic({type: 'text', key: 'text', data: [textData]})
   }
 }

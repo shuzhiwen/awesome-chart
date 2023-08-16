@@ -22,13 +22,15 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = 'point' | 'text'
+
 type DataKey = 'x' | 'y' | 'value' | 'category'
 
 const defaultStyle: LayerScatterStyle = {
   pointSize: [5, 5],
 }
 
-export class LayerScatter extends LayerBase<LayerScatterOptions> {
+export class LayerScatter extends LayerBase<LayerScatterOptions, Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -85,13 +87,13 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
     const {top, left} = this.options.layout,
       {text, point, pointSize} = this.style,
       {scaleX, scaleY, scalePointSize} = this.scale,
-      data = tableListToObjects<DataKey>(this.data.source),
+      data = tableListToObjects<DataKey, number>(this.data.source),
       pointData = data.map((meta) => ({
         value: meta.value,
         category: meta.category,
-        x: left + scaleX(meta.x as number) ?? NaN,
-        y: top + scaleY(meta.y as number) ?? NaN,
-        r: scalePointSize(meta.value as number) ?? ungroup(pointSize),
+        x: left + scaleX(meta.x) ?? NaN,
+        y: top + scaleY(meta.y) ?? NaN,
+        r: scalePointSize(meta.value) ?? ungroup(pointSize),
         meta,
       })),
       categories = Array.from(new Set(pointData.map(({category}) => category))),
@@ -170,7 +172,7 @@ export class LayerScatter extends LayerBase<LayerScatterOptions> {
       fill: group.map(({color}) => color),
     }))
 
-    this.drawBasic({type: 'circle', data: pointData, sublayer: 'point'})
-    this.drawBasic({type: 'text', data: textData})
+    this.drawBasic({type: 'circle', key: 'point', data: pointData})
+    this.drawBasic({type: 'text', key: 'text', data: textData})
   }
 }

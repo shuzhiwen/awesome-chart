@@ -13,6 +13,8 @@ import {
 import {LayerBase} from '../base'
 import {createScale, createStyle, createText, validateAndCreateData} from '../helpers'
 
+type Key = 'block' | 'background' | 'text'
+
 type GeoFeature = {
   type: 'Feature'
   properties: AnyObject
@@ -27,7 +29,7 @@ const defaultStyle: LayerBasemapStyle = {
   },
 }
 
-export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
+export class LayerBasemap extends LayerBase<LayerBasemapOptions, Key> {
   private _data: Maybe<
     DataBase<
       | number
@@ -205,9 +207,9 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions> {
       fillOpacity: 0,
     }
 
-    this.drawBasic({type: 'rect', data: [rectData], sublayer: 'background'})
-    this.drawBasic({type: 'path', data: [blockData], sublayer: 'block'})
-    this.drawBasic({type: 'text', data: [textData]})
+    this.drawBasic({type: 'rect', key: 'background', data: [rectData]})
+    this.drawBasic({type: 'path', key: 'block', data: [blockData]})
+    this.drawBasic({type: 'text', key: 'text', data: [textData]})
 
     // reset coordinate system
     if (this.blockData.length) {

@@ -15,6 +15,8 @@ import {isBoxCollision, isCC, tableListToObjects, ungroup, uuid} from '../../uti
 import {LayerBase} from '../base'
 import {checkColumns, createStyle, makeClass, validateAndCreateData} from '../helpers'
 
+type Key = 'box' | 'gridLine' | 'placeholder'
+
 type DataKey = 'width' | 'height' | 'key'
 
 type ElData = ElConfig & {source: {meta: ArrayItem<LayerGrid['boxData']>}}
@@ -71,7 +73,7 @@ const placeBox = (width: number, height: number, columnHeight: number[]) => {
   return rest
 }
 
-export class LayerGrid extends LayerBase<LayerGridOptions> {
+export class LayerGrid extends LayerBase<LayerGridOptions, Key> {
   private _data: Maybe<DataTableList>
 
   private _style = defaultStyle
@@ -208,9 +210,9 @@ export class LayerGrid extends LayerBase<LayerGridOptions> {
       ...this.style.gridLine,
     }))
 
-    this.drawBasic({type: 'rect', data: [placeholderData], sublayer: 'placeholder'})
-    this.drawBasic({type: 'rect', data: boxData, sublayer: 'box'})
-    this.drawBasic({type: 'line', data: lineData, sublayer: 'gridLine'})
+    this.drawBasic({type: 'rect', key: 'placeholder', data: [placeholderData]})
+    this.drawBasic({type: 'rect', key: 'box', data: boxData})
+    this.drawBasic({type: 'line', key: 'gridLine', data: lineData})
 
     if (this.style.draggable) {
       if (isCC(this.root)) {

@@ -1,6 +1,6 @@
 import {DataBase, DataRelation, DataTable, DataTableList} from '../data'
-import {LayerBase, LayerText} from '../layers'
-import {CreateChartProps, LayerOptions} from '../types'
+import {LayerText} from '../layers'
+import {CreateChartProps, LayerInstance, LayerOptions} from '../types'
 import {
   createLog,
   errorCatcher,
@@ -20,8 +20,8 @@ const log = createLog('CreateChart')
 export const createLayer = (chart: Chart, schema: ArrayItem<CreateChartProps['layers']>) => {
   const {type, options, data, scale, style, animation, event} = schema!,
     layout = options?.layout ? chart.layout[options.layout] : undefined,
-    layerOptions = {type, ...options, layout},
-    layer = chart.createLayer(layerOptions as LayerOptions) as LayerBase<LayerOptions>
+    layerOptions = {type, ...options, layout} as LayerOptions,
+    layer = chart.createLayer(layerOptions) as LayerInstance
   let dataSet = data
 
   if (isRawTable(data) || data?.type === 'table') {
@@ -38,7 +38,9 @@ export const createLayer = (chart: Chart, schema: ArrayItem<CreateChartProps['la
   layer.setAnimation(animation)
   isLayerAxis(layer) && layer.setScale({nice: scale})
   !isLayerLegend(layer) && layer.setData(dataSet)
-  Object.entries(event ?? {}).forEach(([name, fn]) => layer.event.on(name, 'user', fn))
+  Object.entries(event ?? {}).forEach(([name, fn]) => {
+    layer.event.on(name as any, 'user', fn)
+  })
 
   return layer
 }
@@ -49,7 +51,7 @@ export const createChart = errorCatcher(
     const chart = existedChart ?? new Chart(initialConfig)
 
     // catch error and info user
-    chart.event.on('error', 'user', (data: any) => {
+    chart.event.on('error', 'user', (data) => {
       if (!onError) {
         chart.destroy()
         const fbChart = new Chart(initialConfig)
@@ -92,6 +94,7 @@ export const createChart = errorCatcher(
 
     // start animation (consider transfer control)
     chart.layers.map((instance) => instance?.playAnimation())
+
     return chart
   },
   (error: Error) => {

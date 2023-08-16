@@ -23,6 +23,8 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = 'arc' | 'guideLine' | 'text'
+
 const defaultOptions: Partial<LayerArcOptions> = {
   variant: 'pie',
 }
@@ -37,7 +39,7 @@ const defaultStyle: LayerArcStyle = {
   },
 }
 
-export class LayerArc extends LayerBase<LayerArcOptions> {
+export class LayerArc extends LayerBase<LayerArcOptions, Key> {
   public legendData: Maybe<LegendData>
 
   private needRescale = false
@@ -287,9 +289,9 @@ export class LayerArc extends LayerBase<LayerArcOptions> {
       ...this.style.text,
     }))
 
-    this.drawBasic({type: 'arc', data: arcData})
-    this.drawBasic({type: 'curve', data: guideLineData, sublayer: 'guideLine'})
-    this.drawBasic({type: 'text', data: textData})
+    this.drawBasic({type: 'arc', key: 'arc', data: arcData})
+    this.drawBasic({type: 'curve', key: 'guideLine', data: guideLineData})
+    this.drawBasic({type: 'text', key: 'text', data: textData})
 
     this.event.onWithOff('click-arc', 'internal', ({data}) => {
       if (this.options.variant === 'nightingaleRose') return

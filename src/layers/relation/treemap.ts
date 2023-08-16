@@ -15,12 +15,14 @@ import {getAttr, overflowControl, uuid} from '../../utils'
 import {LayerBase} from '../base'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 
+type Key = 'rect' | 'text'
+
 const defaultStyle: LayerTreemapStyle = {
   align: ['middle', 'middle'],
   labelGap: 5,
 }
 
-export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
+export class LayerTreemap extends LayerBase<LayerTreemapOptions, Key> {
   private _data: Maybe<DataRelation>
 
   private _style = defaultStyle
@@ -140,7 +142,7 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions> {
       data: group,
       ...this.style.text,
     }))
-    this.drawBasic({type: 'rect', data: rectData})
-    this.drawBasic({type: 'text', data: textData})
+    this.drawBasic({type: 'rect', key: 'rect', data: rectData})
+    this.drawBasic({type: 'text', key: 'text', data: textData})
   }
 }

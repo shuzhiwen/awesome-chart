@@ -15,6 +15,8 @@ import {createSinusoidal, isSC} from '../../utils'
 import {LayerBase} from '../base'
 import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
 
+type Key = 'area' | 'background' | 'text'
+
 const defaultStyle: LayerWaveStyle = {
   wavelength: 50,
   amplitude: 20,
@@ -34,7 +36,7 @@ const defaultStyle: LayerWaveStyle = {
   },
 }
 
-export class LayerWave extends LayerBase<LayerWaveOptions> {
+export class LayerWave extends LayerBase<LayerWaveOptions, Key> {
   private _style = defaultStyle
 
   private _data: Maybe<
@@ -162,8 +164,8 @@ export class LayerWave extends LayerBase<LayerWaveOptions> {
       ...this.style.text,
     }
 
-    this.drawBasic({type: 'circle', data: [backgroundData], sublayer: 'background'})
-    this.drawBasic({type: 'area', data: [areaData]})
-    this.drawBasic({type: 'text', data: [textData]})
+    this.drawBasic({type: 'circle', key: 'background', data: [backgroundData]})
+    this.drawBasic({type: 'area', key: 'area', data: [areaData]})
+    this.drawBasic({type: 'text', key: 'text', data: [textData]})
   }
 }

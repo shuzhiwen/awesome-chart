@@ -16,12 +16,14 @@ import {isRealNumber} from '../../utils'
 import {LayerBase} from '../base'
 import {createColorMatrix, createScale, createStyle, validateAndCreateData} from '../helpers'
 
+type Key = 'text' | 'arc'
+
 const defaultStyle: LayerRadialStyle = {
   innerRadius: 10,
   cornerRadius: Infinity,
 }
 
-export class LayerRadial extends LayerBase<LayerRadialOptions> {
+export class LayerRadial extends LayerBase<LayerRadialOptions, Key> {
   public legendData: Maybe<LegendData>
 
   private needRescale = false
@@ -143,7 +145,7 @@ export class LayerRadial extends LayerBase<LayerRadialOptions> {
       ...this.style.text,
     }))
 
-    this.drawBasic({type: 'arc', data: arcData})
-    this.drawBasic({type: 'text', data: textData})
+    this.drawBasic({type: 'arc', key: 'arc', data: arcData})
+    this.drawBasic({type: 'text', key: 'text', data: textData})
   }
 }

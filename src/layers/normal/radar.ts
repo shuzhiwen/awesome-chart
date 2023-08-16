@@ -23,6 +23,8 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = 'text' | 'polygon' | 'point'
+
 const defaultOptions: Partial<LayerRadarOptions> = {
   mode: 'cover',
 }
@@ -35,7 +37,7 @@ const defaultStyle: LayerRadarStyle = {
   },
 }
 
-export class LayerRadar extends LayerBase<LayerRadarOptions> {
+export class LayerRadar extends LayerBase<LayerRadarOptions, Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -196,8 +198,8 @@ export class LayerRadar extends LayerBase<LayerRadarOptions> {
       ...this.style.text,
     }))
 
-    this.drawBasic({type: 'polygon', data: polygonData})
-    this.drawBasic({type: 'circle', data: pointData, sublayer: 'point'})
-    this.drawBasic({type: 'text', data: textData})
+    this.drawBasic({type: 'polygon', key: 'polygon', data: polygonData})
+    this.drawBasic({type: 'circle', key: 'point', data: pointData})
+    this.drawBasic({type: 'text', key: 'text', data: textData})
   }
 }

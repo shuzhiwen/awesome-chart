@@ -24,13 +24,15 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
+type Key = 'rect' | 'circle' | 'text'
+
 const defaultStyle: LayerMatrixStyle = {
   shape: 'rect',
   circleSize: ['auto', 'auto'],
   colorDomain: 'auto',
 }
 
-export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
+export class LayerMatrix extends LayerBase<LayerMatrixOptions, Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTable>
@@ -208,8 +210,22 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions> {
       ...this.style.text,
     }))
 
-    this.style.shape === 'rect' && this.drawBasic({type: 'rect', data: rectData})
-    this.style.shape === 'circle' && this.drawBasic({type: 'circle', data: circleData})
-    this.drawBasic({type: 'text', data: textData})
+    this.style.shape === 'rect' &&
+      this.drawBasic({
+        type: 'rect',
+        key: 'rect',
+        data: rectData,
+      })
+    this.style.shape === 'circle' &&
+      this.drawBasic({
+        type: 'circle',
+        key: 'circle',
+        data: circleData,
+      })
+    this.drawBasic({
+      type: 'text',
+      key: 'text',
+      data: textData,
+    })
   }
 }

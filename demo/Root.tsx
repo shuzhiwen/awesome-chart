@@ -23,11 +23,11 @@ export function Root() {
   }, [])
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={{opacity: isDebug ? 0.1 : 1}}>
       <Menu onChange={onEditorChange} />
       <div className={styles.mainSection}>
         <Editor schema={editorSchema} onChange={onChartChange} />
-        <div className={styles.chartSection} style={{opacity: isDebug ? 0.2 : 1}}>
+        <div className={styles.chartSection}>
           <Chart debuggers={debuggers} schema={chartSchema} variant="dark" />
           <Chart debuggers={debuggers} schema={chartSchema} variant="light" />
         </div>

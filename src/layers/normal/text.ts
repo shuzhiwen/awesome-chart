@@ -19,7 +19,7 @@ const defaultStyle: LayerTextStyle = {
   },
 }
 
-export class LayerText extends LayerBase<LayerTextOptions> {
+export class LayerText extends LayerBase<LayerTextOptions, 'text'> {
   private _data: Maybe<
     DataBase<
       | string
@@ -113,6 +113,6 @@ export class LayerText extends LayerBase<LayerTextOptions> {
       ...this.style.groupText?.[item.yIndex],
     }))
 
-    this.drawBasic({type: 'text', data: textData})
+    this.drawBasic({type: 'text', key: 'text', data: textData})
   }
 }

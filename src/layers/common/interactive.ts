@@ -24,7 +24,7 @@ import {
 } from '../helpers'
 import {LayerAuxiliary} from './auxiliary'
 
-const shadowOpacity = 0.5
+type Key = 'rect' | 'interactive'
 
 const defaultStyle: LayerInteractiveStyle = {
   line: {
@@ -37,7 +37,7 @@ const defaultStyle: LayerInteractiveStyle = {
   },
 }
 
-export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
+export class LayerInteractive extends LayerBase<LayerInteractiveOptions, Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -72,7 +72,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
     super({context, options, sublayers: ['rect', 'interactive'], interactive: ['interactive']})
     const {layout, createSublayer, event} = this.options
 
-    this.event.onWithOff('destroy', 'internal', () => {
+    this.systemEvent.onWithOff('destroy', 'internal', () => {
       this.helperAuxiliary.forEach((auxiliary) => auxiliary.destroy())
     })
 
@@ -259,12 +259,13 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions> {
 
     this.drawBasic({
       type: 'rect',
+      key: 'interactive',
       data: darkRectData.concat(lightRectData),
-      sublayer: 'interactive',
     })
 
     this.event.onWithOff('mouseover-interactive', 'internal', ({data, target}) => {
       const getKey = (data: ElConfig) => data.source.meta.key as string
+      const shadowOpacity = 0.5
 
       if (getKey(data).match('secondary')) {
         return
