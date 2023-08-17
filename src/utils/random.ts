@@ -84,7 +84,7 @@ export const randomRelation = (options: RandomRelationOptions): RawRelation => {
 
 export function uuid(
   length = 16,
-  collection = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789'
+  collection = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz'
 ) {
   let string = ''
   for (let i = 0; i < length; i++) string += sample(collection)

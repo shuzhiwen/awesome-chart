@@ -54,7 +54,7 @@ export class Chart {
   /**
    * Log for internal messages.
    */
-  private readonly log = createLog(Chart.name)
+  private readonly log = createLog(this.constructor.name)
 
   /**
    * Manage lifecycle or error events.

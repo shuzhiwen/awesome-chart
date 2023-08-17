@@ -27,7 +27,7 @@ export class Tooltip {
 
   private hideTimeout: NodeJS.Timeout | undefined
 
-  readonly log = createLog(Tooltip.name)
+  readonly log = createLog(this.constructor.name)
 
   constructor(options: TooltipOptions) {
     this.setOptions(options)
@@ -56,7 +56,7 @@ export class Tooltip {
 
   show(event: MouseEvent) {
     this.isVisible = true
-    this.instance?.style('display', 'flex')
+    this.instance.style('display', 'flex')
     clearTimeout(this.hideTimeout)
     this.move(event)
   }
@@ -64,7 +64,7 @@ export class Tooltip {
   hide() {
     this.hideTimeout = setTimeout(() => {
       this.isVisible = false
-      this.instance?.style('display', 'none')
+      this.instance.style('display', 'none')
     })
   }
 

@@ -4,7 +4,7 @@ import {safeLoop} from './chaos'
 import {createLog} from './create-log'
 
 export class ColorMatrix {
-  readonly log = createLog(ColorMatrix.name)
+  readonly log = createLog(this.constructor.name)
 
   private _matrix: string[][]
 

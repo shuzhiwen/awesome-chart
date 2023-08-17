@@ -20,7 +20,17 @@ import {
   LayerScale,
   LayerStyle,
 } from '../types'
-import {compute, createLog, EventManager, fromEntries, group, isCC, isSC, ungroup} from '../utils'
+import {
+  compute,
+  createLog,
+  EventManager,
+  fromEntries,
+  group,
+  isCC,
+  isSC,
+  ungroup,
+  uuid,
+} from '../utils'
 import {makeClass, selector} from './helpers'
 
 export abstract class LayerBase<Options extends LayerOptions, Key extends string> {
@@ -51,7 +61,7 @@ export abstract class LayerBase<Options extends LayerOptions, Key extends string
   /**
    * The className is used to classify drawing elements of different layers.
    */
-  readonly className = this.constructor.name
+  readonly className = 'layer-' + uuid(8)
 
   /**
    * Declare what elements the layer contains.
