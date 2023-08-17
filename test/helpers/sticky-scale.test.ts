@@ -1,7 +1,7 @@
 import {scaleBand} from 'd3'
 import {stickyBandScale} from '../../src'
 
-test('sticky-scale', () => {
+test('stickyBandScale', () => {
   const scale = scaleBand<Meta>().domain(['d1', 'd2', 'd3']).range([0, 100]).paddingInner(0.5)
 
   expect(stickyBandScale(scale, 0)).toEqual({domain: 'd1', value: 10})

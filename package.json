@@ -42,12 +42,13 @@
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "@vitejs/plugin-react": "^1.0.7",
-    "awesome-chart": "^0.4.3",
+    "awesome-chart": "^0.5.0",
     "babel-loader": "^8.2.5",
     "eslint": ">=5.16.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.5.0",
     "jest": "^27.5.1",
+    "jest-canvas-mock": "^2.5.2",
     "jsdom": "^19.0.0",
     "monaco-editor": "^0.32.1",
     "path": "^0.12.7",
@@ -78,6 +79,10 @@
   },
   "jest": {
     "testEnvironment": "jsdom",
+    "setupFiles": [
+      "<rootDir>/test/index.ts",
+      "jest-canvas-mock"
+    ],
     "moduleNameMapper": {
       "d3": "<rootDir>/node_modules/d3/dist/d3.min.js"
     }

@@ -1,10 +1,9 @@
 import {path as d3Path} from 'd3-path'
 import {Chart} from '../../src/core'
-import {LayerODLine} from '../../src/layers'
 
 export const debugODLineLayer = (chart: Chart) => {
   const path = d3Path(),
-    layers = chart.getLayersByType('odLine') as LayerODLine[]
+    layers = chart.getLayersByType('odLine')
 
   if (!layers.length) return
 

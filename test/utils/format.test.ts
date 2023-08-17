@@ -1,11 +1,5 @@
 import {formatNumber, overflowControl} from '../../src'
 
-jest.mock('../../src/utils/chaos', () => ({
-  __esModule: true,
-  ...jest.requireActual<AnyObject>('../../src/utils/chaos'),
-  getTextWidth: jest.fn((text) => (text?.length > 5 ? 100 : 20)),
-}))
-
 test('formatNumber', () => {
   expect(formatNumber(1.00000000008)).toEqual('1')
   expect(formatNumber('1.00000000008')).toEqual('1')

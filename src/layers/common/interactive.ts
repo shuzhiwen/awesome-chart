@@ -83,14 +83,14 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions, Key> {
         layout,
         type: 'auxiliary',
         sublayerConfig: {root: this.root},
-      }),
+      })!,
       createSublayer({
         id: uuid(),
         layout,
         type: 'auxiliary',
         sublayerConfig: {root: this.root},
-      }),
-    ] as LayerInteractive['helperAuxiliary']
+      })!,
+    ]
 
     this.helperAuxiliary[0].setStyle({labelPosition: 'top', direction: 'vertical'})
     this.helperAuxiliary[1].setStyle({labelPosition: 'right', direction: 'horizontal'})

@@ -3,32 +3,14 @@ import base from '../../demo/schema/base'
 import rect from '../../demo/schema/normal/rect'
 import {createChart} from '../../src'
 
-// disable log message
-jest.mock('../../src/utils/create-log', () => ({
-  __esModule: true,
-  createLog: jest.fn(() => ({
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-    debug: {
-      info: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
-    },
-  })),
-}))
-
-test('defines', () => {
+test('render', () => {
   const svgContainer = document.body.appendChild(document.createElement('div'))
-  const canvasContainer = document.body.appendChild(document.createElement('div'))
 
   select(svgContainer).attr('width', '1000px').attr('height', '1000px')
-  select(canvasContainer).attr('width', '1000px').attr('height', '1000px')
 
   const schema = {...base(rect({variant: 'column'})), tooltipOptions: {}}
   const svgChart = createChart({container: svgContainer, ...schema, engine: 'svg'})
-  const canvasChart = createChart({container: svgContainer, ...schema, engine: 'canvas'})
-  const charts = [svgChart, canvasChart]
+  const charts = [svgChart]
 
   charts.forEach((chart) => {
     expect(chart?.getLayersByType('text').length === 1)

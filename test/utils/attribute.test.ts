@@ -1,5 +1,5 @@
 import {select} from 'd3'
-import {addEvent, addStyle, getAttr, mergeAlpha, transformAttr} from '../../src'
+import {addStyle, getAttr, mergeAlpha, transformAttr} from '../../src'
 
 test('mergeAlpha', () => {
   expect(typeof mergeAlpha(0xffffff, 0.5)).toBe('string')
@@ -14,16 +14,10 @@ test('mergeAlpha', () => {
 
 test('addStyle', () => {
   const selection = select(document.createElement('svg'))
+
   expect(addStyle(selection, {}))
   expect(addStyle(selection, {color: 'red'}))
   expect(addStyle(selection, {color: ['red', 'yellow']}, 1))
-})
-
-test('addEvent', () => {
-  const selection = select(document.createElement('svg'))
-  expect(addEvent(selection, {}))
-  expect(addEvent(selection, {click: jest.fn()}))
-  expect(addEvent(selection, {click: jest.fn()}, null))
 })
 
 test('getAttr', () => {

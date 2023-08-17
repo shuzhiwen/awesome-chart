@@ -1,7 +1,7 @@
 import {select} from 'd3'
 import {isArray, isNil, isNumber} from 'lodash'
 import {Container} from 'pixi.js'
-import {LayerAxis, LayerBasemap, LayerBrush, LayerLegend} from '../layers'
+import {LayerAxis, LayerBasemap, LayerLegend} from '../layers'
 import {
   D3Selection,
   LayerInstance,
@@ -59,10 +59,6 @@ export function isCC(selector: any): selector is Container {
 
 export function isLayerAxis(instance: Maybe<LayerInstance>): instance is LayerAxis {
   return instance instanceof LayerAxis
-}
-
-export function isLayerBrush(instance: Maybe<LayerInstance>): instance is LayerBrush {
-  return instance instanceof LayerBrush
 }
 
 export function isLayerLegend(instance: Maybe<LayerInstance>): instance is LayerLegend {

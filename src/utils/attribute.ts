@@ -15,19 +15,6 @@ export function addStyle(target: D3Selection, style: AnyObject = {}, index = 0) 
 }
 
 /**
- * Batch add events for d3 selection.
- * @param event
- * The object that represent element events.
- * @param data
- * Parameters of each event.
- */
-export function addEvent(target: D3Selection, event: AnyEventObject = {}, data?: unknown) {
-  Object.entries(event).forEach(([key, handler]) => target.on(key, handler.bind(null, data)))
-  target.style('cursor', 'pointer')
-  return target
-}
-
-/**
  * Inject alpha channel for color.
  * @example
  * mergeAlpha('rgba(0,0,0,0.8)', 0.5) // rgba(0,0,0,0.4)

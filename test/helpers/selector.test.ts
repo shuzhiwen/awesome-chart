@@ -2,21 +2,6 @@ import {select} from 'd3'
 import {Container} from 'pixi.js'
 import {selector} from '../../src'
 
-// disable log message
-jest.mock('../../src/utils/create-log', () => ({
-  __esModule: true,
-  createLog: jest.fn(() => ({
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-    debug: {
-      info: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
-    },
-  })),
-}))
-
 test('Selector', () => {
   const svgContainer = select(document.createElement('svg'))
   const canvasContainer = new Container()

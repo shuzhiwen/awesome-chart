@@ -1,21 +1,6 @@
 import {ColorMatrix} from '../../src'
 
-// disable log message
-jest.mock('../../src/utils/create-log', () => ({
-  __esModule: true,
-  createLog: jest.fn(() => ({
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-    debug: {
-      info: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
-    },
-  })),
-}))
-
-test('Selector', () => {
+test('ColorMatrix', () => {
   const rawMatrix = [
     ['#ffff00', '#ffff01', '#ffff02', '#ffff03'],
     ['#ffff10', '#ffff11', '#ffff12', '#ffff13'],

@@ -2,6 +2,7 @@ import {
   addStyle,
   Chart,
   DataBase,
+  EventManager,
   getAttr,
   isSC,
   LayerBase,
@@ -57,7 +58,9 @@ const defaultStyle: TabMenuStyleShape = {
   },
 }
 
-class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
+class LayerTabMenu extends LayerBase<BasicLayerOptions<any>, never> {
+  readonly tabEvent = new EventManager<'click', AnyFunction>()
+
   private _data: Maybe<DataBase<MenuItem>>
 
   private _style = defaultStyle
@@ -174,7 +177,7 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>> {
             addStyle(itemEl, itemStyle)
             itemEl.text(itemStyle.text)
           })
-          .on('click', (event, data) => this.event.fire('click-tab', {data, event}))
+          .on('click', (event, data) => this.tabEvent.fire('click', {data, event}))
           .on('mouseenter', (event, data: any) => {
             const {node} = data
             const {depth} = node
@@ -232,11 +235,11 @@ export const Menu = (props: {onChange: (data: any) => void}) => {
       id: uuid(),
       type: 'tabMenu' as any,
       layout: chart.layout.container,
-    }) as unknown as LayerTabMenu
+    }) as LayerTabMenu
 
     layer.setData(new DataBase(schemaMenu))
     layer.draw()
-    layer.event.onWithOff('click-tab', 'user', ({data}) => {
+    layer.tabEvent.onWithOff('click', 'user', ({data}) => {
       if (data.node.data.schema) {
         onChange(data.node.data.schema)
         layer.blur()

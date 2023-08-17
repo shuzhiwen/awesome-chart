@@ -66,7 +66,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions, Key> {
       mode: 'interval',
       variant: 'column',
       sublayerConfig: {root: this.root},
-    }) as LayerRect
+    })!
     this.rectLayer = createSublayer({
       id: uuid(),
       layout,
@@ -74,7 +74,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions, Key> {
       mode: 'interval',
       variant: 'column',
       sublayerConfig: {root: this.root},
-    }) as LayerRect
+    })!
 
     bindEventManager(this.event, [this.lineLayer.event, this.rectLayer.event], (name) =>
       Array.from(commonEvents.values()).some((item) => name.match(item))

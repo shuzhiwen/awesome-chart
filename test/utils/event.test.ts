@@ -1,14 +1,14 @@
 import {EventManager} from '../../src'
 
 test('EventManager', () => {
-  const event = new EventManager<any, any>('abc')
+  const event = new EventManager<'addOne' | 'addTwo' | 'AddOneOnce' | 'MinusOnce'>()
   let value = 0
 
-  event.on('addOne', null, () => value++)
+  event.on('addOne', '', () => value++)
   event.on('addOne', 'group1', () => value++)
   event.on('addOne', 'group2', () => value++)
-  event.on('addTwo', null, () => (value += 2))
-  event.once('AddOneOnce', null, () => value++)
+  event.on('addTwo', '', () => (value += 2))
+  event.once('AddOneOnce', '', () => value++)
 
   expect(event.has('addOne')).toBe(true)
   event.fire('addOne')
@@ -32,13 +32,13 @@ test('EventManager', () => {
 
   value = 10
   expect(event.has('addOne')).toBe(false)
-  event.onWithOff('MinusOnce', null, () => value--)
+  event.onWithOff('MinusOnce', '', () => value--)
   event.fire('MinusOnce')
   expect(value).toBe(9)
-  event.onWithOff('MinusOnce', null, () => value--)
+  event.onWithOff('MinusOnce', '', () => value--)
   event.fire('MinusOnce')
   expect(value).toBe(8)
-  event.onWithOff('MinusOnce', null, () => value--)
+  event.onWithOff('MinusOnce', '', () => value--)
   event.fire('MinusOnce')
   expect(value).toBe(7)
   expect(event.has('MinusOnce')).toBe(true)

@@ -1,4 +1,3 @@
-import {LayerFlopper} from '../../src'
 import {Chart} from '../../src/core'
 import {DataBase, DataTableList} from '../../src/data'
 
@@ -26,7 +25,7 @@ export const debugFlopperLayer = (chart: Chart) => {
   if (!layers.length) return
 
   layers.forEach((layer) => {
-    const {integers} = (layer as LayerFlopper).style
+    const {integers} = layer.style
 
     layer.setData(new DataBase({value: Math.random() * 10 ** (integers ?? 8)}))
     layer.draw()
