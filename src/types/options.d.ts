@@ -3,6 +3,7 @@ import {LayerType} from './layer'
 import {LayoutArea} from './layout'
 
 export type LayerOptions =
+  | BasicLayerOptions
   | LayerAxisOptions
   | LayerAuxiliaryOptions
   | LayerLineOptions
@@ -34,7 +35,7 @@ export type LayerOptions =
   | LayerChordOptions
 
 type BasicLayerOptions<
-  Type extends LayerType,
+  Type extends LayerType = LayerType,
   Options extends AnyObject = Record<never, never>
 > = Partial<Options> & {
   id: string

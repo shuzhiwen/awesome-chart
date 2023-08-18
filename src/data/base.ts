@@ -1,7 +1,10 @@
 import {merge} from 'lodash'
 import {DataBaseOptions} from '../types'
 
-export class DataBase<Source, Options extends DataBaseOptions = DataBaseOptions> {
+export class DataBase<
+  Source extends unknown = unknown,
+  Options extends DataBaseOptions = DataBaseOptions
+> {
   private readonly _source: Source
 
   private readonly _options: Options

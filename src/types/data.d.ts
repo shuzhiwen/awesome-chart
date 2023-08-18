@@ -1,9 +1,7 @@
-import {DataBase, DataDict, DataRelation, DataTable, DataTableList} from '../data'
+import {DataDict} from '../data'
 import {ColorMatrix} from '../utils'
 
-export type DataType = Keys<typeof DataDict>
-
-export type LayerData = DataBase<any> | DataTableList | DataTable | DataRelation
+export type DataType = Keys<DataDict>
 
 export type LegendCache = {
   /**

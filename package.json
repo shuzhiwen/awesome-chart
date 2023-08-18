@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "vite  --port 9527",
     "build": "yarn tsc && vite build",
-    "package": "rm -r dist && yarn tsc && yarn rollup -c && cp -r src/types dist/types",
+    "package": "rm -rf dist && tsc && rollup -c && cp -r src/types dist/types",
     "docs": "yarn typedoc src/index.ts --out docs/api",
     "push": "yarn test && git push origin",
     "test": "yarn jest"

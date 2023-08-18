@@ -10,7 +10,6 @@ import {
   D3Selection,
   GradientCreatorProps,
   LayerAxisScale,
-  LayerDictInstance,
   LayerInstance,
   LayerOptions,
   LayerType,
@@ -18,8 +17,8 @@ import {
   RebuildScaleProps,
 } from '../types'
 import {
-  createLog,
   EventManager,
+  createLog,
   getEasyGradientCreator,
   getPercentageNumber,
   isLayerAxis,
@@ -225,13 +224,13 @@ export class Chart {
   }
 
   getLayerByType<T extends LayerType>(type: T) {
-    return (this.layers as LayerDictInstance<T>[]).find(({options}) => {
+    return (this.layers as LayerDict[T][]).find(({options}) => {
       return options.type === type
     })
   }
 
   getLayersByType<T extends LayerType>(type: T) {
-    return (this.layers as LayerDictInstance<T>[]).filter(({options}) => {
+    return (this.layers as LayerDict[T][]).filter(({options}) => {
       return options.type === type
     })
   }
@@ -290,7 +289,7 @@ export class Chart {
     const layer = new LayerDict[options.type](options as never, context)
     this._layers.push(layer)
 
-    return layer as Maybe<LayerDictInstance<T>>
+    return layer as Maybe<LayerDict[T]>
   }
 
   /**

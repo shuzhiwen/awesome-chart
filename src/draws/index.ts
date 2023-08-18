@@ -1,6 +1,5 @@
 import * as Drawer from '.'
 
-export default Drawer
 export * from './arc'
 export * from './area'
 export * from './circle'

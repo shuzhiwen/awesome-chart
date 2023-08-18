@@ -189,13 +189,12 @@ export function safeLoop(
  * The register function.
  * @internal
  */
-export function createClassRegister<K extends string, V, P>(mapping: Record<K, AnyObject>) {
+export function createClassRegister<K extends string, V, P>(mapping: AnyObject) {
   return function <Instance extends V>(key: K, klass: Newable<Instance, P>) {
     if (Object.keys(mapping).includes(key)) {
       console.error('Duplicate key for register custom class!')
       return
     }
-
     try {
       Object.assign(mapping, {[key]: klass})
     } catch (e) {

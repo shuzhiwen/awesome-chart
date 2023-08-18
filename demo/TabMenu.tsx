@@ -1,24 +1,24 @@
+import {hierarchy, select} from 'd3'
+import {cloneDeep, max, merge} from 'lodash'
+import React, {useEffect, useRef} from 'react'
 import {
-  addStyle,
   Chart,
   DataBase,
   EventManager,
-  getAttr,
-  isSC,
   LayerBase,
   LayerDict,
+  addStyle,
+  getAttr,
+  isSC,
   registerCustomLayer,
   robustRange,
   transformAttr,
   uuid,
   validateAndCreateData,
-} from 'awesome-chart'
-import {BasicLayerOptions, ChartContext, D3Selection} from 'awesome-chart/dist/types'
-import {hierarchy, select} from 'd3'
-import {cloneDeep, max, merge} from 'lodash'
-import React, {useEffect, useRef} from 'react'
-import {schemaMenu} from './schema'
+} from '../src'
+import {BasicLayerOptions, ChartContext, D3Selection} from '../src/types'
 import s from './TabMenu.module.css'
+import {schemaMenu} from './schema'
 
 type MenuItem = {
   name: Meta
@@ -31,6 +31,12 @@ type TabMenuStyleShape = Partial<
     adsorb: boolean
   }
 >
+
+declare module '../src' {
+  interface LayerDict {
+    tabMenu: LayerTabMenu
+  }
+}
 
 const defaultStyle: TabMenuStyleShape = {
   adsorb: true,
@@ -233,9 +239,9 @@ export const Menu = (props: {onChange: (data: any) => void}) => {
     })
     const layer = chart.createLayer({
       id: uuid(),
-      type: 'tabMenu' as any,
+      type: 'tabMenu',
       layout: chart.layout.container,
-    }) as LayerTabMenu
+    })!
 
     layer.setData(new DataBase(schemaMenu))
     layer.draw()

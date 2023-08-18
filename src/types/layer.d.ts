@@ -9,12 +9,7 @@ import {LayerOptions} from './options'
 import {RawScale, ScaleNice} from './scale'
 import {TextStyle} from './styles'
 
-export type LayerType = Keys<typeof LayerDict>
-
-export type LayerDictInstance<
-  T extends LayerType,
-  P extends typeof LayerDict[T] = typeof LayerDict[T]
-> = InstanceType<P>
+export type LayerType = Keys<LayerDict>
 
 /**
  * Drawing data will be cached each time.

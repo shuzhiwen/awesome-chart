@@ -2,6 +2,7 @@ import {cloneDeep, isEqual, merge, noop, range} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {AnimationQueue} from '../animation'
 import {commonEvents, layerLifeCycles, tooltipEvents} from '../core'
+import {DataBase} from '../data'
 import {DrawerDict} from '../draws'
 import {
   CacheLayerAnimation,
@@ -15,15 +16,14 @@ import {
   ElEvent,
   LayerAnimation,
   LayerBaseProps,
-  LayerData,
   LayerOptions,
   LayerScale,
   LayerStyle,
 } from '../types'
 import {
+  EventManager,
   compute,
   createLog,
-  EventManager,
   fromEntries,
   group,
   isCC,
@@ -37,7 +37,7 @@ export abstract class LayerBase<Options extends LayerOptions, Key extends string
   /**
    * Record raw data for layer elements.
    */
-  abstract data: Maybe<LayerData>
+  abstract data: Maybe<DataBase>
 
   /**
    * Record style information for layer elements.
@@ -191,7 +191,7 @@ export abstract class LayerBase<Options extends LayerOptions, Key extends string
    * This method will force the layer to recalculate.
    * @see needRecalculated
    */
-  setData(_: Maybe<LayerData>) {}
+  setData(_: Maybe<DataBase>) {}
 
   /**
    * Set the scale of the layer.

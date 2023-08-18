@@ -3,11 +3,12 @@ import {AnimationDict} from '../animation'
 import {ChartTheme} from './core'
 import {D3Selection, DrawerTarget} from './draw'
 
-export type AnimationType = Keys<typeof AnimationDict>
+export type AnimationType = Keys<AnimationDict>
 
 export type LayerAnimation<T> = Computable<Partial<T>, ChartTheme>
 
 export type AnimationOptions =
+  | BasicAnimationOptions
   | AnimationEmptyOptions
   | AnimationFadeOptions
   | AnimationPathOptions
