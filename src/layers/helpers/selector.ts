@@ -77,7 +77,7 @@ class Selector {
       const group = new Container()
       group.getApp = target.getApp
       group.className = className
-      group.eventMode = 'none'
+      group.eventMode = 'passive'
       target.addChild(group)
       return group
     }

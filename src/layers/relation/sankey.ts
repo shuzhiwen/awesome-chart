@@ -2,9 +2,8 @@ import {max, range, sum} from 'd3'
 import {DataRelation} from '../../data'
 import {scaleLinear} from '../../scales'
 import {
-  ChartContext,
   DrawerData,
-  LayerSankeyOptions,
+  LayerOptions,
   LayerSankeyStyle,
   LayerStyle,
   Node,
@@ -35,7 +34,7 @@ const defaultStyle: LayerSankeyStyle = {
   },
 }
 
-export class LayerSankey extends LayerBase<LayerSankeyOptions, Key> {
+export class LayerSankey extends LayerBase<Key> {
   private _data: Maybe<DataRelation>
 
   private _style = defaultStyle
@@ -61,8 +60,8 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerSankeyOptions, context: ChartContext) {
-    super({options, context, sublayers: ['node', 'edge', 'text'], interactive: ['node']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['node', 'edge', 'text'], interactive: ['node']})
   }
 
   setData(data: LayerSankey['data']) {
@@ -80,8 +79,8 @@ export class LayerSankey extends LayerBase<LayerSankeyOptions, Key> {
 
     const {edges, nodes} = this.data,
       {layout, createGradient} = this.options,
-      {align, text, node, direction = 'horizontal'} = this.style,
-      {labelOffset = 5, nodeWidth = 5, nodeGap = 0, edgeGap = 0} = this.style,
+      {align, text, node, direction} = this.style,
+      {labelOffset, nodeWidth, nodeGap, edgeGap} = this.style,
       levels = range(0, (max(nodes.map(({level}) => level ?? 0)) ?? 0) + 1),
       groups = levels.map((value) => nodes.filter(({level}) => level === value)),
       totalLength = direction === 'horizontal' ? layout.width : layout.height,

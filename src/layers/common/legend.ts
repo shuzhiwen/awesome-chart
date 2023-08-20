@@ -2,13 +2,12 @@ import {cloneDeep, max, sum} from 'lodash'
 import {EVENT_KEY} from '../../core'
 import {DataBase, DataTableList} from '../../data'
 import {
-  ChartContext,
   CircleDrawerProps,
   DrawerData,
   ElConfig,
   LayerInstance,
-  LayerLegendOptions,
   LayerLegendStyle,
+  LayerOptions,
   LayerStyle,
   LegendData,
   LineDrawerProps,
@@ -36,13 +35,12 @@ const defaultStyle: LayerLegendStyle = {
   offset: [0, 0],
   gap: [5, 10],
   shapeSize: 12,
-  shape: {},
   text: {
     fontSize: 12,
   },
 }
 
-export class LayerLegend extends LayerBase<LayerLegendOptions, Key> {
+export class LayerLegend extends LayerBase<Key> {
   private disabledColor: string
 
   private _data = new DataBase<{
@@ -60,17 +58,17 @@ export class LayerLegend extends LayerBase<LayerLegendOptions, Key> {
   private _style = defaultStyle
 
   private textData: (DrawerData<TextDrawerProps> & {
-    textWidth?: number
+    textWidth: number
   })[] = []
 
   private lineData: (DrawerData<LineDrawerProps> & {
-    stroke?: string
-    strokeWidth?: number
+    stroke: string
+    strokeWidth: number
     strokeDasharray?: string
   })[] = []
 
   private rectData: (DrawerData<RectDrawerProps> & {
-    fill?: string
+    fill: string
   })[] = []
 
   private circleData: (DrawerData<CircleDrawerProps> & {
@@ -80,7 +78,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions, Key> {
   })[] = []
 
   private polygonData: (DrawerData<PolyDrawerProps> & {
-    fill?: string
+    fill: string
   })[] = []
 
   private interactiveData: DrawerData<RectDrawerProps>[] = []
@@ -95,9 +93,8 @@ export class LayerLegend extends LayerBase<LayerLegendOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerLegendOptions, context: ChartContext) {
+  constructor(options: LayerOptions) {
     super({
-      context,
       options,
       sublayers: ['interactive', 'circle', 'rect', 'polygon', 'line', 'text'],
     })
@@ -198,7 +195,7 @@ export class LayerLegend extends LayerBase<LayerLegendOptions, Key> {
     }
 
     const {left, top, width, height} = this.options.layout,
-      {maxColumn = 1, shapeSize = 5, offset = [0, 0], text} = this.style,
+      {maxColumn, shapeSize, offset, text} = this.style,
       [align, verticalAlign] = this.style.align ?? ['start', 'start'],
       [inner, outer] = this.style.gap ?? [0, 0],
       data = this.data.source,

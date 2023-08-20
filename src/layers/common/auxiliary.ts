@@ -1,10 +1,9 @@
 import {DataTableList} from '../../data'
 import {
-  ChartContext,
   DrawerData,
-  LayerAuxiliaryOptions,
   LayerAuxiliaryScale,
   LayerAuxiliaryStyle,
+  LayerOptions,
   LayerStyle,
   LegendData,
   LineDrawerProps,
@@ -36,7 +35,7 @@ const defaultStyle: LayerAuxiliaryStyle = {
   },
 }
 
-export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions, Key> {
+export class LayerAuxiliary extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -68,8 +67,8 @@ export class LayerAuxiliary extends LayerBase<LayerAuxiliaryOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerAuxiliaryOptions, context: ChartContext) {
-    super({context, options, sublayers: ['text', 'line', 'background']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['text', 'line', 'background']})
   }
 
   setData(data: LayerAuxiliary['data']) {

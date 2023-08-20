@@ -3,22 +3,13 @@ import {select} from 'd3'
 import {cloneDeep, merge} from 'lodash'
 import {lightTheme} from '../../core/theme'
 import {DataBase} from '../../data'
-import {
-  ChartContext,
-  LayerAnimation,
-  LayerFlopperOptions,
-  LayerFlopperStyle,
-  LayerStyle,
-} from '../../types'
+import {LayerAnimation, LayerFlopperStyle, LayerOptions, LayerStyle} from '../../types'
 import {addStyle, isCC, isSC, mergeAlpha, robustRange} from '../../utils'
 import {LayerBase} from '../base'
 import {createStyle, validateAndCreateData} from '../helpers'
 
-const defaultOptions: Partial<LayerFlopperOptions> = {
-  variant: 'vertical',
-}
-
 const defaultStyle: LayerFlopperStyle = {
+  variant: 'vertical',
   scale: 1,
   integers: 8,
   decimals: 2,
@@ -27,7 +18,7 @@ const defaultStyle: LayerFlopperStyle = {
 
 const characterSet = ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.']
 
-export class LayerFlopper extends LayerBase<LayerFlopperOptions, never> {
+export class LayerFlopper extends LayerBase<never> {
   private _data: Maybe<DataBase<{value: number}>>
 
   private _style = defaultStyle
@@ -48,8 +39,8 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions, never> {
     return this._style
   }
 
-  constructor(options: LayerFlopperOptions, context: ChartContext) {
-    super({options: {...defaultOptions, ...options}, context})
+  constructor(options: LayerOptions) {
+    super({options})
 
     const {containerWidth, containerHeight, layout, root} = this.options,
       {left, top, width, height} = layout
@@ -92,7 +83,7 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions, never> {
 
   update() {
     const {width, height} = this.options.layout,
-      {integers = 8, decimals = 2, thousandth} = this.style,
+      {integers, decimals, thousandth} = this.style,
       commas = thousandth ? Math.floor(Math.abs(integers - 1) / 3) : 0,
       places = integers + decimals + commas + (decimals > 0 ? 1 : 0),
       prevData = this.cellData.map(({text}) => text)
@@ -129,9 +120,8 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions, never> {
       throw new Error('Not support canvas flopper')
     }
 
-    const {variant} = this.options,
-      {width, height} = this.cellSize,
-      {url, characters, scale, cell} = this.style,
+    const {width, height} = this.cellSize,
+      {variant, url, characters, scale, cell} = this.style,
       background = cell?.backgroundColor || 'green',
       data = variant === 'flop' ? cloneDeep(characterSet).reverse() : characterSet,
       position = variant === 'flop' ? 'absolute' : 'relative'
@@ -242,12 +232,13 @@ export class LayerFlopper extends LayerBase<LayerFlopperOptions, never> {
       throw new Error('Not support canvas flopper')
     }
 
-    const {variant, theme} = this.options
-    const {
-      duration = theme.animation.update.duration,
-      delay = theme.animation.update.delay,
-      easing = theme.animation.update.easing,
-    } = this.animation
+    const {theme} = this.options,
+      {variant} = this.style,
+      {
+        duration = theme.animation.update.duration,
+        delay = theme.animation.update.delay,
+        easing = theme.animation.update.easing,
+      } = this.animation
 
     this.root.selectAll(`.${this.className}-group`).each((d, i, els) => {
       let prevIndex = characterSet.indexOf((d as any).prevText),

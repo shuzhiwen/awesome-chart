@@ -2,9 +2,8 @@ import {DataTableList} from '../../data'
 import {scaleBand, scaleLinear} from '../../scales'
 import {
   ArcDrawerProps,
-  ChartContext,
   DrawerData,
-  LayerRadialOptions,
+  LayerOptions,
   LayerRadialScale,
   LayerRadialStyle,
   LayerStyle,
@@ -23,7 +22,7 @@ const defaultStyle: LayerRadialStyle = {
   cornerRadius: Infinity,
 }
 
-export class LayerRadial extends LayerBase<LayerRadialOptions, Key> {
+export class LayerRadial extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
 
   private needRescale = false
@@ -39,7 +38,7 @@ export class LayerRadial extends LayerBase<LayerRadialOptions, Key> {
   private arcData: (DrawerData<ArcDrawerProps> & {
     value: Meta
     meta: SourceMeta
-    color?: string
+    color: string
   })[] = []
 
   get scale() {
@@ -54,8 +53,8 @@ export class LayerRadial extends LayerBase<LayerRadialOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerRadialOptions, context: ChartContext) {
-    super({context, options, sublayers: ['text', 'arc'], interactive: ['arc']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['text', 'arc'], interactive: ['arc']})
   }
 
   setData(data: LayerRadial['data']) {

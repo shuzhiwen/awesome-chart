@@ -1,7 +1,7 @@
 import anime, {AnimeParams} from 'animejs'
 import {select} from 'd3'
 import {Container, Graphics, Texture} from 'pixi.js'
-import {AnimationProps, AnimationScanOptions, Box, D3Selection} from '../types'
+import {AnimationScanOptions, Box, D3Selection} from '../types'
 import {createLinearGradients, isCC, isSC} from '../utils'
 import {AnimationBase} from './base'
 
@@ -14,8 +14,8 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
 
   private gradient: Maybe<D3Selection | Texture>
 
-  constructor(props: AnimationProps<AnimationScanOptions>) {
-    super(props)
+  constructor(options: AnimationScanOptions) {
+    super(options)
     if (isCC(this.options.context)) {
       this.box = this.canvasRoot.getBounds()
     }

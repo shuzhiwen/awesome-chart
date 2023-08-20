@@ -3,9 +3,8 @@ import {getEasyGradientCreator} from '../utils'
 import {AnimationOptions, LayerAnimation} from './animation'
 import {TooltipData} from './data'
 import {ElConfig} from './draw'
-import {CacheLayerData, LayerInstance, LayerType} from './layer'
+import {CacheLayerData, LayerInstance, LayerOptions, LayerType} from './layer'
 import {LayoutCreator} from './layout'
-import {BasicLayerOptions} from './options'
 import {ScaleNice} from './scale'
 import {LayerStyle} from './styles'
 import {RandomRelationOptions, RandomTableListOptions} from './utils'
@@ -14,7 +13,7 @@ import {RandomRelationOptions, RandomTableListOptions} from './utils'
  * The context for layer from chart includes some global data.
  * The context will be delivered to the layer when create the layer.
  */
-export type ChartContext = {
+type ChartContext = {
   /**
    * A easy way to create gradient.
    */
@@ -35,7 +34,7 @@ export type ChartContext = {
   | 'tooltip'
 >
 
-export type ChartTheme = Readonly<{
+type ChartTheme = Readonly<{
   /**
    * The theme color of the chart.
    * If there is no element color is specified,
@@ -97,7 +96,7 @@ export type ChartTheme = Readonly<{
     >
 }>
 
-export type TooltipOptions = {
+type TooltipOptions = Partial<{
   /**
    * Container in which the tooltip is rendered.
    * Custom container will replace the default container.
@@ -109,48 +108,48 @@ export type TooltipOptions = {
    * - `dimension`: Displays all element data with the same dimension value.
    * - `category`: Displays all element data with the same category value.
    */
-  mode?: 'single' | 'dimension' | 'category'
+  mode: 'single' | 'dimension' | 'category'
   /**
    * The size of each row of data points.
    */
-  pointSize?: number
+  pointSize: number
   /**
    * The fontSize of title text.
    */
-  titleSize?: number
+  titleSize: number
   /**
    * The fontSize of each row of label text on the left.
    */
-  labelSize?: number
+  labelSize: number
   /**
    * The fontSize of each row of value text on the right.
    */
-  valueSize?: number
+  valueSize: number
   /**
    * The color of each row of label and value.
    */
-  textColor?: string
+  textColor: string
   /**
    * The backgroundColor of tooltip root.
    */
-  backgroundColor?: string
+  backgroundColor: string
   /**
    * Custom render method that replace default render method.
    */
-  render?: (container: HTMLElement, data: Partial<ElConfig>) => void
+  render: (container: HTMLElement, data: Partial<ElConfig>) => void
   /**
    * Set custom render data replaces default render data that from layers.
    * @remarks
    * This method will use default render method.
    */
-  setTooltipData?: (data: TooltipData, options: TooltipOptions) => TooltipData
+  setTooltipData: (data: TooltipData, options: TooltipOptions) => TooltipData
   /**
    * Tool function provided by the chart to obtain layer's data.
    */
-  getLayersBackupData?: () => CacheLayerData<string>['data']['data']
-}
+  getLayersBackupData: () => CacheLayerData<string>['data']['data']
+}>
 
-export type RebuildScaleProps = Partial<{
+type RebuildScaleProps = Partial<{
   /**
    * Trigger layer is the layer that do not want to be updated after merged scale.
    */
@@ -161,54 +160,57 @@ export type RebuildScaleProps = Partial<{
   redraw: boolean
 }>
 
-export type ChartProps = {
+type ChartProps = {
   /**
    * Chart DOM element.
    */
   container: HTMLElement
+} & Partial<{
   /**
    * The width of chart root which will be ignored when `adjust` is true.
    */
-  width?: number
+  width: number
   /**
    * The height of chart root which will be ignored when `adjust` is true.
    */
-  height?: number
+  height: number
   /**
    * Adjust width and height of chart root to fit container or not.
    */
-  adjust?: boolean
+  adjust: boolean
   /**
    * Render the chart in svg mode or canvas mode.
    */
-  engine?: Engine
+  engine: Engine
   /**
    * Theme define defaults for styles and animations.
    * Theme will be passed as a parameter to the function when setStyle & setAnimation.
    */
-  theme?: ChartTheme
+  theme: ChartTheme
   /**
    * Paddings from the main drawing area to the chart container.
    */
-  padding?: Padding<Meta>
+  padding: Padding<Meta>
   /**
    * The generator function that returns the layout.
    */
-  layoutCreator?: LayoutCreator
+  layoutCreator: LayoutCreator
   /**
    * The configuration of the tooltip of chart.
    */
-  tooltipOptions?: Partial<TooltipOptions>
-}
+  tooltipOptions: Partial<TooltipOptions>
+}>
 
-export type RandomDataProps = (RandomTableListOptions | RandomRelationOptions) & {
+type RandomDataProps = (RandomTableListOptions | RandomRelationOptions) & {
   /**
    * Random data with specific data structure.
    */
   type: 'table' | 'tableList' | 'relation'
 }
 
-export type CreateChartProps = ChartProps & {
+type CreateLayerProps<T extends LayerType> = Omit<LayerOptions<T>, Keys<ChartContext>>
+
+type CreateChartProps = ChartProps & {
   /**
    * Handle error when chart throw errors.
    * @remarks
@@ -218,16 +220,17 @@ export type CreateChartProps = ChartProps & {
   /**
    * Definition of all layers, including axis and legend.
    */
-  layers?: {
+  layers: ({
     /**
      * Internal layer type or custom layer type.
      */
     type: LayerType
+  } & Partial<{
     /**
      * The options of the layer.
      * When options changes, chart will redraw.
      */
-    options?: Omit<BasicLayerOptions<LayerType>, 'type' | 'layout'> & {
+    options: Omit<LayerOptions, 'type' | 'layout'> & {
       /**
        * The name of layout that created by layoutCreator.
        */
@@ -236,24 +239,24 @@ export type CreateChartProps = ChartProps & {
     /**
      * Unrecognized data will be converted to `DataBase`.
      */
-    data?: any
+    data: any
     /**
      * Scale nice options only for axis layer.
      */
-    scale?: ScaleNice
+    scale: ScaleNice
     /**
      * The style will override the default style.
      * Computable style that takes the theme as a parameter.
      */
-    style?: LayerStyle<AnyObject>
+    style: LayerStyle<AnyObject>
     /**
      * The animation will define animation for sublayers.
      * Computable animation that takes the theme as a parameter.
      */
-    animation?: LayerAnimation<AnyObject>
+    animation: LayerAnimation<AnyObject>
     /**
      * Configuration data for the eventName-handler map.
      */
-    event?: AnyEventObject
-  }[]
+    event: AnyEventObject
+  }>)[]
 }

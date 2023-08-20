@@ -1,6 +1,6 @@
 import anime, {AnimeParams} from 'animejs'
 import {Graphics} from 'pixi.js'
-import {AnimationEraseOptions, AnimationProps, Box, D3Selection} from '../types'
+import {AnimationEraseOptions, Box, D3Selection} from '../types'
 import {isSC} from '../utils'
 import {AnimationBase} from './base'
 
@@ -9,8 +9,8 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
 
   private mask: Maybe<Graphics>
 
-  constructor(props: AnimationProps<AnimationEraseOptions>) {
-    super(props)
+  constructor(options: AnimationEraseOptions) {
+    super(options)
   }
 
   get isXEnd() {

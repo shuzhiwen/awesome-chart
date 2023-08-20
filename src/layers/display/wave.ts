@@ -3,11 +3,10 @@ import {Graphics} from 'pixi.js'
 import {DataBase} from '../../data'
 import {
   AreaDrawerProps,
-  ChartContext,
   CircleDrawerProps,
   DrawerData,
+  LayerOptions,
   LayerStyle,
-  LayerWaveOptions,
   LayerWaveStyle,
   TextDrawerProps,
 } from '../../types'
@@ -36,7 +35,7 @@ const defaultStyle: LayerWaveStyle = {
   },
 }
 
-export class LayerWave extends LayerBase<LayerWaveOptions, Key> {
+export class LayerWave extends LayerBase<Key> {
   private _style = defaultStyle
 
   private _data: Maybe<
@@ -65,8 +64,8 @@ export class LayerWave extends LayerBase<LayerWaveOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerWaveOptions, context: ChartContext) {
-    super({options, context, sublayers: ['area', 'background', 'text']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['area', 'background', 'text']})
 
     const {id, layout} = this.options,
       {width, height, left, top} = layout,
@@ -104,7 +103,7 @@ export class LayerWave extends LayerBase<LayerWaveOptions, Key> {
     }
 
     const {value, maxValue} = this.data.source,
-      {areaNumber = 1, wavelength = 0, amplitude = 0, areaGap = 0, area} = this.style,
+      {areaNumber, wavelength, amplitude, areaGap, area} = this.style,
       {left, width, height, top, bottom} = this.options.layout,
       colorMatrix = createColorMatrix({
         layer: this,

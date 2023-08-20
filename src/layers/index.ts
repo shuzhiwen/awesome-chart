@@ -1,5 +1,5 @@
 import * as Layer from '.'
-import {BasicLayerOptions, ChartContext} from '../types'
+import {LayerOptions} from '../types'
 import {createClassRegister} from '../utils'
 
 export * from './base'
@@ -77,6 +77,6 @@ export const LayerDict = {
 
 export const registerCustomLayer = createClassRegister?.<
   string,
-  Layer.LayerBase<BasicLayerOptions<any>, string>,
-  [BasicLayerOptions<any>, ChartContext]
+  Layer.LayerBase<string>,
+  [LayerOptions]
 >(LayerDict)

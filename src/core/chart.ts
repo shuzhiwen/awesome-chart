@@ -7,18 +7,18 @@ import {
   ChartContext,
   ChartProps,
   ChartTheme,
+  CreateLayerProps,
   D3Selection,
   GradientCreatorProps,
   LayerAxisScale,
   LayerInstance,
-  LayerOptions,
   LayerType,
   Layout,
   RebuildScaleProps,
 } from '../types'
 import {
-  EventManager,
   createLog,
+  EventManager,
   getEasyGradientCreator,
   getPercentageNumber,
   isLayerAxis,
@@ -256,7 +256,7 @@ export class Chart {
    * @returns
    * Returns the layer instance if successful.
    */
-  createLayer<T extends LayerType>(options: LayerOptions & {type: T}) {
+  createLayer<T extends LayerType>(options: CreateLayerProps<T>) {
     const context: ChartContext = {
       ...this,
       root: options.sublayerConfig?.root || this.root,
@@ -286,7 +286,7 @@ export class Chart {
       }
     }
 
-    const layer = new LayerDict[options.type](options as never, context)
+    const layer = new LayerDict[options.type]({...options, ...context})
     this._layers.push(layer)
 
     return layer as Maybe<LayerDict[T]>
@@ -306,7 +306,7 @@ export class Chart {
 
     layers.forEach((layer) => {
       const {scale, options} = layer,
-        coordinate = axisLayer.options.coordinate,
+        coordinate = axisLayer.style.coordinate,
         {scaleX, scaleY, scaleAngle, scaleRadius, ...rest} = scale ?? {},
         mergedScales: LayerInstance['scale'] = {...rest}
 
@@ -343,8 +343,8 @@ export class Chart {
         {scaleY, scaleYR, ...rest} = {...layer.scale, ...axisLayer.scale},
         finalScaleY = axis === 'minor' ? scaleYR : scaleY
 
-      if (layer.options.id !== trigger?.options.id) {
-        if (layer !== axisLayer) layer.setScale({...rest, scaleY: finalScaleY})
+      if (layer !== trigger) {
+        layer !== axisLayer && layer.setScale({...rest, scaleY: finalScaleY})
         redraw && layer.draw()
       }
     })

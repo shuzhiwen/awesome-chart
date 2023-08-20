@@ -3,11 +3,11 @@ import {AnimationDict} from '../animation'
 import {ChartTheme} from './core'
 import {D3Selection, DrawerTarget} from './draw'
 
-export type AnimationType = Keys<AnimationDict>
+type AnimationType = Keys<AnimationDict>
 
-export type LayerAnimation<T> = Computable<Partial<T>, ChartTheme>
+type LayerAnimation<T> = Computable<Partial<T>, ChartTheme>
 
-export type AnimationOptions =
+type AnimationOptions =
   | BasicAnimationOptions
   | AnimationEmptyOptions
   | AnimationFadeOptions
@@ -16,11 +16,6 @@ export type AnimationOptions =
   | AnimationMoveOptions
   | AnimationEraseOptions
   | AnimationScanOptions
-
-export type AnimationProps<Options extends AnimationOptions> = Partial<{
-  context: Maybe<DrawerTarget>
-  options: Options
-}>
 
 type BasicAnimationOptions<
   Type extends AnimationType = AnimationType,
@@ -41,12 +36,13 @@ type BasicAnimationOptions<
      * @internal
      */
     targets: Maybe<D3Selection | Graphics[]>
+    context: Maybe<DrawerTarget>
   }
 >
 
-export type AnimationEmptyOptions = BasicAnimationOptions<'empty'>
+type AnimationEmptyOptions = BasicAnimationOptions<'empty'>
 
-export type AnimationFadeOptions = BasicAnimationOptions<
+type AnimationFadeOptions = BasicAnimationOptions<
   'fade',
   {
     /**
@@ -65,14 +61,14 @@ export type AnimationFadeOptions = BasicAnimationOptions<
   }
 >
 
-export type AnimationPathOptions = BasicAnimationOptions<
+type AnimationPathOptions = BasicAnimationOptions<
   'path',
   {
     path: string
   }
 >
 
-export type AnimationZoomOptions = BasicAnimationOptions<
+type AnimationZoomOptions = BasicAnimationOptions<
   'zoom',
   {
     /**
@@ -86,7 +82,7 @@ export type AnimationZoomOptions = BasicAnimationOptions<
   }
 >
 
-export type AnimationMoveOptions = BasicAnimationOptions<
+type AnimationMoveOptions = BasicAnimationOptions<
   'move',
   {
     /**
@@ -111,7 +107,7 @@ export type AnimationMoveOptions = BasicAnimationOptions<
   }
 >
 
-export type AnimationEraseOptions = BasicAnimationOptions<
+type AnimationEraseOptions = BasicAnimationOptions<
   'erase',
   {
     /**
@@ -121,7 +117,7 @@ export type AnimationEraseOptions = BasicAnimationOptions<
   }
 >
 
-export type AnimationScanOptions = BasicAnimationOptions<
+type AnimationScanOptions = BasicAnimationOptions<
   'scan',
   {
     /**

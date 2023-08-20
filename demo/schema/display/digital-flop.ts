@@ -1,13 +1,11 @@
 export default ({variant}) => [
   {
     type: 'flopper',
-    options: {
-      variant,
-    },
     data: {
       value: 12034.456,
     },
     style: {
+      variant,
       scale: 0.5,
       url: 'character.png',
       cell: {

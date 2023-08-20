@@ -5,7 +5,7 @@ export default () => [
   },
   {
     type: 'pack',
-    options: {
+    style: {
       zoom: true,
     },
     data: [nodes, links],

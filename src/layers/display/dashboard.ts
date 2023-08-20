@@ -2,10 +2,9 @@ import {DataBase} from '../../data'
 import {scaleLinear} from '../../scales'
 import {
   ArcDrawerProps,
-  ChartContext,
   DrawerData,
-  LayerDashboardOptions,
   LayerDashboardStyle,
+  LayerOptions,
   LayerStyle,
   LineDrawerProps,
   SourceMeta,
@@ -49,7 +48,7 @@ type DataShape = {
   }[]
 }
 
-export class LayerDashboard extends LayerBase<LayerDashboardOptions, Key> {
+export class LayerDashboard extends LayerBase<Key> {
   private _data: Maybe<DataBase<DataShape>>
 
   private _style = defaultStyle
@@ -86,9 +85,8 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerDashboardOptions, context: ChartContext) {
+  constructor(options: LayerOptions) {
     super({
-      context,
       options,
       sublayers: ['arc', 'pointer', 'tickLine', 'tickText', 'valueText', 'labelText'],
       interactive: ['arc'],
@@ -129,7 +127,7 @@ export class LayerDashboard extends LayerBase<LayerDashboardOptions, Key> {
 
     const {left, top, width, height} = this.options.layout,
       {valueText, tickText, arc, labelText} = this.style,
-      {arcWidth = 5, startAngle = 0, endAngle = 360, tickSize = 5, step = [2, 10]} = this.style,
+      {arcWidth, startAngle, endAngle, tickSize, step} = this.style,
       {value, minValue, maxValue, fragments} = this.fragmentData,
       maxRadius = Math.min(width, height) / 2,
       colorMatrix = createColorMatrix({

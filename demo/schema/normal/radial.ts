@@ -23,7 +23,7 @@ export default () => [
   },
   {
     type: 'axis',
-    options: {
+    style: {
       coordinate: 'polar',
     },
     scale: {

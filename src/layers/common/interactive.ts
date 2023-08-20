@@ -3,12 +3,11 @@ import {Graphics} from 'pixi.js'
 import {EVENT_KEY} from '../../core'
 import {DataTableList} from '../../data'
 import {
-  ChartContext,
   DrawerData,
   ElConfig,
   LayerAxisScale,
-  LayerInteractiveOptions,
   LayerInteractiveStyle,
+  LayerOptions,
   LayerStyle,
   LegendData,
   RectDrawerProps,
@@ -38,7 +37,7 @@ const defaultStyle: LayerInteractiveStyle = {
   },
 }
 
-export class LayerInteractive extends LayerBase<LayerInteractiveOptions, Key> {
+export class LayerInteractive extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -69,8 +68,12 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerInteractiveOptions, context: ChartContext) {
-    super({context, options, sublayers: ['rect', 'interactive'], interactive: ['interactive']})
+  constructor(options: LayerOptions) {
+    super({
+      options,
+      sublayers: ['rect', 'interactive'],
+      interactive: ['interactive'],
+    })
     const {layout, createSublayer, event} = this.options
 
     this.systemEvent.onWithOff('destroy', EVENT_KEY, () => {
@@ -79,14 +82,14 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions, Key> {
 
     this.helperAuxiliary = [
       createSublayer({
+        ...this.options,
         id: uuid(),
-        layout,
         type: 'auxiliary',
         sublayerConfig: {root: this.root},
       })!,
       createSublayer({
+        ...this.options,
         id: uuid(),
-        layout,
         type: 'auxiliary',
         sublayerConfig: {root: this.root},
       })!,
@@ -160,7 +163,7 @@ export class LayerInteractive extends LayerBase<LayerInteractiveOptions, Key> {
   }
 
   setScale(scale: LayerAxisScale) {
-    this._scale = createScale(undefined, this.scale, scale)
+    this._scale = createScale({}, this.scale, scale)
     this.helperAuxiliary.map((layer) => layer.setScale(this.scale))
   }
 

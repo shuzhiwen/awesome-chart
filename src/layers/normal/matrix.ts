@@ -2,12 +2,11 @@ import {scaleLinear, scaleQuantize} from 'd3'
 import {DataTable} from '../../data'
 import {scaleBand} from '../../scales'
 import {
-  ChartContext,
   CircleDrawerProps,
   DrawerData,
-  LayerMatrixOptions,
   LayerMatrixScale,
   LayerMatrixStyle,
+  LayerOptions,
   LayerStyle,
   LegendData,
   RectDrawerProps,
@@ -32,7 +31,7 @@ const defaultStyle: LayerMatrixStyle = {
   colorDomain: 'auto',
 }
 
-export class LayerMatrix extends LayerBase<LayerMatrixOptions, Key> {
+export class LayerMatrix extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTable>
@@ -67,9 +66,8 @@ export class LayerMatrix extends LayerBase<LayerMatrixOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerMatrixOptions, context: ChartContext) {
+  constructor(options: LayerOptions) {
     super({
-      context,
       options,
       sublayers: ['rect', 'circle', 'text'],
       interactive: ['rect', 'circle'],

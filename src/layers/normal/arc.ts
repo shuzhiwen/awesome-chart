@@ -3,12 +3,11 @@ import {DataTableList} from '../../data'
 import {scaleAngle, scaleLinear} from '../../scales'
 import {
   ArcDrawerProps,
-  ChartContext,
   CurveDrawerProps,
   DrawerData,
-  LayerArcOptions,
   LayerArcScale,
   LayerArcStyle,
+  LayerOptions,
   LayerStyle,
   LegendData,
   SourceMeta,
@@ -26,11 +25,8 @@ import {
 
 type Key = 'arc' | 'guideLine' | 'text'
 
-const defaultOptions: Partial<LayerArcOptions> = {
-  variant: 'pie',
-}
-
 const defaultStyle: LayerArcStyle = {
+  variant: 'pie',
   innerRadius: 0,
   labelOffset: 5,
   labelPosition: 'inner',
@@ -40,7 +36,7 @@ const defaultStyle: LayerArcStyle = {
   },
 }
 
-export class LayerArc extends LayerBase<LayerArcOptions, Key> {
+export class LayerArc extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
 
   private needRescale = false
@@ -73,10 +69,9 @@ export class LayerArc extends LayerBase<LayerArcOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerArcOptions, context: ChartContext) {
+  constructor(options: LayerOptions) {
     super({
-      context,
-      options: {...defaultOptions, ...options},
+      options,
       sublayers: ['arc', 'guideLine', 'text'],
       interactive: ['arc'],
     })
@@ -86,7 +81,7 @@ export class LayerArc extends LayerBase<LayerArcOptions, Key> {
   }
 
   setData(data: LayerArc['data']) {
-    const {variant} = this.options
+    const {variant} = this.style
 
     this.needRescale = true
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
@@ -113,10 +108,10 @@ export class LayerArc extends LayerBase<LayerArcOptions, Key> {
       throw new Error('Invalid data or scale')
     }
 
-    const {layout, variant} = this.options,
+    const {layout} = this.options,
       {width, height, top, left} = layout,
       {scaleAngle, scaleRadius} = this.scale,
-      {innerRadius = 0, arc} = this.style,
+      {variant, innerRadius, arc} = this.style,
       {headers, rawTableList} = this.data,
       centerX = left + width / 2,
       centerY = top + height / 2
@@ -191,7 +186,7 @@ export class LayerArc extends LayerBase<LayerArcOptions, Key> {
   }
 
   private createArcLabelAndGuideLine = (props: NonNullable<Ungroup<LayerArc['arcData']>>) => {
-    const {text: style, labelPosition, labelOffset = 0} = this.style,
+    const {text: style, labelPosition, labelOffset} = this.style,
       {value, centerX, centerY, innerRadius, outerRadius, startAngle, endAngle} = props,
       getX = (r: number) => centerX + Math.sin(angle) * r,
       getY = (r: number) => centerY - Math.cos(angle) * r,
@@ -231,10 +226,10 @@ export class LayerArc extends LayerBase<LayerArcOptions, Key> {
 
     this.needRescale = false
 
-    const {layout, variant} = this.options,
+    const {layout} = this.options,
       {width, height} = layout,
       {headers} = this.data,
-      {innerRadius} = this.style,
+      {innerRadius, variant} = this.style,
       labels = this.data.lists[0],
       maxRadius = Math.min(width, height) / 2
 
@@ -295,7 +290,7 @@ export class LayerArc extends LayerBase<LayerArcOptions, Key> {
     this.drawBasic({type: 'text', key: 'text', data: textData})
 
     this.event.onWithOff('click-arc', EVENT_KEY, ({data}) => {
-      if (this.options.variant === 'nightingaleRose') return
+      if (this.style.variant === 'nightingaleRose') return
 
       const {groupIndex, itemIndex} = data.source,
         {width, height, left, top} = this.options.layout,

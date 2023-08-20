@@ -2,11 +2,10 @@ import {GeoGeometryObjects, geoMercator, geoPath} from 'd3'
 import {EVENT_KEY} from '../../core'
 import {DataBase} from '../../data'
 import {
-  ChartContext,
   DrawerData,
-  LayerBasemapOptions,
   LayerBasemapScale,
   LayerBasemapStyle,
+  LayerOptions,
   LayerStyle,
   RectDrawerProps,
   TextDrawerProps,
@@ -30,7 +29,7 @@ const defaultStyle: LayerBasemapStyle = {
   },
 }
 
-export class LayerBasemap extends LayerBase<LayerBasemapOptions, Key> {
+export class LayerBasemap extends LayerBase<Key> {
   private _data: Maybe<
     DataBase<
       | number
@@ -81,10 +80,9 @@ export class LayerBasemap extends LayerBase<LayerBasemapOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerBasemapOptions, context: ChartContext) {
+  constructor(options: LayerOptions) {
     super({
       options,
-      context,
       sublayers: ['block', 'background', 'text'],
       interactive: ['block'],
     })

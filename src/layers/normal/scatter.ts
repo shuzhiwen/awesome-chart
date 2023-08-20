@@ -1,10 +1,9 @@
 import {DataTableList} from '../../data'
 import {scaleLinear} from '../../scales'
 import {
-  ChartContext,
   CircleDrawerProps,
   DrawerData,
-  LayerScatterOptions,
+  LayerOptions,
   LayerScatterScale,
   LayerScatterStyle,
   LayerStyle,
@@ -30,7 +29,7 @@ const defaultStyle: LayerScatterStyle = {
   pointSize: [5, 5],
 }
 
-export class LayerScatter extends LayerBase<LayerScatterOptions, Key> {
+export class LayerScatter extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -60,8 +59,8 @@ export class LayerScatter extends LayerBase<LayerScatterOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerScatterOptions, context: ChartContext) {
-    super({options, context, sublayers: ['point', 'text'], interactive: ['point']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['point', 'text'], interactive: ['point']})
   }
 
   setData(data: LayerScatter['data']) {

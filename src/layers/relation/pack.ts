@@ -2,11 +2,10 @@ import {hierarchy, HierarchyNode, max, pack, range} from 'd3'
 import {EVENT_KEY} from '../../core'
 import {DataRelation} from '../../data'
 import {
-  ChartContext,
   CircleDrawerProps,
   DrawerData,
   ElConfig,
-  LayerPackOptions,
+  LayerOptions,
   LayerPackStyle,
   LayerStyle,
   Node,
@@ -24,16 +23,13 @@ import {
 
 type Key = 'circle' | 'text'
 
-const defaultOptions: Partial<LayerPackOptions> = {
-  variant: 'pack',
-}
-
 const defaultStyle: LayerPackStyle = {
+  variant: 'pack',
   zoom: true,
   padding: 0,
 }
 
-export class LayerPack extends LayerBase<LayerPackOptions, Key> {
+export class LayerPack extends LayerBase<Key> {
   private _data: Maybe<DataRelation>
 
   private _style = defaultStyle
@@ -65,10 +61,9 @@ export class LayerPack extends LayerBase<LayerPackOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerPackOptions, context: ChartContext) {
+  constructor(options: LayerOptions) {
     super({
-      context,
-      options: {...defaultOptions, ...options},
+      options,
       sublayers: ['circle', 'text'],
       interactive: ['circle'],
     })
@@ -108,9 +103,8 @@ export class LayerPack extends LayerBase<LayerPackOptions, Key> {
       throw new Error('Invalid data')
     }
 
-    const {layout, variant} = this.options,
-      {left, top} = layout,
-      {padding = 0, circle, text} = this.style,
+    const {left, top} = this.options.layout,
+      {variant, padding, circle, text} = this.style,
       {view, offset, maxHeight} = this.zoomConfig,
       nodes = pack<Node>().size(view).padding(padding)(this.treeData).descendants(),
       circleData = nodes.map(({x, y, data, ...rest}) => ({
@@ -158,8 +152,7 @@ export class LayerPack extends LayerBase<LayerPackOptions, Key> {
   }
 
   draw() {
-    const {variant} = this.options
-    const {zoom, circle, text} = this.style
+    const {variant, zoom, circle, text} = this.style
     const circleData = this.circleData.map((group) => ({
       data: group,
       ...circle,
@@ -183,10 +176,10 @@ export class LayerPack extends LayerBase<LayerPackOptions, Key> {
   private zoom = ({data}: {data: ElConfig}) => {
     const {cx, cy, rx, ry} = data as ElConfig<'ellipse'>,
       {left, top, width, height} = this.options.layout,
-      {k: prevK = -1, offset: [prevX, prevY] = [0, 0], maxHeight = -1} = this.zoomConfig!,
+      {k: prevK, offset, maxHeight} = this.zoomConfig!,
       nextK = (Math.min(width, height) / (rx + ry)) * prevK,
-      nextX = (width / 2 - (cx - prevX - left) / prevK) * nextK - (width * (nextK - 1)) / 2,
-      nextY = (height / 2 - (cy - prevY - top) / prevK) * nextK - (height * (nextK - 1)) / 2
+      nextX = (width / 2 - (cx - offset[0] - left) / prevK) * nextK - (width * (nextK - 1)) / 2,
+      nextY = (height / 2 - (cy - offset[1] - top) / prevK) * nextK - (height * (nextK - 1)) / 2
 
     this.zoomConfig = {
       maxHeight,

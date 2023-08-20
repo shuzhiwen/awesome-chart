@@ -16,9 +16,6 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
     },
     {
       type: 'line',
-      options: {
-        mode,
-      },
       data: hasMark
         ? [
             ['年级', '人数'],
@@ -37,6 +34,7 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
             sigma: 200,
           },
       style: {
+        mode,
         fallback: 'break',
         labelPosition: hasMark ? 'bottom' : 'top',
         curveType,
@@ -68,15 +66,13 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
     },
     {
       type: 'auxiliary',
-      options: {
-        direction: 'horizontal',
-      },
       data: [
         ['标签', '数值'],
         ['标准', 600],
         ['警戒', 300],
       ],
       style: {
+        direction: 'horizontal',
         labelPosition: 'right',
         line: {
           stroke: ['orange', 'red'],

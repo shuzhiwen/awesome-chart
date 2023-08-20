@@ -8,7 +8,6 @@ import {
   CacheLayerAnimation,
   CacheLayerData,
   CacheLayerEvent,
-  ChartContext,
   DrawBasicProps,
   DrawerTarget,
   DrawerType,
@@ -21,9 +20,9 @@ import {
   LayerStyle,
 } from '../types'
 import {
-  EventManager,
   compute,
   createLog,
+  EventManager,
   fromEntries,
   group,
   isCC,
@@ -33,7 +32,7 @@ import {
 } from '../utils'
 import {makeClass, selector} from './helpers'
 
-export abstract class LayerBase<Options extends LayerOptions, Key extends string> {
+export abstract class LayerBase<Key extends string> {
   /**
    * Record raw data for layer elements.
    */
@@ -90,13 +89,13 @@ export abstract class LayerBase<Options extends LayerOptions, Key extends string
 
   readonly log = createLog(this.className)
 
-  readonly options: Options & ChartContext
-
   readonly cacheAnimation: CacheLayerAnimation<Key>
+
+  readonly cacheEvent: CacheLayerEvent<Key>
 
   readonly cacheData: CacheLayerData<Key>
 
-  readonly cacheEvent: CacheLayerEvent<Key>
+  readonly options: LayerOptions
 
   /**
    * In order to save unnecessary layer data calculation,
@@ -110,8 +109,8 @@ export abstract class LayerBase<Options extends LayerOptions, Key extends string
    */
   protected root: DrawerTarget
 
-  constructor({options, context, sublayers, interactive}: LayerBaseProps<Options, Key>) {
-    this.options = merge(options, context)
+  constructor({options, sublayers, interactive}: LayerBaseProps<Key>) {
+    this.options = options
     this.sublayers = sublayers || []
     this.interactive = interactive || []
     this.root = selector.createGroup(this.options.root as DrawerTarget, this.className)
@@ -125,15 +124,15 @@ export abstract class LayerBase<Options extends LayerOptions, Key extends string
     const {tooltip} = this.options,
       getMouseEvent = (event: ElEvent): MouseEvent =>
         event instanceof MouseEvent ? event : (event.nativeEvent as MouseEvent),
-      getData = (event: ElEvent, data?: ElConfig): ElConfig =>
-        event instanceof MouseEvent ? data! : (event.target as Graphics).data!,
+      getData = (event: ElEvent, data: ElConfig): ElConfig =>
+        event instanceof MouseEvent ? data : (event.target as Graphics).data!,
       getTarget = (event: ElEvent): EventTarget =>
         event instanceof MouseEvent ? event.target! : event.target
 
     return {
       'tooltip.mouseout': () => tooltip.hide(),
       'tooltip.mousemove': (event: ElEvent) => tooltip.move(getMouseEvent(event)),
-      'tooltip.mouseover': (event: ElEvent, data?: ElConfig) => {
+      'tooltip.mouseover': (event: ElEvent, data: ElConfig) => {
         tooltip.update({data: getData(event, data)})
         tooltip.show(getMouseEvent(event))
       },
@@ -326,7 +325,7 @@ export abstract class LayerBase<Options extends LayerOptions, Key extends string
       animationQueue.pushQueue(enterQueue)
       enter.forEach((item) => {
         const config = merge({targets}, animation.enter, item)
-        enterQueue.pushAnimation(config.type!, config, this.root)
+        enterQueue.pushAnimation(config.type!, {...config, context: this.root})
       })
     }
 
@@ -334,7 +333,7 @@ export abstract class LayerBase<Options extends LayerOptions, Key extends string
       animationQueue.pushQueue(loopQueue)
       loop.forEach((item) => {
         const config = merge({targets}, animation.loop, item)
-        loopQueue.pushAnimation(config.type!, config, this.root)
+        loopQueue.pushAnimation(config.type!, {...config, context: this.root})
       })
     }
 

@@ -11,11 +11,9 @@ export default ({mode}: {mode: 'slide' | 'fade'}) => [
   },
   {
     type: 'carousel',
-    options: {
-      mode,
-    },
     data: images,
     style: {
+      mode,
       dot: {
         fill: 'orange',
       },

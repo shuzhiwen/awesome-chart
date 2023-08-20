@@ -2,10 +2,9 @@ import {hierarchy, treemap} from 'd3'
 import * as d3 from 'd3-hierarchy'
 import {DataRelation} from '../../data'
 import {
-  ChartContext,
   DrawerData,
+  LayerOptions,
   LayerStyle,
-  LayerTreemapOptions,
   LayerTreemapStyle,
   Node,
   RectDrawerProps,
@@ -18,11 +17,12 @@ import {createColorMatrix, createStyle, createText, validateAndCreateData} from 
 type Key = 'rect' | 'text'
 
 const defaultStyle: LayerTreemapStyle = {
+  tile: 'treemapSquarify',
   align: ['middle', 'middle'],
   labelGap: 5,
 }
 
-export class LayerTreemap extends LayerBase<LayerTreemapOptions, Key> {
+export class LayerTreemap extends LayerBase<Key> {
   private _data: Maybe<DataRelation>
 
   private _style = defaultStyle
@@ -43,8 +43,8 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerTreemapOptions, context: ChartContext) {
-    super({options, context, sublayers: ['rect', 'text'], interactive: ['rect']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['rect', 'text'], interactive: ['rect']})
   }
 
   setData(data: LayerTreemap['data']) {
@@ -63,7 +63,7 @@ export class LayerTreemap extends LayerBase<LayerTreemapOptions, Key> {
     const {nodes} = this.data,
       {layout} = this.options,
       {left, top, width, height} = layout,
-      {tile = 'treemapSquarify', rect, labelGap = 0, text} = this.style,
+      {tile, rect, labelGap, text} = this.style,
       [align, verticalAlign] = this.style.align ?? ['start', 'start'],
       root = {id: uuid(), name: 'root', value: 0, children: nodes.filter(({level}) => level === 0)},
       hierarchyNode = hierarchy<Node>(root)

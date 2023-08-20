@@ -1,11 +1,10 @@
 import {isNil, max, merge, min, range} from 'lodash'
 import {DataTableList} from '../../data'
 import {
-  ChartContext,
   DrawerData,
   ImageDrawerProps,
-  LayerCarouselOptions,
   LayerCarouselStyle,
+  LayerOptions,
   LayerStyle,
   RectDrawerProps,
 } from '../../types'
@@ -15,18 +14,15 @@ import {createStyle, validateAndCreateData} from '../helpers'
 
 type Key = 'carousel' | 'dot'
 
-const defaultOptions: Partial<LayerCarouselOptions> = {
-  mode: 'slide',
-}
-
 const defaultStyle: LayerCarouselStyle = {
+  mode: 'fade',
   direction: 'left',
   maxDotSize: 10,
   padding: 10,
   zoom: 0.7,
 }
 
-export class LayerCarousel extends LayerBase<LayerCarouselOptions, Key> {
+export class LayerCarousel extends LayerBase<Key> {
   private _data: Maybe<DataTableList>
 
   private _style = defaultStyle
@@ -54,20 +50,16 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerCarouselOptions, context: ChartContext) {
-    super({
-      context,
-      options: {...defaultOptions, ...options},
-      sublayers: ['carousel', 'dot'],
-    })
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['carousel', 'dot']})
   }
 
   setData(data: LayerCarousel['data']) {
     this._data = validateAndCreateData('tableList', this.data, data)
 
-    const {mode, layout} = this.options,
-      {rawTableList: _data = []} = this.data!,
-      {width, height, left, top} = layout,
+    const {mode} = this.style,
+      {rawTableList: _data} = this.data!,
+      {width, height, left, top} = this.options.layout,
       prefix = _data.length < 4 ? _data.concat(_data) : _data.slice(2),
       suffix = _data.length < 4 ? _data.concat(_data) : _data.slice(0, 2),
       total = [...prefix, ..._data, ...suffix]
@@ -103,9 +95,9 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions, Key> {
       throw new Error('Invalid data')
     }
 
-    const {mode, layout} = this.options,
-      {left, top, width, height, right, bottom} = layout,
-      {padding = 0, zoom = 1, direction, maxDotSize = 0} = this.style,
+    const {mode} = this.style,
+      {left, top, width, height, right, bottom} = this.options.layout,
+      {padding, zoom, direction, maxDotSize} = this.style,
       imageCount = this.data.rawTableList.length,
       dotPadding = 4,
       totalDotPadding = (imageCount - 1) * dotPadding,
@@ -176,8 +168,7 @@ export class LayerCarousel extends LayerBase<LayerCarouselOptions, Key> {
   }
 
   next() {
-    const {mode} = this.options,
-      {direction} = this.style,
+    const {direction, mode} = this.style,
       _min = min(this.carouselData.map(({carouselIndex}) => carouselIndex)),
       _max = max(this.carouselData.map(({carouselIndex}) => carouselIndex)),
       minIndex = this.carouselData.findIndex((item) => item.carouselIndex === _min),

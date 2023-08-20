@@ -1,11 +1,10 @@
 import {DataTableList} from '../../data'
 import {
-  ChartContext,
   CircleDrawerProps,
   DrawerData,
-  LayerHeatmapOptions,
   LayerHeatmapScale,
   LayerHeatmapStyle,
+  LayerOptions,
   LayerStyle,
 } from '../../types'
 import {group, isRealNumber, tableListToObjects} from '../../utils'
@@ -21,7 +20,7 @@ const defaultStyle: LayerHeatmapStyle = {
   },
 }
 
-export class LayerHeatmap extends LayerBase<LayerHeatmapOptions, 'heatZone'> {
+export class LayerHeatmap extends LayerBase<'heatZone'> {
   private _data: Maybe<DataTableList>
 
   private _scale: LayerHeatmapScale
@@ -29,7 +28,7 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions, 'heatZone'> {
   private _style = defaultStyle
 
   private heatZoneData: (DrawerData<CircleDrawerProps> & {
-    color?: string
+    color: string
   })[] = []
 
   get data() {
@@ -44,8 +43,8 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions, 'heatZone'> {
     return this._style
   }
 
-  constructor(options: LayerHeatmapOptions, context: ChartContext) {
-    super({options, context, sublayers: ['heatZone']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['heatZone']})
   }
 
   setData(data: LayerHeatmap['data']) {
@@ -67,7 +66,7 @@ export class LayerHeatmap extends LayerBase<LayerHeatmapOptions, 'heatZone'> {
 
     const {scaleX, scaleY} = this.scale,
       {layout, createGradient} = this.options,
-      {heatZone, radiusFactor = 1} = this.style,
+      {heatZone, radiusFactor} = this.style,
       data = tableListToObjects<DataKey>(this.data.source)
 
     this.heatZoneData = data

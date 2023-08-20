@@ -1,5 +1,5 @@
-import {LayerRectOptions} from '../../../src/types'
 import {group, randomNormal} from 'd3'
+import {LayerRectStyle} from '../../../src/types'
 
 const originValues = new Array(30)
   .fill(null)
@@ -11,7 +11,7 @@ const transformedData = [['区间', '数量'] as Meta[]].concat(
   )
 )
 
-export default ({variant}: Partial<LayerRectOptions>) => [
+export default ({variant}: Partial<LayerRectStyle>) => [
   {
     type: 'text',
     data: '直方图模拟',
@@ -28,11 +28,9 @@ export default ({variant}: Partial<LayerRectOptions>) => [
   },
   {
     type: 'rect',
-    options: {
-      variant,
-    },
     data: transformedData,
     style: {
+      variant,
       labelPosition: variant === 'column' ? 'top' : 'right',
       background: {
         fill: 'gray',

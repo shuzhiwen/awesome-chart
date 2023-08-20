@@ -1,5 +1,5 @@
 import * as Animation from '.'
-import {AnimationProps, BasicAnimationOptions} from '../types'
+import {BasicAnimationOptions} from '../types'
 import {createClassRegister} from '../utils'
 
 export * from './base'
@@ -36,5 +36,5 @@ export const AnimationDict = {
 export const registerCustomAnimation = createClassRegister?.<
   string,
   Animation.AnimationBase<BasicAnimationOptions<any>>,
-  AnimationProps<BasicAnimationOptions<any>>
+  BasicAnimationOptions
 >(AnimationDict)

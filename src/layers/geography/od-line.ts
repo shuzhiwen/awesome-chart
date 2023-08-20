@@ -2,11 +2,10 @@ import {path} from 'd3'
 import {EVENT_KEY} from '../../core'
 import {DataTableList} from '../../data'
 import {
-  ChartContext,
   DrawerData,
-  LayerODLineOptions,
   LayerODLineScale,
   LayerODLineStyle,
+  LayerOptions,
   LayerStyle,
   PathDrawerProps,
 } from '../../types'
@@ -28,7 +27,7 @@ const defaultStyle: LayerODLineStyle = {
   },
 }
 
-export class LayerODLine extends LayerBase<LayerODLineOptions, Key> {
+export class LayerODLine extends LayerBase<Key> {
   private _data: Maybe<DataTableList>
 
   private _scale: LayerODLineScale
@@ -55,9 +54,8 @@ export class LayerODLine extends LayerBase<LayerODLineOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerODLineOptions, context: ChartContext) {
+  constructor(options: LayerOptions) {
     super({
-      context,
       options,
       sublayers: ['odLine', 'flyingObject', 'text'],
       interactive: ['odLine'],
@@ -118,7 +116,11 @@ export class LayerODLine extends LayerBase<LayerODLineOptions, Key> {
     }
   }
 
-  private getPath = (props: ArrayItem<LayerODLine['odLineData']>['position'] & {arc?: number}) => {
+  private getPath = (
+    props: ArrayItem<LayerODLine['odLineData']>['position'] & {
+      arc?: number
+    }
+  ) => {
     const instance = path(),
       {fromX, fromY, toX, toY, arc = 0.5} = props,
       [deltaX, deltaY] = [toX - fromX, toY - fromY],

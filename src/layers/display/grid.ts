@@ -2,11 +2,10 @@ import {drag, max, range} from 'd3'
 import {DataTableList} from '../../data'
 import {
   Box,
-  ChartContext,
   DrawerData,
   ElConfig,
-  LayerGridOptions,
   LayerGridStyle,
+  LayerOptions,
   LayerStyle,
   LineDrawerProps,
   RectDrawerProps,
@@ -73,7 +72,7 @@ const placeBox = (width: number, height: number, columnHeight: number[]) => {
   return rest
 }
 
-export class LayerGrid extends LayerBase<LayerGridOptions, Key> {
+export class LayerGrid extends LayerBase<Key> {
   private _data: Maybe<DataTableList>
 
   private _style = defaultStyle
@@ -96,8 +95,8 @@ export class LayerGrid extends LayerBase<LayerGridOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerGridOptions, context: ChartContext) {
-    super({options, context, sublayers: ['box', 'gridLine', 'placeholder']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['box', 'gridLine', 'placeholder']})
     this.placeholderData = {width: 0, height: 0, x: 0, y: 0}
   }
 
@@ -125,7 +124,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions, Key> {
       throw new Error('Invalid data')
     }
 
-    const {sangerColumn = 12, sangerGap: gap = 0, placeMode} = this.style,
+    const {sangerColumn, sangerGap: gap, placeMode} = this.style,
       {width, height, left, top, bottom, right} = this.options.layout,
       unitWidth = (width - (sangerColumn - 1) * gap) / sangerColumn,
       unitHeight = (height - (sangerColumn - 1) * gap) / sangerColumn,
@@ -233,7 +232,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions, Key> {
     box: GridBox,
     generatePlaceHolder: (props: {x: number; y: number}) => void
   ) {
-    const {sangerColumn = 12} = this.style,
+    const {sangerColumn} = this.style,
       columnHeight = new Array<number>(sangerColumn).fill(0),
       target = data.splice(box.index, 1)
 
@@ -258,7 +257,7 @@ export class LayerGrid extends LayerBase<LayerGridOptions, Key> {
     box: GridBox,
     generatePlaceHolder: (props: {x: number; y: number}) => void
   ) {
-    const {sangerColumn = 12} = this.style,
+    const {sangerColumn} = this.style,
       columnHeight1 = new Array<number>(sangerColumn).fill(0),
       columnHeight2 = new Array<number>(sangerColumn).fill(0),
       target = data.splice(box.index, 1),
@@ -284,8 +283,8 @@ export class LayerGrid extends LayerBase<LayerGridOptions, Key> {
   }
 
   private dragged(event: DragEvent, d: ElData) {
-    const {groupIndex: index = 0, meta} = d.source,
-      {sangerColumn: sanger = 12, sangerGap: gap = 0} = this.style,
+    const {groupIndex: index, meta} = d.source,
+      {sangerColumn: sanger, sangerGap: gap} = this.style,
       {width: layoutWidth, height: layoutHeight, left, top} = this.options.layout,
       unitWidth = (layoutWidth - (sanger - 1) * gap) / sanger,
       unitHeight = (layoutHeight - (sanger - 1) * gap) / sanger,

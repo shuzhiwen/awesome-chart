@@ -2,12 +2,11 @@ import {DataTableList} from '../../data'
 import {scaleBand, scaleLinear} from '../../scales'
 import {
   AreaDrawerProps,
-  ChartContext,
   CircleDrawerProps,
   DrawerData,
-  LayerLineOptions,
   LayerLineScale,
   LayerLineStyle,
+  LayerOptions,
   LayerStyle,
   LegendData,
   SourceMeta,
@@ -25,11 +24,8 @@ import {
 
 type Key = 'text' | 'curve' | 'point' | 'area'
 
-const defaultOptions: Partial<LayerLineOptions> = {
-  mode: 'cover',
-}
-
 const defaultStyle: LayerLineStyle = {
+  mode: 'cover',
   fallback: 'break',
   labelPosition: 'top',
   curveType: 'curveMonotoneX',
@@ -46,7 +42,7 @@ const defaultStyle: LayerLineStyle = {
   },
 }
 
-export class LayerLine extends LayerBase<LayerLineOptions, Key> {
+export class LayerLine extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -79,10 +75,9 @@ export class LayerLine extends LayerBase<LayerLineOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerLineOptions, context: ChartContext) {
+  constructor(options: LayerOptions) {
     super({
-      context,
-      options: {...defaultOptions, ...options},
+      options,
       sublayers: ['text', 'curve', 'point', 'area'],
       interactive: ['point'],
     })
@@ -109,10 +104,9 @@ export class LayerLine extends LayerBase<LayerLineOptions, Key> {
       throw new Error('Invalid data or scale')
     }
 
-    const {mode} = this.options,
-      {scaleX, scaleY} = this.scale,
+    const {scaleX, scaleY} = this.scale,
       {height, top, left} = this.options.layout,
-      {labelPosition, pointSize = 5, text, curve} = this.style,
+      {mode, labelPosition, pointSize, text, curve} = this.style,
       {headers, rawTableList} = this.data,
       colorMatrix = createColorMatrix({
         layer: this,
@@ -168,9 +162,10 @@ export class LayerLine extends LayerBase<LayerLineOptions, Key> {
   private createScale() {
     if (!this.data) return
 
-    const {layout, mode} = this.options,
+    const {layout} = this.options,
       {width, height} = layout,
-      {headers} = this.data
+      {headers} = this.data,
+      {mode} = this.style
 
     this._scale = createScale(
       {

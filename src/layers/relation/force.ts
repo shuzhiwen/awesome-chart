@@ -4,11 +4,10 @@ import {EVENT_KEY} from '../../core'
 import {DataTableList} from '../../data'
 import {scaleLinear} from '../../scales'
 import {
-  ChartContext,
   CircleDrawerProps,
   DrawerData,
-  LayerForceOptions,
   LayerForceStyle,
+  LayerOptions,
   LayerStyle,
   TextDrawerProps,
 } from '../../types'
@@ -21,7 +20,7 @@ const defaultStyle: LayerForceStyle = {
   nodeSize: [5, 20],
 }
 
-export class LayerForce extends LayerBase<LayerForceOptions, Key> {
+export class LayerForce extends LayerBase<Key> {
   private _data: Maybe<DataTableList>
 
   private _style = defaultStyle
@@ -34,7 +33,7 @@ export class LayerForce extends LayerBase<LayerForceOptions, Key> {
     meta: AnyObject
     label: Meta
     value: Meta
-    color?: string
+    color: string
   })[] = []
 
   get data() {
@@ -45,15 +44,15 @@ export class LayerForce extends LayerBase<LayerForceOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerForceOptions, context: ChartContext) {
-    super({options, context, sublayers: ['node', 'text'], interactive: ['node']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['node', 'text'], interactive: ['node']})
 
     this.systemEvent.onWithOff('destroy', EVENT_KEY, () => {
       this.simulation?.on('tick', null).stop()
     })
   }
 
-  setAnimation(options: Parameters<LayerBase<any, Key>['setAnimation']>[0]) {
+  setAnimation(options: Parameters<LayerBase<Key>['setAnimation']>[0]) {
     super.setAnimation(
       merge({}, options, {
         node: {update: {duration: 0, delay: 0}},

@@ -1,14 +1,7 @@
 import {merge} from 'lodash'
 import {commonEvents} from '../../core'
 import {DataTableList} from '../../data'
-import {
-  ChartContext,
-  LayerCandleOptions,
-  LayerCandleStyle,
-  LayerRectScale,
-  LayerStyle,
-  LegendData,
-} from '../../types'
+import {LayerCandleStyle, LayerOptions, LayerRectScale, LayerStyle, LegendData} from '../../types'
 import {bindEventManager, uuid} from '../../utils'
 import {LayerBase} from '../base'
 import {createScale, createStyle, validateAndCreateData} from '../helpers'
@@ -20,17 +13,21 @@ const defaultStyle: LayerCandleStyle = {
   positiveColor: 'red',
   negativeColor: 'green',
   rect: {
+    mode: 'interval',
+    variant: 'column',
     background: {hidden: true},
     text: {hidden: true},
   },
   line: {
+    mode: 'interval',
+    variant: 'column',
     fixedWidth: '20%',
     background: {hidden: true},
     text: {hidden: true},
   },
 }
 
-export class LayerCandle extends LayerBase<LayerCandleOptions, Key> {
+export class LayerCandle extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -55,27 +52,25 @@ export class LayerCandle extends LayerBase<LayerCandleOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerCandleOptions, context: ChartContext) {
-    super({context, options})
-    const {layout, createSublayer} = this.options
+  constructor(options: LayerOptions) {
+    super({options})
+    const {createSublayer} = this.options
 
     this.lineLayer = createSublayer({
+      ...this.options,
       id: uuid(),
-      layout,
       type: 'rect',
-      mode: 'interval',
-      variant: 'column',
       sublayerConfig: {root: this.root},
     })!
     this.rectLayer = createSublayer({
+      ...this.options,
       id: uuid(),
-      layout,
       type: 'rect',
-      mode: 'interval',
-      variant: 'column',
       sublayerConfig: {root: this.root},
     })!
 
+    this.lineLayer.setStyle(defaultStyle.line)
+    this.rectLayer.setStyle(defaultStyle.rect)
     bindEventManager(this.event, [this.lineLayer.event, this.rectLayer.event], (name) =>
       Array.from(commonEvents.values()).some((item) => name.match(item))
     )
@@ -137,7 +132,7 @@ export class LayerCandle extends LayerBase<LayerCandleOptions, Key> {
     this.lineLayer.playAnimation()
   }
 
-  setAnimation(options: Parameters<LayerBase<any, Key>['setAnimation']>[0]) {
+  setAnimation(options: Parameters<LayerBase<Key>['setAnimation']>[0]) {
     this.rectLayer.setAnimation(options)
     this.lineLayer.setAnimation(options)
   }

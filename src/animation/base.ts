@@ -1,7 +1,7 @@
 import {merge, throttle} from 'lodash'
 import {animationLifeCycles} from '../core'
 import {selector} from '../layers'
-import {AnimationOptions, AnimationProps} from '../types'
+import {AnimationOptions} from '../types'
 import {createLog, EventManager, isSC, noChange, uuid} from '../utils'
 
 export abstract class AnimationBase<Options extends AnimationOptions> {
@@ -55,8 +55,8 @@ export abstract class AnimationBase<Options extends AnimationOptions> {
 
   destroy(): void {}
 
-  constructor({options, context}: AnimationProps<Options>) {
-    this.options = merge({}, options, {context})
+  constructor(options: Options) {
+    this.options = options
     this.createTargets('targets')
 
     animationLifeCycles.forEach((name) => {

@@ -5,9 +5,6 @@ export default () => [
   },
   {
     type: 'force',
-    options: {
-      zoom: true,
-    },
     data: {
       type: 'tableList',
       mode: 'normal',
@@ -16,7 +13,9 @@ export default () => [
       mu: 500,
       sigma: 200,
     },
-    style: {},
+    style: {
+      zoom: true,
+    },
     animation: {
       node: {
         updateAnimation: {

@@ -1,11 +1,10 @@
 import {max, scalePoint} from 'd3'
 import {DataRelation} from '../../data'
 import {
-  ChartContext,
   CircleDrawerProps,
   DrawerData,
+  LayerOptions,
   LayerStyle,
-  LayerTreeOptions,
   LayerTreeScale,
   LayerTreeStyle,
   LineDrawerProps,
@@ -36,7 +35,7 @@ const defaultStyle: LayerTreeStyle = {
   },
 }
 
-export class LayerTree extends LayerBase<LayerTreeOptions, Key> {
+export class LayerTree extends LayerBase<Key> {
   private needRescale = false
 
   private _data: Maybe<DataRelation>
@@ -51,13 +50,14 @@ export class LayerTree extends LayerBase<LayerTreeOptions, Key> {
     Pick<Node, 'id' | 'name' | 'value'> & {
       meta: AnyObject
       color: string
-      parents: (Node & {
-        order?: number
-        min?: number
-        max?: number
-        x?: number
-        y?: number
-      })[]
+      parents: (Node &
+        Partial<{
+          order: number
+          min: number
+          max: number
+          x: number
+          y: number
+        }>)[]
     })[][] = []
 
   private edgeData: (DrawerData<LineDrawerProps> & {
@@ -80,8 +80,8 @@ export class LayerTree extends LayerBase<LayerTreeOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerTreeOptions, context: ChartContext) {
-    super({options, context, sublayers: ['node', 'edge', 'text'], interactive: ['node']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['node', 'edge', 'text'], interactive: ['node']})
   }
 
   setData(data: LayerTree['data']) {
@@ -127,7 +127,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions, Key> {
     const {layout} = this.options,
       {edges} = this.data,
       {scaleX, scaleY} = this.scale,
-      {labelOffset = 5, nodeSize = 5, curveType = 'curveMonotoneX'} = this.style,
+      {labelOffset, nodeSize, curveType} = this.style,
       {direction, labelPosition, align, text, node} = this.style
 
     this.nodeData = this.groups.map((groupedNodes) => {
@@ -254,7 +254,7 @@ export class LayerTree extends LayerBase<LayerTreeOptions, Key> {
 
     const {nodes} = this.data,
       {width, height} = this.options.layout,
-      {nodeSize = 5, direction} = this.style,
+      {nodeSize, direction} = this.style,
       levels = robustRange(0, max(nodes.map(({level}) => level ?? 0)) ?? 0)
 
     if (direction === 'horizontal') {

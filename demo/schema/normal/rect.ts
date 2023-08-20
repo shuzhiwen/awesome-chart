@@ -1,10 +1,10 @@
-import {LayerRectOptions} from '../../../src/types'
+import {LayerRectStyle} from '../../../src/types'
 
 export default ({
   mode,
   variant,
   hasInteractive = false,
-}: Partial<LayerRectOptions> & {hasInteractive?: boolean}) =>
+}: Partial<LayerRectStyle> & {hasInteractive?: boolean}) =>
   [
     {
       type: 'text',
@@ -35,10 +35,6 @@ export default ({
     },
     {
       type: 'rect',
-      options: {
-        mode,
-        variant,
-      },
       data:
         mode === 'waterfall'
           ? [
@@ -57,6 +53,8 @@ export default ({
               sigma: 200,
             },
       style: {
+        mode,
+        variant,
         labelPosition: mode === 'group' ? (variant === 'column' ? 'top' : 'right') : 'center',
         background: {
           fill: 'gray',

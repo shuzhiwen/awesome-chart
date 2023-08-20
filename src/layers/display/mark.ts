@@ -1,10 +1,9 @@
 import {DataTableList} from '../../data'
 import {
-  ChartContext,
   DrawerData,
-  LayerMarkOptions,
   LayerMarkScale,
   LayerMarkStyle,
+  LayerOptions,
   LayerStyle,
   PathDrawerProps,
   TextDrawerProps,
@@ -28,7 +27,7 @@ const defaultStyle: LayerMarkStyle = {
   },
 }
 
-export class LayerMark extends LayerBase<LayerMarkOptions, Key> {
+export class LayerMark extends LayerBase<Key> {
   private _scale: LayerMarkScale
 
   private _data: Maybe<DataTableList>
@@ -51,8 +50,8 @@ export class LayerMark extends LayerBase<LayerMarkOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerMarkOptions, context: ChartContext) {
-    super({options, context, sublayers: ['mark', 'text']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['mark', 'text']})
   }
 
   setData(data: LayerMark['data']) {
@@ -73,8 +72,8 @@ export class LayerMark extends LayerBase<LayerMarkOptions, Key> {
       throw new Error('Invalid data or scale')
     }
 
-    const {scaleX, scaleY} = this.scale,
-      {size = 10, text} = this.style,
+    const {size, text} = this.style,
+      {scaleX, scaleY} = this.scale,
       {left, top} = this.options.layout,
       data = tableListToObjects<DataKey>(this.data.source),
       offsetX = isScaleBand(scaleX) ? scaleX.bandwidth() / 2 : 0,

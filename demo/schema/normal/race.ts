@@ -38,12 +38,10 @@ export default () => [
   },
   {
     type: 'rect',
-    options: {
-      variant: 'bar',
-      sort: 'desc',
-    },
     data: dynamicRawTableLists[0],
     style: {
+      variant: 'bar',
+      sort: 'desc',
       labelPosition: 'right',
       background: {
         fill: 'gray',

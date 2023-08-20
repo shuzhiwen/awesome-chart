@@ -1,24 +1,24 @@
 import {ScalePoint, ScaleQuantize} from 'd3'
 import {scaleAngle, scaleBand, scaleLinear} from '../scales'
 
-export type ScaleAngle = ReturnType<typeof scaleAngle>
+type ScaleAngle = ReturnType<typeof scaleAngle>
 
-export type ScaleBand = ReturnType<typeof scaleBand>
+type ScaleBand = ReturnType<typeof scaleBand>
 
-export type ScaleLinear = ReturnType<typeof scaleLinear>
+type ScaleLinear = ReturnType<typeof scaleLinear>
 
-export type RawScale<Domain = any> = {
+type RawScale<Domain = any> = {
   (input: Domain): any
 }
 
-export interface Scale<Domain = any> extends RawScale<Domain> {
+interface Scale<Domain = any> extends RawScale<Domain> {
   domain(): Domain[]
   domain(domain: Iterable<Domain>): this
   range(): any[]
   range(range: Iterable<any>): this
 }
 
-export type ScaleLinearNice = Partial<{
+type ScaleLinearNice = Partial<{
   /**
    * The number of coordinate dividing lines.
    */
@@ -38,7 +38,7 @@ export type ScaleLinearNice = Partial<{
   fixedStart: number
 }>
 
-export type ScaleBandNice = Partial<{
+type ScaleBandNice = Partial<{
   /**
    * Sets the inner padding to the specified percentage value
    * which must be in the range [0, 1].
@@ -65,7 +65,7 @@ export type ScaleBandNice = Partial<{
   fixedBoundary: 'start' | 'end'
 }>
 
-export type ScaleArcNice = Partial<{
+type ScaleArcNice = Partial<{
   /**
    * Sets the inner padding to the specified percentage value
    * which must be in the range [0, 1].
@@ -77,33 +77,33 @@ export type ScaleArcNice = Partial<{
   paddingInner: number
 }>
 
-export type ScaleNice = ScaleLinearNice & ScaleBandNice & ScaleArcNice
+type ScaleNice = ScaleLinearNice & ScaleBandNice & ScaleArcNice
 
-export type ScaleBandProps = {
+type ScaleBandProps = {
   domain: Meta[]
   range: Vec2
   nice?: ScaleBandNice
 }
 
-export type ScaleLinearProps = {
+type ScaleLinearProps = {
   domain: Vec2
   range: Vec2
   nice?: ScaleLinearNice
 }
 
-export type ScaleArcProps = {
+type ScaleArcProps = {
   domain: [Meta[], Meta[]]
   range: Vec2
   nice?: ScaleArcNice
 }
 
-export type ScaleArcRangeItem = {
+type ScaleArcRangeItem = {
   weight: Meta
   startAngle: number
   endAngle: number
 }
 
-export type LayerAxisScale = Partial<{
+type LayerAxisScale = Partial<{
   scaleX: Scale
   scaleY: Scale
   scaleYR: Scale
@@ -113,68 +113,68 @@ export type LayerAxisScale = Partial<{
   nice: ScaleNice
 }>
 
-export type LayerAuxiliaryScale = Maybe<{
+type LayerAuxiliaryScale = Maybe<{
   scaleX?: Scale
   scaleY?: Scale
 }>
 
-export type LayerLineScale = Maybe<{
+type LayerLineScale = Maybe<{
   scaleX: ScaleBand
   scaleY: ScaleLinear
 }>
 
-export type LayerRadarScale = Maybe<{
+type LayerRadarScale = Maybe<{
   scaleAngle: ScaleBand
   scaleRadius: ScaleLinear
 }>
 
-export type LayerRadialScale = Maybe<{
+type LayerRadialScale = Maybe<{
   scaleAngle: ScaleLinear
   scaleRadius: ScaleBand
 }>
 
-export type LayerScatterScale = Maybe<{
+type LayerScatterScale = Maybe<{
   scaleX: ScaleLinear
   scaleY: ScaleLinear
   scalePointSize: ScaleLinear
 }>
 
-export type LayerRectScale = Maybe<{
+type LayerRectScale = Maybe<{
   scaleX: ScaleBand | ScaleLinear
   scaleY: ScaleBand | ScaleLinear
 }>
 
-export type LayerBasemapScale = Maybe<{
+type LayerBasemapScale = Maybe<{
   scaleX: RawScale
   scaleY: RawScale
 }>
 
-export type LayerHeatmapScale = Maybe<{
+type LayerHeatmapScale = Maybe<{
   scaleX: RawScale
   scaleY: RawScale
 }>
 
-export type LayerODLineScale = Maybe<{
+type LayerODLineScale = Maybe<{
   scaleX: RawScale
   scaleY: RawScale
 }>
 
-export type LayerMarkScale = Maybe<{
+type LayerMarkScale = Maybe<{
   scaleX: RawScale
   scaleY: RawScale
 }>
 
-export type LayerArcScale = Maybe<{
+type LayerArcScale = Maybe<{
   scaleAngle: ScaleAngle
   scaleRadius: ScaleLinear
 }>
 
-export type LayerTreeScale = Maybe<{
+type LayerTreeScale = Maybe<{
   scaleX: ScalePoint<number>
   scaleY: ScalePoint<number>
 }>
 
-export type LayerMatrixScale = Maybe<{
+type LayerMatrixScale = Maybe<{
   scaleX: ScaleBand
   scaleY: ScaleBand
   scaleColor?: ScaleQuantize<string>

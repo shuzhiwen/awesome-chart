@@ -12,13 +12,11 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
   },
   {
     type: 'axis',
-    options: {
-      coordinate: 'polar',
-    },
     scale: {
       paddingInner: variant !== 'pie' && stack ? 0.1 : 0,
     },
     style: {
+      coordinate: 'polar',
       splitLineAngle: {hidden: variant === 'pie'},
       splitLineRadius: {hidden: variant === 'pie'},
       textAngle: {hidden: variant === 'pie'},
@@ -27,9 +25,6 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
   },
   {
     type: 'arc',
-    options: {
-      variant,
-    },
     data: {
       type: 'tableList',
       mode: 'normal',
@@ -39,6 +34,7 @@ export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => 
       sigma: 200,
     },
     style: {
+      variant,
       labelPosition: variant === 'pie' ? 'outer' : 'inner',
       labelOffset: hasGuideLine ? 15 : 5,
       innerRadius,

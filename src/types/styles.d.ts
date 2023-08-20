@@ -3,9 +3,9 @@ import {ChartTheme} from './core'
 import {BasicDrawerProps, ElConfig} from './draw'
 import {FormatNumberConfig} from './utils'
 
-export type LayerStyle<T> = Computable<Partial<T>, ChartTheme>
+type LayerStyle<T> = Computable<Partial<T>, ChartTheme>
 
-export type GraphStyle = Partial<{
+type GraphStyle = Partial<{
   fill: MaybeGroup<string>
   stroke: MaybeGroup<string>
   strokeWidth: MaybeGroup<number>
@@ -21,7 +21,7 @@ export type GraphStyle = Partial<{
   ) => void | Partial<ElConfig>
 }>
 
-export type TextStyle = GraphStyle &
+type TextStyle = GraphStyle &
   Partial<{
     writingMode: 'horizontal-tb' | 'vertical-rl'
     textDecoration: MaybeGroup<'line-through' | 'overline' | 'underline' | 'none'>
@@ -33,9 +33,15 @@ export type TextStyle = GraphStyle &
     offset: Vec2
   }>
 
-export type LayerAxisStyle = Partial<{
+type LayerAxisStyle = {
+  /**
+   * Determines which coordinate system the current chart is.
+   * A chart can only have one coordinate system.
+   */
+  coordinate: Coordinate
   maxScaleXTextNumber: 'auto' | number
   dynamicReserveTextX: boolean
+} & Partial<{
   splitLineAxisX: GraphStyle
   splitLineAxisY: GraphStyle
   splitLineAngle: GraphStyle
@@ -52,95 +58,137 @@ export type LayerAxisStyle = Partial<{
   titleYR: TextStyle
 }>
 
-export type LayerLegendStyle = Partial<{
-  maxColumn: number
-  align: [Alignment, Alignment]
-  offset: Vec2
+type LayerLegendStyle = {
   gap: Vec2
+  offset: Vec2
+  align: [Alignment, Alignment]
+  maxColumn: number
   shapeSize: number
+} & Partial<{
   shape: GraphStyle
   text: TextStyle
 }>
 
-export type LayerAuxiliaryStyle = Partial<{
+type LayerAuxiliaryStyle = {
   direction: Direction
   enableLegend: boolean
   labelPosition: Position4
   labelOffset: number
+} & Partial<{
   labelBackground: GraphStyle
   line: GraphStyle
   text: TextStyle
 }>
 
-export type LayerInteractiveStyle = Partial<{
+type LayerInteractiveStyle = Partial<{
   interactive: GraphStyle
   line: GraphStyle
 }>
 
-export type LayerBasemapStyle = Partial<{
+type LayerBasemapStyle = Partial<{
   block: GraphStyle
   text: TextStyle
 }>
 
-export type LayerHeatmapStyle = Partial<{
+type LayerHeatmapStyle = {
   radiusFactor: number
+} & Partial<{
   heatZone: GraphStyle
 }>
 
-export type LayerODLineStyle = Partial<{
+type LayerODLineStyle = Partial<{
   odLine: GraphStyle
   flyingObject: GraphStyle & {
     path: Maybe<string>
   }
 }>
 
-export type LayerTextStyle = Partial<{
+type LayerTextStyle = {
   sanger: Vec2
+} & Partial<{
   text: Partial<TextStyle & {align: [Alignment, Alignment]}>
   groupText: Partial<TextStyle & {align: [Alignment, Alignment]}>[]
 }>
 
-export type LayerLineStyle = Partial<{
+type LayerLineStyle = {
+  /**
+   * - `cover`: Lines are rendered independently and may overlap each other.
+   * - `stack`: The lines will be stacked on the value axis.
+   */
+  mode: 'cover' | 'stack'
   fallback: 'zero' | 'continue' | 'break'
-  pointSize: number
   labelPosition: Position5
+  pointSize: number
   curveType: Curve
+} & Partial<{
   text: TextStyle
   curve: GraphStyle
   point: GraphStyle
   area: GraphStyle
 }>
 
-export type LayerRectStyle = Partial<{
-  fixedWidth: Meta
-  fixedHeight: Meta
+type LayerRectStyle = {
+  /**
+   * - `column`: The rectangles are arranged horizontally and stretched vertically.
+   * - `bar`: The rectangles are arranged vertically and stretched horizontally.
+   */
+  variant: 'column' | 'bar'
+  /**
+   * - `cover`: Rectangles are rendered independently and may overlap each other.
+   * - `group`: Rectangles in the same group will bisect the width.
+   * - `stack`: The rectangles will be stacked on the value axis.
+   * - `interval`: Use a rectangle to represent a range of values.
+   * - `waterfall`: Like stack, but stacks between groups instead of within groups.
+   * - `percentage`: Like stack, but in the same group will bisect the height.
+   */
+  mode: 'cover' | 'group' | 'stack' | 'interval' | 'waterfall' | 'percentage'
   labelPosition: Position5 | [Position5, Position5]
   labelPositionOrient: Position2
-  rect: GraphStyle
+  fixedWidth: Meta
+  fixedHeight: Meta
+} & Partial<{
+  /**
+   * Sort rectangles between and within groups.
+   */
+  sort: 'asc' | 'desc'
   background: GraphStyle
+  rect: GraphStyle
   text: TextStyle
 }>
 
-export type LayerArcStyle = Partial<{
+type LayerArcStyle = {
+  /**
+   * - `pie`: The arc radius is the same, the angle changes with the value.
+   * - `nightingaleRose`: The arc angle is the same, the radius changes with the value.
+   */
+  variant: 'pie' | 'nightingaleRose'
   innerRadius: number
   labelOffset: number
   guideLine: GraphStyle
   labelPosition: Position2
+} & Partial<{
   arc: GraphStyle
   text: TextStyle
 }>
 
-export type LayerScatterStyle = Partial<{
+type LayerScatterStyle = {
   pointSize: Vec2
+} & Partial<{
   point: GraphStyle
   text: TextStyle
 }>
 
-export type LayerFlopperStyle = Partial<{
+type LayerFlopperStyle = {
+  /**
+   * - `vertical`: Numbers scroll up and down to update.
+   * - `flop`: Numbers fold flip to update.
+   */
+  variant: 'vertical' | 'flop'
   scale: number
   integers: number
   decimals: number
   thousandth: boolean
+} & Partial<{
   url: string
   characters: Record<
     string,
@@ -157,20 +205,27 @@ export type LayerFlopperStyle = Partial<{
   }>
 }>
 
-export type LayerPackStyle = Partial<{
-  zoom: boolean
+type LayerPackStyle = {
+  /**
+   * - `pack`: The normal pack chart.
+   * - `wordCloud`: Pack chart with only one layer and only text.
+   */
+  variant: 'pack' | 'wordCloud'
   padding: number
+  zoom: boolean
+} & Partial<{
   circle: GraphStyle
   text: TextStyle
 }>
 
-export type LayerForceStyle = Partial<{
+type LayerForceStyle = {
   nodeSize: Vec2
+} & Partial<{
   node: GraphStyle
   text: TextStyle
 }>
 
-export type LayerSankeyStyle = Partial<{
+type LayerSankeyStyle = {
   edgeVariant: 'curve' | 'ribbon'
   direction: Direction
   nodeWidth: number
@@ -178,54 +233,65 @@ export type LayerSankeyStyle = Partial<{
   edgeGap: number
   labelOffset: number
   align: Alignment
+} & Partial<{
   node: GraphStyle
   edge: GraphStyle
   text: TextStyle
 }>
 
-export type LayerTreemapStyle = Partial<{
+type LayerTreemapStyle = {
   tile: Tile
   align: [Alignment, Alignment]
   labelGap: number
+} & Partial<{
   rect: GraphStyle
   text: TextStyle
 }>
 
-export type LayerTreeStyle = Partial<{
+type LayerTreeStyle = {
   curveType: Curve
   direction: Direction
   labelOffset: number
   labelPosition: Position2
   align: Alignment
   nodeSize: number
+} & Partial<{
   node: GraphStyle
   edge: GraphStyle
   text: TextStyle
 }>
 
-export type LayerMatrixStyle = Partial<{
+type LayerMatrixStyle = {
   shape: 'circle' | 'rect'
   colorDomain: Vec2 | 'auto'
   circleSize: [number | 'auto', number | 'auto']
+} & Partial<{
   circle: GraphStyle
   rect: GraphStyle
   text: TextStyle
 }>
 
-export type LayerRadarStyle = Partial<{
+type LayerRadarStyle = {
+  /**
+   * - `cover`: Polygons are rendered independently and may overlap each other.
+   * - `stack`: The polygons will be stacked on the value axis.
+   */
+  mode: 'cover' | 'stack'
   pointSize: 6
+} & Partial<{
   point: GraphStyle
   polygon: GraphStyle
   text: TextStyle
 }>
 
-export type LayerDashboardStyle = Partial<{
+type LayerDashboardStyle = {
   step: Vec2
   startAngle: number
   endAngle: number
   arcWidth: number
-  arc: GraphStyle
   tickSize: number
+} & Partial<{
+  arc: GraphStyle
   pointer: GraphStyle
   tickLine: GraphStyle
   tickText: TextStyle
@@ -233,8 +299,9 @@ export type LayerDashboardStyle = Partial<{
   labelText: TextStyle
 }>
 
-export type LayerMarkStyle = Partial<{
+type LayerMarkStyle = {
   size: number
+} & Partial<{
   mark: GraphStyle
   text: TextStyle
 }>
@@ -244,61 +311,72 @@ type BrushGraphStyle = Omit<GraphStyle, 'mapping'> & {
   ry?: number
 }
 
-export type LayerBrushStyle = Partial<{
+type LayerBrushStyle = {
   targets: string[]
   handleZoom: number
   direction: Direction
+} & Partial<{
   background: BrushGraphStyle
   selection: BrushGraphStyle
   leftHandle: BrushGraphStyle
   rightHandle: BrushGraphStyle
 }>
 
-export type LayerCandleStyle = Partial<{
+type LayerCandleStyle = {
   positiveColor: string
   negativeColor: string
-  rect: LayerRectStyle
-  line: LayerRectStyle
-}>
+  rect: Partial<LayerRectStyle>
+  line: Partial<LayerRectStyle>
+}
 
-export type LayerCarouselStyle = Partial<{
+type LayerCarouselStyle = {
+  /**
+   * - `slide`: Images swipe up, down, left and right to switch.
+   * - `fade`: Images fade in and fade out to switch.
+   */
+  mode: 'slide' | 'fade'
   direction: Position4
+  maxDotSize: number
   padding: number
   zoom: number
+} & Partial<{
   dot: GraphStyle
-  maxDotSize: number
 }>
 
-export type LayerRadialStyle = Partial<{
+type LayerRadialStyle = {
   innerRadius: number
   cornerRadius: number
+} & Partial<{
   arc: GraphStyle
   text: TextStyle
 }>
 
-export type LayerWaveStyle = Partial<{
+type LayerWaveStyle = {
   wavelength: number
   amplitude: number
   areaNumber: number
   areaGap: number
+} & Partial<{
   area: GraphStyle
   background: GraphStyle
   text: TextStyle
 }>
 
-export type LayerGridStyle = Partial<{
+type LayerGridStyle = {
   placeMode: 'collision' | 'position'
   draggable: boolean
   sangerColumn: number
   sangerGap: number
+} & Partial<{
   gridLine: GraphStyle
   placeholder: GraphStyle
   box: GraphStyle
 }>
 
-export type LayerChordStyle = Partial<{
+type LayerChordStyle = {
   arcWidth: number
   labelOffset: number
+} & Partial<{
   edge: GraphStyle
   node: GraphStyle
   text: TextStyle

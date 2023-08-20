@@ -2,9 +2,8 @@ import {cloneDeep, isArray} from 'lodash'
 import {DataTableList} from '../../data'
 import {scaleBand, scaleLinear} from '../../scales'
 import {
-  ChartContext,
   DrawerData,
-  LayerRectOptions,
+  LayerOptions,
   LayerRectScale,
   LayerRectStyle,
   LayerStyle,
@@ -34,14 +33,13 @@ import {
 
 type Key = 'text' | 'rect' | 'background'
 
-const defaultOptions: Partial<LayerRectOptions> = {
-  variant: 'column',
-  mode: 'group',
-}
-
 const defaultStyle: LayerRectStyle = {
+  mode: 'group',
+  variant: 'column',
   labelPosition: 'center',
   labelPositionOrient: 'outer',
+  fixedHeight: '100%',
+  fixedWidth: '100%',
   background: {
     fillOpacity: 0.1,
   },
@@ -50,7 +48,7 @@ const defaultStyle: LayerRectStyle = {
   },
 }
 
-export class LayerRect extends LayerBase<LayerRectOptions, Key> {
+export class LayerRect extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -83,10 +81,9 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerRectOptions, context: ChartContext) {
+  constructor(options: LayerOptions) {
     super({
-      context,
-      options: {...defaultOptions, ...options},
+      options,
       sublayers: ['text', 'rect', 'background'],
       interactive: ['rect'],
     })
@@ -96,7 +93,7 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
   }
 
   setData(data: LayerRect['data']) {
-    const {mode, sort} = this.options
+    const {mode, sort} = this.style
 
     this._data = validateAndCreateData('tableList', this.data, data, (data) => {
       if (!data) return
@@ -126,8 +123,8 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
       throw new Error('Invalid data or scale')
     }
 
-    const {rect} = this.style,
-      {variant, mode, layout} = this.options,
+    const {layout} = this.options,
+      {rect, variant, mode} = this.style,
       {rawTableList, headers} = this.data
     let colorMatrix: ColorMatrix
 
@@ -140,7 +137,7 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
           value: Number(value),
           meta: {dimension, category: headers[i + 1], value},
           x: layout.left + (scaleX(dimension as string) || 0),
-          y: layout.top + (value > 0 ? scaleY(value as number) : scaleY(0)),
+          y: layout.top + ((value as number) > 0 ? scaleY(value as number) : scaleY(0)),
           width: scaleX.bandwidth(),
           height: Math.abs(scaleY(value as number) - scaleY(0)),
           transformOrigin: 'bottom',
@@ -161,7 +158,7 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
           value: Number(value),
           meta: {dimension, category: headers[i + 1], value},
           y: layout.top + (scaleY(dimension as string) || 0),
-          x: layout.left + (value < 0 ? scaleX(value as number) : scaleX(0)),
+          x: layout.left + ((value as number) < 0 ? scaleX(value as number) : scaleX(0)),
           width: Math.abs(scaleX(value as number) - scaleX(0)),
           height: scaleY.bandwidth(),
           transformOrigin: 'left',
@@ -231,7 +228,7 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
   }
 
   private sortRectDataInGroup() {
-    const {sort, variant} = this.options,
+    const {sort, variant} = this.style,
       target = variant === 'column' ? 'x' : 'y'
 
     this.rectData.map((group) => {
@@ -250,7 +247,7 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
   }
 
   private transformGroup() {
-    const {variant} = this.options,
+    const {variant} = this.style,
       columnNumber = this.rectData[0].length
 
     if (variant === 'column') {
@@ -271,7 +268,7 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
   }
 
   private transformStack() {
-    const {variant} = this.options
+    const {variant} = this.style
 
     if (variant === 'column') {
       this.rectData.forEach((group) => {
@@ -311,7 +308,7 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
   }
 
   private transformInterval() {
-    const {variant} = this.options
+    const {variant} = this.style
 
     this.rectData = this.rectData.map((group) => {
       const [data1, data2] = [group[0], group[1]],
@@ -350,7 +347,7 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
   }
 
   private transformWaterfall() {
-    const {variant} = this.options,
+    const {variant} = this.style,
       lastGroup = this.rectData[this.rectData.length - 1]
 
     if (variant === 'column') {
@@ -385,8 +382,8 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
   }
 
   private transformPercentage() {
-    const {variant, layout} = this.options,
-      {width, height} = layout
+    const {variant} = this.style,
+      {width, height} = this.options.layout
 
     this.rectData.forEach((group) => {
       const total = group.reduce((prev, cur) => prev + Number(cur.value), Number.MIN_VALUE),
@@ -407,8 +404,7 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
   }
 
   private transformFixed() {
-    const {variant} = this.options,
-      {fixedWidth = '100%', fixedHeight = '100%'} = this.style
+    const {variant, fixedWidth, fixedHeight} = this.style
 
     this.rectData = this.rectData.map((group) => {
       return group.map(({x, y, width, height, ...rest}) => {
@@ -439,9 +435,9 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
   private createScale() {
     if (!this.data) return
 
-    const {layout, variant = 'column', mode} = this.options,
-      {width, height} = layout,
-      {headers} = this.data,
+    const {headers} = this.data,
+      {variant, mode} = this.style,
+      {width, height} = this.options.layout,
       selectMode = mode === 'stack' ? 'sum' : 'copy',
       bandDomain = this.data.lists[0] as string[],
       range1 = this.data.select(headers.slice(1), {mode: selectMode}).range(),
@@ -481,7 +477,7 @@ export class LayerRect extends LayerBase<LayerRectOptions, Key> {
   }
 
   private createRectLabel() {
-    const {variant = 'column'} = this.options,
+    const {variant} = this.style,
       {labelPosition, labelPositionOrient, text: originText} = this.style,
       positionMin = isArray(labelPosition) ? labelPosition[0] : labelPosition,
       positionMax = isArray(labelPosition) ? labelPosition[1] : labelPosition

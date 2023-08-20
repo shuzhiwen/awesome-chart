@@ -8,15 +8,12 @@ export default ({mode}) => [
   },
   {
     type: 'axis',
-    options: {
+    style: {
       coordinate: 'polar',
     },
   },
   {
     type: 'radar',
-    options: {
-      mode,
-    },
     data: {
       type: 'tableList',
       mode: 'normal',
@@ -26,6 +23,7 @@ export default ({mode}) => [
       sigma: 200,
     },
     style: {
+      mode,
       pointSize: 5,
       text: {
         hidden: true,

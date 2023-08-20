@@ -15,8 +15,8 @@ import {ChartContext, DataType, LayerScale, LayerStyle} from '../../types'
  * The final merged scale.
  */
 export function createScale<Scale extends Maybe<LayerScale>>(
-  defaultScale?: Scale,
-  currentScale?: Scale,
+  defaultScale: Scale,
+  currentScale: Scale,
   incomingScale?: Scale
 ) {
   const nice = merge({}, defaultScale?.nice, currentScale?.nice, incomingScale?.nice),
@@ -43,8 +43,8 @@ export function createScale<Scale extends Maybe<LayerScale>>(
  */
 export function validateAndCreateData<Data extends Maybe<DataBase<unknown>>>(
   dataType: DataType,
-  currentData?: Data,
-  incomingData?: Data,
+  currentData: Data,
+  incomingData: Data,
   filter?: (data: Data) => Data | void
 ) {
   if (!incomingData) {
@@ -71,10 +71,10 @@ export function validateAndCreateData<Data extends Maybe<DataBase<unknown>>>(
  */
 export function createStyle<Style extends Maybe<AnyObject>>(
   context: ChartContext,
-  defaultStyle: LayerStyle<Style>,
-  currentStyle: LayerStyle<Style>,
+  defaultStyle: Style,
+  currentStyle: Style,
   incomingStyle: LayerStyle<Style>
-) {
+): Style {
   const {theme} = context,
     _default = isFunction(defaultStyle) ? defaultStyle(theme) : defaultStyle,
     _current = isFunction(currentStyle) ? currentStyle(theme) : currentStyle,

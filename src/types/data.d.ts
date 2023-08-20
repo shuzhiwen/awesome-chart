@@ -1,9 +1,9 @@
 import {DataDict} from '../data'
 import {ColorMatrix} from '../utils'
 
-export type DataType = Keys<DataDict>
+type DataType = Keys<DataDict>
 
-export type LegendCache = {
+type LegendCache = {
   /**
    * @see LegendData.filter
    */
@@ -19,9 +19,9 @@ export type LegendCache = {
   mapping: Record<Meta, number>
 }
 
-export type DataBaseOptions = Partial<{order: LegendCache}>
+type DataBaseOptions = Partial<{order: LegendCache}>
 
-export type TableListOptions = Partial<{
+type TableListOptions = Partial<{
   /**
    * Select target corresponding to the rows and columns of `TableList`.
    */
@@ -32,7 +32,7 @@ export type TableListOptions = Partial<{
   mode: 'sum' | 'percentage' | 'copy'
 }>
 
-export type TableOptions = Partial<{
+type TableOptions = Partial<{
   /**
    * Select target corresponding to the rows and columns of `Table`.
    */
@@ -42,24 +42,24 @@ export type TableOptions = Partial<{
 /**
  * `RawTableList` can be seen as a relational table in the database.
  */
-export type RawTableList<T = Meta> = T[][]
+type RawTableList<T = Meta> = T[][]
 
 /**
  * `RawTable` can be seen as a matrix.
  */
-export type RawTable<T = Meta> = [Meta[], Meta[], RawTableList<T>]
+type RawTable<T = Meta> = [Meta[], Meta[], RawTableList<T>]
 
 /**
  * `RawRelation` can be seen as two relational table in the database.
  * The first table is represents node information.
  * The second table is represents link information.
  */
-export type RawRelation<T = Meta> = [RawTableList<T>, RawTableList<T>]
+type RawRelation<T = Meta> = [RawTableList<T>, RawTableList<T>]
 
 /**
  * Data structure of `TableList` item.
  */
-export type TableListData = {
+type TableListData = {
   /**
    * The key of the column.
    */
@@ -78,7 +78,7 @@ export type TableListData = {
   max?: Meta
 }[]
 
-export type Edge = {
+type Edge = {
   /**
    * Unique edge ID.
    */
@@ -97,7 +97,7 @@ export type Edge = {
   value?: number
 }
 
-export type Node = {
+type Node = {
   /**
    * Unique node ID.
    */
@@ -124,7 +124,7 @@ export type Node = {
   children?: Node[]
 }
 
-export type RelationData = {
+type RelationData = {
   /**
    * Roots represent nodes in a directed acyclic graph that only have out-degrees.
    */
@@ -139,7 +139,7 @@ export type RelationData = {
   edges: Edge[]
 }
 
-export type LegendData = {
+type LegendData = {
   /**
    * Legend filter mode corresponding to the rows and columns of `TableList`.
    */
@@ -158,7 +158,7 @@ export type LegendData = {
   }[]
 }
 
-export type TooltipData = Maybe<{
+type TooltipData = Maybe<{
   /**
    * Tooltip title that representing the dimension or category.
    */

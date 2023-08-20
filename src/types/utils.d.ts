@@ -1,21 +1,20 @@
 import {Texture} from 'pixi.js'
-import {EventManager} from '../utils'
 import {D3Selection} from './draw'
 
-export type Box = {
+type Box = {
   x: number
   y: number
   width: number
   height: number
 }
 
-export type Stop = Partial<{
+type Stop = Partial<{
   color: string
   offset: number
   opacity: number
 }>
 
-export type LinearGradientSchema = {
+type LinearGradientSchema = {
   id: string
   x1?: number
   y1?: number
@@ -26,7 +25,7 @@ export type LinearGradientSchema = {
   stops: Stop[]
 }
 
-export type RadialGradientSchema = {
+type RadialGradientSchema = {
   id: string
   r?: number
   r2?: number
@@ -39,17 +38,17 @@ export type RadialGradientSchema = {
   stops: Stop[]
 }
 
-export type CreateDefsSchema = Partial<{
-  linearGradient?: MaybeGroup<LinearGradientSchema>
-  radialGradient?: MaybeGroup<RadialGradientSchema>
+type CreateDefsSchema = Partial<{
+  linearGradient: MaybeGroup<LinearGradientSchema>
+  radialGradient: MaybeGroup<RadialGradientSchema>
 }>
 
-export type GradientCreatorProps<Schema> = {
+type GradientCreatorProps<Schema> = {
   container: D3Selection | Texture[]
   schema: Schema
 }
 
-export type EventCallback = AnyFunction & {
+type EventCallback = AnyFunction & {
   /**
    * The event category that used to distinguish event sources.
    * @internal
@@ -64,7 +63,7 @@ export type EventCallback = AnyFunction & {
   isOnceDone?: boolean
 }
 
-export type FormatNumberConfig = Partial<{
+type FormatNumberConfig = Partial<{
   /**
    * Is value transform to percentage string.
    */
@@ -79,7 +78,7 @@ export type FormatNumberConfig = Partial<{
   decimals: number // 12.3412312 => 12.34
 }>
 
-export type OverflowControlConfig = Partial<{
+type OverflowControlConfig = Partial<{
   /**
    * When value exceed width, `...` as suffix or not.
    */
@@ -98,7 +97,7 @@ export type OverflowControlConfig = Partial<{
   fontSize: number
 }>
 
-export type EasyGradientCreatorProps = Partial<RadialGradientSchema> & {
+type EasyGradientCreatorProps = Partial<RadialGradientSchema> & {
   /**
    * Gradient type.
    */
@@ -113,7 +112,7 @@ export type EasyGradientCreatorProps = Partial<RadialGradientSchema> & {
   colors: string[]
 }
 
-export type RandomNumberOptions = {
+type RandomNumberOptions = {
   /**
    * Create a number in `normal` way or `poisson` way.
    */
@@ -136,7 +135,7 @@ export type RandomNumberOptions = {
   mu?: number
 }
 
-export type RandomTableListOptions = RandomNumberOptions & {
+type RandomTableListOptions = RandomNumberOptions & {
   /**
    * Whether numbers have `asc` order or `desc` order.
    */
@@ -151,7 +150,7 @@ export type RandomTableListOptions = RandomNumberOptions & {
   column: number
 }
 
-export type RandomRelationOptions = RandomNumberOptions & {
+type RandomRelationOptions = RandomNumberOptions & {
   /**
    * The number of nodes to generate.
    */

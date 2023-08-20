@@ -48,10 +48,6 @@ export default () =>
     },
     {
       type: 'line',
-      options: {
-        axis: 'minor',
-        mode: 'stack',
-      },
       data: {
         type: 'tableList',
         mode: 'normal',
@@ -60,7 +56,11 @@ export default () =>
         mu: -500,
         sigma: 200,
       },
+      options: {
+        axis: 'minor',
+      },
       style: {
+        mode: 'stack',
         fallback: 'break',
         labelPosition: 'top',
         curve: {

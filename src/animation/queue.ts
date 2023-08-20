@@ -1,6 +1,6 @@
 import {max, range} from 'd3'
 import {AnimationDict} from '.'
-import {AnimationOptions, AnimationType, DrawerTarget} from '../types'
+import {AnimationOptions, AnimationType} from '../types'
 import {safeLoop, uuid} from '../utils'
 import {AnimationBase} from './base'
 import {AnimationEmpty} from './empty'
@@ -30,7 +30,7 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
   private isConnected = false
 
   constructor(options: AnimationOptions) {
-    super({options})
+    super(options)
     const animationHead = new AnimationEmpty({})
 
     animationHead.event.onWithOff('start', eventKey, this.start)
@@ -38,7 +38,7 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
     this.queue = [animationHead]
   }
 
-  connect(priorityConfig?: number[] | ((queues: Animation[]) => number[])) {
+  connect(priorityConfig?: Computable<number[], Animation[]>) {
     this.queue.forEach((instance) => {
       instance.event.off('start', eventKey)
       instance.event.off('end', eventKey)
@@ -93,19 +93,14 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
     this.isConnected = false
   }
 
-  pushAnimation(type: AnimationType, options: AnimationOptions, context: DrawerTarget) {
+  pushAnimation(type: AnimationType, options: AnimationOptions) {
     if (!AnimationDict[type]) {
       this.log.error('Animation type error', type)
       return
     }
 
     this.isConnected = false
-    this.queue.push(
-      new AnimationDict[type]({
-        options: {id: uuid(), ...options} as never,
-        context,
-      })
-    )
+    this.queue.push(new AnimationDict[type]({id: uuid(), ...options} as never))
   }
 
   remove(id: string) {

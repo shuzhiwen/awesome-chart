@@ -2,10 +2,9 @@ import {chord, group, ribbon} from 'd3'
 import {DataTable} from '../../data'
 import {
   ArcDrawerProps,
-  ChartContext,
   DrawerData,
-  LayerChordOptions,
   LayerChordStyle,
+  LayerOptions,
   LayerStyle,
   PathDrawerProps,
   SourceMeta,
@@ -28,7 +27,7 @@ const defaultStyle: LayerChordStyle = {
   },
 }
 
-export class LayerChord extends LayerBase<LayerChordOptions, Key> {
+export class LayerChord extends LayerBase<Key> {
   private _data: Maybe<DataTable>
 
   private _style = defaultStyle
@@ -54,10 +53,9 @@ export class LayerChord extends LayerBase<LayerChordOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerChordOptions, context: ChartContext) {
+  constructor(options: LayerOptions) {
     super({
       options,
-      context,
       sublayers: ['node', 'edge', 'text'],
       interactive: ['node'],
     })
@@ -78,7 +76,7 @@ export class LayerChord extends LayerBase<LayerChordOptions, Key> {
 
     const {rows, body} = this.data,
       {left, top, width, height} = this.options.layout,
-      {arcWidth = 0, labelOffset = 0, text, node} = this.style,
+      {arcWidth, labelOffset, text, node} = this.style,
       [centerX, centerY] = [left + width / 2, top + height / 2],
       chordData = chord().padAngle(Math.PI / 10 / rows.length)(body as number[][]),
       groupData = Array.from(group(chordData, (data) => data.target.index).values()),

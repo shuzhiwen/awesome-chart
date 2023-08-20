@@ -3,12 +3,11 @@ import {scaleTypes} from '../../core'
 import {DataBase} from '../../data'
 import {scaleAngle, scaleBand, scaleLinear} from '../../scales'
 import {
-  ChartContext,
   CircleDrawerProps,
   DrawerData,
-  LayerAxisOptions,
   LayerAxisScale,
   LayerAxisStyle,
+  LayerOptions,
   LayerStyle,
   LineDrawerProps,
   Scale,
@@ -57,11 +56,8 @@ const defaultTitle = {
   fillOpacity: 0.8,
 }
 
-const defaultOptions: Partial<LayerAxisOptions> = {
-  coordinate: 'cartesian',
-}
-
 const defaultStyle: LayerAxisStyle = {
+  coordinate: 'cartesian',
   maxScaleXTextNumber: 'auto',
   dynamicReserveTextX: false,
   splitLineAxisX: defaultSplitLine,
@@ -80,7 +76,7 @@ const defaultStyle: LayerAxisStyle = {
   titleYR: defaultTitle,
 }
 
-export class LayerAxis extends LayerBase<LayerAxisOptions, Key> {
+export class LayerAxis extends LayerBase<Key> {
   private _data: Maybe<
     DataBase<{
       titleX?: string
@@ -146,12 +142,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerAxisOptions, context: ChartContext) {
-    super({
-      context,
-      options: {...defaultOptions, ...options},
-      sublayers: Object.keys(defaultStyle) as Key[],
-    })
+  constructor(options: LayerOptions) {
+    super({options, sublayers: Object.keys(defaultStyle) as Key[]})
   }
 
   setData(data: LayerAxis['data']) {
@@ -159,8 +151,8 @@ export class LayerAxis extends LayerBase<LayerAxisOptions, Key> {
   }
 
   setScale(scale: LayerAxisScale) {
-    const {coordinate} = this.options
-    this._scale = createScale(undefined, this.scale, {nice: scale?.nice})
+    const {coordinate} = this.style
+    this._scale = createScale({}, this.scale, {nice: scale?.nice})
 
     scaleTypes.forEach((type) => {
       if (!scale?.[type]) {
@@ -353,7 +345,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions, Key> {
 
   private reduceScaleXTextNumber() {
     const {width, left, right} = this.options.layout,
-      {maxScaleXTextNumber = Infinity, dynamicReserveTextX} = this.style,
+      {maxScaleXTextNumber, dynamicReserveTextX} = this.style,
       getEnabledTextX = () => {
         return this.textData.textX.filter((item) => !this.disabledAxisX.has(item))
       },
@@ -399,8 +391,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions, Key> {
       return scale.domain().map((label) => ({
         label,
         position:
-          (scale(label) ?? 0) +
-          (this.options.coordinate === 'cartesian' ? scale.bandwidth() / 2 : 0),
+          (scale(label) ?? 0) + (this.style.coordinate === 'cartesian' ? scale.bandwidth() / 2 : 0),
       }))
     } else if (isScaleLinear(scale)) {
       const [min, max] = scale.domain(),
@@ -419,7 +410,7 @@ export class LayerAxis extends LayerBase<LayerAxisOptions, Key> {
   }
 
   draw() {
-    const {coordinate} = this.options,
+    const {coordinate} = this.style,
       {scaleX, scaleY} = this.scale,
       disabledAxisXIndex = Array.from(this.disabledAxisX).map((item) =>
         this.textData.textX.findIndex((item2) => item2 === item)

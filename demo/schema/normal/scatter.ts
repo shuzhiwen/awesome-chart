@@ -45,15 +45,13 @@ export default ({pointSize}) => [
   },
   {
     type: 'auxiliary',
-    options: {
-      direction: 'horizontal',
-    },
     data: [
       ['标签', '数值'],
       ['安全上界', 150],
       ['安全下界', 100],
     ],
     style: {
+      direction: 'horizontal',
       labelPosition: 'right',
       line: {
         stroke: ['orange', 'orange'],

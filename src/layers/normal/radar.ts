@@ -1,10 +1,9 @@
 import {DataTableList} from '../../data'
 import {scaleBand, scaleLinear} from '../../scales'
 import {
-  ChartContext,
   CircleDrawerProps,
   DrawerData,
-  LayerRadarOptions,
+  LayerOptions,
   LayerRadarScale,
   LayerRadarStyle,
   LayerStyle,
@@ -25,11 +24,8 @@ import {
 
 type Key = 'text' | 'polygon' | 'point'
 
-const defaultOptions: Partial<LayerRadarOptions> = {
-  mode: 'cover',
-}
-
 const defaultStyle: LayerRadarStyle = {
+  mode: 'cover',
   pointSize: 6,
   polygon: {
     strokeWidth: 2,
@@ -37,7 +33,7 @@ const defaultStyle: LayerRadarStyle = {
   },
 }
 
-export class LayerRadar extends LayerBase<LayerRadarOptions, Key> {
+export class LayerRadar extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
 
   private _data: Maybe<DataTableList>
@@ -70,10 +66,9 @@ export class LayerRadar extends LayerBase<LayerRadarOptions, Key> {
     return this._style
   }
 
-  constructor(options: LayerRadarOptions, context: ChartContext) {
+  constructor(options: LayerOptions) {
     super({
-      context,
-      options: {...defaultOptions, ...options},
+      options,
       sublayers: ['text', 'polygon', 'point'],
       interactive: ['point'],
     })
@@ -98,8 +93,9 @@ export class LayerRadar extends LayerBase<LayerRadarOptions, Key> {
   private createScale() {
     if (!this.data) return
 
-    const {mode, layout} = this.options,
-      {lists, headers} = this.data
+    const {layout} = this.options,
+      {lists, headers} = this.data,
+      {mode} = this.style
 
     this._scale = createScale(
       {
@@ -124,11 +120,11 @@ export class LayerRadar extends LayerBase<LayerRadarOptions, Key> {
       throw new Error('Invalid data or scale')
     }
 
-    const {mode, layout} = this.options,
+    const {layout} = this.options,
       {headers, rawTableList} = this.data,
       {width, height, left, top} = layout,
       {scaleAngle, scaleRadius} = this.scale,
-      {pointSize = 6, polygon} = this.style,
+      {pointSize, polygon, mode} = this.style,
       [centerX, centerY] = [left + width / 2, top + height / 2],
       colorMatrix = createColorMatrix({
         layer: this,

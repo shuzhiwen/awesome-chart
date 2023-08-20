@@ -1,16 +1,11 @@
 import {BrushBehavior, brushX, brushY, D3BrushEvent} from 'd3'
-import {
-  ChartContext,
-  LayerAxisScale,
-  LayerBrushOptions,
-  LayerBrushStyle,
-  LayerStyle,
-} from '../../types'
+import {LayerAxisScale, LayerBrushStyle, LayerOptions, LayerStyle} from '../../types'
 import {addStyle, isSC, transformAttr} from '../../utils'
 import {LayerBase} from '../base'
 import {createScale, createStyle} from '../helpers'
 
 const defaultStyle: LayerBrushStyle = {
+  targets: [],
   handleZoom: 0.5,
   direction: 'horizontal',
   selection: {
@@ -38,7 +33,7 @@ const defaultStyle: LayerBrushStyle = {
   },
 }
 
-export class LayerBrush extends LayerBase<LayerBrushOptions, never> {
+export class LayerBrush extends LayerBase<never> {
   private _scale: Omit<LayerAxisScale, 'nice'> = {}
 
   private originScaleRangeMap: Map<string, any[]> = new Map()
@@ -59,12 +54,12 @@ export class LayerBrush extends LayerBase<LayerBrushOptions, never> {
     return this._style
   }
 
-  constructor(options: LayerBrushOptions, context: ChartContext) {
-    super({options, context})
+  constructor(options: LayerOptions) {
+    super({options})
   }
 
   setScale(scale: LayerAxisScale) {
-    this._scale = createScale(undefined, this.scale, scale)
+    this._scale = createScale({}, this.scale, scale)
   }
 
   setStyle(style: LayerStyle<LayerBrushStyle>) {
@@ -80,7 +75,7 @@ export class LayerBrush extends LayerBase<LayerBrushOptions, never> {
 
     const {layout, createGradient} = this.options,
       {width, height, left, top} = layout,
-      {direction = 'horizontal', targets} = this.style,
+      {direction, targets} = this.style,
       [x1, x2, y1, y2] = [left, left + width, top, top + height]
 
     this.brush = direction === 'horizontal' ? brushX() : brushY()
@@ -127,7 +122,7 @@ export class LayerBrush extends LayerBase<LayerBrushOptions, never> {
   private brushed(event: D3BrushEvent<unknown>) {
     const {layout, rebuildScale} = this.options,
       {width, height, left, top} = layout,
-      {direction, targets, handleZoom = 1} = this.style,
+      {direction, targets, handleZoom} = this.style,
       total = direction === 'horizontal' ? width : height,
       selection = (event.selection ?? [0, total]) as Vec2,
       zoomFactor = total / Math.max(selection[1] - selection[0], Number.MIN_VALUE)

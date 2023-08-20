@@ -1,11 +1,11 @@
 import anime from 'animejs'
-import {AnimationFadeOptions, AnimationProps} from '../types'
+import {AnimationFadeOptions} from '../types'
 import {isSC} from '../utils'
 import {AnimationBase} from './base'
 
 export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
-  constructor(props: AnimationProps<AnimationFadeOptions>) {
-    super(props)
+  constructor(options: AnimationFadeOptions) {
+    super(options)
   }
 
   init() {

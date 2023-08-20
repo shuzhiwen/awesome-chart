@@ -1,13 +1,6 @@
 import {merge} from 'lodash'
 import {DataBase} from '../../data'
-import {
-  ChartContext,
-  DrawerData,
-  LayerStyle,
-  LayerTextOptions,
-  LayerTextStyle,
-  TextDrawerProps,
-} from '../../types'
+import {DrawerData, LayerOptions, LayerStyle, LayerTextStyle, TextDrawerProps} from '../../types'
 import {getAttr, getTextWidth, group} from '../../utils'
 import {LayerBase} from '../base'
 import {createStyle, createText, validateAndCreateData} from '../helpers'
@@ -19,7 +12,7 @@ const defaultStyle: LayerTextStyle = {
   },
 }
 
-export class LayerText extends LayerBase<LayerTextOptions, 'text'> {
+export class LayerText extends LayerBase<'text'> {
   private _data: Maybe<
     DataBase<
       | string
@@ -49,8 +42,8 @@ export class LayerText extends LayerBase<LayerTextOptions, 'text'> {
     return this._style
   }
 
-  constructor(options: LayerTextOptions, context: ChartContext) {
-    super({options, context, sublayers: ['text']})
+  constructor(options: LayerOptions) {
+    super({options, sublayers: ['text']})
   }
 
   setData(data: LayerText['data']) {
@@ -66,7 +59,7 @@ export class LayerText extends LayerBase<LayerTextOptions, 'text'> {
       throw new Error('Invalid data')
     }
 
-    const {groupText, text, sanger = [1, 1]} = this.style,
+    const {groupText, text, sanger} = this.style,
       {left, top, width, height} = this.options.layout,
       unitWidth = width / sanger[1],
       unitHeight = height / sanger[0]
@@ -99,7 +92,7 @@ export class LayerText extends LayerBase<LayerTextOptions, 'text'> {
       }
 
       return {
-        ...createText({x, y, value, style: style}),
+        ...createText({x, y, value, style}),
         xIndex,
         yIndex,
       }
