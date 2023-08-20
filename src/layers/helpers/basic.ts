@@ -104,11 +104,9 @@ export function checkColumns(data: Maybe<DataTableList>, keys: Meta[]) {
  * Generates the class name of the base element.
  * @param sublayer
  * The sublayer tags that the elements have.
- * @param dot
- * Whether to add a dot before the class string.
  * @returns
  * Selectable `className` for basic element.
  */
-export function makeClass(sublayer: string, dot: boolean) {
-  return `${dot ? '.' : ''}chart-basic-${sublayer}`
+export function elClass(sublayer: string) {
+  return `chart-basic-${sublayer}`
 }

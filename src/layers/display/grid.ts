@@ -12,7 +12,7 @@ import {
 } from '../../types'
 import {isBoxCollision, isCC, tableListToObjects, ungroup, uuid} from '../../utils'
 import {LayerBase} from '../base'
-import {checkColumns, createStyle, makeClass, validateAndCreateData} from '../helpers'
+import {checkColumns, createStyle, elClass, validateAndCreateData} from '../helpers'
 
 type Key = 'box' | 'gridLine' | 'placeholder'
 
@@ -223,7 +223,7 @@ export class LayerGrid extends LayerBase<Key> {
         .on('drag', this.dragged.bind(this))
         .on('end', this.dragEnded.bind(this))
 
-      this.root.selectAll(makeClass('box', true)).call(dragBehavior as any)
+      this.root.selectAll(`.${elClass('box')}`).call(dragBehavior as any)
     }
   }
 

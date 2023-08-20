@@ -30,7 +30,7 @@ import {
   ungroup,
   uuid,
 } from '../utils'
-import {makeClass, selector} from './helpers'
+import {elClass, selector} from './helpers'
 
 export abstract class LayerBase<Key extends string> {
   /**
@@ -248,7 +248,7 @@ export abstract class LayerBase<Key extends string> {
    */
   private bindEvent(sublayer: Key) {
     if (isSC(this.root)) {
-      const els = this.root.selectAll(makeClass(sublayer, true)).style('cursor', 'pointer')
+      const els = this.root.selectAll(`.${elClass(sublayer)}`).style('cursor', 'pointer')
 
       commonEvents.forEach((type) => {
         els.on(`${type}.common`, null)
@@ -264,7 +264,7 @@ export abstract class LayerBase<Key extends string> {
     }
 
     if (isCC(this.root)) {
-      const els = selector.getChildren(this.root, makeClass(sublayer, false))
+      const els = selector.getChildren(this.root, elClass(sublayer))
 
       commonEvents.forEach((type) => {
         els.forEach((el) => {
@@ -302,7 +302,7 @@ export abstract class LayerBase<Key extends string> {
        * Select elements must await animation to be destroyed.
        * Otherwise the elements created by the last animation will be selected.
        */
-      targets = selector.getChildren(this.root, makeClass(sublayer, false)),
+      targets = selector.getChildren(this.root, elClass(sublayer)),
       isFirstPlay = !this.cacheAnimation.animations[sublayer]
 
     if (
@@ -442,7 +442,7 @@ export abstract class LayerBase<Key extends string> {
           isFirstDraw || groupData.disableUpdateAnimation
             ? {duration: 0, delay: 0}
             : this.cacheAnimation.options[key]?.update,
-        className: makeClass(key, false),
+        className: elClass(key),
         container: groupContainer,
         theme: this.options.theme,
       }

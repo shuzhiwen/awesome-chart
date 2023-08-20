@@ -17,7 +17,7 @@ import {LayerBase} from '../base'
 import {
   createScale,
   createStyle,
-  makeClass,
+  elClass,
   selector,
   stickyBandScale,
   validateAndCreateData,
@@ -276,14 +276,14 @@ export class LayerInteractive extends LayerBase<Key> {
       }
 
       if (isSC(this.root)) {
-        this.root.selectAll(makeClass('interactive', true)).each((d, i, els) => {
+        this.root.selectAll(`.${elClass('interactive')}`).each((d, i, els) => {
           if (getKey(d as ElConfig).match(getKey(data))) {
             select(els[i]).attr('opacity', shadowOpacity)
           }
         })
         select(target as HTMLElement).attr('opacity', 0)
       } else {
-        selector.getChildren(this.root, makeClass('interactive', false)).forEach((c) => {
+        selector.getChildren(this.root, elClass('interactive')).forEach((c) => {
           if (getKey(c.data!).match(getKey(data))) {
             c.alpha = shadowOpacity
           }
@@ -293,11 +293,11 @@ export class LayerInteractive extends LayerBase<Key> {
     })
     this.event.onWithOff('mouseout-interactive', EVENT_KEY, () => {
       if (isSC(this.root)) {
-        this.root.selectAll(makeClass('interactive', true)).attr('opacity', 0)
+        this.root.selectAll(`.${elClass('interactive')}`).attr('opacity', 0)
       } else {
-        selector
-          .getChildren(this.root, makeClass('interactive', false))
-          .forEach((child) => (child.alpha = 0))
+        selector.getChildren(this.root, elClass('interactive')).forEach((child) => {
+          child.alpha = 0
+        })
       }
     })
   }
