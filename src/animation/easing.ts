@@ -1,6 +1,9 @@
 import * as d3 from 'd3-ease'
 
-export const svgEasing = new Map<Easing | undefined, (normalizedTime: number) => number>([
+export const svgEasing = new Map<
+  Easing | undefined,
+  (normalizedTime: number) => number
+>([
   [undefined, d3.easeSinInOut],
   ['easeInBack', d3.easeBackIn],
   ['easeInBounce', d3.easeBounceIn],

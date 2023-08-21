@@ -13,7 +13,10 @@ import {
 import {Chart} from './chart'
 import {EVENT_KEY} from './constants'
 
-function createLayer(chart: Chart, schema: ArrayItem<CreateChartProps['layers']>) {
+function createLayer(
+  chart: Chart,
+  schema: ArrayItem<CreateChartProps['layers']>
+) {
   const {type, options, data, scale, style, animation, event} = schema!,
     layout = options?.layout ? chart.layout[options.layout] : undefined,
     layerOptions = {type, ...options, layout} as LayerOptions,
@@ -23,9 +26,13 @@ function createLayer(chart: Chart, schema: ArrayItem<CreateChartProps['layers']>
   if (isRawTable(data) || data?.type === 'table') {
     dataSet = new DataTable(isRawTable(data) ? data : randomTable(data))
   } else if (isRawRelation(data) || data?.type === 'relation') {
-    dataSet = new DataRelation(isRawRelation(data) ? data : randomRelation(data))
+    dataSet = new DataRelation(
+      isRawRelation(data) ? data : randomRelation(data)
+    )
   } else if (isRawTableList(data) || data?.type === 'tableList') {
-    dataSet = new DataTableList(isRawTableList(data) ? data : randomTableList(data))
+    dataSet = new DataTableList(
+      isRawTableList(data) ? data : randomTableList(data)
+    )
   } else {
     dataSet = new DataBase(data ?? {})
   }
@@ -72,7 +79,9 @@ export function createChart(schema: CreateChartProps, existedChart?: Chart) {
   // not visible until animation initialized
   chart.layers.forEach((layer) => {
     const enterAnimations = Object.values(layer.cacheAnimation.animations)
-      .map((animation) => animation?.queue.find(({options: {id}}) => id === 'enter'))
+      .map((animation) =>
+        animation?.queue.find(({options: {id}}) => id === 'enter')
+      )
       .filter(Boolean)
     const batchAnimation = enterAnimations.map((animation) => {
       return new Promise<void>((resolve) => {
@@ -87,7 +96,6 @@ export function createChart(schema: CreateChartProps, existedChart?: Chart) {
     })
   })
 
-  // start animation (consider transfer control)
   chart.layers.map((instance) => instance?.playAnimation())
 
   return chart

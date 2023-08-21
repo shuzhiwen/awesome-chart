@@ -102,7 +102,9 @@ export class LayerTree extends LayerBase<Key> {
       }
 
     this.maxOrder = -1
-    this.groups = levels.map((value) => nodes.filter(({level}) => level === value))
+    this.groups = levels.map((value) =>
+      nodes.filter(({level}) => level === value)
+    )
     this.groups[0]?.forEach(dfs)
   }
 
@@ -201,8 +203,12 @@ export class LayerTree extends LayerBase<Key> {
 
     // step curve mode needs to be optimized display
     if (curveType.match(/step/i) && this.edgeData.length) {
-      this.edgeData = Array.from(new Set(this.edgeData[0].map(({x1, y1}) => `${x1}-${y1}`)))
-        .map((key) => this.edgeData[0].filter(({x1, y1}) => `${x1}-${y1}` === key))
+      this.edgeData = Array.from(
+        new Set(this.edgeData[0].map(({x1, y1}) => `${x1}-${y1}`))
+      )
+        .map((key) =>
+          this.edgeData[0].filter(({x1, y1}) => `${x1}-${y1}` === key)
+        )
         .map((group) => {
           const {x1, x2, y1, y2} = group[0],
             medianX = direction === 'vertical' ? x1 : (x1 + x2) / 2,

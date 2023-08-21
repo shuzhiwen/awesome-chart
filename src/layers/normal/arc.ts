@@ -165,7 +165,9 @@ export class LayerArc extends LayerBase<Key> {
         column: 1,
         theme: arc?.fill,
       })
-      this.arcData.forEach((group, i) => (group[0].color = colorMatrix.get(i, 0)))
+      this.arcData.forEach(
+        (group, i) => (group[0].color = colorMatrix.get(i, 0))
+      )
       this.legendData = {
         colorMatrix,
         filter: 'row',
@@ -182,12 +184,24 @@ export class LayerArc extends LayerBase<Key> {
     )
 
     this.textData = labelLine.map((group) => group.map(({text}) => text))
-    this.guideLineData = labelLine.map((group) => group.map(({points}) => points))
+    this.guideLineData = labelLine.map((group) =>
+      group.map(({points}) => points)
+    )
   }
 
-  private createArcLabelAndGuideLine = (props: NonNullable<Ungroup<LayerArc['arcData']>>) => {
+  private createArcLabelAndGuideLine = (
+    props: NonNullable<Ungroup<LayerArc['arcData']>>
+  ) => {
     const {text: style, labelPosition, labelOffset} = this.style,
-      {value, centerX, centerY, innerRadius, outerRadius, startAngle, endAngle} = props,
+      {
+        value,
+        centerX,
+        centerY,
+        innerRadius,
+        outerRadius,
+        startAngle,
+        endAngle,
+      } = props,
       getX = (r: number) => centerX + Math.sin(angle) * r,
       getY = (r: number) => centerY - Math.cos(angle) * r,
       angle = (startAngle + endAngle) / 2
@@ -197,11 +211,20 @@ export class LayerArc extends LayerBase<Key> {
 
       return {
         points: [],
-        text: createText({x: getX(r), y: getY(r), value, style, position: 'center'}),
+        text: createText({
+          position: 'center',
+          x: getX(r),
+          y: getY(r),
+          value,
+          style,
+        }),
       }
     } else {
       const [x1, y1] = [getX(outerRadius), getY(outerRadius)],
-        [x2, y2] = [getX(outerRadius + labelOffset), getY(outerRadius + labelOffset)],
+        [x2, y2] = [
+          getX(outerRadius + labelOffset),
+          getY(outerRadius + labelOffset),
+        ],
         factor = -Math.sin(angle) + (angle > Math.PI ? -Math.SQRT2 : Math.SQRT2)
 
       return {
@@ -234,7 +257,10 @@ export class LayerArc extends LayerBase<Key> {
       maxRadius = Math.min(width, height) / 2
 
     if (variant === 'pie') {
-      const percentages = this.data.select(headers[1], {mode: 'percentage', target: 'column'})
+      const percentages = this.data.select(headers[1], {
+        mode: 'percentage',
+        target: 'column',
+      })
       this._scale = createScale(
         {
           scaleAngle: scaleAngle({
@@ -260,7 +286,9 @@ export class LayerArc extends LayerBase<Key> {
           scaleRadius: scaleLinear({
             domain: [
               0,
-              this.data.select(headers.slice(1), {mode: 'sum', target: 'row'}).range()[1],
+              this.data
+                .select(headers.slice(1), {mode: 'sum', target: 'row'})
+                .range()[1],
             ],
             range: [innerRadius ?? 0, maxRadius],
           }),
@@ -300,7 +328,9 @@ export class LayerArc extends LayerBase<Key> {
         move = target.centerX === centerX && target.centerY === centerY
 
       this.arcData.forEach((group) =>
-        group.forEach((item) => ((item.centerX = centerX), (item.centerY = centerY)))
+        group.forEach(
+          (item) => ((item.centerX = centerX), (item.centerY = centerY))
+        )
       )
 
       if (move) {
@@ -313,7 +343,9 @@ export class LayerArc extends LayerBase<Key> {
       )
 
       this.textData = labelLine.map((group) => group.map(({text}) => text))
-      this.guideLineData = labelLine.map((group) => group.map(({points}) => points))
+      this.guideLineData = labelLine.map((group) =>
+        group.map(({points}) => points)
+      )
       this.draw()
     })
   }

@@ -106,7 +106,12 @@ export class LayerRadar extends LayerBase<Key> {
         scaleRadius: scaleLinear({
           domain:
             mode === 'stack'
-              ? [0, this.data.select(headers.slice(1), {mode: 'sum', target: 'row'}).range()[1]]
+              ? [
+                  0,
+                  this.data
+                    .select(headers.slice(1), {mode: 'sum', target: 'row'})
+                    .range()[1],
+                ]
               : [0, this.data.select(headers.slice(1)).range()[1]],
           range: [0, Math.min(layout.width, layout.height) / 2],
         }),
@@ -135,12 +140,17 @@ export class LayerRadar extends LayerBase<Key> {
 
     this.pointData = rawTableList.map(([dimension, ...values]) =>
       values.map((value, i) => {
-        const angle = scaleAngle(dimension) ?? 0,
-          centerR = scaleRadius(Number(value)),
-          x = centerX + Math.sin(angle) * centerR,
-          y = centerY - Math.cos(angle) * centerR,
-          meta = {value, dimension, category: headers[i + 1]}
-        return {x, y, angle, r: pointSize / 2, color: colorMatrix.get(0, i), meta}
+        const angle = scaleAngle(dimension) ?? 0
+        const centerR = scaleRadius(Number(value))
+
+        return {
+          angle,
+          r: pointSize / 2,
+          x: centerX + Math.sin(angle) * centerR,
+          y: centerY - Math.cos(angle) * centerR,
+          color: colorMatrix.get(0, i),
+          meta: {value, dimension, category: headers[i + 1]},
+        }
       })
     )
 
@@ -163,7 +173,9 @@ export class LayerRadar extends LayerBase<Key> {
     }))
 
     this.textData = this.pointData.map((group) =>
-      group.map(({meta, x, y, angle}) => createArcText({x, y, value: meta.value, angle}))
+      group.map(({meta, x, y, angle}) =>
+        createArcText({x, y, value: meta.value, angle})
+      )
     )
 
     this.legendData = {

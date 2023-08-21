@@ -132,61 +132,75 @@ export class LayerLegend extends LayerBase<Key> {
       colorMatrix = this.legendDataGroup.map(({colorMatrix}) => colorMatrix),
       active = new Array<boolean>(colors.length).fill(true)
 
-    this.event.onWithOff('click-interactive', EVENT_KEY, (d: {data: ElConfig}) => {
-      const itemIndex = ungroup(d.data.source)?.itemIndex ?? -1,
-        index = counts.findIndex((_, i) => sum(counts.slice(0, i + 1)) > itemIndex),
-        start = counts.slice(0, index).reduce((prev, cur) => prev + cur, 0),
-        layerData = originData[index],
-        layer = layers[index],
-        order: {
-          type: ArrayItem<typeof filterTypes>
-          mapping: Record<Meta, number>
-          colorMatrix: ColorMatrix
-        } = {
-          type: filterTypes[index],
-          colorMatrix: colorMatrix[index],
-          mapping: {},
-        }
-      let filteredData = layerData
+    this.event.onWithOff(
+      'click-interactive',
+      EVENT_KEY,
+      (d: {data: ElConfig}) => {
+        const itemIndex = ungroup(d.data.source)?.itemIndex ?? -1,
+          index = counts.findIndex(
+            (_, i) => sum(counts.slice(0, i + 1)) > itemIndex
+          ),
+          start = counts.slice(0, index).reduce((prev, cur) => prev + cur, 0),
+          layerData = originData[index],
+          layer = layers[index],
+          order: {
+            type: ArrayItem<typeof filterTypes>
+            mapping: Record<Meta, number>
+            colorMatrix: ColorMatrix
+          } = {
+            type: filterTypes[index],
+            colorMatrix: colorMatrix[index],
+            mapping: {},
+          }
+        let filteredData = layerData
 
-      if (!(layerData instanceof DataTableList)) return
-      if (!active[itemIndex]) {
-        active[itemIndex] = true
-        data.shapeColors[itemIndex] = colors[itemIndex]
-        data.textColors[itemIndex] = ungroup(this.style.text?.fill)!
-      } else {
-        active[itemIndex] = false
-        data.shapeColors[itemIndex] = this.disabledColor
-        data.textColors[itemIndex] = this.disabledColor
+        if (!(layerData instanceof DataTableList)) return
+        if (!active[itemIndex]) {
+          active[itemIndex] = true
+          data.shapeColors[itemIndex] = colors[itemIndex]
+          data.textColors[itemIndex] = ungroup(this.style.text?.fill)!
+        } else {
+          active[itemIndex] = false
+          data.shapeColors[itemIndex] = this.disabledColor
+          data.textColors[itemIndex] = this.disabledColor
+        }
+
+        try {
+          if (filterTypes[index] === 'row') {
+            const mapping = robustRange(start, start + counts[index] - 1).map(
+              (i) => active[i]
+            )
+
+            filteredData = layerData.selectRows(
+              mapping
+                .map((v, i) => (v === true ? i : -1))
+                .filter((v) => v !== -1)
+            )
+            layerData.lists[0].forEach(
+              (category, i) => (order.mapping[category] = i)
+            )
+            filteredData.options.order = order
+          }
+
+          if (filterTypes[index] === 'column') {
+            filteredData = layerData.select(
+              layerData.headers.filter((_, i) => !i || active[start + i - 1])
+            )
+            layerData.headers
+              .slice(1)
+              .forEach((header, i) => (order.mapping[header] = i))
+            filteredData.options.order = order
+          }
+
+          layer.setData(filteredData)
+          this.options.rebuildScale({trigger: this, redraw: true})
+          this.needRecalculated = true
+          this.draw()
+        } catch (error) {
+          this.log.warn('Legend Data filtering error', error)
+        }
       }
-
-      try {
-        if (filterTypes[index] === 'row') {
-          const mapping = robustRange(start, start + counts[index] - 1).map((i) => active[i])
-
-          filteredData = layerData.selectRows(
-            mapping.map((v, i) => (v === true ? i : -1)).filter((v) => v !== -1)
-          )
-          layerData.lists[0].forEach((category, i) => (order.mapping[category] = i))
-          filteredData.options.order = order
-        }
-
-        if (filterTypes[index] === 'column') {
-          filteredData = layerData.select(
-            layerData.headers.filter((_, i) => !i || active[start + i - 1])
-          )
-          layerData.headers.slice(1).forEach((header, i) => (order.mapping[header] = i))
-          filteredData.options.order = order
-        }
-
-        layer.setData(filteredData)
-        this.options.rebuildScale({trigger: this, redraw: true})
-        this.needRecalculated = true
-        this.draw()
-      } catch (error) {
-        this.log.warn('Legend Data filtering error', error)
-      }
-    })
+    )
   }
 
   update() {
@@ -205,7 +219,8 @@ export class LayerLegend extends LayerBase<Key> {
       textData = data.text.map((value) => formatNumber(value, text?.format)),
       textWidths = textData.map((value) => getTextWidth(value, fontSize)),
       groupTextWidths = robustRange(0, maxColumn - 1).map(
-        (column) => max(textWidths.filter((_, i) => i % maxColumn === column)) ?? 0
+        (column) =>
+          max(textWidths.filter((_, i) => i % maxColumn === column)) ?? 0
       )
 
     this.textData = textData.map((value, i) => {
@@ -223,12 +238,21 @@ export class LayerLegend extends LayerBase<Key> {
       })
     })
 
-    const totalWidth = max(this.textData.map(({x, textWidth}) => x + textWidth!))!,
-      totalHeight = max(this.textData.map(({y}) => y - (maxHeight - fontSize) / 2))!,
+    const totalWidth = max(
+        this.textData.map(({x, textWidth}) => x + textWidth!)
+      )!,
+      totalHeight = max(
+        this.textData.map(({y}) => y - (maxHeight - fontSize) / 2)
+      )!,
       leftX = width - totalWidth,
       leftY = height - totalHeight,
       offsetX = align === 'middle' ? leftX / 2 : align === 'end' ? leftX : 0,
-      offsetY = verticalAlign === 'middle' ? leftY / 2 : verticalAlign === 'end' ? leftY : 0
+      offsetY =
+        verticalAlign === 'middle'
+          ? leftY / 2
+          : verticalAlign === 'end'
+          ? leftY
+          : 0
 
     this.textData = this.textData.map(({x, y, value, ...rest}) => ({
       ...rest,
@@ -322,7 +346,9 @@ export class LayerLegend extends LayerBase<Key> {
       })
     } else if (shape === 'star') {
       this.polygonData.push({
-        points: createStar(x - size, y - size / 2, size, size).map(([x, y]) => ({x, y})),
+        points: createStar(x - size, y - size / 2, size, size).map(
+          ([x, y]) => ({x, y})
+        ),
         centerX: x,
         centerY: y,
         fill: color,
@@ -352,7 +378,7 @@ export class LayerLegend extends LayerBase<Key> {
       ...this.style.shape,
       stroke: this.lineData.map(({stroke}) => stroke!),
       strokeWidth: this.lineData.map(({strokeWidth}) => strokeWidth!),
-      strokeDasharray: this.lineData.map(({strokeDasharray}) => strokeDasharray!),
+      strokeDasharray: this.lineData.map((datum) => datum.strokeDasharray!),
     }
     const polygonData = {
       data: this.polygonData,

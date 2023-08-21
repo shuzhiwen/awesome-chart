@@ -208,7 +208,10 @@ type RandomDataProps = (RandomTableListOptions | RandomRelationOptions) & {
   type: 'table' | 'tableList' | 'relation'
 }
 
-type CreateLayerProps<T extends LayerType> = Omit<LayerOptions<T>, Keys<ChartContext>>
+type CreateLayerProps<T extends LayerType> = Omit<
+  LayerOptions<T>,
+  Keys<ChartContext>
+>
 
 type CreateChartProps = ChartProps & {
   /**

@@ -34,7 +34,7 @@ export function drawPolygon({
     fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
-    pointString: item.points.reduce((prev, cur) => `${prev} ${cur.x},${cur.y}`, ''),
+    pointString: item.points.map(({x, y}) => `${x},${y}`).join(' '),
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, {} as ElSource),
   }))
@@ -76,7 +76,10 @@ export function drawPolygon({
       graphics.cursor = d.evented ? 'pointer' : 'auto'
 
       isString(d.stroke)
-        ? graphics.lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        ? graphics.lineStyle(
+            d.strokeWidth,
+            ...splitAlpha(d.stroke, d.strokeOpacity)
+          )
         : graphics.lineTextureStyle({texture: d.stroke, width: d.strokeWidth})
       isString(d.fill)
         ? graphics.beginFill(...splitAlpha(d.fill, d.fillOpacity))

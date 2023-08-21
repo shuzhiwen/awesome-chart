@@ -13,7 +13,8 @@ Graphics.prototype.dashLineTo = function (
     dashes = dasharray.split(' ').map(Number),
     originSign = [xTo - xFrom, yTo - yFrom].map(Math.sign),
     sign = xTo === xFrom ? -Math.sign(yTo - yFrom) : Math.sign(xTo - xFrom),
-    theta = xTo === xFrom ? Math.PI / 2 : Math.atan((yFrom - yTo) / (xTo - xFrom)),
+    theta =
+      xTo === xFrom ? Math.PI / 2 : Math.atan((yFrom - yTo) / (xTo - xFrom)),
     position: Vec2 = [xFrom, yFrom]
   let isSolid = true
 

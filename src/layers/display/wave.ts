@@ -12,7 +12,12 @@ import {
 } from '../../types'
 import {createSinusoidal, isSC} from '../../utils'
 import {LayerBase} from '../base'
-import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
+import {
+  createColorMatrix,
+  createStyle,
+  createText,
+  validateAndCreateData,
+} from '../helpers'
 
 type Key = 'area' | 'background' | 'text'
 

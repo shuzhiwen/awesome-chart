@@ -32,7 +32,10 @@ export abstract class AnimationBase<Options extends AnimationOptions> {
   }
 
   get canvasRoot() {
-    if (isSC(this.options.targets)) throw new Error('Wrong call with svg context')
+    if (isSC(this.options.targets)) {
+      throw new Error('Wrong call with svg context')
+    }
+
     return this.options.targets![0].parent.parent
   }
 
@@ -111,7 +114,10 @@ export abstract class AnimationBase<Options extends AnimationOptions> {
       {context} = this.options
 
     if (typeof targets === 'string' && context) {
-      merge(this.options, {className: targets, [key]: selector.getChildren(context, targets)})
+      merge(this.options, {
+        className: targets,
+        [key]: selector.getChildren(context, targets),
+      })
     } else {
       merge(this.options, {[key]: targets})
     }

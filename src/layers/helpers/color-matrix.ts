@@ -54,6 +54,10 @@ export function createColorMatrix(props: CreateColorMatrixProps) {
   }
 
   const colorMatrix = new ColorMatrix(matrix)
-  nice && !order?.colorMatrix && colorMatrix.nice(nice.maxDistance, nice.colorSpace)
+
+  if (nice && !order?.colorMatrix) {
+    colorMatrix.nice(nice.maxDistance, nice.colorSpace)
+  }
+
   return colorMatrix
 }

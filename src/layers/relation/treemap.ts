@@ -12,7 +12,12 @@ import {
 } from '../../types'
 import {getAttr, overflowControl, uuid} from '../../utils'
 import {LayerBase} from '../base'
-import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
+import {
+  createColorMatrix,
+  createStyle,
+  createText,
+  validateAndCreateData,
+} from '../helpers'
 
 type Key = 'rect' | 'text'
 
@@ -65,7 +70,12 @@ export class LayerTreemap extends LayerBase<Key> {
       {left, top, width, height} = layout,
       {tile, rect, labelGap, text} = this.style,
       [align, verticalAlign] = this.style.align ?? ['start', 'start'],
-      root = {id: uuid(), name: 'root', value: 0, children: nodes.filter(({level}) => level === 0)},
+      root = {
+        id: uuid(),
+        name: 'root',
+        value: 0,
+        children: nodes.filter(({level}) => level === 0),
+      },
       hierarchyNode = hierarchy<Node>(root)
         .sum((d) => d.value!)
         .sort((a, b) => b.data.value! - a.data.value!),
@@ -92,52 +102,94 @@ export class LayerTreemap extends LayerBase<Key> {
       meta: {[data.name]: data.value},
     }))
 
-    this.textData = this.rectData.map(({x, y, width, height, data: {name, value}}, i) => {
-      let [nameX, nameY, position]: [number, number, Position9] = [0, 0, 'center']
-      const fontSize = getAttr(text?.fontSize, i, 12)
+    this.textData = this.rectData.map(
+      ({x, y, width, height, data: {name, value}}, i) => {
+        let nameX: number, nameY: number, position: Position9
+        const fontSize = getAttr(text?.fontSize, i, 12)
 
-      if (align === 'start' && verticalAlign === 'start') {
-        ;[nameX, nameY, position] = [x, y, 'rightBottom']
-      } else if (align === 'middle' && verticalAlign === 'start') {
-        ;[nameX, nameY, position] = [x + width / 2, y, 'bottom']
-      } else if (align === 'end' && verticalAlign === 'start') {
-        ;[nameX, nameY, position] = [x + width, y, 'leftBottom']
-      } else if (align === 'start' && verticalAlign === 'middle') {
-        ;[nameX, nameY, position] = [x, y + height / 2 - labelGap / 2, 'rightTop']
-      } else if (align === 'middle' && verticalAlign === 'middle') {
-        ;[nameX, nameY, position] = [x + width / 2, y + height / 2 - labelGap / 2, 'top']
-      } else if (align === 'end' && verticalAlign === 'middle') {
-        ;[nameX, nameY, position] = [x + width, y + height / 2 - labelGap / 2, 'leftTop']
-      } else if (align === 'start' && verticalAlign === 'end') {
-        ;[nameX, nameY, position] = [x, y + height - fontSize - labelGap, 'rightTop']
-      } else if (align === 'middle' && verticalAlign === 'end') {
-        ;[nameX, nameY, position] = [x + width / 2, y + height - fontSize - labelGap, 'top']
-      } else if (align === 'end' && verticalAlign === 'end') {
-        ;[nameX, nameY, position] = [x + width, y + height - fontSize - labelGap, 'leftTop']
+        if (align === 'start' && verticalAlign === 'start') {
+          ;[nameX, nameY, position] = [x, y, 'rightBottom']
+        } else if (align === 'middle' && verticalAlign === 'start') {
+          ;[nameX, nameY, position] = [x + width / 2, y, 'bottom']
+        } else if (align === 'end' && verticalAlign === 'start') {
+          ;[nameX, nameY, position] = [x + width, y, 'leftBottom']
+        } else if (align === 'start' && verticalAlign === 'middle') {
+          ;[nameX, nameY, position] = [
+            x,
+            y + height / 2 - labelGap / 2,
+            'rightTop',
+          ]
+        } else if (align === 'middle' && verticalAlign === 'middle') {
+          ;[nameX, nameY, position] = [
+            x + width / 2,
+            y + height / 2 - labelGap / 2,
+            'top',
+          ]
+        } else if (align === 'end' && verticalAlign === 'middle') {
+          ;[nameX, nameY, position] = [
+            x + width,
+            y + height / 2 - labelGap / 2,
+            'leftTop',
+          ]
+        } else if (align === 'start' && verticalAlign === 'end') {
+          ;[nameX, nameY, position] = [
+            x,
+            y + height - fontSize - labelGap,
+            'rightTop',
+          ]
+        } else if (align === 'middle' && verticalAlign === 'end') {
+          ;[nameX, nameY, position] = [
+            x + width / 2,
+            y + height - fontSize - labelGap,
+            'top',
+          ]
+        } else if (align === 'end' && verticalAlign === 'end') {
+          ;[nameX, nameY, position] = [
+            x + width,
+            y + height - fontSize - labelGap,
+            'leftTop',
+          ]
+        } else {
+          ;[nameX, nameY, position] = [0, 0, 'center']
+        }
+
+        const nameText = overflowControl(name, {
+          width,
+          height: (height - labelGap) / 2,
+        })
+        const valueText = overflowControl(value, {
+          width,
+          height: (height - labelGap) / 2,
+        })
+
+        return [
+          createText({
+            value: nameText,
+            x: nameX,
+            y: nameY,
+            position,
+            style: text,
+          }),
+          createText({
+            value: valueText,
+            x: nameX,
+            y: nameY + fontSize + labelGap,
+            position,
+            style: text,
+          }),
+        ]
       }
-
-      const nameText = overflowControl(name, {width, height: (height - labelGap) / 2})
-      const valueText = overflowControl(value, {width, height: (height - labelGap) / 2})
-
-      return [
-        createText({value: nameText, x: nameX, y: nameY, position, style: text}),
-        createText({
-          value: valueText,
-          x: nameX,
-          y: nameY + fontSize + labelGap,
-          position,
-          style: text,
-        }),
-      ]
-    })
+    )
   }
 
   draw() {
-    const rectData = this.rectData.map(({width, height, x, y, meta, color}) => ({
-      data: [{width, height, x, y, meta}],
-      ...this.style.rect,
-      fill: color,
-    }))
+    const rectData = this.rectData.map(
+      ({width, height, x, y, meta, color}) => ({
+        data: [{width, height, x, y, meta}],
+        ...this.style.rect,
+        fill: color,
+      })
+    )
     const textData = this.textData.map((group) => ({
       data: group,
       ...this.style.text,

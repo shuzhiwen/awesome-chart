@@ -25,7 +25,12 @@ export const createParallelogram = (
  * @returns
  * Return polygon points of shape.
  */
-export const createHexagon = (left: number, top: number, width: number, height: number) => [
+export const createHexagon = (
+  left: number,
+  top: number,
+  width: number,
+  height: number
+) => [
   [left + width * 0.5, top],
   [left + width, top + height * 0.25],
   [left + width, top + height * 0.75],
@@ -39,7 +44,12 @@ export const createHexagon = (left: number, top: number, width: number, height: 
  * @returns
  * Return polygon points of shape.
  */
-export const createStar = (left: number, top: number, width: number, height: number) => [
+export const createStar = (
+  left: number,
+  top: number,
+  width: number,
+  height: number
+) => [
   [
     left + width * 0.5 * (1 - Math.sin(Math.PI * 0.4)),
     top + height * 0.5 * (1 - Math.cos(Math.PI * 0.4)),
@@ -140,14 +150,21 @@ export const createKnuckle = (
  * @returns
  * Return path string of shape.
  */
-export const createDroplet = (left: number, top: number, width: number, height: number) => {
+export const createDroplet = (
+  left: number,
+  top: number,
+  width: number,
+  height: number
+) => {
   const r = height / 3,
     centerX = left + width / 2
 
   return [
     `M ${centerX},${top + height}`,
     `L ${centerX - (height * Math.sqrt(3)) / 6},${top + 1.5 * r}`,
-    `A ${r},${r},0,1,1,${centerX + (height * Math.sqrt(3)) / 6},${top + 1.5 * r} Z`,
+    `A ${r},${r},0,1,1,${centerX + (height * Math.sqrt(3)) / 6},${
+      top + 1.5 * r
+    } Z`,
   ].join(' ')
 }
 
@@ -173,12 +190,24 @@ export const createSinusoidal = (
     [left + width, top + height * 0.5],
   ]
   const leftExtendPoints = range(-lengthen, 0).flatMap((i) => [
-    [points[(i % 2) * -2][0] + Math.ceil((i - 1) / 2) * width, points[(i % 2) * -2][1]],
-    [points[(i % 2) * -2 + 1][0] + Math.ceil((i - 1) / 2) * width, points[(i % 2) * -2 + 1][1]],
+    [
+      points[(i % 2) * -2][0] + Math.ceil((i - 1) / 2) * width,
+      points[(i % 2) * -2][1],
+    ],
+    [
+      points[(i % 2) * -2 + 1][0] + Math.ceil((i - 1) / 2) * width,
+      points[(i % 2) * -2 + 1][1],
+    ],
   ])
   const rightExtendPoints = range(0, lengthen).flatMap((i) => [
-    [points[(i % 2) * 2 + 1][0] + (Math.floor(i / 2) + 1) * width, points[(i % 2) * 2 + 1][1]],
-    [points[(i % 2) * 2 + 2][0] + (Math.floor(i / 2) + 1) * width, points[(i % 2) * 2 + 2][1]],
+    [
+      points[(i % 2) * 2 + 1][0] + (Math.floor(i / 2) + 1) * width,
+      points[(i % 2) * 2 + 1][1],
+    ],
+    [
+      points[(i % 2) * 2 + 2][0] + (Math.floor(i / 2) + 1) * width,
+      points[(i % 2) * 2 + 2][1],
+    ],
   ])
 
   return [...leftExtendPoints, ...points, ...rightExtendPoints]

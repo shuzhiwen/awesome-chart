@@ -12,7 +12,12 @@ type Position4 = 'top' | 'right' | 'bottom' | 'left'
 
 type Position5 = Position4 | 'center'
 
-type Position9 = Position5 | 'leftTop' | 'leftBottom' | 'rightTop' | 'rightBottom'
+type Position9 =
+  | Position5
+  | 'leftTop'
+  | 'leftBottom'
+  | 'rightTop'
+  | 'rightBottom'
 
 type Priority = 'topHigh' | 'topLow' | 'bottomHigh' | 'bottomLow' | 'other'
 

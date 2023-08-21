@@ -50,7 +50,9 @@ export function drawImage({
       .attr('id', (d) => d.id)
       .attr('preserveAspectRatio', 'xMinYMin slice')
       .attr('viewBox', ({viewBox}) =>
-        viewBox ? [viewBox.x, viewBox.y, viewBox.width, viewBox.height].join(' ') : null
+        viewBox
+          ? [viewBox.x, viewBox.y, viewBox.width, viewBox.height].join(' ')
+          : null
       )
       .selectAll(`.${className}`)
       .data((d) => [d])
@@ -83,7 +85,10 @@ export function drawImage({
     mappedData.forEach((d) => {
       const {x, y, width, height} = d.viewBox ?? {},
         baseTexture = BaseTexture.from(d.url),
-        texture = new Texture(baseTexture, d.viewBox && new Rectangle(x, y, width, height)),
+        texture = new Texture(
+          baseTexture,
+          d.viewBox && new Rectangle(x, y, width, height)
+        ),
         sprite = new Sprite(texture)
 
       sprite.x = d.x
@@ -122,7 +127,8 @@ export function transformToImage<T extends ElConfig>(
     position.x += x + (width - size[0]) / 2
     position.y += y + (height - size[1]) / 2
   } else if (from === 'text') {
-    const {x, y, textWidth, textHeight} = data as unknown as DrawerData<TextDrawerProps>
+    const {x, y, textWidth, textHeight} =
+      data as unknown as DrawerData<TextDrawerProps>
     position.x += x + (textWidth - size[0]) / 2
     position.y += y - (textHeight + size[1]) / 2
   }

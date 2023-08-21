@@ -104,9 +104,11 @@ export function download(data: string, fileName: string) {
  * @returns
  */
 export function robustRange(start: number, end: number, step = 1, toFixed = 8) {
-  return range(start, end + (step > 0 ? 1 : -1) * 10 ** -(toFixed + 2), step).map((v) =>
-    Number(Number(v).toFixed(toFixed))
-  )
+  return range(
+    start,
+    end + (step > 0 ? 1 : -1) * 10 ** -(toFixed + 2),
+    step
+  ).map((v) => Number(Number(v).toFixed(toFixed)))
 }
 
 /**
@@ -137,7 +139,10 @@ export function swap(a: any, b: any, key1: Meta, key2: Meta = key1) {
  * @param onError
  * The error handler.
  */
-export function errorCatcher<Fn extends AnyFunction>(fn: Fn, onError: (error: Error) => void) {
+export function errorCatcher<Fn extends AnyFunction>(
+  fn: Fn,
+  onError: (error: Error) => void
+) {
   return (...args: Parameters<Fn>) => {
     try {
       return fn.call(null, ...args) as ReturnType<Fn>
@@ -168,12 +173,12 @@ export function isBoxCollision(box1: Box, box2: Box) {
  */
 export function safeLoop(
   condition: AnyFunction<boolean>,
-  body: () => false | unknown,
+  body: (times: number) => false | unknown,
   maxTimes = 10000
 ) {
   let times = 0
   while (condition()) {
-    if (body() === false) break
+    if (body(times) === false) break
     if (++times > maxTimes) {
       throw new Error('The number of cycles exceeds the upper limit')
     }
@@ -189,7 +194,9 @@ export function safeLoop(
  * The register function.
  * @internal
  */
-export function createClassRegister<K extends string, V, P>(mapping: AnyObject) {
+export function createClassRegister<K extends string, V, P>(
+  mapping: AnyObject
+) {
   return function <Instance extends V>(key: K, klass: Newable<Instance, P>) {
     if (Object.keys(mapping).includes(key)) {
       console.error('Duplicate key for register custom class!')
@@ -207,7 +214,9 @@ export function createClassRegister<K extends string, V, P>(mapping: AnyObject) 
  * Attach strong type resolution to native methods.
  * @see Object.fromEntries
  */
-export function fromEntries<Key extends string, Value>(entries: [Key, Value][]) {
+export function fromEntries<Key extends string, Value>(
+  entries: [Key, Value][]
+) {
   return Object.fromEntries(entries) as Record<Key, Value>
 }
 

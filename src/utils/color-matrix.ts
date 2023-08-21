@@ -32,8 +32,17 @@ export class ColorMatrix {
    * The color corresponding to the data element.
    */
   get(row: number, column: number) {
-    if (row < 0 || column < 0 || row >= this.matrix.length || column >= this.matrix[row]?.length) {
-      this.log.debug.warn('Get color out of bounds', {row, column, matrix: this.matrix})
+    if (
+      row < 0 ||
+      column < 0 ||
+      row >= this.matrix.length ||
+      column >= this.matrix[row]?.length
+    ) {
+      this.log.debug.warn('Get color out of bounds', {
+        row,
+        column,
+        matrix: this.matrix,
+      })
     }
 
     safeLoop(
@@ -61,7 +70,11 @@ export class ColorMatrix {
     this._matrix = this.matrix.map((row) => {
       if (row.length > 1) {
         let averageDistance = Infinity
-        const colorQueue = ['', ...chroma.scale(row).mode('lch').colors(100), '']
+        const colorQueue = [
+          '#000000',
+          ...chroma.scale(row).mode('lch').colors(100),
+          '#000000',
+        ]
         /**
          * Narrow util distance smaller then distance.
          * Note that this loop may not be used once.
@@ -72,7 +85,10 @@ export class ColorMatrix {
             colorQueue.pop()
             colorQueue.shift()
 
-            const colors = chroma.scale(colorQueue).mode('lch').colors(row.length)
+            const colors = chroma
+              .scale(colorQueue)
+              .mode('lch')
+              .colors(row.length)
             const distances: number[] = []
 
             colors.reduce((prev, cur) => {

@@ -85,7 +85,10 @@ export function drawLine({
       graphics.cursor = d.evented ? 'pointer' : 'auto'
 
       isString(d.stroke)
-        ? graphics.lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        ? graphics.lineStyle(
+            d.strokeWidth,
+            ...splitAlpha(d.stroke, d.strokeOpacity)
+          )
         : graphics.lineTextureStyle({texture: d.stroke, width: d.strokeWidth})
 
       graphics.moveTo(x1, y1).dashLineTo(_x2, _y2, d.strokeDasharray)

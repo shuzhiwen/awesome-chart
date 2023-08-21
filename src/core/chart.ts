@@ -195,7 +195,9 @@ export class Chart {
       container: tooltipOptions?.container ?? this.container,
       getLayersBackupData: () =>
         this._layers.flatMap(({interactive, cacheData}) =>
-          interactive.map((sublayer) => cacheData[sublayer].data).flatMap(noChange)
+          interactive
+            .map((sublayer) => cacheData[sublayer].data)
+            .flatMap(noChange)
         ),
     })
 

@@ -1,7 +1,9 @@
 import {EventManager} from '../../src'
 
 test('EventManager', () => {
-  const event = new EventManager<'addOne' | 'addTwo' | 'AddOneOnce' | 'MinusOnce'>()
+  const event = new EventManager<
+    'addOne' | 'addTwo' | 'AddOneOnce' | 'MinusOnce'
+  >()
   let value = 0
 
   event.on('addOne', '', () => value++)

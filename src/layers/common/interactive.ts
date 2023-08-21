@@ -95,8 +95,14 @@ export class LayerInteractive extends LayerBase<Key> {
       })!,
     ]
 
-    this.helperAuxiliary[0].setStyle({labelPosition: 'top', direction: 'vertical'})
-    this.helperAuxiliary[1].setStyle({labelPosition: 'right', direction: 'horizontal'})
+    this.helperAuxiliary[0].setStyle({
+      labelPosition: 'top',
+      direction: 'vertical',
+    })
+    this.helperAuxiliary[1].setStyle({
+      labelPosition: 'right',
+      direction: 'horizontal',
+    })
     this.helperAuxiliary.forEach((layer) => {
       layer.options.theme.animation.update.duration = 100
     })
@@ -108,7 +114,12 @@ export class LayerInteractive extends LayerBase<Key> {
         [helperAuxiliaryX, helperAuxiliaryY] = this.helperAuxiliary
       let x: Maybe<number>, y: Maybe<number>
 
-      if (offsetX < left || offsetX > right || offsetY < top || offsetY > bottom) {
+      if (
+        offsetX < left ||
+        offsetX > right ||
+        offsetY < top ||
+        offsetY > bottom
+      ) {
         helperAuxiliaryX.setVisible(false)
         helperAuxiliaryY.setVisible(false)
         return
@@ -129,7 +140,10 @@ export class LayerInteractive extends LayerBase<Key> {
         helperAuxiliaryX.setData(
           new DataTableList([
             ['label', 'value'],
-            ['helperAuxiliaryX', stickyBandScale(scaleX, offsetX - left).domain],
+            [
+              'helperAuxiliaryX',
+              stickyBandScale(scaleX, offsetX - left).domain,
+            ],
           ])
         )
         helperAuxiliaryX.draw()
@@ -207,7 +221,9 @@ export class LayerInteractive extends LayerBase<Key> {
             x: left + rectX + rectWidth + halfGap * (isTail ? 0 : 1),
             y: top,
             height,
-            width: Math.abs(width - rectX - rectWidth - halfGap * (isTail ? 0 : 1)),
+            width: Math.abs(
+              width - rectX - rectWidth - halfGap * (isTail ? 0 : 1)
+            ),
             meta: {key: `x-${i}-secondary`},
           },
         ]
@@ -241,7 +257,9 @@ export class LayerInteractive extends LayerBase<Key> {
             x: left,
             y: top + rectY + rectHeight + halfGap * (isTail ? 0 : 1),
             width,
-            height: Math.abs(height - rectY - rectHeight - halfGap * (isTail ? 0 : 1)),
+            height: Math.abs(
+              height - rectY - rectHeight - halfGap * (isTail ? 0 : 1)
+            ),
             meta: {key: `y-${i}-secondary`},
           },
         ]
@@ -250,16 +268,20 @@ export class LayerInteractive extends LayerBase<Key> {
   }
 
   draw() {
-    const darkRectData = [...this.rectDataY, ...this.rectDataX].map(([head, , tail]) => ({
-      data: [head, tail],
-      evented: false,
-      ...this.style.interactive,
-    }))
-    const lightRectData = [...this.rectDataY, ...this.rectDataX].map(([, body]) => ({
-      data: [body],
-      evented: true,
-      ...this.style.interactive,
-    }))
+    const darkRectData = [...this.rectDataY, ...this.rectDataX].map(
+      ([head, , tail]) => ({
+        data: [head, tail],
+        evented: false,
+        ...this.style.interactive,
+      })
+    )
+    const lightRectData = [...this.rectDataY, ...this.rectDataX].map(
+      ([, body]) => ({
+        data: [body],
+        evented: true,
+        ...this.style.interactive,
+      })
+    )
 
     this.drawBasic({
       type: 'rect',
@@ -267,37 +289,47 @@ export class LayerInteractive extends LayerBase<Key> {
       data: darkRectData.concat(lightRectData),
     })
 
-    this.event.onWithOff('mouseover-interactive', EVENT_KEY, ({data, target}) => {
-      const getKey = (data: ElConfig) => data.source.meta.key as string
-      const shadowOpacity = 0.5
+    this.event.onWithOff(
+      'mouseover-interactive',
+      EVENT_KEY,
+      ({data, target}) => {
+        const getKey = (data: ElConfig) => data.source.meta.key as string
+        const shadowOpacity = 0.5
 
-      if (getKey(data).match('secondary')) {
-        return
-      }
+        if (getKey(data).match('secondary')) {
+          return
+        }
 
-      if (isSC(this.root)) {
-        this.root.selectAll(`.${elClass('interactive')}`).each((d, i, els) => {
-          if (getKey(d as ElConfig).match(getKey(data))) {
-            select(els[i]).attr('opacity', shadowOpacity)
-          }
-        })
-        select(target as HTMLElement).attr('opacity', 0)
-      } else {
-        selector.getChildren(this.root, elClass('interactive')).forEach((c) => {
-          if (getKey(c.data!).match(getKey(data))) {
-            c.alpha = shadowOpacity
-          }
-        })
-        ;(target as Graphics).alpha = 0
+        if (isSC(this.root)) {
+          this.root
+            .selectAll(`.${elClass('interactive')}`)
+            .each((d, i, els) => {
+              if (getKey(d as ElConfig).match(getKey(data))) {
+                select(els[i]).attr('opacity', shadowOpacity)
+              }
+            })
+          select(target as HTMLElement).attr('opacity', 0)
+        } else {
+          selector
+            .getChildren(this.root, elClass('interactive'))
+            .forEach((c) => {
+              if (getKey(c.data!).match(getKey(data))) {
+                c.alpha = shadowOpacity
+              }
+            })
+          ;(target as Graphics).alpha = 0
+        }
       }
-    })
+    )
     this.event.onWithOff('mouseout-interactive', EVENT_KEY, () => {
       if (isSC(this.root)) {
         this.root.selectAll(`.${elClass('interactive')}`).attr('opacity', 0)
       } else {
-        selector.getChildren(this.root, elClass('interactive')).forEach((child) => {
-          child.alpha = 0
-        })
+        selector
+          .getChildren(this.root, elClass('interactive'))
+          .forEach((child) => {
+            child.alpha = 0
+          })
       }
     })
   }

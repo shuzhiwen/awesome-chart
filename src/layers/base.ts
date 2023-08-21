@@ -85,7 +85,10 @@ export abstract class LayerBase<Key extends string> {
   /**
    * Manage lifecycle or tooltip events.
    */
-  readonly systemEvent = new EventManager<`${Keys<typeof layerLifeCycles>}`, AnyFunction>()
+  readonly systemEvent = new EventManager<
+    `${Keys<typeof layerLifeCycles>}`,
+    AnyFunction
+  >()
 
   readonly log = createLog(this.className)
 
@@ -113,11 +116,14 @@ export abstract class LayerBase<Key extends string> {
     this.options = options
     this.sublayers = sublayers || []
     this.interactive = interactive || []
-    this.root = selector.createGroup(this.options.root as DrawerTarget, this.className)
     this.cacheData = fromEntries(this.sublayers.map((key) => [key, {data: []}]))
     this.cacheAnimation = {animations: {}, options: {}, timer: {}}
     this.cacheEvent = this.initializeEvent()
     this.initializeLifeCycles()
+    this.root = selector.createGroup(
+      this.options.root as DrawerTarget,
+      this.className
+    )
   }
 
   private initializeEvent(): CacheLayerEvent<Key> {
@@ -131,7 +137,8 @@ export abstract class LayerBase<Key extends string> {
 
     return {
       'tooltip.mouseout': () => tooltip.hide(),
-      'tooltip.mousemove': (event: ElEvent) => tooltip.move(getMouseEvent(event)),
+      'tooltip.mousemove': (event: ElEvent) =>
+        tooltip.move(getMouseEvent(event)),
       'tooltip.mouseover': (event: ElEvent, data: ElConfig) => {
         tooltip.update({data: getData(event, data)})
         tooltip.show(getMouseEvent(event))
@@ -172,7 +179,11 @@ export abstract class LayerBase<Key extends string> {
           fn.call(this, ...parameters)
           this.systemEvent.fire(name, {...parameters})
 
-          if (name === 'setData' || name === 'setScale' || name === 'setStyle') {
+          if (
+            name === 'setData' ||
+            name === 'setScale' ||
+            name === 'setStyle'
+          ) {
             this.needRecalculated = true
           } else if (name === 'update') {
             this.needRecalculated = false
@@ -210,7 +221,9 @@ export abstract class LayerBase<Key extends string> {
    * Set the animation of the layer and generate the corresponding animation queue.
    * Calling this method will cause the animation in progress to stop.
    */
-  setAnimation(config: Maybe<LayerAnimation<CacheLayerAnimation<Key>['options']>>) {
+  setAnimation(
+    config: Maybe<LayerAnimation<CacheLayerAnimation<Key>['options']>>
+  ) {
     merge(this.cacheAnimation, {options: compute(config, this.options.theme)})
     this.sublayers.forEach((sublayer) => this.createAnimation(sublayer))
   }
@@ -221,7 +234,9 @@ export abstract class LayerBase<Key extends string> {
    */
   playAnimation() {
     setTimeout(() => {
-      this.sublayers.forEach((type) => this.cacheAnimation.animations[type]?.play())
+      this.sublayers.forEach((type) =>
+        this.cacheAnimation.animations[type]?.play()
+      )
     })
   }
 
@@ -234,7 +249,9 @@ export abstract class LayerBase<Key extends string> {
    */
   setVisible(visible: boolean, sublayer?: Key) {
     const className = `${this.className}-${sublayer}`
-    const target = sublayer ? selector.getDirectChild(this.root, className) : this.root
+    const target = sublayer
+      ? selector.getDirectChild(this.root, className)
+      : this.root
     selector.setVisible(target, visible)
   }
 
@@ -248,7 +265,9 @@ export abstract class LayerBase<Key extends string> {
    */
   private bindEvent(sublayer: Key) {
     if (isSC(this.root)) {
-      const els = this.root.selectAll(`.${elClass(sublayer)}`).style('cursor', 'pointer')
+      const els = this.root
+        .selectAll(`.${elClass(sublayer)}`)
+        .style('cursor', 'pointer')
 
       commonEvents.forEach((type) => {
         els.on(`${type}.common`, null)
@@ -386,7 +405,10 @@ export abstract class LayerBase<Key extends string> {
      */
     range(0, maxGroupLength).map((groupIndex) => {
       const groupClassName = `${sublayerClassName}-${groupIndex}`
-      const groupContainer = selector.getDirectChild(sublayerContainer, groupClassName)
+      const groupContainer = selector.getDirectChild(
+        sublayerContainer,
+        groupClassName
+      )
 
       if (groupIndex < nextData.length && !groupContainer) {
         selector.createGroup(sublayerContainer, groupClassName)
@@ -435,7 +457,10 @@ export abstract class LayerBase<Key extends string> {
       if (groupData.hidden || isEqual(cacheData.data[i], groupData)) return
 
       const groupClassName = `${sublayerClassName}-${i}`
-      const groupContainer = selector.getDirectChild(sublayerContainer, groupClassName)
+      const groupContainer = selector.getDirectChild(
+        sublayerContainer,
+        groupClassName
+      )
       const options = {
         ...groupData,
         transition:
@@ -456,7 +481,9 @@ export abstract class LayerBase<Key extends string> {
   }
 
   destroy() {
-    this.sublayers.forEach((name) => this.cacheAnimation.animations[name]?.destroy())
     this.root && selector.remove(this.root)
+    this.sublayers.forEach((name) =>
+      this.cacheAnimation.animations[name]?.destroy()
+    )
   }
 }

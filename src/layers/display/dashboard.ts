@@ -20,7 +20,13 @@ import {
   validateAndCreateData,
 } from '../helpers'
 
-type Key = 'arc' | 'pointer' | 'tickLine' | 'tickText' | 'valueText' | 'labelText'
+type Key =
+  | 'arc'
+  | 'pointer'
+  | 'tickLine'
+  | 'tickText'
+  | 'valueText'
+  | 'labelText'
 
 const defaultStyle: LayerDashboardStyle = {
   step: [2, 10],
@@ -88,7 +94,14 @@ export class LayerDashboard extends LayerBase<Key> {
   constructor(options: LayerOptions) {
     super({
       options,
-      sublayers: ['arc', 'pointer', 'tickLine', 'tickText', 'valueText', 'labelText'],
+      sublayers: [
+        'arc',
+        'pointer',
+        'tickLine',
+        'tickText',
+        'valueText',
+        'labelText',
+      ],
       interactive: ['arc'],
     })
   }
@@ -182,7 +195,8 @@ export class LayerDashboard extends LayerBase<Key> {
     robustRange(minValue, maxValue, step[0]).map((number, i) => {
       const isBigTick = (i * step[0]) % step[1] === 0 && step[0] !== step[1],
         angle = scaleAngle(number),
-        innerRadius = maxRadius - arcWidth - (isBigTick ? tickSize / 0.618 : tickSize),
+        innerRadius =
+          maxRadius - arcWidth - (isBigTick ? tickSize / 0.618 : tickSize),
         outerRadius = maxRadius - arcWidth - 5,
         computeX = (r: number) => centerX + Math.sin(angle) * r,
         computeY = (r: number) => centerY - Math.cos(angle) * r,

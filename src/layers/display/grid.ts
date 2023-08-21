@@ -10,9 +10,20 @@ import {
   LineDrawerProps,
   RectDrawerProps,
 } from '../../types'
-import {isBoxCollision, isCC, tableListToObjects, ungroup, uuid} from '../../utils'
+import {
+  isBoxCollision,
+  isCC,
+  tableListToObjects,
+  ungroup,
+  uuid,
+} from '../../utils'
 import {LayerBase} from '../base'
-import {checkColumns, createStyle, elClass, validateAndCreateData} from '../helpers'
+import {
+  checkColumns,
+  createStyle,
+  elClass,
+  validateAndCreateData,
+} from '../helpers'
 
 type Key = 'box' | 'gridLine' | 'placeholder'
 
@@ -47,7 +58,11 @@ const getIndexFromLength = (length: number, unit: number, gap: number) => {
   return Math.round((gap + length) / (unit + gap))
 }
 
-const placeBoxDelay = (width: number, height: number, columnHeight: number[]) => {
+const placeBoxDelay = (
+  width: number,
+  height: number,
+  columnHeight: number[]
+) => {
   let [optimalRow, optimalColumn] = [Infinity, Infinity]
   const apply = () => {
     for (let i = optimalColumn; i < optimalColumn + width; i++) {
@@ -150,7 +165,9 @@ export class LayerGrid extends LayerBase<Key> {
 
     if (box) {
       const rearrange =
-        placeMode === 'collision' ? this.rearrangeByCollision : this.rearrangeByPosition
+        placeMode === 'collision'
+          ? this.rearrangeByCollision
+          : this.rearrangeByPosition
 
       rearrange.call(this, data, box, ({x, y}) => {
         this.placeholderData = {
@@ -285,15 +302,14 @@ export class LayerGrid extends LayerBase<Key> {
   private dragged(event: DragEvent, d: ElData) {
     const {groupIndex: index, meta} = d.source,
       {sangerColumn: sanger, sangerGap: gap} = this.style,
-      {width: layoutWidth, height: layoutHeight, left, top} = this.options.layout,
-      unitWidth = (layoutWidth - (sanger - 1) * gap) / sanger,
-      unitHeight = (layoutHeight - (sanger - 1) * gap) / sanger,
+      {width, height, left, top} = this.options.layout,
+      unitWidth = (width - (sanger - 1) * gap) / sanger,
+      unitHeight = (height - (sanger - 1) * gap) / sanger,
       x = Math.round((event.x - left) / (unitWidth + gap)),
-      y = Math.round((event.y - top) / (unitHeight + gap)),
-      {width, height} = meta
+      y = Math.round((event.y - top) / (unitHeight + gap))
 
     this.needRecalculated = true
-    this.update({x, y, width, height, event, index, source: d.source})
+    this.update({...meta, x, y, event, index, source: d.source})
     this.draw()
   }
 

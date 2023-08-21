@@ -64,7 +64,6 @@
     "vite-plugin-monaco-editor": "^1.1.0"
   },
   "prettier": {
-    "printWidth": 100,
     "trailingComma": "es5",
     "bracketSpacing": false,
     "jsxBracketSameLine": false,

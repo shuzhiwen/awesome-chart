@@ -78,7 +78,10 @@ export function drawEllipse({
       graphics.cursor = d.evented ? 'pointer' : 'auto'
 
       isString(d.stroke)
-        ? graphics.lineStyle(d.strokeWidth, ...splitAlpha(d.stroke, d.strokeOpacity))
+        ? graphics.lineStyle(
+            d.strokeWidth,
+            ...splitAlpha(d.stroke, d.strokeOpacity)
+          )
         : graphics.lineTextureStyle({texture: d.stroke, width: d.strokeWidth})
       isString(d.fill)
         ? graphics.beginFill(...splitAlpha(d.fill, d.fillOpacity))

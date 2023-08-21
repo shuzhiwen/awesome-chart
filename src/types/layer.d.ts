@@ -4,7 +4,12 @@ import {LayerBase, LayerDict} from '../layers'
 import {AnimationOptions} from './animation'
 import {ChartContext} from './core'
 import {LegendData} from './data'
-import {DrawerDictProps, DrawerTarget, DrawerType, GraphDrawerProps} from './draw'
+import {
+  DrawerDictProps,
+  DrawerTarget,
+  DrawerType,
+  GraphDrawerProps,
+} from './draw'
 import {LayoutArea} from './layout'
 import {RawScale, ScaleNice} from './scale'
 import {TextStyle} from './styles'
@@ -88,7 +93,10 @@ type DrawBasicProps<T extends DrawerType, Key extends string> = {
   /**
    * Drawing data for a sublayer.
    */
-  data: (Omit<DrawerDictProps<T>, 'className' | 'container' | 'theme' | 'source'> & {
+  data: (Omit<
+    DrawerDictProps<T>,
+    'className' | 'container' | 'theme' | 'source'
+  > & {
     data: {meta?: GraphDrawerProps<unknown>['source'][number]['meta']}[]
     disableUpdateAnimation?: boolean
   })[]

@@ -1,4 +1,9 @@
-export default ({variant, stack = false, innerRadius, hasGuideLine = false}) => [
+export default ({
+  variant,
+  stack = false,
+  innerRadius,
+  hasGuideLine = false,
+}) => [
   {
     type: 'text',
     data: '饼图',

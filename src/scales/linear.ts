@@ -96,7 +96,8 @@ export function niceDomain(scale: Scale, nice: ScaleLinearNice) {
 
   if (!count && fixedStep) {
     const niceStart = fixedStart || Math.floor(start / fixedStep) * fixedStep
-    const niceEnd = niceStart + Math.ceil((end - niceStart) / fixedStep) * fixedStep
+    const niceEnd =
+      niceStart + Math.ceil((end - niceStart) / fixedStep) * fixedStep
 
     scale.domain(reverse ? [niceEnd, niceStart] : [niceStart, niceEnd])
   }

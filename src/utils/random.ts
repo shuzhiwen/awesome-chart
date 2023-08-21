@@ -23,12 +23,16 @@ const toFixed = (number: number, decimals: number) => {
 const createNumberGenerator = (options: RandomNumberOptions) => () =>
   toFixed(mapping[options.mode](options)(), options.decimals || 0)
 
-export const randomTableList = (options: RandomTableListOptions): RawTableList => {
+export const randomTableList = (
+  options: RandomTableListOptions
+): RawTableList => {
   const {row, column, sort} = options
   const createNumber = createNumberGenerator(options)
   const numbers = range(row * column).map(createNumber)
   sort && numbers.sort((a, b) => (sort === 'asc' ? a - b : b - a))
-  const headers = ['dimension'].concat(range(column).map((i) => `Class${i + 1}`))
+  const headers = ['dimension'].concat(
+    range(column).map((i) => `Class${i + 1}`)
+  )
   const lists = range(row).map((_, i) => [
     `Item${i + 1}`,
     ...numbers.slice(i * column, (i + 1) * column),
@@ -44,7 +48,8 @@ export const randomTable = (options: RandomTableListOptions): RawTable => {
     sort && groupNumbers.sort((a, b) => (sort === 'asc' ? a - b : b - a))
     return groupNumbers
   })
-  sort && numbers.sort((a, b) => (sort === 'asc' ? sum(a) - sum(b) : sum(b) - sum(a)))
+  sort &&
+    numbers.sort((a, b) => (sort === 'asc' ? sum(a) - sum(b) : sum(b) - sum(a)))
   const rows = range(row).map((_, i) => `Row${i + 1}`)
   const columns = range(column).map((_, i) => `Column${i + 1}`)
   return [rows, columns, numbers]
@@ -55,7 +60,11 @@ export const randomRelation = (options: RandomRelationOptions): RawRelation => {
   const createNumber = createNumberGenerator(options)
   const nodeIds = range(0, node).map(() => uuid())
   const nodes: Node[] = nodeIds
-    .map((id) => ({id, value: createNumber(), level: Math.floor(Math.random() * level)}))
+    .map((id) => ({
+      id,
+      value: createNumber(),
+      level: Math.floor(Math.random() * level),
+    }))
     .sort((a, b) => a.level! - b.level!)
     .map((node, i) => ({...node, name: `Node${i + 1}`}))
   const groupedNodes = group(nodes, ({level}) => level)

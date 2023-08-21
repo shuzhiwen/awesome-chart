@@ -1,4 +1,5 @@
 import {max, range, sum} from 'd3'
+import {pick} from 'lodash'
 import {DataRelation} from '../../data'
 import {scaleLinear} from '../../scales'
 import {
@@ -12,7 +13,12 @@ import {
 } from '../../types'
 import {getAttr, noChange} from '../../utils'
 import {LayerBase} from '../base'
-import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
+import {
+  createColorMatrix,
+  createStyle,
+  createText,
+  validateAndCreateData,
+} from '../helpers'
 
 type Key = 'node' | 'edge' | 'text'
 
@@ -82,16 +88,21 @@ export class LayerSankey extends LayerBase<Key> {
       {align, text, node, direction} = this.style,
       {labelOffset, nodeWidth, nodeGap, edgeGap} = this.style,
       levels = range(0, (max(nodes.map(({level}) => level ?? 0)) ?? 0) + 1),
-      groups = levels.map((value) => nodes.filter(({level}) => level === value)),
+      groups = levels.map((value) =>
+        nodes.filter(({level}) => level === value)
+      ),
       totalLength = direction === 'horizontal' ? layout.width : layout.height,
-      groupNodeWidths = range(0, groups.length).map((i) => getAttr(nodeWidth, i, 5)),
+      groupNodeWidths = range(0, groups.length).map((i) =>
+        getAttr(nodeWidth, i, 5)
+      ),
       groupNodeGap = (totalLength - sum(groupNodeWidths)) / (groups.length - 1)
 
     const maxStackNodeLength = max(
       levels.map((level, i) => {
         const totalNumber = sum(groups[level].map(({value}) => value)),
           gapLength = (groups[level].length - 1) * getAttr(nodeGap, i, 5),
-          totalLength = direction === 'horizontal' ? layout.height : layout.width,
+          totalLength =
+            direction === 'horizontal' ? layout.height : layout.width,
           ratio = totalNumber / (totalLength - gapLength)
         return totalNumber + gapLength * ratio
       })
@@ -99,7 +110,8 @@ export class LayerSankey extends LayerBase<Key> {
 
     const scaleNode = scaleLinear({
       domain: [0, maxStackNodeLength ?? 0],
-      range: direction === 'horizontal' ? [0, layout.height] : [0, layout.width],
+      range:
+        direction === 'horizontal' ? [0, layout.height] : [0, layout.width],
     })
 
     this.nodeData = groups.map((groupedNodes, i) => {
@@ -124,7 +136,9 @@ export class LayerSankey extends LayerBase<Key> {
 
     this.nodeData.forEach((group, i) => {
       group.forEach((item, j) => {
-        j && (item.y = group[j - 1].y + group[j - 1].height + getAttr(nodeGap, i, 5))
+        if (j !== 0) {
+          item.y = group[j - 1].y + group[j - 1].height + getAttr(nodeGap, i, 5)
+        }
       })
     })
 
@@ -133,7 +147,8 @@ export class LayerSankey extends LayerBase<Key> {
       const tailNode = group[group.length - 1]
 
       if (direction === 'horizontal') {
-        const offset = layout.top + layout.height - tailNode.y - tailNode.height,
+        const offset =
+            layout.top + layout.height - tailNode.y - tailNode.height,
           moveY = align === 'end' ? offset : align === 'middle' ? offset / 2 : 0
         group.forEach((item) => (item.y += moveY))
       } else if (direction === 'vertical') {
@@ -174,7 +189,8 @@ export class LayerSankey extends LayerBase<Key> {
             x2: toNode.x - edgeGap,
           }),
           ...(direction === 'vertical' && {
-            y1: fromNode.x + fromNode.width + edgeGap - layout.left + layout.top,
+            y1:
+              fromNode.x + fromNode.width + edgeGap - layout.left + layout.top,
             y2: toNode.x - edgeGap - layout.left + layout.top,
           }),
         }) as string,
@@ -191,17 +207,19 @@ export class LayerSankey extends LayerBase<Key> {
           ...other,
         }))
       )
-      this.edgeData = this.edgeData.map(({x1, y1, x2, y2, x3, y3, x4, y4, ...rest}) => ({
-        ...rest,
-        x1: y1 - layout.top + layout.left,
-        y1: x1 - layout.left + layout.top,
-        x2: y2 - layout.top + layout.left,
-        y2: x2 - layout.left + layout.top,
-        x3: y3 - layout.top + layout.left,
-        y3: x3 - layout.left + layout.top,
-        x4: y4 - layout.top + layout.left,
-        y4: x4 - layout.left + layout.top,
-      }))
+      this.edgeData = this.edgeData.map(
+        ({x1, y1, x2, y2, x3, y3, x4, y4, ...rest}) => ({
+          ...rest,
+          x1: y1 - layout.top + layout.left,
+          y1: x1 - layout.left + layout.top,
+          x2: y2 - layout.top + layout.left,
+          y2: x2 - layout.left + layout.top,
+          x3: y3 - layout.top + layout.left,
+          y3: x3 - layout.left + layout.top,
+          x4: y4 - layout.top + layout.left,
+          y4: x4 - layout.left + layout.top,
+        })
+      )
     }
 
     this.textData = this.nodeData.map((group, i) => {
@@ -255,16 +273,16 @@ export class LayerSankey extends LayerBase<Key> {
       if (direction === 'horizontal') {
         return [
           `M ${x1},${(y1 + y4) / 2}`,
-          `C ${(x1 + x2) / 2},${(y1 + y4) / 2} ${(x1 + x2) / 2},${(y2 + y3) / 2} ${x2},${
+          `C ${(x1 + x2) / 2},${(y1 + y4) / 2} ${(x1 + x2) / 2},${
             (y2 + y3) / 2
-          }`,
+          } ${x2},${(y2 + y3) / 2}`,
         ].join(' ')
       } else if (direction === 'vertical') {
         return [
           `M ${(x1 + x4) / 2},${y1}`,
-          `C ${(x1 + x4) / 2},${(y1 + y2) / 2} ${(x2 + x3) / 2},${(y1 + y2) / 2} ${
-            (x2 + x3) / 2
-          },${y2}`,
+          `C ${(x1 + x4) / 2},${(y1 + y2) / 2} ${(x2 + x3) / 2},${
+            (y1 + y2) / 2
+          } ${(x2 + x3) / 2},${y2}`,
         ].join(' ')
       }
     }
@@ -273,7 +291,9 @@ export class LayerSankey extends LayerBase<Key> {
   draw() {
     const {edgeVariant, edge} = this.style
     const nodeData = this.nodeData.map((group) => ({
-      data: group.map(({width, height, x, y, meta}) => ({x, y, width, height, meta})),
+      data: group.map((item) =>
+        pick(item, ['x', 'y', 'width', 'height', 'meta'])
+      ),
       ...this.style.node,
       fill: group.map(({color}) => color ?? 'black'),
     }))

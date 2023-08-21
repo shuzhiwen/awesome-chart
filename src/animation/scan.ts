@@ -22,11 +22,11 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
   }
 
   private get isHorizontal() {
-    return this.options.direction === 'left' || this.options.direction === 'right'
+    return ['left', 'right'].includes(this.options.direction!)
   }
 
   private get isVertical() {
-    return this.options.direction === 'top' || this.options.direction === 'bottom'
+    return ['top', 'bottom'].includes(this.options.direction!)
   }
 
   private get stops() {
@@ -66,7 +66,7 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
 
     this.gradient = isSC(this.defs)
       ? this.defs.select(`#scan-gradient-${this.id}`)
-      : this.defs.find((item) => item.gradientId === `scan-gradient-${this.id}`)!
+      : this.defs.find((item) => item.gradientId === `scan-gradient-${this.id}`)
   }
 
   private cloneMaskNode(node: HTMLElement) {

@@ -19,11 +19,17 @@ export function createScale<Scale extends Maybe<LayerScale>>(
   currentScale: Scale,
   incomingScale?: Scale
 ) {
-  const nice = merge({}, defaultScale?.nice, currentScale?.nice, incomingScale?.nice),
+  const nice = merge(
+      {},
+      defaultScale?.nice,
+      currentScale?.nice,
+      incomingScale?.nice
+    ),
     scales: LayerScale = {...currentScale, ...defaultScale, nice}
 
   scaleTypes.forEach((type) => {
-    scales[type] = incomingScale?.[type] || defaultScale?.[type] || currentScale?.[type]
+    scales[type] =
+      incomingScale?.[type] || defaultScale?.[type] || currentScale?.[type]
   })
 
   return scales as Required<Scale>

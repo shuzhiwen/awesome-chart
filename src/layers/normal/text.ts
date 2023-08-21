@@ -1,6 +1,12 @@
 import {merge} from 'lodash'
 import {DataBase} from '../../data'
-import {DrawerData, LayerOptions, LayerStyle, LayerTextStyle, TextDrawerProps} from '../../types'
+import {
+  DrawerData,
+  LayerOptions,
+  LayerStyle,
+  LayerTextStyle,
+  TextDrawerProps,
+} from '../../types'
 import {getAttr, getTextWidth, group} from '../../utils'
 import {LayerBase} from '../base'
 import {createStyle, createText, validateAndCreateData} from '../helpers'

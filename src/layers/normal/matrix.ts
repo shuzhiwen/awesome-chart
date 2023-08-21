@@ -125,7 +125,9 @@ export class LayerMatrix extends LayerBase<Key> {
       colorMatrix = createColorMatrix({
         layer: this,
         row: 1,
-        column: Math.ceil(distance / getMagnitude(distance / body.flatMap(noChange).length)),
+        column: Math.ceil(
+          distance / getMagnitude(distance / body.flatMap(noChange).length)
+        ),
         theme: shape === 'rect' ? rect?.fill : circle?.fill,
       }),
       scaleColor =

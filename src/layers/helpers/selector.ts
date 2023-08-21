@@ -28,13 +28,18 @@ class Selector {
    */
   getChildren(target: D3Selection, className: string): D3Selection
   getChildren(target: Container, className: string): Container[]
-  getChildren(target: DrawerTarget, className: string): D3Selection | Container[]
+  getChildren(
+    target: DrawerTarget,
+    className: string
+  ): D3Selection | Container[]
   getChildren(target: Maybe<DrawerTarget>, className: string) {
     if (isSC(target)) {
       return target.selectAll(`.${className}`)
     } else if (isCC(target)) {
       return (target.children as Container[])
-        .flatMap((item) => (isCC(item) ? this.getChildren(item, className) : item))
+        .flatMap((item) =>
+          isCC(item) ? this.getChildren(item, className) : item
+        )
         .filter((item) => item.className === className)
     }
   }

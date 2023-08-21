@@ -87,7 +87,8 @@ export class LayerPack extends LayerBase<Key> {
       .sort((a, b) => b.data.value! - a.data.value!)
 
     this.zoomConfig = {
-      maxHeight: max(this.treeData.descendants().map(({height}) => height + 1)) ?? -1,
+      maxHeight:
+        max(this.treeData.descendants().map(({height}) => height + 1)) ?? -1,
       view: [width, height],
       offset: [0, 0],
       k: 1,
@@ -106,7 +107,10 @@ export class LayerPack extends LayerBase<Key> {
     const {left, top} = this.options.layout,
       {variant, padding, circle, text} = this.style,
       {view, offset, maxHeight} = this.zoomConfig,
-      nodes = pack<Node>().size(view).padding(padding)(this.treeData).descendants(),
+      nodes = pack<Node>()
+        .size(view)
+        .padding(padding)(this.treeData)
+        .descendants(),
       circleData = nodes.map(({x, y, data, ...rest}) => ({
         ...rest,
         value: data.name,
@@ -162,11 +166,18 @@ export class LayerPack extends LayerBase<Key> {
     const textData = this.textData.map((group) => ({
       data: group,
       ...text,
-      fontSize: variant === 'pack' ? text?.fontSize : group.flatMap(({fontSize}) => fontSize!),
+      fontSize:
+        variant === 'pack'
+          ? text?.fontSize
+          : group.flatMap(({fontSize}) => fontSize!),
     }))
 
     this.drawBasic({type: 'circle', key: 'circle', data: circleData})
-    this.drawBasic({type: 'text', key: 'text', data: textData.slice(textData.length - 1)})
+    this.drawBasic({
+      type: 'text',
+      key: 'text',
+      data: textData.slice(textData.length - 1),
+    })
 
     if (zoom) {
       this.event.onWithOff('mousedown-circle', EVENT_KEY, this.zoom)
@@ -178,8 +189,12 @@ export class LayerPack extends LayerBase<Key> {
       {left, top, width, height} = this.options.layout,
       {k: prevK, offset, maxHeight} = this.zoomConfig!,
       nextK = (Math.min(width, height) / (rx + ry)) * prevK,
-      nextX = (width / 2 - (cx - offset[0] - left) / prevK) * nextK - (width * (nextK - 1)) / 2,
-      nextY = (height / 2 - (cy - offset[1] - top) / prevK) * nextK - (height * (nextK - 1)) / 2
+      nextX =
+        (width / 2 - (cx - offset[0] - left) / prevK) * nextK -
+        (width * (nextK - 1)) / 2,
+      nextY =
+        (height / 2 - (cy - offset[1] - top) / prevK) * nextK -
+        (height * (nextK - 1)) / 2
 
     this.zoomConfig = {
       maxHeight,

@@ -8,7 +8,9 @@ export function scaleBand({domain, range, nice = {}}: ScaleBandProps) {
     distance = Math.abs(range[1] - range[0])
 
   if (isNumber(fixedBandwidth) && isNumber(fixedPaddingInner)) {
-    const fixedRange = fixedBandwidth * domain.length + fixedPaddingInner * (domain.length - 1),
+    const fixedRange =
+        fixedBandwidth * domain.length +
+        fixedPaddingInner * (domain.length - 1),
       offset = (fixedRange - distance) * Math.sign(range[1] - range[0])
     scale.range([
       fixedBoundary === 'end' ? range[0] - offset : range[0],

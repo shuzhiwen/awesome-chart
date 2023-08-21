@@ -11,7 +11,13 @@ import {
 } from '../../types'
 import {isRealNumber, isSC, tableListToObjects} from '../../utils'
 import {LayerBase} from '../base'
-import {checkColumns, createScale, createStyle, elClass, validateAndCreateData} from '../helpers'
+import {
+  checkColumns,
+  createScale,
+  createStyle,
+  elClass,
+  validateAndCreateData,
+} from '../helpers'
 
 type Key = 'odLine' | 'flyingObject' | 'text'
 
@@ -155,16 +161,24 @@ export class LayerODLine extends LayerBase<Key> {
     }
 
     this.drawBasic({type: 'path', key: 'odLine', data: [odLineData]})
-    this.drawBasic({type: 'path', key: 'flyingObject', data: [flyingObjectData]})
-
-    this.cacheAnimation['animations']['flyingObject']?.event.on('start', EVENT_KEY, () => {
-      if (isSC(this.root) && this.odLineData.some(({path}) => path)) {
-        this.root
-          .selectAll(`${elClass('flyingObject')}`)
-          .transition()
-          .duration(this.options.theme.animation.enter.duration)
-          .attr('opacity', 1)
-      }
+    this.drawBasic({
+      type: 'path',
+      key: 'flyingObject',
+      data: [flyingObjectData],
     })
+
+    this.cacheAnimation['animations']['flyingObject']?.event.on(
+      'start',
+      EVENT_KEY,
+      () => {
+        if (isSC(this.root) && this.odLineData.some(({path}) => path)) {
+          this.root
+            .selectAll(`${elClass('flyingObject')}`)
+            .transition()
+            .duration(this.options.theme.animation.enter.duration)
+            .attr('opacity', 1)
+        }
+      }
+    )
   }
 }

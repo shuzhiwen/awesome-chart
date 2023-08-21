@@ -6,9 +6,12 @@ const originValues = new Array(30)
   .map(() => randomNormal(10, 3)())
   .sort((a, b) => a - b)
 const transformedData = [['区间', '数量'] as Meta[]].concat(
-  Array.from(group(originValues, (v) => `${Math.floor(v / 2) * 2}-${Math.ceil(v / 2) * 2}`)).map(
-    ([category, values]) => [category, values.length]
-  )
+  Array.from(
+    group(
+      originValues,
+      (v) => `${Math.floor(v / 2) * 2}-${Math.ceil(v / 2) * 2}`
+    )
+  ).map(([category, values]) => [category, values.length])
 )
 
 export default ({variant}: Partial<LayerRectStyle>) => [

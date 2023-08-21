@@ -78,8 +78,12 @@ export class LayerChord extends LayerBase<Key> {
       {left, top, width, height} = this.options.layout,
       {arcWidth, labelOffset, text, node} = this.style,
       [centerX, centerY] = [left + width / 2, top + height / 2],
-      chordData = chord().padAngle(Math.PI / 10 / rows.length)(body as number[][]),
-      groupData = Array.from(group(chordData, (data) => data.target.index).values()),
+      chordData = chord().padAngle(Math.PI / 10 / rows.length)(
+        body as number[][]
+      ),
+      groupData = Array.from(
+        group(chordData, (data) => data.target.index).values()
+      ),
       maxRadius = Math.min(width, height) / 2,
       radius = maxRadius - arcWidth,
       colorMatrix = createColorMatrix({

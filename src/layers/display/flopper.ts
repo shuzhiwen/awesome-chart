@@ -3,10 +3,17 @@ import {select} from 'd3'
 import {cloneDeep, merge} from 'lodash'
 import {lightTheme} from '../../core/theme'
 import {DataBase} from '../../data'
-import {LayerAnimation, LayerFlopperStyle, LayerOptions, LayerStyle} from '../../types'
+import {
+  LayerAnimation,
+  LayerFlopperStyle,
+  LayerOptions,
+  LayerStyle,
+} from '../../types'
 import {addStyle, isCC, isSC, mergeAlpha, robustRange} from '../../utils'
 import {LayerBase} from '../base'
 import {createStyle, validateAndCreateData} from '../helpers'
+
+const characterSet = [''].concat('0123456789,.'.split(''))
 
 const defaultStyle: LayerFlopperStyle = {
   variant: 'vertical',
@@ -15,8 +22,6 @@ const defaultStyle: LayerFlopperStyle = {
   decimals: 2,
   thousandth: true,
 }
-
-const characterSet = ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.']
 
 export class LayerFlopper extends LayerBase<never> {
   private _data: Maybe<DataBase<{value: number}>>
@@ -108,7 +113,8 @@ export class LayerFlopper extends LayerBase<never> {
     const findNumber = (data: LayerFlopper['cellData']) =>
       data.findIndex(({text}) => text >= '0' && text <= '9')
     const first = findNumber(this.cellData)
-    const last = this.cellData.length - findNumber(cloneDeep(this.cellData).reverse()) - 1
+    const last =
+      this.cellData.length - findNumber(cloneDeep(this.cellData).reverse()) - 1
 
     this.cellData.forEach((item, i) => {
       if (i < first || i > last) item.text = ''
@@ -123,7 +129,8 @@ export class LayerFlopper extends LayerBase<never> {
     const {width, height} = this.cellSize,
       {variant, url, characters, scale, cell} = this.style,
       background = cell?.backgroundColor || 'green',
-      data = variant === 'flop' ? cloneDeep(characterSet).reverse() : characterSet,
+      data =
+        variant === 'flop' ? cloneDeep(characterSet).reverse() : characterSet,
       position = variant === 'flop' ? 'absolute' : 'relative'
 
     this.root
@@ -155,12 +162,18 @@ export class LayerFlopper extends LayerBase<never> {
               .join('img')
               .attr('src', url!)
               .style('position', 'absolute')
-              .style('clip', `rect(${top}px,${left + width}px,${top + height}px,${left}px)`)
+              .style(
+                'clip',
+                `rect(${top}px,${left + width}px,${top + height}px,${left}px)`
+              )
               .style('transform', `translate(${offsetX}px,${offsetY}px)`)
               .style('left', '50%')
               .style('top', '50%')
           } else {
-            container.text(d).style('display', 'grid').style('place-items', 'center')
+            container
+              .text(d)
+              .style('display', 'grid')
+              .style('place-items', 'center')
           }
         } else if (variant === 'flop') {
           container
@@ -211,18 +224,26 @@ export class LayerFlopper extends LayerBase<never> {
               .style('left', '50%')
               .style('position', 'absolute')
               .style('backface-visibility', 'hidden')
-              .style('clip', `rect(${top}px,${left + width}px,${top + height}px,${left}px)`)
+              .style(
+                'clip',
+                `rect(${top}px,${left + width}px,${top + height}px,${left}px)`
+              )
               .style('transform', `translate(${offsetX}px,${offsetY}px)`)
               .style('background', background)
             container.selectAll('.top img').style('top', '100%')
           } else {
-            container.selectAll('.digital').text(d).style('background', background)
+            container
+              .selectAll('.digital')
+              .text(d)
+              .style('background', background)
           }
         }
       })
   }
 
-  setAnimation(options: Maybe<LayerAnimation<Partial<LayerFlopper['animation']>>>) {
+  setAnimation(
+    options: Maybe<LayerAnimation<Partial<LayerFlopper['animation']>>>
+  ) {
     const {update} = this.options.theme.animation
     this.animation = merge({}, update, this.animation, options)
   }
@@ -256,7 +277,10 @@ export class LayerFlopper extends LayerBase<never> {
           translateY: `+=${this.cellSize.height * (prevIndex - index)}`,
         })
       } else if (index !== prevIndex) {
-        const cells = select(els[i]).selectAll(`.${this.className}-cell`).nodes().reverse(),
+        const cells = select(els[i])
+            .selectAll(`.${this.className}-cell`)
+            .nodes()
+            .reverse(),
           [backCell, frontCell] = [cells[index], cells[prevIndex]],
           backTop = select(backCell).selectAll('.top'),
           backBottom = select(backCell).selectAll('.bottom'),
@@ -270,7 +294,12 @@ export class LayerFlopper extends LayerBase<never> {
 
         anime({targets: backBottom.nodes(), rotateX: 180, duration: 0})
         anime({targets: backBottom.nodes(), rotateX: 0, duration, easing})
-        anime({targets: frontTop.nodes(), rotateX: 180, duration, easing}).finished.then(() => {
+        anime({
+          targets: frontTop.nodes(),
+          rotateX: 180,
+          duration,
+          easing,
+        }).finished.then(() => {
           anime({targets: frontTop.nodes(), rotateX: 0, duration: 0})
           frontTop.style('z-index', 'auto')
           frontBottom.style('z-index', 'auto')

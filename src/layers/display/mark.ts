@@ -10,7 +10,13 @@ import {
 } from '../../types'
 import {createDroplet, isScaleBand, tableListToObjects} from '../../utils'
 import {LayerBase} from '../base'
-import {checkColumns, createScale, createStyle, createText, validateAndCreateData} from '../helpers'
+import {
+  checkColumns,
+  createScale,
+  createStyle,
+  createText,
+  validateAndCreateData,
+} from '../helpers'
 
 type Key = 'mark' | 'text'
 
@@ -87,7 +93,13 @@ export class LayerMark extends LayerBase<Key> {
     }))
 
     this.textData = this.markData.map(({centerX, centerY, value}) =>
-      createText({position: 'center', x: centerX, y: centerY - size / 10, value, style: text})
+      createText({
+        position: 'center',
+        x: centerX,
+        y: centerY - size / 10,
+        value,
+        style: text,
+      })
     )
   }
 

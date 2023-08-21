@@ -135,15 +135,23 @@ export class LayerLine extends LayerBase<Key> {
     }
 
     this.textData = this.pointData.map((group) =>
-      group.map(({value, x, y}) =>
-        createText({x, y, value, position: labelPosition, style: text, offset: 5})
+      group.map((datum) =>
+        createText({
+          ...datum,
+          position: labelPosition,
+          style: text,
+          offset: 5,
+        })
       )
     )
 
     this.areaData = this.pointData.map((group, i) =>
       group.map(({y, ...item}, j) => ({
         ...item,
-        y2: mode === 'stack' && j !== 0 ? this.pointData[i][j - 1].y : height + top,
+        y2:
+          mode === 'stack' && j !== 0
+            ? this.pointData[i][j - 1].y
+            : height + top,
         y1: y,
       }))
     )
@@ -184,7 +192,9 @@ export class LayerLine extends LayerBase<Key> {
     )
   }
 
-  private fallbackFilter<T extends {y?: number; y1?: number; y2?: number}>(position: T[]) {
+  private fallbackFilter<T extends {y?: number; y1?: number; y2?: number}>(
+    position: T[]
+  ) {
     if (!this.scale) return []
 
     const {layout} = this.options,
@@ -195,7 +205,10 @@ export class LayerLine extends LayerBase<Key> {
       return position.reduce<T[][]>(
         (prev, cur) =>
           cur.y || cur.y1
-            ? [...prev.slice(0, prev.length - 1), [...prev[prev.length - 1], cur]]
+            ? [
+                ...prev.slice(0, prev.length - 1),
+                [...prev[prev.length - 1], cur],
+              ]
             : [...prev, []],
         [[]]
       )
@@ -220,18 +233,22 @@ export class LayerLine extends LayerBase<Key> {
 
   draw() {
     const areaData = this.areaData[0].map(({color}, index) => ({
-      data: this.fallbackFilter(this.areaData.map((item) => item[index])).map((lines) => ({
-        curve: this.style.curveType!,
-        lines,
-      })),
+      data: this.fallbackFilter(this.areaData.map((item) => item[index])).map(
+        (lines) => ({
+          curve: this.style.curveType,
+          lines,
+        })
+      ),
       ...this.style.area,
       fill: color,
     }))
     const curveData = this.pointData[0].map(({color}, index) => ({
-      data: this.fallbackFilter(this.pointData.map((item) => item[index])).map((points) => ({
-        curve: this.style.curveType!,
-        points,
-      })),
+      data: this.fallbackFilter(this.pointData.map((item) => item[index])).map(
+        (points) => ({
+          curve: this.style.curveType,
+          points,
+        })
+      ),
       ...this.style.curve,
       stroke: color,
     }))

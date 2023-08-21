@@ -9,8 +9,14 @@ import {D3Selection} from '../types'
  * @param index
  * The group index for each attributes.
  */
-export function addStyle(target: D3Selection, style: AnyObject = {}, index = 0) {
-  Object.entries(style).forEach(([key, value]) => target.style(key, getAttr(value, index, '')))
+export function addStyle(
+  target: D3Selection,
+  style: AnyObject = {},
+  index = 0
+) {
+  Object.entries(style).forEach(([key, value]) =>
+    target.style(key, getAttr(value, index, ''))
+  )
   return target
 }
 
@@ -60,7 +66,11 @@ export function splitAlpha(color: string, opacity: number) {
  * @returns
  * Return attribute value.
  */
-export function getAttr<T>(target: MaybeGroup<T>, index = 0, defaultValue: T): T {
+export function getAttr<T>(
+  target: MaybeGroup<T>,
+  index = 0,
+  defaultValue: T
+): T {
   if (isArray(target)) {
     if (target.length > index && !isNil(target[index])) {
       return target[index] ?? defaultValue

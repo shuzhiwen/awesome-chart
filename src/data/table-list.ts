@@ -1,5 +1,10 @@
 import {cloneDeep, max, min, sum} from 'lodash'
-import {DataBaseOptions, RawTableList, TableListData, TableListOptions} from '../types'
+import {
+  DataBaseOptions,
+  RawTableList,
+  TableListData,
+  TableListOptions,
+} from '../types'
 import {group, isRawTableList, transpose} from '../utils'
 import {DataBase} from './base'
 
@@ -68,14 +73,18 @@ export class DataTableList extends DataBase<RawTableList> {
    */
   select(headers: MaybeGroup<Meta>, options?: TableListOptions): DataTableList {
     const {mode = 'copy', target = 'row'} = options || {}
-    let data = cloneDeep(this._data.filter(({header}) => group(headers).includes(header)))
+    let data = cloneDeep(
+      this._data.filter(({header}) => group(headers).includes(header))
+    )
 
     if (mode === 'sum') {
       if (target === 'row') {
         const lists = data
           .map(({list}) => list)
           .reduce<Meta[][]>((prev, cur, i) => {
-            return i === 0 ? [cur] : [...prev, prev[i - 1].map((value, j) => sum([value, cur[j]]))]
+            return i === 0
+              ? [cur]
+              : [...prev, prev[i - 1].map((value, j) => sum([value, cur[j]]))]
           }, [])
         data = [
           {
@@ -101,7 +110,10 @@ export class DataTableList extends DataBase<RawTableList> {
       } else if (target === 'column') {
         data = data.map((item) => {
           const total = sum(item.list)
-          return {...item, list: item.list.map((value) => Number(value) / total)}
+          return {
+            ...item,
+            list: item.list.map((value) => Number(value) / total),
+          }
         })
       }
     }
@@ -171,8 +183,12 @@ export class DataTableList extends DataBase<RawTableList> {
    */
   range(): Vec2 {
     return [
-      Number(min(this._data.map(({list, min: value}) => min([value, min(list)])))),
-      Number(max(this._data.map(({list, max: value}) => max([value, max(list)])))),
+      Number(
+        min(this._data.map(({list, min: value}) => min([value, min(list)])))
+      ),
+      Number(
+        max(this._data.map(({list, max: value}) => max([value, max(list)])))
+      ),
     ]
   }
 
@@ -183,10 +199,15 @@ export class DataTableList extends DataBase<RawTableList> {
    * @param options
    * The sort configuration.
    */
-  sort(options: {mode: 'asc' | 'desc'; targets: 'dimension' | 'groupWeight'; variant?: 'date'}) {
+  sort(options: {
+    mode: 'asc' | 'desc'
+    targets: 'dimension' | 'groupWeight'
+    variant?: 'date'
+  }) {
     const {rawTableList, headers} = this,
       {mode, targets, variant} = options,
-      getValue = (value: Meta) => (variant === 'date' ? new Date(value).getTime() : value)
+      getValue = (value: Meta) =>
+        variant === 'date' ? new Date(value).getTime() : value
 
     if (targets === 'groupWeight') {
       if (mode === 'asc') {

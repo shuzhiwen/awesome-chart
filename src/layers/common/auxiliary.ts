@@ -91,7 +91,8 @@ export class LayerAuxiliary extends LayerBase<Key> {
     const {rawTableList} = this.data,
       {scaleX, scaleY} = this.scale,
       {left, top, width, height} = this.options.layout,
-      {labelPosition, direction, labelOffset, line, text, enableLegend} = this.style,
+      {labelPosition, direction, labelOffset, line, text, enableLegend} =
+        this.style,
       offsetX = isScaleBand(scaleX) ? scaleX.bandwidth() / 2 : 0,
       offsetY = isScaleBand(scaleY) ? scaleY.bandwidth() / 2 : 0,
       colorMatrix = createColorMatrix({
@@ -101,7 +102,10 @@ export class LayerAuxiliary extends LayerBase<Key> {
         theme: line?.stroke,
       })
 
-    if (direction === 'horizontal' && (isScaleLinear(scaleY) || isScaleBand(scaleY))) {
+    if (
+      direction === 'horizontal' &&
+      (isScaleLinear(scaleY) || isScaleBand(scaleY))
+    ) {
       this.lineData = rawTableList.map(([, value], i) => ({
         value,
         x1: left,
@@ -110,7 +114,10 @@ export class LayerAuxiliary extends LayerBase<Key> {
         y2: top + (scaleY(value as number) ?? 0) + offsetY,
         color: colorMatrix.get(i, 0),
       }))
-    } else if (direction === 'vertical' && (isScaleLinear(scaleX) || isScaleBand(scaleX))) {
+    } else if (
+      direction === 'vertical' &&
+      (isScaleLinear(scaleX) || isScaleBand(scaleX))
+    ) {
       this.lineData = rawTableList.map(([, value], i) => ({
         value,
         x1: left + (scaleX(value as number) ?? 0) + offsetX,
@@ -124,8 +131,18 @@ export class LayerAuxiliary extends LayerBase<Key> {
     this.textData = this.lineData.map(({value, x1, y1, x2, y2}) =>
       createText({
         value,
-        x: labelPosition === 'left' ? x1 : labelPosition === 'right' ? x2 : (x1 + x2) / 2,
-        y: labelPosition === 'top' ? y1 : labelPosition === 'bottom' ? y2 : (y1 + y2) / 2,
+        x:
+          labelPosition === 'left'
+            ? x1
+            : labelPosition === 'right'
+            ? x2
+            : (x1 + x2) / 2,
+        y:
+          labelPosition === 'top'
+            ? y1
+            : labelPosition === 'bottom'
+            ? y2
+            : (y1 + y2) / 2,
         position: labelPosition,
         offset: labelOffset,
         style: text,

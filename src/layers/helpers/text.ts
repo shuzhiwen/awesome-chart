@@ -13,7 +13,7 @@ import {
  * Easy way to calculate text data.
  */
 export function createText<T extends CreateTextProps>(props: T) {
-  const {x, y, value, style = {}, position = 'rightTop', offset = 0, ...rest} = props,
+  const {x, y, value, style = {}, position, offset = 0, ...rest} = props,
     {fontSize: _fontSize, writingMode, format} = style,
     fontSize = getAttr(_fontSize, 0, 12),
     formattedText = String(formatNumber(value, format)),
@@ -73,7 +73,9 @@ export function createText<T extends CreateTextProps>(props: T) {
 /**
  * Determine the anchor point position of the arc text based on the angle.
  */
-export function createArcText(props: Omit<CreateTextProps, 'position'> & {angle: number}) {
+export function createArcText(
+  props: Omit<CreateTextProps, 'position'> & {angle: number}
+) {
   let angle = props.angle % (Math.PI * 2)
 
   safeLoop(

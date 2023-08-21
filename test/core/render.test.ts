@@ -9,7 +9,11 @@ test('render', () => {
   select(svgContainer).attr('width', '1000px').attr('height', '1000px')
 
   const schema = {...base(rect({variant: 'column'})), tooltipOptions: {}}
-  const svgChart = createChart({container: svgContainer, ...schema, engine: 'svg'})
+  const svgChart = createChart({
+    container: svgContainer,
+    ...schema,
+    engine: 'svg',
+  })
   const charts = [svgChart]
 
   charts.forEach((chart) => {

@@ -117,7 +117,14 @@ export class LayerAxis extends LayerBase<Key> {
   private disabledAxisX: Set<ReturnType<typeof createText>> = new Set()
 
   private textData: Record<
-    'textX' | 'textY' | 'textYR' | 'textAngle' | 'textRadius' | 'titleX' | 'titleY' | 'titleYR',
+    | 'textX'
+    | 'textY'
+    | 'textYR'
+    | 'textAngle'
+    | 'textRadius'
+    | 'titleX'
+    | 'titleY'
+    | 'titleYR',
     ReturnType<typeof createText>[]
   > = {
     textX: [],
@@ -180,7 +187,11 @@ export class LayerAxis extends LayerBase<Key> {
       incoming = scale?.[target]() ?? []
 
     if (current[0] > current[1] !== incoming[0] > incoming[1]) {
-      this.log.debug.warn('Layers scale does not match', {current, incoming, target})
+      this.log.debug.warn('Layers scale does not match', {
+        current,
+        incoming,
+        target,
+      })
       return
     }
 
@@ -191,8 +202,12 @@ export class LayerAxis extends LayerBase<Key> {
 
     const isReverse = current[0] > current[1]
     this.scale[type]?.[target]([
-      isReverse ? Math.max(current[0], incoming[0]) : Math.min(current[0], incoming[0]),
-      isReverse ? Math.min(current[1], incoming[1]) : Math.max(current[1], incoming[1]),
+      isReverse
+        ? Math.max(current[0], incoming[0])
+        : Math.min(current[0], incoming[0]),
+      isReverse
+        ? Math.min(current[1], incoming[1])
+        : Math.max(current[1], incoming[1]),
     ])
   }
 
@@ -224,7 +239,10 @@ export class LayerAxis extends LayerBase<Key> {
       } else if (isScaleAngle(scale)) {
         this.scale[type] = scaleAngle({
           domain: [scale.domain(), scale.range().map(({weight}) => weight)],
-          range: [scale.range()[0].startAngle, scale.range().slice(-1)[0].endAngle],
+          range: [
+            scale.range()[0].startAngle,
+            scale.range().slice(-1)[0].endAngle,
+          ],
           nice: this.scale.nice,
         })
       }
@@ -239,7 +257,8 @@ export class LayerAxis extends LayerBase<Key> {
     const {containerWidth, layout} = this.options,
       {left, top, width, height, bottom} = layout,
       {scaleX, scaleY, scaleYR, scaleAngle, scaleRadius} = this.scale,
-      {titleX, titleY, titleYR, textX, textY, textYR, textAngle, textRadius} = this.style,
+      {titleX, titleY, titleYR, textX, textY, textYR, textAngle, textRadius} =
+        this.style,
       maxRadius = scaleRadius?.range()[1] || Math.max(width / 2, height / 2),
       labelYR = this.getLabelAndPosition(scaleYR!),
       offset = 5
@@ -255,16 +274,16 @@ export class LayerAxis extends LayerBase<Key> {
       })
     )
 
-    this.lineData.splitLineAxisY = this.getLabelAndPosition(scaleY! || scaleYR).map(
-      ({label, position}, i) => ({
-        value: label,
-        x1: left,
-        x2: left + width,
-        y1: top + position,
-        y2: top + position,
-        axisLine: i === 0 ? 'Y' : null,
-      })
-    )
+    this.lineData.splitLineAxisY = this.getLabelAndPosition(
+      scaleY! || scaleYR
+    ).map(({label, position}, i) => ({
+      value: label,
+      x1: left,
+      x2: left + width,
+      y1: top + position,
+      y2: top + position,
+      axisLine: i === 0 ? 'Y' : null,
+    }))
 
     this.lineData.splitLineAngle = this.getLabelAndPosition(scaleAngle!).map(
       ({label, position}) => ({
@@ -279,12 +298,14 @@ export class LayerAxis extends LayerBase<Key> {
       })
     )
 
-    this.splitLineRadiusData = this.getLabelAndPosition(scaleRadius!).map(({label, position}) => ({
-      value: label,
-      x: left + width / 2,
-      y: top + height / 2,
-      r: position,
-    }))
+    this.splitLineRadiusData = this.getLabelAndPosition(scaleRadius!).map(
+      ({label, position}) => ({
+        value: label,
+        x: left + width / 2,
+        y: top + height / 2,
+        r: position,
+      })
+    )
 
     this.textData.titleX = [
       createText({
@@ -323,23 +344,45 @@ export class LayerAxis extends LayerBase<Key> {
     this.reduceScaleXTextNumber()
 
     if (scaleY) {
-      this.textData.textY = this.lineData.splitLineAxisY.map(({value, x1, y1}) =>
-        createText({x: x1!, y: y1!, value, style: textY, position: 'left'})
+      this.textData.textY = this.lineData.splitLineAxisY.map(
+        ({value, x1, y1}) =>
+          createText({x: x1!, y: y1!, value, style: textY, position: 'left'})
       )
     }
     if (scaleYR) {
       this.textData.textYR = this.lineData.splitLineAxisY.map(({x2, y2}, i) =>
-        createText({x: x2!, y: y2!, value: labelYR[i]?.label, style: textYR, position: 'right'})
+        createText({
+          x: x2!,
+          y: y2!,
+          value: labelYR[i]?.label,
+          style: textYR,
+          position: 'right',
+        })
       )
     }
 
-    this.textData.textRadius = this.splitLineRadiusData.map(({value, x, y, r}) =>
-      createText({x: x!, y: y! - r!, value, style: textRadius, position: 'left', offset})
+    this.textData.textRadius = this.splitLineRadiusData.map(
+      ({value, x, y, r}) =>
+        createText({
+          x: x!,
+          y: y! - r!,
+          value,
+          style: textRadius,
+          position: 'left',
+          offset,
+        })
     )
 
     this.textData.textAngle = this.lineData.splitLineAngle.map(
       ({value, labelX, labelY, angle = 0}) =>
-        createArcText({x: labelX!, y: labelY!, value, style: textAngle, angle, offset})
+        createArcText({
+          x: labelX!,
+          y: labelY!,
+          value,
+          style: textAngle,
+          angle,
+          offset,
+        })
     )
   }
 
@@ -347,13 +390,17 @@ export class LayerAxis extends LayerBase<Key> {
     const {width, left, right} = this.options.layout,
       {maxScaleXTextNumber, dynamicReserveTextX} = this.style,
       getEnabledTextX = () => {
-        return this.textData.textX.filter((item) => !this.disabledAxisX.has(item))
+        return this.textData.textX.filter(
+          (item) => !this.disabledAxisX.has(item)
+        )
       },
       getTextXTotalWidth = () => {
         return sum(getEnabledTextX().map(({textWidth}) => textWidth))
       },
       markHalfTextXDisabled = () => {
-        getEnabledTextX().forEach((item, i) => i % 2 !== 0 && this.disabledAxisX.add(item))
+        getEnabledTextX().forEach(
+          (item, i) => i % 2 !== 0 && this.disabledAxisX.add(item)
+        )
       }
 
     this.disabledAxisX.clear()
@@ -391,7 +438,8 @@ export class LayerAxis extends LayerBase<Key> {
       return scale.domain().map((label) => ({
         label,
         position:
-          (scale(label) ?? 0) + (this.style.coordinate === 'cartesian' ? scale.bandwidth() / 2 : 0),
+          (scale(label) ?? 0) +
+          (this.style.coordinate === 'cartesian' ? scale.bandwidth() / 2 : 0),
       }))
     } else if (isScaleLinear(scale)) {
       const [min, max] = scale.domain(),
@@ -418,7 +466,8 @@ export class LayerAxis extends LayerBase<Key> {
       getLineData = (key: Keys<LayerAxis['lineData']>) =>
         this.lineData[key].map((item, i) => ({
           data: [item],
-          opacity: key === 'splitLineAxisX' && disabledAxisXIndex.includes(i) ? 0 : 1,
+          opacity:
+            key === 'splitLineAxisX' && disabledAxisXIndex.includes(i) ? 0 : 1,
           ...(item.axisLine === 'X'
             ? this.style.axisLineAxisX
             : item.axisLine === 'Y'
@@ -450,8 +499,16 @@ export class LayerAxis extends LayerBase<Key> {
       this.drawBasic({type: 'text', key: 'textY', data: getTextData('textY')})
       this.drawBasic({type: 'text', key: 'textYR', data: getTextData('textYR')})
       this.drawBasic({type: 'text', key: 'titleX', data: getTextData('titleX')})
-      this.drawBasic({type: 'text', key: 'titleY', data: getTextData('titleY', -90)})
-      this.drawBasic({type: 'text', key: 'titleYR', data: getTextData('titleYR', 90)})
+      this.drawBasic({
+        type: 'text',
+        key: 'titleY',
+        data: getTextData('titleY', -90),
+      })
+      this.drawBasic({
+        type: 'text',
+        key: 'titleYR',
+        data: getTextData('titleYR', 90),
+      })
     }
 
     if (coordinate === 'polar') {
@@ -468,8 +525,16 @@ export class LayerAxis extends LayerBase<Key> {
         key: 'splitLineAngle',
         data: getLineData('splitLineAngle'),
       })
-      this.drawBasic({type: 'text', key: 'textAngle', data: getTextData('textAngle')})
-      this.drawBasic({type: 'text', key: 'textRadius', data: getTextData('textRadius')})
+      this.drawBasic({
+        type: 'text',
+        key: 'textAngle',
+        data: getTextData('textAngle'),
+      })
+      this.drawBasic({
+        type: 'text',
+        key: 'textRadius',
+        data: getTextData('textRadius'),
+      })
     }
   }
 }

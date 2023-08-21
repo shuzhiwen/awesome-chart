@@ -1,7 +1,13 @@
 import {merge} from 'lodash'
 import {commonEvents} from '../../core'
 import {DataTableList} from '../../data'
-import {LayerCandleStyle, LayerOptions, LayerRectScale, LayerStyle, LegendData} from '../../types'
+import {
+  LayerCandleStyle,
+  LayerOptions,
+  LayerRectScale,
+  LayerStyle,
+  LegendData,
+} from '../../types'
 import {bindEventManager, uuid} from '../../utils'
 import {LayerBase} from '../base'
 import {createScale, createStyle, validateAndCreateData} from '../helpers'
@@ -71,8 +77,11 @@ export class LayerCandle extends LayerBase<Key> {
 
     this.lineLayer.setStyle(defaultStyle.line)
     this.rectLayer.setStyle(defaultStyle.rect)
-    bindEventManager(this.event, [this.lineLayer.event, this.rectLayer.event], (name) =>
-      Array.from(commonEvents.values()).some((item) => name.match(item))
+    bindEventManager(
+      this.event,
+      [this.lineLayer.event, this.rectLayer.event],
+      (name) =>
+        Array.from(commonEvents.values()).some((item) => name.match(item))
     )
   }
 

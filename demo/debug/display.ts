@@ -39,7 +39,10 @@ export const debugGridLayer = (chart: Chart) => {
     data = [['width', 'height'] as Meta[]].concat(
       new Array(Math.floor(Math.random() * 5) + 10)
         .fill(null)
-        .map(() => [Math.floor(Math.random() * 5) + 1, Math.floor(Math.random() * 5) + 1])
+        .map(() => [
+          Math.floor(Math.random() * 5) + 1,
+          Math.floor(Math.random() * 5) + 1,
+        ])
     )
 
   if (!layers.length) return

@@ -108,7 +108,8 @@ export class DataTable extends DataBase<RawTable> {
         index !== -1 && removedList.concat(this.body.splice(index, 1))
       } else if (target === 'column') {
         const index = this.columns.indexOf(dimension)
-        index !== -1 && removedList.concat(this.body.map((item) => item.splice(index, 1)[0]))
+        index !== -1 &&
+          removedList.concat(this.body.map((item) => item.splice(index, 1)[0]))
       }
     })
   }

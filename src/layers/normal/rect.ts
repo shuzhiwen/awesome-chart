@@ -137,7 +137,9 @@ export class LayerRect extends LayerBase<Key> {
           value: Number(value),
           meta: {dimension, category: headers[i + 1], value},
           x: layout.left + (scaleX(dimension as string) || 0),
-          y: layout.top + ((value as number) > 0 ? scaleY(value as number) : scaleY(0)),
+          y:
+            layout.top +
+            ((value as number) > 0 ? scaleY(value as number) : scaleY(0)),
           width: scaleX.bandwidth(),
           height: Math.abs(scaleY(value as number) - scaleY(0)),
           transformOrigin: 'bottom',
@@ -158,7 +160,9 @@ export class LayerRect extends LayerBase<Key> {
           value: Number(value),
           meta: {dimension, category: headers[i + 1], value},
           y: layout.top + (scaleY(dimension as string) || 0),
-          x: layout.left + ((value as number) < 0 ? scaleX(value as number) : scaleX(0)),
+          x:
+            layout.left +
+            ((value as number) < 0 ? scaleX(value as number) : scaleX(0)),
           width: Math.abs(scaleX(value as number) - scaleX(0)),
           height: scaleY.bandwidth(),
           transformOrigin: 'left',
@@ -314,7 +318,9 @@ export class LayerRect extends LayerBase<Key> {
       const [data1, data2] = [group[0], group[1]],
         min = Math.min(Number(data1.value), Number(data2.value)),
         max = Math.max(Number(data1.value), Number(data2.value)),
-        meta = Object.fromEntries(group.map(({meta}) => [meta.category, meta.value]))
+        meta = Object.fromEntries(
+          group.map(({meta}) => [meta.category, meta.value])
+        )
 
       if (variant === 'column') {
         const y1 = data1.value < 0 ? data1.y + data1.height : data1.y
@@ -386,7 +392,10 @@ export class LayerRect extends LayerBase<Key> {
       {width, height} = this.options.layout
 
     this.rectData.forEach((group) => {
-      const total = group.reduce((prev, cur) => prev + Number(cur.value), Number.MIN_VALUE),
+      const total = group.reduce(
+          (prev, cur) => prev + Number(cur.value),
+          Number.MIN_VALUE
+        ),
         percentages = group.map(({value}) => Number(value) / total)
 
       group.map((item, i) => {
@@ -442,7 +451,10 @@ export class LayerRect extends LayerBase<Key> {
       bandDomain = this.data.lists[0] as string[],
       range1 = this.data.select(headers.slice(1), {mode: selectMode}).range(),
       range2 = this.data.select(headers.slice(1), {mode: 'copy'}).range(),
-      finalRange = [Math.min(range1[0], range2[0]), Math.max(range1[1], range2[1])],
+      finalRange = [
+        Math.min(range1[0], range2[0]),
+        Math.max(range1[1], range2[1]),
+      ],
       linearDomain = (mode !== 'percentage' ? finalRange : [0, 1]) as Vec2
 
     if (variant === 'column') {
@@ -478,13 +490,13 @@ export class LayerRect extends LayerBase<Key> {
 
   private createRectLabel() {
     const {variant} = this.style,
-      {labelPosition, labelPositionOrient, text: originText} = this.style,
+      {labelPosition, labelPositionOrient, text: originText = {}} = this.style,
       positionMin = isArray(labelPosition) ? labelPosition[0] : labelPosition,
       positionMax = isArray(labelPosition) ? labelPosition[1] : labelPosition
 
     this.textData = this.rectData.map((group) =>
       group.map(({value, x: originX, y: originY, width, height, meta}) => {
-        const text = cloneDeep(originText)!,
+        const text = cloneDeep(originText),
           [offsetX = 0, offsetY = 0] = text.offset!,
           labelPosition = value > 0 ? positionMax : positionMin
         let position: Position9 = 'center',

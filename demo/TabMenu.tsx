@@ -183,7 +183,9 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>, never> {
             addStyle(itemEl, itemStyle)
             itemEl.text(itemStyle.text)
           })
-          .on('click', (event, data) => this.tabEvent.fire('click', {data, event}))
+          .on('click', (event, data) =>
+            this.tabEvent.fire('click', {data, event})
+          )
           .on('mouseenter', (event, data: any) => {
             const {node} = data
             const {depth} = node

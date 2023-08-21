@@ -13,7 +13,12 @@ import {
 } from '../../types'
 import {isRealNumber} from '../../utils'
 import {LayerBase} from '../base'
-import {createColorMatrix, createScale, createStyle, validateAndCreateData} from '../helpers'
+import {
+  createColorMatrix,
+  createScale,
+  createStyle,
+  validateAndCreateData,
+} from '../helpers'
 
 type Key = 'text' | 'arc'
 

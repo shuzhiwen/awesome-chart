@@ -12,7 +12,10 @@ import {getTextWidth} from './chaos'
  * @returns
  * Return formatted string.
  */
-export const formatNumber = (data: Maybe<Meta>, config?: FormatNumberConfig) => {
+export const formatNumber = (
+  data: Maybe<Meta>,
+  config?: FormatNumberConfig
+) => {
   const number = Number(data ?? '')
   const {percentage = false, thousandth = false, decimals = 8} = config || {}
 
@@ -25,7 +28,9 @@ export const formatNumber = (data: Maybe<Meta>, config?: FormatNumberConfig) => 
     return data
   }
 
-  return format(`${thousandth ? ',' : ''}.${decimals}~${percentage ? '%' : 'f'}`)(number)
+  return format(
+    `${thousandth ? ',' : ''}.${decimals}~${percentage ? '%' : 'f'}`
+  )(number)
 }
 
 /**
@@ -35,9 +40,17 @@ export const formatNumber = (data: Maybe<Meta>, config?: FormatNumberConfig) => 
  * @return
  * Return controlled string.
  */
-export const overflowControl = (data: Maybe<Meta>, config: OverflowControlConfig) => {
+export const overflowControl = (
+  data: Maybe<Meta>,
+  config: OverflowControlConfig
+) => {
   const text = String(data ?? '')
-  const {omit = true, width = Infinity, height = Infinity, fontSize = 12} = config
+  const {
+    omit = true,
+    width = Infinity,
+    height = Infinity,
+    fontSize = 12,
+  } = config
 
   if (fontSize > height) {
     return ''

@@ -11,7 +11,12 @@ import {
   TextDrawerProps,
 } from '../../types'
 import {LayerBase} from '../base'
-import {createScale, createStyle, createText, validateAndCreateData} from '../helpers'
+import {
+  createScale,
+  createStyle,
+  createText,
+  validateAndCreateData,
+} from '../helpers'
 
 type Key = 'block' | 'background' | 'text'
 
@@ -21,7 +26,8 @@ type GeoFeature = {
   geometry: GeoGeometryObjects
 }
 
-const getGeoJSON = (adcode: Meta) => `http://cdn.dtwave.com/waveview/geojson/${adcode}.json`
+const getGeoJSON = (adcode: Meta) =>
+  `http://cdn.dtwave.com/waveview/geojson/${adcode}.json`
 
 const defaultStyle: LayerBasemapStyle = {
   block: {
@@ -178,7 +184,10 @@ export class LayerBasemap extends LayerBase<Key> {
           this.setData(
             new DataBase({
               type: 'FeatureCollection',
-              features: list.reduce<GeoFeature[]>((prev, cur) => [...prev, ...cur.features], []),
+              features: list.reduce<GeoFeature[]>(
+                (prev, cur) => [...prev, ...cur.features],
+                []
+              ),
             })
           )
           this.update()

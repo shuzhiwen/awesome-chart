@@ -64,28 +64,34 @@ export class DataRelation extends DataBase<RawRelation> {
 
     if (!nodeData[0].includes('value') && edgeData[0].includes('value')) {
       this.nodes.forEach((node) => {
-        const from = this.edges.filter(({from}) => from === node.id).map(({value}) => value)
-        const to = this.edges.filter(({to}) => to === node.id).map(({value}) => value)
-        node.value = Number(formatNumber(max([sum(from), sum(to)])!))
+        const from = this.edges
+          .filter(({from}) => from === node.id)
+          .map(({value}) => value)
+        const to = this.edges
+          .filter(({to}) => to === node.id)
+          .map(({value}) => value)
+        node.value = Number(formatNumber(max([sum(from), sum(to)])))
       })
     }
 
     if (!nodeData[0].includes('level')) {
       this.computeLevel()
     } else {
-      this._data.roots = this.nodes.filter(({level}) => level === 0).map(({id}) => id)
+      this._data.roots = this.nodes
+        .filter(({level}) => level === 0)
+        .map(({id}) => id)
     }
   }
 
   private computeLevel() {
-    const level: Record<string, number> = {},
-      completed: Record<string, boolean> = {}
+    const level: Record<string, number> = {}
+    const completed: Record<string, boolean> = {}
 
     this.nodes.forEach(({id}) => (completed[id] = false))
     this.nodes.forEach(({id}) => (level[id] = -1))
 
     const generateLink = (id: Meta) => {
-      const current = this.getNode(id)!,
+      const current = this.getNode(id),
         prevIds = this.edges.filter(({to}) => to === id).map(({from}) => from),
         parents = prevIds.map((prevId) => this.getNode(prevId)!)
 
@@ -113,7 +119,9 @@ export class DataRelation extends DataBase<RawRelation> {
             level[nextId] = level[id] + 1
           } else if (level[nextId] - level[id] !== 1) {
             // backtracking and rebuilding hierarchies
-            parents.map((prevId) => (level[prevId] += level[nextId] - level[id] - 1))
+            parents.map(
+              (prevId) => (level[prevId] += level[nextId] - level[id] - 1)
+            )
           }
           generateLevel(nextId, parents)
         })
@@ -121,7 +129,9 @@ export class DataRelation extends DataBase<RawRelation> {
 
     this.edges.forEach(({to}) => generateLink(to))
     this.roots.forEach((root) => generateLevel(root, []))
-    this.nodes.map((node) => (node.level = level[node.id] === -1 ? 0 : level[node.id]))
+    this.nodes.map(
+      (node) => (node.level = level[node.id] === -1 ? 0 : level[node.id])
+    )
     this.nodes.forEach(({parents, children}, i) => {
       this.nodes[i].parents = Array.from(new Set(parents))
       this.nodes[i].children = Array.from(new Set(children))

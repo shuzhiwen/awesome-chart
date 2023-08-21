@@ -63,11 +63,18 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
 
     groupedQueue.reduce((previousAnimations, currentAnimations, priority) => {
       currentAnimations.forEach((animation) => {
-        const [startState, processState, endState] = ['start', 'process', 'end'].map(
-          (state: string) => ({id: animation.options.id, priority, state})
+        const states = ['start', 'process', 'end']
+        const [startState, processState, endState] = states.map(
+          (state: string) => ({
+            id: animation.options.id,
+            priority,
+            state,
+          })
         )
 
-        animation.event.onWithOff('start', eventKey, () => this.process(startState))
+        animation.event.onWithOff('start', eventKey, () =>
+          this.process(startState)
+        )
         animation.event.onWithOff('end', eventKey, () => this.process(endState))
         animation.event.onWithOff('process', eventKey, (data) =>
           this.process({...processState, data})

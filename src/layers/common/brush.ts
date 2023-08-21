@@ -1,5 +1,10 @@
 import {BrushBehavior, brushX, brushY, D3BrushEvent} from 'd3'
-import {LayerAxisScale, LayerBrushStyle, LayerOptions, LayerStyle} from '../../types'
+import {
+  LayerAxisScale,
+  LayerBrushStyle,
+  LayerOptions,
+  LayerStyle,
+} from '../../types'
 import {addStyle, isSC, transformAttr} from '../../utils'
 import {LayerBase} from '../base'
 import {createScale, createStyle} from '../helpers'
@@ -90,7 +95,10 @@ export class LayerBrush extends LayerBase<never> {
       .join('g')
       .attr('class', 'chart-brush')
       .call(this.brush as any)
-      .call(this.brush.move as any, direction === 'horizontal' ? [x1, x2] : [y1, y2])
+      .call(
+        this.brush.move as any,
+        direction === 'horizontal' ? [x1, x2] : [y1, y2]
+      )
 
     if (this.scale.scaleColor && targets?.includes('scaleColor')) {
       const backgroundColor = createGradient({
@@ -125,13 +133,18 @@ export class LayerBrush extends LayerBase<never> {
       {direction, targets, handleZoom} = this.style,
       total = direction === 'horizontal' ? width : height,
       selection = (event.selection ?? [0, total]) as Vec2,
-      zoomFactor = total / Math.max(selection[1] - selection[0], Number.MIN_VALUE)
+      zoomFactor =
+        total / Math.max(selection[1] - selection[0], Number.MIN_VALUE)
 
     Object.entries(this.scale).forEach(([name, scale]) => {
       if (!targets?.includes(name) || !scale) return
       if (!this.originScaleRangeMap.has(name)) {
         if (name === 'scaleColor') {
-          this.originScaleRangeMap.set(name, [0, scale.range().length - 1, scale.range()])
+          this.originScaleRangeMap.set(name, [
+            0,
+            scale.range().length - 1,
+            scale.range(),
+          ])
         } else {
           this.originScaleRangeMap.set(name, scale.range())
         }
@@ -139,14 +152,22 @@ export class LayerBrush extends LayerBase<never> {
 
       const [start, end, colors] = this.originScaleRangeMap.get(name) ?? [0, 0],
         relativeEnd = start + (end - start) * zoomFactor,
-        offsetFactor = (selection[0] - (direction === 'horizontal' ? left : top)) / total,
+        offsetFactor =
+          (selection[0] - (direction === 'horizontal' ? left : top)) / total,
         offset = offsetFactor * (relativeEnd - start)
 
       if (name === 'scaleColor') {
         const offset = offsetFactor * (end - start),
-          relativeColorEnd = start + (end - start) / zoomFactor - Number.MIN_VALUE,
-          hasColor = (i: number) => i >= start + offset && i <= relativeColorEnd + offset
-        scale.range(colors.map((color: string, i: number) => (hasColor(i) ? color : '#ffffff00')))
+          relativeColorEnd =
+            start + (end - start) / zoomFactor - Number.MIN_VALUE,
+          hasColor = (i: number) =>
+            i >= start + offset && i <= relativeColorEnd + offset
+
+        scale.range(
+          colors.map((color: string, i: number) =>
+            hasColor(i) ? color : '#ffffff00'
+          )
+        )
       } else {
         scale.range([start - offset, relativeEnd - offset])
       }
@@ -155,13 +176,28 @@ export class LayerBrush extends LayerBase<never> {
     rebuildScale({trigger: this, redraw: true})
 
     if (isSC(this.root)) {
-      addStyle(this.root.selectAll('.overlay'), transformAttr(this.style.background ?? {}))
-      addStyle(this.root.selectAll('.selection'), transformAttr(this.style.selection ?? {}))
-      addStyle(this.root.selectAll('.handle--w'), transformAttr(this.style.leftHandle ?? {}))
-      addStyle(this.root.selectAll('.handle--e'), transformAttr(this.style.rightHandle ?? {}))
+      addStyle(
+        this.root.selectAll('.overlay'),
+        transformAttr(this.style.background ?? {})
+      )
+      addStyle(
+        this.root.selectAll('.selection'),
+        transformAttr(this.style.selection ?? {})
+      )
+      addStyle(
+        this.root.selectAll('.handle--w'),
+        transformAttr(this.style.leftHandle ?? {})
+      )
+      addStyle(
+        this.root.selectAll('.handle--e'),
+        transformAttr(this.style.rightHandle ?? {})
+      )
 
       const selection = this.root.selectAll('.selection'),
-        handles = [this.root.selectAll('.handle--w'), this.root.selectAll('.handle--e')]
+        handles = [
+          this.root.selectAll('.handle--w'),
+          this.root.selectAll('.handle--e'),
+        ]
 
       handles.forEach((handle) => {
         const [x, y, width, height] = [
@@ -171,7 +207,10 @@ export class LayerBrush extends LayerBase<never> {
           Number(handle.attr('height')),
         ]
         handle.attr('transform-origin', `${x + width / 2} ${y + height / 2}`)
-        handle.attr('stroke-width', Number(handle.attr('stroke-width')) / handleZoom)
+        handle.attr(
+          'stroke-width',
+          Number(handle.attr('stroke-width')) / handleZoom
+        )
         handle.attr('transform', `scale(${handleZoom})`)
       })
 

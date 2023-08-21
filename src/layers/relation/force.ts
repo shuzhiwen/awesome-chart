@@ -12,7 +12,12 @@ import {
   TextDrawerProps,
 } from '../../types'
 import {LayerBase} from '../base'
-import {createColorMatrix, createStyle, createText, validateAndCreateData} from '../helpers'
+import {
+  createColorMatrix,
+  createStyle,
+  createText,
+  validateAndCreateData,
+} from '../helpers'
 
 type Key = 'node' | 'text'
 
@@ -25,7 +30,9 @@ export class LayerForce extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private simulation: Maybe<Simulation<ArrayItem<LayerForce['nodeData']>, undefined>>
+  private simulation: Maybe<
+    Simulation<ArrayItem<LayerForce['nodeData']>, undefined>
+  >
 
   private textData: DrawerData<TextDrawerProps>[] = []
 
@@ -91,8 +98,14 @@ export class LayerForce extends LayerBase<Key> {
 
     this.nodeData = rawTableList.map(([label, value], i) => ({
       meta: {[label]: value},
-      x: Math.random() > 0.5 ? containerWidth + Math.random() * width : -Math.random() * width,
-      y: Math.random() > 0.5 ? containerHeight + Math.random() * height : -Math.random() * height,
+      x:
+        Math.random() > 0.5
+          ? containerWidth + Math.random() * width
+          : -Math.random() * width,
+      y:
+        Math.random() > 0.5
+          ? containerHeight + Math.random() * height
+          : -Math.random() * height,
       r: scaleNodeSize(value as number),
       color: colorMatrix.get(0, i),
       label,

@@ -91,28 +91,43 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '分组折线',
-          schema: base(line({mode: 'default', hasArea: false, curveType: 'curveLinear'})),
+          schema: base(
+            line({mode: 'default', hasArea: false, curveType: 'curveLinear'})
+          ),
         },
         {
           name: '堆叠折线',
-          schema: base(line({mode: 'stack', hasArea: false, curveType: 'curveLinear'})),
+          schema: base(
+            line({mode: 'stack', hasArea: false, curveType: 'curveLinear'})
+          ),
         },
         {
           name: '分组面积',
-          schema: base(line({mode: 'default', hasArea: true, curveType: 'curveMonotoneX'})),
+          schema: base(
+            line({mode: 'default', hasArea: true, curveType: 'curveMonotoneX'})
+          ),
         },
         {
           name: '堆叠面积',
-          schema: base(line({mode: 'stack', hasArea: true, curveType: 'curveMonotoneX'})),
+          schema: base(
+            line({mode: 'stack', hasArea: true, curveType: 'curveMonotoneX'})
+          ),
         },
         {
           name: '阶梯折线',
-          schema: base(line({mode: 'stack', hasArea: false, curveType: 'curveStep'})),
+          schema: base(
+            line({mode: 'stack', hasArea: false, curveType: 'curveStep'})
+          ),
         },
         {
           name: '带标记的折线图',
           schema: base(
-            line({mode: 'default', hasArea: false, curveType: 'curveMonotoneX', hasMark: true})
+            line({
+              mode: 'default',
+              hasArea: false,
+              curveType: 'curveMonotoneX',
+              hasMark: true,
+            })
           ),
         },
       ],
@@ -142,11 +157,14 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '带轴交互的柱状图',
-          schema: base(rect({variant: 'column', mode: 'group', hasInteractive: true}), {
-            tooltipOptions: {
-              mode: 'dimension',
-            },
-          }),
+          schema: base(
+            rect({variant: 'column', mode: 'group', hasInteractive: true}),
+            {
+              tooltipOptions: {
+                mode: 'dimension',
+              },
+            }
+          ),
         },
         {
           name: '折线柱状图',
@@ -192,13 +210,18 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础饼图',
-          schema: base(pie({variant: 'pie', innerRadius: 0}), {padding: [30, 80, 30, 30]}),
+          schema: base(pie({variant: 'pie', innerRadius: 0}), {
+            padding: [30, 80, 30, 30],
+          }),
         },
         {
           name: '基础环图',
-          schema: base(pie({variant: 'pie', innerRadius: 30, hasGuideLine: true}), {
-            padding: [30, 80, 30, 30],
-          }),
+          schema: base(
+            pie({variant: 'pie', innerRadius: 30, hasGuideLine: true}),
+            {
+              padding: [30, 80, 30, 30],
+            }
+          ),
         },
         {
           name: '南丁格尔玫瑰',
@@ -208,9 +231,12 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '堆叠南丁格尔玫瑰',
-          schema: base(pie({variant: 'nightingaleRose', innerRadius: 10, stack: true}), {
-            padding: [30, 80, 30, 30],
-          }),
+          schema: base(
+            pie({variant: 'nightingaleRose', innerRadius: 10, stack: true}),
+            {
+              padding: [30, 80, 30, 30],
+            }
+          ),
         },
       ],
     },
@@ -321,7 +347,9 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '滚动翻牌器',
-          schema: base(digitalFlop({variant: 'vertical'}), {padding: noPadding}),
+          schema: base(digitalFlop({variant: 'vertical'}), {
+            padding: noPadding,
+          }),
         },
         {
           name: '折叠翻牌器',

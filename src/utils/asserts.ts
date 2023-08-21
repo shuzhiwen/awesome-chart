@@ -57,11 +57,15 @@ export function isCC(selector: any): selector is Container {
   return selector?.constructor.name === Container.name
 }
 
-export function isLayerAxis(instance: Maybe<LayerInstance>): instance is LayerAxis {
+export function isLayerAxis(
+  instance: Maybe<LayerInstance>
+): instance is LayerAxis {
   return instance instanceof LayerAxis
 }
 
-export function isLayerLegend(instance: Maybe<LayerInstance>): instance is LayerLegend {
+export function isLayerLegend(
+  instance: Maybe<LayerInstance>
+): instance is LayerLegend {
   return instance instanceof LayerLegend
 }
 

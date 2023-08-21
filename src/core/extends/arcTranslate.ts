@@ -42,7 +42,8 @@ export function svgArcToCanvas(
     [[(x1 - x2) / 2], [(y1 - y2) / 2]]
   ).flatMap(noChange)
   const coefficient = sqrt(
-    ((rx * ry) ** 2 - (rx * y1_) ** 2 - (ry * x1_) ** 2) / ((rx * y1_) ** 2 + (ry * x1_) ** 2)
+    ((rx * ry) ** 2 - (rx * y1_) ** 2 - (ry * x1_) ** 2) /
+      ((rx * y1_) ** 2 + (ry * x1_) ** 2)
   )
   const [cx_, cy_] = [(rx * y1_) / ry, (-ry * x1_) / rx].map(
     (item) => (fA !== fS ? 1 : -1) * item * coefficient
@@ -56,9 +57,13 @@ export function svgArcToCanvas(
   ).flatMap((item, i) => item[0] + (i === 0 ? (x1 + x2) / 2 : (y1 + y2) / 2))
   const θ1 = computeAngle([1, 0], [(x1_ - cx_) / rx, (y1_ - cy_) / ry])
   const Δθ_ =
-    computeAngle([(x1_ - cx_) / rx, (y1_ - cy_) / ry], [(-x1_ - cx_) / rx, (-y1_ - cy_) / ry]) %
+    computeAngle(
+      [(x1_ - cx_) / rx, (y1_ - cy_) / ry],
+      [(-x1_ - cx_) / rx, (-y1_ - cy_) / ry]
+    ) %
     (PI * 2)
-  const Δθ = Δθ_ + (fS === 0 && Δθ_ > 0 ? -PI * 2 : fS === 1 && Δθ_ < 0 ? PI * 2 : 0)
+  const Δθ =
+    Δθ_ + (fS === 0 && Δθ_ > 0 ? -PI * 2 : fS === 1 && Δθ_ < 0 ? PI * 2 : 0)
 
   return [cx, cy, (rx + ry) / 2, θ1, θ1 + Δθ, !fS] as const
 }

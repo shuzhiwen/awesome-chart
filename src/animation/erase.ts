@@ -22,7 +22,9 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
   }
 
   get isHorizontal() {
-    return this.options.direction === 'left' || this.options.direction === 'right'
+    return (
+      this.options.direction === 'left' || this.options.direction === 'right'
+    )
   }
 
   updateClipPath(mask: Graphics, b: Box) {

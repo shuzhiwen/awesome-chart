@@ -2,7 +2,8 @@ import {Chart, DataTableList, randomTableList} from '../../src'
 import {LayerType} from '../../src/types'
 
 const debugTableListLayer =
-  (type: Extract<LayerType, 'arc' | 'rect' | 'line' | 'radial'>) => (chart: Chart) => {
+  (type: Extract<LayerType, 'arc' | 'rect' | 'line' | 'radial'>) =>
+  (chart: Chart) => {
     const data = randomTableList({
         mode: 'normal',
         mu: 1000,

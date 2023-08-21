@@ -55,7 +55,12 @@ export default ({
       style: {
         mode,
         variant,
-        labelPosition: mode === 'group' ? (variant === 'column' ? 'top' : 'right') : 'center',
+        labelPosition:
+          mode === 'group'
+            ? variant === 'column'
+              ? 'top'
+              : 'right'
+            : 'center',
         background: {
           fill: 'gray',
           fillOpacity: 0.3,

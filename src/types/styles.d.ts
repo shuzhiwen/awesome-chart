@@ -24,7 +24,9 @@ type GraphStyle = Partial<{
 type TextStyle = GraphStyle &
   Partial<{
     writingMode: 'horizontal-tb' | 'vertical-rl'
-    textDecoration: MaybeGroup<'line-through' | 'overline' | 'underline' | 'none'>
+    textDecoration: MaybeGroup<
+      'line-through' | 'overline' | 'underline' | 'none'
+    >
     fontFamily: MaybeGroup<string>
     fontWeight: MaybeGroup<string>
     fontSize: MaybeGroup<number>
