@@ -116,14 +116,11 @@ export abstract class LayerBase<Key extends string> {
     this.options = options
     this.sublayers = sublayers || []
     this.interactive = interactive || []
+    this.root = selector.createGroup(this.options.root, this.className)
     this.cacheData = fromEntries(this.sublayers.map((key) => [key, {data: []}]))
     this.cacheAnimation = {animations: {}, options: {}, timer: {}}
     this.cacheEvent = this.initializeEvent()
     this.initializeLifeCycles()
-    this.root = selector.createGroup(
-      this.options.root as DrawerTarget,
-      this.className
-    )
   }
 
   private initializeEvent(): CacheLayerEvent<Key> {

@@ -16,9 +16,8 @@ const mapping = {
   poisson: ({lambda = 1}: RandomNumberOptions) => randomPoisson(lambda),
 }
 
-const toFixed = (number: number, decimals: number) => {
-  return Math.round(number / 10 ** -decimals) / 10 ** decimals
-}
+const toFixed = (number: number, decimals: number) =>
+  Math.round(number / 10 ** -decimals) / 10 ** decimals
 
 const createNumberGenerator = (options: RandomNumberOptions) => () =>
   toFixed(mapping[options.mode](options)(), options.decimals || 0)
@@ -95,7 +94,7 @@ export function uuid(
   length = 16,
   collection = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz'
 ) {
-  let string = ''
-  for (let i = 0; i < length; i++) string += sample(collection)
-  return string
+  return range(0, length)
+    .map(() => sample(collection))
+    .join('')
 }

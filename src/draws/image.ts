@@ -119,16 +119,15 @@ export function transformToImage<T extends ElConfig>(
     position = {x: offset[0], y: offset[1]}
 
   if (from === 'ellipse') {
-    const {cx, cy} = data as unknown as DrawerData<EllipseDrawerProps>
+    const {cx, cy} = data as DrawerData<EllipseDrawerProps>
     position.x += cx - size[0] / 2
     position.y += cy - size[1] / 2
   } else if (from === 'rect') {
-    const {x, y, width, height} = data as unknown as DrawerData<RectDrawerProps>
+    const {x, y, width, height} = data as DrawerData<RectDrawerProps>
     position.x += x + (width - size[0]) / 2
     position.y += y + (height - size[1]) / 2
   } else if (from === 'text') {
-    const {x, y, textWidth, textHeight} =
-      data as unknown as DrawerData<TextDrawerProps>
+    const {x, y, textWidth, textHeight} = data as DrawerData<TextDrawerProps>
     position.x += x + (textWidth - size[0]) / 2
     position.y += y - (textHeight + size[1]) / 2
   }

@@ -129,8 +129,8 @@ export class LayerRect extends LayerBase<Key> {
     let colorMatrix: ColorMatrix
 
     if (variant === 'column') {
-      const scaleX = this.scale.scaleX as ScaleBand,
-        scaleY = this.scale.scaleY as ScaleLinear
+      const scaleX = this.scale.scaleX as ScaleBand
+      const scaleY = this.scale.scaleY as ScaleLinear
 
       this.rectData = rawTableList.map(([dimension, ...values]) =>
         values.map((value, i) => ({
@@ -152,8 +152,8 @@ export class LayerRect extends LayerBase<Key> {
         height: layout.height,
       }))
     } else {
-      const scaleX = this.scale.scaleX as ScaleLinear,
-        scaleY = this.scale.scaleY as ScaleBand
+      const scaleX = this.scale.scaleX as ScaleLinear
+      const scaleY = this.scale.scaleY as ScaleBand
 
       this.rectData = rawTableList.map(([dimension, ...values]) =>
         values.map((value, i) => ({

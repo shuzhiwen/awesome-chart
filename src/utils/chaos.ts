@@ -214,9 +214,7 @@ export function createClassRegister<K extends string, V, P>(
  * Attach strong type resolution to native methods.
  * @see Object.fromEntries
  */
-export function fromEntries<Key extends string, Value>(
-  entries: [Key, Value][]
-) {
+export function fromEntries<Key extends Meta, Value>(entries: [Key, Value][]) {
   return Object.fromEntries(entries) as Record<Key, Value>
 }
 

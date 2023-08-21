@@ -1,7 +1,7 @@
 import {select} from 'd3'
 import {isNil, noop} from 'lodash'
 import {Application, Container} from 'pixi.js'
-import {LayerAxis, LayerDict, LayerLegend} from '../layers'
+import {LayerDict} from '../layers'
 import {defaultLayoutCreator} from '../layout'
 import {
   ChartContext,
@@ -163,6 +163,7 @@ export class Chart {
         height: this.containerHeight,
         backgroundAlpha: 0,
         autoDensity: true,
+        eventMode: 'static',
       })
       this.root = app.stage
       this.root.getApp = () => app
@@ -298,8 +299,8 @@ export class Chart {
    * This function is responsible for integrating the scales of all layers.
    */
   rebuildScale({trigger, redraw}: RebuildScaleProps) {
-    const axisLayer = this.getLayerByType('axis') as Maybe<LayerAxis>,
-      legendLayer = this.getLayerByType('legend') as Maybe<LayerLegend>,
+    const axisLayer = this.getLayerByType('axis'),
+      legendLayer = this.getLayerByType('legend'),
       layers = this.independentLayers.concat(this.getLayersByType('brush'))
 
     if (!axisLayer) {

@@ -42,7 +42,7 @@ function createLayer(
   isLayerAxis(layer) && layer.setScale({nice: scale})
   !isLayerLegend(layer) && layer.setData(dataSet)
   Object.entries(event ?? {}).forEach(([name, fn]) => {
-    layer.event.on(name as any, 'user', fn)
+    layer.event.on(name as never, 'user', fn)
   })
 
   return layer
