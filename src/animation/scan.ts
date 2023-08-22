@@ -1,11 +1,13 @@
 import anime, {AnimeParams} from 'animejs'
 import {select} from 'd3'
 import {Container, Graphics, Texture} from 'pixi.js'
-import {AnimationScanOptions, Box, D3Selection} from '../types'
-import {createLinearGradients, isCC, isSC} from '../utils'
+import {AnimationProps, AnimationScanOptions, Box, D3Selection} from '../types'
+import {createLinearGradients, isCC, isSC, uuid} from '../utils'
 import {AnimationBase} from './base'
 
 export class AnimationScan extends AnimationBase<AnimationScanOptions> {
+  private key = uuid()
+
   private box: Maybe<Box>
 
   private defs: Maybe<D3Selection | Texture[]>
@@ -14,7 +16,7 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
 
   private gradient: Maybe<D3Selection | Texture>
 
-  constructor(options: AnimationScanOptions) {
+  constructor(options: AnimationProps<'scan'>) {
     super(options)
     if (isCC(this.options.context)) {
       this.box = this.canvasRoot.getBounds()
@@ -47,7 +49,7 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
       container: this.defs,
       schema: [
         {
-          id: `scan-gradient-${this.id}`,
+          id: `scan-gradient-${this.key}`,
           stops: this.stops,
           ...(isSC(context) && {
             [this.isHorizontal ? 'x1' : 'y1']: '-100%',
@@ -65,8 +67,10 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
     })
 
     this.gradient = isSC(this.defs)
-      ? this.defs.select(`#scan-gradient-${this.id}`)
-      : this.defs.find((item) => item.gradientId === `scan-gradient-${this.id}`)
+      ? this.defs.select(`#scan-gradient-${this.key}`)
+      : this.defs.find(
+          (item) => item.gradientId === `scan-gradient-${this.key}`
+        )
   }
 
   private cloneMaskNode(node: HTMLElement) {
@@ -88,12 +92,12 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
         .attr('y', 0)
         .attr('width', '100%')
         .attr('height', '100%')
-        .attr('mask', `url(#scan-mask-${this.id})`)
-        .attr('fill', `url(#scan-gradient-${this.id})`)
+        .attr('mask', `url(#scan-mask-${this.key})`)
+        .attr('fill', `url(#scan-gradient-${this.key})`)
         .style('pointer-events', 'none')
       this.defs
         .append('mask')
-        .attr('id', `scan-mask-${this.id}`)
+        .attr('id', `scan-mask-${this.key}`)
         .call((selector) => {
           targets.nodes().forEach((item) => {
             selector.node()?.appendChild(this.cloneMaskNode(item))

@@ -111,6 +111,7 @@ export class LayerODLine extends LayerBase<Key> {
       this.setAnimation({
         flyingObject: {
           loop: {
+            type: 'path',
             path: elClass('odLine'),
             ...this.options.theme.animation.loop,
           },

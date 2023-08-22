@@ -1,14 +1,14 @@
 import anime from 'animejs'
 import {noop} from 'lodash'
 import {Graphics} from 'pixi.js'
-import {AnimationMoveOptions} from '../types'
+import {AnimationMoveOptions, AnimationProps} from '../types'
 import {isSC} from '../utils'
 import {AnimationBase} from './base'
 
 export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
   private originPosition: Vec2[] = []
 
-  constructor(options: AnimationMoveOptions) {
+  constructor(options: AnimationProps<'move'>) {
     super(options)
   }
 

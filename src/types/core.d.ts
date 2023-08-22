@@ -1,6 +1,10 @@
 import {Chart} from '../core'
 import {getEasyGradientCreator} from '../utils'
-import {AnimationOptions, LayerAnimation} from './animation'
+import {
+  AnimationOptions,
+  BasicAnimationOptions,
+  LayerAnimation,
+} from './animation'
 import {TooltipData} from './data'
 import {ElConfig} from './draw'
 import {CacheLayerData, LayerInstance, LayerOptions, LayerType} from './layer'
@@ -88,11 +92,7 @@ type ChartTheme = Readonly<{
   animation: Record<'presets', Record<string, AnimationOptions>> &
     Record<
       'enter' | 'loop' | 'update',
-      {
-        duration: number
-        delay: number
-        easing: Easing
-      }
+      Required<Pick<BasicAnimationOptions, 'duration' | 'delay' | 'easing'>>
     >
 }>
 

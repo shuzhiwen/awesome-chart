@@ -1,10 +1,10 @@
 import anime from 'animejs'
-import {AnimationZoomOptions} from '../types'
+import {AnimationProps, AnimationZoomOptions} from '../types'
 import {isSC} from '../utils'
 import {AnimationBase} from './base'
 
 export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
-  constructor(options: AnimationZoomOptions) {
+  constructor(options: AnimationProps<'zoom'>) {
     super(options)
   }
 

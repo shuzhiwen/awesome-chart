@@ -1,15 +1,17 @@
 import anime, {AnimeParams} from 'animejs'
 import {Graphics} from 'pixi.js'
-import {AnimationEraseOptions, Box, D3Selection} from '../types'
-import {isSC} from '../utils'
+import {AnimationEraseOptions, AnimationProps, Box, D3Selection} from '../types'
+import {isSC, uuid} from '../utils'
 import {AnimationBase} from './base'
 
 export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
+  private key = uuid()
+
   private defs: Maybe<D3Selection>
 
   private mask: Maybe<Graphics>
 
-  constructor(options: AnimationEraseOptions) {
+  constructor(options: AnimationProps<'erase'>) {
     super(options)
   }
 
@@ -39,13 +41,13 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
       this.defs = context.append('defs')
       this.defs
         .append('clipPath')
-        .attr('id', `erase-${this.id}`)
+        .attr('id', `erase-${this.key}`)
         .append('rect')
         .attr('x', this.isXEnd ? '100%' : '0%')
         .attr('y', this.isYEnd ? '100%' : '0%')
         .attr('width', this.isHorizontal ? '0%' : '100%')
         .attr('height', !this.isHorizontal ? '0%' : '100%')
-      targets.attr('clip-path', `url(#erase-${this.id})`)
+      targets.attr('clip-path', `url(#erase-${this.key})`)
     } else {
       const {x, y, width, height} = this.canvasRoot.getBounds()
       this.canvasRoot.mask = this.mask = new Graphics()
@@ -76,7 +78,7 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
 
     if (isSC(context)) {
       Object.assign(configs, {
-        targets: context.selectAll(`#erase-${this.id} rect`).nodes(),
+        targets: context.selectAll(`#erase-${this.key} rect`).nodes(),
         x: [this.isXEnd ? '100%' : '0%', '0%'],
         y: [this.isYEnd ? '100%' : '0%', '0%'],
         width: [this.isHorizontal ? '0%' : '100%', '100%'],

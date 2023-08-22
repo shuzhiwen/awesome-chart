@@ -1,11 +1,11 @@
 import {max, range} from 'd3'
 import {AnimationDict} from '.'
-import {AnimationOptions, AnimationType} from '../types'
-import {safeLoop, uuid} from '../utils'
+import {AnimationOptions, AnimationProps, AnimationType} from '../types'
+import {safeLoop} from '../utils'
 import {AnimationBase} from './base'
 import {AnimationEmpty} from './empty'
 
-type Animation = AnimationBase<AnimationOptions>
+type Animation = AnimationBase<AnyObject>
 
 const bindKey = `bindKey-${new Date().getTime()}`
 const eventKey = `eventKey-${new Date().getTime()}`
@@ -24,12 +24,12 @@ const bind = (animations: Animation[], callback: AnyFunction) => {
   })
 }
 
-export class AnimationQueue extends AnimationBase<AnimationOptions> {
+export class AnimationQueue extends AnimationBase {
   readonly queue: Animation[]
 
   private isConnected = false
 
-  constructor(options: AnimationOptions) {
+  constructor(options: AnimationProps<'empty'>) {
     super(options)
     const animationHead = new AnimationEmpty({})
 
@@ -100,14 +100,16 @@ export class AnimationQueue extends AnimationBase<AnimationOptions> {
     this.isConnected = false
   }
 
-  pushAnimation(type: AnimationType, options: AnimationOptions) {
+  pushAnimation<T extends AnimationType>(options: AnimationOptions<T>) {
+    const {type} = options
+
     if (!AnimationDict[type]) {
       this.log.error('Animation type error', type)
       return
     }
 
     this.isConnected = false
-    this.queue.push(new AnimationDict[type]({id: uuid(), ...options} as never))
+    this.queue.push(new AnimationDict[type](options))
   }
 
   remove(id: string) {

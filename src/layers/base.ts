@@ -341,7 +341,7 @@ export abstract class LayerBase<Key extends string> {
       animationQueue.pushQueue(enterQueue)
       enter.forEach((item) => {
         const config = merge({targets}, animation.enter, item)
-        enterQueue.pushAnimation(config.type!, {...config, context: this.root})
+        enterQueue.pushAnimation({...config, context: this.root})
       })
     }
 
@@ -349,7 +349,7 @@ export abstract class LayerBase<Key extends string> {
       animationQueue.pushQueue(loopQueue)
       loop.forEach((item) => {
         const config = merge({targets}, animation.loop, item)
-        loopQueue.pushAnimation(config.type!, {...config, context: this.root})
+        loopQueue.pushAnimation({...config, context: this.root})
       })
     }
 

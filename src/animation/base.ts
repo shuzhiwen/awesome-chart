@@ -1,17 +1,15 @@
 import {merge, throttle} from 'lodash'
 import {animationLifeCycles} from '../core'
 import {selector} from '../layers'
-import {AnimationOptions} from '../types'
-import {createLog, EventManager, isSC, noChange, uuid} from '../utils'
+import {BasicAnimationOptions} from '../types'
+import {createLog, EventManager, isSC, noChange} from '../utils'
 
-export abstract class AnimationBase<Options extends AnimationOptions> {
+export abstract class AnimationBase<Options extends AnyObject = {}> {
   readonly log = createLog(this.constructor.name)
 
   readonly event = new EventManager<Keys<typeof animationLifeCycles>>()
 
-  readonly options
-
-  protected id = uuid()
+  readonly options: Partial<BasicAnimationOptions & Options>
 
   protected _isInitialized = false
 
@@ -58,7 +56,7 @@ export abstract class AnimationBase<Options extends AnimationOptions> {
 
   destroy(): void {}
 
-  constructor(options: Options) {
+  constructor(options: AnimationBase<Options>['options']) {
     this.options = options
     this.createTargets('targets')
 
