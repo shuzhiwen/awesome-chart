@@ -15,12 +15,12 @@ import {
 import {isSC, isScaleBand, isScaleLinear, uuid} from '../../utils'
 import {LayerBase} from '../base'
 import {
+  createData,
   createScale,
   createStyle,
   elClass,
   selector,
   stickyBandScale,
-  validateAndCreateData,
 } from '../helpers'
 import {LayerAuxiliary} from './auxiliary'
 
@@ -173,11 +173,11 @@ export class LayerInteractive extends LayerBase<Key> {
   }
 
   setData(data: LayerInteractive['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    this._data = createData('base', this.data, data)
   }
 
   setScale(scale: LayerAxisScale) {
-    this._scale = createScale({}, this.scale, scale)
+    this._scale = createScale(undefined, this.scale, scale)
     this.helperAuxiliary.map((layer) => layer.setScale(this.scale))
   }
 
@@ -301,8 +301,8 @@ export class LayerInteractive extends LayerBase<Key> {
         }
 
         if (isSC(this.root)) {
-          this.root
-            .selectAll(`.${elClass('interactive')}`)
+          selector
+            .getChildren(this.root, elClass('interactive'))
             .each((d, i, els) => {
               if (getKey(d as ElConfig).match(getKey(data))) {
                 select(els[i]).attr('opacity', shadowOpacity)
@@ -323,7 +323,9 @@ export class LayerInteractive extends LayerBase<Key> {
     )
     this.event.onWithOff('mouseout-interactive', EVENT_KEY, () => {
       if (isSC(this.root)) {
-        this.root.selectAll(`.${elClass('interactive')}`).attr('opacity', 0)
+        selector
+          .getChildren(this.root, elClass('interactive'))
+          .attr('opacity', 0)
       } else {
         selector
           .getChildren(this.root, elClass('interactive'))

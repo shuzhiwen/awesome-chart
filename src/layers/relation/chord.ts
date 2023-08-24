@@ -12,9 +12,9 @@ import {
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createRotatedArcText,
   createStyle,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'node' | 'edge' | 'text'
@@ -62,7 +62,7 @@ export class LayerChord extends LayerBase<Key> {
   }
 
   setData(data: LayerChord['data']) {
-    this._data = validateAndCreateData('table', this.data, data)
+    this._data = createData('table', this.data, data)
   }
 
   setStyle(style: LayerStyle<LayerChordStyle>) {

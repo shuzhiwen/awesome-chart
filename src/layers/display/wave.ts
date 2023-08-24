@@ -14,9 +14,9 @@ import {createSinusoidal, isSC} from '../../utils'
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'area' | 'background' | 'text'
@@ -95,7 +95,7 @@ export class LayerWave extends LayerBase<Key> {
   }
 
   setData(data: LayerWave['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    this._data = createData('base', this.data, data)
   }
 
   setStyle(style: LayerStyle<LayerWaveStyle>) {

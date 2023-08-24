@@ -17,10 +17,10 @@ import {errorCatcher, isRealNumber} from '../../utils'
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createScale,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'arc' | 'guideLine' | 'text'
@@ -38,8 +38,6 @@ const defaultStyle: LayerArcStyle = {
 
 export class LayerArc extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
-
-  private needRescale = false
 
   private _data: Maybe<DataTableList>
 
@@ -83,27 +81,25 @@ export class LayerArc extends LayerBase<Key> {
   setData(data: LayerArc['data']) {
     const {variant} = this.style
 
-    this.needRescale = true
-    this._data = validateAndCreateData('tableList', this.data, data, (data) => {
+    this._data = createData('tableList', this.data, data, (data) => {
       if (variant === 'pie') {
         return data?.select(data.headers.slice(0, 2)) ?? null
       }
     })
+
+    this.createScale()
   }
 
   setScale(scale: LayerArcScale) {
     this._scale = createScale(undefined, this.scale, scale)
-    this.needRescale = false
   }
 
   setStyle(style: LayerStyle<LayerArcStyle>) {
     this._style = createStyle(this.options, defaultStyle, this.style, style)
-    this.needRescale = true
+    this.createScale()
   }
 
   update() {
-    this.needRescale && this.createScale()
-
     if (!this.data || !this.scale) {
       throw new Error('Invalid data or scale')
     }
@@ -246,8 +242,6 @@ export class LayerArc extends LayerBase<Key> {
 
   private createScale() {
     if (!this.data) return
-
-    this.needRescale = false
 
     const {layout} = this.options,
       {width, height} = layout,

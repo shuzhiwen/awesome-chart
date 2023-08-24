@@ -64,7 +64,7 @@ export class LayerBrush extends LayerBase<never> {
   }
 
   setScale(scale: LayerAxisScale) {
-    this._scale = createScale({}, this.scale, scale)
+    this._scale = createScale(undefined, this.scale, scale)
   }
 
   setStyle(style: LayerStyle<LayerBrushStyle>) {

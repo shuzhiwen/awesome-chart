@@ -9,7 +9,7 @@ import {
 } from '../../types'
 import {group, isRealNumber, tableListToObjects} from '../../utils'
 import {LayerBase} from '../base'
-import {createScale, createStyle, validateAndCreateData} from '../helpers'
+import {createData, createScale, createStyle} from '../helpers'
 
 type DataKey = 'x' | 'y' | 'value'
 
@@ -48,7 +48,7 @@ export class LayerHeatmap extends LayerBase<'heatZone'> {
   }
 
   setData(data: LayerHeatmap['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data)
+    this._data = createData('tableList', this.data, data)
   }
 
   setScale(scale: LayerHeatmapScale) {

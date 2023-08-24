@@ -10,7 +10,7 @@ import {
 } from '../../types'
 import {bindEventManager, uuid} from '../../utils'
 import {LayerBase} from '../base'
-import {createScale, createStyle, validateAndCreateData} from '../helpers'
+import {createData, createScale, createStyle} from '../helpers'
 import {LayerRect} from '../normal'
 
 type Key = 'rect' | 'text'
@@ -86,7 +86,7 @@ export class LayerCandle extends LayerBase<Key> {
   }
 
   setData(data: LayerCandle['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data, (data) => {
+    this._data = createData('tableList', this.data, data, (data) => {
       if (!data) return
 
       const {headers} = data
@@ -119,6 +119,9 @@ export class LayerCandle extends LayerBase<Key> {
 
     this.rectLayer.setStyle(merge({rect: {fill: colors}}, rect))
     this.lineLayer.setStyle(merge({rect: {fill: colors}}, line))
+    // setStyle will reset scales
+    this.rectLayer.setScale(this.scale)
+    this.lineLayer.setScale(this.scale)
 
     this.rectLayer.update()
     this.lineLayer.update()

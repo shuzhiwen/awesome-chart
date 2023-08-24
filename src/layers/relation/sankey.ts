@@ -15,9 +15,9 @@ import {getAttr, noChange} from '../../utils'
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'node' | 'edge' | 'text'
@@ -71,7 +71,7 @@ export class LayerSankey extends LayerBase<Key> {
   }
 
   setData(data: LayerSankey['data']) {
-    this._data = validateAndCreateData('relation', this.data, data)
+    this._data = createData('relation', this.data, data)
   }
 
   setStyle(style: LayerStyle<LayerSankeyStyle>) {

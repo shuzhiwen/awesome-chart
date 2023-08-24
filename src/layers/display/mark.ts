@@ -12,10 +12,10 @@ import {createDroplet, isScaleBand, tableListToObjects} from '../../utils'
 import {LayerBase} from '../base'
 import {
   checkColumns,
+  createData,
   createScale,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'mark' | 'text'
@@ -61,7 +61,7 @@ export class LayerMark extends LayerBase<Key> {
   }
 
   setData(data: LayerMark['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data)
+    this._data = createData('tableList', this.data, data)
     checkColumns(this.data, ['x', 'y'])
   }
 

@@ -215,7 +215,7 @@ export abstract class LayerBase<Key extends string> {
   setStyle(_: Maybe<LayerStyle<AnyObject>>) {}
 
   /**
-   * Set the animation of the layer and generate the corresponding animation queue.
+   * Set the animation of the layer and generate animation queues.
    * Calling this method will cause the animation in progress to stop.
    */
   setAnimation(
@@ -245,9 +245,8 @@ export abstract class LayerBase<Key extends string> {
    * Specifies the sublayer to show/hide, undefined means the entire layer.
    */
   setVisible(visible: boolean, sublayer?: Key) {
-    const className = `${this.className}-${sublayer}`
     const target = sublayer
-      ? selector.getDirectChild(this.root, className)
+      ? selector.getDirectChild(this.root, `${this.className}-${sublayer}`)
       : this.root
     selector.setVisible(target, visible)
   }
@@ -262,8 +261,8 @@ export abstract class LayerBase<Key extends string> {
    */
   private bindEvent(sublayer: Key) {
     if (isSC(this.root)) {
-      const els = this.root
-        .selectAll(`.${elClass(sublayer)}`)
+      const els = selector
+        .getChildren(this.root, elClass(sublayer))
         .style('cursor', 'pointer')
 
       commonEvents.forEach((type) => {

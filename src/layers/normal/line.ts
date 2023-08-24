@@ -16,10 +16,10 @@ import {errorCatcher, isRealNumber} from '../../utils'
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createScale,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'text' | 'curve' | 'point' | 'area'
@@ -87,7 +87,7 @@ export class LayerLine extends LayerBase<Key> {
   }
 
   setData(data: LayerLine['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data)
+    this._data = createData('tableList', this.data, data)
     this.createScale()
   }
 
@@ -97,6 +97,7 @@ export class LayerLine extends LayerBase<Key> {
 
   setStyle(style: LayerStyle<LayerLineStyle>) {
     this._style = createStyle(this.options, defaultStyle, this.style, style)
+    this.createScale()
   }
 
   update() {

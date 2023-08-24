@@ -13,10 +13,11 @@ import {isRealNumber, isSC, tableListToObjects} from '../../utils'
 import {LayerBase} from '../base'
 import {
   checkColumns,
+  createData,
   createScale,
   createStyle,
   elClass,
-  validateAndCreateData,
+  selector,
 } from '../helpers'
 
 type Key = 'odLine' | 'flyingObject' | 'text'
@@ -69,7 +70,7 @@ export class LayerODLine extends LayerBase<Key> {
   }
 
   setData(data: LayerODLine['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data)
+    this._data = createData('tableList', this.data, data)
     checkColumns(this.data, ['fromX', 'fromY', 'toX', 'toY'])
   }
 
@@ -173,8 +174,8 @@ export class LayerODLine extends LayerBase<Key> {
       EVENT_KEY,
       () => {
         if (isSC(this.root) && this.odLineData.some(({path}) => path)) {
-          this.root
-            .selectAll(`${elClass('flyingObject')}`)
+          selector
+            .getChildren(this.root, elClass('flyingObject'))
             .transition()
             .duration(this.options.theme.animation.enter.duration)
             .attr('opacity', 1)

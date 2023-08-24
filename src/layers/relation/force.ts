@@ -14,9 +14,9 @@ import {
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'node' | 'text'
@@ -69,7 +69,7 @@ export class LayerForce extends LayerBase<Key> {
   }
 
   setData(data: LayerForce['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data)
+    this._data = createData('tableList', this.data, data)
   }
 
   setStyle(style: LayerStyle<LayerForceStyle>) {

@@ -15,10 +15,10 @@ import {LayerBase} from '../base'
 import {
   checkColumns,
   createColorMatrix,
+  createData,
   createScale,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'point' | 'text'
@@ -64,7 +64,7 @@ export class LayerScatter extends LayerBase<Key> {
   }
 
   setData(data: LayerScatter['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data)
+    this._data = createData('tableList', this.data, data)
     this.createScale()
 
     checkColumns(this.data, ['x', 'y'])
@@ -76,6 +76,7 @@ export class LayerScatter extends LayerBase<Key> {
 
   setStyle(style: LayerStyle<LayerScatterStyle>) {
     this._style = createStyle(this.options, defaultStyle, this.style, style)
+    this.createScale()
   }
 
   update() {

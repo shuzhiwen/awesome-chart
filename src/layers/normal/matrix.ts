@@ -17,10 +17,10 @@ import {getMagnitude, noChange} from '../../utils'
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createScale,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'rect' | 'circle' | 'text'
@@ -75,7 +75,7 @@ export class LayerMatrix extends LayerBase<Key> {
   }
 
   setData(data: LayerMatrix['data']) {
-    this._data = validateAndCreateData('table', this.data, data)
+    this._data = createData('table', this.data, data)
     this.createScale()
   }
 
@@ -85,6 +85,7 @@ export class LayerMatrix extends LayerBase<Key> {
 
   setStyle(style: LayerStyle<LayerMatrixStyle>) {
     this._style = createStyle(this.options, defaultStyle, this.style, style)
+    this.createScale()
   }
 
   private createScale() {

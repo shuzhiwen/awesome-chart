@@ -2,23 +2,23 @@ import {hierarchy, select} from 'd3'
 import {cloneDeep, max, merge} from 'lodash'
 import React, {useEffect, useRef} from 'react'
 import {
+  addStyle,
   Chart,
+  createData,
   DataBase,
   EventManager,
-  LayerBase,
-  LayerDict,
-  addStyle,
   getAttr,
   isSC,
+  LayerBase,
+  LayerDict,
   registerCustomLayer,
   robustRange,
   transformAttr,
   uuid,
-  validateAndCreateData,
 } from '../src'
-import {BasicLayerOptions, ChartContext, D3Selection} from '../src/types'
-import s from './TabMenu.module.css'
+import {D3Selection, LayerOptions} from '../src/types'
 import {schemaMenu} from './schema'
+import s from './TabMenu.module.css'
 
 type MenuItem = {
   name: Meta
@@ -64,7 +64,7 @@ const defaultStyle: TabMenuStyleShape = {
   },
 }
 
-class LayerTabMenu extends LayerBase<BasicLayerOptions<any>, never> {
+class LayerTabMenu extends LayerBase<never> {
   readonly tabEvent = new EventManager<'click', AnyFunction>()
 
   private _data: Maybe<DataBase<MenuItem>>
@@ -85,8 +85,8 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>, never> {
     return this._style
   }
 
-  constructor(options: BasicLayerOptions<any>, context: ChartContext) {
-    super({context, options})
+  constructor(options: LayerOptions) {
+    super({options})
 
     const {left, top, width, height} = options.layout
 
@@ -111,7 +111,7 @@ class LayerTabMenu extends LayerBase<BasicLayerOptions<any>, never> {
   }
 
   setData(data: LayerTabMenu['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    this._data = createData('base', this.data, data)
 
     const tree = hierarchy(this.data?.source)
     const nodes = tree.descendants()

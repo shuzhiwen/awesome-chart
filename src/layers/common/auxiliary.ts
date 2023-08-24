@@ -14,10 +14,10 @@ import {getAttr, isScaleBand, isScaleLinear} from '../../utils'
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createScale,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'text' | 'line' | 'background'
@@ -72,7 +72,7 @@ export class LayerAuxiliary extends LayerBase<Key> {
   }
 
   setData(data: LayerAuxiliary['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data)
+    this._data = createData('tableList', this.data, data)
   }
 
   setScale(scale: LayerAuxiliaryScale) {

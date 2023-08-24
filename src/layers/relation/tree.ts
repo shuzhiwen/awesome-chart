@@ -15,10 +15,10 @@ import {robustRange} from '../../utils'
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createScale,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'node' | 'edge' | 'text'
@@ -36,8 +36,6 @@ const defaultStyle: LayerTreeStyle = {
 }
 
 export class LayerTree extends LayerBase<Key> {
-  private needRescale = false
-
   private _data: Maybe<DataRelation>
 
   private _scale: LayerTreeScale
@@ -85,8 +83,7 @@ export class LayerTree extends LayerBase<Key> {
   }
 
   setData(data: LayerTree['data']) {
-    this._data = validateAndCreateData('relation', this.data, data)
-    this.needRescale = true
+    this._data = createData('relation', this.data, data)
 
     if (!this.data) return
 
@@ -106,20 +103,19 @@ export class LayerTree extends LayerBase<Key> {
       nodes.filter(({level}) => level === value)
     )
     this.groups[0]?.forEach(dfs)
+    this.createScale()
   }
 
   setScale(scale: LayerTreeScale) {
     this._scale = createScale(undefined, this.scale, scale)
-    this.needRescale = false
   }
 
   setStyle(style: LayerStyle<LayerTreeStyle>) {
     this._style = createStyle(this.options, defaultStyle, this.style, style)
-    this.needRescale = true
+    this.createScale()
   }
 
   update() {
-    this.needRescale && this.createScale()
     this.nodeData = []
 
     if (!this.data || !this.scale) {
@@ -255,8 +251,6 @@ export class LayerTree extends LayerBase<Key> {
 
   private createScale() {
     if (!this.data) return
-
-    this.needRescale = false
 
     const {nodes} = this.data,
       {width, height} = this.options.layout,

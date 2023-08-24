@@ -11,12 +11,7 @@ import {
   TextDrawerProps,
 } from '../../types'
 import {LayerBase} from '../base'
-import {
-  createScale,
-  createStyle,
-  createText,
-  validateAndCreateData,
-} from '../helpers'
+import {createData, createScale, createStyle, createText} from '../helpers'
 
 type Key = 'block' | 'background' | 'text'
 
@@ -100,7 +95,7 @@ export class LayerBasemap extends LayerBase<Key> {
   }
 
   setData(data: LayerBasemap['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    this._data = createData('base', this.data, data)
   }
 
   setScale(scale: LayerBasemapScale) {

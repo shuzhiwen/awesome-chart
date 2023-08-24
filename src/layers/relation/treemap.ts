@@ -14,9 +14,9 @@ import {getAttr, overflowControl, uuid} from '../../utils'
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'rect' | 'text'
@@ -53,7 +53,7 @@ export class LayerTreemap extends LayerBase<Key> {
   }
 
   setData(data: LayerTreemap['data']) {
-    this._data = validateAndCreateData('relation', this.data, data)
+    this._data = createData('relation', this.data, data)
   }
 
   setStyle(style: LayerStyle<LayerTreemapStyle>) {

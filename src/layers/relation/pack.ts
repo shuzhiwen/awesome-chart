@@ -15,10 +15,10 @@ import {uuid} from '../../utils'
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createLimitText,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'circle' | 'text'
@@ -70,7 +70,7 @@ export class LayerPack extends LayerBase<Key> {
   }
 
   setData(data: LayerPack['data']) {
-    this._data = validateAndCreateData('relation', this.data, data)
+    this._data = createData('relation', this.data, data)
 
     const {nodes} = this.data!,
       {layout} = this.options,

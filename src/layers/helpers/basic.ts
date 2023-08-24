@@ -1,5 +1,4 @@
 import {isFunction, merge} from 'lodash'
-import {scaleTypes} from '../../core'
 import {DataBase, DataDict, DataTableList} from '../../data'
 import {ChartContext, DataType, LayerScale, LayerStyle} from '../../types'
 
@@ -19,20 +18,17 @@ export function createScale<Scale extends Maybe<LayerScale>>(
   currentScale: Scale,
   incomingScale?: Scale
 ) {
-  const nice = merge(
+  return {
+    ...currentScale,
+    ...defaultScale,
+    ...incomingScale,
+    nice: merge(
       {},
       defaultScale?.nice,
       currentScale?.nice,
       incomingScale?.nice
     ),
-    scales: LayerScale = {...currentScale, ...defaultScale, nice}
-
-  scaleTypes.forEach((type) => {
-    scales[type] =
-      incomingScale?.[type] || defaultScale?.[type] || currentScale?.[type]
-  })
-
-  return scales as Required<Scale>
+  }
 }
 
 /**
@@ -47,7 +43,7 @@ export function createScale<Scale extends Maybe<LayerScale>>(
  * Just a callback method.
  * @returns
  */
-export function validateAndCreateData<Data extends Maybe<DataBase<unknown>>>(
+export function createData<Data extends Maybe<DataBase<unknown>>>(
   dataType: DataType,
   currentData: Data,
   incomingData: Data,
@@ -114,5 +110,5 @@ export function checkColumns(data: Maybe<DataTableList>, keys: Meta[]) {
  * Selectable `className` for basic element.
  */
 export function elClass(sublayer: string) {
-  return `chart-basic-${sublayer}`
+  return `element-basic-${sublayer}`
 }

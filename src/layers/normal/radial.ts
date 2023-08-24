@@ -15,9 +15,9 @@ import {isRealNumber} from '../../utils'
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createScale,
   createStyle,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'text' | 'arc'
@@ -29,8 +29,6 @@ const defaultStyle: LayerRadialStyle = {
 
 export class LayerRadial extends LayerBase<Key> {
   public legendData: Maybe<LegendData>
-
-  private needRescale = false
 
   private _data: Maybe<DataTableList>
 
@@ -63,25 +61,22 @@ export class LayerRadial extends LayerBase<Key> {
   }
 
   setData(data: LayerRadial['data']) {
-    this.needRescale = true
-    this._data = validateAndCreateData('tableList', this.data, data, (data) => {
+    this._data = createData('tableList', this.data, data, (data) => {
       return data?.select(data.headers.slice(0, 3))
     })
+    this.createScale()
   }
 
   setScale(scale: LayerRadialScale) {
     this._scale = createScale(undefined, this.scale, scale)
-    this.needRescale = false
   }
 
   setStyle(style: LayerStyle<LayerRadialStyle>) {
     this._style = createStyle(this.options, defaultStyle, this.style, style)
-    this.needRescale = true
+    this.createScale()
   }
 
   update() {
-    this.needRescale && this.createScale()
-
     if (!this.data || !this.scale) {
       throw new Error('Invalid data or scale')
     }

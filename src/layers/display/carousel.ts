@@ -10,7 +10,7 @@ import {
 } from '../../types'
 import {getAttr} from '../../utils'
 import {LayerBase} from '../base'
-import {createStyle, validateAndCreateData} from '../helpers'
+import {createData, createStyle} from '../helpers'
 
 type Key = 'carousel' | 'dot'
 
@@ -55,7 +55,7 @@ export class LayerCarousel extends LayerBase<Key> {
   }
 
   setData(data: LayerCarousel['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data)
+    this._data = createData('tableList', this.data, data)
 
     const {mode} = this.style,
       {rawTableList: _data} = this.data!,

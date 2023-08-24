@@ -9,7 +9,7 @@ import {
 } from '../../types'
 import {getAttr, getTextWidth, group} from '../../utils'
 import {LayerBase} from '../base'
-import {createStyle, createText, validateAndCreateData} from '../helpers'
+import {createData, createStyle, createText} from '../helpers'
 
 const defaultStyle: LayerTextStyle = {
   sanger: [1, 1],
@@ -53,7 +53,7 @@ export class LayerText extends LayerBase<'text'> {
   }
 
   setData(data: LayerText['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    this._data = createData('base', this.data, data)
   }
 
   setStyle(style: LayerStyle<LayerTextStyle>) {

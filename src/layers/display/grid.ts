@@ -20,9 +20,10 @@ import {
 import {LayerBase} from '../base'
 import {
   checkColumns,
+  createData,
   createStyle,
   elClass,
-  validateAndCreateData,
+  selector,
 } from '../helpers'
 
 type Key = 'box' | 'gridLine' | 'placeholder'
@@ -117,7 +118,7 @@ export class LayerGrid extends LayerBase<Key> {
 
   setData(data: LayerGrid['data']) {
     this.placeholderData = {width: 0, height: 0, x: 0, y: 0}
-    this._data = validateAndCreateData('tableList', this.data, data, (data) => {
+    this._data = createData('tableList', this.data, data, (data) => {
       if (!data) return
 
       checkColumns(data, ['width', 'height'])
@@ -240,7 +241,7 @@ export class LayerGrid extends LayerBase<Key> {
         .on('drag', this.dragged.bind(this))
         .on('end', this.dragEnded.bind(this))
 
-      this.root.selectAll(`.${elClass('box')}`).call(dragBehavior as any)
+      selector.getChildren(this.root, elClass('box')).call(dragBehavior as any)
     }
   }
 

@@ -17,9 +17,9 @@ import {LayerBase} from '../base'
 import {
   createArcText,
   createColorMatrix,
+  createData,
   createScale,
   createStyle,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'text' | 'polygon' | 'point'
@@ -78,7 +78,7 @@ export class LayerRadar extends LayerBase<Key> {
   }
 
   setData(data: LayerRadar['data']) {
-    this._data = validateAndCreateData('tableList', this.data, data)
+    this._data = createData('tableList', this.data, data)
     this.createScale()
   }
 
@@ -88,6 +88,7 @@ export class LayerRadar extends LayerBase<Key> {
 
   setStyle(style: LayerStyle<LayerRadarStyle>) {
     this._style = createStyle(this.options, defaultStyle, this.style, style)
+    this.createScale()
   }
 
   private createScale() {

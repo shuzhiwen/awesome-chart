@@ -11,7 +11,7 @@ import {
 } from '../../types'
 import {addStyle, isCC, isSC, mergeAlpha, robustRange} from '../../utils'
 import {LayerBase} from '../base'
-import {createStyle, validateAndCreateData} from '../helpers'
+import {createData, createStyle} from '../helpers'
 
 const characterSet = [''].concat('0123456789,.'.split(''))
 
@@ -68,7 +68,7 @@ export class LayerFlopper extends LayerBase<never> {
   }
 
   setData(data: LayerFlopper['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    this._data = createData('base', this.data, data)
     this.magnitudes = {}
 
     const {value} = this.data?.source ?? {},

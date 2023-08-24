@@ -25,10 +25,10 @@ import {
 import {LayerBase} from '../base'
 import {
   createColorMatrix,
+  createData,
   createScale,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = 'text' | 'rect' | 'background'
@@ -95,7 +95,7 @@ export class LayerRect extends LayerBase<Key> {
   setData(data: LayerRect['data']) {
     const {mode, sort} = this.style
 
-    this._data = validateAndCreateData('tableList', this.data, data, (data) => {
+    this._data = createData('tableList', this.data, data, (data) => {
       if (!data) return
 
       if (mode === 'interval') {
@@ -116,6 +116,7 @@ export class LayerRect extends LayerBase<Key> {
 
   setStyle(style: LayerStyle<LayerRectStyle>) {
     this._style = createStyle(this.options, defaultStyle, this.style, style)
+    this.createScale()
   }
 
   update() {

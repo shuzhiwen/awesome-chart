@@ -24,11 +24,11 @@ import {
 import {LayerBase} from '../base'
 import {
   createArcText,
+  createData,
   createScale,
   createStyle,
   createText,
   isTextCollision,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key = Keys<typeof defaultStyle>
@@ -154,12 +154,12 @@ export class LayerAxis extends LayerBase<Key> {
   }
 
   setData(data: LayerAxis['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    this._data = createData('base', this.data, data)
   }
 
   setScale(scale: LayerAxisScale) {
     const {coordinate} = this.style
-    this._scale = createScale({}, this.scale, {nice: scale?.nice})
+    this._scale = createScale(undefined, this.scale, {nice: scale.nice})
 
     scaleTypes.forEach((type) => {
       if (!scale?.[type]) {

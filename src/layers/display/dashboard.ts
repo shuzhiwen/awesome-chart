@@ -15,9 +15,9 @@ import {LayerBase} from '../base'
 import {
   createArcText,
   createColorMatrix,
+  createData,
   createStyle,
   createText,
-  validateAndCreateData,
 } from '../helpers'
 
 type Key =
@@ -107,7 +107,7 @@ export class LayerDashboard extends LayerBase<Key> {
   }
 
   setData(data: LayerDashboard['data']) {
-    this._data = validateAndCreateData('base', this.data, data)
+    this._data = createData('base', this.data, data)
 
     const {fragments} = this.data!.source
 
