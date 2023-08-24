@@ -43,8 +43,6 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
     const {
       targets,
       delay,
-      duration,
-      easing,
       alternate,
       stagger = null,
       decayFactor = 1,
@@ -56,11 +54,10 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
 
     nodes.forEach((targets, i, array) => {
       const [x, y] = this.getRealPosition(targets, i)
+
       anime({
+        ...this.basicConfig,
         targets,
-        easing,
-        duration,
-        update: this.process,
         loopBegin: i === 0 ? this.start : noop,
         loopComplete: i === array.length - 1 ? this.end : noop,
         keyframes: [

@@ -1,4 +1,4 @@
-import anime, {AnimeParams} from 'animejs'
+import anime from 'animejs'
 import {select} from 'd3'
 import {Container, Graphics, Texture} from 'pixi.js'
 import {AnimationProps, AnimationScanOptions, Box, D3Selection} from '../types'
@@ -126,21 +126,13 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
   }
 
   play() {
-    const {context, direction, easing, duration, delay} = this.options
-    const configs: AnimeParams = {
-      update: this.process,
-      loopBegin: this.start,
-      loopComplete: this.end,
-      duration,
-      easing,
-      delay,
-    }
+    const {context, direction} = this.options
 
     if (isSC(context) && isSC(this.gradient)) {
-      Object.assign(
-        configs,
-        {targets: this.gradient.node()},
-        direction === 'right'
+      anime({
+        ...this.basicConfig,
+        targets: this.gradient.node(),
+        ...(direction === 'right'
           ? {x1: ['-100%', '100%'], x2: [0, '200%']}
           : direction === 'left'
           ? {x1: ['100%', '-100%'], x2: ['200%', 0]}
@@ -148,24 +140,23 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
           ? {y1: ['-100%', '100%'], y2: [0, '200%']}
           : direction === 'top'
           ? {y1: ['100%', '-100%'], y2: ['200%', 0]}
-          : null
-      )
+          : null),
+      })
     }
 
     if (isCC(context) && this.mask instanceof Graphics) {
       const {width, height} = this.mask.getBounds()
-      Object.assign(
-        configs,
-        {targets: this.mask},
-        this.isHorizontal
+
+      anime({
+        ...this.basicConfig,
+        targets: this.mask,
+        ...(this.isHorizontal
           ? {x: direction === 'right' ? [-width, width] : [width, -width]}
           : this.isVertical
           ? {y: direction === 'bottom' ? [-height, height] : [height, -height]}
-          : null
-      )
+          : null),
+      })
     }
-
-    anime(configs)
   }
 
   destroy() {

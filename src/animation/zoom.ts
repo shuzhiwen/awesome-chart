@@ -26,32 +26,17 @@ export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
   }
 
   play() {
-    const {
-        targets,
-        delay,
-        duration,
-        easing,
-        stagger = null,
-        startScale = 0,
-        endScale = 1,
-      } = this.options,
-      start = Math.max(startScale, 5e-6),
-      end = Math.max(endScale, 5e-6)
+    const {targets, delay, stagger, startScale, endScale} = this.options,
+      start = Math.max(startScale || 0, 5e-6),
+      end = Math.max(endScale || 1, 5e-6)
 
     anime({
+      ...this.basicConfig,
       targets: isSC(targets) ? targets.nodes() : targets?.map((g) => g.scale),
-      easing,
-      duration,
       delay: stagger ? anime.stagger(stagger) : delay,
       ...(isSC(targets)
         ? {scale: [start, end]}
-        : {
-            x: [start, end],
-            y: [start, end],
-          }),
-      update: this.process,
-      loopBegin: this.start,
-      loopComplete: this.end,
+        : {x: [start, end], y: [start, end]}),
     })
   }
 }

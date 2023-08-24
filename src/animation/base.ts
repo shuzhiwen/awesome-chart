@@ -5,6 +5,12 @@ import {BasicAnimationOptions} from '../types'
 import {createLog, EventManager, isSC, noChange} from '../utils'
 
 export abstract class AnimationBase<Options extends AnyObject = {}> {
+  init() {}
+
+  play() {}
+
+  destroy() {}
+
   readonly log = createLog(this.constructor.name)
 
   readonly event = new EventManager<Keys<typeof animationLifeCycles>>()
@@ -16,26 +22,6 @@ export abstract class AnimationBase<Options extends AnyObject = {}> {
   protected _isStarted = false
 
   protected _isAvailable = true
-
-  get isInitialized() {
-    return this._isInitialized
-  }
-
-  get isStarted() {
-    return this._isStarted
-  }
-
-  get isAvailable() {
-    return this._isAvailable
-  }
-
-  get canvasRoot() {
-    if (isSC(this.options.targets)) {
-      throw new Error('Wrong call with svg context')
-    }
-
-    return this.options.targets![0].parent.parent
-  }
 
   protected start(...args: any) {
     return args
@@ -50,11 +36,37 @@ export abstract class AnimationBase<Options extends AnyObject = {}> {
     return args
   }
 
-  init(): void {}
+  protected get basicConfig() {
+    return {
+      update: this.process,
+      loopBegin: this.start,
+      loopComplete: this.end,
+      targets: this.options.targets,
+      duration: this.options.duration,
+      easing: this.options.easing,
+      delay: this.options.delay,
+    }
+  }
 
-  play(): void {}
+  protected get canvasRoot() {
+    if (isSC(this.options.targets)) {
+      throw new Error('Wrong call with svg context')
+    }
 
-  destroy(): void {}
+    return this.options.targets![0].parent.parent
+  }
+
+  get isInitialized() {
+    return this._isInitialized
+  }
+
+  get isStarted() {
+    return this._isStarted
+  }
+
+  get isAvailable() {
+    return this._isAvailable
+  }
 
   constructor(options: AnimationBase<Options>['options']) {
     this.options = options

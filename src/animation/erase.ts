@@ -1,4 +1,4 @@
-import anime, {AnimeParams} from 'animejs'
+import anime from 'animejs'
 import {Graphics} from 'pixi.js'
 import {AnimationEraseOptions, AnimationProps, Box, D3Selection} from '../types'
 import {isSC, uuid} from '../utils'
@@ -61,23 +61,12 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
   }
 
   play() {
-    const {context, delay, duration, easing} = this.options
+    const {context} = this.options
     const rect = {x: 0, y: 0, width: 0, height: 0}
-    const configs: AnimeParams = {
-      duration,
-      delay,
-      easing,
-      loopBegin: this.start,
-      loopComplete: this.end,
-      update: (...args: unknown[]) => {
-        super.process(...args)
-        this.mask && this.updateClipPath(this.mask, rect)
-        return args
-      },
-    }
 
     if (isSC(context)) {
-      Object.assign(configs, {
+      anime({
+        ...this.basicConfig,
         targets: context.selectAll(`#erase-${this.key} rect`).nodes(),
         x: [this.isXEnd ? '100%' : '0%', '0%'],
         y: [this.isYEnd ? '100%' : '0%', '0%'],
@@ -86,7 +75,10 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
       })
     } else {
       const {x, y, width, height} = this.canvasRoot.getBounds()
-      Object.assign(configs, {
+
+      anime({
+        ...this.basicConfig,
+        update: () => this.updateClipPath(this.mask!, rect),
         targets: rect,
         x: [this.isXEnd ? x + width : x, x],
         y: [this.isYEnd ? y + height : y, y],
@@ -94,8 +86,6 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
         height: [!this.isHorizontal ? 0 : height, height],
       })
     }
-
-    anime(configs)
   }
 
   destroy() {

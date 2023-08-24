@@ -22,8 +22,6 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
     const {
         targets,
         delay,
-        duration,
-        easing,
         alternate,
         stagger = null,
         startOpacity = 0,
@@ -34,12 +32,8 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
       end = Math.max(endOpacity, 5e-6)
 
     anime({
+      ...this.basicConfig,
       targets: isSC(targets) ? targets.nodes() : targets,
-      easing,
-      duration,
-      update: this.process,
-      loopBegin: this.start,
-      loopComplete: this.end,
       keyframes: [
         {[name]: start, duration: 0, delay: 0},
         {[name]: end, delay: stagger ? anime.stagger(stagger) : delay},

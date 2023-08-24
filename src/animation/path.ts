@@ -18,29 +18,24 @@ export class AnimationPath extends AnimationBase<AnimationPathOptions> {
   }
 
   play() {
-    const {targets, path, delay, duration, easing} = this.options
+    const {targets, path} = this.options
 
     if (isSC(targets) && isSC(path)) {
-      const animePaths = path.nodes().map((node) => anime.path(node)),
-        animationTargets = targets.nodes()
+      const animePaths = path.nodes().map((node) => anime.path(node))
+      const animationTargets = targets.nodes()
 
-      animationTargets.forEach((target, i) =>
+      animationTargets.forEach((target, i) => {
         this.instances.push(
           anime({
+            ...this.basicConfig,
             targets: target,
-            duration,
-            delay,
-            // translate must before at rotate
             translateX: animePaths[i]?.('x'),
             translateY: animePaths[i]?.('y'),
+            // translate must before at rotate
             rotate: animePaths[i]?.('angle'),
-            update: this.process,
-            loopBegin: this.start,
-            loopComplete: this.end,
-            easing,
           })
         )
-      )
+      })
     }
   }
 
