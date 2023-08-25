@@ -61,6 +61,15 @@ type AnimationZoomOptions = {
   endScale: number
 }
 
+type AnimationRotateOptions = {
+  /**
+   * If set true, subsequent element's animation are triggered with a delay.
+   * This configuration will cause the delay from the options to fail.
+   */
+  stagger: number
+  initialRotation: number
+}
+
 type AnimationMoveOptions = {
   /**
    * If set true, after the animation ends,

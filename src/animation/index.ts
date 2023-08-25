@@ -10,15 +10,17 @@ export * from './fade'
 export * from './move'
 export * from './path'
 export * from './queue'
+export * from './rotate'
 export * from './scan'
 export * from './zoom'
 
 export interface AnimationDict {
-  erase: Animation.AnimationErase
   empty: Animation.AnimationEmpty
+  erase: Animation.AnimationErase
   fade: Animation.AnimationFade
   move: Animation.AnimationMove
   path: Animation.AnimationPath
+  rotate: Animation.AnimationRotate
   scan: Animation.AnimationScan
   zoom: Animation.AnimationZoom
 }
@@ -29,6 +31,7 @@ export const AnimationDict = {
   fade: Animation.AnimationFade,
   move: Animation.AnimationMove,
   path: Animation.AnimationPath,
+  rotate: Animation.AnimationRotate,
   scan: Animation.AnimationScan,
   zoom: Animation.AnimationZoom,
 }
