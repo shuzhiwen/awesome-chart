@@ -1,13 +1,12 @@
-import {themeColors} from '../../../src/core/theme'
+import {randomTableList, themeColors} from 'awesome-chart'
 
-const data = {
-  type: 'tableList',
+const data = randomTableList({
   mode: 'normal',
   row: 5,
   column: 1,
   mu: 500,
   sigma: 200,
-}
+})
 
 const animation = `(theme) => ({
   arc: {

@@ -94,9 +94,9 @@ export class LayerBrush extends LayerBase<never> {
       .data([null])
       .join('g')
       .attr('class', 'chart-brush')
-      .call(this.brush as any)
+      .call(this.brush as AnyFunction)
       .call(
-        this.brush.move as any,
+        this.brush.move as AnyFunction,
         direction === 'horizontal' ? [x1, x2] : [y1, y2]
       )
 

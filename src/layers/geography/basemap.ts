@@ -1,4 +1,9 @@
-import {GeoGeometryObjects, geoMercator, geoPath} from 'd3'
+import {
+  GeoGeometryObjects,
+  geoMercator,
+  geoPath,
+  GeoPermissibleObjects,
+} from 'd3'
 import {EVENT_KEY} from '../../core'
 import {DataBase} from '../../data'
 import {
@@ -49,13 +54,13 @@ export class LayerBasemap extends LayerBase<Key> {
 
   private textData: DrawerData<TextDrawerProps>[] = []
 
-  private path: Maybe<d3.GeoPath<any, d3.GeoPermissibleObjects>>
+  private path: Maybe<d3.GeoPath>
 
   private backgroundData: DrawerData<RectDrawerProps>[] = []
 
   private blockData: {
     properties: AnyObject
-    geometry: any
+    geometry: GeoPermissibleObjects
   }[] = []
 
   private parentCode: number[] = []

@@ -4,6 +4,7 @@ import {cloneDeep, merge} from 'lodash'
 import {lightTheme} from '../../core/theme'
 import {DataBase} from '../../data'
 import {
+  Box,
   LayerAnimation,
   LayerFlopperStyle,
   LayerOptions,
@@ -12,6 +13,11 @@ import {
 import {addStyle, isCC, isSC, mergeAlpha, robustRange} from '../../utils'
 import {LayerBase} from '../base'
 import {createData, createStyle} from '../helpers'
+
+type SourceMeta = {
+  text: string
+  prevText: string
+}
 
 const characterSet = [''].concat('0123456789,.'.split(''))
 
@@ -30,9 +36,9 @@ export class LayerFlopper extends LayerBase<never> {
 
   private magnitudes: Record<number, string> = {}
 
-  private cellSize: {width: number; height: number} = {width: 0, height: 0}
+  private cellSize: Pick<Box, 'width' | 'height'> = {width: 0, height: 0}
 
-  private cellData: {text: string; prevText?: string}[] = []
+  private cellData: SourceMeta[] = []
 
   private animation = {...lightTheme.animation.update}
 
@@ -104,9 +110,9 @@ export class LayerFlopper extends LayerBase<never> {
             : ','
           : this.magnitudes[index]
 
-      this.cellData.push({text, prevText: prevData.shift()})
+      this.cellData.push({text, prevText: prevData.shift()!})
       if (index === 0 && decimals > 0) {
-        this.cellData.push({text: '.', prevText: prevData.shift()})
+        this.cellData.push({text: '.', prevText: prevData.shift()!})
       }
     })
 
@@ -262,8 +268,8 @@ export class LayerFlopper extends LayerBase<never> {
       } = this.animation
 
     this.root.selectAll(`.${this.className}-group`).each((d, i, els) => {
-      let prevIndex = characterSet.indexOf((d as any).prevText),
-        index = characterSet.indexOf((d as any).text)
+      let prevIndex = characterSet.indexOf((d as SourceMeta).prevText)
+      let index = characterSet.indexOf((d as SourceMeta).text)
 
       prevIndex = prevIndex === -1 ? 0 : prevIndex
       index = index === -1 ? 0 : index

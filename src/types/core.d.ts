@@ -1,4 +1,5 @@
 import {Chart} from '../core'
+import {LayerDict} from '../layers'
 import {getEasyGradientCreator} from '../utils'
 import {
   AnimationOptions,
@@ -7,11 +8,15 @@ import {
 } from './animation'
 import {TooltipData} from './data'
 import {ElConfig} from './draw'
-import {CacheLayerData, LayerInstance, LayerOptions, LayerType} from './layer'
+import {
+  CacheLayerAnimation,
+  CacheLayerData,
+  LayerInstance,
+  LayerOptions,
+  LayerType,
+} from './layer'
 import {LayoutCreator} from './layout'
-import {ScaleNice} from './scale'
-import {LayerStyle} from './styles'
-import {RandomRelationOptions, RandomTableListOptions} from './utils'
+import {LayerAxisScale} from './scale'
 
 /**
  * The context for layer from chart includes some global data.
@@ -201,13 +206,6 @@ type ChartProps = {
   tooltipOptions: Partial<TooltipOptions>
 }>
 
-type RandomDataProps = (RandomTableListOptions | RandomRelationOptions) & {
-  /**
-   * Random data with specific data structure.
-   */
-  type: 'table' | 'tableList' | 'relation'
-}
-
 type CreateLayerProps<T extends LayerType> = Omit<
   LayerOptions<T>,
   Keys<ChartContext>
@@ -240,26 +238,26 @@ type CreateChartProps = ChartProps & {
       layout?: string
     }
     /**
-     * Unrecognized data will be converted to `DataBase`.
-     */
-    data: any
-    /**
      * Scale nice options only for axis layer.
      */
-    scale: ScaleNice
+    scale: LayerAxisScale['nice']
+    /**
+     * Unrecognized data will be converted to `DataBase`.
+     */
+    data: NonNullable<LayerDict[LayerType]['data']>['source']
     /**
      * The style will override the default style.
      * Computable style that takes the theme as a parameter.
      */
-    style: LayerStyle<AnyObject>
+    style: NonNullable<LayerDict[LayerType]>['style']
     /**
      * The animation will define animation for sublayers.
      * Computable animation that takes the theme as a parameter.
      */
-    animation: LayerAnimation<AnyObject>
+    animation: LayerAnimation<CacheLayerAnimation<string>['options']>
     /**
      * Configuration data for the eventName-handler map.
      */
-    event: AnyEventObject
+    event: Record<string, AnyFunction>
   }>)[]
 }

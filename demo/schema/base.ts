@@ -1,4 +1,7 @@
-import {GetFacetLayoutCreatorProps, TooltipOptions} from '../../src/types'
+import {
+  GetFacetLayoutCreatorProps,
+  TooltipOptions,
+} from 'awesome-chart/dist/types'
 
 export default (
   layers: any[],

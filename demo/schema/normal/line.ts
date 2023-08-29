@@ -1,3 +1,5 @@
+import {randomTableList} from 'awesome-chart'
+
 export default ({mode, hasArea, curveType, hasMark = false}) =>
   [
     {
@@ -25,14 +27,13 @@ export default ({mode, hasArea, curveType, hasMark = false}) =>
             ['4年级', 100],
             ['5年级', 500],
           ]
-        : {
-            type: 'tableList',
+        : randomTableList({
             mode: 'normal',
             row: 5,
             column: 2,
             mu: 500,
             sigma: 200,
-          },
+          }),
       style: {
         mode,
         fallback: 'break',

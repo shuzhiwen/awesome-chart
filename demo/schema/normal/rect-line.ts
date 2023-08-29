@@ -1,3 +1,5 @@
+import {randomTableList} from 'awesome-chart'
+
 export default () =>
   [
     {
@@ -18,14 +20,13 @@ export default () =>
     },
     {
       type: 'rect',
-      data: {
-        type: 'tableList',
+      data: randomTableList({
         mode: 'normal',
         row: 5,
         column: 2,
         mu: 500,
         sigma: 200,
-      },
+      }),
       style: {
         labelPosition: 'top',
         background: {
@@ -48,14 +49,13 @@ export default () =>
     },
     {
       type: 'line',
-      data: {
-        type: 'tableList',
+      data: randomTableList({
         mode: 'normal',
         row: 5,
         column: 2,
         mu: -500,
         sigma: 200,
-      },
+      }),
       options: {
         axis: 'minor',
       },

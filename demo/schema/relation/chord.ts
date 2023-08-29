@@ -1,3 +1,5 @@
+import {randomTable} from 'awesome-chart'
+
 export default () => [
   {
     type: 'text',
@@ -5,16 +7,15 @@ export default () => [
   },
   {
     type: 'chord',
-    data: {
-      type: 'table',
+    data: randomTable({
       mode: 'poisson',
       row: 10,
       column: 10,
       lambda: 40,
       mu: 1000,
       sigma: 400,
-      decimalPlace: 1,
-    },
+      decimals: 1,
+    }),
     style: {
       labelOffset: 10,
       line: {

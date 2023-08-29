@@ -1,3 +1,5 @@
+import {randomTable} from 'awesome-chart'
+
 export default ({shape, brush}: {shape: string; brush?: boolean}) =>
   [
     {
@@ -12,14 +14,13 @@ export default ({shape, brush}: {shape: string; brush?: boolean}) =>
     },
     {
       type: 'matrix',
-      data: {
-        type: 'table',
+      data: randomTable({
         mode: 'normal',
         row: 8,
         column: 8,
         mu: 1000,
         sigma: 400,
-      },
+      }),
       scale: {
         paddingInner: 0,
       },

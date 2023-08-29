@@ -1,3 +1,5 @@
+import {randomTableList} from 'awesome-chart'
+
 export default ({mode}) => [
   {
     type: 'text',
@@ -14,14 +16,13 @@ export default ({mode}) => [
   },
   {
     type: 'radar',
-    data: {
-      type: 'tableList',
+    data: randomTableList({
       mode: 'normal',
       row: 5,
       column: 2,
       mu: 500,
       sigma: 200,
-    },
+    }),
     style: {
       mode,
       pointSize: 5,

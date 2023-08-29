@@ -44,7 +44,7 @@ export function isApproximateNumber(n1: number, n2: number) {
  * @returns
  * Is the value a d3 selection.
  */
-export function isSC(selector: any): selector is D3Selection {
+export function isSC(selector: unknown): selector is D3Selection {
   return selector?.constructor.name === select(null).constructor.name
 }
 
@@ -53,7 +53,7 @@ export function isSC(selector: any): selector is D3Selection {
  * @returns
  * Is the value a pixi group.
  */
-export function isCC(selector: any): selector is Container {
+export function isCC(selector: unknown): selector is Container {
   return selector?.constructor.name === Container.name
 }
 

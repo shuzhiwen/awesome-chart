@@ -1,4 +1,4 @@
-import {LayerGridStyle} from '../../../src/types'
+import {LayerGridStyle} from 'awesome-chart/dist/types'
 
 export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
   {

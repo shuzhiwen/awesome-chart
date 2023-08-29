@@ -1,3 +1,5 @@
+import {randomTableList} from 'awesome-chart'
+
 export default ({
   variant,
   stack = false,
@@ -30,14 +32,13 @@ export default ({
   },
   {
     type: 'arc',
-    data: {
-      type: 'tableList',
+    data: randomTableList({
       mode: 'normal',
       row: 5,
       column: stack ? 2 : 1,
       mu: 500,
       sigma: 200,
-    },
+    }),
     style: {
       variant,
       labelPosition: variant === 'pie' ? 'outer' : 'inner',

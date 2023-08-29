@@ -12,8 +12,6 @@ type Padding<T = number> = [T, T, T, T]
 
 type AnyFunction<T = unknown> = (...args: any) => T
 
-type AnyEventObject = Record<string, AnyFunction>
-
 type Ungroup<T> = T extends Array<infer V> ? Ungroup<V> : Maybe<T>
 
 type ArrayItem<T> = T extends Array<infer V> ? V : T

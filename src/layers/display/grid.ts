@@ -241,7 +241,9 @@ export class LayerGrid extends LayerBase<Key> {
         .on('drag', this.dragged.bind(this))
         .on('end', this.dragEnded.bind(this))
 
-      selector.getChildren(this.root, elClass('box')).call(dragBehavior as any)
+      selector
+        .getChildren(this.root, elClass('box'))
+        .call(dragBehavior as AnyFunction)
     }
   }
 

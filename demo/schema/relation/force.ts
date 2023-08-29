@@ -1,3 +1,5 @@
+import {randomTableList} from 'awesome-chart'
+
 export default () => [
   {
     type: 'text',
@@ -5,14 +7,13 @@ export default () => [
   },
   {
     type: 'force',
-    data: {
-      type: 'tableList',
+    data: randomTableList({
       mode: 'normal',
       row: 10,
       column: 1,
       mu: 500,
       sigma: 200,
-    },
+    }),
     style: {
       zoom: true,
     },

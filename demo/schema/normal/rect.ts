@@ -1,4 +1,5 @@
-import {LayerRectStyle} from '../../../src/types'
+import {LayerRectStyle} from 'awesome-chart/dist/types'
+import {randomTableList} from '../../../src'
 
 export default ({
   mode,
@@ -44,14 +45,13 @@ export default ({
               ['服装', 300],
               ['总计', 2300],
             ]
-          : {
-              type: 'tableList',
+          : randomTableList({
               mode: 'normal',
               row: 5,
               column: 2,
               mu: 500,
               sigma: 200,
-            },
+            }),
       style: {
         mode,
         variant,

@@ -1,6 +1,3 @@
-import {hierarchy, select} from 'd3'
-import {cloneDeep, max, merge} from 'lodash'
-import React, {useEffect, useRef} from 'react'
 import {
   addStyle,
   Chart,
@@ -15,8 +12,11 @@ import {
   robustRange,
   transformAttr,
   uuid,
-} from '../src'
-import {D3Selection, LayerOptions} from '../src/types'
+} from 'awesome-chart'
+import {D3Selection, LayerOptions} from 'awesome-chart/dist/types'
+import {hierarchy, select} from 'd3'
+import {cloneDeep, max, merge} from 'lodash'
+import React, {useEffect, useRef} from 'react'
 import {schemaMenu} from './schema'
 import s from './TabMenu.module.css'
 
@@ -32,7 +32,7 @@ type TabMenuStyleShape = Partial<
   }
 >
 
-declare module '../src' {
+declare module 'awesome-chart' {
   interface LayerDict {
     tabMenu: LayerTabMenu
   }

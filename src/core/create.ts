@@ -6,9 +6,6 @@ import {
   isRawRelation,
   isRawTable,
   isRawTableList,
-  randomRelation,
-  randomTable,
-  randomTableList,
 } from '../utils'
 import {Chart} from './chart'
 import {EVENT_KEY} from './constants'
@@ -20,22 +17,14 @@ function createLayer(
   const {type, options, data, scale, style, animation, event} = schema!,
     layout = options?.layout ? chart.layout[options.layout] : undefined,
     layerOptions = {type, ...options, layout} as LayerOptions,
-    layer = chart.createLayer(layerOptions) as LayerInstance
-  let dataSet = data
-
-  if (isRawTable(data) || data?.type === 'table') {
-    dataSet = new DataTable(isRawTable(data) ? data : randomTable(data))
-  } else if (isRawRelation(data) || data?.type === 'relation') {
-    dataSet = new DataRelation(
-      isRawRelation(data) ? data : randomRelation(data)
-    )
-  } else if (isRawTableList(data) || data?.type === 'tableList') {
-    dataSet = new DataTableList(
-      isRawTableList(data) ? data : randomTableList(data)
-    )
-  } else {
-    dataSet = new DataBase(data ?? {})
-  }
+    layer = chart.createLayer(layerOptions) as LayerInstance,
+    dataSet = isRawTable(data)
+      ? new DataTable(data)
+      : isRawRelation(data)
+      ? new DataRelation(data)
+      : isRawTableList(data)
+      ? new DataTableList(data)
+      : new DataBase(data ?? ({} as any))
 
   layer.setStyle(style)
   layer.setAnimation(animation)
@@ -54,21 +43,23 @@ export function createChart(schema: CreateChartProps, existedChart?: Chart) {
 
   // catch error and info user
   chart.event.onWithOff('error', EVENT_KEY, (data) => {
-    if (!onError) {
-      chart.destroy()
-      const fbChart = new Chart(initialConfig)
-      const fallbackLayer = fbChart.createLayer({
-        type: 'text',
-        id: 'fallback',
-        layout: fbChart.layout.container,
-      })
+    chart.destroy()
 
-      fallbackLayer?.setData(new DataBase([data.error?.message ?? '']))
-      fallbackLayer?.setStyle({text: {align: ['middle', 'middle']}})
-      fallbackLayer?.draw()
-    } else {
+    if (onError) {
       onError(data)
+      return
     }
+
+    const fbChart = new Chart(initialConfig)
+    const fallbackLayer = fbChart.createLayer({
+      type: 'text',
+      id: 'fallback',
+      layout: fbChart.layout.container,
+    })
+
+    fallbackLayer?.setData(new DataBase([data.error?.message ?? '']))
+    fallbackLayer?.setStyle({text: {align: ['middle', 'middle']}})
+    fallbackLayer?.draw()
   })
 
   // define order is draw order

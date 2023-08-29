@@ -1,5 +1,5 @@
 import {group, randomNormal} from 'd3'
-import {LayerRectStyle} from '../../../src/types'
+import {LayerRectStyle} from 'awesome-chart/dist/types'
 
 const originValues = new Array(30)
   .fill(null)
