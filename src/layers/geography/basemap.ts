@@ -27,7 +27,7 @@ type GeoFeature = {
 }
 
 const getGeoJSON = (adcode: Meta) =>
-  `http://cdn.dtwave.com/waveview/geojson/${adcode}.json`
+  `https://cdn.dtwave.com/waveview/geojson/${adcode}.json`
 
 const defaultStyle: LayerBasemapStyle = {
   block: {

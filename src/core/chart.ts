@@ -177,7 +177,7 @@ export class Chart {
         .append('svg')
         .attr('width', this.containerWidth)
         .attr('height', this.containerHeight)
-        .attr('xmlns', 'http://www.w3.org/2000/svg')
+        .attr('xmlns', 'https://www.w3.org/2000/svg')
         .style('position', 'absolute')
       this.defs = this.root.append('defs')
       this.root.on('mousemove', (event) => {
