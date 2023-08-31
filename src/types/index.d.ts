@@ -1,6 +1,5 @@
 import './constant'
 import './global'
-import './module'
 
 export * from './animation'
 export * from './core'
