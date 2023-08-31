@@ -389,14 +389,10 @@ export class LayerAxis extends LayerBase<Key> {
   private reduceScaleXTextNumber() {
     const {width, left, right} = this.options.layout,
       {maxScaleXTextNumber, dynamicReserveTextX} = this.style,
-      getEnabledTextX = () => {
-        return this.textData.textX.filter(
-          (item) => !this.disabledAxisX.has(item)
-        )
-      },
-      getTextXTotalWidth = () => {
-        return sum(getEnabledTextX().map(({textWidth}) => textWidth))
-      },
+      getEnabledTextX = () =>
+        this.textData.textX.filter((item) => !this.disabledAxisX.has(item)),
+      getTextXTotalWidth = () =>
+        sum(getEnabledTextX().map(({textWidth}) => textWidth)),
       markHalfTextXDisabled = () => {
         getEnabledTextX().forEach(
           (item, i) => i % 2 !== 0 && this.disabledAxisX.add(item)

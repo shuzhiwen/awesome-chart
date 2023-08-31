@@ -6,6 +6,10 @@ import {selector} from '../layers'
 import {ElSource, TextDrawerProps} from '../types'
 import {getAttr, isCC, isRealNumber, isSC, mergeAlpha, noChange} from '../utils'
 
+function toNumber(number: string) {
+  return number?.match(/[^\d\.\-]/i) ? number : parseFloat(number)
+}
+
 export function drawText({
   fontFamily,
   fontSize,
@@ -73,7 +77,7 @@ export function drawText({
       .duration(getAttr(transition?.duration, 0, update.duration))
       .delay(getAttr(transition?.delay, 0, update.delay))
       .textTween((d, i) => {
-        const [prev, next] = [parseFloat(prevTexts[i]), parseFloat(d.value)]
+        const [prev, next] = [toNumber(prevTexts[i]), toNumber(d.value)]
         const decimals = d.value.toString().split('.')[1]?.length || 0
         return isRealNumber(prev) && isRealNumber(next)
           ? (t) => interpolateNumber(prev, next)(t).toFixed(decimals)

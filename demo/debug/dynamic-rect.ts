@@ -35,7 +35,7 @@ export const debugDynamicRectLayer = (chart: Chart) => {
   dynamicRawTableLists.forEach((data, i) => {
     setTimeout(() => {
       const layers = chart.getLayersByType('rect').filter((item) => {
-        return item.style.sort
+        return item.style.sort !== 'none'
       })
       if (layers.length) {
         layers.forEach((layer) => {
