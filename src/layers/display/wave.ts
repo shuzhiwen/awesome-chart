@@ -114,7 +114,7 @@ export class LayerWave extends LayerBase<Key> {
         layer: this,
         row: 1,
         column: areaNumber,
-        theme: area?.fill,
+        theme: area.fill,
       })
 
     this.areaData = range(0, areaNumber, 1).map((index) => ({

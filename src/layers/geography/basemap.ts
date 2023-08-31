@@ -33,6 +33,7 @@ const defaultStyle: LayerBasemapStyle = {
   block: {
     fill: 'lightblue',
   },
+  text: {},
 }
 
 export class LayerBasemap extends LayerBase<Key> {

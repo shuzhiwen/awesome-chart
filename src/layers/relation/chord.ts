@@ -25,6 +25,8 @@ const defaultStyle: LayerChordStyle = {
   edge: {
     opacity: 0.7,
   },
+  node: {},
+  text: {},
 }
 
 export class LayerChord extends LayerBase<Key> {
@@ -90,7 +92,7 @@ export class LayerChord extends LayerBase<Key> {
         layer: this,
         row: 1,
         column: chordData.groups.length,
-        theme: node?.fill,
+        theme: node.fill,
       })
 
     this.nodeData = chordData.groups.map(({value, ...rest}, i) => ({

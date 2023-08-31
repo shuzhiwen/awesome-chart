@@ -27,6 +27,8 @@ const defaultStyle: LayerPackStyle = {
   variant: 'pack',
   zoom: true,
   padding: 0,
+  circle: {},
+  text: {},
 }
 
 export class LayerPack extends LayerBase<Key> {
@@ -128,7 +130,7 @@ export class LayerPack extends LayerBase<Key> {
       layer: this,
       row: this.circleData.length,
       column: 1,
-      theme: circle?.fill,
+      theme: circle.fill,
     })
 
     this.circleData.forEach((group, i) =>
@@ -161,14 +163,14 @@ export class LayerPack extends LayerBase<Key> {
       data: group,
       ...circle,
       fill: group.map(({color}) => color!),
-      fillOpacity: variant === 'wordCloud' ? 0 : circle?.fillOpacity,
+      fillOpacity: variant === 'wordCloud' ? 0 : circle.fillOpacity,
     }))
     const textData = this.textData.map((group) => ({
       data: group,
       ...text,
       fontSize:
         variant === 'pack'
-          ? text?.fontSize
+          ? text.fontSize
           : group.flatMap(({fontSize}) => fontSize!),
     }))
 

@@ -8,7 +8,7 @@ function getPosition(
   command: string,
   position: [Maybe<number>, Maybe<number>]
 ): Vec2 {
-  const [x, y] = this.currentPath?.points.slice(-2) || [0, 0]
+  const [x, y] = this.currentPath.points.slice(-2) || [0, 0]
   const _position: Vec2 = [position[0] ?? x, position[1] ?? y]
 
   if (/[MLHVCSQTAZ]/.test(command)) {

@@ -27,6 +27,8 @@ type DataKey = 'x' | 'y' | 'value' | 'category'
 
 const defaultStyle: LayerScatterStyle = {
   pointSize: [5, 5],
+  point: {},
+  text: {},
 }
 
 export class LayerScatter extends LayerBase<Key> {
@@ -101,7 +103,7 @@ export class LayerScatter extends LayerBase<Key> {
         layer: this,
         row: categories.length,
         column: 1,
-        theme: point?.fill,
+        theme: point.fill,
       })
 
     this.pointData = categories.map((_category, i) =>

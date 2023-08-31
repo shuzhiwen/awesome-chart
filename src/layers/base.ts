@@ -323,7 +323,7 @@ export abstract class LayerBase<Key extends string> {
     if (
       !options[sublayer] ||
       this.cacheData[sublayer].data.length === 0 ||
-      (isSC(targets) ? targets.size() === 0 : targets?.length === 0)
+      (isSC(targets) ? targets.size() === 0 : targets.length === 0)
     ) {
       this.cacheAnimation.animations[sublayer] = null
       return
@@ -429,7 +429,7 @@ export abstract class LayerBase<Key extends string> {
         curOrder = nextData.map(({source}) => ungroup(source)?.meta.dimension)
 
       curOrder.forEach((dimension, i) => {
-        if (prevOrder?.has(dimension)) {
+        if (prevOrder.has(dimension)) {
           orderedGroupData[prevOrder.get(dimension)!] = nextData[i]
         } else {
           orderedGroupData.push(nextData[i])

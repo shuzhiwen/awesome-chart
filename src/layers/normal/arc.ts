@@ -34,6 +34,8 @@ const defaultStyle: LayerArcStyle = {
     fillOpacity: 0,
     strokeWidth: 1,
   },
+  text: {},
+  arc: {},
 }
 
 export class LayerArc extends LayerBase<Key> {
@@ -135,12 +137,12 @@ export class LayerArc extends LayerBase<Key> {
       )
     }
 
-    if (this.arcData[0]?.length > 1) {
+    if (this.arcData[0].length > 1) {
       const colorMatrix = createColorMatrix({
         layer: this,
         row: 1,
         column: this.arcData[0].length,
-        theme: arc?.fill,
+        theme: arc.fill,
       })
       this.arcData.forEach((group) =>
         group.forEach((item, i) => (item.color = colorMatrix.get(0, i)))
@@ -154,12 +156,12 @@ export class LayerArc extends LayerBase<Key> {
           color: colorMatrix.get(0, i),
         })),
       }
-    } else if (this.arcData[0]?.length === 1) {
+    } else if (this.arcData[0].length === 1) {
       const colorMatrix = createColorMatrix({
         layer: this,
         row: this.arcData.length,
         column: 1,
-        theme: arc?.fill,
+        theme: arc.fill,
       })
       this.arcData.forEach(
         (group, i) => (group[0].color = colorMatrix.get(i, 0))

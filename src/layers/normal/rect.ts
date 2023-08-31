@@ -34,6 +34,7 @@ import {
 type Key = 'text' | 'rect' | 'background'
 
 const defaultStyle: LayerRectStyle = {
+  sort: 'none',
   mode: 'group',
   variant: 'column',
   labelPosition: 'center',
@@ -46,6 +47,7 @@ const defaultStyle: LayerRectStyle = {
   text: {
     offset: [0, 0],
   },
+  rect: {},
 }
 
 export class LayerRect extends LayerBase<Key> {
@@ -104,7 +106,9 @@ export class LayerRect extends LayerBase<Key> {
         return data.select(data.headers.slice(0, 2))
       }
 
-      sort && data.sort({mode: sort, targets: 'groupWeight'})
+      if (sort !== 'none') {
+        data.sort({mode: sort, targets: 'groupWeight'})
+      }
     })
 
     this.createScale()
@@ -181,12 +185,12 @@ export class LayerRect extends LayerBase<Key> {
       return group.filter(({value}) => isRealNumber(value))
     })
 
-    if (this.rectData[0]?.length > 1 && mode !== 'interval') {
+    if (this.rectData[0].length > 1 && mode !== 'interval') {
       colorMatrix = createColorMatrix({
         layer: this,
         row: 1,
         column: this.rectData[0].length,
-        theme: rect?.fill,
+        theme: rect.fill,
       })
       this.rectData.forEach((group) =>
         group.forEach((item, i) => (item.color = colorMatrix.get(0, i)))
@@ -196,7 +200,7 @@ export class LayerRect extends LayerBase<Key> {
         layer: this,
         row: this.rectData.length,
         column: 1,
-        theme: rect?.fill,
+        theme: rect.fill,
       })
       this.rectData.forEach((group, i) =>
         group.forEach((item) => (item.color = colorMatrix.get(i, 0)))

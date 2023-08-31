@@ -43,6 +43,9 @@ const defaultStyle: LayerDashboardStyle = {
   valueText: {
     offset: [0, -20],
   },
+  labelText: {},
+  tickText: {},
+  arc: {},
 }
 
 type DataShape = {
@@ -147,13 +150,13 @@ export class LayerDashboard extends LayerBase<Key> {
         layer: this,
         row: 1,
         column: fragments.length,
-        theme: arc?.fill,
+        theme: arc.fill,
       }),
       scaleAngle = scaleLinear({
         domain: [minValue, maxValue],
         range: [(startAngle / 180) * Math.PI, (endAngle / 180) * Math.PI],
       }),
-      tickFontSize = getAttr(tickText?.fontSize, 0, tickSize * 2),
+      tickFontSize = getAttr(tickText.fontSize, 0, tickSize * 2),
       pointerLength = maxRadius - arcWidth - tickSize / 0.618 - tickFontSize,
       [centerX, centerY] = [left + width / 2, top + height / 2]
 
@@ -228,8 +231,8 @@ export class LayerDashboard extends LayerBase<Key> {
       if (fragment) {
         this.labelTextData.push(
           createArcText({
-            x: computeX(maxRadius + getAttr(labelText?.fontSize, 0, 12)),
-            y: computeY(maxRadius + getAttr(labelText?.fontSize, 0, 12)),
+            x: computeX(maxRadius + getAttr(labelText.fontSize, 0, 12)),
+            y: computeY(maxRadius + getAttr(labelText.fontSize, 0, 12)),
             value: fragment.label,
             style: labelText,
             angle,

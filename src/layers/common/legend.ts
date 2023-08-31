@@ -9,6 +9,7 @@ import {
   LayerLegendStyle,
   LayerOptions,
   LayerStyle,
+  LegendCache,
   LegendData,
   LineDrawerProps,
   PolyDrawerProps,
@@ -16,7 +17,6 @@ import {
   TextDrawerProps,
 } from '../../types'
 import {
-  ColorMatrix,
   createStar,
   formatNumber,
   getTextWidth,
@@ -35,6 +35,7 @@ const defaultStyle: LayerLegendStyle = {
   offset: [0, 0],
   gap: [5, 10],
   shapeSize: 12,
+  shape: {},
   text: {
     fontSize: 12,
   },
@@ -112,12 +113,12 @@ export class LayerLegend extends LayerBase<Key> {
 
     Object.keys(data).map((key) => (data[key as Keys<typeof data>].length = 0))
 
-    this.legendDataGroup = layers.map((layer) => cloneDeep(layer.legendData)!)
+    this.legendDataGroup = layers.map((layer) => layer.legendData!)
     this.legendDataGroup.forEach(({legends}) => {
-      data.text.push(...(legends?.map(({label}) => label) ?? []))
-      data.shape.push(...(legends?.map(({shape}) => shape) ?? []))
-      data.shapeColors.push(...(legends?.map(({color}) => color) ?? []))
-      data.textColors.push(...new Array(legends?.length).fill(text.fill))
+      data.text.push(...legends.map(({label}) => label))
+      data.shape.push(...legends.map(({shape}) => shape))
+      data.shapeColors.push(...legends.map(({color}) => color))
+      data.textColors.push(...new Array(legends.length).fill(text.fill))
     })
     this.filter(layers)
     this.needRecalculated = true
@@ -127,7 +128,7 @@ export class LayerLegend extends LayerBase<Key> {
     const data = this.data.source,
       colors = cloneDeep(data.shapeColors),
       originData = cloneDeep(layers.map((layer) => layer.data)),
-      counts = this.legendDataGroup.map(({legends}) => legends?.length),
+      counts = this.legendDataGroup.map(({legends}) => legends.length),
       filterTypes = this.legendDataGroup.map(({filter}) => filter),
       colorMatrix = this.legendDataGroup.map(({colorMatrix}) => colorMatrix),
       active = new Array<boolean>(colors.length).fill(true)
@@ -143,11 +144,7 @@ export class LayerLegend extends LayerBase<Key> {
           start = counts.slice(0, index).reduce((prev, cur) => prev + cur, 0),
           layerData = originData[index],
           layer = layers[index],
-          order: {
-            type: ArrayItem<typeof filterTypes>
-            mapping: Record<Meta, number>
-            colorMatrix: ColorMatrix
-          } = {
+          order: LegendCache = {
             type: filterTypes[index],
             colorMatrix: colorMatrix[index],
             mapping: {},
@@ -158,7 +155,7 @@ export class LayerLegend extends LayerBase<Key> {
         if (!active[itemIndex]) {
           active[itemIndex] = true
           data.shapeColors[itemIndex] = colors[itemIndex]
-          data.textColors[itemIndex] = ungroup(this.style.text?.fill)!
+          data.textColors[itemIndex] = ungroup(this.style.text.fill)!
         } else {
           active[itemIndex] = false
           data.shapeColors[itemIndex] = this.disabledColor
@@ -214,9 +211,9 @@ export class LayerLegend extends LayerBase<Key> {
       [inner, outer] = this.style.gap ?? [0, 0],
       data = this.data.source,
       shapeWidth = shapeSize * 2,
-      fontSize = ungroup(text?.fontSize) ?? 12,
+      fontSize = ungroup(text.fontSize) ?? 12,
       maxHeight = Math.max(shapeSize, fontSize),
-      textData = data.text.map((value) => formatNumber(value, text?.format)),
+      textData = data.text.map((value) => formatNumber(value, text.format)),
       textWidths = textData.map((value) => getTextWidth(value, fontSize)),
       groupTextWidths = robustRange(0, maxColumn - 1).map(
         (column) =>

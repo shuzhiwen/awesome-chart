@@ -17,14 +17,14 @@ function createLayer(
   const {type, options, data, scale, style, animation, event} = schema!,
     layout = options?.layout ? chart.layout[options.layout] : undefined,
     layerOptions = {type, ...options, layout} as LayerOptions,
-    layer = chart.createLayer(layerOptions) as LayerInstance,
-    dataSet = isRawTable(data)
-      ? new DataTable(data)
-      : isRawRelation(data)
-      ? new DataRelation(data)
-      : isRawTableList(data)
-      ? new DataTableList(data)
-      : new DataBase(data ?? ({} as any))
+    layer = chart.createLayer(layerOptions) as LayerInstance
+  const dataSet = isRawTable(data)
+    ? new DataTable(data)
+    : isRawRelation(data)
+    ? new DataRelation(data)
+    : isRawTableList(data)
+    ? new DataTableList(data)
+    : new DataBase(data ?? ({} as any))
 
   layer.setStyle(style)
   layer.setAnimation(animation)
@@ -87,7 +87,7 @@ export function createChart(schema: CreateChartProps, existedChart?: Chart) {
     })
   })
 
-  chart.layers.map((instance) => instance?.playAnimation())
+  chart.layers.map((instance) => instance.playAnimation())
 
   return chart
 }

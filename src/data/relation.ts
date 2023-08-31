@@ -99,7 +99,7 @@ export class DataRelation extends DataBase<RawRelation> {
         !completed[id] && this.roots.push(id)
       } else if (current) {
         current.parents?.push(...parents)
-        parents.forEach((parent) => parent?.children?.push(current))
+        parents.forEach((parent) => parent.children?.push(current))
         prevIds.forEach((prevId) => !completed[prevId] && generateLink(prevId))
       }
 

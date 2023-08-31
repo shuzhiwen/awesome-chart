@@ -22,8 +22,8 @@ type GraphStyle = Partial<{
   ) => void | Partial<ElConfig>
 }>
 
-type TextStyle = GraphStyle &
-  Partial<{
+type TextStyle = Partial<
+  GraphStyle & {
     writingMode: 'horizontal-tb' | 'vertical-rl'
     textDecoration: MaybeGroup<
       'line-through' | 'overline' | 'underline' | 'none'
@@ -34,7 +34,8 @@ type TextStyle = GraphStyle &
     shadow: MaybeGroup<string>
     format: FormatNumberConfig
     offset: Vec2
-  }>
+  }
+>
 
 type LayerAxisStyle = {
   /**
@@ -44,7 +45,6 @@ type LayerAxisStyle = {
   coordinate: Coordinate
   maxScaleXTextNumber: 'auto' | number
   dynamicReserveTextX: boolean
-} & Partial<{
   splitLineAxisX: GraphStyle
   splitLineAxisY: GraphStyle
   splitLineAngle: GraphStyle
@@ -59,7 +59,7 @@ type LayerAxisStyle = {
   titleX: TextStyle
   titleY: TextStyle
   titleYR: TextStyle
-}>
+}
 
 type LayerLegendStyle = {
   gap: Vec2
@@ -67,51 +67,47 @@ type LayerLegendStyle = {
   align: [Alignment, Alignment]
   maxColumn: number
   shapeSize: number
-} & Partial<{
   shape: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerAuxiliaryStyle = {
   direction: Direction
   enableLegend: boolean
   labelPosition: Position4
   labelOffset: number
-} & Partial<{
   labelBackground: GraphStyle
   line: GraphStyle
   text: TextStyle
-}>
+}
 
-type LayerInteractiveStyle = Partial<{
+type LayerInteractiveStyle = {
   interactive: GraphStyle
   line: GraphStyle
-}>
+}
 
-type LayerBasemapStyle = Partial<{
+type LayerBasemapStyle = {
   block: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerHeatmapStyle = {
   radiusFactor: number
-} & Partial<{
   heatZone: GraphStyle
-}>
+}
 
-type LayerODLineStyle = Partial<{
+type LayerODLineStyle = {
   odLine: GraphStyle
   flyingObject: GraphStyle & {
     path: Maybe<string>
   }
-}>
+}
 
 type LayerTextStyle = {
   sanger: Vec2
-} & Partial<{
   text: Partial<TextStyle & {align: [Alignment, Alignment]}>
   groupText: Partial<TextStyle & {align: [Alignment, Alignment]}>[]
-}>
+}
 
 type LayerLineStyle = {
   /**
@@ -123,12 +119,11 @@ type LayerLineStyle = {
   labelPosition: Position5
   pointSize: number
   curveType: Curve
-} & Partial<{
   text: TextStyle
   curve: GraphStyle
   point: GraphStyle
   area: GraphStyle
-}>
+}
 
 type LayerRectStyle = {
   /**
@@ -145,19 +140,18 @@ type LayerRectStyle = {
    * - `percentage`: Like stack, but in the same group will bisect the height.
    */
   mode: 'cover' | 'group' | 'stack' | 'interval' | 'waterfall' | 'percentage'
+  /**
+   * Sort rectangles between and within groups.
+   */
+  sort: 'asc' | 'desc' | 'none'
   labelPosition: Position5 | [Position5, Position5]
   labelPositionOrient: Position2
   fixedWidth: Meta
   fixedHeight: Meta
-} & Partial<{
-  /**
-   * Sort rectangles between and within groups.
-   */
-  sort: 'asc' | 'desc'
   background: GraphStyle
   rect: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerArcStyle = {
   /**
@@ -169,17 +163,15 @@ type LayerArcStyle = {
   labelOffset: number
   guideLine: GraphStyle
   labelPosition: Position2
-} & Partial<{
   arc: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerScatterStyle = {
   pointSize: Vec2
-} & Partial<{
   point: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerFlopperStyle = {
   /**
@@ -191,7 +183,6 @@ type LayerFlopperStyle = {
   integers: number
   decimals: number
   thousandth: boolean
-} & Partial<{
   url: string
   characters: Record<
     string,
@@ -206,7 +197,7 @@ type LayerFlopperStyle = {
     fontSize: string
     backgroundColor: string
   }>
-}>
+}
 
 type LayerPackStyle = {
   /**
@@ -216,17 +207,15 @@ type LayerPackStyle = {
   variant: 'pack' | 'wordCloud'
   padding: number
   zoom: boolean
-} & Partial<{
   circle: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerForceStyle = {
   nodeSize: Vec2
-} & Partial<{
   node: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerSankeyStyle = {
   edgeVariant: 'curve' | 'ribbon'
@@ -236,20 +225,18 @@ type LayerSankeyStyle = {
   edgeGap: number
   labelOffset: number
   align: Alignment
-} & Partial<{
   node: GraphStyle
   edge: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerTreemapStyle = {
   tile: Tile
   align: [Alignment, Alignment]
   labelGap: number
-} & Partial<{
   rect: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerTreeStyle = {
   curveType: Curve
@@ -258,21 +245,19 @@ type LayerTreeStyle = {
   labelPosition: Position2
   align: Alignment
   nodeSize: number
-} & Partial<{
   node: GraphStyle
   edge: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerMatrixStyle = {
   shape: 'circle' | 'rect'
   colorDomain: Vec2 | 'auto'
   circleSize: [number | 'auto', number | 'auto']
-} & Partial<{
   circle: GraphStyle
   rect: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerRadarStyle = {
   /**
@@ -281,11 +266,10 @@ type LayerRadarStyle = {
    */
   mode: 'cover' | 'stack'
   pointSize: 6
-} & Partial<{
   point: GraphStyle
   polygon: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerDashboardStyle = {
   step: Vec2
@@ -293,21 +277,19 @@ type LayerDashboardStyle = {
   endAngle: number
   arcWidth: number
   tickSize: number
-} & Partial<{
   arc: GraphStyle
   pointer: GraphStyle
   tickLine: GraphStyle
   tickText: TextStyle
   valueText: TextStyle
   labelText: TextStyle
-}>
+}
 
 type LayerMarkStyle = {
   size: number
-} & Partial<{
   mark: GraphStyle
   text: TextStyle
-}>
+}
 
 type BrushGraphStyle = Omit<GraphStyle, 'mapping'> & {
   rx?: number
@@ -319,11 +301,10 @@ type LayerBrushStyle = {
   handleZoom: number
   direction: Direction
   debounce: number
-} & Partial<{
   background: BrushGraphStyle
   selection: BrushGraphStyle
   handle: BrushGraphStyle
-}>
+}
 
 type LayerCandleStyle = {
   positiveColor: string
@@ -342,45 +323,40 @@ type LayerCarouselStyle = {
   maxDotSize: number
   padding: number
   zoom: number
-} & Partial<{
   dot: GraphStyle
-}>
+}
 
 type LayerRadialStyle = {
   innerRadius: number
   cornerRadius: number
-} & Partial<{
   arc: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerWaveStyle = {
   wavelength: number
   amplitude: number
   areaNumber: number
   areaGap: number
-} & Partial<{
   area: GraphStyle
   background: GraphStyle
   text: TextStyle
-}>
+}
 
 type LayerGridStyle = {
   placeMode: 'collision' | 'position'
   draggable: boolean
   sangerColumn: number
   sangerGap: number
-} & Partial<{
   gridLine: GraphStyle
   placeholder: GraphStyle
   box: GraphStyle
-}>
+}
 
 type LayerChordStyle = {
   arcWidth: number
   labelOffset: number
-} & Partial<{
   edge: GraphStyle
   node: GraphStyle
   text: TextStyle
-}>
+}

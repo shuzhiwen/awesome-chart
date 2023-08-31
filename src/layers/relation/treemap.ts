@@ -25,6 +25,8 @@ const defaultStyle: LayerTreemapStyle = {
   tile: 'treemapSquarify',
   align: ['middle', 'middle'],
   labelGap: 5,
+  rect: {},
+  text: {},
 }
 
 export class LayerTreemap extends LayerBase<Key> {
@@ -89,7 +91,7 @@ export class LayerTreemap extends LayerBase<Key> {
         layer: this,
         row: leaves.length,
         column: 1,
-        theme: rect?.fill,
+        theme: rect.fill,
       })
 
     this.rectData = leaves.map(({x0, x1, y0, y1, data}, i) => ({
@@ -105,7 +107,7 @@ export class LayerTreemap extends LayerBase<Key> {
     this.textData = this.rectData.map(
       ({x, y, width, height, data: {name, value}}, i) => {
         let nameX: number, nameY: number, position: Position9
-        const fontSize = getAttr(text?.fontSize, i, 12)
+        const fontSize = getAttr(text.fontSize, i, 12)
 
         if (align === 'start' && verticalAlign === 'start') {
           ;[nameX, nameY, position] = [x, y, 'rightBottom']

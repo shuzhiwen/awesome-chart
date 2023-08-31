@@ -25,6 +25,8 @@ type Key = 'text' | 'arc'
 const defaultStyle: LayerRadialStyle = {
   innerRadius: 10,
   cornerRadius: Infinity,
+  text: {},
+  arc: {},
 }
 
 export class LayerRadial extends LayerBase<Key> {
@@ -92,7 +94,7 @@ export class LayerRadial extends LayerBase<Key> {
         layer: this,
         row: 1,
         column: rawTableList.length,
-        theme: arc?.fill,
+        theme: arc.fill,
       })
 
     this.arcData = rawTableList.map(([dimension, value, maxValue], i) => ({

@@ -12,6 +12,7 @@ import {LayerBase} from '../base'
 import {createData, createStyle, createText} from '../helpers'
 
 const defaultStyle: LayerTextStyle = {
+  groupText: [],
   sanger: [1, 1],
   text: {
     fontSize: 16,
@@ -74,7 +75,7 @@ export class LayerText extends LayerBase<'text'> {
       const value = typeof item === 'string' ? item : item.text,
         xIndex = typeof item === 'string' ? 0 : item.x,
         yIndex = typeof item === 'string' ? 0 : item.y,
-        style = merge({}, text, groupText?.[yIndex]),
+        style = merge({}, text, groupText[yIndex]),
         fontSize = getAttr(style.fontSize, i, 12),
         align = getAttr(style.align, 0, 'start'),
         verticalAlign = getAttr(style.align, 1, 'start')
@@ -109,7 +110,7 @@ export class LayerText extends LayerBase<'text'> {
     const textData = this.textData.map((item) => ({
       data: [item],
       ...this.style.text,
-      ...this.style.groupText?.[item.yIndex],
+      ...this.style.groupText[item.yIndex],
     }))
 
     this.drawBasic({type: 'text', key: 'text', data: textData})

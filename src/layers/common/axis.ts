@@ -162,15 +162,15 @@ export class LayerAxis extends LayerBase<Key> {
     this._scale = createScale(undefined, this.scale, {nice: scale.nice})
 
     scaleTypes.forEach((type) => {
-      if (!scale?.[type]) {
+      if (!scale[type]) {
         return
       } else if (!this.scale[type] || coordinate === 'geographic') {
-        this.scale[type] = scale?.[type]
+        this.scale[type] = scale[type]
         return
       } else if (isScaleLinear(this.scale[type])) {
         this.mergeScale(scale[type], type, 'domain')
       } else {
-        this.scale[type] = scale?.[type]
+        this.scale[type] = scale[type]
       }
 
       // dangerous: latecomers first
@@ -183,8 +183,8 @@ export class LayerAxis extends LayerBase<Key> {
     type: Keys<Omit<LayerAxis['scale'], 'nice'>>,
     target: 'domain' | 'range'
   ) {
-    const current = this.scale[type]?.[target]() ?? [],
-      incoming = scale?.[target]() ?? []
+    const current = this.scale[type]?.[target]() ?? []
+    const incoming = scale?.[target]() ?? []
 
     if (current[0] > current[1] !== incoming[0] > incoming[1]) {
       this.log.debug.warn('Layers scale does not match', {
@@ -310,7 +310,7 @@ export class LayerAxis extends LayerBase<Key> {
     this.textData.titleX = [
       createText({
         x: left + width / 2,
-        y: bottom - (textX?.offset?.[1] ?? 0) + (ungroup(textX?.fontSize) ?? 0),
+        y: bottom - (textX.offset?.[1] ?? 0) + (ungroup(textX.fontSize) ?? 0),
         value: this.data?.source.titleX ?? '',
         style: titleX,
         position: 'bottom',
@@ -354,7 +354,7 @@ export class LayerAxis extends LayerBase<Key> {
         createText({
           x: x2!,
           y: y2!,
-          value: labelYR[i]?.label,
+          value: labelYR[i].label,
           style: textYR,
           position: 'right',
         })

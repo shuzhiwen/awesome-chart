@@ -98,9 +98,9 @@ class Selector {
   remove(target: DrawerTarget): DrawerTarget
   remove(target: Maybe<DrawerTarget>) {
     if (isSC(target)) {
-      return target?.remove()
+      return target.remove()
     } else if (isCC(target)) {
-      return target.parent?.removeChild(target)
+      return target.parent.removeChild(target)
     }
   }
 }

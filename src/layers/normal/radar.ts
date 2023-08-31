@@ -31,6 +31,8 @@ const defaultStyle: LayerRadarStyle = {
     strokeWidth: 2,
     fillOpacity: 0.4,
   },
+  point: {},
+  text: {},
 }
 
 export class LayerRadar extends LayerBase<Key> {
@@ -136,7 +138,7 @@ export class LayerRadar extends LayerBase<Key> {
         layer: this,
         row: 1,
         column: headers.length - 1,
-        theme: polygon?.fill,
+        theme: polygon.fill,
       })
 
     this.pointData = rawTableList.map(([dimension, ...values]) =>
@@ -168,7 +170,7 @@ export class LayerRadar extends LayerBase<Key> {
 
     this.polygonData = this.pointData[0].map((_, i) => ({
       points: this.pointData.map((group) => ({x: group[i].x, y: group[i].y})),
-      color: this.pointData[0]?.[i]?.color ?? 'white',
+      color: this.pointData[0]?.[i].color ?? 'white',
       centerX,
       centerY,
     }))

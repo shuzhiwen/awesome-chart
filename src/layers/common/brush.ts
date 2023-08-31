@@ -105,7 +105,7 @@ export class LayerBrush extends LayerBase<never> {
         direction === 'horizontal' ? [x1, x2] : [y1, y2]
       )
 
-    if (this.scale.scaleColor && targets?.includes('scaleColor')) {
+    if (this.scale.scaleColor && targets.includes('scaleColor')) {
       const backgroundColor = createGradient({
         x1,
         x2,
@@ -189,7 +189,8 @@ export class LayerBrush extends LayerBase<never> {
       }
     })
 
-    const leftHandle = this.root.selectAll('.handle--w'),
+    const selection = this.root.selectAll('.selection'),
+      leftHandle = this.root.selectAll('.handle--w'),
       rightHandle = this.root.selectAll('.handle--e'),
       lb = this.getBox(leftHandle),
       rb = this.getBox(rightHandle)
@@ -202,6 +203,10 @@ export class LayerBrush extends LayerBase<never> {
       'transform-origin',
       `${rb.x + rb.width / 2}px ${rb.y + rb.height / 2}px`
     )
+    addStyle(
+      this.root.select(`#${this.clipPathId}`).selectAll('rect'),
+      this.getBox(selection)
+    )
 
     this.rebuildScale({trigger: this, redraw: true})
   }
@@ -212,7 +217,6 @@ export class LayerBrush extends LayerBase<never> {
     }
 
     const {selection = {}, background = {}, handle, handleZoom} = this.style
-    const brushBar = this.root.selectAll('.selection')
     const handlers = [
       this.root.selectAll('.handle--w'),
       this.root.selectAll('.handle--e'),
@@ -220,16 +224,13 @@ export class LayerBrush extends LayerBase<never> {
 
     addStyle(this.root.selectAll('.overlay'), transformAttr(background))
     addStyle(this.root.selectAll('.selection'), transformAttr(selection))
-    addStyle(
-      this.root.select(`#${this.clipPathId}`).selectAll('rect'),
-      this.getBox(brushBar)
-    )
+
     handlers.forEach((handler) =>
       addStyle(
         handler,
         transformAttr({
           ...handle,
-          strokeWidth: Number(handle?.strokeWidth) / handleZoom,
+          strokeWidth: Number(handle.strokeWidth) / handleZoom,
           transform: `scale(${handleZoom})`,
         })
       )

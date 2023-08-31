@@ -83,7 +83,7 @@ export class LayerHeatmap extends LayerBase<'heatZone'> {
           r2: item.r,
           width: item.x + item.r,
           height: item.y + item.r,
-          colors: group(heatZone?.fill),
+          colors: group(heatZone.fill),
           x1: item.x / (item.x + item.r),
           x2: item.x / (item.x + item.r),
           y1: item.y / (item.y + item.r),

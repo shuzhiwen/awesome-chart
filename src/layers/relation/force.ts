@@ -23,6 +23,8 @@ type Key = 'node' | 'text'
 
 const defaultStyle: LayerForceStyle = {
   nodeSize: [5, 20],
+  node: {},
+  text: {},
 }
 
 export class LayerForce extends LayerBase<Key> {
@@ -89,7 +91,7 @@ export class LayerForce extends LayerBase<Key> {
         layer: this,
         row: 1,
         column: rawTableList.length,
-        theme: node?.fill,
+        theme: node.fill,
       }),
       scaleNodeSize = scaleLinear({
         domain: this.data.select(headers[1]).range(),

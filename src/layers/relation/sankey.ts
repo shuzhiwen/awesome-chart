@@ -38,6 +38,7 @@ const defaultStyle: LayerSankeyStyle = {
   text: {
     fontSize: 12,
   },
+  node: {},
 }
 
 export class LayerSankey extends LayerBase<Key> {
@@ -119,7 +120,7 @@ export class LayerSankey extends LayerBase<Key> {
         layer: this,
         row: groupedNodes.length,
         column: 1,
-        theme: node?.fill,
+        theme: node.fill,
       })
 
       return groupedNodes.map((item, j) => ({
@@ -301,8 +302,8 @@ export class LayerSankey extends LayerBase<Key> {
       data: [{path: this.getPath(rest)!}],
       ...this.style.edge,
       fill: edgeVariant === 'ribbon' ? color : '#ffffff00',
-      stroke: edgeVariant === 'curve' ? color : edge?.stroke,
-      strokeWidth: edgeVariant === 'curve' ? length : edge?.strokeWidth,
+      stroke: edgeVariant === 'curve' ? color : edge.stroke,
+      strokeWidth: edgeVariant === 'curve' ? length : edge.strokeWidth,
     }))
     const textData = this.textData.map((group) => ({
       data: group,

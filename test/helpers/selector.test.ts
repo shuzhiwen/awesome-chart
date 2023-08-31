@@ -4,7 +4,7 @@ import {selector} from '../../src'
 
 test('Selector', () => {
   const svgContainer = select(document.createElement('svg'))
-  const canvasContainer = new Container()
+  const canvasContainer = new Container().addChild(new Container())
 
   expect(selector.createGroup(svgContainer, 'sub')).not.toBeNull()
   expect(selector.createGroup(svgContainer, 'sub')).not.toBeUndefined()
@@ -22,5 +22,5 @@ test('Selector', () => {
   expect(selector.getDirectChild(canvasContainer, 'sub')).not.toBeUndefined()
 
   expect(selector.remove(svgContainer)).toBeDefined()
-  expect(selector.remove(canvasContainer)).toBeUndefined()
+  expect(selector.remove(canvasContainer)).toBeDefined()
 })

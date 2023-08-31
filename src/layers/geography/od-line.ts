@@ -108,7 +108,7 @@ export class LayerODLine extends LayerBase<Key> {
       }
     })
 
-    if (flyingObject?.path) {
+    if (flyingObject.path) {
       this.setAnimation({
         flyingObject: {
           loop: {

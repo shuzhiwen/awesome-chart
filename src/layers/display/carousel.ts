@@ -20,6 +20,7 @@ const defaultStyle: LayerCarouselStyle = {
   maxDotSize: 10,
   padding: 10,
   zoom: 0.7,
+  dot: {},
 }
 
 export class LayerCarousel extends LayerBase<Key> {
@@ -233,7 +234,7 @@ export class LayerCarousel extends LayerBase<Key> {
       data: this.dotData,
       ...this.style.dot,
       opacity: this.dotData.map(
-        ({opacity}, i) => opacity * getAttr(this.style.dot?.opacity, i, 1)
+        ({opacity}, i) => opacity * getAttr(this.style.dot.opacity, i, 1)
       ),
     }
 

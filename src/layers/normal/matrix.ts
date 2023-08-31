@@ -29,6 +29,9 @@ const defaultStyle: LayerMatrixStyle = {
   shape: 'rect',
   circleSize: ['auto', 'auto'],
   colorDomain: 'auto',
+  circle: {},
+  rect: {},
+  text: {},
 }
 
 export class LayerMatrix extends LayerBase<Key> {
@@ -129,7 +132,7 @@ export class LayerMatrix extends LayerBase<Key> {
         column: Math.ceil(
           distance / getMagnitude(distance / body.flatMap(noChange).length)
         ),
-        theme: shape === 'rect' ? rect?.fill : circle?.fill,
+        theme: shape === 'rect' ? rect.fill : circle.fill,
       }),
       scaleColor =
         this.scale.scaleColor ||

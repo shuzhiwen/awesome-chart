@@ -40,6 +40,9 @@ const defaultStyle: LayerLineStyle = {
     fill: 'white',
     strokeWidth: 2,
   },
+  area: {
+    fillOpacity: 0.5,
+  },
 }
 
 export class LayerLine extends LayerBase<Key> {
@@ -113,7 +116,7 @@ export class LayerLine extends LayerBase<Key> {
         layer: this,
         row: 1,
         column: rawTableList[0].length - 1,
-        theme: curve?.stroke,
+        theme: curve.stroke,
       })
 
     this.pointData = rawTableList.map(([dimension, ...values]) =>

@@ -33,6 +33,8 @@ const defaultStyle: LayerTreeStyle = {
   edge: {
     strokeWidth: 2,
   },
+  node: {},
+  text: {},
 }
 
 export class LayerTree extends LayerBase<Key> {
@@ -102,7 +104,7 @@ export class LayerTree extends LayerBase<Key> {
     this.groups = levels.map((value) =>
       nodes.filter(({level}) => level === value)
     )
-    this.groups[0]?.forEach(dfs)
+    this.groups[0].forEach(dfs)
     this.createScale()
   }
 
@@ -133,7 +135,7 @@ export class LayerTree extends LayerBase<Key> {
         layer: this,
         row: groupedNodes.length,
         column: 1,
-        theme: node?.fill,
+        theme: node.fill,
       })
 
       return groupedNodes.map((item, j) => ({
@@ -165,7 +167,7 @@ export class LayerTree extends LayerBase<Key> {
         const target = direction === 'horizontal' ? 'y' : 'x',
           value = rest[target]
 
-        parents?.forEach((parent) => {
+        parents.forEach((parent) => {
           if (!parent[target]) parent[target] = value
 
           parent.min = Math.min(value, parent.min || value)

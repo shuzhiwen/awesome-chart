@@ -27,6 +27,9 @@ const defaultStyle: LayerFlopperStyle = {
   integers: 8,
   decimals: 2,
   thousandth: true,
+  characters: {},
+  cell: {},
+  url: '',
 }
 
 export class LayerFlopper extends LayerBase<never> {
@@ -134,7 +137,7 @@ export class LayerFlopper extends LayerBase<never> {
 
     const {width, height} = this.cellSize,
       {variant, url, characters, scale, cell} = this.style,
-      background = cell?.backgroundColor || 'green',
+      background = cell.backgroundColor || 'green',
       data =
         variant === 'flop' ? cloneDeep(characterSet).reverse() : characterSet,
       position = variant === 'flop' ? 'absolute' : 'relative'

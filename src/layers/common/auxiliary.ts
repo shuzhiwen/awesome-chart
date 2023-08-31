@@ -33,6 +33,7 @@ const defaultStyle: LayerAuxiliaryStyle = {
   labelBackground: {
     hidden: true,
   },
+  text: {},
 }
 
 export class LayerAuxiliary extends LayerBase<Key> {
@@ -99,7 +100,7 @@ export class LayerAuxiliary extends LayerBase<Key> {
         layer: this,
         row: rawTableList.length,
         column: 1,
-        theme: line?.stroke,
+        theme: line.stroke,
       })
 
     if (
@@ -151,9 +152,9 @@ export class LayerAuxiliary extends LayerBase<Key> {
 
     this.backgroundData = this.textData.map(({x, y, textWidth}) => ({
       x: x - 4,
-      y: y - getAttr(text?.fontSize, 0, 12) - 4,
+      y: y - getAttr(text.fontSize, 0, 12) - 4,
       width: textWidth + 8,
-      height: getAttr(text?.fontSize, 0, 12) + 8,
+      height: getAttr(text.fontSize, 0, 12) + 8,
     }))
 
     if (enableLegend) {

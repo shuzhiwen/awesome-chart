@@ -49,6 +49,7 @@ const defaultStyle: LayerGridStyle = {
     stroke: 'gray',
     strokeWidth: 1,
   },
+  box: {},
 }
 
 const getLengthFromIndex = (index: number, unit: number, gap: number) => {
