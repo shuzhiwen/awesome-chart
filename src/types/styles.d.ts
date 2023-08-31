@@ -1,6 +1,7 @@
 import {AnimationOptions} from './animation'
 import {ChartTheme} from './core'
 import {BasicDrawerProps, ElConfig} from './draw'
+import {LayerScale} from './layer'
 import {FormatNumberConfig} from './utils'
 
 type LayerStyle<T> = Computable<Partial<T>, ChartTheme>
@@ -314,14 +315,14 @@ type BrushGraphStyle = Omit<GraphStyle, 'mapping'> & {
 }
 
 type LayerBrushStyle = {
-  targets: string[]
+  targets: Keys<Omit<LayerScale, 'nice'>>[]
   handleZoom: number
   direction: Direction
+  debounce: number
 } & Partial<{
   background: BrushGraphStyle
   selection: BrushGraphStyle
-  leftHandle: BrushGraphStyle
-  rightHandle: BrushGraphStyle
+  handle: BrushGraphStyle
 }>
 
 type LayerCandleStyle = {

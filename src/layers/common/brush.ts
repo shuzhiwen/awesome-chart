@@ -1,5 +1,9 @@
 import {BrushBehavior, brushX, brushY, D3BrushEvent} from 'd3'
+import {debounce} from 'lodash'
 import {
+  Box,
+  ChartContext,
+  D3Selection,
   LayerAxisScale,
   LayerBrushStyle,
   LayerOptions,
@@ -11,6 +15,7 @@ import {createScale, createStyle} from '../helpers'
 
 const defaultStyle: LayerBrushStyle = {
   targets: [],
+  debounce: 300,
   handleZoom: 0.5,
   direction: 'horizontal',
   selection: {
@@ -26,12 +31,7 @@ const defaultStyle: LayerBrushStyle = {
     rx: 4,
     ry: 4,
   },
-  leftHandle: {
-    stroke: 'gray',
-    strokeWidth: 1,
-    fill: 'white',
-  },
-  rightHandle: {
+  handle: {
     stroke: 'gray',
     strokeWidth: 1,
     fill: 'white',
@@ -41,11 +41,15 @@ const defaultStyle: LayerBrushStyle = {
 export class LayerBrush extends LayerBase<never> {
   private _scale: Omit<LayerAxisScale, 'nice'> = {}
 
-  private originScaleRangeMap: Map<string, any[]> = new Map()
+  private rangeMapping: Map<string, any[]> = new Map()
 
   private brush: Maybe<BrushBehavior<unknown>>
 
+  private rebuildScale: ChartContext['rebuildScale']
+
   private _style = defaultStyle
+
+  private clipPathId
 
   get data() {
     return null
@@ -61,6 +65,8 @@ export class LayerBrush extends LayerBase<never> {
 
   constructor(options: LayerOptions) {
     super({options})
+    this.clipPathId = `brush-selection-${this.options.id}`
+    this.rebuildScale = debounce(this.options.rebuildScale, this.style.debounce)
   }
 
   setScale(scale: LayerAxisScale) {
@@ -69,13 +75,12 @@ export class LayerBrush extends LayerBase<never> {
 
   setStyle(style: LayerStyle<LayerBrushStyle>) {
     this._style = createStyle(this.options, defaultStyle, this.style, style)
+    this.rebuildScale = debounce(this.options.rebuildScale, this.style.debounce)
   }
 
   update() {
-    if (!this.scale) throw new Error('Invalid scale')
     if (!isSC(this.root)) {
-      this.log.warn('The brush only supports svg')
-      return
+      throw new Error('The brush only supports svg')
     }
 
     const {layout, createGradient} = this.options,
@@ -112,12 +117,12 @@ export class LayerBrush extends LayerBase<never> {
       this.root
         .selectAll('.overlay')
         .attr('fill', backgroundColor)
-        .attr('clip-path', `url(#brush-selection-${this.options.id})`)
+        .attr('clip-path', `url(#${this.clipPathId})`)
       this.root
         .selectAll('clipPath')
         .data([null])
         .join('clipPath')
-        .attr('id', `brush-selection-${this.options.id}`)
+        .attr('id', this.clipPathId)
         .append('rect')
         .attr('fill', '#ffffff')
         .attr('x', left)
@@ -127,33 +132,44 @@ export class LayerBrush extends LayerBase<never> {
     }
   }
 
+  private getBox(selection: D3Selection): Box {
+    return {
+      x: Number(selection.attr('x')),
+      y: Number(selection.attr('y')),
+      width: Number(selection.attr('width')),
+      height: Number(selection.attr('height')),
+    }
+  }
+
   private brushed(event: D3BrushEvent<unknown>) {
-    const {layout, rebuildScale} = this.options,
-      {width, height, left, top} = layout,
-      {direction, targets, handleZoom} = this.style,
+    if (!isSC(this.root)) {
+      throw new Error('The brush only supports svg')
+    }
+
+    const {direction, targets} = this.style,
+      {width, height, left, top} = this.options.layout,
       total = direction === 'horizontal' ? width : height,
-      selection = (event.selection ?? [0, total]) as Vec2,
-      zoomFactor =
-        total / Math.max(selection[1] - selection[0], Number.MIN_VALUE)
+      [min, max] = (event.selection ?? [0, total]) as Vec2,
+      zoomFactor = total / Math.max(max - min, Number.MIN_VALUE)
 
     Object.entries(this.scale).forEach(([name, scale]) => {
-      if (!targets?.includes(name) || !scale) return
-      if (!this.originScaleRangeMap.has(name)) {
+      if (!targets.includes(name as Keys<LayerBrush['scale']>)) return
+      if (!this.rangeMapping.has(name)) {
         if (name === 'scaleColor') {
-          this.originScaleRangeMap.set(name, [
+          this.rangeMapping.set(name, [
             0,
             scale.range().length - 1,
             scale.range(),
           ])
         } else {
-          this.originScaleRangeMap.set(name, scale.range())
+          this.rangeMapping.set(name, scale.range())
         }
       }
 
-      const [start, end, colors] = this.originScaleRangeMap.get(name) ?? [0, 0],
+      const [start, end, colors] = this.rangeMapping.get(name) ?? [0, 0],
         relativeEnd = start + (end - start) * zoomFactor,
         offsetFactor =
-          (selection[0] - (direction === 'horizontal' ? left : top)) / total,
+          (min - (direction === 'horizontal' ? left : top)) / total,
         offset = offsetFactor * (relativeEnd - start)
 
       if (name === 'scaleColor') {
@@ -173,56 +189,50 @@ export class LayerBrush extends LayerBase<never> {
       }
     })
 
-    rebuildScale({trigger: this, redraw: true})
+    const leftHandle = this.root.selectAll('.handle--w'),
+      rightHandle = this.root.selectAll('.handle--e'),
+      lb = this.getBox(leftHandle),
+      rb = this.getBox(rightHandle)
 
-    if (isSC(this.root)) {
-      addStyle(
-        this.root.selectAll('.overlay'),
-        transformAttr(this.style.background ?? {})
-      )
-      addStyle(
-        this.root.selectAll('.selection'),
-        transformAttr(this.style.selection ?? {})
-      )
-      addStyle(
-        this.root.selectAll('.handle--w'),
-        transformAttr(this.style.leftHandle ?? {})
-      )
-      addStyle(
-        this.root.selectAll('.handle--e'),
-        transformAttr(this.style.rightHandle ?? {})
-      )
+    leftHandle.attr(
+      'transform-origin',
+      `${lb.x + lb.width / 2}px ${lb.y + lb.height / 2}px`
+    )
+    rightHandle.attr(
+      'transform-origin',
+      `${rb.x + rb.width / 2}px ${rb.y + rb.height / 2}px`
+    )
 
-      const selection = this.root.selectAll('.selection'),
-        handles = [
-          this.root.selectAll('.handle--w'),
-          this.root.selectAll('.handle--e'),
-        ]
-
-      handles.forEach((handle) => {
-        const [x, y, width, height] = [
-          Number(handle.attr('x')),
-          Number(handle.attr('y')),
-          Number(handle.attr('width')),
-          Number(handle.attr('height')),
-        ]
-        handle.attr('transform-origin', `${x + width / 2} ${y + height / 2}`)
-        handle.attr(
-          'stroke-width',
-          Number(handle.attr('stroke-width')) / handleZoom
-        )
-        handle.attr('transform', `scale(${handleZoom})`)
-      })
-
-      this.root
-        .select(`#brush-selection-${this.options.id}`)
-        .selectAll('rect')
-        .attr('x', selection.attr('x'))
-        .attr('y', selection.attr('y'))
-        .attr('width', selection.attr('width'))
-        .attr('height', selection.attr('height'))
-    }
+    this.rebuildScale({trigger: this, redraw: true})
   }
 
-  draw() {}
+  draw() {
+    if (!isSC(this.root)) {
+      throw new Error('The brush only supports svg')
+    }
+
+    const {selection = {}, background = {}, handle, handleZoom} = this.style
+    const brushBar = this.root.selectAll('.selection')
+    const handlers = [
+      this.root.selectAll('.handle--w'),
+      this.root.selectAll('.handle--e'),
+    ]
+
+    addStyle(this.root.selectAll('.overlay'), transformAttr(background))
+    addStyle(this.root.selectAll('.selection'), transformAttr(selection))
+    addStyle(
+      this.root.select(`#${this.clipPathId}`).selectAll('rect'),
+      this.getBox(brushBar)
+    )
+    handlers.forEach((handler) =>
+      addStyle(
+        handler,
+        transformAttr({
+          ...handle,
+          strokeWidth: Number(handle?.strokeWidth) / handleZoom,
+          transform: `scale(${handleZoom})`,
+        })
+      )
+    )
+  }
 }
