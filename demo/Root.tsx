@@ -1,9 +1,8 @@
 import {debounce, isFunction} from 'lodash'
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {CSSProperties, useCallback, useEffect, useState} from 'react'
 import {Chart} from './Chart'
 import * as debugs from './debug'
 import {Editor} from './Editor'
-import styles from './Root.module.css'
 import base from './schema/base'
 import {Menu} from './TabMenu'
 
@@ -23,15 +22,37 @@ export function Root() {
   }, [])
 
   return (
-    <div className={styles.container} style={{opacity: isDebug ? 0.1 : 1}}>
+    <div style={styles.container}>
       <Menu onChange={onEditorChange} />
-      <div className={styles.mainSection}>
+      <div style={styles.main}>
         <Editor schema={editorSchema} onChange={onChartChange} />
-        <div className={styles.chartSection}>
+        <div style={styles.chart}>
           <Chart debuggers={debuggers} schema={chartSchema} variant="dark" />
           <Chart debuggers={debuggers} schema={chartSchema} variant="light" />
         </div>
       </div>
     </div>
   )
+}
+
+const styles: Record<'container' | 'main' | 'chart', CSSProperties> = {
+  container: {
+    opacity: isDebug ? 0.1 : 1,
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100vw',
+    height: '100vh',
+  },
+  main: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    width: '100%',
+  },
+  chart: {
+    display: 'grid',
+    gridTemplateRows: '1fr 1fr',
+    backgroundColor: 'seagreen',
+    padding: '12px',
+    rowGap: '8px',
+  },
 }

@@ -16,9 +16,8 @@ import {
 import {D3Selection, LayerOptions} from 'awesome-chart/dist/types'
 import {hierarchy, select} from 'd3'
 import {cloneDeep, max, merge} from 'lodash'
-import React, {useEffect, useRef} from 'react'
+import React, {CSSProperties, useEffect, useRef} from 'react'
 import {schemaMenu} from './schema'
-import s from './TabMenu.module.css'
 
 type MenuItem = {
   name: Meta
@@ -256,8 +255,22 @@ export const Menu = (props: {onChange: (data: any) => void}) => {
   }, [onChange])
 
   return (
-    <div className={s.sideContainer}>
-      <div ref={ref} className={s.menu} />
+    <div style={styles.container}>
+      <div ref={ref} style={styles.menu} />
     </div>
   )
+}
+
+const styles: Record<'container' | 'menu', CSSProperties> = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: 100,
+  },
+  menu: {
+    zIndex: 1,
+    width: 250,
+    pointerEvents: 'none',
+    height: window.innerHeight,
+  },
 }

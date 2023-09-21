@@ -138,11 +138,12 @@ export class Chart {
     this.engine = engine
     this.container = container
 
-    const domContainer = select(this.container).html('')
+    const selector = select(this.container).html('')
+    const box = container.getBoundingClientRect()
 
     if (adjust) {
-      this.containerWidth = parseFloat(domContainer.style('width')) || width
-      this.containerHeight = parseFloat(domContainer.style('height')) || width
+      this.containerWidth = box.width || width
+      this.containerHeight = box.height || height
     } else {
       this.containerWidth = width
       this.containerHeight = height
@@ -173,7 +174,7 @@ export class Chart {
         this.event.fire('globalEvent', {event})
       })
     } else {
-      this.root = domContainer
+      this.root = selector
         .append('svg')
         .attr('width', this.containerWidth)
         .attr('height', this.containerHeight)

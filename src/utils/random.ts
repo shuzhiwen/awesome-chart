@@ -19,8 +19,12 @@ const mapping = {
 const toFixed = (number: number, decimals: number) =>
   Math.round(number / 10 ** -decimals) / 10 ** decimals
 
-const createNumberGenerator = (options: RandomNumberOptions) => () =>
-  toFixed(mapping[options.mode](options)(), options.decimals || 0)
+const createNumberGenerator =
+  ({abs, decimals = 0, ...options}: RandomNumberOptions) =>
+  () => {
+    const number = toFixed(mapping[options.mode](options)(), decimals)
+    return abs ? Math.abs(number) : number
+  }
 
 export const randomTableList = (
   options: RandomTableListOptions

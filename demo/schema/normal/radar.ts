@@ -1,4 +1,4 @@
-import {randomTableList} from 'awesome-chart'
+import {randomTableList} from '../../../src'
 
 export default ({mode}) => [
   {
@@ -22,6 +22,7 @@ export default ({mode}) => [
       column: 2,
       mu: 500,
       sigma: 200,
+      abs: true,
     }),
     style: {
       mode,

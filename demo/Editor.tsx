@@ -4,7 +4,6 @@ import * as monaco from 'monaco-editor'
 import React, {useEffect, useMemo, useRef, useState} from 'react'
 import * as awesome from '../src'
 import {download, errorCatcher} from '../src'
-import styles from './Editor.module.css'
 
 const throttleDownload = throttle(download, 500)
 
@@ -103,5 +102,5 @@ export function Editor(props: {schema?: AnyObject; onChange: AnyFunction}) {
     }
   }, [editor, onChange, schema])
 
-  return <div className={styles.editor} ref={editorRef} />
+  return <div ref={editorRef} style={{flex: 1}} />
 }

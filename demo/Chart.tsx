@@ -1,5 +1,11 @@
 import {cloneDeep} from 'lodash'
-import React, {useCallback, useEffect, useRef, useState} from 'react'
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import {
   Chart as ChartShape,
   createChart,
@@ -9,7 +15,6 @@ import {
 } from '../src'
 import {darkTheme, lightTheme} from '../src/core/theme'
 import {CreateChartProps} from '../src/types'
-import styles from './Chart.module.css'
 import {MenuItemShape} from './schema'
 
 export const Chart = (props: {
@@ -61,26 +66,55 @@ export const Chart = (props: {
   }, [schema, engine, variant])
 
   return (
-    <div className={styles.chartContainer}>
-      <div className={styles.title}>
-        <div className={styles.button} onClick={toggleDebug}>
+    <div style={styles.container}>
+      <div style={styles.title}>
+        <div style={styles.button} onClick={toggleDebug}>
           UPDATE
         </div>
-        <div className={styles.button} onClick={toggleEngine}>
+        <div style={styles.button} onClick={toggleEngine}>
           {engine.toUpperCase()}
         </div>
-        <div className={styles.button} onClick={downloadFile}>
+        <div style={styles.button} onClick={downloadFile}>
           DOWNLOAD
         </div>
       </div>
       <div
-        ref={chartRef}
-        className={styles.chart}
         style={{
+          ...styles.chart,
           border: `dotted ${variant === 'light' ? '#eeeeee' : '#101010'} 2px`,
           backgroundColor: variant === 'light' ? '#eeeeee' : '#101010',
         }}
-      />
+      >
+        <div ref={chartRef} style={{width: '100%', height: '100%'}} />
+      </div>
     </div>
   )
+}
+
+const styles: Record<
+  'container' | 'title' | 'button' | 'chart',
+  CSSProperties
+> = {
+  container: {
+    color: '#f1f2f3',
+    padding: '12px',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  title: {
+    height: '3vh',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  button: {
+    paddingBottom: '8px',
+    fontSize: '14px',
+    cursor: 'pointer',
+  },
+  chart: {
+    flex: 1,
+    padding: '12px',
+    borderRadius: '8px',
+  },
 }

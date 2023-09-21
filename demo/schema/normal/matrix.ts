@@ -1,4 +1,4 @@
-import {randomTable} from 'awesome-chart'
+import {randomTable} from '../../../src'
 
 export default ({shape, brush}: {shape: string; brush?: boolean}) =>
   [

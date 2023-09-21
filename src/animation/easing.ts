@@ -5,6 +5,7 @@ export const svgEasing = new Map<
   (normalizedTime: number) => number
 >([
   [undefined, d3.easeSinInOut],
+  ['linear', d3.easeLinear],
   ['easeInBack', d3.easeBackIn],
   ['easeInBounce', d3.easeBounceIn],
   ['easeInCirc', d3.easeCircleIn],

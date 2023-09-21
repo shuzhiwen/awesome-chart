@@ -27,6 +27,7 @@ type LegendShape = 'rect' | 'circle' | 'brokenLine' | 'dottedLine' | 'star'
  * @see https://easings.net/
  */
 type Easing =
+  | 'linear'
   | 'easeInBack'
   | 'easeInBounce'
   | 'easeInCirc'

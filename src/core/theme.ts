@@ -126,9 +126,9 @@ function createDefaultTheme({
         easing: 'easeInOutSine',
       },
       update: {
-        duration: 2000,
+        duration: 1000,
         delay: 0,
-        easing: 'easeInOutSine',
+        easing: 'linear',
       },
       presets: {
         zoomIn: {

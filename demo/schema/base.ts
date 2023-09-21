@@ -20,7 +20,7 @@ export default (
   hasBrush: config?.hasBrush,
   facet: config?.facet,
   tooltipOptions: {
-    mode: 'single' as const,
+    mode: 'dimension' as const,
     ...config?.tooltipOptions,
   },
   layers,

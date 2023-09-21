@@ -1,4 +1,4 @@
-import {randomTableList} from 'awesome-chart'
+import {randomTableList} from '../../../src'
 
 export default ({
   variant,
@@ -38,6 +38,7 @@ export default ({
       column: stack ? 2 : 1,
       mu: 500,
       sigma: 200,
+      abs: true,
     }),
     style: {
       variant,

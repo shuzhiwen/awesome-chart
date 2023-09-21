@@ -133,6 +133,10 @@ type RandomNumberOptions = {
    * Is available when mode is `normal`, defaults to 0.
    */
   mu?: number
+  /**
+   * Make sure the number is positive.
+   */
+  abs?: boolean
 }
 
 type RandomTableListOptions = RandomNumberOptions & {

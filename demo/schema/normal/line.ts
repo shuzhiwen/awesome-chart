@@ -1,4 +1,4 @@
-import {randomTableList} from 'awesome-chart'
+import {randomTableList} from '../../../src'
 
 export default ({mode, hasArea, curveType, hasMark = false}) =>
   [

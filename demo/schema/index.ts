@@ -145,7 +145,9 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '区间柱状',
-          schema: base(rect({variant: 'column', mode: 'interval'})),
+          schema: base(rect({variant: 'column', mode: 'interval'}), {
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '瀑布柱状',
@@ -185,7 +187,9 @@ export const schemaMenu: MenuShape = {
         },
         {
           name: '区间条形',
-          schema: base(rect({variant: 'bar', mode: 'interval'})),
+          schema: base(rect({variant: 'bar', mode: 'interval'}), {
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '瀑布条形',
@@ -267,11 +271,15 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础散点',
-          schema: base(scatter({pointSize: [5, 5]})),
+          schema: base(scatter({pointSize: [5, 5]}), {
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '气泡',
-          schema: base(scatter({pointSize: [5, 15]})),
+          schema: base(scatter({pointSize: [5, 15]}), {
+            tooltipOptions: {mode: 'single'},
+          }),
         },
       ],
     },
@@ -280,15 +288,22 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '方形矩阵',
-          schema: base(matrix({shape: 'rect'})),
+          schema: base(matrix({shape: 'rect'}), {
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '圆形矩阵',
-          schema: base(matrix({shape: 'circle'})),
+          schema: base(matrix({shape: 'circle'}), {
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '带笔刷的矩阵',
-          schema: base(matrix({shape: 'rect', brush: true}), {hasBrush: true}),
+          schema: base(matrix({shape: 'rect', brush: true}), {
+            hasBrush: true,
+            tooltipOptions: {mode: 'single'},
+          }),
         },
       ],
     },
