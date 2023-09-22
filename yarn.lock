@@ -2455,10 +2455,10 @@ available-typed-arrays@^1.0.5:
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz#92f95616501069d07d10edb2fc37d3e1c65123b7"
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
-awesome-chart@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/awesome-chart/-/awesome-chart-0.6.0.tgz#536d8bf7057fa424ad2dce6b601c5307dd95ec35"
-  integrity sha512-qFplXgUewaUOw3C+PpApkvvrn1dolwuo02SRI51f8vmqw2Z3M+c4HkjDGCkaqhpj0Xgi4ggUCLJelYNuHAMb0w==
+awesome-chart@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/awesome-chart/-/awesome-chart-0.6.1.tgz#44f9641b7a0e40b26922f1f479af424ae59e4f51"
+  integrity sha512-vijm/pBZo2zU6xHYNpQxX1BN3c3tXNgOjus86dh5lpCtKt+IzXWsKMWDlhQBE/SneaUYxwjF9bl8RlJ80Zzxeg==
   dependencies:
     animejs "^3.2.1"
     chroma-js "^2.1.1"

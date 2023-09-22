@@ -23,7 +23,7 @@ export const Chart = (props: {
   schema: MenuItemShape['schema'] & AnyObject
 }) => {
   const {debuggers, variant, schema} = props,
-    chartRef = useRef<any>(null),
+    chartRef = useRef<HTMLDivElement>(null),
     [chart, setChart] = useState<ChartShape>(),
     [engine, setEngine] = useState<'svg' | 'canvas'>(
       (localStorage.getItem(`${variant}-engine`) as 'svg' | 'canvas') || 'svg'
@@ -37,11 +37,11 @@ export const Chart = (props: {
   }, [engine, variant])
   const downloadFile = useCallback(() => {
     engine === 'svg'
-      ? download(chartRef.current?.children?.[0].outerHTML ?? '', 'chart.svg')
-      : download(
-          chartRef.current?.children?.[0].children?.[0].toDataURL(),
-          'chart.jpg'
+      ? download(
+          chartRef.current?.querySelector('svg')?.outerHTML ?? '',
+          'chart.svg'
         )
+      : alert('如需下载，可右键保存该图片')
   }, [engine])
   const toggleDebug = useCallback(
     () => chart && debuggers?.forEach((fn) => fn(chart)),
