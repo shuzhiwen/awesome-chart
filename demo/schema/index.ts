@@ -386,11 +386,11 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '滑动轮播',
-          schema: base(carousel({mode: 'slide'}), {padding: noPadding}),
+          schema: base(carousel({mode: 'slide'}), {padding: [30, 0, 0, 0]}),
         },
         {
           name: '淡入淡出轮播',
-          schema: base(carousel({mode: 'fade'}), {padding: noPadding}),
+          schema: base(carousel({mode: 'fade'}), {padding: [30, 0, 0, 0]}),
         },
       ],
     },

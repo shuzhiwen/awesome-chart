@@ -48,11 +48,9 @@ export function drawImage({
       .data(mappedData)
       .join('symbol')
       .attr('id', (d) => d.id)
-      .attr('preserveAspectRatio', 'xMinYMin slice')
-      .attr('viewBox', ({viewBox}) =>
-        viewBox
-          ? [viewBox.x, viewBox.y, viewBox.width, viewBox.height].join(' ')
-          : null
+      .attr('preserveAspectRatio', 'none')
+      .attr('viewBox', ({viewBox: vb}) =>
+        vb ? [vb.x, vb.y, vb.width, vb.height].join(' ') : null
       )
       .selectAll(`.${className}`)
       .data((d) => [d])
@@ -63,17 +61,18 @@ export function drawImage({
       .duration(getAttr(transition?.duration, 0, update.duration))
       .delay(getAttr(transition?.delay, 0, update.delay))
       .attr('opacity', (d) => d.opacity)
-      .attr('xlink:href', (d) => d.url)
+      .attr('href', (d) => d.url)
       .attr('x', (d) => (d.viewBox ? null : d.x))
       .attr('y', (d) => (d.viewBox ? null : d.y))
       .attr('width', (d) => (d.viewBox ? null : d.width))
       .attr('height', (d) => (d.viewBox ? null : d.height))
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
+      .attr('preserveAspectRatio', 'none')
     container
       .selectAll('use')
       .data(mappedData)
       .join('use')
-      .attr('xlink:href', (d) => `#${d.id}`)
+      .attr('href', (d) => `#${d.id}`)
       .attr('x', (d) => (d.viewBox ? d.x : null))
       .attr('y', (d) => (d.viewBox ? d.y : null))
       .attr('width', (d) => (d.viewBox ? d.width : null))
