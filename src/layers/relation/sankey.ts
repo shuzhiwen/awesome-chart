@@ -150,11 +150,11 @@ export class LayerSankey extends LayerBase<Key> {
       if (direction === 'horizontal') {
         const offset =
             layout.top + layout.height - tailNode.y - tailNode.height,
-          moveY = align === 'end' ? offset : align === 'middle' ? offset / 2 : 0
+          moveY = align === 'end' ? offset : align === 'center' ? offset / 2 : 0
         group.forEach((item) => (item.y += moveY))
       } else if (direction === 'vertical') {
         const offset = layout.top + layout.width - tailNode.y - tailNode.height,
-          moveX = align === 'end' ? offset : align === 'middle' ? offset / 2 : 0
+          moveX = align === 'end' ? offset : align === 'center' ? offset / 2 : 0
         group.forEach((item) => (item.y += moveX))
       }
     })

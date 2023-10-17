@@ -175,7 +175,7 @@ export class LayerTree extends LayerBase<Key> {
 
           if (align === 'start') {
             parent[target] = parent.min
-          } else if (align === 'middle') {
+          } else if (align === 'center') {
             parent[target] = (parent.min + parent.max) / 2
           } else if (align === 'end') {
             parent[target] = parent.max

@@ -2,7 +2,7 @@ type Engine = 'svg' | 'canvas'
 
 type Direction = 'horizontal' | 'vertical'
 
-type Alignment = 'start' | 'middle' | 'end'
+type Alignment = 'start' | 'center' | 'end'
 
 type Coordinate = 'geographic' | 'cartesian' | 'polar'
 

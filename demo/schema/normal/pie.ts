@@ -14,7 +14,7 @@ export default ({
     type: 'legend',
     style: {
       maxColumn: 1,
-      align: ['end', 'middle'],
+      align: ['end', 'center'],
     },
   },
   {

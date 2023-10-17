@@ -8,7 +8,7 @@ export default () => [
     data: [nodes, links],
     style: {
       direction: 'horizontal', // or vertical
-      align: 'middle',
+      align: 'center',
       labelPosition: 'outer',
       labelOffset: 10,
       curve: {

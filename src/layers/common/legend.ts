@@ -243,9 +243,9 @@ export class LayerLegend extends LayerBase<Key> {
       )!,
       leftX = width - totalWidth,
       leftY = height - totalHeight,
-      offsetX = align === 'middle' ? leftX / 2 : align === 'end' ? leftX : 0,
+      offsetX = align === 'center' ? leftX / 2 : align === 'end' ? leftX : 0,
       offsetY =
-        verticalAlign === 'middle'
+        verticalAlign === 'center'
           ? leftY / 2
           : verticalAlign === 'end'
           ? leftY

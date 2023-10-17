@@ -58,7 +58,7 @@ export function createChart(schema: CreateChartProps, existedChart?: Chart) {
     })
 
     fallbackLayer?.setData(new DataBase([data.error?.message ?? '']))
-    fallbackLayer?.setStyle({text: {align: ['middle', 'middle']}})
+    fallbackLayer?.setStyle({text: {align: ['center', 'center']}})
     fallbackLayer?.draw()
   })
 

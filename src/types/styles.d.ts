@@ -64,7 +64,7 @@ type LayerAxisStyle = {
 type LayerLegendStyle = {
   gap: Vec2
   offset: Vec2
-  align: [Alignment, Alignment]
+  align: Vec2<Alignment>
   maxColumn: number
   shapeSize: number
   shape: GraphStyle
@@ -105,8 +105,8 @@ type LayerODLineStyle = {
 
 type LayerTextStyle = {
   sanger: Vec2
-  text: Partial<TextStyle & {align: [Alignment, Alignment]}>
-  groupText: Partial<TextStyle & {align: [Alignment, Alignment]}>[]
+  text: Partial<TextStyle & {align: Vec2<Alignment>}>
+  groupText: Partial<TextStyle & {align: Vec2<Alignment>}>[]
 }
 
 type LayerLineStyle = {
@@ -144,7 +144,7 @@ type LayerRectStyle = {
    * Sort rectangles between and within groups.
    */
   sort: 'asc' | 'desc' | 'none'
-  labelPosition: Position5 | [Position5, Position5]
+  labelPosition: NonNullable<MaybeGroup<Position5>>
   labelPositionOrient: Position2
   fixedWidth: Meta
   fixedHeight: Meta
@@ -232,7 +232,7 @@ type LayerSankeyStyle = {
 
 type LayerTreemapStyle = {
   tile: Tile
-  align: [Alignment, Alignment]
+  align: Vec2<Alignment>
   labelGap: number
   rect: GraphStyle
   text: TextStyle
@@ -253,7 +253,7 @@ type LayerTreeStyle = {
 type LayerMatrixStyle = {
   shape: 'circle' | 'rect'
   colorDomain: Vec2 | 'auto'
-  circleSize: [number | 'auto', number | 'auto']
+  circleSize: Vec2<number | 'auto'>
   circle: GraphStyle
   rect: GraphStyle
   text: TextStyle

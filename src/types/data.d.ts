@@ -54,7 +54,7 @@ type RawTable<T = Meta> = [Meta[], Meta[], RawTableList<T>]
  * The first table is represents node information.
  * The second table is represents link information.
  */
-type RawRelation<T = Meta> = [RawTableList<T>, RawTableList<T>]
+type RawRelation<T = Meta> = Vec2<RawTableList<T>>
 
 /**
  * Data structure of `TableList` item.

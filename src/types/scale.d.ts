@@ -92,7 +92,7 @@ type ScaleLinearProps = {
 }
 
 type ScaleArcProps = {
-  domain: [Meta[], Meta[]]
+  domain: Vec2<Meta[]>
   range: Vec2
   nice?: ScaleArcNice
 }

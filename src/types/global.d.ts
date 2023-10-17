@@ -1,6 +1,6 @@
 type Meta = number | string
 
-type Vec2 = [number, number]
+type Vec2<T = number> = [T, T]
 
 type Maybe<T> = T | null | undefined
 

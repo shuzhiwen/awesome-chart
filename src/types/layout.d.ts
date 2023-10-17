@@ -64,5 +64,5 @@ type GetFacetLayoutCreatorProps = {
   /**
    * Row and column spacing between each area.
    */
-  gap: [Meta, Meta]
+  gap: Vec2<Meta>
 }

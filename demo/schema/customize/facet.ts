@@ -30,7 +30,7 @@ export default () => [
     type: 'legend',
     style: {
       maxColumn: 2,
-      align: ['end', 'middle'],
+      align: ['end', 'center'],
     },
   },
   {

@@ -84,7 +84,7 @@ export class LayerText extends LayerBase<'text'> {
 
       if (align === 'start') {
         x += 0
-      } else if (align === 'middle') {
+      } else if (align === 'center') {
         x += (unitWidth - getTextWidth(value, fontSize)) / 2
       } else if (align === 'end') {
         x += unitWidth - getTextWidth(value, fontSize)
@@ -92,7 +92,7 @@ export class LayerText extends LayerBase<'text'> {
 
       if (verticalAlign === 'start') {
         y += fontSize
-      } else if (verticalAlign === 'middle') {
+      } else if (verticalAlign === 'center') {
         y += (unitHeight + fontSize) / 2
       } else if (verticalAlign === 'end') {
         y += unitHeight

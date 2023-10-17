@@ -23,7 +23,7 @@ type Key = 'rect' | 'text'
 
 const defaultStyle: LayerTreemapStyle = {
   tile: 'treemapSquarify',
-  align: ['middle', 'middle'],
+  align: ['center', 'center'],
   labelGap: 5,
   rect: {},
   text: {},
@@ -111,23 +111,23 @@ export class LayerTreemap extends LayerBase<Key> {
 
         if (align === 'start' && verticalAlign === 'start') {
           ;[nameX, nameY, position] = [x, y, 'rightBottom']
-        } else if (align === 'middle' && verticalAlign === 'start') {
+        } else if (align === 'center' && verticalAlign === 'start') {
           ;[nameX, nameY, position] = [x + width / 2, y, 'bottom']
         } else if (align === 'end' && verticalAlign === 'start') {
           ;[nameX, nameY, position] = [x + width, y, 'leftBottom']
-        } else if (align === 'start' && verticalAlign === 'middle') {
+        } else if (align === 'start' && verticalAlign === 'center') {
           ;[nameX, nameY, position] = [
             x,
             y + height / 2 - labelGap / 2,
             'rightTop',
           ]
-        } else if (align === 'middle' && verticalAlign === 'middle') {
+        } else if (align === 'center' && verticalAlign === 'center') {
           ;[nameX, nameY, position] = [
             x + width / 2,
             y + height / 2 - labelGap / 2,
             'top',
           ]
-        } else if (align === 'end' && verticalAlign === 'middle') {
+        } else if (align === 'end' && verticalAlign === 'center') {
           ;[nameX, nameY, position] = [
             x + width,
             y + height / 2 - labelGap / 2,
@@ -139,7 +139,7 @@ export class LayerTreemap extends LayerBase<Key> {
             y + height - fontSize - labelGap,
             'rightTop',
           ]
-        } else if (align === 'middle' && verticalAlign === 'end') {
+        } else if (align === 'center' && verticalAlign === 'end') {
           ;[nameX, nameY, position] = [
             x + width / 2,
             y + height - fontSize - labelGap,

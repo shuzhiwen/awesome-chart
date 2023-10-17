@@ -11,7 +11,7 @@ export default () => [
     data: [nodes, links],
     style: {
       direction: 'horizontal',
-      align: 'middle',
+      align: 'center',
       labelOffset: 10,
       text: {
         fontSize: 12,
