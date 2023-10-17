@@ -45,12 +45,12 @@ type LayerAxisStyle = {
   coordinate: Coordinate
   maxScaleXTextNumber: 'auto' | number
   dynamicReserveTextX: boolean
-  splitLineAxisX: GraphStyle
-  splitLineAxisY: GraphStyle
+  axisLineX: GraphStyle
+  axisLineY: GraphStyle
+  splitLineX: GraphStyle
+  splitLineY: GraphStyle
   splitLineAngle: GraphStyle
   splitLineRadius: GraphStyle
-  axisLineAxisX: GraphStyle
-  axisLineAxisY: GraphStyle
   textX: TextStyle
   textY: TextStyle
   textYR: TextStyle

@@ -44,6 +44,7 @@ const defaultAxisLine = {
   strokeWidth: 1,
   fillOpacity: 0,
   evented: false,
+  hidden: true,
 }
 
 const defaultText = {
@@ -60,19 +61,19 @@ const defaultStyle: LayerAxisStyle = {
   coordinate: 'cartesian',
   maxScaleXTextNumber: 'auto',
   dynamicReserveTextX: false,
-  splitLineAxisX: defaultSplitLine,
-  splitLineAxisY: defaultSplitLine,
+  axisLineX: defaultAxisLine,
+  axisLineY: defaultAxisLine,
+  splitLineX: defaultSplitLine,
+  splitLineY: defaultSplitLine,
   splitLineAngle: defaultSplitLine,
   splitLineRadius: defaultSplitLine,
-  axisLineAxisX: defaultAxisLine,
-  axisLineAxisY: defaultAxisLine,
   textX: {...defaultText, offset: [0, -10]},
   textY: {...defaultText, offset: [-10, 0]},
   textYR: {...defaultText, offset: [10, 0]},
   textAngle: defaultText,
   textRadius: defaultText,
   titleX: {...defaultTitle, offset: [0, -10]},
-  titleY: defaultTitle,
+  titleY: {...defaultTitle, offset: [10, 0]},
   titleYR: defaultTitle,
 }
 
@@ -96,17 +97,19 @@ export class LayerAxis extends LayerBase<Key> {
   private _style = defaultStyle
 
   private lineData: Record<
-    'splitLineAxisX' | 'splitLineAxisY' | 'splitLineAngle',
-    (DrawerData<LineDrawerProps> & {
-      value: Meta
-      angle?: number
-      labelX?: number
-      labelY?: number
-      axisLine?: Maybe<'X' | 'Y'>
-    })[]
+    'axisLineX' | 'axisLineY' | 'splitLineX' | 'splitLineY' | 'splitLineAngle',
+    (DrawerData<LineDrawerProps> &
+      Partial<{
+        value: Meta
+        angle: number
+        labelX: number
+        labelY: number
+      }>)[]
   > = {
-    splitLineAxisX: [],
-    splitLineAxisY: [],
+    axisLineX: [],
+    axisLineY: [],
+    splitLineX: [],
+    splitLineY: [],
     splitLineAngle: [],
   }
 
@@ -255,7 +258,7 @@ export class LayerAxis extends LayerBase<Key> {
 
   update() {
     const {containerWidth, layout} = this.options,
-      {left, top, width, height, bottom} = layout,
+      {left, top, width, height, bottom, right} = layout,
       {scaleX, scaleY, scaleYR, scaleAngle, scaleRadius} = this.scale,
       {titleX, titleY, titleYR, textX, textY, textYR, textAngle, textRadius} =
         this.style,
@@ -263,27 +266,28 @@ export class LayerAxis extends LayerBase<Key> {
       labelYR = this.getLabelAndPosition(scaleYR!),
       offset = 5
 
-    this.lineData.splitLineAxisX = this.getLabelAndPosition(scaleX!).map(
-      ({label, position}, i) => ({
+    this.lineData.axisLineX = [{x1: left, x2: right, y1: bottom, y2: bottom}]
+    this.lineData.axisLineY = [{x1: left, x2: left, y1: top, y2: bottom}]
+
+    this.lineData.splitLineX = this.getLabelAndPosition(scaleX!).map(
+      ({label, position}) => ({
         value: label,
         x1: left + position,
         x2: left + position,
         y1: top,
         y2: top + height,
-        axisLine: i === 0 ? 'X' : null,
       })
     )
 
-    this.lineData.splitLineAxisY = this.getLabelAndPosition(
-      scaleY! || scaleYR
-    ).map(({label, position}, i) => ({
-      value: label,
-      x1: left,
-      x2: left + width,
-      y1: top + position,
-      y2: top + position,
-      axisLine: i === 0 ? 'Y' : null,
-    }))
+    this.lineData.splitLineY = this.getLabelAndPosition(scaleY! || scaleYR).map(
+      ({label, position}) => ({
+        value: label,
+        x1: left,
+        x2: left + width,
+        y1: top + position,
+        y2: top + position,
+      })
+    )
 
     this.lineData.splitLineAngle = this.getLabelAndPosition(scaleAngle!).map(
       ({label, position}) => ({
@@ -337,20 +341,19 @@ export class LayerAxis extends LayerBase<Key> {
       }),
     ]
 
-    this.textData.textX = this.lineData.splitLineAxisX.map(({value, x2, y2}) =>
+    this.textData.textX = this.lineData.splitLineX.map(({value, x2, y2}) =>
       createText({x: x2!, y: y2!, value, style: textX, position: 'bottom'})
     )
 
     this.reduceScaleXTextNumber()
 
     if (scaleY) {
-      this.textData.textY = this.lineData.splitLineAxisY.map(
-        ({value, x1, y1}) =>
-          createText({x: x1!, y: y1!, value, style: textY, position: 'left'})
+      this.textData.textY = this.lineData.splitLineY.map(({value, x1, y1}) =>
+        createText({x: x1!, y: y1!, value, style: textY, position: 'left'})
       )
     }
     if (scaleYR) {
-      this.textData.textYR = this.lineData.splitLineAxisY.map(({x2, y2}, i) =>
+      this.textData.textYR = this.lineData.splitLineY.map(({x2, y2}, i) =>
         createText({
           x: x2!,
           y: y2!,
@@ -463,12 +466,8 @@ export class LayerAxis extends LayerBase<Key> {
         this.lineData[key].map((item, i) => ({
           data: [item],
           opacity:
-            key === 'splitLineAxisX' && disabledAxisXIndex.includes(i) ? 0 : 1,
-          ...(item.axisLine === 'X'
-            ? this.style.axisLineAxisX
-            : item.axisLine === 'Y'
-            ? this.style.axisLineAxisY
-            : this.style[key]),
+            key === 'splitLineX' && disabledAxisXIndex.includes(i) ? 0 : 1,
+          ...this.style[key],
         })),
       getTextData = (key: Keys<LayerAxis['textData']>, rotation?: number) =>
         this.textData[key].map((item, i) => ({
@@ -479,17 +478,27 @@ export class LayerAxis extends LayerBase<Key> {
         }))
 
     if (coordinate === 'cartesian') {
+      this.drawBasic({
+        type: 'line',
+        key: 'axisLineX',
+        data: getLineData('axisLineX'),
+      })
+      this.drawBasic({
+        type: 'line',
+        key: 'axisLineY',
+        data: getLineData('axisLineY'),
+      })
       isScaleLinear(scaleX) &&
         this.drawBasic({
           type: 'line',
-          key: 'splitLineAxisX',
-          data: getLineData('splitLineAxisX'),
+          key: 'splitLineX',
+          data: getLineData('splitLineX'),
         })
       isScaleLinear(scaleY) &&
         this.drawBasic({
           type: 'line',
-          key: 'splitLineAxisY',
-          data: getLineData('splitLineAxisY'),
+          key: 'splitLineY',
+          data: getLineData('splitLineY'),
         })
       this.drawBasic({type: 'text', key: 'textX', data: getTextData('textX')})
       this.drawBasic({type: 'text', key: 'textY', data: getTextData('textY')})

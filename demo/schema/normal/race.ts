@@ -29,7 +29,7 @@ export default () => [
           duration: 500,
         },
       },
-      splitLineAxisX: {
+      splitLineX: {
         update: {
           duration: 500,
         },
