@@ -1,5 +1,6 @@
 export * from './basic'
 export * from './color-matrix'
+export * from './image'
 export * from './selector'
 export * from './sticky-scale'
 export * from './text'

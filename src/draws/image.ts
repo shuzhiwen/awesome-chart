@@ -2,20 +2,11 @@ import {merge} from 'lodash'
 import {BaseTexture, Rectangle, Sprite, Texture} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
-import {
-  DrawerData,
-  DrawerType,
-  ElConfig,
-  EllipseDrawerProps,
-  ElSource,
-  GraphStyle,
-  ImageDrawerProps,
-  RectDrawerProps,
-  TextDrawerProps,
-} from '../types'
+import {ElSource, ImageDrawerProps} from '../types'
 import {getAttr, isCC, isSC, noChange, uuid} from '../utils'
 
 export function drawImage({
+  rotation,
   opacity,
   mapping = noChange,
   source = [],
@@ -34,6 +25,7 @@ export function drawImage({
     ...item,
     className,
     id: `${className}-${uuid()}`,
+    rotation: getAttr(rotation, i, 0),
     opacity: getAttr(opacity, i, graph.opacity),
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, {} as ElSource),
@@ -68,6 +60,10 @@ export function drawImage({
       .attr('height', (d) => (d.viewBox ? null : d.height))
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
       .attr('preserveAspectRatio', 'none')
+      .attr('transform', (d) => (d.viewBox ? null : `rotate(${d.rotation})`))
+      .attr('transform-origin', (d) =>
+        d.viewBox ? null : `${d.x + d.width / 2} ${d.y + d.height / 2}`
+      )
     container
       .selectAll('use')
       .data(mappedData)
@@ -77,67 +73,29 @@ export function drawImage({
       .attr('y', (d) => (d.viewBox ? d.y : null))
       .attr('width', (d) => (d.viewBox ? d.width : null))
       .attr('height', (d) => (d.viewBox ? d.height : null))
+      .attr('transform', (d) => (d.viewBox ? `rotate(${d.rotation})` : null))
+      .attr('transform-origin', (d) =>
+        d.viewBox ? `${d.x + d.width / 2} ${d.y + d.height / 2}` : null
+      )
   }
 
   if (isCC(container)) {
     container.removeChild(...selector.getChildren(container, className))
     mappedData.forEach((d) => {
-      const {x, y, width, height} = d.viewBox ?? {},
-        baseTexture = BaseTexture.from(d.url),
-        texture = new Texture(
-          baseTexture,
-          d.viewBox && new Rectangle(x, y, width, height)
-        ),
-        sprite = new Sprite(texture)
+      const vb = d.viewBox
+      const box = vb && new Rectangle(vb.x, vb.y, vb.width, vb.height)
+      const sprite = new Sprite(new Texture(BaseTexture.from(d.url), box))
 
-      sprite.x = d.x
-      sprite.y = d.y
       sprite.width = d.width
       sprite.height = d.height
       sprite.alpha = d.opacity
+      sprite.angle = d.rotation
+      sprite.anchor.set(0.5, 0.5)
+      sprite.x = d.x + d.width / 2
+      sprite.y = d.y + d.height / 2
+      sprite.className = d.className
       sprite.cursor = d.evented ? 'pointer' : 'auto'
       container.addChild(sprite)
     })
   }
-}
-
-export function transformToImage<T extends ElConfig>(
-  data: T & {
-    from: Extract<DrawerType, 'ellipse' | 'rect' | 'text'>
-    viewBox?: DrawerData<ImageDrawerProps>['viewBox']
-    size?: Vec2
-    offset?: Vec2
-    url?: string
-  }
-): T {
-  if (!data.size || !data.url) return data
-
-  const {from, url, size, viewBox, offset = [0, 0]} = data,
-    {container, theme, source, className} = data as typeof data &
-      Parameters<NonNullable<GraphStyle['mapping']>>[0],
-    position = {x: offset[0], y: offset[1]}
-
-  if (from === 'ellipse') {
-    const {cx, cy} = data as DrawerData<EllipseDrawerProps>
-    position.x += cx - size[0] / 2
-    position.y += cy - size[1] / 2
-  } else if (from === 'rect') {
-    const {x, y, width, height} = data as DrawerData<RectDrawerProps>
-    position.x += x + (width - size[0]) / 2
-    position.y += y + (height - size[1]) / 2
-  } else if (from === 'text') {
-    const {x, y, textWidth, textHeight} = data as DrawerData<TextDrawerProps>
-    position.x += x + (textWidth - size[0]) / 2
-    position.y += y - (textHeight + size[1]) / 2
-  }
-
-  drawImage({
-    theme: theme,
-    source: [source],
-    container: container,
-    className: `transformed-image-from-${className}`,
-    data: [{url, viewBox, width: size[0], height: size[1], ...position}],
-  })
-
-  return data
 }
