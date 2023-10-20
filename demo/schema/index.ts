@@ -312,31 +312,51 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '桑基图',
-          schema: base(sankey(), {padding: smallPadding}),
+          schema: base(sankey(), {
+            padding: smallPadding,
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '树图',
-          schema: base(tree(), {padding: [30, 60, 30, 60]}),
+          schema: base(tree(), {
+            padding: [30, 60, 30, 60],
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '矩阵树图',
-          schema: base(treemap(), {padding: smallPadding}),
+          schema: base(treemap(), {
+            padding: smallPadding,
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '打包图',
-          schema: base(pack(), {padding: smallPadding}),
+          schema: base(pack(), {
+            padding: smallPadding,
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '重力气泡图',
-          schema: base(force(), {padding: smallPadding}),
+          schema: base(force(), {
+            padding: smallPadding,
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '词云',
-          schema: base(wordCloud(), {padding: smallPadding}),
+          schema: base(wordCloud(), {
+            padding: smallPadding,
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '和弦图',
-          schema: base(chord()),
+          schema: base(chord(), {
+            tooltipOptions: {mode: 'single'},
+          }),
         },
       ],
     },
@@ -345,11 +365,17 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '仪表盘',
-          schema: base(dashboard({type: 'dashboard'}), {padding: smallPadding}),
+          schema: base(dashboard({type: 'dashboard'}), {
+            padding: smallPadding,
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '环形指标卡',
-          schema: base(dashboard({type: 'indicator'}), {padding: smallPadding}),
+          schema: base(dashboard({type: 'indicator'}), {
+            padding: smallPadding,
+            tooltipOptions: {mode: 'single'},
+          }),
         },
         {
           name: '水波球',

@@ -59,6 +59,7 @@ export default ({type}) => [
   },
   {
     type: 'dashboard',
+    options: {id: type},
     data: createDashboardData(type),
     style: createDashBoardStyle(type),
   },

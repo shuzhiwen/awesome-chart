@@ -2,17 +2,27 @@ import {Chart} from '../../src/core'
 import {DataBase, DataTableList} from '../../src/data'
 
 export const debugDashboardLayer = (chart: Chart) => {
-  const data = {
-      value: Math.round(Math.random() * 100),
-      fragments: [
-        {start: 0, end: 30, label: '低'},
-        {start: 30, end: 60, label: '中'},
-        {start: 60, end: 100, label: '高'},
-      ],
-    },
-    layers = chart.getLayersByType('dashboard')
+  const layers = chart.getLayersByType('dashboard')
+  const value = Math.round(Math.random() * 100)
 
   layers.forEach((layer) => {
+    const data =
+      layer.options.id === 'dashboard'
+        ? {
+            value,
+            fragments: [
+              {start: 0, end: 30, label: '低'},
+              {start: 30, end: 60, label: '中'},
+              {start: 60, end: 100, label: '高'},
+            ],
+          }
+        : {
+            value,
+            fragments: [
+              {label: '当前', start: 0, end: value},
+              {label: '剩余', start: value, end: 100},
+            ],
+          }
     layer.setData(new DataBase(data))
     layer.draw()
     console.info('Random Data', data)
