@@ -12,7 +12,13 @@ type AnimationOptions<T extends AnimationType = AnimationType> =
 
 type AnimationProps<T extends AnimationType> = AnimationDict[T]['options']
 
-type BasicAnimationOptions = {
+type UpdateAnimationOptions = {
+  easing: Easing
+  duration: number
+  delay: number
+}
+
+type BasicAnimationOptions = UpdateAnimationOptions & {
   id: string
   /**
    * Basic elements to be animated.
@@ -24,9 +30,9 @@ type BasicAnimationOptions = {
    * @internal
    */
   context: Maybe<DrawerTarget>
-  easing: Easing
-  duration: number
-  delay: number
+  /**
+   * Whether to loop the animation.
+   */
   loop: boolean
 }
 

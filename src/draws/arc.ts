@@ -8,7 +8,7 @@ export function drawArc({data = [], ...rest}: ArcDrawerProps) {
       path: (context) =>
         arc()
           .context(context || null)
-          .cornerRadius(cornerRadius ?? 0)(rest)!,
+          .cornerRadius(cornerRadius ?? 0)(rest),
       centerX,
       centerY,
     })),

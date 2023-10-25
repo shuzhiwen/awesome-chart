@@ -1,4 +1,4 @@
-import {AnimationOptions} from './animation'
+import {UpdateAnimationOptions} from './animation'
 import {ChartTheme} from './core'
 import {BasicDrawerProps, ElConfig} from './draw'
 import {LayerScale} from './layer'
@@ -15,7 +15,7 @@ type GraphStyle = Partial<{
   strokeOpacity: MaybeGroup<number>
   strokeDasharray: MaybeGroup<string>
   rotation: MaybeGroup<number>
-  transition: Maybe<Partial<AnimationOptions>>
+  transition: Maybe<Partial<UpdateAnimationOptions>>
   hidden: boolean
   mapping: (
     config: ElConfig & Pick<BasicDrawerProps<unknown>, 'container' | 'theme'>

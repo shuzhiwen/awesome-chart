@@ -1,4 +1,5 @@
 import {merge, throttle} from 'lodash'
+import {Graphics} from 'pixi.js'
 import {animationLifeCycles} from '../core'
 import {selector} from '../layers'
 import {BasicAnimationOptions} from '../types'
@@ -53,7 +54,7 @@ export abstract class AnimationBase<Options extends AnyObject = {}> {
       throw new Error('Wrong call with svg context')
     }
 
-    return this.options.targets![0].parent.parent
+    return (this.options.targets![0] as Graphics).parent.parent
   }
 
   get isInitialized() {

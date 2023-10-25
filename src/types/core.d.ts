@@ -3,8 +3,8 @@ import {LayerDict} from '../layers'
 import {getEasyGradientCreator} from '../utils'
 import {
   AnimationOptions,
-  BasicAnimationOptions,
   LayerAnimation,
+  UpdateAnimationOptions,
 } from './animation'
 import {TooltipData} from './data'
 import {ElConfig} from './draw'
@@ -95,10 +95,7 @@ type ChartTheme = Readonly<{
    * Presets are some configured animation that out of box.
    */
   animation: Record<'presets', Record<string, AnimationOptions>> &
-    Record<
-      'enter' | 'loop' | 'update',
-      Required<Pick<BasicAnimationOptions, 'duration' | 'delay' | 'easing'>>
-    >
+    Record<'enter' | 'loop' | 'update', UpdateAnimationOptions>
 }>
 
 type TooltipOptions = Partial<{

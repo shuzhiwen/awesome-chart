@@ -307,10 +307,6 @@ export abstract class LayerBase<Key extends string> {
    * The target elements.
    */
   private createAnimation(sublayer: Key) {
-    if (this.cacheAnimation.animations[sublayer]) {
-      this.cacheAnimation.animations[sublayer]?.destroy()
-    }
-
     const {options} = this.cacheAnimation,
       {animation} = this.options.theme,
       /**
@@ -450,7 +446,10 @@ export abstract class LayerBase<Key extends string> {
      */
     cacheData.data.length = nextData.length
     nextData.forEach((groupData, i) => {
-      if (groupData.hidden || isEqual(cacheData.data[i], groupData)) return
+      this.cacheAnimation.animations[key]?.destroy()
+      if (groupData.hidden || isEqual(cacheData.data[i], groupData)) {
+        return
+      }
 
       const groupClassName = `${sublayerClassName}-${i}`
       const groupContainer = selector.getDirectChild(
@@ -469,7 +468,7 @@ export abstract class LayerBase<Key extends string> {
       }
 
       DrawerDict[type](options as never)
-      cacheData.data[i] = cloneDeep(groupData as never)
+      cacheData.data[i] = cloneDeep(groupData)
     })
 
     this.bindEvent(key)
