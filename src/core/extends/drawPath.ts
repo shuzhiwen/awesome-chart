@@ -1,6 +1,6 @@
 import chroma from 'chroma-js'
 import {Graphics, Texture} from 'pixi.js'
-import {createLog, mergeAlpha} from '../..'
+import {createLog, parsePathString, mergeAlpha} from '../..'
 import {svgArcToCanvas} from './arcTranslate'
 
 function getPosition(
@@ -18,23 +18,9 @@ function getPosition(
   }
 }
 
-function generateCommandData(d: string) {
-  const commands = d.match(/[MLHVCSQTAZ]/gi)
-  const data = d
-    .trim()
-    .split(/[MLHVCSQTAZ]/gi)
-    .slice(1)
-    .map((item) => item.trim().split(/,|\s+/gi))
-
-  return commands?.map((command, i) => ({
-    command,
-    data: data[i].map(Number),
-  }))
-}
-
 Graphics.prototype.drawPath = function (d: string) {
   try {
-    generateCommandData(d)?.map(({command, data}) => {
+    parsePathString(d).map(({command, data}) => {
       const position = getPosition.bind(this, command)
 
       if (/M/i.test(command)) {

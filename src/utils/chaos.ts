@@ -230,3 +230,24 @@ export function fromEntries<Key extends Meta, Value>(entries: [Key, Value][]) {
 export function compute<T, P>(computable: Computable<T, P>, params: P) {
   return isFunction(computable) ? computable(params) : computable
 }
+
+/**
+ * Parse svg path command.
+ * @param path
+ * The path string.
+ * @returns
+ * Path data for easy processing.
+ */
+export function parsePathString(path: string) {
+  const commands = path.match(/[MLHVCSQTAZ]/gi) ?? []
+  const data = path
+    .trim()
+    .split(/[MLHVCSQTAZ]/gi)
+    .slice(1)
+    .map((item) => item.trim().split(/,|\s+/gi))
+
+  return commands.map((command, i) => ({
+    command,
+    data: data[i].filter(Boolean).map(Number),
+  }))
+}

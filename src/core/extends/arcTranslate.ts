@@ -3,7 +3,7 @@ import {noChange} from '../..'
 
 function matrixMultiply(m1: number[][], m2: number[][]) {
   return m1.map((row) => {
-    return range(0, row.length).map((i) => {
+    return range(0, m2[0].length).map((i) => {
       return sum(row.map((item, j) => item * m2[j][i]))
     })
   })

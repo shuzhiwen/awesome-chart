@@ -61,8 +61,7 @@ export function drawPath({
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
-      // transition occur attribute attach delay
-      .style('transform', (d) => `translate(${d.centerX}px,${d.centerY}px)`)
+      .attr('transform-origin', (d) => `${d.centerX} ${d.centerY}`)
   }
 
   if (isCC(container)) {
@@ -73,6 +72,7 @@ export function drawPath({
       graphics.alpha = d.opacity
       graphics.className = d.className
       graphics.interactive = d.evented
+      graphics.pivot = {x: d.centerX, y: d.centerY}
       graphics.position = {x: d.centerX, y: d.centerY}
       graphics.cursor = d.evented ? 'pointer' : 'auto'
 

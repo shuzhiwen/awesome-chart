@@ -1,24 +1,6 @@
 import chroma from 'chroma-js'
-import {isArray, isNil} from 'lodash'
+import {isArray, isNil, kebabCase} from 'lodash'
 import {D3Selection} from '../types'
-
-/**
- * Batch add styles for d3 selection.
- * @param style
- * The object that represent element styles.
- * @param index
- * The group index for each attributes.
- */
-export function addStyle(
-  target: D3Selection,
-  style: AnyObject = {},
-  index = 0
-) {
-  Object.entries(style).forEach(([key, value]) =>
-    target.style(key, getAttr(value, index, ''))
-  )
-  return target
-}
 
 /**
  * Inject alpha channel for color.
@@ -91,13 +73,20 @@ export function getAttr<T>(
  */
 export function transformAttr(object: AnyObject) {
   return Object.fromEntries(
-    Object.entries(object).map(([key, value]) => {
-      const index = key.search(/[A-Z]/)
-      if (index !== -1) {
-        key = key.toLowerCase()
-        key = `${key.slice(0, index)}-${key.slice(index)}`
-      }
-      return [key, value]
-    })
+    Object.entries(object).map(([key, value]) => [kebabCase(key), value])
   )
+}
+
+/**
+ * Batch add styles for d3 selection.
+ * @param style
+ * The object that represent element styles.
+ * @param index
+ * The group index for each attributes.
+ */
+export function addStyle(target: D3Selection, style: AnyObject, index = 0) {
+  Object.entries(style).forEach(([key, value]) =>
+    target.style(key, getAttr(value, index, ''))
+  )
+  return target
 }

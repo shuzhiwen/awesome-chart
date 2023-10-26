@@ -8,8 +8,6 @@ export function drawCurve({data = [], ...rest}: CurveDrawerProps) {
     ...rest,
     fillOpacity: 0,
     data: data.map(({points, curve}) => ({
-      centerX: 0,
-      centerY: 0,
       path: (context) => {
         const path = d3
           .line()

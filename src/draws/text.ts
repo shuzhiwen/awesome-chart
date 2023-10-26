@@ -40,8 +40,6 @@ export function drawText({
   const configuredData = data.map((item, i) => ({
     ...item,
     className,
-    centerX: item.x + item.textWidth / 2,
-    centerY: item.y - item.textHeight / 2,
     fill: getAttr(fill, i, text.fill),
     stroke: getAttr(stroke, i, text.stroke),
     opacity: getAttr(opacity, i, text.opacity),
@@ -95,7 +93,6 @@ export function drawText({
       .attr('font-size', (d) => d.fontSize)
       .attr('font-weight', (d) => d.fontWeight)
       .attr('writing-mode', (d) => d.writingMode)
-      .attr('transform-origin', (d) => `${d.centerX} ${d.centerY}`)
       .attr('text-decoration', (d) => d.textDecoration)
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
       .attr('transform', (d) => `rotate(${d.rotation})`)
