@@ -29,7 +29,7 @@ type BasicAnimationOptions = UpdateAnimationOptions & {
    * Animation element parent node.
    * @internal
    */
-  context: Maybe<DrawerTarget>
+  context: DrawerTarget
   /**
    * Whether to loop the animation.
    */

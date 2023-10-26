@@ -2,7 +2,7 @@ import {Chart, DataTableList, randomTableList} from '../../src'
 import {LayerType} from '../../src/types'
 
 const debugTableListLayer =
-  (type: Extract<LayerType, 'arc' | 'rect' | 'line' | 'radial'>) =>
+  (type: Extract<LayerType, 'arc' | 'rect' | 'line' | 'radial' | 'radar'>) =>
   (chart: Chart) => {
     const data = randomTableList({
         mode: 'normal',
@@ -28,3 +28,4 @@ export const debugArcLayer = debugTableListLayer('arc')
 export const debugRectLayer = debugTableListLayer('rect')
 export const debugLineLayer = debugTableListLayer('line')
 export const debugRadialLayer = debugTableListLayer('radial')
+export const debugRadarLayer = debugTableListLayer('radar')

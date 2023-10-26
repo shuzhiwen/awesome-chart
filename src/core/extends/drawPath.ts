@@ -1,6 +1,6 @@
 import chroma from 'chroma-js'
 import {Graphics, Texture} from 'pixi.js'
-import {createLog, parsePathString, mergeAlpha} from '../..'
+import {createLog, mergeAlpha, parsePath} from '../..'
 import {svgArcToCanvas} from './arcTranslate'
 
 function getPosition(
@@ -20,7 +20,7 @@ function getPosition(
 
 Graphics.prototype.drawPath = function (d: string) {
   try {
-    parsePathString(d).map(({command, data}) => {
+    parsePath(d).map(({command, data}) => {
       const position = getPosition.bind(this, command)
 
       if (/M/i.test(command)) {

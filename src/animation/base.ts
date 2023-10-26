@@ -1,7 +1,6 @@
-import {merge, throttle} from 'lodash'
+import {throttle} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {animationLifeCycles} from '../core'
-import {selector} from '../layers'
 import {BasicAnimationOptions} from '../types'
 import {createLog, EventManager, isSC, noChange} from '../utils'
 
@@ -71,7 +70,6 @@ export abstract class AnimationBase<Options extends AnyObject = {}> {
 
   constructor(options: AnimationBase<Options>['options']) {
     this.options = options
-    this.createTargets('targets')
 
     animationLifeCycles.forEach((name) => {
       const fn = this[name] || noChange
@@ -118,19 +116,5 @@ export abstract class AnimationBase<Options extends AnyObject = {}> {
       this.play = throttle(this.play, 100)
       this.destroy = throttle(this.destroy, 100)
     })
-  }
-
-  protected createTargets(key: string) {
-    const targets = this.options[key as 'targets'],
-      {context} = this.options
-
-    if (typeof targets === 'string' && context) {
-      merge(this.options, {
-        className: targets,
-        [key]: selector.getChildren(context, targets),
-      })
-    } else {
-      merge(this.options, {[key]: targets})
-    }
   }
 }

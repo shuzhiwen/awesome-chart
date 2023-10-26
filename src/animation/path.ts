@@ -1,4 +1,5 @@
 import anime from 'animejs'
+import {selector} from '../layers'
 import {AnimationPathOptions, AnimationProps} from '../types'
 import {isCC, isSC} from '../utils'
 import {AnimationBase} from './base'
@@ -8,7 +9,6 @@ export class AnimationPath extends AnimationBase<AnimationPathOptions> {
 
   constructor(options: AnimationProps<'path'>) {
     super(options)
-    this.createTargets('path')
   }
 
   init() {
@@ -18,10 +18,11 @@ export class AnimationPath extends AnimationBase<AnimationPathOptions> {
   }
 
   play() {
-    const {targets, path} = this.options
+    const {targets, context, path} = this.options
 
-    if (isSC(targets) && isSC(path)) {
-      const animePaths = path.nodes().map((node) => anime.path(node))
+    if (isSC(targets) && isSC(context) && path) {
+      const pathNode = selector.getChildren(context, path)
+      const animePaths = pathNode.nodes().map((node) => anime.path(node))
       const animationTargets = targets.nodes()
 
       animationTargets.forEach((target, i) => {

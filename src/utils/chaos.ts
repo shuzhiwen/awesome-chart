@@ -238,7 +238,7 @@ export function compute<T, P>(computable: Computable<T, P>, params: P) {
  * @returns
  * Path data for easy processing.
  */
-export function parsePathString(path: string) {
+export function parsePath(path: string) {
   const commands = path.match(/[MLHVCSQTAZ]/gi) ?? []
   const data = path
     .trim()

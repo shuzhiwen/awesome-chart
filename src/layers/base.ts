@@ -60,7 +60,7 @@ export abstract class LayerBase<Key extends string> {
   /**
    * The className is used to classify drawing elements of different layers.
    */
-  readonly className = 'layer-' + uuid(8)
+  readonly className = this.constructor.name + '-' + uuid(8)
 
   /**
    * Declare what elements the layer contains.
@@ -446,7 +446,6 @@ export abstract class LayerBase<Key extends string> {
      */
     cacheData.data.length = nextData.length
     nextData.forEach((groupData, i) => {
-      this.cacheAnimation.animations[key]?.destroy()
       if (groupData.hidden || isEqual(cacheData.data[i], groupData)) {
         return
       }
@@ -467,8 +466,9 @@ export abstract class LayerBase<Key extends string> {
         theme: this.options.theme,
       }
 
-      DrawerDict[type](options as never)
+      this.cacheAnimation.animations[key]?.destroy()
       cacheData.data[i] = cloneDeep(groupData)
+      DrawerDict[type](options as never)
     })
 
     this.bindEvent(key)

@@ -40,6 +40,8 @@ export function drawText({
   const configuredData = data.map((item, i) => ({
     ...item,
     className,
+    cx: item.x + item.textWidth / 2,
+    cy: item.y - item.textHeight / 2,
     fill: getAttr(fill, i, text.fill),
     stroke: getAttr(stroke, i, text.stroke),
     opacity: getAttr(opacity, i, text.opacity),
@@ -94,6 +96,7 @@ export function drawText({
       .attr('font-weight', (d) => d.fontWeight)
       .attr('writing-mode', (d) => d.writingMode)
       .attr('text-decoration', (d) => d.textDecoration)
+      .attr('transform-origin', (d) => `${d.cx} ${d.cy}`)
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
       .attr('transform', (d) => `rotate(${d.rotation})`)
       .style('text-shadow', (d) => d.shadow)
@@ -115,8 +118,8 @@ export function drawText({
       text.angle = d.rotation
       text.className = d.className
       text.interactive = d.evented
+      text.position = {x: d.cx, y: d.cy}
       text.pivot = {x: d.textWidth / 2, y: d.textHeight / 2}
-      text.position = {x: d.x + d.textWidth / 2, y: d.y - d.textHeight / 2}
       text.cursor = d.evented ? 'pointer' : 'auto'
       container.addChild(text)
     })

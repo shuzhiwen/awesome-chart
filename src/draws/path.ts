@@ -2,8 +2,8 @@ import {isFunction, isString, merge} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {svgEasing} from '../animation'
 import {selector} from '../layers'
-import {ElSource, PathDrawerProps} from '../types'
-import {getAttr, isCC, isSC, noChange, splitAlpha} from '../utils'
+import {DrawerData, ElSource, PathDrawerProps} from '../types'
+import {getAttr, isCC, isSC, noChange, parsePath, splitAlpha} from '../utils'
 
 export function drawPath({
   fill,
@@ -27,7 +27,7 @@ export function drawPath({
   } = theme
   const configuredData = data.map((item, i) => ({
     className,
-    path: item.path,
+    path: movePath(item),
     centerX: item.centerX ?? 0,
     centerY: item.centerY ?? 0,
     fill: getAttr(fill, i, graph.fill),
@@ -94,4 +94,41 @@ export function drawPath({
       container.addChild(graphics)
     })
   }
+}
+
+export function movePath(props: DrawerData<PathDrawerProps>) {
+  const {path, centerX = 0, centerY = 0} = props
+
+  if (typeof path !== 'string') {
+    return path
+  }
+
+  return parsePath(path)
+    .map(({command, data}) => {
+      if (command === 'M' || command === 'L') {
+        data[0] += centerX
+        data[1] += centerY
+      } else if (command === 'H') {
+        data[0] += centerX
+      } else if (command === 'V') {
+        data[0] += centerY
+      } else if (command === 'C') {
+        data[0] += centerX
+        data[1] += centerY
+        data[2] += centerX
+        data[3] += centerY
+        data[4] += centerX
+        data[5] += centerY
+      } else if (command === 'Q') {
+        data[0] += centerX
+        data[1] += centerY
+        data[2] += centerX
+        data[3] += centerY
+      } else if (command === 'A') {
+        data[5] += centerX
+        data[6] += centerY
+      }
+      return `${command}${data.join(',')}`
+    })
+    .join('')
 }
