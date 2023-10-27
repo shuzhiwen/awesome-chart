@@ -28,8 +28,8 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
         endOpacity = 1,
       } = this.options,
       name = isSC(targets) ? 'opacity' : 'alpha',
-      start = Math.max(startOpacity, 5e-6),
-      end = Math.max(endOpacity, 5e-6)
+      start = Math.max(startOpacity, 1e-6),
+      end = Math.max(endOpacity, 1e-6)
 
     anime({
       ...this.basicConfig,

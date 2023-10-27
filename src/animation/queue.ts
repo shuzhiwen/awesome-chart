@@ -109,7 +109,7 @@ export class AnimationQueue extends AnimationBase {
     }
 
     this.isConnected = false
-    this.queue.push(new AnimationDict[type](options))
+    this.queue.push(new AnimationDict[type](options as never))
   }
 
   remove(id: string) {

@@ -9,7 +9,7 @@ export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
   }
 
   init() {
-    const {targets, initialScale = 5e-6} = this.options
+    const {targets, initialScale = 1e-6} = this.options
 
     if (isSC(targets)) {
       anime({
@@ -27,8 +27,8 @@ export class AnimationZoom extends AnimationBase<AnimationZoomOptions> {
 
   play() {
     const {targets, delay, stagger, startScale, endScale} = this.options,
-      start = Math.max(startScale || 0, 5e-6),
-      end = Math.max(endScale || 1, 5e-6)
+      start = Math.max(startScale || 0, 1e-6),
+      end = Math.max(endScale || 1, 1e-6)
 
     anime({
       ...this.basicConfig,

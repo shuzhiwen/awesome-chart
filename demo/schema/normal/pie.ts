@@ -57,7 +57,9 @@ export default ({
     },
     animation: `(theme) => ({
       arc: {
-        enter: theme.animation.presets.zoomIn,
+        enter: theme.animation.presets.${
+          variant === 'pie' ? 'zoomIn' : 'eraseClockwise'
+        },
       },
       guideLine: {
         enter: theme.animation.presets.fadeIn,

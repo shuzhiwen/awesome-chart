@@ -153,6 +153,12 @@ function createDefaultTheme({
           duration: 2000,
           direction: 'right',
         },
+        eraseClockwise: {
+          type: 'erase',
+          delay: 0,
+          duration: 2000,
+          direction: 'clockwise',
+        },
         scanRight: {
           type: 'scan',
           delay: 0,

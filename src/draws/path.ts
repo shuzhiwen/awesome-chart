@@ -96,7 +96,9 @@ export function drawPath({
   }
 }
 
-export function movePath(props: DrawerData<PathDrawerProps>) {
+export function movePath<T extends DrawerData<PathDrawerProps>>(
+  props: T
+): T['path'] {
   const {path, centerX = 0, centerY = 0} = props
 
   if (typeof path !== 'string') {

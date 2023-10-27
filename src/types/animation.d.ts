@@ -102,7 +102,7 @@ type AnimationEraseOptions = {
   /**
    * The direction in which the erase animation proceeds.
    */
-  direction: Position4
+  direction: Position4 | 'clockwise' | 'anticlockwise'
 }
 
 type AnimationScanOptions = {
