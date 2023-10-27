@@ -71,10 +71,10 @@ export function drawPath({
       graphics.data = d
       graphics.alpha = d.opacity
       graphics.className = d.className
-      graphics.interactive = d.evented
       graphics.pivot = {x: d.centerX, y: d.centerY}
       graphics.position = {x: d.centerX, y: d.centerY}
       graphics.cursor = d.evented ? 'pointer' : 'auto'
+      graphics.eventMode = d.evented ? 'dynamic' : 'none'
 
       isString(d.stroke)
         ? graphics.lineStyle(

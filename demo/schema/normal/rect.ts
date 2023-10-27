@@ -1,5 +1,5 @@
-import {randomTableList} from 'awesome-chart'
 import {LayerRectStyle} from 'awesome-chart/dist/types'
+import {randomTableList} from '../../../src'
 
 export default ({
   mode,

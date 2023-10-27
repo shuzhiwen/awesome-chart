@@ -60,7 +60,7 @@ export abstract class LayerBase<Key extends string> {
   /**
    * The className is used to classify drawing elements of different layers.
    */
-  readonly className = this.constructor.name + '-' + uuid(8)
+  readonly className = uuid(8)
 
   /**
    * Declare what elements the layer contains.

@@ -403,7 +403,10 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '基础地图',
-          schema: base(map(), {padding: noPadding}),
+          schema: base(map(), {
+            padding: noPadding,
+            tooltipOptions: {mode: 'single'},
+          }),
         },
       ],
     },

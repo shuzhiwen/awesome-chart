@@ -81,11 +81,12 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
       }
     } else {
       const {x, y, width, height} = (this.box = this.canvasRoot.getBounds())
+
       this.canvasRoot.mask = this.mask = new Graphics()
+      this.mask.beginFill(0xffffff)
 
       if (this.isPolar) {
         this.updateMask('')
-        this.mask.beginFill(0xffffff)
       } else {
         this.updateMask({
           x: this.isXEnd ? x + width : x,

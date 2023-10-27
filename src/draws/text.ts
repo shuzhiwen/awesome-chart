@@ -117,10 +117,10 @@ export function drawText({
       text.alpha = d.opacity
       text.angle = d.rotation
       text.className = d.className
-      text.interactive = d.evented
       text.position = {x: d.cx, y: d.cy}
       text.pivot = {x: d.textWidth / 2, y: d.textHeight / 2}
       text.cursor = d.evented ? 'pointer' : 'auto'
+      text.eventMode = d.evented ? 'dynamic' : 'none'
       container.addChild(text)
     })
   }

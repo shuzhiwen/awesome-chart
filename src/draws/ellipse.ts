@@ -72,10 +72,10 @@ export function drawEllipse({
       graphics.data = d
       graphics.alpha = d.opacity
       graphics.className = d.className
-      graphics.interactive = d.evented
       graphics.pivot = {x: d.cx, y: d.cy}
       graphics.position = {x: d.cx, y: d.cy}
       graphics.cursor = d.evented ? 'pointer' : 'auto'
+      graphics.eventMode = d.evented ? 'dynamic' : 'none'
 
       isString(d.stroke)
         ? graphics.lineStyle(
