@@ -144,7 +144,10 @@ type LayerRectStyle = {
    * Sort rectangles between and within groups.
    */
   sort: 'asc' | 'desc' | 'none'
-  labelPosition: NonNullable<MaybeGroup<Position5>>
+  /**
+   * Label display that determines positive and negative values.
+   */
+  labelPosition: Vec2<Position5> | Position5
   labelPositionOrient: Position2
   fixedWidth: Meta
   fixedHeight: Meta

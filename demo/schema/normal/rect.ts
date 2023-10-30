@@ -51,6 +51,7 @@ export default ({
               column: 2,
               mu: 500,
               sigma: 200,
+              abs: mode === 'percentage' || mode === 'stack',
             }),
       style: {
         mode,
@@ -58,8 +59,8 @@ export default ({
         labelPosition:
           mode === 'group'
             ? variant === 'column'
-              ? 'top'
-              : 'right'
+              ? ['top', 'bottom']
+              : ['right', 'left']
             : 'center',
         background: {
           fill: 'gray',

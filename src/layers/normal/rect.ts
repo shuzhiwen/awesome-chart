@@ -1,4 +1,4 @@
-import {cloneDeep, isArray} from 'lodash'
+import {cloneDeep} from 'lodash'
 import {DataTableList} from '../../data'
 import {scaleBand, scaleLinear} from '../../scales'
 import {
@@ -18,6 +18,7 @@ import {
   ColorMatrix,
   errorCatcher,
   formatNumber,
+  getAttr,
   getPercentageNumber,
   isRealNumber,
   swap,
@@ -496,14 +497,14 @@ export class LayerRect extends LayerBase<Key> {
   private createRectLabel() {
     const {variant} = this.style,
       {labelPosition, labelPositionOrient, text: originText = {}} = this.style,
-      positionMin = isArray(labelPosition) ? labelPosition[0] : labelPosition,
-      positionMax = isArray(labelPosition) ? labelPosition[1] : labelPosition
+      position1 = getAttr(labelPosition, 0, 'center'),
+      position2 = getAttr(labelPosition, 1, 'center')
 
     this.textData = this.rectData.map((group) =>
       group.map(({value, x: originX, y: originY, width, height, meta}) => {
         const text = cloneDeep(originText),
           [offsetX = 0, offsetY = 0] = text.offset!,
-          labelPosition = value > 0 ? positionMax : positionMin
+          labelPosition = value > 0 ? position1 : position2
         let position: Position9 = 'center',
           [x, y] = [originX, originY]
 
