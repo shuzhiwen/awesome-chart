@@ -84,24 +84,21 @@ export class LayerSankey extends LayerBase<Key> {
       throw new Error('Invalid data')
     }
 
-    const {edges, nodes} = this.data,
+    const {edges, nodeGroups} = this.data,
       {layout, createGradient} = this.options,
       {align, text, node, direction} = this.style,
       {labelOffset, nodeWidth, nodeGap, edgeGap} = this.style,
-      levels = range(0, (max(nodes.map(({level}) => level ?? 0)) ?? 0) + 1),
-      groups = levels.map((value) =>
-        nodes.filter(({level}) => level === value)
-      ),
       totalLength = direction === 'horizontal' ? layout.width : layout.height,
-      groupNodeWidths = range(0, groups.length).map((i) =>
+      groupNodeWidths = range(0, nodeGroups.length).map((i) =>
         getAttr(nodeWidth, i, 5)
       ),
-      groupNodeGap = (totalLength - sum(groupNodeWidths)) / (groups.length - 1)
+      groupNodeGap =
+        (totalLength - sum(groupNodeWidths)) / (nodeGroups.length - 1)
 
     const maxStackNodeLength = max(
-      levels.map((level, i) => {
-        const totalNumber = sum(groups[level].map(({value}) => value)),
-          gapLength = (groups[level].length - 1) * getAttr(nodeGap, i, 5),
+      nodeGroups.map((group, i) => {
+        const totalNumber = sum(group.map(({value}) => value)),
+          gapLength = (group.length - 1) * getAttr(nodeGap, i, 5),
           totalLength =
             direction === 'horizontal' ? layout.height : layout.width,
           ratio = totalNumber / (totalLength - gapLength)
@@ -115,7 +112,7 @@ export class LayerSankey extends LayerBase<Key> {
         direction === 'horizontal' ? [0, layout.height] : [0, layout.width],
     })
 
-    this.nodeData = groups.map((groupedNodes, i) => {
+    this.nodeData = nodeGroups.map((groupedNodes, i) => {
       const colorMatrix = createColorMatrix({
         layer: this,
         row: groupedNodes.length,

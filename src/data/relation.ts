@@ -1,4 +1,5 @@
-import {max, merge, sum} from 'lodash'
+import {group} from 'd3'
+import {get, max, merge, sum} from 'lodash'
 import {Edge, Node, RawRelation, RelationData} from '../types'
 import {formatNumber, isRawRelation, tableListToObjects} from '../utils'
 import {DataBase} from './base'
@@ -29,6 +30,15 @@ export class DataRelation extends DataBase<RawRelation> {
    */
   get roots() {
     return this._data.roots
+  }
+
+  /**
+   * Node groups by level.
+   */
+  get nodeGroups() {
+    return Array.from(group(this.nodes, ({level}) => level).values()).sort(
+      (a, b) => (get(a, '0.level') ?? 0) - (get(b, '0.level') ?? 0)
+    )
   }
 
   getNode(id: Meta) {
@@ -75,7 +85,7 @@ export class DataRelation extends DataBase<RawRelation> {
     }
 
     if (!nodeData[0].includes('level')) {
-      this.computeLevel()
+      this.preprocessNodeLevel()
     } else {
       this._data.roots = this.nodes
         .filter(({level}) => level === 0)
@@ -83,7 +93,34 @@ export class DataRelation extends DataBase<RawRelation> {
     }
   }
 
-  private computeLevel() {
+  private computeLevel = (
+    id: Meta,
+    parents: Meta[],
+    level: Record<string, number>
+  ) => {
+    if (level[id] === -1) {
+      parents.push(id)
+      level[id] = 0
+    }
+
+    const nextNodeIds = this.edges
+      .filter(({from}) => from === id)
+      .map(({to}) => to)
+
+    nextNodeIds.forEach((nextId) => {
+      if (level[nextId] === -1) {
+        level[nextId] = level[id] + 1
+      } else if (level[nextId] - level[id] !== 1) {
+        parents.map((prevId) => {
+          // backtracking and rebuilding hierarchies
+          return (level[prevId] += level[nextId] - level[id] - 1)
+        })
+      }
+      this.computeLevel(nextId, parents, level)
+    })
+  }
+
+  private preprocessNodeLevel() {
     const level: Record<string, number> = {}
     const completed: Record<string, boolean> = {}
 
@@ -106,29 +143,8 @@ export class DataRelation extends DataBase<RawRelation> {
       completed[id] = true
     }
 
-    const generateLevel = (id: Meta, parents: Meta[]) => {
-      if (level[id] === -1) {
-        parents.push(id)
-        level[id] = 0
-      }
-
-      this.edges
-        .filter(({from}) => from === id)
-        .forEach(({to: nextId}) => {
-          if (level[nextId] === -1) {
-            level[nextId] = level[id] + 1
-          } else if (level[nextId] - level[id] !== 1) {
-            // backtracking and rebuilding hierarchies
-            parents.map(
-              (prevId) => (level[prevId] += level[nextId] - level[id] - 1)
-            )
-          }
-          generateLevel(nextId, parents)
-        })
-    }
-
     this.edges.forEach(({to}) => generateLink(to))
-    this.roots.forEach((root) => generateLevel(root, []))
+    this.roots.forEach((root) => this.computeLevel(root, [], level))
     this.nodes.map(
       (node) => (node.level = level[node.id] === -1 ? 0 : level[node.id])
     )

@@ -89,21 +89,16 @@ export class LayerTree extends LayerBase<Key> {
 
     if (!this.data) return
 
-    const {nodes} = this.data,
-      levels = robustRange(0, max(nodes.map(({level}) => level ?? 0)) ?? 0),
-      // dfs inserts the order of leaf nodes
-      dfs = (node: Node & {order?: number}) => {
-        if (node.children?.length === 0) {
-          node.order = ++this.maxOrder
-        } else {
-          node.children?.forEach((child) => dfs(child))
-        }
+    const dfs = (node: Node & {order?: number}) => {
+      if (node.children?.length === 0) {
+        node.order = ++this.maxOrder
+      } else {
+        node.children?.forEach((child) => dfs(child))
       }
+    }
 
     this.maxOrder = -1
-    this.groups = levels.map((value) =>
-      nodes.filter(({level}) => level === value)
-    )
+    this.groups = this.data.nodeGroups
     this.groups[0].forEach(dfs)
     this.createScale()
   }
