@@ -298,6 +298,7 @@ export class Chart {
 
   /**
    * This function is responsible for integrating the scales of all layers.
+   * Any operation that affects layout should call this method.
    */
   rebuildScale({trigger, redraw}: RebuildScaleProps) {
     const axisLayer = this.getLayerByType('axis'),

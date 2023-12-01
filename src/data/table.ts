@@ -1,6 +1,6 @@
-import {isArray, max, min} from 'lodash'
+import {max, min} from 'lodash'
 import {RawTable, TableOptions} from '../types'
-import {isRawTable} from '../utils'
+import {group, isRawTable} from '../utils'
 import {DataBase} from './base'
 
 export class DataTable extends DataBase<RawTable> {
@@ -47,8 +47,8 @@ export class DataTable extends DataBase<RawTable> {
    * New `DataTable` containing specific rows and columns.
    */
   select(rows: Meta[], columns: Meta[]) {
-    const _rows = isArray(rows) ? rows : [rows],
-      _columns = isArray(columns) ? columns : [columns],
+    const _rows = group(rows),
+      _columns = group(columns),
       data: RawTable = [_rows, _columns, []],
       rowsIndex = _rows.map((row) => this.rows.indexOf(row)),
       columnsIndex = _columns.map((column) => this.columns.indexOf(column))

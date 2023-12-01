@@ -1,8 +1,7 @@
 import chroma from 'chroma-js'
-import {isArray} from 'lodash'
 import {DataTableList} from '../../data'
 import {CreateColorMatrixProps} from '../../types'
-import {ColorMatrix, safeLoop} from '../../utils'
+import {ColorMatrix, group, safeLoop} from '../../utils'
 
 /**
  * Create `ColorMatrix` for the layer.
@@ -13,7 +12,7 @@ import {ColorMatrix, safeLoop} from '../../utils'
 export function createColorMatrix(props: CreateColorMatrixProps) {
   const {layer, row, column, theme} = props,
     {main, nice} = layer.options.theme.palette,
-    colors = !theme ? main : isArray(theme) ? theme : [theme],
+    colors = !theme ? main : group(theme),
     chromaScale = chroma.scale(colors).mode('lch'),
     order = layer.data?.options.order
   let matrix: string[][] = order?.colorMatrix.matrix || []
