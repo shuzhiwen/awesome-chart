@@ -40,9 +40,9 @@ export class LayerScatter extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: DrawerData<TextDrawerProps>[][] = []
+  protected textData: DrawerData<TextDrawerProps>[][] = []
 
-  private pointData: (DrawerData<CircleDrawerProps> & {
+  protected pointData: (DrawerData<CircleDrawerProps> & {
     value: Meta
     color: string
     category: Meta

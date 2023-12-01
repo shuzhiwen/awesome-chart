@@ -47,11 +47,11 @@ export class LayerArc extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: DrawerData<TextDrawerProps>[][] = []
+  protected textData: DrawerData<TextDrawerProps>[][] = []
 
-  private guideLineData: DrawerData<CurveDrawerProps>['points'][][] = []
+  protected guideLineData: DrawerData<CurveDrawerProps>['points'][][] = []
 
-  private arcData: (DrawerData<ArcDrawerProps> & {
+  protected arcData: (DrawerData<ArcDrawerProps> & {
     value: Meta
     meta: SourceMeta
     color?: string

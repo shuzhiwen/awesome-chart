@@ -44,9 +44,13 @@ export class LayerTree extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: DrawerData<TextDrawerProps>[][] = []
+  private maxOrder = -1
 
-  private nodeData: (DrawerData<CircleDrawerProps> &
+  private groups: (Node & {order?: number})[][] = []
+
+  protected textData: DrawerData<TextDrawerProps>[][] = []
+
+  protected nodeData: (DrawerData<CircleDrawerProps> &
     Pick<Node, 'id' | 'name' | 'value'> & {
       meta: AnyObject
       color: string
@@ -60,13 +64,9 @@ export class LayerTree extends LayerBase<Key> {
         }>)[]
     })[][] = []
 
-  private edgeData: (DrawerData<LineDrawerProps> & {
+  protected edgeData: (DrawerData<LineDrawerProps> & {
     color: string
   })[][] = []
-
-  private groups: (Node & {order?: number})[][] = []
-
-  private maxOrder = -1
 
   get data() {
     return this._data

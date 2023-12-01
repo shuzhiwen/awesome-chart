@@ -27,7 +27,7 @@ export class LayerHeatmap extends LayerBase<'heatZone'> {
 
   private _style = defaultStyle
 
-  private heatZoneData: (DrawerData<CircleDrawerProps> & {
+  protected heatZoneData: (DrawerData<CircleDrawerProps> & {
     color: string
   })[] = []
 

@@ -44,15 +44,15 @@ export class LayerRadar extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: DrawerData<TextDrawerProps>[][] = []
+  protected textData: DrawerData<TextDrawerProps>[][] = []
 
-  private pointData: (DrawerData<CircleDrawerProps> & {
+  protected pointData: (DrawerData<CircleDrawerProps> & {
     angle: number
     meta: SourceMeta
     color: string
   })[][] = []
 
-  private polygonData: (DrawerData<PolyDrawerProps> & {
+  protected polygonData: (DrawerData<PolyDrawerProps> & {
     color: string
   })[] = []
 

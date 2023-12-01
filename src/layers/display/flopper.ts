@@ -37,13 +37,13 @@ export class LayerFlopper extends LayerBase<never> {
 
   private _style = defaultStyle
 
+  private animation = {...lightTheme.animation.update}
+
   private magnitudes: Record<number, string> = {}
 
   private cellSize: Pick<Box, 'width' | 'height'> = {width: 0, height: 0}
 
-  private cellData: SourceMeta[] = []
-
-  private animation = {...lightTheme.animation.update}
+  protected cellData: SourceMeta[] = []
 
   get data() {
     return this._data

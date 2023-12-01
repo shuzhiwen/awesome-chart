@@ -42,9 +42,9 @@ export class LayerCandle extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private rectLayer: LayerRect
+  protected rectLayer: LayerRect
 
-  private lineLayer: LayerRect
+  protected lineLayer: LayerRect
 
   get scale() {
     return this._scale

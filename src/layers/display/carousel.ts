@@ -28,20 +28,20 @@ export class LayerCarousel extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private carouselData: (DrawerData<ImageDrawerProps> & {
+  private startIndex = 0
+
+  private currentIndex = 0
+
+  private timer: Maybe<NodeJS.Timeout>
+
+  protected carouselData: (DrawerData<ImageDrawerProps> & {
     carouselIndex: number
     opacity: number
   })[] = []
 
-  private dotData: (DrawerData<RectDrawerProps> & {
+  protected dotData: (DrawerData<RectDrawerProps> & {
     opacity: number
   })[] = []
-
-  private timer: Maybe<NodeJS.Timeout>
-
-  private currentIndex = 0
-
-  private startIndex = 0
 
   get data() {
     return this._data

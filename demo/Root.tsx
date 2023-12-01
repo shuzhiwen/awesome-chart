@@ -3,8 +3,8 @@ import React, {CSSProperties, useCallback, useEffect, useState} from 'react'
 import {Chart} from './Chart'
 import * as debugs from './debug'
 import {Editor} from './Editor'
+import {Menu} from './Menu'
 import base from './schema/base'
-import {Menu} from './TabMenu'
 
 const isDebug = localStorage.getItem('AWESOME_MODE') === 'development'
 

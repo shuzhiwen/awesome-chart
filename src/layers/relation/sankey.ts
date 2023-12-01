@@ -46,15 +46,15 @@ export class LayerSankey extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: DrawerData<TextDrawerProps>[][] = []
+  protected textData: DrawerData<TextDrawerProps>[][] = []
 
-  private nodeData: (DrawerData<RectDrawerProps> & {
+  protected nodeData: (DrawerData<RectDrawerProps> & {
     meta: AnyObject
     stackedEdgeLength: [0, 0]
     color: string
   } & Node)[][] = []
 
-  private edgeData: (Record<RibbonKey, number> & {
+  protected edgeData: (Record<RibbonKey, number> & {
     color: string
     length: number
   })[] = []

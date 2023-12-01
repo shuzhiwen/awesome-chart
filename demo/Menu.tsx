@@ -72,9 +72,9 @@ class LayerTabMenu extends LayerBase<never> {
 
   private activeNodes: any[] = []
 
-  private originTabData: any[] = []
+  protected originTabData: any[] = []
 
-  private activeTabData: any[] = []
+  protected activeTabData: any[] = []
 
   get data() {
     return this._data

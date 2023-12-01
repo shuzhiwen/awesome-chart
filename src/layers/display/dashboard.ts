@@ -62,24 +62,24 @@ export class LayerDashboard extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private tickLineData: DrawerData<LineDrawerProps>[] = []
+  protected tickLineData: DrawerData<LineDrawerProps>[] = []
 
-  private tickTextData: DrawerData<TextDrawerProps>[] = []
+  protected tickTextData: DrawerData<TextDrawerProps>[] = []
 
-  private labelTextData: DrawerData<TextDrawerProps>[] = []
+  protected labelTextData: DrawerData<TextDrawerProps>[] = []
 
-  private valueTextData: DrawerData<TextDrawerProps>[] = []
+  protected valueTextData: DrawerData<TextDrawerProps>[] = []
 
-  private pointerData: (DrawerData<LineDrawerProps> & {
+  protected pointerData: (DrawerData<LineDrawerProps> & {
     rotation: number
   })[] = []
 
-  private arcData: (DrawerData<ArcDrawerProps> & {
+  protected arcData: (DrawerData<ArcDrawerProps> & {
     meta: Pick<SourceMeta, 'category' | 'value'>
     color: string
   })[] = []
 
-  private fragmentData: Maybe<
+  protected fragmentData: Maybe<
     DataShape & {
       minValue: number
       maxValue: number

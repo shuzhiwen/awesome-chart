@@ -45,13 +45,13 @@ export class LayerAuxiliary extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: (DrawerData<TextDrawerProps> & {
+  protected textData: (DrawerData<TextDrawerProps> & {
     textWidth: number
   })[] = []
 
-  private backgroundData: DrawerData<RectDrawerProps>[] = []
+  protected backgroundData: DrawerData<RectDrawerProps>[] = []
 
-  private lineData: (DrawerData<LineDrawerProps> & {
+  protected lineData: (DrawerData<LineDrawerProps> & {
     value: Meta
     color: string
   })[] = []

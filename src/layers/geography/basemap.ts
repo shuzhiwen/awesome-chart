@@ -51,18 +51,9 @@ export class LayerBasemap extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private fetchTimeout: Maybe<NodeJS.Timeout>
-
-  private textData: DrawerData<TextDrawerProps>[] = []
-
   private path: Maybe<d3.GeoPath>
 
-  private backgroundData: DrawerData<RectDrawerProps>[] = []
-
-  private blockData: {
-    properties: AnyObject
-    geometry: GeoPermissibleObjects
-  }[] = []
+  private fetchTimeout: Maybe<NodeJS.Timeout>
 
   private parentCode: number[] = []
 
@@ -73,6 +64,15 @@ export class LayerBasemap extends LayerBase<Key> {
     name: string
     level: string
     parent: number
+  }[] = []
+
+  protected textData: DrawerData<TextDrawerProps>[] = []
+
+  protected backgroundData: DrawerData<RectDrawerProps>[] = []
+
+  protected blockData: {
+    properties: AnyObject
+    geometry: GeoPermissibleObjects
   }[] = []
 
   get scale() {

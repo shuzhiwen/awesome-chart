@@ -34,15 +34,15 @@ export class LayerChord extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: ReturnType<typeof createRotatedArcText>[] = []
+  protected textData: ReturnType<typeof createRotatedArcText>[] = []
 
-  private nodeData: (DrawerData<ArcDrawerProps> & {
+  protected nodeData: (DrawerData<ArcDrawerProps> & {
     meta: Pick<SourceMeta, 'category' | 'value'>
     color: string
     index: number
   })[] = []
 
-  private edgeData: (DrawerData<PathDrawerProps> & {
+  protected edgeData: (DrawerData<PathDrawerProps> & {
     color: string
     index: number
   })[][] = []

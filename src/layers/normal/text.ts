@@ -36,7 +36,7 @@ export class LayerText extends LayerBase<'text'> {
 
   private _style = defaultStyle
 
-  private textData: (DrawerData<TextDrawerProps> & {
+  protected textData: (DrawerData<TextDrawerProps> & {
     xIndex: number
     yIndex: number
   })[] = []

@@ -96,7 +96,9 @@ export class LayerAxis extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private lineData: Record<
+  private disabledAxisX: Set<ReturnType<typeof createText>> = new Set()
+
+  protected lineData: Record<
     'axisLineX' | 'axisLineY' | 'splitLineX' | 'splitLineY' | 'splitLineAngle',
     (DrawerData<LineDrawerProps> &
       Partial<{
@@ -113,13 +115,11 @@ export class LayerAxis extends LayerBase<Key> {
     splitLineAngle: [],
   }
 
-  private splitLineRadiusData: (DrawerData<CircleDrawerProps> & {
+  protected splitLineRadiusData: (DrawerData<CircleDrawerProps> & {
     value: Meta
   })[] = []
 
-  private disabledAxisX: Set<ReturnType<typeof createText>> = new Set()
-
-  private textData: Record<
+  protected textData: Record<
     | 'textX'
     | 'textY'
     | 'textYR'

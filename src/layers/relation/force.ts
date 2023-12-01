@@ -36,9 +36,9 @@ export class LayerForce extends LayerBase<Key> {
     Simulation<ArrayItem<LayerForce['nodeData']>, undefined>
   >
 
-  private textData: DrawerData<TextDrawerProps>[] = []
+  protected textData: DrawerData<TextDrawerProps>[] = []
 
-  private nodeData: (DrawerData<CircleDrawerProps> & {
+  protected nodeData: (DrawerData<CircleDrawerProps> & {
     meta: AnyObject
     label: Meta
     value: Meta

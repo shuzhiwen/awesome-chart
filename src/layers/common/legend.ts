@@ -42,8 +42,6 @@ const defaultStyle: LayerLegendStyle = {
 }
 
 export class LayerLegend extends LayerBase<Key> {
-  private disabledColor: string
-
   private _data = new DataBase<{
     text: Meta[]
     shape: LegendShape[]
@@ -58,33 +56,35 @@ export class LayerLegend extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: (DrawerData<TextDrawerProps> & {
+  private disabledColor: string
+
+  private legendDataGroup: LegendData[] = []
+
+  protected textData: (DrawerData<TextDrawerProps> & {
     textWidth: number
   })[] = []
 
-  private lineData: (DrawerData<LineDrawerProps> & {
+  protected lineData: (DrawerData<LineDrawerProps> & {
     stroke: string
     strokeWidth: number
     strokeDasharray?: string
   })[] = []
 
-  private rectData: (DrawerData<RectDrawerProps> & {
+  protected rectData: (DrawerData<RectDrawerProps> & {
     fill: string
   })[] = []
 
-  private circleData: (DrawerData<CircleDrawerProps> & {
+  protected circleData: (DrawerData<CircleDrawerProps> & {
     fill?: string
     stroke?: string
     strokeWidth?: number
   })[] = []
 
-  private polygonData: (DrawerData<PolyDrawerProps> & {
+  protected polygonData: (DrawerData<PolyDrawerProps> & {
     fill: string
   })[] = []
 
-  private interactiveData: DrawerData<RectDrawerProps>[] = []
-
-  private legendDataGroup: LegendData[] = []
+  protected interactiveData: DrawerData<RectDrawerProps>[] = []
 
   get data() {
     return this._data

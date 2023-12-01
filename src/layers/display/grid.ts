@@ -96,13 +96,13 @@ export class LayerGrid extends LayerBase<Key> {
 
   private insertIndex = -1
 
-  private boxData: (DrawerData<RectDrawerProps> & {
+  protected boxData: (DrawerData<RectDrawerProps> & {
     meta: DrawerData<RectDrawerProps> & {dimension: Meta}
   })[] = []
 
-  private gridLineData: DrawerData<LineDrawerProps>[][] = []
+  protected gridLineData: DrawerData<LineDrawerProps>[][] = []
 
-  private placeholderData: DrawerData<RectDrawerProps>
+  protected placeholderData: DrawerData<RectDrawerProps>
 
   get data() {
     return this._data

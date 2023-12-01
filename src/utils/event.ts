@@ -22,7 +22,7 @@ export class EventManager<
    * @eventProperty
    */
   has(name: Name) {
-    return !!this.cache[name]
+    return Array.isArray(this.cache[name])
   }
 
   /**
@@ -90,8 +90,6 @@ export class EventManager<
    * The event name.
    * @param args
    * The arguments for listener.
-   * @param context
-   * The context for listener.
    * @eventProperty
    */
   fire(name: Name, ...args: Parameters<Callback>) {

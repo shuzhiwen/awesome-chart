@@ -41,9 +41,9 @@ export class LayerODLine extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private flyingObjectData: DrawerData<PathDrawerProps>[] = []
+  protected flyingObjectData: DrawerData<PathDrawerProps>[] = []
 
-  private odLineData: {
+  protected odLineData: {
     meta: AnyObject
     path: string | null
     position: Record<DataKey, number>

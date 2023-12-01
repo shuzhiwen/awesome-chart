@@ -36,24 +36,24 @@ export class LayerPack extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: (DrawerData<TextDrawerProps> & {
-    fontSize?: number
-  })[][] = []
-
-  private treeData: Maybe<HierarchyNode<Node>>
-
-  private circleData: (DrawerData<CircleDrawerProps> & {
-    meta: AnyObject
-    value: Meta
-    color?: string
-  })[][] = []
-
   private zoomConfig: Maybe<{
     maxHeight: number
     view: Vec2
     offset: Vec2
     k: number
   }>
+
+  protected textData: (DrawerData<TextDrawerProps> & {
+    fontSize?: number
+  })[][] = []
+
+  protected treeData: Maybe<HierarchyNode<Node>>
+
+  protected circleData: (DrawerData<CircleDrawerProps> & {
+    meta: AnyObject
+    value: Meta
+    color?: string
+  })[][] = []
 
   get data() {
     return this._data

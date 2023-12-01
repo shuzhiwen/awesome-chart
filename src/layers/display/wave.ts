@@ -50,16 +50,16 @@ export class LayerWave extends LayerBase<Key> {
     }>
   >
 
-  private areaData: Required<
+  protected areaData: Required<
     DrawerData<AreaDrawerProps> & {
       value: Meta
       color: string
     }
   >[] = []
 
-  private backgroundData: DrawerData<CircleDrawerProps>[] = []
+  protected backgroundData: DrawerData<CircleDrawerProps>[] = []
 
-  private textData: DrawerData<TextDrawerProps>[] = []
+  protected textData: DrawerData<TextDrawerProps>[] = []
 
   get data() {
     return this._data

@@ -54,15 +54,15 @@ export class LayerLine extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: DrawerData<TextDrawerProps>[][] = []
+  protected textData: DrawerData<TextDrawerProps>[][] = []
 
-  private pointData: (DrawerData<CircleDrawerProps> & {
+  protected pointData: (DrawerData<CircleDrawerProps> & {
     value: Meta
     meta: SourceMeta
     color: string
   })[][] = []
 
-  private areaData: (ArrayItem<DrawerData<AreaDrawerProps>['lines']> & {
+  protected areaData: (ArrayItem<DrawerData<AreaDrawerProps>['lines']> & {
     color: string
   })[][] = []
 

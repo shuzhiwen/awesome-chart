@@ -43,9 +43,9 @@ export class LayerBrush extends LayerBase<never> {
 
   private rangeMapping: Map<string, any[]> = new Map()
 
-  private brush: Maybe<BrushBehavior<unknown>>
-
   private rebuildScale: ChartContext['rebuildScale']
+
+  private brush: Maybe<BrushBehavior<unknown>>
 
   private _style = defaultStyle
 

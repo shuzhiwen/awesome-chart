@@ -34,9 +34,9 @@ export class LayerTreemap extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: DrawerData<TextDrawerProps>[][] = []
+  protected textData: DrawerData<TextDrawerProps>[][] = []
 
-  private rectData: (DrawerData<RectDrawerProps> & {
+  protected rectData: (DrawerData<RectDrawerProps> & {
     data: Node
     color: string
     meta: AnyObject

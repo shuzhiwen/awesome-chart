@@ -38,9 +38,9 @@ export class LayerRadial extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: DrawerData<TextDrawerProps>[][] = []
+  protected textData: DrawerData<TextDrawerProps>[][] = []
 
-  private arcData: (DrawerData<ArcDrawerProps> & {
+  protected arcData: (DrawerData<ArcDrawerProps> & {
     value: Meta
     meta: SourceMeta
     color: string

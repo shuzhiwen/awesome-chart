@@ -40,9 +40,10 @@ export class LayerMark extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: DrawerData<TextDrawerProps>[] = []
+  protected textData: DrawerData<TextDrawerProps>[] = []
 
-  private markData: Required<DrawerData<PathDrawerProps> & {value: Meta}>[] = []
+  protected markData: Required<DrawerData<PathDrawerProps> & {value: Meta}>[] =
+    []
 
   get data() {
     return this._data

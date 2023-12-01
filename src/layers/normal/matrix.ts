@@ -43,19 +43,19 @@ export class LayerMatrix extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private rectData: (DrawerData<RectDrawerProps> & {
+  protected rectData: (DrawerData<RectDrawerProps> & {
     value: Meta
     meta: Pick<SourceMeta, 'dimension' | 'value'>
     color: string
   })[][] = []
 
-  private circleData: (DrawerData<CircleDrawerProps> & {
+  protected circleData: (DrawerData<CircleDrawerProps> & {
     value: Meta
     meta: Pick<SourceMeta, 'dimension' | 'value'>
     color: string
   })[][] = []
 
-  private textData: DrawerData<TextDrawerProps>[][] = []
+  protected textData: DrawerData<TextDrawerProps>[][] = []
 
   get scale() {
     return this._scale

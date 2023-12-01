@@ -60,17 +60,17 @@ export class LayerRect extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private textData: (DrawerData<TextDrawerProps> & {
+  protected textData: (DrawerData<TextDrawerProps> & {
     meta: Pick<SourceMeta, 'dimension'>
   })[][] = []
 
-  private rectData: (DrawerData<RectDrawerProps> & {
+  protected rectData: (DrawerData<RectDrawerProps> & {
     value: number
     meta: SourceMeta
     color?: string
   })[][] = []
 
-  private backgroundData: DrawerData<RectDrawerProps>[] = []
+  protected backgroundData: DrawerData<RectDrawerProps>[] = []
 
   get scale() {
     return this._scale

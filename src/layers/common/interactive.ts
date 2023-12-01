@@ -46,15 +46,15 @@ export class LayerInteractive extends LayerBase<Key> {
 
   private _style = defaultStyle
 
-  private rectDataX: (DrawerData<RectDrawerProps> & {
+  protected rectDataX: (DrawerData<RectDrawerProps> & {
     meta: AnyObject
   })[][] = []
 
-  private rectDataY: (DrawerData<RectDrawerProps> & {
+  protected rectDataY: (DrawerData<RectDrawerProps> & {
     meta: AnyObject
   })[][] = []
 
-  private helperAuxiliary: [LayerAuxiliary, LayerAuxiliary]
+  protected helperAuxiliary: [LayerAuxiliary, LayerAuxiliary]
 
   get scale() {
     return this._scale
