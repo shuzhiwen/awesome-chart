@@ -17,8 +17,8 @@ import {
   RebuildScaleProps,
 } from '../types'
 import {
-  createLog,
   EventManager,
+  createLog,
   getEasyGradientCreator,
   getPercentageNumber,
   isLayerAxis,
@@ -176,10 +176,8 @@ export class Chart {
     } else {
       this.root = selector
         .append('svg')
-        .attr('width', this.containerWidth)
-        .attr('height', this.containerHeight)
         .attr('xmlns', 'http://www.w3.org/2000/svg')
-        .style('position', 'absolute')
+        .attr('viewBox', `0 0 ${this.containerWidth} ${this.containerHeight}`)
       this.defs = this.root.append('defs')
       this.root.on('mousemove', (event) => {
         this.event.fire('globalEvent', {event})

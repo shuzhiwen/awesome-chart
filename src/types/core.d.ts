@@ -246,7 +246,7 @@ type CreateChartProps = ChartProps & {
      * The style will override the default style.
      * Computable style that takes the theme as a parameter.
      */
-    style: NonNullable<LayerDict[LayerType]>['style']
+    style: Partial<NonNullable<LayerDict[LayerType]>['style']>
     /**
      * The animation will define animation for sublayers.
      * Computable animation that takes the theme as a parameter.
