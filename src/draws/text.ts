@@ -66,7 +66,7 @@ export function drawText({
     const prevTexts = container
       .selectAll(`.${className}`)
       .data()
-      .map((d) => (d as typeof mappedData[number]).value)
+      .map((d) => (d as (typeof mappedData)[number]).value)
     container
       .selectAll(`.${className}`)
       .data(mappedData)

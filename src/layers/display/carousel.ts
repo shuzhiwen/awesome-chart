@@ -142,10 +142,10 @@ export class LayerCarousel extends LayerBase<Key> {
               this.currentIndex - carouselIndex > 0
                 ? left - (this.currentIndex - carouselIndex) * groupWidth
                 : this.currentIndex - carouselIndex < 0
-                ? right +
-                  (carouselIndex - this.currentIndex) * groupWidth -
-                  width * zoom
-                : left,
+                  ? right +
+                    (carouselIndex - this.currentIndex) * groupWidth -
+                    width * zoom
+                  : left,
           })
         )
       } else if (direction === 'top' || direction === 'bottom') {
@@ -166,10 +166,10 @@ export class LayerCarousel extends LayerBase<Key> {
               this.currentIndex - carouselIndex > 0
                 ? top - (this.currentIndex - carouselIndex) * groupHeight
                 : this.currentIndex - carouselIndex < 0
-                ? bottom +
-                  (carouselIndex - this.currentIndex) * groupHeight -
-                  height * zoom
-                : top,
+                  ? bottom +
+                    (carouselIndex - this.currentIndex) * groupHeight -
+                    height * zoom
+                  : top,
           })
         )
       }

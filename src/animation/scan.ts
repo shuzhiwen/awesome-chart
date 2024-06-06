@@ -135,26 +135,26 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
         ...(direction === 'right'
           ? {x1: ['-100%', '100%'], x2: [0, '200%']}
           : direction === 'left'
-          ? {x1: ['100%', '-100%'], x2: ['200%', 0]}
-          : direction === 'bottom'
-          ? {y1: ['-100%', '100%'], y2: [0, '200%']}
-          : direction === 'top'
-          ? {y1: ['100%', '-100%'], y2: ['200%', 0]}
-          : null),
+            ? {x1: ['100%', '-100%'], x2: ['200%', 0]}
+            : direction === 'bottom'
+              ? {y1: ['-100%', '100%'], y2: [0, '200%']}
+              : direction === 'top'
+                ? {y1: ['100%', '-100%'], y2: ['200%', 0]}
+                : null),
       })
     }
 
     if (isCC(context) && this.mask instanceof Graphics) {
-      const {width, height} = this.mask.getBounds()
+      const {width: w, height: h} = this.mask.getBounds()
 
       anime({
         ...this.basicConfig,
         targets: this.mask,
         ...(this.isHorizontal
-          ? {x: direction === 'right' ? [-width, width] : [width, -width]}
+          ? {x: direction === 'right' ? [-w, w] : [w, -w]}
           : this.isVertical
-          ? {y: direction === 'bottom' ? [-height, height] : [height, -height]}
-          : null),
+            ? {y: direction === 'bottom' ? [-h, h] : [h, -h]}
+            : null),
       })
     }
   }

@@ -8,7 +8,7 @@ const isCallback = (fn: unknown): fn is EventCallback => isFunction(fn)
 
 export class EventManager<
   Name extends string = string,
-  Callback extends EventCallback = EventCallback
+  Callback extends EventCallback = EventCallback,
 > {
   /**
    * All active listener functions.

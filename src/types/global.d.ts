@@ -20,10 +20,11 @@ type Newable<T, P> = new (...args: P extends [...infer V] ? V : [P]) => T
 
 type Computable<T, P = never> = T | ((props: P) => T)
 
-type Keys<T> = T extends Set<infer K>
-  ? K
-  : T extends Map<infer K, unknown>
-  ? K
-  : T extends Record<infer K, unknown>
-  ? K
-  : keyof T
+type Keys<T> =
+  T extends Set<infer K>
+    ? K
+    : T extends Map<infer K, unknown>
+      ? K
+      : T extends Record<infer K, unknown>
+        ? K
+        : keyof T

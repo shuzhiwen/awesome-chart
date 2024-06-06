@@ -3,7 +3,7 @@ import {DataBaseOptions} from '../types'
 
 export class DataBase<
   Source extends unknown = unknown,
-  Options extends DataBaseOptions = DataBaseOptions
+  Options extends DataBaseOptions = DataBaseOptions,
 > {
   private readonly _source: Source
 

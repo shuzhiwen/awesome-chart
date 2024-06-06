@@ -136,14 +136,14 @@ export class LayerAuxiliary extends LayerBase<Key> {
           labelPosition === 'left'
             ? x1
             : labelPosition === 'right'
-            ? x2
-            : (x1 + x2) / 2,
+              ? x2
+              : (x1 + x2) / 2,
         y:
           labelPosition === 'top'
             ? y1
             : labelPosition === 'bottom'
-            ? y2
-            : (y1 + y2) / 2,
+              ? y2
+              : (y1 + y2) / 2,
         position: labelPosition,
         offset: labelOffset,
         style: text,

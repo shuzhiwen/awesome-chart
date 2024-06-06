@@ -88,16 +88,16 @@ export function createArcText(
     position: isApproximateNumber(angle, 0)
       ? 'top'
       : isApproximateNumber(angle, Math.PI)
-      ? 'bottom'
-      : angle < Math.PI
-      ? angle < Math.PI * 0.5
-        ? 'rightTop'
-        : 'rightBottom'
-      : angle > Math.PI
-      ? angle > Math.PI * 1.5
-        ? 'leftTop'
-        : 'leftBottom'
-      : 'center',
+        ? 'bottom'
+        : angle < Math.PI
+          ? angle < Math.PI * 0.5
+            ? 'rightTop'
+            : 'rightBottom'
+          : angle > Math.PI
+            ? angle > Math.PI * 1.5
+              ? 'leftTop'
+              : 'leftBottom'
+            : 'center',
   })
 }
 

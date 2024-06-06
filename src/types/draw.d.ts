@@ -44,7 +44,7 @@ type ElConfig<T extends DrawerType = DrawerType> = {
 
 type DrawerDictProps<
   T extends DrawerType,
-  P extends typeof DrawerDict[T] = typeof DrawerDict[T]
+  P extends (typeof DrawerDict)[T] = (typeof DrawerDict)[T],
 > = Parameters<P>[0]
 
 type TextDrawerProps = TextStyle &

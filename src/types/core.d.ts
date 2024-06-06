@@ -228,7 +228,7 @@ type CreateChartProps = ChartProps & {
      * The options of the layer.
      * When options changes, chart will redraw.
      */
-    options: Omit<LayerOptions, 'type' | 'layout'> & {
+    options: Pick<LayerOptions, 'id' | 'axis'> & {
       /**
        * The name of layout that created by layoutCreator.
        */

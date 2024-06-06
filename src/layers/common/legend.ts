@@ -248,8 +248,8 @@ export class LayerLegend extends LayerBase<Key> {
         verticalAlign === 'center'
           ? leftY / 2
           : verticalAlign === 'end'
-          ? leftY
-          : 0
+            ? leftY
+            : 0
 
     this.textData = this.textData.map(({x, y, value, ...rest}) => ({
       ...rest,
