@@ -20,9 +20,9 @@ import {
   LayerStyle,
 } from '../types'
 import {
+  EventManager,
   compute,
   createLog,
-  EventManager,
   fromEntries,
   group,
   isCC,
@@ -395,16 +395,18 @@ export abstract class LayerBase<Key extends string> {
      * If data length is more than last time, add missing group container.
      * If data length is less than last time, remove redundant group container.
      */
-    range(0, maxGroupLength).map((groupIndex) => {
-      const groupClassName = `${sublayerClassName}-${groupIndex}`
+    range(0, maxGroupLength).map((i) => {
+      const groupClassName = `${sublayerClassName}-${i}`
       const groupContainer = selector.getDirectChild(
         sublayerContainer,
         groupClassName
       )
 
-      if (groupIndex < nextData.length && !groupContainer) {
+      if (nextData[i]?.hidden) {
+        return
+      } else if (i < nextData.length && !groupContainer) {
         selector.createGroup(sublayerContainer, groupClassName)
-      } else if (groupIndex >= nextData.length) {
+      } else if (i >= nextData.length) {
         selector.remove(groupContainer)
       }
     })
@@ -445,8 +447,8 @@ export abstract class LayerBase<Key extends string> {
      * Data update animation is not triggered on first render.
      */
     cacheData.data.length = nextData.length
-    nextData.forEach((groupData, i) => {
-      if (groupData.hidden || isEqual(cacheData.data[i], groupData)) {
+    nextData.forEach(({hidden, disableUpdateAnimation, ...datum}, i) => {
+      if (hidden || isEqual(cacheData.data[i], datum)) {
         return
       }
 
@@ -456,9 +458,9 @@ export abstract class LayerBase<Key extends string> {
         groupClassName
       )
       const options = {
-        ...groupData,
+        ...datum,
         transition:
-          isFirstDraw || groupData.disableUpdateAnimation
+          isFirstDraw || disableUpdateAnimation
             ? {duration: 0, delay: 0}
             : this.cacheAnimation.options[key]?.update,
         className: elClass(key),
@@ -467,7 +469,7 @@ export abstract class LayerBase<Key extends string> {
       }
 
       this.cacheAnimation.animations[key]?.destroy()
-      cacheData.data[i] = cloneDeep(groupData)
+      cacheData.data[i] = cloneDeep(datum)
       DrawerDict[type](options as never)
     })
 
