@@ -15,7 +15,6 @@ type GraphStyle = Partial<{
   strokeOpacity: MaybeGroup<number>
   strokeDasharray: MaybeGroup<string>
   rotation: MaybeGroup<number>
-  transition: Maybe<Partial<UpdateAnimationOptions>>
   hidden: boolean
   mapping: (
     config: ElConfig & Pick<BasicDrawerProps<unknown>, 'container' | 'theme'>

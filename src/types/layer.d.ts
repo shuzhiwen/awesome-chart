@@ -1,7 +1,7 @@
 import {AnimationQueue} from '../animation'
 import {commonEvents, tooltipEvents} from '../core'
 import {LayerBase, LayerDict} from '../layers'
-import {AnimationOptions} from './animation'
+import {AnimationOptions, UpdateAnimationOptions} from './animation'
 import {ChartContext} from './core'
 import {LegendData} from './data'
 import {
@@ -55,7 +55,7 @@ type CacheLayerAnimation<Key extends string> = {
       Key,
       Partial<
         Record<'enter' | 'loop', MaybeGroup<AnimationOptions>> & {
-          update: AnimationOptions
+          update: UpdateAnimationOptions
         }
       >
     >

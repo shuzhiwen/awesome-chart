@@ -1,6 +1,7 @@
 import {Selection} from 'd3'
 import {Container, FederatedPointerEvent} from 'pixi.js'
 import {DrawerDict} from '../draws'
+import {UpdateAnimationOptions} from './animation'
 import {ChartTheme} from './core'
 import {GraphStyle, TextStyle} from './styles'
 
@@ -28,6 +29,7 @@ type BasicDrawerProps<Datum> = {
   className: string
   container: DrawerTarget
   theme: ChartTheme
+  transition?: Maybe<Partial<UpdateAnimationOptions>>
   evented?: boolean
 }
 
