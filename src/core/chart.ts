@@ -124,10 +124,9 @@ export class Chart {
   }
 
   constructor({
+    width,
+    height,
     container,
-    width = 100,
-    height = 100,
-    adjust = true,
     engine = 'svg',
     padding = [0, 0, 0, 0],
     theme = lightTheme,
@@ -141,14 +140,8 @@ export class Chart {
     const selector = select(this.container).html('')
     const box = container.getBoundingClientRect()
 
-    if (adjust) {
-      this.containerWidth = box.width || width
-      this.containerHeight = box.height || height
-    } else {
-      this.containerWidth = width
-      this.containerHeight = height
-    }
-
+    this.containerWidth = width || box.width
+    this.containerHeight = height || box.height
     this.padding = [
       getPercentageNumber(padding[0], this.containerHeight),
       getPercentageNumber(padding[1], this.containerWidth),

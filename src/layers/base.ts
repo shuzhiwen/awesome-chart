@@ -15,7 +15,6 @@ import {
   ElEvent,
   LayerAnimation,
   LayerBaseProps,
-  LayerOptions,
   LayerScale,
   LayerStyle,
 } from '../types'
@@ -28,7 +27,6 @@ import {
   isCC,
   isSC,
   ungroup,
-  uuid,
 } from '../utils'
 import {elClass, selector} from './helpers'
 
@@ -58,11 +56,6 @@ export abstract class LayerBase<Key extends string> {
   abstract draw(): void
 
   /**
-   * The className is used to classify drawing elements of different layers.
-   */
-  readonly className = uuid(8)
-
-  /**
    * Declare what elements the layer contains.
    * Each sublayer is associated with a base element type.
    */
@@ -90,15 +83,15 @@ export abstract class LayerBase<Key extends string> {
     AnyFunction
   >()
 
-  readonly log = createLog(this.className)
-
   readonly cacheAnimation: CacheLayerAnimation<Key>
 
   readonly cacheEvent: CacheLayerEvent<Key>
 
   readonly cacheData: CacheLayerData<Key>
 
-  readonly options: LayerOptions
+  readonly options
+
+  readonly log
 
   /**
    * In order to save unnecessary layer data calculation,
@@ -116,7 +109,8 @@ export abstract class LayerBase<Key extends string> {
     this.options = options
     this.sublayers = sublayers || []
     this.interactive = interactive || []
-    this.root = selector.createGroup(this.options.root, this.className)
+    this.log = createLog(this.options.id)
+    this.root = selector.createGroup(this.options.root, this.options.id)
     this.cacheData = fromEntries(this.sublayers.map((key) => [key, {data: []}]))
     this.cacheAnimation = {animations: {}, options: {}, timer: {}}
     this.cacheEvent = this.initializeEvent()
@@ -246,7 +240,7 @@ export abstract class LayerBase<Key extends string> {
    */
   setVisible(visible: boolean, sublayer?: Key) {
     const target = sublayer
-      ? selector.getDirectChild(this.root, `${this.className}-${sublayer}`)
+      ? selector.getDirectChild(this.root, `${this.options.id}-${sublayer}`)
       : this.root
     selector.setVisible(target, visible)
   }
@@ -372,7 +366,7 @@ export abstract class LayerBase<Key extends string> {
     const {type, key, data} = props,
       cacheData = this.cacheData[key],
       isFirstDraw = cacheData.data.length === 0,
-      sublayerClassName = `${this.className}-${key}`,
+      sublayerClassName = `${this.options.id}-${key}`,
       maxGroupLength = Math.max(cacheData.data.length, data.length),
       sublayerContainer =
         selector.getDirectChild(this.root, sublayerClassName) ||

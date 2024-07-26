@@ -177,10 +177,6 @@ type ChartProps = {
    */
   height: number
   /**
-   * Adjust width and height of chart root to fit container or not.
-   */
-  adjust: boolean
-  /**
    * Render the chart in svg mode or canvas mode.
    */
   engine: Engine

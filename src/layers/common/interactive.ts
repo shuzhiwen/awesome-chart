@@ -107,7 +107,7 @@ export class LayerInteractive extends LayerBase<Key> {
       layer.options.theme.animation.update.duration = 100
     })
 
-    event.on('globalEvent', this.className, ({event}: {event: MouseEvent}) => {
+    event.on('globalEvent', this.options.id, ({event}: {event: MouseEvent}) => {
       const {offsetX, offsetY} = event,
         {scaleX, scaleY} = this.scale,
         {left, right, top, bottom} = layout,

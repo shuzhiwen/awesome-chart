@@ -65,7 +65,7 @@ export class LayerFlopper extends LayerBase<never> {
         .style('width', containerWidth)
         .style('height', containerHeight)
         .append('xhtml:div')
-        .attr('class', `${this.className}-container`)
+        .attr('class', `${this.options.id}-container`)
         .style('width', `${width}px`)
         .style('height', `${height}px`)
         .style('margin-left', `${left}px`)
@@ -144,16 +144,16 @@ export class LayerFlopper extends LayerBase<never> {
 
     this.root
       .style('background', mergeAlpha(background, 1))
-      .selectAll(`.${this.className}-group`)
+      .selectAll(`.${this.options.id}-group`)
       .data(this.cellData)
       .join('xhtml:div')
-      .attr('class', `${this.className}-group`)
+      .attr('class', `${this.options.id}-group`)
       .style('width', `${width}px`)
       .style('height', `${height}px`)
-      .selectAll(`.${this.className}-cell`)
+      .selectAll(`.${this.options.id}-cell`)
       .data(data)
       .join('xhtml:div')
-      .attr('class', `${this.className}-cell`)
+      .attr('class', `${this.options.id}-cell`)
       .style('width', `${width}px`)
       .style('height', `${height}px`)
       .style('position', position)
@@ -270,7 +270,7 @@ export class LayerFlopper extends LayerBase<never> {
         easing = theme.animation.update.easing,
       } = this.animation
 
-    this.root.selectAll(`.${this.className}-group`).each((d, i, els) => {
+    this.root.selectAll(`.${this.options.id}-group`).each((d, i, els) => {
       let prevIndex = characterSet.indexOf((d as SourceMeta).prevText)
       let index = characterSet.indexOf((d as SourceMeta).text)
 
@@ -287,7 +287,7 @@ export class LayerFlopper extends LayerBase<never> {
         })
       } else if (index !== prevIndex) {
         const cells = select(els[i])
-            .selectAll(`.${this.className}-cell`)
+            .selectAll(`.${this.options.id}-cell`)
             .nodes()
             .reverse(),
           [backCell, frontCell] = [cells[index], cells[prevIndex]],
