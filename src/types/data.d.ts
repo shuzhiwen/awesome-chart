@@ -78,7 +78,7 @@ type TableListData = {
   max?: Meta
 }[]
 
-type Edge = {
+interface Edge {
   /**
    * Unique edge ID.
    */
@@ -97,7 +97,7 @@ type Edge = {
   value?: number
 }
 
-type Node = {
+interface Node {
   /**
    * Unique node ID.
    */

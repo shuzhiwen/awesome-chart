@@ -115,7 +115,7 @@ type LineDrawerProps = GraphDrawerProps<{
 }>
 
 type PathDrawerProps = GraphDrawerProps<{
-  path: string | ((context?: CanvasRenderingContext2D) => void)
+  path: string | ((context?: CanvasRenderingContext2D) => string)
   centerX?: number
   centerY?: number
 }>

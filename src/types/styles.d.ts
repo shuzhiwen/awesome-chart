@@ -1,4 +1,3 @@
-import {UpdateAnimationOptions} from './animation'
 import {ChartTheme} from './core'
 import {BasicDrawerProps, ElConfig} from './draw'
 import {LayerScale} from './layer'
