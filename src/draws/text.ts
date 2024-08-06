@@ -98,7 +98,7 @@ export function drawText({
       .attr('text-decoration', (d) => d.textDecoration)
       .attr('transform-origin', (d) => `${d.cx} ${d.cy}`)
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
-      .attr('transform', (d) => `rotate(${d.rotation})`)
+      .attr('transform', (d) => (d.rotation ? `rotate(${d.rotation})` : null))
       .style('text-shadow', (d) => d.shadow)
       .style('dominant-baseline', 'central')
   }

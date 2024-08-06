@@ -40,7 +40,6 @@ export function drawImage({
       .data(mappedData)
       .join('symbol')
       .attr('id', (d) => d.id)
-      .attr('preserveAspectRatio', 'none')
       .attr('viewBox', ({viewBox: vb}) =>
         vb ? [vb.x, vb.y, vb.width, vb.height].join(' ') : null
       )
@@ -60,7 +59,9 @@ export function drawImage({
       .attr('height', (d) => (d.viewBox ? null : d.height))
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
       .attr('preserveAspectRatio', 'none')
-      .attr('transform', (d) => (d.viewBox ? null : `rotate(${d.rotation})`))
+      .attr('transform', (d) =>
+        d.viewBox || !d.rotation ? null : `rotate(${d.rotation})`
+      )
       .attr('transform-origin', (d) =>
         d.viewBox ? null : `${d.x + d.width / 2} ${d.y + d.height / 2}`
       )
@@ -73,7 +74,9 @@ export function drawImage({
       .attr('y', (d) => (d.viewBox ? d.y : null))
       .attr('width', (d) => (d.viewBox ? d.width : null))
       .attr('height', (d) => (d.viewBox ? d.height : null))
-      .attr('transform', (d) => (d.viewBox ? `rotate(${d.rotation})` : null))
+      .attr('transform', (d) =>
+        d.viewBox && d.rotation ? `rotate(${d.rotation})` : null
+      )
       .attr('transform-origin', (d) =>
         d.viewBox ? `${d.x + d.width / 2} ${d.y + d.height / 2}` : null
       )

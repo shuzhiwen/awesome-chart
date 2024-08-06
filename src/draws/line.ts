@@ -61,7 +61,7 @@ export function drawLine({
       .attr('stroke-width', (d) => d.strokeWidth)
       .attr('stroke-dasharray', (d) => d.strokeDasharray)
       .attr('transform-origin', (d) => `${d.x1} ${d.y1}`)
-      .attr('transform', (d) => `rotate(${d.rotation})`)
+      .attr('transform', (d) => (d.rotation ? `rotate(${d.rotation})` : null))
       .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
   }
 
