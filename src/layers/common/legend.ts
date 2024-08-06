@@ -236,7 +236,7 @@ export class LayerLegend extends LayerBase<Key> {
     })
 
     const totalWidth = max(
-        this.textData.map(({x, textWidth}) => x + textWidth!)
+        this.textData.map(({x, textWidth}) => x + textWidth)
       )!,
       totalHeight = max(
         this.textData.map(({y}) => y - (maxHeight - fontSize) / 2)
@@ -357,7 +357,7 @@ export class LayerLegend extends LayerBase<Key> {
     const rectData = {
       data: this.rectData,
       ...this.style.shape,
-      fill: this.rectData.map(({fill}) => fill!),
+      fill: this.rectData.map(({fill}) => fill),
     }
     const interactiveData = {
       data: this.interactiveData,
@@ -373,14 +373,14 @@ export class LayerLegend extends LayerBase<Key> {
     const lineData = {
       data: this.lineData,
       ...this.style.shape,
-      stroke: this.lineData.map(({stroke}) => stroke!),
-      strokeWidth: this.lineData.map(({strokeWidth}) => strokeWidth!),
+      stroke: this.lineData.map(({stroke}) => stroke),
+      strokeWidth: this.lineData.map(({strokeWidth}) => strokeWidth),
       strokeDasharray: this.lineData.map((datum) => datum.strokeDasharray!),
     }
     const polygonData = {
       data: this.polygonData,
       ...this.style.shape,
-      fill: this.polygonData.map(({fill}) => fill!),
+      fill: this.polygonData.map(({fill}) => fill),
     }
     const textData = {
       data: this.textData,

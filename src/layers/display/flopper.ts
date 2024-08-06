@@ -169,7 +169,7 @@ export class LayerFlopper extends LayerBase<never> {
               .selectAll('img')
               .data([null])
               .join('img')
-              .attr('src', url!)
+              .attr('src', url)
               .style('position', 'absolute')
               .style(
                 'clip',
@@ -229,7 +229,7 @@ export class LayerFlopper extends LayerBase<never> {
               .selectAll('img')
               .data([null])
               .join('img')
-              .attr('src', url!)
+              .attr('src', url)
               .style('left', '50%')
               .style('position', 'absolute')
               .style('backface-visibility', 'hidden')

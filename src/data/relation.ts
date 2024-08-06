@@ -130,7 +130,7 @@ export class DataRelation extends DataBase<RawRelation> {
     const generateLink = (id: Meta) => {
       const current = this.getNode(id),
         prevIds = this.edges.filter(({to}) => to === id).map(({from}) => from),
-        parents = prevIds.map((prevId) => this.getNode(prevId)!)
+        parents = prevIds.map((prevId) => this.getNode(prevId)!).filter(Boolean)
 
       if (prevIds.length === 0) {
         !completed[id] && this.roots.push(id)

@@ -105,8 +105,8 @@ export const createRadialGradients = ({
  * @internal
  */
 export const createDefs = (props: GradientCreatorProps<CreateDefsSchema>) => {
-  const {container, schema} = props,
-    {linearGradient, radialGradient} = schema
+  const {container, schema} = props
+  const {linearGradient, radialGradient} = schema
 
   createLinearGradients({container, schema: group(linearGradient)})
   createRadialGradients({container, schema: group(radialGradient)})
@@ -122,14 +122,14 @@ export const getEasyGradientCreator = ({
   container,
 }: Pick<GradientCreatorProps<unknown>, 'container'>) => {
   return ({type, colors, direction, ...other}: EasyGradientCreatorProps) => {
-    const schema: CreateDefsSchema = {},
-      baseSchema = {
-        id: uuid(),
-        stops: colors.map((color, i) => ({
-          offset: i / (colors.length - 1),
-          color,
-        })),
-      }
+    const schema: CreateDefsSchema = {}
+    const baseSchema = {
+      id: uuid(),
+      stops: colors.map((color, i) => ({
+        offset: i / (colors.length - 1),
+        color,
+      })),
+    }
 
     if (type === 'radial') {
       schema.radialGradient = {
@@ -149,7 +149,7 @@ export const getEasyGradientCreator = ({
     if (isSC(container)) {
       return `url(#${baseSchema.id})`
     } else {
-      return container.find((item) => item.gradientId === baseSchema.id)!
+      return container.find(({gradientId: id}) => id === baseSchema.id)
     }
   }
 }

@@ -137,7 +137,7 @@ export class LayerMatrix extends LayerBase<Key> {
       scaleColor =
         this.scale.scaleColor ||
         scaleQuantize<string>()
-          .domain(colorDomain === 'auto' ? [minValue, maxValue] : colorDomain!)
+          .domain(colorDomain === 'auto' ? [minValue, maxValue] : colorDomain)
           .range(colorMatrix.matrix[0])
 
     if (!this.scale.scaleColor) {
@@ -185,7 +185,7 @@ export class LayerMatrix extends LayerBase<Key> {
 
     if (shape === 'circle') {
       const ceiling = Math.min(scaleX.bandwidth(), scaleY.bandwidth()) / 1.8
-      let [min, max] = circleSize!
+      let [min, max] = circleSize
 
       if (max === 'auto' || max < 0) max = ceiling
       if (min === 'auto' || min < 0) min = max > ceiling ? ceiling / 2 : max / 2

@@ -105,7 +105,7 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
         })
     }
 
-    if (isCC(context) && !isSC(targets)) {
+    if (isCC(context) && targets && !isSC(targets)) {
       const {x, y, width, height} = this.box!
       const container = new Container()
 
@@ -114,7 +114,7 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
         .drawRect(x, y, width, height)
         .endFill()
 
-      container.addChild(...targets!.map((target) => target.clone()))
+      container.addChild(...targets.map((target) => target.clone()))
 
       this.mask.mask = container
       this.mask.position = {x, y}

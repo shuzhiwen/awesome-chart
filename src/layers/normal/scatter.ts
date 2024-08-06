@@ -156,7 +156,7 @@ export class LayerScatter extends LayerBase<Key> {
           domain: this.data.headers.includes('value')
             ? this.data.select('value').range()
             : [Infinity, Infinity],
-          range: pointSize!,
+          range: pointSize,
         }),
       },
       this.scale

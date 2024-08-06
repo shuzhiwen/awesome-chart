@@ -246,7 +246,7 @@ export class LayerDashboard extends LayerBase<Key> {
     const arcData = {
       data: this.arcData,
       ...this.style.arc,
-      fill: this.arcData.map(({color}) => color!),
+      fill: this.arcData.map(({color}) => color),
     }
     const tickLineData = {
       data: this.tickLineData,

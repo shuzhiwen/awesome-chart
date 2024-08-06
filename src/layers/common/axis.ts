@@ -263,13 +263,13 @@ export class LayerAxis extends LayerBase<Key> {
       {titleX, titleY, titleYR, textX, textY, textYR, textAngle, textRadius} =
         this.style,
       maxRadius = scaleRadius?.range()[1] || Math.max(width / 2, height / 2),
-      labelYR = this.getLabelAndPosition(scaleYR!),
+      labelYR = this.getLabelAndPosition(scaleYR),
       offset = 5
 
     this.lineData.axisLineX = [{x1: left, x2: right, y1: bottom, y2: bottom}]
     this.lineData.axisLineY = [{x1: left, x2: left, y1: top, y2: bottom}]
 
-    this.lineData.splitLineX = this.getLabelAndPosition(scaleX!).map(
+    this.lineData.splitLineX = this.getLabelAndPosition(scaleX).map(
       ({label, position}) => ({
         value: label,
         x1: left + position,
@@ -279,7 +279,7 @@ export class LayerAxis extends LayerBase<Key> {
       })
     )
 
-    this.lineData.splitLineY = this.getLabelAndPosition(scaleY! || scaleYR).map(
+    this.lineData.splitLineY = this.getLabelAndPosition(scaleY || scaleYR).map(
       ({label, position}) => ({
         value: label,
         x1: left,
@@ -289,7 +289,7 @@ export class LayerAxis extends LayerBase<Key> {
       })
     )
 
-    this.lineData.splitLineAngle = this.getLabelAndPosition(scaleAngle!).map(
+    this.lineData.splitLineAngle = this.getLabelAndPosition(scaleAngle).map(
       ({label, position}) => ({
         value: label,
         angle: position,
@@ -302,7 +302,7 @@ export class LayerAxis extends LayerBase<Key> {
       })
     )
 
-    this.splitLineRadiusData = this.getLabelAndPosition(scaleRadius!).map(
+    this.splitLineRadiusData = this.getLabelAndPosition(scaleRadius).map(
       ({label, position}) => ({
         value: label,
         x: left + width / 2,
@@ -342,21 +342,21 @@ export class LayerAxis extends LayerBase<Key> {
     ]
 
     this.textData.textX = this.lineData.splitLineX.map(({value, x2, y2}) =>
-      createText({x: x2!, y: y2!, value, style: textX, position: 'bottom'})
+      createText({x: x2, y: y2, value, style: textX, position: 'bottom'})
     )
 
     this.reduceScaleXTextNumber()
 
     if (scaleY) {
       this.textData.textY = this.lineData.splitLineY.map(({value, x1, y1}) =>
-        createText({x: x1!, y: y1!, value, style: textY, position: 'left'})
+        createText({x: x1, y: y1, value, style: textY, position: 'left'})
       )
     }
     if (scaleYR) {
       this.textData.textYR = this.lineData.splitLineY.map(({x2, y2}, i) =>
         createText({
-          x: x2!,
-          y: y2!,
+          x: x2,
+          y: y2,
           value: labelYR[i].label,
           style: textYR,
           position: 'right',
@@ -367,8 +367,8 @@ export class LayerAxis extends LayerBase<Key> {
     this.textData.textRadius = this.splitLineRadiusData.map(
       ({value, x, y, r}) =>
         createText({
-          x: x!,
-          y: y! - r!,
+          x,
+          y: y - r,
           value,
           style: textRadius,
           position: 'left',
@@ -432,7 +432,7 @@ export class LayerAxis extends LayerBase<Key> {
     }
   }
 
-  private getLabelAndPosition(scale: Scale) {
+  private getLabelAndPosition(scale?: Scale) {
     if (isScaleBand(scale)) {
       return scale.domain().map((label) => ({
         label,

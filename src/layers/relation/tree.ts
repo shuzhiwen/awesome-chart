@@ -289,7 +289,7 @@ export class LayerTree extends LayerBase<Key> {
     }))
     const edgeData = this.edgeData.map((group) => ({
       data: group.map(({x1, x2, y1, y2}) => ({
-        curve: this.style.curveType!,
+        curve: this.style.curveType,
         points: [
           {x: x1, y: y1},
           {x: x2, y: y2},

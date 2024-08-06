@@ -503,7 +503,7 @@ export class LayerRect extends LayerBase<Key> {
     this.textData = this.rectData.map((group) =>
       group.map(({value, x: originX, y: originY, width, height, meta}) => {
         const text = cloneDeep(originText),
-          [offsetX = 0, offsetY = 0] = text.offset!,
+          [offsetX = 0, offsetY = 0] = text.offset ?? [],
           labelPosition = value > 0 ? position1 : position2
         let position: Position9 = 'center',
           [x, y] = [originX, originY]

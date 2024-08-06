@@ -68,7 +68,7 @@ export const randomRelation = (options: RandomRelationOptions): RawRelation => {
       value: createNumber(),
       level: Math.floor(Math.random() * level),
     }))
-    .sort((a, b) => a.level! - b.level!)
+    .sort((a, b) => a.level - b.level)
     .map((node, i) => ({...node, name: `Node${i + 1}`}))
   const groupedNodes = group(nodes, ({level}) => level)
   const edges: Edge[] = []

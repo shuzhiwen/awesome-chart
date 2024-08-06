@@ -14,7 +14,7 @@ function createLayer(
   chart: Chart,
   schema: ArrayItem<CreateChartProps['layers']>
 ) {
-  const {type, options, data, scale, style, animation, event} = schema!,
+  const {type, options, data, scale, style, animation, event} = schema,
     layout = options?.layout ? chart.layout[options.layout] : undefined,
     layerOptions = {type, ...options, layout} as LayerOptions,
     layer = chart.createLayer(layerOptions) as LayerInstance

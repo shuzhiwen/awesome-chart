@@ -284,7 +284,7 @@ export class Chart {
     const layer = new LayerDict[options.type]({...options, ...context})
     this._layers.push(layer)
 
-    return layer as Maybe<LayerDict[T]>
+    return layer as LayerDict[T]
   }
 
   /**

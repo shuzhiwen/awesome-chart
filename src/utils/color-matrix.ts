@@ -96,12 +96,12 @@ export class ColorMatrix {
               return cur
             })
 
-            const newAverageDistance = mean(distances)
+            const newAverageDistance = mean(distances)!
 
-            if (newAverageDistance! >= averageDistance) {
+            if (newAverageDistance >= averageDistance) {
               return false
             } else {
-              averageDistance = newAverageDistance!
+              averageDistance = newAverageDistance
             }
           }
         )

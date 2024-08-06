@@ -96,7 +96,7 @@ export class LayerHeatmap extends LayerBase<'heatZone'> {
     const heatZoneData = {
       data: this.heatZoneData,
       ...this.style.heatZone,
-      fill: this.heatZoneData.map(({color}) => color!),
+      fill: this.heatZoneData.map(({color}) => color),
       evented: false,
     }
 
