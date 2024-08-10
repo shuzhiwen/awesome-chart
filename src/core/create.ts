@@ -31,7 +31,7 @@ function createLayer(
   isLayerAxis(layer) && layer.setScale({nice: scale})
   !isLayerLegend(layer) && layer.setData(dataSet)
   Object.entries(event ?? {}).forEach(([name, fn]) => {
-    layer.event.on(name as never, 'user', fn)
+    layer.event.onWithOff(name as never, 'user', fn)
   })
 
   return layer
@@ -75,8 +75,8 @@ export function createChart(schema: CreateChartProps, existedChart?: Chart) {
       )
       .filter(Boolean)
     const batchAnimation = enterAnimations.map((animation) => {
-      return new Promise<void>((resolve) => {
-        animation?.event.on('init', 'system', () => resolve())
+      return new Promise((resolve) => {
+        animation?.event.onWithOff('init', 'system', resolve)
       })
     })
     Promise.all(batchAnimation).then(() => {

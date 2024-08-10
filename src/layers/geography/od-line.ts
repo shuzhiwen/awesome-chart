@@ -169,7 +169,7 @@ export class LayerODLine extends LayerBase<Key> {
       data: [flyingObjectData],
     })
 
-    this.cacheAnimation['animations']['flyingObject']?.event.on(
+    this.cacheAnimation['animations']['flyingObject']?.event.onWithOff(
       'start',
       EVENT_KEY,
       () => {

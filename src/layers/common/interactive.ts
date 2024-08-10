@@ -107,69 +107,76 @@ export class LayerInteractive extends LayerBase<Key> {
       layer.options.theme.animation.update.duration = 100
     })
 
-    event.on('globalEvent', this.options.id, ({event}: {event: MouseEvent}) => {
-      const {offsetX, offsetY} = event,
-        {scaleX, scaleY} = this.scale,
-        {left, right, top, bottom} = layout,
-        [helperAuxiliaryX, helperAuxiliaryY] = this.helperAuxiliary
-      let x: Maybe<number>, y: Maybe<number>
+    event.onWithOff(
+      'globalEvent',
+      this.options.id,
+      ({event}: {event: MouseEvent}) => {
+        const {offsetX, offsetY} = event,
+          {scaleX, scaleY} = this.scale,
+          {left, right, top, bottom} = layout,
+          [helperAuxiliaryX, helperAuxiliaryY] = this.helperAuxiliary
+        let x: Maybe<number>, y: Maybe<number>
 
-      if (
-        offsetX < left ||
-        offsetX > right ||
-        offsetY < top ||
-        offsetY > bottom
-      ) {
-        helperAuxiliaryX.setVisible(false)
-        helperAuxiliaryY.setVisible(false)
-        return
-      }
+        if (
+          offsetX < left ||
+          offsetX > right ||
+          offsetY < top ||
+          offsetY > bottom
+        ) {
+          helperAuxiliaryX.setVisible(false)
+          helperAuxiliaryY.setVisible(false)
+          return
+        }
 
-      if (isScaleLinear(scaleX)) {
-        x = scaleX.invert(offsetX - left)
-        helperAuxiliaryX.setVisible(true)
-        helperAuxiliaryX.setData(
-          new DataTableList([
-            ['label', 'value'],
-            ['helperAuxiliaryX', Number(x).toFixed(2)],
-          ])
-        )
-        helperAuxiliaryX.draw()
-      } else if (isScaleBand(scaleX)) {
-        helperAuxiliaryX.setVisible(true)
-        helperAuxiliaryX.setData(
-          new DataTableList([
-            ['label', 'value'],
-            [
-              'helperAuxiliaryX',
-              stickyBandScale(scaleX, offsetX - left).domain,
-            ],
-          ])
-        )
-        helperAuxiliaryX.draw()
-      }
+        if (isScaleLinear(scaleX)) {
+          x = scaleX.invert(offsetX - left)
+          helperAuxiliaryX.setVisible(true)
+          helperAuxiliaryX.setData(
+            new DataTableList([
+              ['label', 'value'],
+              ['helperAuxiliaryX', Number(x).toFixed(2)],
+            ])
+          )
+          helperAuxiliaryX.draw()
+        } else if (isScaleBand(scaleX)) {
+          helperAuxiliaryX.setVisible(true)
+          helperAuxiliaryX.setData(
+            new DataTableList([
+              ['label', 'value'],
+              [
+                'helperAuxiliaryX',
+                stickyBandScale(scaleX, offsetX - left).domain,
+              ],
+            ])
+          )
+          helperAuxiliaryX.draw()
+        }
 
-      if (isScaleLinear(scaleY)) {
-        y = scaleY.invert(offsetY - top)
-        helperAuxiliaryY.setVisible(true)
-        helperAuxiliaryY.setData(
-          new DataTableList([
-            ['label', 'value'],
-            ['helperAuxiliaryY', Number(y).toFixed(2)],
-          ])
-        )
-        helperAuxiliaryY.draw()
-      } else if (isScaleBand(scaleY)) {
-        helperAuxiliaryY.setVisible(true)
-        helperAuxiliaryY.setData(
-          new DataTableList([
-            ['label', 'value'],
-            ['helperAuxiliaryY', stickyBandScale(scaleY, offsetY - top).domain],
-          ])
-        )
-        helperAuxiliaryY.draw()
+        if (isScaleLinear(scaleY)) {
+          y = scaleY.invert(offsetY - top)
+          helperAuxiliaryY.setVisible(true)
+          helperAuxiliaryY.setData(
+            new DataTableList([
+              ['label', 'value'],
+              ['helperAuxiliaryY', Number(y).toFixed(2)],
+            ])
+          )
+          helperAuxiliaryY.draw()
+        } else if (isScaleBand(scaleY)) {
+          helperAuxiliaryY.setVisible(true)
+          helperAuxiliaryY.setData(
+            new DataTableList([
+              ['label', 'value'],
+              [
+                'helperAuxiliaryY',
+                stickyBandScale(scaleY, offsetY - top).domain,
+              ],
+            ])
+          )
+          helperAuxiliaryY.draw()
+        }
       }
-    })
+    )
   }
 
   setData(data: LayerInteractive['data']) {

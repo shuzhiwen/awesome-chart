@@ -44,7 +44,11 @@ export class EventManager<
    * Register listener for specific event.
    * @see onWithOff
    */
-  on(name: Name, category: string, fn: Callback) {
+  on(name: Name, fn: Callback): void
+  on(name: Name, category: string, fn: Callback): void
+  on(name: Name, ...params: any[]) {
+    const category: string = params.length === 2 ? params[0] : null
+    const fn: Callback = params.length === 2 ? params[1] : params[0]
     this.cache[name] = this.cache[name] || []
     this.cache[name].push(fn)
     fn.category = category
@@ -54,7 +58,11 @@ export class EventManager<
    * Register listener that will be destroy after fire.
    * @see onWithOff
    */
-  once(name: Name, category: string, fn: Callback) {
+  once(name: Name, fn: Callback): void
+  once(name: Name, category: string, fn: Callback): void
+  once(name: Name, ...params: any[]) {
+    const category: string = params.length === 2 ? params[0] : null
+    const fn: Callback = params.length === 2 ? params[1] : params[0]
     this.cache[name] = this.cache[name] || []
     this.cache[name].push(fn)
     fn.category = category
