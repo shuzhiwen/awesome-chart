@@ -17,22 +17,28 @@ export class AnimationScan extends AnimationBase<AnimationScanOptions> {
   private gradient: Maybe<D3Selection | Texture>
 
   constructor(options: AnimationProps<'scan'>) {
-    super(options)
+    super({
+      direction: 'right',
+      color: 'white',
+      scope: 'all',
+      opacity: 1,
+      ...options,
+    })
     if (isCC(this.options.context)) {
       this.box = this.canvasRoot.getBounds()
     }
   }
 
   private get isHorizontal() {
-    return ['left', 'right'].includes(this.options.direction!)
+    return ['left', 'right'].includes(this.options.direction)
   }
 
   private get isVertical() {
-    return ['top', 'bottom'].includes(this.options.direction!)
+    return ['top', 'bottom'].includes(this.options.direction)
   }
 
   private get stops() {
-    const {color = 'white', opacity = 0} = this.options
+    const {color, opacity} = this.options
     return [
       {offset: 0.2, color, opacity: 0},
       {offset: 0.45, color, opacity},

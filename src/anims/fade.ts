@@ -5,11 +5,18 @@ import {AnimationBase} from './base'
 
 export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
   constructor(options: AnimationProps<'fade'>) {
-    super(options)
+    super({
+      alternate: false,
+      initialOpacity: 0,
+      startOpacity: 0,
+      endOpacity: 1,
+      stagger: 0,
+      ...options,
+    })
   }
 
   init() {
-    const {targets, initialOpacity = 0} = this.options
+    const {targets, initialOpacity} = this.options
 
     if (isSC(targets)) {
       targets.attr('opacity', initialOpacity)
@@ -19,14 +26,8 @@ export class AnimationFade extends AnimationBase<AnimationFadeOptions> {
   }
 
   play() {
-    const {
-        targets,
-        delay,
-        alternate,
-        stagger = null,
-        startOpacity = 0,
-        endOpacity = 1,
-      } = this.options,
+    const {targets, delay, alternate, stagger, startOpacity, endOpacity} =
+        this.options,
       name = isSC(targets) ? 'opacity' : 'alpha',
       start = Math.max(startOpacity, 1e-6),
       end = Math.max(endOpacity, 1e-6)

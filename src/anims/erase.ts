@@ -16,7 +16,7 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
   private box: Maybe<Box>
 
   constructor(options: AnimationProps<'erase'>) {
-    super(options)
+    super({direction: 'right', ...options})
   }
 
   get isXEnd() {
@@ -32,11 +32,11 @@ export class AnimationErase extends AnimationBase<AnimationEraseOptions> {
   }
 
   get isHorizontal() {
-    return ['left', 'right'].includes(this.options.direction!)
+    return ['left', 'right'].includes(this.options.direction)
   }
 
   get isPolar() {
-    return ['clockwise', 'anticlockwise'].includes(this.options.direction!)
+    return ['clockwise', 'anticlockwise'].includes(this.options.direction)
   }
 
   updateMask(data: Box | string) {

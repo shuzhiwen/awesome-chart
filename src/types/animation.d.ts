@@ -1,5 +1,5 @@
 import {Graphics} from 'pixi.js'
-import {AnimationDict} from '../animation'
+import {AnimationDict} from '../anims'
 import {ChartTheme} from './core'
 import {D3Selection, DrawerTarget} from './draw'
 
@@ -10,7 +10,9 @@ type LayerAnimation<T> = Computable<Partial<T>, ChartTheme>
 type AnimationOptions<T extends AnimationType = AnimationType> =
   AnimationProps<T> & {type: T}
 
-type AnimationProps<T extends AnimationType> = AnimationDict[T]['options']
+type AnimationProps<T extends AnimationType> = Partial<
+  AnimationDict[T]['options']
+>
 
 type UpdateAnimationOptions = {
   easing: Easing
@@ -21,19 +23,17 @@ type UpdateAnimationOptions = {
 type BasicAnimationOptions = UpdateAnimationOptions & {
   id: string
   /**
-   * Basic elements to be animated.
-   * @internal
-   */
-  targets: Maybe<D3Selection | Graphics[]>
-  /**
-   * Animation element parent node.
-   * @internal
-   */
-  context: DrawerTarget
-  /**
    * Whether to loop the animation.
    */
   loop: boolean
+  /**
+   * Basic elements to be animated.
+   */
+  targets?: D3Selection | Graphics[]
+  /**
+   * Animation element parent node.
+   */
+  context?: DrawerTarget
 }
 
 type AnimationFadeOptions = {

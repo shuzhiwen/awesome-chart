@@ -2,9 +2,9 @@ import {throttle} from 'lodash'
 import {Graphics} from 'pixi.js'
 import {animationLifeCycles} from '../core'
 import {BasicAnimationOptions} from '../types'
-import {createLog, EventManager, isSC, noChange} from '../utils'
+import {createLog, EventManager, isSC, noChange, uuid} from '../utils'
 
-export abstract class AnimationBase<Options extends AnyObject = {}> {
+export abstract class AnimationBase<Options = unknown> {
   init() {}
 
   play() {}
@@ -15,7 +15,7 @@ export abstract class AnimationBase<Options extends AnyObject = {}> {
 
   readonly event = new EventManager<Keys<typeof animationLifeCycles>>()
 
-  readonly options: Partial<BasicAnimationOptions & Options>
+  readonly options: Options & BasicAnimationOptions
 
   protected _isInitialized = false
 
@@ -68,8 +68,15 @@ export abstract class AnimationBase<Options extends AnyObject = {}> {
     return this._isAvailable
   }
 
-  constructor(options: AnimationBase<Options>['options']) {
-    this.options = options
+  constructor(options: Options & Partial<BasicAnimationOptions>) {
+    this.options = {
+      id: uuid(),
+      delay: 0,
+      duration: 1000,
+      easing: 'linear',
+      loop: false,
+      ...options,
+    }
 
     animationLifeCycles.forEach((name) => {
       const fn = this[name] || noChange

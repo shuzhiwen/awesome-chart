@@ -3,11 +3,11 @@ import {AnimationBase} from './base'
 
 export class AnimationEmpty extends AnimationBase {
   constructor(options: AnimationProps<'empty'>) {
-    super(options)
+    super({duration: 0, ...options})
   }
 
   play() {
-    const {duration = 0, delay = 0} = this.options
+    const {duration, delay} = this.options
 
     setTimeout(() => {
       setTimeout(this.end, duration)

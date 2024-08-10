@@ -1,6 +1,6 @@
 import {merge} from 'lodash'
 import {BaseTexture, Rectangle, Sprite, Texture} from 'pixi.js'
-import {svgEasing} from '../animation'
+import {svgEasing} from '../anims'
 import {selector} from '../layers'
 import {ElSource, ImageDrawerProps} from '../types'
 import {getAttr, isCC, isSC, noChange, uuid} from '../utils'

@@ -1,6 +1,6 @@
 import {isString, merge} from 'lodash'
 import {Graphics} from 'pixi.js'
-import {svgEasing} from '../animation'
+import {svgEasing} from '../anims'
 import {selector} from '../layers'
 import {ElSource, LineDrawerProps} from '../types'
 import {getAttr, isCC, isSC, noChange, splitAlpha} from '../utils'

@@ -1,6 +1,6 @@
 import {cloneDeep, isEqual, merge, noop, range} from 'lodash'
 import {Graphics} from 'pixi.js'
-import {AnimationQueue} from '../animation'
+import {AnimationQueue} from '../anims'
 import {commonEvents, layerLifeCycles, tooltipEvents} from '../core'
 import {DataBase} from '../data'
 import {DrawerDict} from '../draws'

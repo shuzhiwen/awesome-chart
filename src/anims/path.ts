@@ -1,13 +1,13 @@
 import anime from 'animejs'
 import {selector} from '../layers'
-import {AnimationPathOptions, AnimationProps} from '../types'
+import {AnimationOptions, AnimationPathOptions} from '../types'
 import {isCC, isSC} from '../utils'
 import {AnimationBase} from './base'
 
 export class AnimationPath extends AnimationBase<AnimationPathOptions> {
   private instances: anime.AnimeInstance[] = []
 
-  constructor(options: AnimationProps<'path'>) {
+  constructor(options: AnimationOptions<'path'> & AnimationPathOptions) {
     super(options)
   }
 

@@ -5,11 +5,11 @@ import {AnimationBase} from './base'
 
 export class AnimationRotate extends AnimationBase<AnimationRotateOptions> {
   constructor(options: AnimationProps<'rotate'>) {
-    super(options)
+    super({stagger: 0, initialRotation: 0, ...options})
   }
 
   init() {
-    const {targets, initialRotation = 0} = this.options
+    const {targets, initialRotation} = this.options
 
     if (isSC(targets)) {
       anime({

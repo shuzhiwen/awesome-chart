@@ -9,11 +9,19 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
   private originPosition: Vec2[] = []
 
   constructor(options: AnimationProps<'move'>) {
-    super(options)
+    super({
+      alternate: false,
+      initialOffset: [0, 0],
+      startOffset: [0, 0],
+      endOffset: [0, 0],
+      decayFactor: 1,
+      stagger: 0,
+      ...options,
+    })
   }
 
   init() {
-    const {targets, initialOffset = [0, 0]} = this.options
+    const {targets, initialOffset} = this.options
 
     if (isSC(targets)) {
       anime({
@@ -44,10 +52,10 @@ export class AnimationMove extends AnimationBase<AnimationMoveOptions> {
       targets,
       delay,
       alternate,
-      stagger = null,
-      decayFactor = 1,
-      startOffset = [0, 0],
-      endOffset = [0, 0],
+      stagger,
+      decayFactor,
+      startOffset,
+      endOffset,
     } = this.options
     const nodes = isSC(targets) ? (targets.nodes() as HTMLElement[]) : targets!
     const attrs = isSC(targets) ? ['translateX', 'translateY'] : ['x', 'y']

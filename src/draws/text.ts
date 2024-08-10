@@ -1,7 +1,7 @@
 import {interpolateNumber} from 'd3'
 import {merge} from 'lodash'
 import {Text, TextStyleFontWeight} from 'pixi.js'
-import {svgEasing} from '../animation'
+import {svgEasing} from '../anims'
 import {selector} from '../layers'
 import {ElSource, TextDrawerProps} from '../types'
 import {getAttr, isCC, isRealNumber, isSC, mergeAlpha, noChange} from '../utils'

@@ -1,4 +1,4 @@
-export * from './animation'
+export * from './anims'
 export * from './core'
 export * from './data'
 export * from './draws'

@@ -1,4 +1,4 @@
-import {AnimationQueue} from '../animation'
+import {AnimationQueue} from '../anims'
 import {commonEvents, tooltipEvents} from '../core'
 import {LayerBase, LayerDict} from '../layers'
 import {AnimationOptions, UpdateAnimationOptions} from './animation'
