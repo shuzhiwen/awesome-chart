@@ -30,9 +30,9 @@ export function drawImage({
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, {} as ElSource),
   }))
-  const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...datum, container, theme}))
-  })
+  const mappedData = configuredData.map((datum) =>
+    merge(datum, mapping({...datum, container, theme}))
+  )
 
   if (isSC(container)) {
     container
@@ -51,13 +51,13 @@ export function drawImage({
       .ease(svgEasing.get(getAttr(transition?.easing, 0, update.easing))!)
       .duration(getAttr(transition?.duration, 0, update.duration))
       .delay(getAttr(transition?.delay, 0, update.delay))
-      .attr('opacity', (d) => d.opacity)
       .attr('href', (d) => d.url)
+      .attr('opacity', (d) => d.opacity)
       .attr('x', (d) => (d.viewBox ? null : d.x))
       .attr('y', (d) => (d.viewBox ? null : d.y))
       .attr('width', (d) => (d.viewBox ? null : d.width))
       .attr('height', (d) => (d.viewBox ? null : d.height))
-      .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
+      .attr('pointer-events', (d) => (d.evented ? null : 'none'))
       .attr('preserveAspectRatio', 'none')
       .attr('transform', (d) =>
         d.viewBox || !d.rotation ? null : `rotate(${d.rotation})`

@@ -30,16 +30,16 @@ export function drawLine({
     className,
     rotation: getAttr(rotation, i, 0),
     stroke: getAttr(stroke, i, graph.stroke),
-    opacity: getAttr(opacity, i, graph.opacity),
-    strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     strokeDasharray: getAttr(strokeDasharray, i, ''),
+    opacity: getAttr(opacity, i, graph.opacity),
+    strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, {} as ElSource),
   }))
-  const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...datum, container, theme}))
-  })
+  const mappedData = configuredData.map((datum) =>
+    merge(datum, mapping({...datum, container, theme}))
+  )
 
   if (isSC(container)) {
     container
@@ -56,13 +56,13 @@ export function drawLine({
       .attr('x2', (d) => d.x2)
       .attr('y2', (d) => d.y2)
       .attr('stroke', (d) => d.stroke)
-      .attr('opacity', (d) => d.opacity)
-      .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('stroke-width', (d) => d.strokeWidth)
       .attr('stroke-dasharray', (d) => d.strokeDasharray)
+      .attr('opacity', (d) => d.opacity)
+      .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('transform-origin', (d) => `${d.x1} ${d.y1}`)
       .attr('transform', (d) => (d.rotation ? `rotate(${d.rotation})` : null))
-      .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
+      .attr('pointer-events', (d) => (d.evented ? null : 'none'))
   }
 
   if (isCC(container)) {

@@ -138,13 +138,13 @@ export class LayerTree extends LayerBase<Key> {
         x:
           layout.left +
           (direction === 'horizontal'
-            ? scaleX(item.level ?? -1) ?? 0
-            : scaleX(item.order ?? -1) ?? 0),
+            ? (scaleX(item.level ?? -1) ?? 0)
+            : (scaleX(item.order ?? -1) ?? 0)),
         y:
           layout.top +
           (direction === 'horizontal'
-            ? scaleY(item.order ?? -1) ?? 0
-            : scaleY(item.level ?? -1) ?? 0),
+            ? (scaleY(item.order ?? -1) ?? 0)
+            : (scaleY(item.level ?? -1) ?? 0)),
         color: colorMatrix.get(j, 0),
         parents: item.parents ?? [],
         meta: {[item.name]: item.value},

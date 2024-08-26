@@ -42,13 +42,13 @@ export function drawText({
     className,
     cx: item.x + item.textWidth / 2,
     cy: item.y - item.textHeight / 2,
+    rotation: getAttr(rotation, i, 0),
     fill: getAttr(fill, i, text.fill),
     stroke: getAttr(stroke, i, text.stroke),
+    strokeWidth: getAttr(strokeWidth, i, text.strokeWidth),
     opacity: getAttr(opacity, i, text.opacity),
     fillOpacity: getAttr(fillOpacity, i, text.fillOpacity),
     strokeOpacity: getAttr(strokeOpacity, i, text.strokeOpacity),
-    strokeWidth: getAttr(strokeWidth, i, text.strokeWidth),
-    rotation: getAttr(rotation, i, 0),
     shadow: getAttr(shadow, i, text.shadow),
     fontSize: getAttr(fontSize, i, text.fontSize),
     fontFamily: getAttr(fontFamily, i, text.fontFamily),
@@ -58,9 +58,9 @@ export function drawText({
     evented: getAttr(evented, i, text.evented),
     source: getAttr(source, i, {} as ElSource),
   }))
-  const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...datum, container, theme}))
-  })
+  const mappedData = configuredData.map((datum) =>
+    merge(datum, mapping({...datum, container, theme}))
+  )
 
   if (isSC(container)) {
     const prevTexts = container
@@ -97,7 +97,7 @@ export function drawText({
       .attr('writing-mode', (d) => d.writingMode)
       .attr('text-decoration', (d) => d.textDecoration)
       .attr('transform-origin', (d) => `${d.cx} ${d.cy}`)
-      .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
+      .attr('pointer-events', (d) => (d.evented ? null : 'none'))
       .attr('transform', (d) => (d.rotation ? `rotate(${d.rotation})` : null))
       .style('text-shadow', (d) => d.shadow)
       .style('dominant-baseline', 'central')

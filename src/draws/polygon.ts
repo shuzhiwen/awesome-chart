@@ -30,17 +30,17 @@ export function drawPolygon({
     className,
     fill: getAttr(fill, i, graph.fill),
     stroke: getAttr(stroke, i, graph.stroke),
+    strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     opacity: getAttr(opacity, i, graph.opacity),
     fillOpacity: getAttr(fillOpacity, i, graph.fillOpacity),
     strokeOpacity: getAttr(strokeOpacity, i, graph.strokeOpacity),
-    strokeWidth: getAttr(strokeWidth, i, graph.strokeWidth),
     pointString: item.points.map(({x, y}) => `${x},${y}`).join(' '),
     evented: getAttr(evented, i, graph.evented),
     source: getAttr(source, i, {} as ElSource),
   }))
-  const mappedData = configuredData.map((datum) => {
-    return merge(datum, mapping({...datum, container, theme}))
-  })
+  const mappedData = configuredData.map((datum) =>
+    merge(datum, mapping({...datum, container, theme}))
+  )
 
   if (isSC(container)) {
     container
@@ -60,7 +60,7 @@ export function drawPolygon({
       .attr('fill-opacity', (d) => d.fillOpacity)
       .attr('stroke-opacity', (d) => d.strokeOpacity)
       .attr('transform-origin', (d) => `${d.centerX} ${d.centerY}`)
-      .attr('pointer-events', (d) => (d.evented ? 'auto' : 'none'))
+      .attr('pointer-events', (d) => (d.evented ? null : 'none'))
   }
 
   if (isCC(container)) {
