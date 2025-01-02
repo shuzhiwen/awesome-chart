@@ -10,6 +10,7 @@ export default ({variant}) => [
       url: 'character.png',
       cell: {
         fontSize: '48px',
+        backgroundColor: 'green',
       },
       characters: {
         0: {

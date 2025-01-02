@@ -71,7 +71,7 @@ export function getAttr<T>(
  * @returns
  * Return transformed style object.
  */
-export function transformAttr(object: AnyObject) {
+function transformAttr(object: AnyObject) {
   return Object.fromEntries(
     Object.entries(object).map(([key, value]) => [kebabCase(key), value])
   )
@@ -85,7 +85,7 @@ export function transformAttr(object: AnyObject) {
  * The group index for each attributes.
  */
 export function addStyle(target: D3Selection, style: AnyObject, index = 0) {
-  Object.entries(style).forEach(([key, value]) =>
+  Object.entries(transformAttr(style)).forEach(([key, value]) =>
     target.style(key, getAttr(value, index, ''))
   )
   return target

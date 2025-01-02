@@ -9,7 +9,7 @@ import {
   LayerOptions,
   LayerStyle,
 } from '../../types'
-import {addStyle, isSC, transformAttr} from '../../utils'
+import {addStyle, isSC} from '../../utils'
 import {LayerBase} from '../base'
 import {createScale, createStyle} from '../helpers'
 
@@ -222,18 +222,15 @@ export class LayerBrush extends LayerBase<never> {
       this.root.selectAll('.handle--e'),
     ]
 
-    addStyle(this.root.selectAll('.overlay'), transformAttr(background))
-    addStyle(this.root.selectAll('.selection'), transformAttr(selection))
+    addStyle(this.root.selectAll('.overlay'), background)
+    addStyle(this.root.selectAll('.selection'), selection)
 
     handlers.forEach((handler) =>
-      addStyle(
-        handler,
-        transformAttr({
-          ...handle,
-          strokeWidth: Number(handle.strokeWidth) / handleZoom,
-          transform: `scale(${handleZoom})`,
-        })
-      )
+      addStyle(handler, {
+        ...handle,
+        strokeWidth: Number(handle.strokeWidth) / handleZoom,
+        transform: `scale(${handleZoom})`,
+      })
     )
   }
 }

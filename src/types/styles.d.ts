@@ -1,3 +1,4 @@
+import {CSSProperties} from 'react'
 import {ChartTheme} from './core'
 import {BasicDrawerProps, ElConfig} from './draw'
 import {LayerScale} from './layer'
@@ -194,10 +195,7 @@ type LayerFlopperStyle = {
       height: number
     }
   >
-  cell: Partial<{
-    fontSize: string
-    backgroundColor: string
-  }>
+  cell: Partial<CSSProperties>
 }
 
 type LayerPackStyle = {
