@@ -1,4 +1,4 @@
-import {Chart, DataTableList, randomTableList} from '../../src'
+import {Chart, DataTableList, LayerRect, randomTableList} from '../../src'
 import {LayerType} from '../../src/types'
 
 const debugTableListLayer =
@@ -12,7 +12,13 @@ const debugTableListLayer =
         column: 2,
         sort: 'asc',
       }),
-      layers = chart.getLayersByType(type)
+      layers = chart.getLayersByType(type).filter((layer) => {
+        // 不包括动态条形图
+        if (layer instanceof LayerRect && layer.style.sort !== 'none') {
+          return false
+        }
+        return true
+      })
 
     if (!layers.length) return
 

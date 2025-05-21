@@ -16,7 +16,7 @@ import {
 import {D3Selection, LayerOptions} from 'awesome-chart/dist/types'
 import {hierarchy, select} from 'd3'
 import {cloneDeep, max, merge} from 'lodash'
-import React, {CSSProperties, useEffect, useRef} from 'react'
+import {CSSProperties, useEffect, useRef} from 'react'
 import {schemaMenu} from './schema'
 
 type MenuItem = {

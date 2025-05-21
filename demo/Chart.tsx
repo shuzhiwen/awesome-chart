@@ -1,11 +1,5 @@
 import {cloneDeep} from 'lodash'
-import React, {
-  CSSProperties,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import {CSSProperties, useCallback, useEffect, useRef, useState} from 'react'
 import {
   Chart as ChartShape,
   createChart,

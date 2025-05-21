@@ -1,7 +1,7 @@
 import chroma from 'chroma-js'
 import {noop, throttle} from 'lodash'
 import * as monaco from 'monaco-editor'
-import React, {useEffect, useMemo, useRef, useState} from 'react'
+import {useEffect, useMemo, useRef, useState} from 'react'
 import * as awesome from '../src'
 import {download, errorCatcher} from '../src'
 
