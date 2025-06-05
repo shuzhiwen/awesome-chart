@@ -4,9 +4,9 @@ import {BasicDrawerProps, ElConfig} from './draw'
 import {LayerScale} from './layer'
 import {FormatNumberConfig} from './utils'
 
-type LayerStyle<T> = Computable<Partial<T>, ChartTheme>
+export type LayerStyle<T> = Computable<Partial<T>, ChartTheme>
 
-type GraphStyle = Partial<{
+export type GraphStyle = Partial<{
   fill: MaybeGroup<string>
   stroke: MaybeGroup<string>
   strokeWidth: MaybeGroup<number>
@@ -17,11 +17,13 @@ type GraphStyle = Partial<{
   rotation: MaybeGroup<number>
   hidden: boolean
   mapping: (
-    config: ElConfig & Pick<BasicDrawerProps<unknown>, 'container' | 'theme'>
+    config: Pick<BasicDrawerProps<never>, 'container' | 'theme'> &
+      ElConfig &
+      AnyObject
   ) => void | Partial<ElConfig>
 }>
 
-type TextStyle = Partial<
+export type TextStyle = Partial<
   GraphStyle & {
     writingMode: 'horizontal-tb' | 'vertical-rl'
     textDecoration: MaybeGroup<
@@ -36,7 +38,7 @@ type TextStyle = Partial<
   }
 >
 
-type LayerAxisStyle = {
+export type LayerAxisStyle = {
   /**
    * Determines which coordinate system the current chart is.
    * A chart can only have one coordinate system.
@@ -60,7 +62,7 @@ type LayerAxisStyle = {
   titleYR: TextStyle
 }
 
-type LayerLegendStyle = {
+export type LayerLegendStyle = {
   gap: Vec2
   offset: Vec2
   align: Vec2<Alignment>
@@ -70,7 +72,7 @@ type LayerLegendStyle = {
   text: TextStyle
 }
 
-type LayerAuxiliaryStyle = {
+export type LayerAuxiliaryStyle = {
   direction: Direction
   enableLegend: boolean
   labelPosition: Position4
@@ -80,35 +82,35 @@ type LayerAuxiliaryStyle = {
   text: TextStyle
 }
 
-type LayerInteractiveStyle = {
+export type LayerInteractiveStyle = {
   interactive: GraphStyle
   line: GraphStyle
 }
 
-type LayerBasemapStyle = {
+export type LayerBasemapStyle = {
   block: GraphStyle
   text: TextStyle
 }
 
-type LayerHeatmapStyle = {
+export type LayerHeatmapStyle = {
   radiusFactor: number
   heatZone: GraphStyle
 }
 
-type LayerODLineStyle = {
+export type LayerODLineStyle = {
   odLine: GraphStyle
   flyingObject: GraphStyle & {
     path: Maybe<string>
   }
 }
 
-type LayerTextStyle = {
+export type LayerTextStyle = {
   sanger: Vec2
   text: Partial<TextStyle & {align: Vec2<Alignment>}>
   groupText: Partial<TextStyle & {align: Vec2<Alignment>}>[]
 }
 
-type LayerLineStyle = {
+export type LayerLineStyle = {
   /**
    * - `cover`: Lines are rendered independently and may overlap each other.
    * - `stack`: The lines will be stacked on the value axis.
@@ -124,7 +126,7 @@ type LayerLineStyle = {
   area: GraphStyle
 }
 
-type LayerRectStyle = {
+export type LayerRectStyle = {
   /**
    * - `column`: The rectangles are arranged horizontally and stretched vertically.
    * - `bar`: The rectangles are arranged vertically and stretched horizontally.
@@ -155,7 +157,7 @@ type LayerRectStyle = {
   text: TextStyle
 }
 
-type LayerArcStyle = {
+export type LayerArcStyle = {
   /**
    * - `pie`: The arc radius is the same, the angle changes with the value.
    * - `nightingaleRose`: The arc angle is the same, the radius changes with the value.
@@ -169,13 +171,13 @@ type LayerArcStyle = {
   text: TextStyle
 }
 
-type LayerScatterStyle = {
+export type LayerScatterStyle = {
   pointSize: Vec2
   point: GraphStyle
   text: TextStyle
 }
 
-type LayerFlopperStyle = {
+export type LayerFlopperStyle = {
   /**
    * - `vertical`: Numbers scroll up and down to update.
    * - `flop`: Numbers fold flip to update.
@@ -198,7 +200,7 @@ type LayerFlopperStyle = {
   cell: Partial<CSSProperties>
 }
 
-type LayerPackStyle = {
+export type LayerPackStyle = {
   /**
    * - `pack`: The normal pack chart.
    * - `wordCloud`: Pack chart with only one layer and only text.
@@ -210,13 +212,13 @@ type LayerPackStyle = {
   text: TextStyle
 }
 
-type LayerForceStyle = {
+export type LayerForceStyle = {
   nodeSize: Vec2
   node: GraphStyle
   text: TextStyle
 }
 
-type LayerSankeyStyle = {
+export type LayerSankeyStyle = {
   edgeVariant: 'curve' | 'ribbon'
   direction: Direction
   nodeWidth: number
@@ -229,7 +231,7 @@ type LayerSankeyStyle = {
   text: TextStyle
 }
 
-type LayerTreemapStyle = {
+export type LayerTreemapStyle = {
   tile: Tile
   align: Vec2<Alignment>
   labelGap: number
@@ -237,7 +239,7 @@ type LayerTreemapStyle = {
   text: TextStyle
 }
 
-type LayerTreeStyle = {
+export type LayerTreeStyle = {
   curveType: Curve
   direction: Direction
   labelOffset: number
@@ -249,7 +251,7 @@ type LayerTreeStyle = {
   text: TextStyle
 }
 
-type LayerMatrixStyle = {
+export type LayerMatrixStyle = {
   shape: 'circle' | 'rect'
   colorDomain: Vec2 | 'auto'
   circleSize: Vec2<number | 'auto'>
@@ -258,7 +260,7 @@ type LayerMatrixStyle = {
   text: TextStyle
 }
 
-type LayerRadarStyle = {
+export type LayerRadarStyle = {
   /**
    * - `cover`: Polygons are rendered independently and may overlap each other.
    * - `stack`: The polygons will be stacked on the value axis.
@@ -270,7 +272,7 @@ type LayerRadarStyle = {
   text: TextStyle
 }
 
-type LayerDashboardStyle = {
+export type LayerDashboardStyle = {
   step: Vec2
   startAngle: number
   endAngle: number
@@ -284,18 +286,18 @@ type LayerDashboardStyle = {
   labelText: TextStyle
 }
 
-type LayerMarkStyle = {
+export type LayerMarkStyle = {
   size: number
   mark: GraphStyle
   text: TextStyle
 }
 
-type BrushGraphStyle = Omit<GraphStyle, 'mapping'> & {
+export type BrushGraphStyle = Omit<GraphStyle, 'mapping'> & {
   rx?: number
   ry?: number
 }
 
-type LayerBrushStyle = {
+export type LayerBrushStyle = {
   targets: Keys<Omit<LayerScale, 'nice'>>[]
   handleZoom: number
   direction: Direction
@@ -305,14 +307,14 @@ type LayerBrushStyle = {
   handle: BrushGraphStyle
 }
 
-type LayerCandleStyle = {
+export type LayerCandleStyle = {
   positiveColor: string
   negativeColor: string
   rect: Partial<LayerRectStyle>
   line: Partial<LayerRectStyle>
 }
 
-type LayerCarouselStyle = {
+export type LayerCarouselStyle = {
   /**
    * - `slide`: Images swipe up, down, left and right to switch.
    * - `fade`: Images fade in and fade out to switch.
@@ -325,14 +327,14 @@ type LayerCarouselStyle = {
   dot: GraphStyle
 }
 
-type LayerRadialStyle = {
+export type LayerRadialStyle = {
   innerRadius: number
   cornerRadius: number
   arc: GraphStyle
   text: TextStyle
 }
 
-type LayerWaveStyle = {
+export type LayerWaveStyle = {
   wavelength: number
   amplitude: number
   areaNumber: number
@@ -342,7 +344,7 @@ type LayerWaveStyle = {
   text: TextStyle
 }
 
-type LayerGridStyle = {
+export type LayerGridStyle = {
   placeMode: 'collision' | 'position'
   draggable: boolean
   sangerColumn: number
@@ -352,7 +354,7 @@ type LayerGridStyle = {
   box: GraphStyle
 }
 
-type LayerChordStyle = {
+export type LayerChordStyle = {
   arcWidth: number
   labelOffset: number
   edge: GraphStyle

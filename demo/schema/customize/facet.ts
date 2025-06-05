@@ -1,4 +1,6 @@
 import {randomTableList, themeColors} from '../../../src'
+import {ChartTheme} from '../../../src/types'
+import {DemoLayersSchema} from '../base'
 
 const data = randomTableList({
   mode: 'normal',
@@ -9,7 +11,7 @@ const data = randomTableList({
   abs: true,
 })
 
-const animation = `(theme) => ({
+const animation = (theme: ChartTheme) => ({
   arc: {
     enter: theme.animation.presets.zoomIn,
   },
@@ -19,9 +21,9 @@ const animation = `(theme) => ({
   text: {
     enter: theme.animation.presets.fadeIn,
   },
-})`
+})
 
-export default () => [
+export default (): DemoLayersSchema => [
   {
     type: 'text',
     data: '分面饼图',

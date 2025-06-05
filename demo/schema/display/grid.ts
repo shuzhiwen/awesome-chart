@@ -1,6 +1,7 @@
-import {LayerGridStyle} from 'awesome-chart/dist/types'
+import {LayerGridStyle} from '../../../src/types'
+import {DemoLayersSchema} from '../base'
 
-export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
+export default (style: Pick<LayerGridStyle, 'placeMode'>): DemoLayersSchema => [
   {
     type: 'text',
     data: '堆叠网格布局',
@@ -18,7 +19,7 @@ export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
           ]
         : [['width', 'height']].concat(new Array(20).fill([2, 2])),
     style: style,
-    animation: `(theme) => ({
+    animation: (theme) => ({
       box: {
         enter: {
           ...theme.animation.presets.zoomIn,
@@ -35,6 +36,6 @@ export default (style: Pick<LayerGridStyle, 'placeMode'>) => [
           delay: 0,
         },
       },
-    })`,
+    }),
   },
 ]

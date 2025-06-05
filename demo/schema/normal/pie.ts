@@ -1,11 +1,18 @@
 import {randomTableList} from '../../../src'
+import {LayerArcStyle} from '../../../src/types'
+import {DemoLayersSchema} from '../base'
 
 export default ({
   variant,
-  stack = false,
   innerRadius,
   hasGuideLine = false,
-}) => [
+  stack = false,
+}: {
+  variant: LayerArcStyle['variant']
+  innerRadius: number
+  hasGuideLine?: boolean
+  stack?: boolean
+}): DemoLayersSchema => [
   {
     type: 'text',
     data: '饼图',
@@ -55,11 +62,9 @@ export default ({
         hidden: variant !== 'pie',
       },
     },
-    animation: `(theme) => ({
+    animation: (theme) => ({
       arc: {
-        enter: theme.animation.presets.${
-          variant === 'pie' ? 'zoomIn' : 'eraseClockwise'
-        },
+        enter: theme.animation.presets.zoomIn,
       },
       guideLine: {
         enter: theme.animation.presets.fadeIn,
@@ -67,6 +72,6 @@ export default ({
       text: {
         enter: theme.animation.presets.fadeIn,
       },
-    })`,
+    }),
   },
 ]

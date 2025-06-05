@@ -62,14 +62,14 @@ export const schemaMenu: MenuShape = {
           name: '高级绘制函数',
           schema: base(mapping(), {
             tooltipOptions: {
-              render: `(container) => {
+              render: (container) => {
                 const image = document.createElement('img')
                 image.src = 'fruits.png'
                 image.width = 100
                 image.height = 100
                 container.innerHTML = ''
                 container.appendChild(image)
-              }`,
+              },
             },
           }),
         },
@@ -92,7 +92,7 @@ export const schemaMenu: MenuShape = {
         {
           name: '分组折线',
           schema: base(
-            line({mode: 'default', hasArea: false, curveType: 'curveLinear'})
+            line({mode: 'cover', hasArea: false, curveType: 'curveLinear'})
           ),
         },
         {
@@ -104,7 +104,7 @@ export const schemaMenu: MenuShape = {
         {
           name: '分组面积',
           schema: base(
-            line({mode: 'default', hasArea: true, curveType: 'curveMonotoneX'})
+            line({mode: 'cover', hasArea: true, curveType: 'curveMonotoneX'})
           ),
         },
         {
@@ -123,7 +123,7 @@ export const schemaMenu: MenuShape = {
           name: '带标记的折线图',
           schema: base(
             line({
-              mode: 'default',
+              mode: 'cover',
               hasArea: false,
               curveType: 'curveMonotoneX',
               hasMark: true,
@@ -249,7 +249,7 @@ export const schemaMenu: MenuShape = {
       children: [
         {
           name: '分组雷达',
-          schema: base(radar({mode: 'default'}), {padding: smallPadding}),
+          schema: base(radar({mode: 'cover'}), {padding: smallPadding}),
         },
         {
           name: '堆叠雷达',

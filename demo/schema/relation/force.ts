@@ -1,6 +1,7 @@
 import {randomTableList} from '../../../src'
+import {DemoLayersSchema} from '../base'
 
-export default () => [
+export default (): DemoLayersSchema => [
   {
     type: 'text',
     data: '重力气泡图',
@@ -19,7 +20,7 @@ export default () => [
     },
     animation: {
       node: {
-        updateAnimation: {
+        update: {
           duration: 0,
         },
       },

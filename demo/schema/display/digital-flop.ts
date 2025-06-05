@@ -1,4 +1,11 @@
-export default ({variant}) => [
+import {LayerFlopperStyle} from '../../../src/types'
+import {DemoLayersSchema} from '../base'
+
+export default ({
+  variant,
+}: {
+  variant: LayerFlopperStyle['variant']
+}): DemoLayersSchema => [
   {
     type: 'flopper',
     data: {

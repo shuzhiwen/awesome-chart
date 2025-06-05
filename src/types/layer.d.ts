@@ -14,13 +14,13 @@ import {LayoutArea} from './layout'
 import {RawScale, ScaleNice} from './scale'
 import {TextStyle} from './styles'
 
-type LayerType = Keys<LayerDict>
+export type LayerType = Keys<LayerDict>
 
 /**
  * Drawing data will be cached each time.
  * This cache use for show tooltip or support update animation etc.
  */
-type CacheLayerData<Key extends string> = Record<
+export type CacheLayerData<Key extends string> = Record<
   Key,
   {
     data: Omit<GraphDrawerProps<unknown>, 'className' | 'container' | 'theme'>[]
@@ -32,7 +32,7 @@ type CacheLayerData<Key extends string> = Record<
   }
 >
 
-type CacheLayerAnimation<Key extends string> = {
+export type CacheLayerAnimation<Key extends string> = {
   /**
    * Mapping from sublayer to timer.
    * Loop animation should await for update animation after draw.
@@ -55,7 +55,7 @@ type CacheLayerAnimation<Key extends string> = {
       Key,
       Partial<
         Record<'enter' | 'loop', MaybeGroup<AnimationOptions>> & {
-          update: UpdateAnimationOptions
+          update: Partial<UpdateAnimationOptions>
         }
       >
     >
@@ -68,12 +68,12 @@ type CacheLayerAnimation<Key extends string> = {
  * - `tooltip`: Events for tooltip only.
  * @internal
  */
-type CacheLayerEvent<Key extends string> = Readonly<
+export type CacheLayerEvent<Key extends string> = Readonly<
   Record<`common.${Keys<typeof commonEvents>}`, Record<Key, AnyFunction>> &
     Record<`tooltip.${Keys<typeof tooltipEvents>}`, AnyFunction>
 >
 
-type LayerBaseProps<Key extends string> = Readonly<{
+export type LayerBaseProps<Key extends string> = Readonly<{
   options: LayerOptions
   /**
    * @see LayerBase.sublayers
@@ -85,9 +85,9 @@ type LayerBaseProps<Key extends string> = Readonly<{
   interactive?: Key[]
 }>
 
-type DrawBasicProps<T extends DrawerType, Key extends string> = {
+export type DrawBasicProps<T extends DrawerType, Key extends string> = {
   /**
-   * Basic element type, type of drawer.
+   * Basic element type, export type of drawer.
    */
   type: T
   /**
@@ -106,7 +106,7 @@ type DrawBasicProps<T extends DrawerType, Key extends string> = {
   key: Key
 }
 
-type LayerOptions<T extends LayerType = LayerType> = ChartContext & {
+export type LayerOptions<T extends LayerType = LayerType> = ChartContext & {
   id: string
   type: T
   layout: LayoutArea
@@ -124,7 +124,7 @@ type LayerOptions<T extends LayerType = LayerType> = ChartContext & {
   }
 }
 
-type LayerScale = Partial<{
+export type LayerScale = Partial<{
   /**
    * Scale for horizontal, available in cartesian coordinate.
    */
@@ -149,7 +149,7 @@ type LayerScale = Partial<{
   nice: ScaleNice
 }>
 
-type LayerInstance = LayerBase<string> & {
+export type LayerInstance = LayerBase<string> & {
   /**
    * If scale is declared, it will be captured by the axis layer.
    */
@@ -160,7 +160,7 @@ type LayerInstance = LayerBase<string> & {
   legendData?: Maybe<LegendData>
 }
 
-type CreateTextProps = {
+export type CreateTextProps = {
   value: Maybe<Meta>
   /**
    * Relative horizontal position of text.
@@ -184,11 +184,11 @@ type CreateTextProps = {
   offset?: number
 }
 
-type CreateLimitTextProps = CreateTextProps & {
+export type CreateLimitTextProps = CreateTextProps & {
   maxTextWidth: number
 }
 
-type CreateColorMatrixProps = {
+export type CreateColorMatrixProps = {
   layer: LayerInstance
   /**
    * The row number of colorMatrix.

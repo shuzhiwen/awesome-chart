@@ -1,5 +1,6 @@
 import {group, randomNormal} from 'd3'
-import {LayerRectStyle} from 'awesome-chart/dist/types'
+import {LayerRectStyle} from '../../../src/types'
+import {DemoLayersSchema} from '../base'
 
 const originValues = new Array(30)
   .fill(null)
@@ -14,7 +15,7 @@ const transformedData = [['区间', '数量'] as Meta[]].concat(
   ).map(([category, values]) => [category, values.length])
 )
 
-export default ({variant}: Partial<LayerRectStyle>) => [
+export default ({variant}: Partial<LayerRectStyle>): DemoLayersSchema => [
   {
     type: 'text',
     data: '直方图模拟',
@@ -57,7 +58,7 @@ export default ({variant}: Partial<LayerRectStyle>) => [
       line: {
         stroke: ['orange', 'red'],
         strokeWidth: 2,
-        dasharray: '10 5',
+        strokeDasharray: '10 5',
       },
     },
   },

@@ -1,4 +1,6 @@
-export default () => [
+import {DemoLayersSchema} from '../base'
+
+export default (): DemoLayersSchema => [
   {
     type: 'text',
     data: '树形图',
@@ -7,13 +9,13 @@ export default () => [
     type: 'tree',
     data: [nodes, links],
     style: {
-      direction: 'horizontal', // or vertical
+      direction: 'horizontal',
       align: 'center',
       labelPosition: 'outer',
       labelOffset: 10,
-      curve: {
+      curveType: 'curveBumpX',
+      edge: {
         stroke: ['blue', 'skyblue'],
-        curve: 'curveBumpX',
         strokeWidth: 3,
         strokeOpacity: 0.8,
       },

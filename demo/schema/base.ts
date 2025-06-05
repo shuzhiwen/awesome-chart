@@ -1,16 +1,19 @@
 import {
+  CreateChartProps,
   GetFacetLayoutCreatorProps,
   TooltipOptions,
-} from 'awesome-chart/dist/types'
+} from '../../src/types'
+
+export type DemoLayersSchema = Maybe<
+  CreateChartProps['layers'][number] | false
+>[]
 
 export default (
-  layers: any[],
+  layers: DemoLayersSchema,
   config?: Partial<{
     padding: Padding
     facet: GetFacetLayoutCreatorProps
-    tooltipOptions: {
-      render?: string
-    } & Omit<TooltipOptions, 'container' | 'render'>
+    tooltipOptions: Omit<TooltipOptions, 'container'>
     hasBrush: boolean
   }>
 ) => ({
@@ -20,8 +23,8 @@ export default (
   hasBrush: config?.hasBrush,
   facet: config?.facet,
   tooltipOptions: {
-    mode: 'dimension' as const,
+    mode: 'dimension',
     ...config?.tooltipOptions,
   },
-  layers,
+  layers: layers.filter(Boolean),
 })

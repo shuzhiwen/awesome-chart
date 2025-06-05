@@ -1,7 +1,22 @@
-export default () => [
+import {DemoLayersSchema} from '../base'
+
+declare global {
+  interface Window {
+    awesome: any
+  }
+}
+
+export default (): DemoLayersSchema => [
   {
     type: 'text',
-    data: '柱状图',
+    data: '自定义渲染',
+    style: {
+      text: {
+        format: {
+          formatter: (d) => d + (Math.random() * 100).toFixed(2),
+        },
+      },
+    },
   },
   {
     type: 'axis',
@@ -10,29 +25,29 @@ export default () => [
     },
     style: {
       textX: {
-        mapping: `(data) =>
+        mapping: (data) =>
           window.awesome.attachImageToElement({
             ...data,
             from: 'text',
             url: 'fruits.png',
             size: [30, 30],
             offset: [0, 25],
-          })`,
+          }),
       },
       axisLineX: {
         hidden: false,
-        mapping: `(data) =>
+        mapping: (data) =>
           window.awesome.attachImageToElement({
             ...data,
             from: 'line',
             url: 'boll.gif',
             size: [30, 30],
             offset: [5, 0],
-          })`,
+          }),
       },
       axisLineY: {
         hidden: false,
-        mapping: `(data) =>
+        mapping: (data) =>
           window.awesome.attachImageToElement({
             ...data,
             position: 'end',
@@ -40,7 +55,7 @@ export default () => [
             url: 'boll.gif',
             size: [30, 30],
             offset: [0, -5],
-          })`,
+          }),
       },
     },
   },
@@ -62,7 +77,7 @@ export default () => [
       rect: {
         fill: 'seagreen',
         opacity: 0,
-        mapping: `({
+        mapping: ({
           source,
           x,
           y,
@@ -82,19 +97,19 @@ export default () => [
                 y2: y + height,
               },
             ],
-            stroke: source.meta.value > 4000 ? 'red' : fill,
+            stroke: (source.meta.value as number) > 4000 ? 'red' : fill,
             strokeWidth: width * 0.6,
             strokeDasharray: '5 5',
             container,
             theme,
             className: className + '-mapping-line',
           })
-        }`,
+        },
       },
       text: {
         fontSize: 10,
         opacity: 0,
-        mapping: `(data) => {
+        mapping: (data) => {
           const xIndex = Math.floor(Math.random() * 2)
           const yIndex = Math.floor(Math.random() * 2)
           const originImageSize = 200
@@ -114,7 +129,7 @@ export default () => [
               height: imageItemSize,
             },
           })
-        }`,
+        },
       },
     },
   },

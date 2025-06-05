@@ -22,7 +22,7 @@ import {LayerAxisScale} from './scale'
  * The context for layer from chart includes some global data.
  * The context will be delivered to the layer when create the layer.
  */
-type ChartContext = {
+export type ChartContext = {
   /**
    * A easy way to create gradient.
    */
@@ -43,7 +43,7 @@ type ChartContext = {
   | 'tooltip'
 >
 
-type ChartTheme = Readonly<{
+export type ChartTheme = Readonly<{
   /**
    * The theme color of the chart.
    * If there is no element color is specified,
@@ -98,7 +98,7 @@ type ChartTheme = Readonly<{
     Record<'enter' | 'loop' | 'update', UpdateAnimationOptions>
 }>
 
-type TooltipOptions = Partial<{
+export type TooltipOptions = Partial<{
   /**
    * Container in which the tooltip is rendered.
    * Custom container will replace the default container.
@@ -151,7 +151,7 @@ type TooltipOptions = Partial<{
   getLayersBackupData: () => CacheLayerData<string>['data']['data']
 }>
 
-type RebuildScaleProps = Partial<{
+export type RebuildScaleProps = Partial<{
   /**
    * Trigger layer is the layer that do not want to be updated after merged scale.
    */
@@ -162,7 +162,7 @@ type RebuildScaleProps = Partial<{
   redraw: boolean
 }>
 
-type ChartProps = {
+export type ChartProps = {
   /**
    * Chart DOM element.
    */
@@ -199,12 +199,12 @@ type ChartProps = {
   tooltipOptions: Partial<TooltipOptions>
 }>
 
-type CreateLayerProps<T extends LayerType> = Omit<
+export type CreateLayerProps<T extends LayerType> = Omit<
   LayerOptions<T>,
   Keys<ChartContext>
 >
 
-type CreateChartProps = ChartProps & {
+export type CreateChartProps = ChartProps & {
   /**
    * Handle error when chart throw errors.
    * @remarks
@@ -216,7 +216,7 @@ type CreateChartProps = ChartProps & {
    */
   layers: ({
     /**
-     * Internal layer type or custom layer type.
+     * Internal layer export type or custom layer type.
      */
     type: LayerType
   } & Partial<{
@@ -224,12 +224,14 @@ type CreateChartProps = ChartProps & {
      * The options of the layer.
      * When options changes, chart will redraw.
      */
-    options: Pick<LayerOptions, 'id' | 'axis'> & {
-      /**
-       * The name of layout that created by layoutCreator.
-       */
-      layout?: string
-    }
+    options: Partial<
+      Pick<LayerOptions, 'id' | 'axis'> & {
+        /**
+         * The name of layout that created by layoutCreator.
+         */
+        layout: string
+      }
+    >
     /**
      * Scale nice options only for axis layer.
      */

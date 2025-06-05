@@ -1,20 +1,20 @@
 import {Texture} from 'pixi.js'
 import {D3Selection} from './draw'
 
-type Box = {
+export type Box = {
   x: number
   y: number
   width: number
   height: number
 }
 
-type Stop = Partial<{
+export type Stop = Partial<{
   color: string
   offset: number
   opacity: number
 }>
 
-type LinearGradientSchema = {
+export type LinearGradientSchema = {
   id: string
   x1?: number
   y1?: number
@@ -25,7 +25,7 @@ type LinearGradientSchema = {
   stops: Stop[]
 }
 
-type RadialGradientSchema = {
+export type RadialGradientSchema = {
   id: string
   r?: number
   r2?: number
@@ -38,17 +38,17 @@ type RadialGradientSchema = {
   stops: Stop[]
 }
 
-type CreateDefsSchema = Partial<{
+export type CreateDefsSchema = Partial<{
   linearGradient: MaybeGroup<LinearGradientSchema>
   radialGradient: MaybeGroup<RadialGradientSchema>
 }>
 
-type GradientCreatorProps<Schema> = {
+export type GradientCreatorProps<Schema> = {
   container: D3Selection | Texture[]
   schema: Schema
 }
 
-type EventCallback = AnyFunction & {
+export type EventCallback = AnyFunction & {
   /**
    * The event category that used to distinguish event sources.
    * @internal
@@ -63,7 +63,7 @@ type EventCallback = AnyFunction & {
   isOnceDone?: boolean
 }
 
-type FormatNumberConfig = Partial<{
+export type FormatNumberConfig = Partial<{
   /**
    * Is value transform to percentage string.
    */
@@ -82,7 +82,7 @@ type FormatNumberConfig = Partial<{
   formatter: (value: Maybe<Meta>) => string
 }>
 
-type OverflowControlConfig = Partial<{
+export type OverflowControlConfig = Partial<{
   /**
    * When value exceed width, `...` as suffix or not.
    */
@@ -101,7 +101,7 @@ type OverflowControlConfig = Partial<{
   fontSize: number
 }>
 
-type EasyGradientCreatorProps = Partial<RadialGradientSchema> & {
+export type EasyGradientCreatorProps = Partial<RadialGradientSchema> & {
   /**
    * Gradient type.
    */
@@ -116,7 +116,7 @@ type EasyGradientCreatorProps = Partial<RadialGradientSchema> & {
   colors: string[]
 }
 
-type RandomNumberOptions = {
+export type RandomNumberOptions = {
   /**
    * Create a number in `normal` way or `poisson` way.
    */
@@ -143,7 +143,7 @@ type RandomNumberOptions = {
   abs?: boolean
 }
 
-type RandomTableListOptions = RandomNumberOptions & {
+export type RandomTableListOptions = RandomNumberOptions & {
   /**
    * Whether numbers have `asc` order or `desc` order.
    */
@@ -158,7 +158,7 @@ type RandomTableListOptions = RandomNumberOptions & {
   column: number
 }
 
-type RandomRelationOptions = RandomNumberOptions & {
+export type RandomRelationOptions = RandomNumberOptions & {
   /**
    * The number of nodes to generate.
    */

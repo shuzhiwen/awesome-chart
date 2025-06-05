@@ -1,13 +1,13 @@
 import {ScalePoint, ScaleQuantize} from 'd3'
 import {scaleAngle, scaleBand, scaleLinear} from '../scales'
 
-type ScaleAngle = ReturnType<typeof scaleAngle>
+export type ScaleAngle = ReturnType<typeof scaleAngle>
 
-type ScaleBand = ReturnType<typeof scaleBand>
+export type ScaleBand = ReturnType<typeof scaleBand>
 
-type ScaleLinear = ReturnType<typeof scaleLinear>
+export type ScaleLinear = ReturnType<typeof scaleLinear>
 
-type RawScale<Domain = any> = {
+export type RawScale<Domain = any> = {
   (input: Domain): any
 }
 
@@ -18,7 +18,7 @@ interface Scale<Domain = any> extends RawScale<Domain> {
   range(range: Iterable<any>): this
 }
 
-type ScaleLinearNice = Partial<{
+export type ScaleLinearNice = Partial<{
   /**
    * The number of coordinate dividing lines.
    */
@@ -38,7 +38,7 @@ type ScaleLinearNice = Partial<{
   fixedStart: number
 }>
 
-type ScaleBandNice = Partial<{
+export type ScaleBandNice = Partial<{
   /**
    * Sets the inner padding to the specified percentage value
    * which must be in the range [0, 1].
@@ -65,7 +65,7 @@ type ScaleBandNice = Partial<{
   fixedBoundary: 'start' | 'end'
 }>
 
-type ScaleArcNice = Partial<{
+export type ScaleArcNice = Partial<{
   /**
    * Sets the inner padding to the specified percentage value
    * which must be in the range [0, 1].
@@ -77,33 +77,33 @@ type ScaleArcNice = Partial<{
   paddingInner: number
 }>
 
-type ScaleNice = ScaleLinearNice & ScaleBandNice & ScaleArcNice
+export type ScaleNice = ScaleLinearNice & ScaleBandNice & ScaleArcNice
 
-type ScaleBandProps = {
+export type ScaleBandProps = {
   domain: Meta[]
   range: Vec2
   nice?: ScaleBandNice
 }
 
-type ScaleLinearProps = {
+export type ScaleLinearProps = {
   domain: Vec2
   range: Vec2
   nice?: ScaleLinearNice
 }
 
-type ScaleArcProps = {
+export type ScaleArcProps = {
   domain: Vec2<Meta[]>
   range: Vec2
   nice?: ScaleArcNice
 }
 
-type ScaleArcRangeItem = {
+export type ScaleArcRangeItem = {
   weight: Meta
   startAngle: number
   endAngle: number
 }
 
-type LayerAxisScale = Partial<{
+export type LayerAxisScale = Partial<{
   scaleX: Scale
   scaleY: Scale
   scaleYR: Scale
@@ -113,68 +113,68 @@ type LayerAxisScale = Partial<{
   nice: ScaleNice
 }>
 
-type LayerAuxiliaryScale = Maybe<{
+export type LayerAuxiliaryScale = Maybe<{
   scaleX?: Scale
   scaleY?: Scale
 }>
 
-type LayerLineScale = Maybe<{
+export type LayerLineScale = Maybe<{
   scaleX: ScaleBand
   scaleY: ScaleLinear
 }>
 
-type LayerRadarScale = Maybe<{
+export type LayerRadarScale = Maybe<{
   scaleAngle: ScaleBand
   scaleRadius: ScaleLinear
 }>
 
-type LayerRadialScale = Maybe<{
+export type LayerRadialScale = Maybe<{
   scaleAngle: ScaleLinear
   scaleRadius: ScaleBand
 }>
 
-type LayerScatterScale = Maybe<{
+export type LayerScatterScale = Maybe<{
   scaleX: ScaleLinear
   scaleY: ScaleLinear
   scalePointSize: ScaleLinear
 }>
 
-type LayerRectScale = Maybe<{
+export type LayerRectScale = Maybe<{
   scaleX: ScaleBand | ScaleLinear
   scaleY: ScaleBand | ScaleLinear
 }>
 
-type LayerBasemapScale = Maybe<{
+export type LayerBasemapScale = Maybe<{
   scaleX: RawScale
   scaleY: RawScale
 }>
 
-type LayerHeatmapScale = Maybe<{
+export type LayerHeatmapScale = Maybe<{
   scaleX: RawScale
   scaleY: RawScale
 }>
 
-type LayerODLineScale = Maybe<{
+export type LayerODLineScale = Maybe<{
   scaleX: RawScale
   scaleY: RawScale
 }>
 
-type LayerMarkScale = Maybe<{
+export type LayerMarkScale = Maybe<{
   scaleX: RawScale
   scaleY: RawScale
 }>
 
-type LayerArcScale = Maybe<{
+export type LayerArcScale = Maybe<{
   scaleAngle: ScaleAngle
   scaleRadius: ScaleLinear
 }>
 
-type LayerTreeScale = Maybe<{
+export type LayerTreeScale = Maybe<{
   scaleX: ScalePoint<number>
   scaleY: ScalePoint<number>
 }>
 
-type LayerMatrixScale = Maybe<{
+export type LayerMatrixScale = Maybe<{
   scaleX: ScaleBand
   scaleY: ScaleBand
   scaleColor?: ScaleQuantize<string>
