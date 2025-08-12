@@ -1,5 +1,5 @@
 import {debounce, isFunction} from 'lodash'
-import React, {CSSProperties, useCallback, useEffect, useState} from 'react'
+import {CSSProperties, useCallback, useEffect, useState} from 'react'
 import {Chart} from './Chart'
 import * as debugs from './debug'
 import {Editor} from './Editor'
