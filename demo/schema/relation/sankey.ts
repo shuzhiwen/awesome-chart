@@ -1,4 +1,6 @@
-export default () => [
+import {DemoLayersSchema} from '../base'
+
+export default (): DemoLayersSchema => [
   {
     type: 'text',
     data: '桑基图',
@@ -16,13 +18,6 @@ export default () => [
       text: {
         fontSize: 12,
       },
-      line: {
-        curve: 'curveBasis',
-      },
-    },
-    tooltip: {
-      mode: 'single',
-      targets: ['circle', 'arc'],
     },
   },
 ]

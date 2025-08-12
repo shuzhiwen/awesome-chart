@@ -5,7 +5,15 @@ import {useEffect, useMemo, useRef, useState} from 'react'
 import * as awesome from '../src'
 import {download, errorCatcher} from '../src'
 
+declare global {
+  interface Window {
+    awesome: any
+  }
+}
+
 const throttleDownload = throttle(download, 500)
+
+const transferNames = ['formatter', 'mapping', 'render', 'animation']
 
 const stringify = errorCatcher(
   (value: unknown, space = 2, noPack = false) => {
@@ -14,9 +22,8 @@ const stringify = errorCatcher(
     const result = JSON.stringify(
       value,
       (key, value) => {
-        return (key === 'mapping' || key === 'render' || key === 'animation') &&
-          typeof value === 'string'
-          ? `fn{${value}}fn`
+        return transferNames.includes(key) && typeof value === 'function'
+          ? `fn{${value.toString()}}fn`
           : value
       },
       space
@@ -46,13 +53,13 @@ const parse = errorCatcher(
   }
 )
 
+window.awesome = awesome
 monaco.languages.typescript.typescriptDefaults.addExtraLib(
   `${Object.entries(awesome).reduce(
     (prev, [key]) => `${prev}${key}:any;`,
     'interface Window {awesome: {'
   )}}}`
 )
-;(window as any).awesome = awesome
 
 export function Editor(props: {schema?: AnyObject; onChange: AnyFunction}) {
   const {schema: _schema, onChange = noop} = props,

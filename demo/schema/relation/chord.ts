@@ -1,6 +1,7 @@
 import {randomTable} from '../../../src'
+import {DemoLayersSchema} from '../base'
 
-export default () => [
+export default (): DemoLayersSchema => [
   {
     type: 'text',
     data: '和弦图',
@@ -18,9 +19,6 @@ export default () => [
     }),
     style: {
       labelOffset: 10,
-      line: {
-        curve: 'curveBasis',
-      },
     },
   },
 ]

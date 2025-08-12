@@ -1,6 +1,7 @@
 import {randomTableList} from '../../../src'
+import {DemoLayersSchema} from '../base'
 
-export default () => [
+export default (): DemoLayersSchema => [
   {
     type: 'text',
     data: '折线柱状图',
@@ -37,15 +38,15 @@ export default () => [
         fontSize: 10,
       },
     },
-    animation: `(theme) => ({
-        rect: {
-          enter: theme.animation.presets.zoomIn,
-          loop: theme.animation.presets.scanTop,
-        },
-        text: {
-          enter: theme.animation.presets.fadeIn,
-        },
-      })`,
+    animation: (theme) => ({
+      rect: {
+        enter: theme.animation.presets.zoomIn,
+        loop: theme.animation.presets.scanTop,
+      },
+      text: {
+        enter: theme.animation.presets.fadeIn,
+      },
+    }),
   },
   {
     type: 'line',
@@ -75,18 +76,18 @@ export default () => [
         fontSize: 10,
       },
     },
-    animation: `(theme) => ({
-        curve: {
-          enter: theme.animation.presets.eraseRight,
-          loop: theme.animation.presets.scanRight,
-        },
-        area: {
-          enter: theme.animation.presets.eraseRight,
-          loop: theme.animation.presets.scanRight,
-        },
-        text: {
-          enter: theme.animation.presets.fadeIn,
-        },
-      })`,
+    animation: (theme) => ({
+      curve: {
+        enter: theme.animation.presets.eraseRight,
+        loop: theme.animation.presets.scanRight,
+      },
+      area: {
+        enter: theme.animation.presets.eraseRight,
+        loop: theme.animation.presets.scanRight,
+      },
+      text: {
+        enter: theme.animation.presets.fadeIn,
+      },
+    }),
   },
 ]

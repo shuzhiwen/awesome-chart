@@ -1,4 +1,6 @@
-export default () => [
+import {DemoLayersSchema} from '../base'
+
+export default (): DemoLayersSchema => [
   {
     type: 'text',
     data: '二维地图',

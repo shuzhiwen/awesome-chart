@@ -1,4 +1,6 @@
-const createDashboardData = (type) => {
+import {DemoLayersSchema} from '../base'
+
+const createDashboardData = (type: 'indicator' | 'dashboard') => {
   const value = Math.floor(Math.random() * 100)
 
   if (type === 'dashboard') {
@@ -20,7 +22,7 @@ const createDashboardData = (type) => {
   }
 }
 
-const createDashBoardStyle = (type) => {
+const createDashBoardStyle = (type: 'indicator' | 'dashboard') => {
   if (type === 'dashboard') {
     return {
       tickSize: 10,
@@ -52,7 +54,11 @@ const createDashBoardStyle = (type) => {
   }
 }
 
-export default ({type}) => [
+export default ({
+  type,
+}: {
+  type: 'indicator' | 'dashboard'
+}): DemoLayersSchema => [
   {
     type: 'text',
     data: '仪表盘',

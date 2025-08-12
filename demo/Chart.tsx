@@ -43,20 +43,24 @@ export const Chart = (props: {
   )
 
   useEffect(() => {
-    const container = chartRef.current
-    const newChart = createChart({
-      ...cloneDeep(schema),
-      layoutCreator: schema.facet
-        ? getFacetLayoutCreator(schema.facet)
-        : getStandardLayoutCreator({brush: !!schema.hasBrush}),
-      theme: variant === 'light' ? lightTheme : darkTheme,
-      container,
-      engine,
-    } as CreateChartProps)
+    try {
+      const container = chartRef.current
+      const newChart = createChart({
+        ...cloneDeep(schema),
+        layoutCreator: schema.facet
+          ? getFacetLayoutCreator(schema.facet)
+          : getStandardLayoutCreator({brush: !!schema.hasBrush}),
+        theme: variant === 'light' ? lightTheme : darkTheme,
+        container,
+        engine,
+      } as CreateChartProps)
 
-    setChart(newChart)
+      setChart(newChart)
 
-    return () => newChart?.destroy()
+      return () => newChart.destroy()
+    } catch (e) {
+      console.error(e)
+    }
   }, [schema, engine, variant])
 
   return (

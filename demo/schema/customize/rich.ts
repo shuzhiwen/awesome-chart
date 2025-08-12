@@ -1,4 +1,6 @@
-export default () => [
+import {DemoLayersSchema} from '../base'
+
+export default (): DemoLayersSchema => [
   {
     type: 'text',
     data: '栅格文本',
@@ -40,17 +42,17 @@ export default () => [
         y: 2,
       },
       {
-        text: 100,
+        text: '100',
         x: 0,
         y: 4,
       },
       {
-        text: 2000,
+        text: '2000',
         x: 1,
         y: 4,
       },
       {
-        text: 30000,
+        text: '30000',
         x: 2,
         y: 4,
       },

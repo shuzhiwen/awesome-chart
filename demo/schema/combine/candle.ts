@@ -1,6 +1,7 @@
 import data from '../../../public/stock.json'
+import {DemoLayersSchema} from '../base'
 
-export default () => [
+export default (): DemoLayersSchema => [
   {
     type: 'text',
     data: '丐版K线',

@@ -1,6 +1,7 @@
-import {dynamicRawTableLists} from '../../debug/dynamic-rect'
+import {dynamicRawTableLists} from '../../debug'
+import {DemoLayersSchema} from '../base'
 
-export default () => [
+export default (): DemoLayersSchema => [
   {
     type: 'text',
     data: '点击"UPDATE"开始播放',
@@ -51,15 +52,15 @@ export default () => [
         fontSize: 10,
       },
     },
-    animation: `(theme) => ({
-            rect: {
-              enter: theme.animation.presets.zoomIn,
-              update: {duration: 500},
-            },
-            text: {
-              enter: theme.animation.presets.fadeIn,
-              update: {duration: 500},
-            },
-          })`,
+    animation: (theme) => ({
+      rect: {
+        enter: theme.animation.presets.zoomIn,
+        update: {duration: 500},
+      },
+      text: {
+        enter: theme.animation.presets.fadeIn,
+        update: {duration: 500},
+      },
+    }),
   },
 ]

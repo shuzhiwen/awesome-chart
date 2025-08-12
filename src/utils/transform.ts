@@ -21,7 +21,7 @@ export function tableListToObjects<K extends Meta, V = Meta>(
 
   return tableList.slice(1).map((item) => {
     const entries = tableList[0].map((key, i) => [key, item[i]])
-    return Object.fromEntries(entries) as unknown as Record<K, V>
+    return Object.fromEntries(entries) as Record<K, V>
   })
 }
 

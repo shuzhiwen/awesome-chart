@@ -1,3 +1,6 @@
+import {hierarchy, select} from 'd3'
+import {cloneDeep, max, merge} from 'lodash'
+import {CSSProperties, useEffect, useRef} from 'react'
 import {
   addStyle,
   Chart,
@@ -10,13 +13,9 @@ import {
   LayerDict,
   registerCustomLayer,
   robustRange,
-  transformAttr,
   uuid,
-} from 'awesome-chart'
-import {D3Selection, LayerOptions} from 'awesome-chart/dist/types'
-import {hierarchy, select} from 'd3'
-import {cloneDeep, max, merge} from 'lodash'
-import {CSSProperties, useEffect, useRef} from 'react'
+} from '../src'
+import {D3Selection, LayerOptions} from '../src/types'
 import {schemaMenu} from './schema'
 
 type MenuItem = {
@@ -31,7 +30,7 @@ type TabMenuStyleShape = Partial<
   }
 >
 
-declare module 'awesome-chart' {
+declare module '../src' {
   interface LayerDict {
     tabMenu: LayerTabMenu
   }
@@ -166,8 +165,7 @@ class LayerTabMenu extends LayerBase<never> {
       .style('flex-direction', 'column')
       .each((groupData: any, index, groups) => {
         const groupEl = select(groups[index])
-        const groupStyle = transformAttr(this.style.group ?? {})
-        addStyle(groupEl, groupStyle, index)
+        addStyle(groupEl, this.style.group ?? {}, index)
         groupEl
           .selectAll('.item')
           .data(groupData)
@@ -178,9 +176,8 @@ class LayerTabMenu extends LayerBase<never> {
           .style('cursor', 'pointer')
           .each((itemData: any, itemIndex, items) => {
             const itemEl = select(items[itemIndex])
-            const itemStyle = transformAttr(itemData)
-            addStyle(itemEl, itemStyle)
-            itemEl.text(itemStyle.text)
+            addStyle(itemEl, itemData)
+            itemEl.text(itemData.text)
           })
           .on('click', (event, data) =>
             this.tabEvent.fire('click', {data, event})

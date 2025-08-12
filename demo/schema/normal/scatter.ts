@@ -1,4 +1,10 @@
-export default ({pointSize}) => [
+import {DemoLayersSchema} from '../base'
+
+export default ({
+  pointSize,
+}: {
+  pointSize: [number, number]
+}): DemoLayersSchema => [
   {
     type: 'text',
     data: '散点气泡图',
@@ -33,7 +39,7 @@ export default ({pointSize}) => [
         hidden: true,
       },
     },
-    animation: `(theme) => ({
+    animation: (theme) => ({
       point: {
         enter: theme.animation.presets.zoomIn,
         loop: theme.animation.presets.breath,
@@ -41,7 +47,7 @@ export default ({pointSize}) => [
       text: {
         enter: theme.animation.presets.fadeIn,
       },
-    })`,
+    }),
   },
   {
     type: 'auxiliary',
@@ -56,7 +62,7 @@ export default ({pointSize}) => [
       line: {
         stroke: ['orange', 'orange'],
         strokeWidth: 2,
-        dasharray: '10 5',
+        strokeDasharray: '10 5',
       },
       text: {
         fill: ['orange', 'orange'],

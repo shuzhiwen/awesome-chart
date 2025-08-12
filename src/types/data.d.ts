@@ -1,9 +1,9 @@
 import {DataDict} from '../data'
 import {ColorMatrix} from '../utils'
 
-type DataType = Keys<DataDict>
+export type DataType = Keys<DataDict>
 
-type LegendCache = {
+export type LegendCache = {
   /**
    * @see LegendData.filter
    */
@@ -19,9 +19,9 @@ type LegendCache = {
   mapping: Record<Meta, number>
 }
 
-type DataBaseOptions = Partial<{order: LegendCache}>
+export type DataBaseOptions = Partial<{order: LegendCache}>
 
-type TableListOptions = Partial<{
+export type TableListOptions = Partial<{
   /**
    * Select target corresponding to the rows and columns of `TableList`.
    */
@@ -32,7 +32,7 @@ type TableListOptions = Partial<{
   mode: 'sum' | 'percentage' | 'copy'
 }>
 
-type TableOptions = Partial<{
+export type TableOptions = Partial<{
   /**
    * Select target corresponding to the rows and columns of `Table`.
    */
@@ -42,24 +42,24 @@ type TableOptions = Partial<{
 /**
  * `RawTableList` can be seen as a relational table in the database.
  */
-type RawTableList<T = Meta> = T[][]
+export type RawTableList<T = Meta> = T[][]
 
 /**
  * `RawTable` can be seen as a matrix.
  */
-type RawTable<T = Meta> = [Meta[], Meta[], RawTableList<T>]
+export type RawTable<T = Meta> = [Meta[], Meta[], RawTableList<T>]
 
 /**
  * `RawRelation` can be seen as two relational table in the database.
  * The first table is represents node information.
  * The second table is represents link information.
  */
-type RawRelation<T = Meta> = Vec2<RawTableList<T>>
+export type RawRelation<T = Meta> = Vec2<RawTableList<T>>
 
 /**
  * Data structure of `TableList` item.
  */
-type TableListData = {
+export type TableListData = {
   /**
    * The key of the column.
    */
@@ -124,7 +124,7 @@ interface Node {
   children?: Node[]
 }
 
-type RelationData = {
+export type RelationData = {
   /**
    * Roots represent nodes in a directed acyclic graph that only have out-degrees.
    */
@@ -139,7 +139,7 @@ type RelationData = {
   edges: Edge[]
 }
 
-type LegendData = {
+export type LegendData = {
   /**
    * Legend filter mode corresponding to the rows and columns of `TableList`.
    */
@@ -158,7 +158,7 @@ type LegendData = {
   }[]
 }
 
-type TooltipData = Maybe<{
+export type TooltipData = Maybe<{
   /**
    * Tooltip title that representing the dimension or category.
    */

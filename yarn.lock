@@ -2455,17 +2455,6 @@ available-typed-arrays@^1.0.5:
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz#92f95616501069d07d10edb2fc37d3e1c65123b7"
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
-awesome-chart@^0.6.3:
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/awesome-chart/-/awesome-chart-0.6.3.tgz#be9633761339c70ee5903b2d6adb53bec7f48965"
-  integrity sha512-u0TqiLIMZ8wDtVwwxO9x7wh+PsNAgeoziQGN4o4ia2PppUzN7Xwxc/+hIKtvdsP0F6GomIMZF3g/BDrlAxbzVA==
-  dependencies:
-    animejs "^3.2.1"
-    chroma-js "^2.1.1"
-    d3 "^7.6.1"
-    lodash "^4.17.21"
-    pixi.js "^7.2.4"
-
 babel-jest@^27.5.1:
   version "27.5.1"
   resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-27.5.1.tgz#a1bf8d61928edfefd21da27eb86a695bfd691444"

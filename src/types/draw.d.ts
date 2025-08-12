@@ -5,25 +5,26 @@ import {UpdateAnimationOptions} from './animation'
 import {ChartTheme} from './core'
 import {GraphStyle, TextStyle} from './styles'
 
-type DrawerType = Keys<typeof DrawerDict>
+export type DrawerType = Keys<typeof DrawerDict>
 
-type DrawerTarget = D3Selection | Container
+export type DrawerTarget = D3Selection | Container
 
-type DrawerData<Props> = Props extends BasicDrawerProps<infer V> ? V : never
+export type DrawerData<Props> =
+  Props extends BasicDrawerProps<infer V> ? V : never
 
-type D3Selection<GDatum = unknown> = Selection<any, GDatum, any, unknown>
+export type D3Selection<GDatum = unknown> = Selection<any, GDatum, any, unknown>
 
-type ElEvent = MouseEvent | FederatedPointerEvent
+export type ElEvent = MouseEvent | FederatedPointerEvent
 
-type SourceMeta = Record<'dimension' | 'category' | 'value', Meta>
+export type SourceMeta = Record<'dimension' | 'category' | 'value', Meta>
 
-type ElSource = {
+export type ElSource = {
   meta: AnyObject & Partial<SourceMeta>
   groupIndex: number
   itemIndex: number
 }
 
-type BasicDrawerProps<Datum> = {
+export type BasicDrawerProps<Datum> = {
   data: Datum[]
   source: ElSource[]
   className: string
@@ -33,7 +34,7 @@ type BasicDrawerProps<Datum> = {
   evented?: boolean
 }
 
-type ElConfig<T extends DrawerType = DrawerType> = {
+export type ElConfig<T extends DrawerType = DrawerType> = {
   className: string
   source: ElSource
   fill?: string
@@ -44,12 +45,12 @@ type ElConfig<T extends DrawerType = DrawerType> = {
   strokeWidth?: number
 } & DrawerDictProps<T>['data'][number]
 
-type DrawerDictProps<
+export type DrawerDictProps<
   T extends DrawerType,
   P extends (typeof DrawerDict)[T] = (typeof DrawerDict)[T],
 > = Parameters<P>[0]
 
-type TextDrawerProps = TextStyle &
+export type TextDrawerProps = TextStyle &
   BasicDrawerProps<{
     x: number
     y: number
@@ -58,9 +59,9 @@ type TextDrawerProps = TextStyle &
     textHeight: number
   }>
 
-type GraphDrawerProps<Datum> = GraphStyle & BasicDrawerProps<Datum>
+export type GraphDrawerProps<Datum> = GraphStyle & BasicDrawerProps<Datum>
 
-type ArcDrawerProps = GraphDrawerProps<{
+export type ArcDrawerProps = GraphDrawerProps<{
   startAngle: number
   endAngle: number
   innerRadius: number
@@ -70,30 +71,30 @@ type ArcDrawerProps = GraphDrawerProps<{
   cornerRadius?: number
 }>
 
-type AreaDrawerProps = GraphDrawerProps<{
+export type AreaDrawerProps = GraphDrawerProps<{
   lines: {x: number; y1: number; y2: number}[]
   curve: Curve
 }>
 
-type CircleDrawerProps = GraphDrawerProps<{
+export type CircleDrawerProps = GraphDrawerProps<{
   r: number
   x: number
   y: number
 }>
 
-type CurveDrawerProps = GraphDrawerProps<{
+export type CurveDrawerProps = GraphDrawerProps<{
   points: {x: number; y: number}[]
   curve: Curve
 }>
 
-type EllipseDrawerProps = GraphDrawerProps<{
+export type EllipseDrawerProps = GraphDrawerProps<{
   rx: number
   ry: number
   cx: number
   cy: number
 }>
 
-type ImageDrawerProps = GraphDrawerProps<{
+export type ImageDrawerProps = GraphDrawerProps<{
   url: string
   width: number
   height: number
@@ -107,26 +108,26 @@ type ImageDrawerProps = GraphDrawerProps<{
   }
 }>
 
-type LineDrawerProps = GraphDrawerProps<{
+export type LineDrawerProps = GraphDrawerProps<{
   x1: number
   y1: number
   x2: number
   y2: number
 }>
 
-type PathDrawerProps = GraphDrawerProps<{
+export type PathDrawerProps = GraphDrawerProps<{
   path: string | ((context?: CanvasRenderingContext2D) => string)
   centerX?: number
   centerY?: number
 }>
 
-type PolyDrawerProps = GraphDrawerProps<{
+export type PolyDrawerProps = GraphDrawerProps<{
   points: {x: number; y: number}[]
   centerX: number
   centerY: number
 }>
 
-type RectDrawerProps = GraphDrawerProps<{
+export type RectDrawerProps = GraphDrawerProps<{
   x: number
   y: number
   width: number

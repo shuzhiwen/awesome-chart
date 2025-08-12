@@ -1,6 +1,8 @@
 import {randomTableList} from '../../../src'
+import {LayerRadarStyle} from '../../../src/types'
+import {DemoLayersSchema} from '../base'
 
-export default ({mode}) => [
+export default ({mode}: {mode: LayerRadarStyle['mode']}): DemoLayersSchema => [
   {
     type: 'text',
     data: '雷达图',
@@ -31,7 +33,7 @@ export default ({mode}) => [
         hidden: true,
       },
     },
-    animation: `(theme) => ({
+    animation: (theme) => ({
       polygon: {
         enter: theme.animation.presets.zoomIn,
         loop: theme.animation.presets.scanRight,
@@ -43,6 +45,6 @@ export default ({mode}) => [
       text: {
         enter: theme.animation.presets.fadeIn,
       },
-    })`,
+    }),
   },
 ]

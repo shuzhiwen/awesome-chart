@@ -113,7 +113,7 @@ export class LayerChord extends LayerBase<Key> {
         path: ribbon()({
           source: {...source, radius},
           target: {...target, radius},
-        }) as unknown as string,
+        }) as never,
         color: colorMatrix.get(
           0,
           this.nodeData.findIndex(({index}) => index === target.index)

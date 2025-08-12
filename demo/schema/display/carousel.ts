@@ -1,3 +1,5 @@
+import {DemoLayersSchema} from '../base'
+
 const images = [
   ['url'],
   [
@@ -6,7 +8,7 @@ const images = [
   ['https://t7.baidu.com/it/u=1732966997,2981886582&fm=193&f=GIF'],
 ]
 
-export default ({mode}: {mode: 'slide' | 'fade'}) => [
+export default ({mode}: {mode: 'slide' | 'fade'}): DemoLayersSchema => [
   {
     type: 'text',
     data: '轮播图',

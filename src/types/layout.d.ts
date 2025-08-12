@@ -6,7 +6,7 @@ export interface LayoutCreator {
  * `LayoutArea` is a rectangle box in which chart layer placed.
  * Note that layers should not exceed the layout.
  */
-type LayoutArea = Readonly<{
+export type LayoutArea = Readonly<{
   top: number
   right: number
   bottom: number
@@ -19,7 +19,7 @@ type LayoutArea = Readonly<{
  * The layout is divided into several layer areas,
  * and each layer is drawn in a specific area.
  */
-type Layout = Record<string, LayoutArea> & {
+export type Layout = Record<string, LayoutArea> & {
   /**
    * Generally refers to the overall area of the chart.
    */
@@ -30,7 +30,7 @@ type Layout = Record<string, LayoutArea> & {
   container: LayoutArea
 }
 
-type LayoutProps = {
+export type LayoutProps = {
   /**
    * The height of the chart box.
    */
@@ -45,14 +45,14 @@ type LayoutProps = {
   padding: Padding
 }
 
-type GetStandardLayoutCreatorProps = {
+export type GetStandardLayoutCreatorProps = {
   /**
    * Generate brush layout area or not.
    */
   brush: boolean
 }
 
-type GetFacetLayoutCreatorProps = {
+export type GetFacetLayoutCreatorProps = {
   /**
    * Facet rows for layout area.
    */

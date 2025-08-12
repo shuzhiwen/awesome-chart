@@ -3,24 +3,24 @@ import {AnimationDict} from '../anims'
 import {ChartTheme} from './core'
 import {D3Selection, DrawerTarget} from './draw'
 
-type AnimationType = Keys<AnimationDict>
+export type AnimationType = Keys<AnimationDict>
 
-type LayerAnimation<T> = Computable<Partial<T>, ChartTheme>
+export type LayerAnimation<T> = Computable<Partial<T>, ChartTheme>
 
-type AnimationOptions<T extends AnimationType = AnimationType> =
+export type AnimationOptions<T extends AnimationType = AnimationType> =
   AnimationProps<T> & {type: T}
 
-type AnimationProps<T extends AnimationType> = Partial<
+export type AnimationProps<T extends AnimationType> = Partial<
   AnimationDict[T]['options']
 >
 
-type UpdateAnimationOptions = {
+export type UpdateAnimationOptions = {
   easing: Easing
   duration: number
   delay: number
 }
 
-type BasicAnimationOptions = UpdateAnimationOptions & {
+export type BasicAnimationOptions = UpdateAnimationOptions & {
   id: string
   /**
    * Whether to loop the animation.
@@ -36,7 +36,7 @@ type BasicAnimationOptions = UpdateAnimationOptions & {
   context?: DrawerTarget
 }
 
-type AnimationFadeOptions = {
+export type AnimationFadeOptions = {
   /**
    * If set true, after the animation ends,
    * a corresponding recovery animation will be executed.
@@ -52,11 +52,11 @@ type AnimationFadeOptions = {
   endOpacity: number
 }
 
-type AnimationPathOptions = {
+export type AnimationPathOptions = {
   path: string
 }
 
-type AnimationZoomOptions = {
+export type AnimationZoomOptions = {
   /**
    * If set true, subsequent element's animation are triggered with a delay.
    * This configuration will cause the delay from the options to fail.
@@ -67,7 +67,7 @@ type AnimationZoomOptions = {
   endScale: number
 }
 
-type AnimationRotateOptions = {
+export type AnimationRotateOptions = {
   /**
    * If set true, subsequent element's animation are triggered with a delay.
    * This configuration will cause the delay from the options to fail.
@@ -76,7 +76,7 @@ type AnimationRotateOptions = {
   initialRotation: number
 }
 
-type AnimationMoveOptions = {
+export type AnimationMoveOptions = {
   /**
    * If set true, after the animation ends,
    * a corresponding recovery animation will be executed.
@@ -98,14 +98,14 @@ type AnimationMoveOptions = {
   endOffset: Vec2
 }
 
-type AnimationEraseOptions = {
+export type AnimationEraseOptions = {
   /**
    * The direction in which the erase animation proceeds.
    */
   direction: Position4 | 'clockwise' | 'anticlockwise'
 }
 
-type AnimationScanOptions = {
+export type AnimationScanOptions = {
   /**
    * Only for svg, the range in which the scan animation takes effect.
    */
