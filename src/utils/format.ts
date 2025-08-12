@@ -17,7 +17,16 @@ export const formatNumber = (
   config?: FormatNumberConfig
 ) => {
   const number = Number(data ?? '')
-  const {percentage = false, thousandth = false, decimals = 8} = config || {}
+  const {
+    percentage = false,
+    thousandth = false,
+    decimals = 8,
+    formatter,
+  } = config ?? {}
+
+  if (formatter) {
+    return formatter(data)
+  }
 
   if (!config) {
     if (isNil(data) || data === '') {

@@ -76,6 +76,10 @@ type FormatNumberConfig = Partial<{
    * The exact number of decimal places.
    */
   decimals: number // 12.3412312 => 12.34
+  /**
+   * Custom format function. Overrides all other options if provided.
+   */
+  formatter: (value: Maybe<Meta>) => string
 }>
 
 type OverflowControlConfig = Partial<{
